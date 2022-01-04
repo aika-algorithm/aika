@@ -193,7 +193,7 @@ public class SearchNode implements Comparable<SearchNode> {
             switch (sn.step) {
                 case INIT:
                     if (sn.level >= doc.candidates.size()) {
-                        checkTimeoutCondition(timeoutInMilliSeconds, startTime);
+                        checkTimeoutCondition(doc, timeoutInMilliSeconds, startTime);
 
                         returnWeight = sn.processResult(doc);
                         returnWeightSum = returnWeight;
@@ -253,9 +253,9 @@ public class SearchNode implements Comparable<SearchNode> {
     }
 
 
-    private static void checkTimeoutCondition(Long timeoutInMilliSeconds, long startTime) throws TimeoutException {
+    private static void checkTimeoutCondition(Document doc, Long timeoutInMilliSeconds, long startTime) throws TimeoutException {
         if (timeoutInMilliSeconds != null && System.currentTimeMillis() > startTime + timeoutInMilliSeconds) {
-            throw new TimeoutException("Interpretation search took too long: " + (System.currentTimeMillis() - startTime) + "ms");
+            throw new TimeoutException(doc, "Interpretation search took too long: " + (System.currentTimeMillis() - startTime) + "ms");
         }
     }
 
@@ -505,8 +505,15 @@ public class SearchNode implements Comparable<SearchNode> {
 
 
     public static class TimeoutException extends RuntimeException {
-        public TimeoutException(String message) {
+        private Document doc;
+
+        public TimeoutException(Document doc, String message) {
             super(message);
+            this.doc = doc;
+        }
+
+        public Document getDocument() {
+            return doc;
         }
     }
 }
