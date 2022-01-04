@@ -102,6 +102,8 @@ public class Activation implements Comparable<Activation> {
 
     public boolean blocked;
 
+    public long countSearchVisits = 0;
+
     /**
      * The cached decision is used to avoid having to explore the same currentSearchState twice even though nothing that
      * influences this currentSearchState has changed.
@@ -163,6 +165,15 @@ public class Activation implements Comparable<Activation> {
         this.slots = slots;
 
         neuron.register(this);
+    }
+
+
+    public long getCountSearchVisits() {
+        return countSearchVisits;
+    }
+
+    public void setCountSearchVisits(long countSearchVisits) {
+        this.countSearchVisits = countSearchVisits;
     }
 
 

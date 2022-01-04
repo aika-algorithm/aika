@@ -312,6 +312,10 @@ public class SearchNode implements Comparable<SearchNode> {
             return false;
         }
 
+        if(act != null) {
+            act.countSearchVisits++;
+        }
+
         SearchNode child = new SearchNode(doc, d, this, level + 1);
 
         if (b.prepareStep(doc, child)) return false;

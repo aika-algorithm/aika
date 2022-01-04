@@ -5,7 +5,7 @@
     <groupId>network.aika</groupId>
     <artifactId>aika</artifactId>
     <packaging>jar</packaging>
-    <version>1.4.22</version>
+    <version>1.4.23</version>
     <name>aika</name>
     <url>https://aika.network</url>
     <description>An Artificial Intelligence for Knowledge Acquisition</description>
@@ -30,7 +30,7 @@
         <url>https://github.com/aika-algorithm/aika</url>
         <connection>scm:git:git://github.com/aika-algorithm/aika.git</connection>
         <developerConnection>scm:git:git@github.com:aika-algorithm/aika.git</developerConnection>
-        <tag>aika-1.4.22</tag>
+        <tag>aika-1.4.23</tag>
     </scm>
 
 
