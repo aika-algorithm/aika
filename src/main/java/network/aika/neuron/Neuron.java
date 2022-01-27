@@ -85,12 +85,16 @@ public class Neuron extends Provider<INeuron> {
      * @param end   The range end
      */
     public Activation addInput(Document doc, int begin, int end) {
+        return addInput(doc, begin, end, true);
+    }
+
+    public Activation addInput(Document doc, int begin, int end, boolean propagate) {
         return addInput(doc,
                 new Activation.Builder()
                         .setRange(begin, end)
+                        .setPropagate(propagate)
         );
     }
-
 
     /**
      * Propagate an input activation into the network.

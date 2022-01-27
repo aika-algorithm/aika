@@ -465,10 +465,10 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
             doc.getLinker().process();
         }
 
-        propagate(act);
-
-        doc.propagate();
-
+        if(input.propagate) {
+            propagate(act);
+            doc.propagate();
+        }
         return act;
     }
 

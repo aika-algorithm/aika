@@ -986,6 +986,7 @@ public class Activation implements Comparable<Activation> {
         public double net = 0.0;
         public Double targetValue;
         public int fired;
+        public boolean propagate = true;
 
 
         public Builder setRange(int begin, int end) {
@@ -1007,6 +1008,15 @@ public class Activation implements Comparable<Activation> {
 
         public Builder setTargetValue(Double targetValue) {
             this.targetValue = targetValue;
+            return this;
+        }
+
+        public SortedMap<Integer, Integer> getPositions() {
+            return positions;
+        }
+
+        public Builder setPropagate(boolean propagate) {
+            this.propagate = propagate;
             return this;
         }
 
