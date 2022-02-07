@@ -97,7 +97,6 @@ public class OrNode extends Node<OrNode, OrActivation> {
             orAct.setOutputAct(act);
         }
 
-
         OrActivation orAct = act.getInputNodeActivation();
         propagate(orAct);
         orAct.link(ol);
@@ -109,6 +108,7 @@ public class OrNode extends Node<OrNode, OrActivation> {
     private Activation lookupActivation(OrActivation.Link ol, Predicate<Link> filter) {
         for(Link l: ol.getInputLinks(outputNeuron)) {
             Synapse syn = l.getSynapse();
+
             Map<Integer, Relation> rels = syn.getRelations();
             for(Map.Entry<Integer, Relation> me: rels.entrySet()) {
                 Integer relSynId = me.getKey();

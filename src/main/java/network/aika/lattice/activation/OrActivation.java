@@ -24,6 +24,8 @@ import network.aika.neuron.Neuron;
 import network.aika.neuron.Synapse;
 import network.aika.neuron.activation.Activation;
 import network.aika.neuron.activation.link.Linker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -32,6 +34,10 @@ import java.util.*;
  * @author Lukas Molzberger
  */
 public class OrActivation extends NodeActivation<OrNode> {
+
+    private static final Logger log = LoggerFactory.getLogger(OrActivation.class);
+
+
     private Map<Integer, Link> orInputs = new TreeMap<>();
     private Activation outputAct;
 
@@ -99,8 +105,12 @@ public class OrActivation extends NodeActivation<OrNode> {
             for (int i = 0; i < size(); i++) {
                 int synId = get(i);
                 Synapse s = n.getSynapseById(synId);
-                Activation iAct = input.getInputActivation(i);
-                inputActs.add(new network.aika.neuron.activation.link.Link(s, iAct, null));
+                if(s != null) {
+                    Activation iAct = input.getInputActivation(i);
+                    inputActs.add(new network.aika.neuron.activation.link.Link(s, iAct, null));
+                } else {
+                    log.error("OrActivation.getInputLinks : syn == null  outputNeuron: neuron.id:" + n.getId()  + " neuron.label:" + n.getLabel() + " synapse.id:" + synId);
+                }
             }
             return inputActs;
         }
