@@ -20,6 +20,7 @@ import network.aika.neuron.activation.Element;
 import network.aika.neuron.activation.Timestamp;
 
 import java.util.ArrayDeque;
+import java.util.Comparator;
 import java.util.stream.Stream;
 
 import static network.aika.neuron.activation.Timestamp.NOT_SET;
@@ -28,19 +29,30 @@ import static network.aika.neuron.activation.Timestamp.NOT_SET;
  *
  * @author Lukas Molzberger
  */
-public abstract class InnerQueue implements QueueKey, Element {
+public abstract class OuterQueueEntry implements Element {
+
+    public static Comparator<OuterQueueEntry> COMPARATOR = Comparator
+            .<OuterQueueEntry, Timestamp>comparing(k -> k.getFired())
+            .thenComparingDouble(k -> k.getSortValue())
+            .thenComparing(k -> k.getCreated())
+            .thenComparing(k -> k.getCurrentTimestamp());
 
     private Timestamp currentTimestamp;
 
     private boolean isQueued;
+    private double currentSortValue;
 
     private ArrayDeque<Step> innerQueue = new ArrayDeque<>();
 
 
-    public void notifyValueUpdate() {
+    public void notifyValueUpdate(double newSortValue) {
+        if(!isQueued)
+            return;
 
+        removeOuterQueueEntry();
+        currentSortValue = newSortValue;
+        addOuterQueueEntry();
     }
-
 
     public Stream<Step> getSteps() {
         return innerQueue.stream();
@@ -54,16 +66,14 @@ public abstract class InnerQueue implements QueueKey, Element {
         getThought().queueEntryAddedEvent(s);
     }
 
-    private void updateOuterQueue() {
-
-    }
-
     private void addOuterQueueEntry() {
         getThought().addInnerQueueEntry(this);
+        isQueued = true;
     }
 
     private void removeOuterQueueEntry() {
         getThought().removeInnerQueueEntry(this);
+        isQueued = false;
     }
 
     public void process() {
@@ -76,13 +86,12 @@ public abstract class InnerQueue implements QueueKey, Element {
         }
     }
 
-    @Override
-    public Timestamp getPrimaryTimestamp() {
-        return null;
+
+    public double getSortValue() {
+        return currentSortValue;
     }
 
-    @Override
-    public Timestamp getSecondaryTimestamp() {
+    public Timestamp getCurrentTimestamp() {
         return currentTimestamp;
     }
 

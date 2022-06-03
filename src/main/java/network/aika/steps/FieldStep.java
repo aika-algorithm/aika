@@ -22,7 +22,7 @@ import network.aika.fields.QueueField;
  *
  * @author Lukas Molzberger
  */
-public class FieldStep<E extends InnerQueue> extends Step<E> {
+public class FieldStep<E extends OuterQueueEntry> extends Step<E> {
 
     private QueueField field;
 

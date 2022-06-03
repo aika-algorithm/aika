@@ -16,8 +16,6 @@
  */
 package network.aika.steps;
 
-import network.aika.Thought;
-import network.aika.neuron.activation.Element;
 import network.aika.neuron.activation.Timestamp;
 
 import static network.aika.neuron.activation.Timestamp.NOT_SET;
@@ -26,7 +24,7 @@ import static network.aika.neuron.activation.Timestamp.NOT_SET;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Step<E extends InnerQueue> {
+public abstract class Step<E extends OuterQueueEntry> {
 
     private E element;
 

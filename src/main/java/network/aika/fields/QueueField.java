@@ -18,7 +18,7 @@ package network.aika.fields;
 
 
 import network.aika.steps.FieldStep;
-import network.aika.steps.InnerQueue;
+import network.aika.steps.OuterQueueEntry;
 import network.aika.steps.Step;
 
 /**
@@ -29,12 +29,12 @@ public class QueueField extends Field {
     private boolean isQueued;
     private FieldStep step;
 
-    public QueueField(InnerQueue e, String label) {
+    public QueueField(OuterQueueEntry e, String label) {
         super(e, label);
         step = new FieldStep(e, this);
     }
 
-    public QueueField(InnerQueue e, String label, double initialValue) {
+    public QueueField(OuterQueueEntry e, String label, double initialValue) {
         super(e, label, initialValue);
         step = new FieldStep(e, this);
     }

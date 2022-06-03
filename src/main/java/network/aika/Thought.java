@@ -24,8 +24,7 @@ import network.aika.neuron.Range;
 import network.aika.neuron.Synapse;
 import network.aika.neuron.activation.*;
 import network.aika.neuron.bindingsignal.BindingSignal;
-import network.aika.steps.InnerQueue;
-import network.aika.steps.QueueKey;
+import network.aika.steps.OuterQueueEntry;
 import network.aika.steps.Step;
 
 import java.util.*;
@@ -49,7 +48,7 @@ public abstract class Thought<M extends Model> {
     private long timestampCounter = 0;
     private int activationIdCounter = 0;
 
-    private final NavigableMap<QueueKey, InnerQueue> queue = new TreeMap<>(QueueKey.COMPARATOR);
+    private final NavigableMap<OuterQueueEntry, OuterQueueEntry> queue = new TreeMap<>(OuterQueueEntry.COMPARATOR);
 
     private final TreeMap<Integer, Activation> activationsById = new TreeMap<>();
     private final Map<NeuronProvider, SortedSet<Activation<?>>> actsPerNeuron = new HashMap<>();
@@ -143,17 +142,17 @@ public abstract class Thought<M extends Model> {
     public void registerBindingSignalSource(Activation act, BindingSignal pbs) {
     }
 
-    public void addInnerQueueEntry(InnerQueue e) {
+    public void addInnerQueueEntry(OuterQueueEntry e) {
         e.setSecondaryTimestamp(getNextTimestamp());
         queue.put(e, e);
     }
 
-    public void removeInnerQueueEntry(InnerQueue e) {
-        InnerQueue removedEntry = queue.remove(e);
+    public void removeInnerQueueEntry(OuterQueueEntry e) {
+        OuterQueueEntry removedEntry = queue.remove(e);
         assert removedEntry != null;
     }
 
-    public Collection<InnerQueue> getQueue() {
+    public Collection<OuterQueueEntry> getQueue() {
         return queue.values();
     }
 
@@ -163,7 +162,7 @@ public abstract class Thought<M extends Model> {
 
     public void process() {
         while (!queue.isEmpty()) {
-            InnerQueue e = queue.pollFirstEntry().getValue();
+            OuterQueueEntry e = queue.pollFirstEntry().getValue();
             timestampOnProcess = getCurrentTimestamp();
 
             e.process();
