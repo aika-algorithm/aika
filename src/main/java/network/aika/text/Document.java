@@ -28,7 +28,6 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
-import static network.aika.steps.Phase.PROCESSING;
 
 
 /**
@@ -123,9 +122,9 @@ public class Document extends Thought<TextModel> {
         for(String t: tokens) {
             int j = i + t.length();
             TokenActivation currentToken = addToken(t, i, j);
-            process(PROCESSING);
+            process();
             TokenActivation.addRelation(lastToken, currentToken);
-            process(PROCESSING);
+            process();
 
             lastToken = currentToken;
             i = j + 1;

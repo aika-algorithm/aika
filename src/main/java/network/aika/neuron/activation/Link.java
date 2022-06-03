@@ -25,6 +25,7 @@ import network.aika.fields.FieldOutput;
 import network.aika.neuron.Range;
 import network.aika.neuron.Synapse;
 import network.aika.sign.Sign;
+import network.aika.steps.InnerQueue;
 import network.aika.steps.link.Cleanup;
 import network.aika.steps.link.LinkCounting;
 import static network.aika.fields.ConstantField.ZERO;
@@ -37,7 +38,7 @@ import static network.aika.neuron.activation.Timestamp.NOT_SET_AFTER;
  *
  * @author Lukas Molzberger
  */
-public abstract class Link<S extends Synapse, I extends Activation<?>, O extends Activation> implements Element {
+public abstract class Link<S extends Synapse, I extends Activation<?>, O extends Activation> extends InnerQueue implements Element {
 
     protected S synapse;
 

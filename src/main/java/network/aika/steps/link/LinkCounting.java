@@ -18,7 +18,6 @@ package network.aika.steps.link;
 
 import network.aika.neuron.Synapse;
 import network.aika.neuron.activation.Link;
-import network.aika.steps.Phase;
 import network.aika.steps.Step;
 
 /**
@@ -35,11 +34,6 @@ public class LinkCounting extends Step<Link> {
 
     private LinkCounting(Link l) {
         super(l);
-    }
-
-    @Override
-    public Phase getPhase() {
-        return Phase.POST;
     }
 
     @Override

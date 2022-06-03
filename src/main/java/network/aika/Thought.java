@@ -24,7 +24,7 @@ import network.aika.neuron.Range;
 import network.aika.neuron.Synapse;
 import network.aika.neuron.activation.*;
 import network.aika.neuron.bindingsignal.BindingSignal;
-import network.aika.steps.Phase;
+import network.aika.steps.InnerQueue;
 import network.aika.steps.QueueKey;
 import network.aika.steps.Step;
 
@@ -33,7 +33,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static network.aika.steps.Phase.*;
 
 /**
  *
@@ -50,7 +49,7 @@ public abstract class Thought<M extends Model> {
     private long timestampCounter = 0;
     private int activationIdCounter = 0;
 
-    private final NavigableMap<QueueKey, Step> queue = new TreeMap<>(QueueKey.COMPARATOR);
+    private final NavigableMap<QueueKey, InnerQueue> queue = new TreeMap<>(QueueKey.COMPARATOR);
 
     private final TreeMap<Integer, Activation> activationsById = new TreeMap<>();
     private final Map<NeuronProvider, SortedSet<Activation<?>>> actsPerNeuron = new HashMap<>();
@@ -144,18 +143,17 @@ public abstract class Thought<M extends Model> {
     public void registerBindingSignalSource(Activation act, BindingSignal pbs) {
     }
 
-    public void addStep(Step s) {
-        s.setSecondaryTimestamp(getNextTimestamp());
-        queue.put(s, s);
-        queueEntryAddedEvent(s);
+    public void addInnerQueueEntry(InnerQueue e) {
+        e.setSecondaryTimestamp(getNextTimestamp());
+        queue.put(e, e);
     }
 
-    public void removeStep(Step s) {
-        Step removedStep = queue.remove(s);
-        assert removedStep != null;
+    public void removeInnerQueueEntry(InnerQueue e) {
+        InnerQueue removedEntry = queue.remove(e);
+        assert removedEntry != null;
     }
 
-    public Collection<Step> getQueue() {
+    public Collection<InnerQueue> getQueue() {
         return queue.values();
     }
 
@@ -163,22 +161,13 @@ public abstract class Thought<M extends Model> {
         return new Range(absoluteBegin, absoluteBegin + length());
     }
 
-    public void process(Phase maxPhase) {
+    public void process() {
         while (!queue.isEmpty()) {
-            if(checkMaxPhaseReached(maxPhase))
-                break;
-
-            Step s = queue.pollFirstEntry().getValue();
+            InnerQueue e = queue.pollFirstEntry().getValue();
             timestampOnProcess = getCurrentTimestamp();
 
-            beforeProcessedEvent(s);
-            s.process();
-            afterProcessedEvent(s);
+            e.process();
         }
-    }
-
-    private boolean checkMaxPhaseReached(Phase maxPhase) {
-        return maxPhase.compareTo(queue.firstEntry().getValue().getPhase()) < 0;
     }
 
     /**
@@ -190,14 +179,14 @@ public abstract class Thought<M extends Model> {
                 .forEach(act ->
                         act.getIsFinal().set(1.0)
                 );
-        process(PROCESSING);
+        process();
     }
 
     /**
      * The postprocessing steps such as counting, cleanup or save are executed.
      */
     public void postProcessing() {
-        process(POST);
+        process();
     }
 
     public Timestamp getTimestampOnProcess() {
@@ -216,7 +205,8 @@ public abstract class Thought<M extends Model> {
         return queue
                 .values()
                 .stream()
-                .filter(s -> s.getElement() == element)
+                .filter(e -> e == element)
+                .flatMap(e -> e.getSteps())
                 .collect(Collectors.toList());
     }
 

@@ -19,7 +19,6 @@ package network.aika.steps.activation;
 import network.aika.neuron.Neuron;
 import network.aika.neuron.activation.DummyActivation;
 import network.aika.neuron.conjunctive.ConjunctiveNeuron;
-import network.aika.steps.Phase;
 import network.aika.steps.Step;
 
 
@@ -49,11 +48,6 @@ public class PostTraining extends Step<DummyActivation> {
 
     private PostTraining(DummyActivation act) {
         super(act);
-    }
-
-    @Override
-    public Phase getPhase() {
-        return Phase.PROCESSING;
     }
 
     @Override

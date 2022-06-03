@@ -27,6 +27,7 @@ import network.aika.neuron.activation.Activation;
 import network.aika.neuron.activation.Element;
 import network.aika.neuron.activation.Link;
 import network.aika.neuron.activation.Timestamp;
+import network.aika.steps.InnerQueue;
 
 import java.util.stream.Stream;
 
@@ -36,7 +37,7 @@ import static network.aika.fields.Fields.mul;
 /**
  * @author Lukas Molzberger
  */
-public class BindingSignal<A extends Activation> implements Element {
+public class BindingSignal<A extends Activation> extends InnerQueue implements Element {
 
     private BindingSignal parent;
     private A activation;

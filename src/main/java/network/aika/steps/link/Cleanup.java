@@ -17,7 +17,6 @@
 package network.aika.steps.link;
 
 import network.aika.neuron.activation.Link;
-import network.aika.steps.Phase;
 import network.aika.steps.Step;
 
 /**
@@ -32,11 +31,6 @@ public class Cleanup extends Step<Link> {
 
     private Cleanup(Link l) {
         super(l);
-    }
-
-    @Override
-    public Phase getPhase() {
-        return Phase.POST;
     }
 
     @Override

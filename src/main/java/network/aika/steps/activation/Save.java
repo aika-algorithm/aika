@@ -18,7 +18,6 @@ package network.aika.steps.activation;
 
 import network.aika.neuron.Neuron;
 import network.aika.neuron.activation.DummyActivation;
-import network.aika.steps.Phase;
 import network.aika.steps.Step;
 
 /**
@@ -37,11 +36,6 @@ public class Save extends Step<DummyActivation> {
 
     private Save(DummyActivation act) {
         super(act);
-    }
-
-    @Override
-    public Phase getPhase() {
-        return Phase.POST;
     }
 
     @Override

@@ -26,17 +26,10 @@ import java.util.Comparator;
 public interface QueueKey {
 
     Comparator<QueueKey> COMPARATOR = Comparator
-            .<QueueKey>comparingInt(k -> k.getPhase().ordinal())
-            .thenComparing(k -> k.getPrimaryTimestamp())
+            .<QueueKey, Timestamp>comparing(k -> k.getPrimaryTimestamp())
             .thenComparing(k -> k.getSecondaryTimestamp());
-
-    String getStepName();
-
-    Phase getPhase();
 
     Timestamp getPrimaryTimestamp();
 
     Timestamp getSecondaryTimestamp();
-
-    String timestampToString();
 }

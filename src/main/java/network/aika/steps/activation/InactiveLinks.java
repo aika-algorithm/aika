@@ -3,7 +3,6 @@ package network.aika.steps.activation;
 import network.aika.neuron.Neuron;
 import network.aika.neuron.activation.Activation;
 import network.aika.neuron.bindingsignal.BindingSignal;
-import network.aika.steps.Phase;
 import network.aika.steps.Step;
 
 public class InactiveLinks extends Step<Activation> {
@@ -17,11 +16,6 @@ public class InactiveLinks extends Step<Activation> {
     public InactiveLinks(BindingSignal bs) {
         super(bs.getActivation());
         bindingSignal = bs;
-    }
-
-    @Override
-    public Phase getPhase() {
-        return Phase.POST;
     }
 
     @Override

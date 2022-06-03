@@ -16,21 +16,18 @@
  */
 package network.aika.steps;
 
-import network.aika.neuron.activation.Element;
 import network.aika.fields.QueueField;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class FieldStep<E extends Element> extends Step<E> {
+public class FieldStep<E extends InnerQueue> extends Step<E> {
 
     private QueueField field;
-    private Phase phase;
 
-    public FieldStep(E e, QueueField qf, Phase p) {
+    public FieldStep(E e, QueueField qf) {
         super(e);
-        this.phase = p;
         this.field = qf;
         this.field.setStep(this);
     }
@@ -38,11 +35,6 @@ public class FieldStep<E extends Element> extends Step<E> {
     @Override
     public void process() {
         field.process();
-    }
-
-    @Override
-    public Phase getPhase() {
-        return phase;
     }
 
     public String toString() {
