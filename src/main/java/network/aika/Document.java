@@ -68,7 +68,6 @@ public class Document implements Comparable<Document> {
 
     private Model model;
     Integer threadId;
-    boolean documentHasBeenCleared = false;
 
     long startTime;
 
@@ -216,9 +215,6 @@ public class Document implements Comparable<Document> {
 
 
     public int getThreadId() {
-        if(documentHasBeenCleared)
-            throw new IllegalStateException("Document has already been cleared!");
-
         return threadId;
     }
 
@@ -490,7 +486,6 @@ public class Document implements Comparable<Document> {
      * Removes the activations of this document from the model again.
      */
     public void clearActivations() {
-        documentHasBeenCleared = true;
         if(threadId == null) {
             return;
         }
