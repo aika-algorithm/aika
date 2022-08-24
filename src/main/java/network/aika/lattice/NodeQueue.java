@@ -29,7 +29,7 @@ public class NodeQueue {
     private Document doc;
 
     private final TreeSet<Node> queue = new TreeSet<>(
-            (n1, n2) -> Node.compareRank(doc.getThreadId(), n1, n2)
+            (n1, n2) -> Node.compareRank(doc, n1, n2)
     );
 
     private long queueIdCounter = 0;
@@ -41,7 +41,7 @@ public class NodeQueue {
 
 
     public void add(Node n) {
-        if(!n.isQueued(doc.getThreadId(), queueIdCounter++)) {
+        if(!n.isQueued(doc, queueIdCounter++)) {
             queue.add(n);
         }
     }
@@ -51,7 +51,7 @@ public class NodeQueue {
         while(!queue.isEmpty()) {
             Node n = queue.pollFirst();
 
-            n.setNotQueued(doc.getThreadId());
+            n.setNotQueued(doc);
             n.processChanges(doc);
         }
     }

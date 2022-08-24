@@ -245,8 +245,6 @@ public class WeightsTest {
         inCB.addInput(doc, 0, 6);
 
         doc.process();
-
-        doc.clearActivations();
     }
 
 

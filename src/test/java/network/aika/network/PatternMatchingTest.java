@@ -128,8 +128,6 @@ public class PatternMatchingTest {
         System.out.println("All activations:");
         System.out.println(doc.activationsToString());
         System.out.println();
-
-        doc.clearActivations();
     }
 
 
@@ -227,8 +225,6 @@ public class PatternMatchingTest {
         System.out.println("All activations:");
         System.out.println(doc.activationsToString());
         System.out.println();
-
-        doc.clearActivations();
     }
 
 
@@ -306,8 +302,6 @@ public class PatternMatchingTest {
         System.out.println("All activations:");
         System.out.println(doc.activationsToString());
         System.out.println();
-
-        doc.clearActivations();
     }
 
     @Test
@@ -402,8 +396,6 @@ public class PatternMatchingTest {
         System.out.println("All activations:");
         System.out.println(doc.activationsToString());
         System.out.println();
-
-        doc.clearActivations();
     }
 
     @Test
@@ -503,8 +495,6 @@ public class PatternMatchingTest {
         System.out.println("All activations:");
         System.out.println(doc.activationsToString());
         System.out.println();
-
-        doc.clearActivations();
     }
 
     @Test
@@ -608,8 +598,6 @@ public class PatternMatchingTest {
         System.out.println("All activations:");
         System.out.println(doc.activationsToString());
         System.out.println();
-
-        doc.clearActivations();
     }
 
 }

@@ -66,7 +66,7 @@ public class OrNode extends Node<OrNode, OrActivation> {
     }
 
     @Override
-    public RefValue expand(int threadId, Document doc, Refinement ref) {
+    public RefValue expand(Document doc, Refinement ref) {
         throw new UnsupportedOperationException();
     }
 
@@ -191,8 +191,8 @@ public class OrNode extends Node<OrNode, OrActivation> {
     }
 
 
-    void addInput(int[] synapseIds, int threadId, Node in, boolean andMode) {
-        in.changeNumberOfNeuronRefs(threadId, provider.getModel().visitedCounter.addAndGet(1), 1);
+    void addInput(int[] synapseIds, Document doc, Node in, boolean andMode) {
+        in.changeNumberOfNeuronRefs(doc, provider.getModel().visitedCounter.addAndGet(1), 1);
 
         OrEntry oe = new OrEntry(synapseIds, in.getProvider(), provider);
         in.addOrChild(oe);
@@ -206,39 +206,10 @@ public class OrNode extends Node<OrNode, OrActivation> {
         }
     }
 
-
-    @Override
-    public void delete(Set<String> modelLabels) {
-        outputNeuron.get().remove();
-
-        super.remove();
-
-        try {
-            lock.acquireReadLock();
-            removeParents(modelLabels);
-        } finally {
-            lock.releaseReadLock();
-        }
-    }
-
-
-    void removeParents(Set<String> modelLabels) {
-        for (OrEntry oe : andParents) {
-            Provider<? extends Node> pp = oe.parent;
-            Node pn = pp.get();
-            pn.changeNumberOfNeuronRefs(provider.getModel().defaultThreadId, provider.getModel().visitedCounter.addAndGet(1), -1);
-            pn.removeOrChild(oe);
-            pn.setModified();
-
-//            pp.delete(modelLabels);
-        }
-        andParents.clear();
-    }
-
-    void removeParents(int threadId) {
+    void removeParents(Document doc) {
         for (OrEntry oe : andParents) {
             Node pn = oe.parent.get();
-            pn.changeNumberOfNeuronRefs(threadId, provider.getModel().visitedCounter.addAndGet(1), -1);
+            pn.changeNumberOfNeuronRefs(doc, provider.getModel().visitedCounter.addAndGet(1), -1);
             pn.removeOrChild(oe);
             pn.setModified();
         }
@@ -247,7 +218,7 @@ public class OrNode extends Node<OrNode, OrActivation> {
 
 
     @Override
-    protected void changeNumberOfNeuronRefs(int threadId, long v, int d) {
+    protected void changeNumberOfNeuronRefs(Document doc, long v, int d) {
         throw new UnsupportedOperationException();
     }
 

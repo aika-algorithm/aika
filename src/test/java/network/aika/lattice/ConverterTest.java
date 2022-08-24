@@ -107,7 +107,7 @@ public class ConverterTest {
         out.get().setBias(1.5);
 
         out.get().commit(out.get().getInputSynapses());
-        Converter.convert(0, null, out.get(), out.get().getInputSynapses());
+        Converter.convert(new Document(m, ""), out.get(), out.get().getInputSynapses());
 
         System.out.println(out.get().getInputNode().get().logicToString());
 
@@ -264,7 +264,7 @@ public class ConverterTest {
         out.getSynapseById(3).updateDelta(null, -1.5, 0.0);
 
         out.get().commit(out.get().getInputSynapses());
-        Converter.convert( 0, null, out.get(), out.get().getInputSynapses());
+        Converter.convert( new Document(m, ""), out.get(), out.get().getInputSynapses());
         System.out.println(out.get().getInputNode().get().logicToString());
         Assert.assertEquals(1, out.get().getInputNode().get().andParents.size());
     }

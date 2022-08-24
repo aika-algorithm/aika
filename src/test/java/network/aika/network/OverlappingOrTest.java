@@ -120,8 +120,6 @@ public class OverlappingOrTest {
         System.out.println("All activations:");
         System.out.println(doc.activationsToString());
         System.out.println();
-
-        doc.clearActivations();
     }
 
 }

@@ -212,6 +212,5 @@ public class MutualExclusionTest {
         Assert.assertTrue(pC.getActivations(doc, true).collect(Collectors.toList()).isEmpty());
 
         Assert.assertFalse(outN.getActivations(doc, true).collect(Collectors.toList()).isEmpty());
-        doc.clearActivations();
     }
 }

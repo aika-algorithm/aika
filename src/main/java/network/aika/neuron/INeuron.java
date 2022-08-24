@@ -114,7 +114,8 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
     PassiveInputFunction passiveInputFunction = null;
 
 
-    private ThreadState[] threads;
+    private WeakHashMap<Integer, ThreadState> activations = new WeakHashMap<>();
+
 
 
     /**
@@ -131,12 +132,60 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
         public int maxLength = 0;
 
 
-        public ThreadState() {
+        public ThreadState(Document doc) {
+            this.doc = doc;
             activationsBySlotAndPosition = new TreeMap<>();
             activations = new TreeMap<>();
         }
     }
 
+    @Override
+    public boolean isSuspendable() {
+        return activations.isEmpty();
+    }
+
+    public ThreadState lookupThreadState(Document doc) {
+        synchronized (activations) {
+            ThreadState th = activations
+                    .computeIfAbsent(
+                            doc.getId(),
+                            n -> new ThreadState(doc)
+                    );
+
+            th.lastUsed = provider.getModel().docIdCounter.get();
+            return th;
+        }
+    }
+
+
+    public void register(Activation act) {
+        Document doc = act.getDocument();
+
+        ThreadState th = lookupThreadState(act.getDocument());
+        doc.addActivatedNeuron(act.getINeuron());
+
+        if(th.doc != doc) {
+            throw new Model.StaleDocumentException();
+        }
+
+        Integer l = act.length();
+        if(l != null) {
+            th.minLength = Math.min(th.minLength, l);
+            th.maxLength = Math.max(th.maxLength, l);
+        }
+
+        for(Map.Entry<Integer, Position> me: act.getSlots().entrySet()) {
+            ActKey ak = new ActKey(me.getKey(), me.getValue(), act.getId());
+            th.activationsBySlotAndPosition.put(ak, act);
+            th.activations.put(act.getId(), act);
+        }
+
+        for(Map.Entry<Integer, Position> me: act.getSlots().entrySet()) {
+            me.getValue().addActivation(me.getKey(), act);
+        }
+
+        doc.addActivation(act);
+    }
 
     public void setOutputNode(Provider<InputNode> node) {
         outputNode = node;
@@ -192,12 +241,6 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
         return inputSynapses.values();
     }
 
-    public void addModelLabel(String modelLabel) {
-        super.addModelLabel(modelLabel);
-
-        inputNode.get().addModelLabel(modelLabel);
-    }
-
     public Synapse getMaxInputSynapse(Synapse.State state) {
         if(type != EXCITATORY) {
             return null;
@@ -240,7 +283,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
 
     public Stream<Activation> getActivations(Document doc) {
-        ThreadState th = getThreadState(doc.getThreadId(), false);
+        ThreadState th = lookupThreadState(doc);
         if(th == null) {
             return Stream.empty();
         }
@@ -250,7 +293,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
 
     public boolean isEmpty(Document doc) {
-        ThreadState th = getThreadState(doc.getThreadId(), false);
+        ThreadState th = lookupThreadState(doc);
         if(th == null) {
             return true;
         }
@@ -259,7 +302,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
 
     public int size(Document doc) {
-        ThreadState th = getThreadState(doc.getThreadId(), false);
+        ThreadState th = lookupThreadState(doc);
         if(th == null) {
             return 0;
         }
@@ -269,7 +312,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
 
     public void clearActivations(Document doc) {
-        ThreadState th = getThreadState(doc.getThreadId(), false);
+        ThreadState th = lookupThreadState(doc);
         if(th == null) {
             return;
         }
@@ -284,30 +327,13 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
                 .filter(act -> !onlyFinal || act.isFinalActivation());
     }
 
-
-    public void clearActivations() {
-        for (int i = 0; i < provider.getModel().numberOfThreads; i++) {
-            clearActivations(i);
-        }
-    }
-
-
-    public void clearActivations(int threadId) {
-        ThreadState th = getThreadState(threadId, false);
-        if (th == null) return;
-        th.activationsBySlotAndPosition.clear();
-        th.activations.clear();
-        th.doc = null;
-    }
-
-
     public Model getModel() {
         return provider.getModel();
     }
 
 
     public Stream<Activation> getActivations(Document doc, int fromSlot, Position fromPos, boolean fromInclusive, int toSlot, Position toPos, boolean toInclusive) {
-        ThreadState th = getThreadState(doc.getThreadId(), false);
+        ThreadState th = lookupThreadState(doc);
         if(th == null) {
             return Stream.empty();
         }
@@ -370,26 +396,12 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
     }
 
 
-    private ThreadState getThreadState(int threadId, boolean create) {
-        ThreadState th = threads[threadId];
-        if (th == null) {
-            if (!create) return null;
-
-            th = new ThreadState();
-            threads[threadId] = th;
-        }
-        th.lastUsed = provider.getModel().docIdCounter.get();
-        return th;
-    }
-
-
     private INeuron() {
     }
 
 
     public INeuron(Neuron p) {
         provider = p;
-        threads = new INeuron.ThreadState[p.getModel().numberOfThreads];
     }
 
 
@@ -405,21 +417,10 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
         setOutputText(outputText);
 
-        threads = new ThreadState[m.numberOfThreads];
-
         provider = new Neuron(m, this);
 
         OrNode node = new OrNode(m);
         InputNode iNode = new InputNode(m);
-
-        if(m.getModelLabelCallback() != null) {
-            String ml = m.getModelLabelCallback().getCurrentModelLabel();
-            if(ml != null) {
-                getModelLabels().add(ml);
-                node.getModelLabels().add(ml);
-                iNode.getModelLabels().add(ml);
-            }
-        }
 
         node.setOutputNeuron(provider);
         inputNode = node.getProvider();
@@ -531,8 +532,6 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
     // TODO
     public void remove() {
-        clearActivations();
-
         for (Synapse s : inputSynapses.values()) {
             INeuron in = s.getInput().get();
             in.provider.lock.acquireWriteLock();
@@ -721,7 +720,6 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
         passiveInputFunction = m.passiveActivationFunctions.get(getId());
     }
 
-
     @Override
     public void suspend() {
         for (Synapse s : inputSynapses.values()) {
@@ -769,26 +767,6 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
 
     @Override
-    public void delete(Set<String> modelLabels) {
-        new ArrayList<>(getInputSynapses())
-                .stream()
-                .filter(s -> !s.getInput().isMarkedDeleted())
-                .forEach(s -> {
-                    s.unlink();
-                    s.getInput().delete(modelLabels);
-                });
-
-        inputNode.delete(modelLabels);
-
-        Provider on = getOutputNode();
-        if (on != null && !on.get().getModelLabels().isEmpty()) {
-            on.get().getModelLabels().forEach(ml ->
-                    log.warn("Dependend model: " + ml)
-            );
-        }
-    }
-
-    @Override
     public boolean isNeuron() {
         return true;
     }
@@ -819,38 +797,6 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
     public double getBiasDelta() {
         return biasDelta;
-    }
-
-
-    public void register(Activation act) {
-        Document doc = act.getDocument();
-
-        ThreadState th = getThreadState(act.getThreadId(), true);
-        if(th.doc == null) {
-            th.doc = doc;
-            doc.addActivatedNeuron(act.getINeuron());
-        }
-        if(th.doc != doc) {
-            throw new Model.StaleDocumentException();
-        }
-
-        Integer l = act.length();
-        if(l != null) {
-            th.minLength = Math.min(th.minLength, l);
-            th.maxLength = Math.max(th.maxLength, l);
-        }
-
-        for(Map.Entry<Integer, Position> me: act.getSlots().entrySet()) {
-            ActKey ak = new ActKey(me.getKey(), me.getValue(), act.getId());
-            th.activationsBySlotAndPosition.put(ak, act);
-            th.activations.put(act.getId(), act);
-        }
-
-        for(Map.Entry<Integer, Position> me: act.getSlots().entrySet()) {
-            me.getValue().addActivation(me.getKey(), act);
-        }
-
-        doc.addActivation(act);
     }
 
 

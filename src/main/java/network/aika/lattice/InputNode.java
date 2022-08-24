@@ -115,7 +115,7 @@ public class InputNode extends Node<InputNode, InputActivation> {
     }
 
 
-    public RefValue expand(int threadId, Document doc, Refinement ref) {
+    public RefValue expand(Document doc, Refinement ref) {
         if(!ref.isConvertible()) return null;
 
         Relation rel = ref.relations.get(0);
@@ -263,10 +263,5 @@ public class InputNode extends Node<InputNode, InputActivation> {
         if (in.readBoolean()) {
             inputNeuron = m.lookupNeuron(in.readInt());
         }
-    }
-
-    @Override
-    public void delete(Set<String> modelLabels) {
-
     }
 }

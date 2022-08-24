@@ -273,8 +273,6 @@ public class NamedEntityRecognitionTest {
 
         Assert.assertFalse(jacksonForenameEntity.getActivations(doc, true).collect(Collectors.toList()).isEmpty());
         Assert.assertFalse(cookSurnameEntity.getActivations(doc, true).collect(Collectors.toList()).isEmpty());
-
-        doc.clearActivations();
     }
 
 }

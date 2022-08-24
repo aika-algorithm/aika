@@ -183,8 +183,6 @@ public class OptionalAndTest {
 
             System.out.println(doc.activationsToString());
             System.out.println();
-
-            doc.clearActivations();
         }
     }
 

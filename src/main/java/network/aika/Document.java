@@ -67,7 +67,6 @@ public class Document implements Comparable<Document> {
     public int positionIdCounter = 0;
 
     private Model model;
-    Integer threadId;
 
     long startTime;
 
@@ -151,8 +150,6 @@ public class Document implements Comparable<Document> {
         this.linker = initLinker();
 
         this.startTime = System.currentTimeMillis();
-
-        model.acquireThread(this);
     }
 
 
@@ -213,10 +210,6 @@ public class Document implements Comparable<Document> {
         activatedNeurons.add(n);
     }
 
-
-    public int getThreadId() {
-        return threadId;
-    }
 
     public void append(String txt) {
         content.append(txt);
@@ -476,52 +469,10 @@ public class Document implements Comparable<Document> {
     public void commit() {
         modifiedWeights.forEach((n, inputSyns) -> {
             n.commit(inputSyns);
-            Converter.convert(threadId, this, n, inputSyns);
+            Converter.convert(this, n, inputSyns);
         });
         modifiedWeights.clear();
     }
-
-
-    /**
-     * Removes the activations of this document from the model again.
-     */
-    public void clearActivations() {
-        if(threadId == null) {
-            return;
-        }
-
-        activatedNeurons.forEach(n -> n.clearActivations(this));
-        activatedNodes.forEach(n -> n.clearActivations(this));
-
-        activationsById.clear();
-        addedNodeActivations.clear();
-        activatedNeurons.clear();
-        activatedNodes.clear();
-        addedNodes.clear();
-
-        if(model.lastCleanup[threadId] + CLEANUP_INTERVAL < id) {
-            model.lastCleanup[threadId] = id;
-
-            List<Provider<? extends AbstractNode>> tmp;
-            synchronized(model.activeProviders) {
-                tmp = new ArrayList<>(model.activeProviders.values());
-            }
-
-            tmp.forEach(np -> {
-                AbstractNode an = np.getIfNotSuspended();
-                if (an != null && an instanceof Node) {
-                    Node n = (Node) an;
-
-                    n.clearThreadState(threadId,  id - CLEANUP_INTERVAL);
-                }
-            });
-        }
-
-        model.docs[threadId] = null;
-
-        model.releaseThread(this);
-    }
-
 
     public String generateOutputText() {
         int oldLength = length();

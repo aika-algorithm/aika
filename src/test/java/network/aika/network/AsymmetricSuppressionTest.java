@@ -60,7 +60,5 @@ public class AsymmetricSuppressionTest {
         System.out.println(doc.activationsToString());
 
         Assert.assertTrue(outN.getActivations(doc, true).collect(Collectors.toList()).isEmpty());
-
-        doc.clearActivations();
     }
 }

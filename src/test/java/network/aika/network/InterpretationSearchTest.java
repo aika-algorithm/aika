@@ -198,8 +198,6 @@ public class InterpretationSearchTest {
         Assert.assertTrue(eZimmermannCompany.getActivations(doc, true).collect(Collectors.toList()).isEmpty());
         Assert.assertFalse(eZimmermannSurname.getActivations(doc, true).collect(Collectors.toList()).isEmpty());
 
-        doc.clearActivations();
-
         doc = new Document(m, "Joerg Zimmermann Joerg Zimmermann");
 
         wJoerg.addInput(doc, 0, 6);
@@ -213,8 +211,6 @@ public class InterpretationSearchTest {
 
         Assert.assertEquals(0, eZimmermannCompany.getActivations(doc, true).collect(Collectors.toList()).size());
         Assert.assertEquals(2, eZimmermannSurname.getActivations(doc, true).collect(Collectors.toList()).size());
-
-        doc.clearActivations();
     }
 
 

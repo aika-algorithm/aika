@@ -61,10 +61,6 @@ public abstract class NodeActivation<T extends Node> implements Comparable<NodeA
     }
 
 
-    public int getThreadId() {
-        return doc.getThreadId();
-    }
-
     public abstract Activation getInputActivation(int i);
 
 

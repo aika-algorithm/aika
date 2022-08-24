@@ -51,14 +51,6 @@ public class Model {
 
     private static final Logger log = LoggerFactory.getLogger(Model.class);
 
-
-    public int numberOfThreads = 1;
-    public int numberOfAvailableThreads = numberOfThreads;
-
-    public int[] lastCleanup;
-
-    public Document[] docs;
-
     public SuspensionHook suspensionHook;
 
     public AtomicInteger docIdCounter = new AtomicInteger(0);
@@ -70,10 +62,7 @@ public class Model {
 
     public Map<Integer, PassiveInputFunction> passiveActivationFunctions = new TreeMap<>();
 
-    public int defaultThreadId = 0;
     public static AtomicLong visitedCounter = new AtomicLong(1);
-
-    public ModelLabelCallback modelLabelCallback;
 
 
     public Supplier<Writable> dataSupplier;
@@ -87,11 +76,7 @@ public class Model {
 
     public Model(SuspensionHook sh, int numberOfThreads) {
         assert numberOfThreads >= 1;
-        this.numberOfThreads = numberOfThreads;
-        this.numberOfAvailableThreads = numberOfThreads;
 
-        lastCleanup = new int[numberOfThreads];
-        docs = new Document[numberOfThreads];
         suspensionHook = sh;
     }
 
@@ -103,61 +88,6 @@ public class Model {
     public void setCustomDataInstanceSupplier(Supplier<Writable> dataSupplier) {
         this.dataSupplier = dataSupplier;
     }
-
-    public ModelLabelCallback getModelLabelCallback() {
-        return modelLabelCallback;
-    }
-
-    public void setModelLabelCallback(ModelLabelCallback modelLabelCallback) {
-        this.modelLabelCallback = modelLabelCallback;
-    }
-
-    public synchronized void acquireThread(Document doc) {
-        if(numberOfAvailableThreads == 0) {
-            dumpThreadState();
-        }
-
-        try {
-            while (numberOfAvailableThreads == 0) {
-                wait();
-            }
-        } catch(InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        for(int i = 0; i < docs.length; i++) {
-            if(docs[i] == null) {
-                docs[i] = doc;
-                doc.threadId = i;
-                break;
-            }
-        }
-
-        numberOfAvailableThreads--;
-    }
-
-
-    public synchronized void releaseThread(Document doc) {
-        int oldNOAT = numberOfAvailableThreads;
-
-        docs[doc.threadId] = null;
-        doc.threadId = null;
-        numberOfAvailableThreads++;
-
-        if(oldNOAT == 0) {
-            notify();
-        }
-    }
-
-
-    public void dumpThreadState() {
-        log.warn("numberOfAvailableThreads: " + numberOfAvailableThreads);
-        for(int i = 0; i < docs.length; i++) {
-            Document doc =  docs[i];
-            log.warn("ThreadId: " + i + (doc != null ? " DocId:" + doc.getId() + " Time alive:" + (System.currentTimeMillis() - doc.startTime) : " - "));
-        }
-    }
-
 
     public SuspensionHook getSuspensionHook() {
         return suspensionHook;
@@ -282,7 +212,6 @@ public class Model {
      * @param docId
      */
     public void suspendUnusedNodes(int docId, SuspensionMode sm) {
-        docId = Math.min(docId, getOldestDocIdInProcessing());
         List<Provider> tmp;
         synchronized (activeProviders) {
             tmp = new ArrayList<>(activeProviders.values());
@@ -292,14 +221,6 @@ public class Model {
         }
     }
 
-
-    public int getOldestDocIdInProcessing() {
-        int oldestDocId = Integer.MAX_VALUE;
-        for(Document doc: docs) {
-            if(doc != null) oldestDocId = Math.min(oldestDocId, doc.getId());
-        }
-        return oldestDocId;
-    }
 
 
     /**

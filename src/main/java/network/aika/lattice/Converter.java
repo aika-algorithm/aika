@@ -52,7 +52,6 @@ public class Converter {
         return Integer.compare(s1.getId(), s2.getId());
     };
 
-    private int threadId;
     private INeuron neuron;
     private Model model;
     private Document doc;
@@ -60,31 +59,26 @@ public class Converter {
     private Collection<Synapse> modifiedSynapses;
 
 
-    public static boolean convert(int threadId, Document doc, INeuron neuron, Collection<Synapse> modifiedSynapses) {
-        return new Converter(threadId, doc, neuron, modifiedSynapses).convert();
+    public static boolean convert(Document doc, INeuron neuron, Collection<Synapse> modifiedSynapses) {
+        return new Converter(doc, neuron, modifiedSynapses).convert();
     }
 
 
-    private Converter(int threadId, Document doc, INeuron neuron, Collection<Synapse> modifiedSynapses) {
+    private Converter(Document doc, INeuron neuron, Collection<Synapse> modifiedSynapses) {
         this.doc = doc;
         this.neuron = neuron;
         this.model = neuron.getModel();
-        this.threadId = threadId;
         this.modifiedSynapses = modifiedSynapses;
     }
 
 
     private boolean convert() {
-        setModelLabel(neuron);
-
         outputNode = neuron.getInputNode().get();
-
-        setModelLabel(outputNode);
 
         SynapseSummary ss = neuron.getSynapseSummary();
 
         if(neuron.getTotalBias(CURRENT) + ss.getPosDirSum() + ss.getPosRecSum() <= 0.0) {
-            outputNode.removeParents(threadId);
+            outputNode.removeParents(doc);
             return false;
         }
 
@@ -107,17 +101,10 @@ public class Converter {
         return true;
     }
 
-    private void setModelLabel(AbstractNode n) {
-        if (model.getModelLabelCallback() != null) {
-            n.addModelLabel(model.getModelLabelCallback().getCurrentModelLabel());
-        }
-    }
-
-
     private void convertConjunction() {
         SynapseSummary ss = neuron.getSynapseSummary();
 
-        outputNode.removeParents(threadId);
+        outputNode.removeParents(doc);
 
         List<Synapse> candidates = prepareCandidates();
 
@@ -151,7 +138,7 @@ public class Converter {
             } else {
                 NodeContext nlNodeContext = expandNode(nodeContext, s);
                 if (nlNodeContext != null) {
-                    outputNode.addInput(nlNodeContext.getSynapseIds(), threadId, nlNodeContext.node, true);
+                    outputNode.addInput(nlNodeContext.getSynapseIds(), doc, nlNodeContext.node, true);
                     remainingSum -= v;
                 }
             }
@@ -164,7 +151,7 @@ public class Converter {
         }
 
         if(nodeContext != null && !optionalInputMode) {
-            outputNode.addInput(nodeContext.getSynapseIds(), threadId, nodeContext.node, true);
+            outputNode.addInput(nodeContext.getSynapseIds(), doc, nodeContext.node, true);
         }
     }
 
@@ -194,7 +181,7 @@ public class Converter {
                 sum += s.getWeight();
 
                 NodeContext nlNodeContext = expandNode(null, s);
-                outputNode.addInput(nlNodeContext.getSynapseIds(), threadId, nlNodeContext.node, true);
+                outputNode.addInput(nlNodeContext.getSynapseIds(), doc, nlNodeContext.node, true);
 
                 if(sum > neuron.getBias()) {
 //                    break;  // siehe: AIKA-1
@@ -209,7 +196,7 @@ public class Converter {
             if (!s.isRecurrent() && !s.isWeak(CURRENT)) {
                 NodeContext nlNodeContext = expandNode(null, s);
 
-                outputNode.addInput(nlNodeContext.getSynapseIds(), threadId, nlNodeContext.node, false);
+                outputNode.addInput(nlNodeContext.getSynapseIds(), doc, nlNodeContext.node, false);
             }
         }
     }
@@ -259,11 +246,7 @@ public class Converter {
     }
 
     private NodeContext expandNode(NodeContext nc, Synapse s) {
-        NodeContext nln = expandNodeInternal(nc, s);
-        if(nln != null) {
-            setModelLabel(nln.node);
-        }
-        return nln;
+        return expandNodeInternal(nc, s);
     }
 
     private NodeContext expandNodeInternal(NodeContext nc, Synapse s) {
@@ -283,7 +266,7 @@ public class Converter {
             NodeContext nln = new NodeContext();
             nln.offsets = new Synapse[nc.offsets.length + 1];
             Refinement ref = new Refinement(new RelationsMap(relations), s.getInput().get().getOutputNode());
-            RefValue rv = nc.node.expand(threadId, doc, ref);
+            RefValue rv = nc.node.expand(doc, ref);
             if(rv == null) {
                 return null;
             }

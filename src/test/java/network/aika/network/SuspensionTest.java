@@ -259,9 +259,6 @@ public class SuspensionTest {
         Neuron inA = m.createNeuron("A", INPUT);
         Neuron inB = m.createNeuron("B", INPUT);
 
-        inA.get().addModelLabel("InputModel");
-        inB.get().addModelLabel("InputModel");
-
         int idA = inA.getId();
         int idB = inB.getId();
 
@@ -280,12 +277,8 @@ public class SuspensionTest {
                         .setRelation(EQUALS)
         );
 
-        outD.get().addModelLabel("OutputModel");
-
 
         m.suspendAll(Provider.SuspensionMode.SAVE);
-
-        nC.delete(Collections.singleton("TestModel"));
 
         Assert.assertTrue(outD.isSuspended());
 
@@ -298,8 +291,6 @@ public class SuspensionTest {
         Neuron nCNew = initNeuronC(m, inA, inB);
 
         Assert.assertNotEquals(nC.getId(), nCNew.getId());
-
-        doc.clearActivations();
 
         doc = processTestDocument(m, idA, idB);
 
@@ -350,7 +341,6 @@ public class SuspensionTest {
                         .setRelation(END_EQUALS)
         );
 
-        nC.get().addModelLabel("TestModel");
         return nC;
     }
 }

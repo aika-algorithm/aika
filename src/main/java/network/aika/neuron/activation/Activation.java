@@ -234,10 +234,6 @@ public class Activation implements Comparable<Activation> {
         return doc;
     }
 
-    public int getThreadId() {
-        return doc.getThreadId();
-    }
-
     public long getNewVisitedId() {
         return doc.getNewVisitedId();
     }

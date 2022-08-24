@@ -21,6 +21,7 @@ import network.aika.*;
 import network.aika.lattice.refinement.OrEntry;
 import network.aika.lattice.refinement.RefValue;
 import network.aika.lattice.refinement.Refinement;
+import network.aika.neuron.INeuron;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -62,7 +63,9 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
     // Only the children maps are locked.
     protected ReadWriteLock lock = new ReadWriteLock();
 
-    private ThreadState<A>[] threads;
+
+    private WeakHashMap<Integer, ThreadState> activations = new WeakHashMap<>();
+
 
     long markedCreated;
 
@@ -90,35 +93,31 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
         public boolean isQueued = false;
         public long queueId;
 
-        public ThreadState() {
+        public ThreadState(Document doc) {
+            this.doc = doc;
             added = new ArrayList<>();
             activations = new ArrayList<>();
         }
     }
 
-
-    private ThreadState<A> getThreadState(int threadId, boolean create) {
-        ThreadState<A> th = threads[threadId];
-        if (th == null) {
-            if (!create) return null;
-
-            th = new ThreadState();
-            threads[threadId] = th;
-        }
-        th.lastUsed = provider.getModel().docIdCounter.get();
-        return th;
+    @Override
+    public boolean isSuspendable() {
+        return activations.isEmpty();
     }
 
-
-    public void clearThreadState(int threadId, int deleteDocId) {
-        Node.ThreadState th = threads[threadId];
-        if (th != null && th.lastUsed < deleteDocId) {
-            threads[threadId] = null;
+    public ThreadState<A> lookupThreadState(Document doc) {
+        synchronized (activations) {
+            ThreadState<A> th = activations
+                    .computeIfAbsent(
+                            doc.getId(),
+                            n -> new ThreadState(doc)
+                    );
+            th.lastUsed = provider.getModel().docIdCounter.get();
+            return th;
         }
     }
 
-
-    abstract RefValue expand(int threadId, Document doc, Refinement ref);
+    abstract RefValue expand(Document doc, Refinement ref);
 
     public abstract void reprocessInputs(Document doc);
 
@@ -132,7 +131,6 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
 
 
     public Node(Model m, int level) {
-        threads = new ThreadState[m.numberOfThreads];
         provider = new Provider(m, this);
         this.level = level;
         setModified();
@@ -206,11 +204,9 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
 
         assert act.getNode() == this;
 
-        ThreadState th = getThreadState(doc.getThreadId(), true);
-        if(th.doc == null) {
-            th.doc = doc;
-            doc.addActivatedNode(act.getNode());
-        }
+        ThreadState th = lookupThreadState(doc);
+        doc.addActivatedNode(act.getNode());
+
         if(th.doc != doc) {
             throw new Model.StaleDocumentException();
         }
@@ -221,37 +217,13 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
         act.registered = true;
     }
 
-
-    public void clearActivations(Document doc) {
-        clearActivations(doc.getThreadId());
-    }
-
-
-    public void clearActivations(int threadId) {
-        ThreadState th = getThreadState(threadId, false);
-        if (th == null) return;
-        th.activations.clear();
-
-        th.added.clear();
-
-        th.doc = null;
-    }
-
-
-    public void clearActivations() {
-        for (int i = 0; i < provider.getModel().numberOfThreads; i++) {
-            clearActivations(i);
-        }
-    }
-
-
     /**
      * Process all added or removed activation for this logic node.
      *
      * @param doc
      */
     public void processChanges(Document doc) {
-        ThreadState th = getThreadState(doc.getThreadId(), true);
+        ThreadState th = lookupThreadState(doc);
         List<A> tmpAdded = th.added;
 
         th.added = new ArrayList<>();
@@ -287,7 +259,7 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
      * @param act
      */
     public void addActivation(A act) {
-        ThreadState<A> th = getThreadState(act.getThreadId(), true);
+        ThreadState<A> th = lookupThreadState(act.getDocument());
         if(th.doc == null) {
             th.doc = act.doc;
             act.doc.addActivatedNode(act.getNode());
@@ -334,8 +306,8 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
     }
 
 
-    protected void changeNumberOfNeuronRefs(int threadId, long v, int d) {
-        ThreadState th = getThreadState(threadId, true);
+    protected void changeNumberOfNeuronRefs(Document doc, long v, int d) {
+        ThreadState th = lookupThreadState(doc);
         if (th.visited == v) return;
         th.visited = v;
         numberOfNeuronRefs.addAndGet(d);
@@ -343,7 +315,7 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
 
 
     public Collection<A> getActivations(Document doc) {
-        ThreadState<A> th = getThreadState(doc.getThreadId(), false);
+        ThreadState<A> th = lookupThreadState(doc);
         if (th == null) return Collections.EMPTY_LIST;
         return th.activations;
     }
@@ -355,8 +327,8 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
     }
 
 
-    public boolean isQueued(int threadId, long queueId) {
-        ThreadState th = getThreadState(threadId, true);
+    public boolean isQueued(Document doc, long queueId) {
+        ThreadState th = lookupThreadState(doc);
         if (!th.isQueued) {
             th.isQueued = true;
             th.queueId = queueId;
@@ -365,19 +337,19 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
     }
 
 
-    public void setNotQueued(int threadId) {
-        ThreadState th = getThreadState(threadId, false);
+    public void setNotQueued(Document doc) {
+        ThreadState th = lookupThreadState(doc);
         if(th == null) return;
         th.isQueued = false;
     }
 
 
-    public static int compareRank(int threadId, Node n1, Node n2) {
+    public static int compareRank(Document doc, Node n1, Node n2) {
         int r = Integer.compare(n1.level, n2.level);
         if(r != 0) return r;
 
-        ThreadState th1 = n1.getThreadState(threadId, true);
-        ThreadState th2 = n2.getThreadState(threadId, true);
+        ThreadState th1 = n1.lookupThreadState(doc);
+        ThreadState th2 = n2.lookupThreadState(doc);
         return Long.compare(th1.queueId, th2.queueId);
     }
 
@@ -454,8 +426,6 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
             }
             orChildren.add(OrEntry.read(in, m));
         }
-
-        threads = new ThreadState[m.numberOfThreads];
     }
 
 

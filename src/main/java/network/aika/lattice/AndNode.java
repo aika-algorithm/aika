@@ -91,24 +91,6 @@ public class AndNode extends Node<AndNode, AndActivation> {
 
 
     @Override
-    public void delete(Set<String> modelLabels) {
-        for(Entry e: parents) {
-            Provider<? extends Node> pp = e.rv.parent;
-            Node pn = pp.get();
-            pn.lock.acquireWriteLock();
-            pn.removeAndChild(e.ref);
-            pn.setModified();
-            pn.lock.releaseWriteLock();
-            pp.delete(modelLabels);
-        }
-
-        for(Entry e: parents) {
-            e.rv.parent.get().cleanup();
-        }
-    }
-
-
-    @Override
     public void cleanup() {
         if(!isRemoved && !isRequired()) {
             remove();
@@ -172,7 +154,7 @@ public class AndNode extends Node<AndNode, AndActivation> {
     }
 
 
-    RefValue expand(int threadId, Document doc, Refinement firstRef) {
+    RefValue expand(Document doc, Refinement firstRef) {
         if(!firstRef.isConvertible()) return null;
 
         RefValue firstRV = getAndChild(firstRef);
@@ -192,7 +174,7 @@ public class AndNode extends Node<AndNode, AndActivation> {
             Node parentNode = firstParent.rv.parent.get(doc);
 
             Refinement secondParentRef = new Refinement(getParentRelations(firstRef, firstParent), firstRef.input);
-            RefValue secondParentRV = parentNode.expand(threadId, doc, secondParentRef);
+            RefValue secondParentRV = parentNode.expand(doc, secondParentRef);
 
             if(secondParentRV == null) {
                 continue;
@@ -279,10 +261,10 @@ public class AndNode extends Node<AndNode, AndActivation> {
 
 
     @Override
-    public void changeNumberOfNeuronRefs(int threadId, long v, int d) {
-        super.changeNumberOfNeuronRefs(threadId, v, d);
+    public void changeNumberOfNeuronRefs(Document doc, long v, int d) {
+        super.changeNumberOfNeuronRefs(doc, v, d);
 
-        parents.forEach(e -> e.rv.parent.get().changeNumberOfNeuronRefs(threadId, v, d));
+        parents.forEach(e -> e.rv.parent.get().changeNumberOfNeuronRefs(doc, v, d));
     }
 
 

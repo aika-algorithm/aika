@@ -112,7 +112,11 @@ public class Provider<T extends AbstractNode> implements Comparable<Provider<?>>
 
 
     public synchronized void suspend(SuspensionMode sm) {
-        if(n == null) return;
+        if(n == null)
+            return;
+
+        if(!n.isSuspendable())
+            return;
 
         assert model.suspensionHook != null;
 
@@ -120,9 +124,8 @@ public class Provider<T extends AbstractNode> implements Comparable<Provider<?>>
 
         model.unregister(this);
 
-        if(sm == SuspensionMode.SAVE) {
+        if(sm == SuspensionMode.SAVE)
             save();
-        }
 
         n = null;
     }
@@ -192,23 +195,6 @@ public class Provider<T extends AbstractNode> implements Comparable<Provider<?>>
         n.reactivate();
 
         model.register(this);
-    }
-
-    public void delete(Set<String> modelLabels) {
-        get();
-
-        n.getModelLabels().removeAll(modelLabels);
-
-        if(!n.getModelLabels().isEmpty()) {
-            return;
-        }
-
-        n.delete(modelLabels);
-
-//        model.removeProvider(this);
-        model.suspensionHook.remove(id);
-        model.suspensionHook.removeLabel(n.getLabel());
-        markedDeleted = true;
     }
 
     public boolean isMarkedDeleted() {

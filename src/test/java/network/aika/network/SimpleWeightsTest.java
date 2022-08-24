@@ -74,8 +74,6 @@ public class SimpleWeightsTest {
             doc.process();
 
             System.out.println(doc.activationsToString());
-
-            doc.clearActivations();
         }
         {
             Document doc = new Document(m, "aaaaaaaaaa");
@@ -86,8 +84,6 @@ public class SimpleWeightsTest {
             doc.process();
 
             System.out.println(doc.activationsToString());
-
-            doc.clearActivations();
         }
     }
 
@@ -131,8 +127,6 @@ public class SimpleWeightsTest {
             doc.process();
 
             System.out.println(doc.activationsToString());
-
-            doc.clearActivations();
         }
     }
 }
