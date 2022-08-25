@@ -286,7 +286,7 @@ public class SuspensionTest {
 
         Document doc = processTestDocument(m, idA, idB);
 
-        Assert.assertTrue(outD.getActivations(doc, true).collect(Collectors.toList()).isEmpty());
+        Assert.assertFalse(outD.getActivations(doc, true).collect(Collectors.toList()).isEmpty());
 
         Neuron nCNew = initNeuronC(m, inA, inB);
 
