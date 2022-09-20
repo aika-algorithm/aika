@@ -57,7 +57,7 @@ public class Document implements Comparable<Document> {
     public static int CLEANUP_INTERVAL = 500;
     public static int MAX_ROUND = 20;
 
-    private final int id;
+    private final Integer id;
     private final StringBuilder content;
 
     private long visitedCounter = 1;
@@ -145,7 +145,7 @@ public class Document implements Comparable<Document> {
     }
 
 
-    public Document(Model model, int id, String content) {
+    public Document(Model model, Integer id, String content) {
         this.id = id;
         this.content = new StringBuilder(content);
 
@@ -168,7 +168,7 @@ public class Document implements Comparable<Document> {
     }
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

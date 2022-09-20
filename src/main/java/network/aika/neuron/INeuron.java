@@ -161,6 +161,12 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
         }
     }
 
+    public ThreadState getThreadState(Document doc) {
+        synchronized (activations) {
+            return activations.get(doc.getId());
+        }
+    }
+
 
     public void register(Activation act) {
         Document doc = act.getDocument();
@@ -182,9 +188,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
             ActKey ak = new ActKey(me.getKey(), me.getValue(), act.getId());
             th.activationsBySlotAndPosition.put(ak, act);
             th.activations.put(act.getId(), act);
-        }
 
-        for(Map.Entry<Integer, Position> me: act.getSlots().entrySet()) {
             me.getValue().addActivation(me.getKey(), act);
         }
 
@@ -287,7 +291,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
 
     public Stream<Activation> getActivations(Document doc) {
-        ThreadState th = lookupThreadState(doc);
+        ThreadState th = getThreadState(doc);
         if(th == null) {
             return Stream.empty();
         }
@@ -297,7 +301,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
 
     public boolean isEmpty(Document doc) {
-        ThreadState th = lookupThreadState(doc);
+        ThreadState th = getThreadState(doc);
         if(th == null) {
             return true;
         }
@@ -306,25 +310,13 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
 
     public int size(Document doc) {
-        ThreadState th = lookupThreadState(doc);
+        ThreadState th = getThreadState(doc);
         if(th == null) {
             return 0;
         }
 
         return th.activations.size();
     }
-
-
-    public void clearActivations(Document doc) {
-        ThreadState th = lookupThreadState(doc);
-        if(th == null) {
-            return;
-        }
-        th.activationsBySlotAndPosition.clear();
-        th.activations.clear();
-        th.doc = null;
-    }
-
 
     public Stream<Activation> getActivations(Document doc, int slot, Position pos, boolean onlyFinal) {
         return getActivations(doc, slot, pos, true, slot, pos, false)
@@ -337,7 +329,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
 
     public Stream<Activation> getActivations(Document doc, int fromSlot, Position fromPos, boolean fromInclusive, int toSlot, Position toPos, boolean toInclusive) {
-        ThreadState th = lookupThreadState(doc);
+        ThreadState th = getThreadState(doc);
         if(th == null) {
             return Stream.empty();
         }
