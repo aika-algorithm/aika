@@ -22,6 +22,7 @@ import network.aika.lattice.Node;
 import network.aika.lattice.NodeActivation;
 import network.aika.lattice.NodeQueue;
 import network.aika.neuron.INeuron;
+import network.aika.neuron.Neuron;
 import network.aika.neuron.Synapse;
 import network.aika.neuron.activation.Activation;
 import network.aika.neuron.activation.Activation.OscillatingActivationsException;
@@ -77,7 +78,9 @@ public class Document implements Comparable<Document> {
 
     private TreeMap<Integer, Position> positions = new TreeMap<>();
     private TreeSet<Node> activatedNodes = new TreeSet<>();
+    private final Map<Provider, Node.ThreadState> actsPerNode = new HashMap<>();
     private TreeSet<INeuron> activatedNeurons = new TreeSet<>();
+    private final Map<Neuron, INeuron.ThreadState> actsPerNeuron = new HashMap<>();
     private TreeSet<INeuron> finallyActivatedNeurons = new TreeSet<>();
     private TreeSet<Activation> inputNeuronActivations = new TreeSet<>();
     private TreeMap<INeuron, Set<Synapse>> modifiedWeights = new TreeMap<>();
@@ -152,6 +155,13 @@ public class Document implements Comparable<Document> {
         this.startTime = System.currentTimeMillis();
     }
 
+    public void register(Provider p, Node.ThreadState acts) {
+        actsPerNode.put(p, acts);
+    }
+
+    public void register(Neuron np, INeuron.ThreadState acts) {
+        actsPerNeuron.put(np, acts);
+    }
 
     protected Linker initLinker() {
         return new Linker(this);

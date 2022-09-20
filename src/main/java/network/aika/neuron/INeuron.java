@@ -122,7 +122,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
      * The {@code ThreadState} is a thread local data structure containing the activationsBySlotAndPosition of a single document for
      * a specific logic node.
      */
-    private static class ThreadState {
+    public static class ThreadState {
         public long lastUsed;
         public Document doc;
 
@@ -149,7 +149,11 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
             ThreadState th = activations
                     .computeIfAbsent(
                             doc.getId(),
-                            n -> new ThreadState(doc)
+                            n -> {
+                                ThreadState t = new ThreadState(doc);
+                                doc.register(getProvider(), t);
+                                return t;
+                            }
                     );
 
             th.lastUsed = provider.getModel().docIdCounter.get();

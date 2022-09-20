@@ -81,7 +81,7 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
      * The {@code ThreadState} is a thread local data structure containing the activations of a single document for
      * a specific logic node.
      */
-    private static class ThreadState<A extends NodeActivation> {
+    public static class ThreadState<A extends NodeActivation> {
         public long lastUsed;
         public Document doc;
 
@@ -110,7 +110,11 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
             ThreadState<A> th = activations
                     .computeIfAbsent(
                             doc.getId(),
-                            n -> new ThreadState(doc)
+                            n -> {
+                                ThreadState t = new ThreadState(doc);
+                                doc.register(getProvider(), t);
+                                return t;
+                            }
                     );
             th.lastUsed = provider.getModel().docIdCounter.get();
             return th;
