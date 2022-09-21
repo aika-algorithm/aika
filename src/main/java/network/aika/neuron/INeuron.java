@@ -149,11 +149,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
             ThreadState th = activations
                     .computeIfAbsent(
                             doc.getId(),
-                            n -> {
-                                ThreadState t = new ThreadState(doc);
-                                doc.register(getProvider(), t);
-                                return t;
-                            }
+                            n -> new ThreadState(doc)
                     );
 
             th.lastUsed = provider.getModel().docIdCounter.get();

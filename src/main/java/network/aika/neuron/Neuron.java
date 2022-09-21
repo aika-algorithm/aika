@@ -108,7 +108,7 @@ public class Neuron extends Provider<INeuron> {
 
 
     public static Neuron init(Neuron n, Builder... inputs) {
-        return init(new Document(n.getModel(), ""), n, inputs);
+        return init(null, n, inputs);
     }
 
 
@@ -156,13 +156,13 @@ public class Neuron extends Provider<INeuron> {
      * @return
      */
     public static Neuron init(Neuron n, double bias, Collection<Synapse.Builder> synapseBuilders, Collection<Relation.Builder> relationBuilders) {
-        if(n.init(new Document(n.getModel(), ""), bias, synapseBuilders, relationBuilders)) return n;
+        if(n.init((Document) null, bias, synapseBuilders, relationBuilders)) return n;
         return null;
     }
 
 
     public static Neuron init(Neuron n, double bias, Collection<Neuron.Builder> inputs) {
-        if(n.init(new Document(n.getModel(), ""), bias, getSynapseBuilders(inputs), getRelationBuilders(inputs))) return n;
+        if(n.init((Document) null, bias, getSynapseBuilders(inputs), getRelationBuilders(inputs))) return n;
         return null;
     }
 

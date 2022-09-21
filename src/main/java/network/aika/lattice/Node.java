@@ -56,6 +56,7 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
     TreeSet<OrEntry> orChildren;
 
     public int level;
+    private long visited;
 
     private AtomicInteger numberOfNeuronRefs = new AtomicInteger(0);
     volatile boolean isRemoved;
@@ -110,11 +111,7 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
             ThreadState<A> th = activations
                     .computeIfAbsent(
                             doc.getId(),
-                            n -> {
-                                ThreadState t = new ThreadState(doc);
-                                doc.register(getProvider(), t);
-                                return t;
-                            }
+                            n -> new ThreadState(doc)
                     );
             th.lastUsed = provider.getModel().docIdCounter.get();
             return th;
@@ -311,9 +308,14 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
 
 
     protected void changeNumberOfNeuronRefs(Document doc, long v, int d) {
-        ThreadState th = lookupThreadState(doc);
-        if (th.visited == v) return;
-        th.visited = v;
+        if(doc == null) {
+            if (visited == v) return;
+            visited = v;
+        } else {
+            ThreadState th = lookupThreadState(doc);
+            if (th.visited == v) return;
+            th.visited = v;
+        }
         numberOfNeuronRefs.addAndGet(d);
     }
 
