@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -57,7 +58,7 @@ public class Model {
     public AtomicInteger currentId = new AtomicInteger(0);
 
     // Important: the id field needs to be referenced by the provider!
-    public final WeakHashMap<Integer, WeakReference<Provider<? extends AbstractNode>>> providers = new WeakHashMap<>();
+    public final WeakHashMap<Integer, SoftReference<Provider<? extends AbstractNode>>> providers = new WeakHashMap<>();
     public Map<Integer, Provider<? extends AbstractNode>> activeProviders = new TreeMap<>();
 
     public Map<Integer, PassiveInputFunction> passiveActivationFunctions = new TreeMap<>();
@@ -162,7 +163,7 @@ public class Model {
 
     public <P extends Provider<? extends Node>> P lookupNodeProvider(int id) {
         synchronized (providers) {
-            WeakReference<Provider<? extends AbstractNode>> wr = providers.get(id);
+            SoftReference<Provider<? extends AbstractNode>> wr = providers.get(id);
             if(wr != null) {
                 P p = (P) wr.get();
                 if (p != null) {
@@ -178,7 +179,7 @@ public class Model {
 
     public Neuron lookupNeuron(int id) {
         synchronized (providers) {
-            WeakReference<Provider<? extends AbstractNode>> wr = providers.get(id);
+            SoftReference<Provider<? extends AbstractNode>> wr = providers.get(id);
             if(wr != null) {
                 Neuron n = (Neuron) wr.get();
                 if (n != null) {
