@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -114,7 +115,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
     PassiveInputFunction passiveInputFunction = null;
 
 
-    private WeakHashMap<Integer, ThreadState> activations = new WeakHashMap<>();
+    private final WeakHashMap<Integer, WeakReference<ThreadState>> activations = new WeakHashMap<>();
 
 
 
@@ -125,8 +126,8 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
     public static class ThreadState {
         public long lastUsed;
 
-        private TreeMap<ActKey, Activation> activationsBySlotAndPosition;
-        private TreeMap<Integer, Activation> activations;
+        private final TreeMap<ActKey, Activation> activationsBySlotAndPosition;
+        private final TreeMap<Integer, Activation> activations;
         public int minLength = Integer.MAX_VALUE;
         public int maxLength = 0;
 
@@ -137,22 +138,25 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
         }
     }
 
-    public ThreadState lookupThreadState(Document doc) {
+    public ThreadState lookupThreadState(Activation act) {
         synchronized (activations) {
-            ThreadState th = activations
+            WeakReference<ThreadState> thWR = activations
                     .computeIfAbsent(
-                            doc.getId(),
-                            n -> new ThreadState()
+                            act.getDocument().getId(),
+                            n -> new WeakReference<>(act.initThreadState())
                     );
 
-            th.lastUsed = provider.getModel().docIdCounter.get();
+            ThreadState th = thWR.get();
+            if(th != null)
+                th.lastUsed = provider.getModel().docIdCounter.get();
             return th;
         }
     }
 
     public ThreadState getThreadState(Document doc) {
         synchronized (activations) {
-            return activations.get(doc.getId());
+            WeakReference<ThreadState> thWR = activations.get(doc.getId());
+            return thWR != null ? thWR.get() : null;
         }
     }
 
@@ -160,7 +164,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
     public void register(Activation act) {
         Document doc = act.getDocument();
 
-        ThreadState th = lookupThreadState(act.getDocument());
+        ThreadState th = lookupThreadState(act);
         doc.addActivatedNeuron(act.getINeuron());
 
         Integer l = act.length();

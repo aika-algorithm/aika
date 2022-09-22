@@ -57,7 +57,7 @@ public class Model {
     public AtomicInteger currentId = new AtomicInteger(0);
 
     // Important: the id field needs to be referenced by the provider!
-    public WeakHashMap<Integer, WeakReference<Provider<? extends AbstractNode>>> providers = new WeakHashMap<>();
+    public final WeakHashMap<Integer, WeakReference<Provider<? extends AbstractNode>>> providers = new WeakHashMap<>();
     public Map<Integer, Provider<? extends AbstractNode>> activeProviders = new TreeMap<>();
 
     public Map<Integer, PassiveInputFunction> passiveActivationFunctions = new TreeMap<>();

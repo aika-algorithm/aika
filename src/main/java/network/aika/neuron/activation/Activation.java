@@ -19,6 +19,7 @@ package network.aika.neuron.activation;
 import network.aika.ActivationFunction;
 import network.aika.Document;
 import network.aika.Utils;
+import network.aika.lattice.Node;
 import network.aika.lattice.activation.InputActivation;
 import network.aika.lattice.activation.OrActivation;
 import network.aika.neuron.INeuron;
@@ -74,6 +75,8 @@ public class Activation implements Comparable<Activation> {
     private int id;
     private INeuron neuron;
     private Document doc;
+
+    private INeuron.ThreadState threadState;
     private long visited = 0;
 
     private Map<Integer, Position> slots = new TreeMap<>();
@@ -165,6 +168,12 @@ public class Activation implements Comparable<Activation> {
         this.slots = slots;
 
         neuron.register(this);
+    }
+
+    public INeuron.ThreadState initThreadState() {
+        assert this.threadState == null;
+        this.threadState = new INeuron.ThreadState();
+        return this.threadState;
     }
 
 

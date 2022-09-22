@@ -37,6 +37,8 @@ public abstract class NodeActivation<T extends Node> implements Comparable<NodeA
 
     protected final Document doc;
 
+    protected Node.ThreadState threadState;
+
     public Long repropagateV;
     public boolean registered;
 
@@ -50,6 +52,11 @@ public abstract class NodeActivation<T extends Node> implements Comparable<NodeA
         this.node = node;
     }
 
+    public Node.ThreadState initThreadState() {
+        assert this.threadState == null;
+        this.threadState = new Node.ThreadState();
+        return this.threadState;
+    }
 
     public T getNode() {
         return node;

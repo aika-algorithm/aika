@@ -17,6 +17,7 @@
 package network.aika.lattice.activation;
 
 import network.aika.lattice.InputNode;
+import network.aika.lattice.Node;
 import network.aika.lattice.NodeActivation;
 import network.aika.neuron.activation.Activation;
 

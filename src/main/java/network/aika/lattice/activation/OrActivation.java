@@ -17,6 +17,7 @@
 package network.aika.lattice.activation;
 
 import network.aika.Document;
+import network.aika.lattice.Node;
 import network.aika.lattice.NodeActivation;
 import network.aika.lattice.OrNode;
 import network.aika.lattice.refinement.OrEntry;
