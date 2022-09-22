@@ -124,7 +124,6 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
      */
     public static class ThreadState {
         public long lastUsed;
-        public Document doc;
 
         private TreeMap<ActKey, Activation> activationsBySlotAndPosition;
         private TreeMap<Integer, Activation> activations;
@@ -132,16 +131,10 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
         public int maxLength = 0;
 
 
-        public ThreadState(Document doc) {
-            this.doc = doc;
+        public ThreadState() {
             activationsBySlotAndPosition = new TreeMap<>();
             activations = new TreeMap<>();
         }
-    }
-
-    @Override
-    public boolean isSuspendable() {
-        return activations.isEmpty();
     }
 
     public ThreadState lookupThreadState(Document doc) {
@@ -149,7 +142,7 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
             ThreadState th = activations
                     .computeIfAbsent(
                             doc.getId(),
-                            n -> new ThreadState(doc)
+                            n -> new ThreadState()
                     );
 
             th.lastUsed = provider.getModel().docIdCounter.get();
@@ -169,10 +162,6 @@ public class INeuron extends AbstractNode<Neuron> implements Comparable<INeuron>
 
         ThreadState th = lookupThreadState(act.getDocument());
         doc.addActivatedNeuron(act.getINeuron());
-
-        if(th.doc != doc) {
-            throw new Model.StaleDocumentException();
-        }
 
         Integer l = act.length();
         if(l != null) {

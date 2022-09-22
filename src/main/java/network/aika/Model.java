@@ -249,14 +249,4 @@ public class Model {
             providers.remove(p.id);
         }
     }
-
-
-
-
-    public static class StaleDocumentException extends RuntimeException {
-
-        public StaleDocumentException() {
-            super("Two documents are using the same thread. Call clearActivations() first, before processing the next document.");
-        }
-    }
 }

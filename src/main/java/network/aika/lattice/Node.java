@@ -84,7 +84,6 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
      */
     public static class ThreadState<A extends NodeActivation> {
         public long lastUsed;
-        public Document doc;
 
         public List<A> added;
         public List<A> activations;
@@ -94,16 +93,10 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
         public boolean isQueued = false;
         public long queueId;
 
-        public ThreadState(Document doc) {
-            this.doc = doc;
+        public ThreadState() {
             added = new ArrayList<>();
             activations = new ArrayList<>();
         }
-    }
-
-    @Override
-    public boolean isSuspendable() {
-        return activations.isEmpty();
     }
 
     public ThreadState<A> lookupThreadState(Document doc) {
@@ -111,7 +104,7 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
             ThreadState<A> th = activations
                     .computeIfAbsent(
                             doc.getId(),
-                            n -> new ThreadState(doc)
+                            n -> new ThreadState()
                     );
             th.lastUsed = provider.getModel().docIdCounter.get();
             return th;
@@ -208,10 +201,6 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
         ThreadState th = lookupThreadState(doc);
         doc.addActivatedNode(act.getNode());
 
-        if(th.doc != doc) {
-            throw new Model.StaleDocumentException();
-        }
-
         th.activations.add(act);
 
         doc.addedNodeActivations.add(act);
@@ -261,13 +250,7 @@ public abstract class Node<T extends Node, A extends NodeActivation<T>> extends 
      */
     public void addActivation(A act) {
         ThreadState<A> th = lookupThreadState(act.getDocument());
-        if(th.doc == null) {
-            th.doc = act.doc;
-            act.doc.addActivatedNode(act.getNode());
-        }
-        if(th.doc != act.doc) {
-            throw new Model.StaleDocumentException();
-        }
+        act.doc.addActivatedNode(act.getNode());
 
         th.added.add(act);
         act.getDocument().getNodeQueue().add(this);

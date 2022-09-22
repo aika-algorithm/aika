@@ -115,9 +115,6 @@ public class Provider<T extends AbstractNode> implements Comparable<Provider<?>>
         if(n == null)
             return;
 
-        if(!n.isSuspendable())
-            return;
-
         assert model.suspensionHook != null;
 
         n.suspend();

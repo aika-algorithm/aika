@@ -45,8 +45,6 @@ public abstract class AbstractNode<P extends Provider<? extends AbstractNode>> i
         modified = true;
     }
 
-    public abstract boolean isSuspendable();
-
     public void suspend() {}
 
     public void reactivate() {}
