@@ -7,9 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
-import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -43,7 +41,7 @@ public class Provider<T extends AbstractNode> implements Comparable<Provider<?>>
 
         if(model != null) {
             synchronized (model.providers) {
-                model.providers.put(this.id, new SoftReference<>(this));
+                model.providers.put(this.id, new WeakReference<>(this));
             }
         }
     }
@@ -55,7 +53,7 @@ public class Provider<T extends AbstractNode> implements Comparable<Provider<?>>
 
         id = model.suspensionHook != null ? model.suspensionHook.getNewId() : model.currentId.addAndGet(1);
         synchronized (model.providers) {
-            model.providers.put(id, new SoftReference<>(this));
+            model.providers.put(id, new WeakReference<>(this));
 
             if(n != null) {
                 model.register(this);

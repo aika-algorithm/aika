@@ -5,7 +5,7 @@
     <groupId>network.aika</groupId>
     <artifactId>aika</artifactId>
     <packaging>jar</packaging>
-    <version>1.4.32-SNAPSHOT</version>
+    <version>1.4.41-ms</version>
     <name>aika</name>
     <url>https://aika.network</url>
     <description>An Artificial Intelligence for Knowledge Acquisition</description>
@@ -26,25 +26,39 @@
         </license>
     </licenses>
 
-    <scm>
-        <url>https://github.com/aika-algorithm/aika</url>
-        <connection>scm:git:git://github.com/aika-algorithm/aika.git</connection>
-        <developerConnection>scm:git:git@github.com:aika-algorithm/aika.git</developerConnection>
-        <tag>aika-1.4.32-SNAPSHOT</tag>
-    </scm>
-
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
         <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>meinestadt.de-releases</id>
+            <name>meinestadt Release Repository</name>
+            <url>http://repository.meinestadt.de:8081/artifactory/libs-release-local</url>
         </repository>
+        <snapshotRepository>
+            <id>meinestadt.de-snapshots</id>
+            <name>meinestadt Snapshot Repository</name>
+            <url>http://repository.meinestadt.de:8081/artifactory/libs-snapshot-local</url>
+        </snapshotRepository>
     </distributionManagement>
 
+    <!--
+        <scm>
+            <url>https://github.com/aika-algorithm/aika</url>
+            <connection>scm:git:git://github.com/aika-algorithm/aika.git</connection>
+            <developerConnection>scm:git:git@github.com:aika-algorithm/aika.git</developerConnection>
+            <tag>aika-1.4.32-SNAPSHOT</tag>
+        </scm>
+
+        <distributionManagement>
+            <snapshotRepository>
+                <id>ossrh</id>
+                <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            </snapshotRepository>
+            <repository>
+                <id>ossrh</id>
+                <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            </repository>
+        </distributionManagement>
+    -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -176,7 +190,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+<!--
     <profiles>
         <profile>
             <id>deploy_artifact</id>
@@ -214,4 +228,5 @@
             </build>
         </profile>
     </profiles>
+    -->
 </project>
