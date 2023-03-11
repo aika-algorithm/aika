@@ -16,103 +16,32 @@
  */
 package network.aika.debugger;
 
-import network.aika.callbacks.EventType;
-import network.aika.debugger.activations.LayoutState;
-import network.aika.elements.neurons.*;
-import org.graphstream.graph.Node;
-import org.graphstream.ui.geom.Vector3;
-import org.graphstream.ui.layout.springbox.EdgeSpring;
-import org.graphstream.ui.layout.springbox.Energies;
-import org.graphstream.ui.layout.springbox.GraphCellData;
-import org.graphstream.ui.layout.springbox.NodeParticle;
-import org.graphstream.ui.layout.springbox.implementations.SpringBoxNodeParticle;
-import org.miv.pherd.Particle;
-import org.miv.pherd.geom.Point3;
-import org.miv.pherd.ntree.Cell;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.function.Consumer;
+import network.aika.elements.Element;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractParticle<G extends AbstractGraphManager> extends SpringBoxNodeParticle {
+public abstract class Node<N extends Element> implements GraphicElement<N> {
 
-    public static double K1Attr = 0.0001;
+    protected N node;
 
     public double x;
     public double y;
 
-    protected Map<Long, AbstractParticleLink> inputParticleLinks = new TreeMap<>();
-    protected Map<Long, AbstractParticleLink> outputParticleLinks = new TreeMap<>();
 
-    protected static Map<Class<? extends Neuron>, Consumer<Node>> neuronTypeModifiers = new HashMap<>();
-
-    static {
-        neuronTypeModifiers.put(BindingNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(0,205,0);"));
-        neuronTypeModifiers.put(TokenPositionRelationNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(10,170,0);"));
-        neuronTypeModifiers.put(CharPositionRelationNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(0,170,10);"));
-
-        neuronTypeModifiers.put(InhibitoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,100,255);"));
-
-        neuronTypeModifiers.put(PatternCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-        neuronTypeModifiers.put(BindingCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-        neuronTypeModifiers.put(InhibitoryCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-
-        neuronTypeModifiers.put(TokenNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(175, 15, 192);"));
-        neuronTypeModifiers.put(PatternNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(224, 34, 245);"));
+    public Node(N node) {
+        this.node = node;
     }
 
-    /**
-     * Default repulsion.
-     */
-    protected double K2 = 0.000005f; // 0.12 ??
 
-    protected Node node;
 
-    protected G graphManager;
-
-    public AbstractParticle(G graphManager, String id, Node n, double x, double y, double z) {
-        super(graphManager, id, x, y, z);
-        this.graphManager = graphManager;
-        this.node = n;
-    }
-
-    public void addInputParticleLink(AbstractParticleLink pl) {
-        inputParticleLinks.put(
-                pl.getInputId(),
-                pl
-        );
-    }
-
-    public AbstractParticleLink getInputParticleLink(Long inputId) {
-        return inputParticleLinks.get(inputId);
-    }
-
-    public void addOutputParticleLink(AbstractParticleLink pl) {
-        outputParticleLinks.put(
-                pl.getOutputId(),
-                pl
-        );
-    }
-
-    public AbstractParticleLink getOutputParticleLink(Long outputId) {
-        return outputParticleLinks.get(outputId);
-    }
-
-    public Node getNode() {
+    @Override
+    public N getElement() {
         return node;
     }
 
-    public abstract void processLayout(LayoutState ls);
 
-    public abstract void onEvent(EventType et);
-
-    @Override
-    protected void repulsionN2(Vector3 delta) {
+    protected void repulsionN2(double[] delta) {
         /*
         AbstractLayout box = (AbstractLayout) this.box;
         boolean is3D = box.is3D();
@@ -145,8 +74,8 @@ public abstract class AbstractParticle<G extends AbstractGraphManager> extends S
          */
     }
 
-    @Override
-    protected void repulsionNLogN(Vector3 delta) {
+
+    protected void repulsionNLogN(double[] delta) {
         // Explore the n-tree from the root cell and consider the contents
         // of one cell only if it does intersect an area around the current
         // node. Else take its (weighted) barycenter into account.
@@ -154,6 +83,7 @@ public abstract class AbstractParticle<G extends AbstractGraphManager> extends S
   //      recurseRepulsion(box.getSpatialIndex().getNTree().getRootCell(), delta);
     }
 
+    /*
     protected void recurseRepulsion(Cell cell, Vector3 delta) {
         AbstractGraphManager box = (AbstractGraphManager) this.box;
         boolean is3D = box.is3D();
@@ -244,5 +174,5 @@ public abstract class AbstractParticle<G extends AbstractGraphManager> extends S
         disp.add(delta);
         attE += factor;
         energies.accumulateEnergy(factor);
-    }
+    }*/
 }

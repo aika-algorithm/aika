@@ -14,17 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger;
+package network.aika.debugger.activations.layout;
 
-import org.graphstream.stream.file.images.Resolution;
-import org.graphstream.ui.swing.util.SwingFileSinkImages;
+import network.aika.elements.links.InputPatternLink;
+
+
 
 /**
  * @author Lukas Molzberger
  */
-public class AIKAFileSinkImages extends SwingFileSinkImages {
+public class InputPatternLinkEdge<L extends InputPatternLink> extends LinkEdge<L> {
 
-    public AIKAFileSinkImages(OutputType outputType, Resolution resolution) {
-        super(outputType, resolution);
+    public InputPatternLinkEdge(L l) {
+        super(l);
     }
+
 }

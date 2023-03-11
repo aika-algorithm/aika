@@ -16,32 +16,25 @@
  */
 package network.aika.debugger.activations.layout;
 
-import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.debugger.activations.particles.ActivationParticle;
-import network.aika.direction.Direction;
-import network.aika.elements.links.FeedbackLink;
-import org.graphstream.graph.Edge;
-import org.graphstream.ui.geom.Vector3;
-import org.miv.pherd.geom.Point3;
+import network.aika.elements.links.PatternCategoryInputLink;
+
 
 /**
  * @author Lukas Molzberger
  */
-public class FeedbackParticleLink<L extends FeedbackLink> extends ParticleLink<L> {
+public class PatternCategoryInputLinkEdge<L extends PatternCategoryInputLink> extends LinkEdge<L> {
 
-    public FeedbackParticleLink(L l, Edge e, ActivationGraphManager gm) {
-        super(l, e, gm);
+    public PatternCategoryInputLinkEdge(L l) {
+        super(l);
     }
 
-    public static ParticleLink create(FeedbackLink l, Edge e, ActivationGraphManager gm) {
-        return new FeedbackParticleLink(l, e, gm);
+    public static LinkEdge create(PatternCategoryInputLink l) {
+        return new PatternCategoryInputLinkEdge(l);
     }
-
+/*
     @Override
-    public void calculateForce(Vector3 delta, Point3 pos, Direction dir, ActivationParticle other) {
+    public double getInitialYDistance() {
+        return STANDARD_DISTANCE_Y * 2;
     }
-
-    @Override
-    public void processLayout() {
-    }
+ */
 }

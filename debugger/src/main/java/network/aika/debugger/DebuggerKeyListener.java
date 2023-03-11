@@ -51,7 +51,6 @@ public class DebuggerKeyListener implements KeyListener {
 
         switch(c) {
             case 'm':
-                System.out.println("Metric: " + debugger.getActivationViewManager().getCamera().getMetrics());
                 return;
             case 'e':
                 sm.setStopAfterProcessed(true);
@@ -91,7 +90,7 @@ public class DebuggerKeyListener implements KeyListener {
     public void keyReleased(KeyEvent e) {
         char c = e.getKeyChar();
         if(c == 'o') {
-            debugger.getActivationViewManager().dumpNetworkCoordinates();
+    //        debugger.getActivationViewManager().dumpNetworkCoordinates();
             debugger.getNeuronViewManager().dumpNetworkCoordinates();
         }
     }

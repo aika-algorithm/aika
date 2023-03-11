@@ -15,26 +15,15 @@
  * limitations under the License.
  */
 package network.aika.debugger.activations.layout;
-
-import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.elements.links.RelationInputLink;
-import org.graphstream.graph.Edge;
-
+import network.aika.elements.links.InhibitoryLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class RelationInputParticleLink<L extends RelationInputLink> extends ParticleLink<L> {
+public class InhibitoryLinkEdge<L extends InhibitoryLink> extends LinkEdge<L> {
 
-    public RelationInputParticleLink(L l, Edge e, ActivationGraphManager gm) {
-        super(l, e, gm);
+    public InhibitoryLinkEdge(L l) {
+        super(l);
     }
 
-    public static ParticleLink create(RelationInputLink l, Edge e, ActivationGraphManager gm) {
-        return new RelationInputParticleLink(l, e, gm);
-    }
-
-    @Override
-    public void processLayout() {
-    }
 }

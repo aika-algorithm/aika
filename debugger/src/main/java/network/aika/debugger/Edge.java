@@ -17,32 +17,16 @@
 package network.aika.debugger;
 
 import network.aika.elements.Element;
-import network.aika.elements.links.Link;
-import network.aika.elements.synapses.*;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractParticleLink<E extends Element> {
+public abstract class Edge<E extends Element> implements GraphicElement<E> {
 
-    protected E link;
-
-    protected Edge edge;
-
-    protected Node inputNode;
-    protected Node outputNode;
-
-    protected AbstractParticle inputParticle;
-    protected AbstractParticle outputParticle;
-
-    protected AbstractGraphManager graphManager;
+    protected E edge;
 
 
+/*
     protected static Map<Class<? extends Synapse>, String> synapseTypeModifiers = new HashMap<>();
 
 
@@ -55,7 +39,6 @@ public abstract class AbstractParticleLink<E extends Element> {
         synapseTypeModifiers.put(ReversePatternSynapse.class, "fill-color: rgb(120,200,50); ");
 
         synapseTypeModifiers.put(InhibitorySynapse.class, "fill-color: rgb(100,100,255);");
-        synapseTypeModifiers.put(PrimaryInhibitorySynapse.class, "fill-color: rgb(90,90,245);");
 
         synapseTypeModifiers.put(PatternCategorySynapse.class, "fill-color: rgb(100,0,200);");
         synapseTypeModifiers.put(BindingCategorySynapse.class, "fill-color: rgb(110,0,220);");
@@ -67,43 +50,13 @@ public abstract class AbstractParticleLink<E extends Element> {
         synapseTypeModifiers.put(BindingCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
         synapseTypeModifiers.put(InhibitoryCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
     }
+*/
 
-
-    public AbstractParticleLink(E link, Edge e, AbstractGraphManager gm) {
-        this.link = link;
-        this.edge = e;
-        this.graphManager = gm;
+    public Edge(E edge) {
+        this.edge = edge;
     }
 
-    public abstract Long getInputId();
-
-    public abstract Long getOutputId();
-
-    public Edge getEdge() {
+    public E getElement() {
         return edge;
-    }
-
-    public E getLink() {
-        return link;
-    }
-
-    public abstract void processLayout();
-
-    public void onEvent() {
-        Synapse s;
-        if(link instanceof Link) {
-            s = ((Link) link).getSynapse();
-        } else {
-            s = (Synapse) link;
-        }
-
-        String synapseTypeModifier = synapseTypeModifiers.get(s.getClass());
-        if(synapseTypeModifier == null)
-            synapseTypeModifier = "";
-
-        if(s instanceof FeedbackSynapse)
-            synapseTypeModifier += " arrow-shape: diamond;";
-
-        edge.setAttribute("ui.style", synapseTypeModifier);
     }
 }

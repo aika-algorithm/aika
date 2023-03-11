@@ -18,7 +18,9 @@ package network.aika.debugger.activations.properties;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.links.CategoryInputLink;
+
+import java.util.stream.Stream;
+
 
 /**
  * @author Lukas Molzberger
@@ -41,14 +43,7 @@ public class ConjunctiveActivationPropertyPanel<E extends ConjunctiveActivation>
         if(ati != null)
             addConstant("Active Template-Instance: ", getShortString(ati));
 
-        CategoryInputLink cil = act.getCategoryInputLink();
-        if(cil == null || cil.getInput() == null)
-            return;
-
-        cil.getInput()
-                .getCategoryInputs()
-                .forEach(tiAct ->
-                        addConstant("Template-Instance: ", getShortString(tiAct))
-                );
+        Stream<Activation> tis = act.getTemplateInstancesStream();
+        tis.forEach(tiAct -> addConstant("Template-Instance: ", getShortString(tiAct)));
     }
 }

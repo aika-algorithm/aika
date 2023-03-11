@@ -123,8 +123,6 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
         actViewManager = new ActivationViewManager(doc, new ActivationConsoleManager(doc), this);
         actViewManager.setStepManager(new DebugStepManager(doc));
         addTab(ACTIVATION_TAB_INDEX, "Activations", KeyEvent.VK_A, actViewManager.getView());
-        actViewManager.enableAutoLayout();
-        actViewManager.getCamera().setViewCenter(0.678, 0.563, 0);
     }
 
     public Runnable getCurrentTestCase() {

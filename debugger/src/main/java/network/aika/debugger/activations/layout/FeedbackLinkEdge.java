@@ -16,29 +16,23 @@
  */
 package network.aika.debugger.activations.layout;
 
-import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.elements.links.InhibitoryLink;
-import org.graphstream.graph.Edge;
-
-import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
-
+import network.aika.elements.links.FeedbackLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryParticleLink<L extends InhibitoryLink> extends ParticleLink<L> {
+public class FeedbackLinkEdge<L extends FeedbackLink> extends LinkEdge<L> {
 
-    public InhibitoryParticleLink(L l, Edge e, ActivationGraphManager gm) {
-        super(l, e, gm);
+    public FeedbackLinkEdge(L l) {
+        super(l);
     }
 
-    public static ParticleLink create(InhibitoryLink l, Edge e, ActivationGraphManager gm) {
-
-        return new InhibitoryParticleLink(l, e, gm);
+    public static LinkEdge create(FeedbackLink l) {
+        return new FeedbackLinkEdge(l);
     }
-
+/*
     @Override
-    public double getInitialYDistance() {
-        return STANDARD_DISTANCE_Y / 2;
+    public void calculateForce(Vector3 delta, Point3 pos, Direction dir, ActivationParticle other) {
     }
+*/
 }

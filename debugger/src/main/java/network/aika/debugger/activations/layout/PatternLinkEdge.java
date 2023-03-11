@@ -16,28 +16,45 @@
  */
 package network.aika.debugger.activations.layout;
 
-import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.elements.links.PatternCategoryInputLink;
-import org.graphstream.graph.Edge;
-
-import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
+import network.aika.elements.links.PatternLink;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class PatternCategoryInputParticleLink<L extends PatternCategoryInputLink> extends ParticleLink<L> {
+public class PatternLinkEdge<L extends PatternLink> extends LinkEdge<L> {
 
-    public PatternCategoryInputParticleLink(L l, Edge e, ActivationGraphManager gm) {
-        super(l, e, gm);
+
+    public PatternLinkEdge(L l) {
+        super(l);
     }
 
-    public static ParticleLink create(PatternCategoryInputLink l, Edge e, ActivationGraphManager gm) {
-        return new PatternCategoryInputParticleLink(l, e, gm);
+    public static LinkEdge create(PatternLink l) {
+        return new PatternLinkEdge(l);
     }
 
+    /*
     @Override
-    public double getInitialYDistance() {
-        return STANDARD_DISTANCE_Y * 2;
-    }
+    public void processLayout() {
+        PatternActivation oAct = link.getOutput();
+
+        OptionalDouble avgXPos = oAct.getInputLinks()
+                .map(il -> il.getInput().getTokenPos())
+                .filter(Objects::nonNull)
+                .mapToDouble(Integer::intValue)
+                .average();
+
+        if(!avgXPos.isPresent())
+            return;
+
+        Node node = graphManager.getNode(oAct);
+
+        if(node == null)
+            return;
+
+        node.setAttribute(
+                "x",
+                STANDARD_DISTANCE_X * avgXPos.getAsDouble()
+        );
+    }*/
 }

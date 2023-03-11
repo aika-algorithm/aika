@@ -16,30 +16,14 @@
  */
 package network.aika.debugger.activations.particles;
 
-import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.debugger.activations.LayoutState;
-import network.aika.elements.activations.LatentRelationActivation;
-import org.graphstream.graph.Node;
-
-import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_X;
-
+import network.aika.elements.activations.PatternActivation;
 
 /**
  * @author Lukas Molzberger
  */
-public class LatentRelationActivationParticle extends BindingActivationParticle<LatentRelationActivation> {
+public class PatternActivationNode<E extends PatternActivation> extends ActivationNode<E> {
 
-    public LatentRelationActivationParticle(LatentRelationActivation act, Node n, ActivationGraphManager gm) {
-        super(act, n, gm);
-    }
-
-    @Override
-    public void processLayout(LayoutState ls) {
-        if(act.getFromAct() != null && act.getToAct() != null) {
-            node.setAttribute(
-                    "x",
-                    STANDARD_DISTANCE_X * (act.getFromAct().getTokenPos() + act.getToAct().getTokenPos()) / 2.0
-            );
-        }
+    public PatternActivationNode(E act) {
+        super(act);
     }
 }

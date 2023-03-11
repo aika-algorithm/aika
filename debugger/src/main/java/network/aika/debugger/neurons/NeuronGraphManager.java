@@ -17,83 +17,44 @@
 package network.aika.debugger.neurons;
 
 import network.aika.debugger.AbstractGraphManager;
-import network.aika.debugger.AbstractParticleLink;
-import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.debugger.Edge;
+import network.aika.debugger.Node;
+import network.aika.elements.Element;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
-import org.graphstream.ui.layout.springbox.NodeParticle;
 
 /**
  * @author Lukas Molzberger
  */
-public class NeuronGraphManager extends AbstractGraphManager<Neuron, Synapse, NeuronParticle> {
+public class NeuronGraphManager extends AbstractGraphManager {
 
-    public NeuronGraphManager(Graph graph) {
-        super(graph);
+    public NeuronGraphManager() {
 
-        k = STANDARD_DISTANCE_X;
-        K1Init = 0.06f;
-        K1Final = 0.01f;
-        K2 = 0.005f;
     }
 
     @Override
-    protected Long getAikaNodeId(Neuron n) {
-        return n.getId();
+    public Long getNodeId(Element key) {
+        return ((Neuron) key).getId();
     }
 
     @Override
-    protected NeuronParticle createParticle(Neuron key, Node node) {
-        return new NeuronParticle(this, node, key);
+    public long[] getEdgeIds(Element key) {
+        Synapse s = (Synapse) key;
+        return new long[] {
+                s.getInput().getId(),
+                s.getOutput().getId()
+        };
     }
 
     @Override
-    protected ParticleSynapse createParticleLink(Synapse synapse, Edge edge) {
-        return new ParticleSynapse(synapse, edge, this);
+    public Node createNode(Element key) {
+        return NeuronNode.create((Neuron) key);
     }
 
     @Override
-    protected AbstractParticleLink getParticleLink(Synapse synapse) {
-        return getParticle(synapse.getInput())
-                .getOutputParticleLink(
-                        synapse.getOutput().getId()
-                );
+    public Edge createEdge(Element key) {
+        return SynapseEdge.create((Synapse) key);
     }
 
-    @Override
-    public ParticleSynapse<Synapse> lookupParticleLink(Synapse s) {
-        return (ParticleSynapse) lookupParticleLink(s, s.getInput(), s.getOutput());
-    }
 
-    public Edge getEdge(Synapse s) {
-        return getEdge(s.getInput(), s.getOutput());
-    }
-
-    @Override
-    public Synapse getLink(Edge e) {
-        Neuron<?> in = getAikaNode(e.getSourceNode());
-        Neuron<?> on = getAikaNode(e.getTargetNode());
-
-        if(on instanceof ConjunctiveNeuron<?>) {
-            return on.getInputSynapsesAsStream()
-                    .filter(s -> s.getInput() == in)
-                    .findAny()
-                    .orElse(null);
-        } else {
-            return in.getOutputSynapsesAsStream()
-                    .filter(s -> s.getOutput() == on)
-                    .findAny()
-                    .orElse(null);
-        }
-    }
-
-    @Override
-    public NodeParticle newNodeParticle(String id) {
-        return getParticle(
-                getNode(id)
-        );
-    }
 }

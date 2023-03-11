@@ -17,42 +17,39 @@
 package network.aika.debugger;
 
 import network.aika.Model;
-import org.graphstream.graph.Element;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
-import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.stream.thread.ThreadProxyPipe;
-import org.graphstream.ui.graphicGraph.GraphicElement;
-import org.graphstream.ui.swing.SwingGraphRenderer;
-import org.graphstream.ui.swing_viewer.DefaultView;
-import org.graphstream.ui.swing_viewer.SwingViewer;
-import org.graphstream.ui.swing_viewer.ViewPanel;
-import org.graphstream.ui.view.Viewer;
-import org.graphstream.ui.view.ViewerPipe;
-import org.graphstream.ui.view.camera.Camera;
+import network.aika.debugger.math.Matrix;
+import network.aika.debugger.math.Vector;
+import network.aika.elements.Element;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.HashSet;
 import java.util.Set;
+
+import static network.aika.debugger.math.Matrix.getWorldMatrix;
 
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
+public abstract class AbstractViewManager<N, G extends AbstractGraphManager>extends JPanel implements KeyListener, MouseInputListener, MouseWheelListener {
+
+    Character pressedKey;
+
+    private Matrix worldMatrix;
+
+    private double lastX, lastY;
+
 
     protected boolean highlightEnabled = true;
 
-    protected Graph graph;
 
     protected G graphManager;
 
-    protected SwingViewer viewer;
 
-    protected ViewerPipe fromViewer;
-
-    protected ViewPanel graphView;
+    protected JPanel graphView;
 
     protected JComponent view;
 
@@ -63,39 +60,170 @@ public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
     private Set<String> movedManually = new HashSet<>();
 
 
-    public AbstractViewManager(Model model){
+    public AbstractViewManager(Model model) {
+        super(new GridLayout(1, 1));
+
         this.model = model;
         initModifiers();
 
-        graph = initGraph();
-        viewer = new SwingViewer(new ThreadProxyPipe(graph));
-
-        graphView = (DefaultView)viewer.addDefaultView(false, new SwingGraphRenderer());
-        graphView.enableMouseOptions();
 
         MouseManager mouseManager = new MouseManager(this);
-        graphView.setMouseManager(mouseManager);
-        graphView.addMouseWheelListener(mouseManager);
 
-        Camera camera = graphView.getCamera();
-
-        camera.setAutoFitView(false);
-
-
-        // The default action when closing the view is to quit
-        // the program.
-        viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
-
-        // We connect back the viewer to the graph,
-        // the graph becomes a sink for the viewer.
-        // We also install us as a viewer listener to
-        // intercept the graphic events.
-        fromViewer = viewer.newViewerPipe();
-        fromViewer.addSink(graph);
+        setFocusable(true);
+        setRequestFocusEnabled(true);
+        addMouseListener(this);
+        addMouseMotionListener(this);
+        addMouseWheelListener(this);
+        addKeyListener(this);
     }
 
-    public ViewPanel getGraphView() {
-        return graphView;
+    public void update() {
+        repaint();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        if(worldMatrix == null)
+            return;
+
+        Canvas c = new CanvasImpl(worldMatrix);
+        //sim.getRoot().draw(g, c);
+    }
+
+
+    private void initWorldMatrix(JFrame f) {
+        worldMatrix = getWorldMatrix(
+                new Vector(new double[]{
+                        f.getWidth() / 2.0,
+                        f.getHeight() / 2.0,
+                        0.0,
+                        1.0
+                }),
+                400.0);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        pressedKey = e.getKeyChar();
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        pressedKey = null;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        lastX = e.getX();
+        lastY = e.getY();
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        double deltaX = (e.getX() - lastX);
+        lastX = e.getX();
+
+        double deltaY = (e.getY() - lastY);
+        lastY = e.getY();
+
+        if (!e.isShiftDown()) {
+            mouseTranslationUpdate(e.isControlDown(), deltaX, deltaY);
+        } else {
+            mouseRotationUpdate(e.isControlDown(), deltaX / 3.0, deltaY / 3.0);
+        }
+
+        update();
+    }
+
+    private void mouseRotationUpdate(boolean ctrl, double xDelta, double yDelta) {
+        if(!ctrl) {
+            worldMatrix = rotate(worldMatrix, xDelta, yDelta);
+        } else {
+
+        }
+    }
+
+    private void mouseTranslationUpdate(boolean ctrl, double xDelta, double yDelta) {
+        if(!ctrl) {
+            worldMatrix = translation(worldMatrix, xDelta, yDelta);
+        } else {
+
+        }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        double s = e.getPreciseWheelRotation();
+
+        if(!e.isControlDown()) {
+            worldMatrix = scale(worldMatrix, s);
+        } else {
+
+        }
+        update();
+    }
+
+    private Matrix translation(Matrix m, double xDelta, double yDelta) {
+        double[] offset = m.getColumn(3, 3);
+        offset[0] += xDelta;
+        offset[1] += yDelta;
+
+        double scale = m.getRadius();
+
+        Vector rotation = m.getRotation();
+
+        return getWorldMatrix(new Vector(offset), rotation, scale);
+    }
+
+    private Matrix rotate(Matrix m, double xDelta, double yDelta) {
+        double[] offset = m.getColumn(3, 3);
+        double scale = m.getRadius();
+
+        double[] rotation = m.getRotation().getValue();
+        rotation[1] -= Math.toRadians(xDelta);
+        rotation[0] += Math.toRadians(yDelta);
+
+        return getWorldMatrix(new Vector(offset), new Vector(rotation), scale);
+    }
+
+    private Matrix scale(Matrix m, double s) {
+        double[] offset = m.getColumn(3, 3);
+        double scale = m.getRadius();
+        scale += s * 10.0;
+
+        Vector rotation = m.getRotation();
+
+        return getWorldMatrix(new Vector(offset), rotation, scale);
     }
 
     public boolean hasBeenMovedManually(String key) {
@@ -111,14 +239,6 @@ public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
 
     public abstract Component getConsoleManager();
 
-    public void enableAutoLayout() {
-        viewer.enableAutoLayout(graphManager);
-    }
-
-    public void disableAutoLayout() {
-        viewer.disableAutoLayout();
-    }
-
     public Model getModel() {
         return model;
     }
@@ -131,13 +251,6 @@ public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
 
     public abstract void showElementContext(GraphicElement ge);
 
-    public Graph getGraph() {
-        return graph;
-    }
-
-    public Camera getCamera() {
-        return graphView.getCamera();
-    }
 
     public JComponent getView() {
         return view;
@@ -155,7 +268,7 @@ public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
             return graphView;
         }
     }
-
+/*
     private Graph initGraph() {
         //        System.setProperty("org.graphstream.ui", "org.graphstream.ui.swing.util.Display");
 
@@ -209,12 +322,13 @@ public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
 
         return graph;
     }
+*/
 
     protected void initModifiers() {
     }
 
     public void pump() {
-        fromViewer.pump();
+  //      fromViewer.pump();
         // fromViewer.blockingPump();
     }
 
@@ -222,23 +336,19 @@ public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
         if(!highlightEnabled)
             return;
 
-        ge.removeAttribute("ui.selected");
-        fromViewer.pump();
+  //      ge.removeAttribute("ui.selected");
+  //      fromViewer.pump();
     }
 
     public void highlightElement(Element ge) {
         if(!highlightEnabled)
             return;
 
-        ge.setAttribute("ui.selected");
-        fromViewer.pump();
+ //       ge.setAttribute("ui.selected");
+ //       fromViewer.pump();
     }
 
     public void viewClosed(String id) {
         //     loop = false;
     }
-
-    public abstract void dumpNetworkCoordinates();
-
-    public abstract void moveNodeGroup(Node n, int x, int y);
 }

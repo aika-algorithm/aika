@@ -14,31 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.activations.layout;
 
-import network.aika.elements.links.PrimaryInhibitoryLink;
+
+import network.aika.elements.links.BindingNeuronLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class PrimaryInhibitoryLinkPropertyPanel extends LinkPropertyPanel<PrimaryInhibitoryLink> {
+public class BindingLinkEdge<L extends BindingNeuronLink> extends LinkEdge<L> {
 
-    public PrimaryInhibitoryLinkPropertyPanel(PrimaryInhibitoryLink l) {
+    public BindingLinkEdge(L l) {
         super(l);
     }
 
-    @Override
-    public void initIdentitySection(PrimaryInhibitoryLink l) {
-        super.initIdentitySection(l);
-    }
 
-    @Override
-    public void initInferenceSection(PrimaryInhibitoryLink l) {
-        addField(l.getInputValue());
-    }
-
-    @Override
-    public void initTrainingSection(PrimaryInhibitoryLink l) {
-        super.initTrainingSection(l);
-    }
 }

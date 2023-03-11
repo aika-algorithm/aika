@@ -16,28 +16,23 @@
  */
 package network.aika.debugger.activations.particles;
 
-import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.debugger.activations.LayoutState;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.TokenActivation;
-import org.graphstream.graph.Node;
 
-import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_X;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class TokenActivationParticle extends PatternActivationParticle<TokenActivation> {
+public class TokenActivationNode extends PatternActivationNode<TokenActivation> {
 
-    public TokenActivationParticle(TokenActivation act, Node n, ActivationGraphManager gm) {
-        super(act, n, gm);
+    public TokenActivationNode(TokenActivation act) {
+        super(act);
     }
 
-    @Override
-    public void processLayout(LayoutState ls) {
-        if(!act.getNeuron().isAbstract())
-            node.setAttribute("layout.frozen");
+/*    @Override
+    public void update(LayoutState ls, EventType et) {
+//        if(!act.getNeuron().isAbstract())
+//            node.setAttribute("layout.frozen");
 
         Double x = getActivationXCoordinate(ls.getLastInputAct());
         if(x == null) {
@@ -50,12 +45,13 @@ public class TokenActivationParticle extends PatternActivationParticle<TokenActi
             x = 0.0;
         }
 
-        node.setAttribute("x", x);
+//        node.setAttribute("x", x);
 
         ls.setLastInputActXPos(x);
         ls.setLastInputAct(act);
     }
-
+*/
+    /*
     private Double getActivationXCoordinate(Activation act) {
         if(act == null)
             return null;
@@ -65,5 +61,5 @@ public class TokenActivationParticle extends PatternActivationParticle<TokenActi
             return null;
 
         return originParticle.getPosition().x;
-    }
+    }*/
 }

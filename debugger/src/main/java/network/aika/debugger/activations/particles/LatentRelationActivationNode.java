@@ -16,30 +16,25 @@
  */
 package network.aika.debugger.activations.particles;
 
-import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.debugger.activations.LayoutState;
-import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.activations.TokenActivation;
-import org.graphstream.graph.Node;
+import network.aika.elements.activations.LatentRelationActivation;
+
 
 /**
  * @author Lukas Molzberger
  */
-public class PatternActivationParticle<E extends PatternActivation> extends ActivationParticle<E> {
+public class LatentRelationActivationNode extends BindingActivationNode<LatentRelationActivation> {
 
-    public PatternActivationParticle(E act, Node n, ActivationGraphManager gm) {
-        super(act, n, gm);
+    public LatentRelationActivationNode(LatentRelationActivation act) {
+        super(act);
     }
-
+/*
     @Override
-    public void processLayout(LayoutState ls) {
-    }
-
-    public static ActivationParticle create(PatternActivation act, Node n, ActivationGraphManager gm) {
-        if(act instanceof TokenActivation) {
-            return new TokenActivationParticle((TokenActivation) act, n, gm);
+    public void update(LayoutState ls, EventType et) {
+        if(act.getFromAct() != null && act.getToAct() != null) {
+           node.setAttribute(
+                    "x",
+                    STANDARD_DISTANCE_X * (act.getFromAct().getTokenPos() + act.getToAct().getTokenPos()) / 2.0
+            );
         }
-
-        return new PatternActivationParticle(act, n, gm);
-    }
+    }*/
 }

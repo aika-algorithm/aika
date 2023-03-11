@@ -16,7 +16,10 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.elements.links.*;
+import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.FeedbackLink;
+import network.aika.elements.links.InputPatternLink;
+import network.aika.elements.links.PatternLink;
 
 
 /**

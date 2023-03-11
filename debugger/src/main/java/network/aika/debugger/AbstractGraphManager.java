@@ -16,154 +16,43 @@
  */
 package network.aika.debugger;
 
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
-import org.graphstream.ui.layout.springbox.NodeParticle;
-import org.graphstream.ui.layout.springbox.implementations.SpringBox;
 
+import network.aika.elements.Element;
+
+import java.util.Comparator;
 import java.util.Map;
-import java.util.Random;
 import java.util.TreeMap;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractGraphManager<N, L, P extends AbstractParticle> extends SpringBox {
+public abstract class AbstractGraphManager {
 
-    protected static double k = 1f;
+    protected Map<Long, Node> nodes = new TreeMap<>();
+    protected Map<long[], Edge> edges = new TreeMap<>(
+            Comparator.comparingLong((long[] k) -> k[0])
+                    .thenComparingLong(k -> k[1])
+    );
 
-    protected static double K1Init;
-    protected static double K1Final;
-
-    public static double STANDARD_DISTANCE_X = 0.3f;
-    public static double STANDARD_DISTANCE_Y = 0.2f;
-
-    private Graph graph;
-    private Map<String, N> nodeIdToAikaNode = new TreeMap<>();
-    private Map<Long, P> keyIdToParticle = new TreeMap<>();
-
-    public AbstractGraphManager(Graph graph) {
-        this.graph = graph;
+    public AbstractGraphManager() {
     }
 
-    public N getAikaNode(Node n) {
-        return nodeIdToAikaNode.get(n.getId());
+    public abstract Long getNodeId(Element key);
+    public abstract long[] getEdgeIds(Element key);
+
+    public abstract Node createNode(Element key);
+
+    public abstract Edge createEdge(Element key);
+
+    public Node lookupNode(Element key) {
+        return nodes.computeIfAbsent(getNodeId(key), a ->
+                createNode(key)
+        );
     }
 
-    public N getAikaNode(String nodeId) {
-        return nodeIdToAikaNode.get(nodeId);
-    }
-
-    public N getInputKey(Edge e) {
-        return nodeIdToAikaNode.get(e.getId().substring(0, e.getId().indexOf("-")));
-    }
-
-    public N getOutputKey(Edge e) {
-        return nodeIdToAikaNode.get(e.getId().substring(e.getId().indexOf("-") + 1));
-    }
-
-    protected abstract Long getAikaNodeId(N key);
-
-    public P getParticle(Node n) {
-        return getParticle(Long.valueOf(n.getId()));
-    }
-
-    public P getParticle(N key) {
-        return getParticle(getAikaNodeId(key));
-    }
-
-    public P getParticle(long keyId) {
-        return keyIdToParticle.get(keyId);
-    }
-
-    public void setParticle(N key, P particle) {
-        keyIdToParticle.put(getAikaNodeId(key), particle);
-    }
-
-    public String getNodeId(N key) {
-        return "" + getAikaNodeId(key);
-    }
-
-    public String getEdgeId(N iKey, N oKey) {
-        return getAikaNodeId(iKey) + "-" + getAikaNodeId(oKey);
-    }
-
-    public synchronized P lookupParticle(N key) {
-        String id = getNodeId(key);
-        Node node = graph.getNode(id);
-
-        P particle;
-
-        if (node == null) {
-            nodeIdToAikaNode.put(id, key);
-            node = graph.addNode(id);
-            particle = createParticle(key, node);
-        } else {
-            particle = getParticle(key);
-        }
-
-        return particle;
-    }
-
-    protected  abstract P createParticle(N key, Node node);
-
-    protected abstract AbstractParticleLink createParticleLink(L l, Edge edge);
-
-    public Node getNode(N key) {
-        String id = getNodeId(key);
-        return graph.getNode(id);
-    }
-
-    public AbstractParticleLink lookupParticleLink(L l, N iKey, N oKey) {
-        String edgeId = getEdgeId(iKey, oKey);
-        Edge edge = graph.getEdge(edgeId);
-        AbstractParticleLink pl;
-        if (edge == null) {
-            edge = graph.addEdge(edgeId, getNodeId(iKey), getNodeId(oKey), true);
-            pl = createParticleLink(l, edge);
-        } else {
-            pl = getParticleLink(l);
-        }
-        return pl;
-    }
-
-    protected abstract AbstractParticleLink getParticleLink(L l);
-
-    public Edge getEdge(N iKey, N oKey) {
-        String edgeId = getEdgeId(iKey, oKey);
-        return graph.getEdge(edgeId);
-    }
-
-    public Node getNode(String nodeId) {
-        return graph.getNode(nodeId);
-    }
-
-    public abstract AbstractParticleLink lookupParticleLink(L l);
-
-    public abstract Edge getEdge(L l);
-
-    public abstract L getLink(Edge e);
-
-    public Random getRandom() {
-        return random;
-    }
-
-    @Override
-    public String getLayoutAlgorithmName() {
-        return "AikaLayout";
-    }
-
-    @Override
-    protected void chooseNodePosition(NodeParticle n0, NodeParticle n1) {
-    }
-
-    public synchronized void particleMoved(Object id, double x, double y, double z) {
-        super.particleMoved(id, x, y, z);
-
-        AbstractParticle ap = getParticle(getAikaNode((String)id));
-
-        ap.x = x;
-        ap.y = y;
+    public Edge lookupEdge(Element key) {
+        return edges.computeIfAbsent(getEdgeIds(key), a ->
+                createEdge(key)
+        );
     }
 }

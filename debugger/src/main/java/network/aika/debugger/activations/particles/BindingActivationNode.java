@@ -16,35 +16,18 @@
  */
 package network.aika.debugger.activations.particles;
 
-import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.debugger.activations.LayoutState;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.LatentRelationActivation;
-import org.graphstream.graph.Node;
 
 /**
  * @author Lukas Molzberger
  */
-public class BindingActivationParticle<E extends BindingActivation> extends ActivationParticle<E> {
+public class BindingActivationNode<E extends BindingActivation> extends ActivationNode<E> {
 
-
-    public BindingActivationParticle(E act, Node n, ActivationGraphManager gm) {
-        super(act, n, gm);
-
+    public BindingActivationNode(E act) {
+        super(act);
+/*
         act.setOnTokenPosUpdate(pos ->
-                processLayout(null)
-        );
-    }
-
-    @Override
-    public void processLayout(LayoutState ls) {
-    }
-
-    public static ActivationParticle create(BindingActivation act, Node n, ActivationGraphManager gm) {
-        if(act instanceof LatentRelationActivation) {
-            return new LatentRelationActivationParticle((LatentRelationActivation) act, n, gm);
-        }
-
-        return new BindingActivationParticle(act, n, gm);
+                update(null, null)
+        );*/
     }
 }

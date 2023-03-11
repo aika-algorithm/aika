@@ -16,32 +16,23 @@
  */
 package network.aika.debugger.activations.layout;
 
-import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.debugger.activations.particles.ActivationParticle;
-import network.aika.direction.Direction;
 import network.aika.elements.links.SamePatternLink;
-import org.graphstream.graph.Edge;
-import org.graphstream.ui.geom.Vector3;
-import org.miv.pherd.geom.Point3;
 
 /**
  * @author Lukas Molzberger
  */
-public class SamePatternParticleLink<L extends SamePatternLink> extends ParticleLink<L> {
+public class SamePatternLinkEdge<L extends SamePatternLink> extends LinkEdge<L> {
 
-    public SamePatternParticleLink(L l, Edge e, ActivationGraphManager gm) {
-        super(l, e, gm);
+    public SamePatternLinkEdge(L l) {
+        super(l);
     }
 
-    public static ParticleLink create(SamePatternLink l, Edge e, ActivationGraphManager gm) {
-        return new SamePatternParticleLink(l, e, gm);
+    public static LinkEdge create(SamePatternLink l) {
+        return new SamePatternLinkEdge(l);
     }
-
+/*
     @Override
     public void calculateForce(Vector3 delta, Point3 pos, Direction dir, ActivationParticle other) {
     }
-
-    @Override
-    public void processLayout() {
-    }
+*/
 }
