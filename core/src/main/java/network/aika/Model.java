@@ -41,7 +41,7 @@ public class Model implements Writable {
 
     private long N = 0;
 
-    private SuspensionCallback suspensionCallback;
+    public SuspensionCallback suspensionCallback;
     private final AtomicLong retrievalCounter = new AtomicLong(0);
     private final AtomicLong thoughtIdCounter = new AtomicLong(0);
 
@@ -212,15 +212,6 @@ public class Model implements Writable {
         suspensionCallback.saveIndex(this);
 
         suspensionCallback.close();
-    }
-
-    public Object modelClass(String clazzName) {
-        try {
-            Class clazz = getClass().getClassLoader().loadClass(clazzName);
-            return clazz.getConstructor().newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

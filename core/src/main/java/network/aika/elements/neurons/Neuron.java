@@ -469,7 +469,7 @@ public abstract class Neuron<A extends Activation> extends FieldObject implement
 
     public static Neuron read(DataInput in, Model m) throws Exception {
         String neuronClazz = in.readUTF();
-        Neuron n = (Neuron) m.modelClass(neuronClazz);
+        Neuron n = (Neuron) m.suspensionCallback.modelClass(neuronClazz, m);
 
         n.readFields(in, m);
         return n;
