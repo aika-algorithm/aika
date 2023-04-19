@@ -59,4 +59,13 @@ public interface SuspensionCallback {
     void loadIndex(Model m);
 
     void saveIndex(Model m) throws IOException;
+
+    default Object modelClass(String clazzName, Model model) {
+        try {
+            Class clazz = model.getClass().getClassLoader().loadClass(clazzName);
+            return clazz.getConstructor().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
