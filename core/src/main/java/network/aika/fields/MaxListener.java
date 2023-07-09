@@ -14,26 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links;
-
-import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InhibitoryActivation;
-import network.aika.elements.synapses.InhibitorySynapse;
-
-import static network.aika.fields.FieldLink.linkAndConnect;
+package network.aika.fields;
 
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryLink extends AbstractInhibitoryLink<InhibitorySynapse, BindingActivation> {
+public interface MaxListener {
 
-    public InhibitoryLink(InhibitorySynapse inhibitorySynapse, BindingActivation input, InhibitoryActivation output) {
-        super(inhibitorySynapse, input, output);
-    }
-
-    protected void connectNet() {
-        getOutput().getRelatedInhibitoryActivations().forEach(act ->
-                linkAndConnect(weightedInput, act.getMaxInputNet())
-        );
-    }
+    void maxInputChanged(AbstractFieldLink oldMaxInput, AbstractFieldLink newMaxInput);
 }

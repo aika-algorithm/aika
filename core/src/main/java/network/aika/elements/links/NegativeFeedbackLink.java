@@ -38,19 +38,6 @@ public class NegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, 
 
     public NegativeFeedbackLink(NegativeFeedbackSynapse s, InhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
-
-        if(input == null)
-            return;
-
-        InhibitoryActivation.connectFields(
-                input.getAllInhibitoryLinks(),
-                Stream.of(this)
-        );
-    }
-
-    @Override
-    protected void initInputValue() {
-        inputValue = new MaxField(this, "max-input-value");
     }
 
     @Override

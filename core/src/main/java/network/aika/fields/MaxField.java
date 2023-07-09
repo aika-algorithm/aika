@@ -25,8 +25,12 @@ public class MaxField extends MultiInputField {
 
     private AbstractFieldLink selectedInput;
 
-    public MaxField(FieldObject ref, String label) {
+    private MaxListener listener;
+
+    public MaxField(FieldObject ref, String label, MaxListener listener) {
         super(ref, label, null);
+
+        this.listener = listener;
     }
 
     public AbstractFieldLink getSelectedInput() {
@@ -44,13 +48,16 @@ public class MaxField extends MultiInputField {
     protected double computeUpdate(AbstractFieldLink fl, double u) {
         if(selectedInput == null) {
             selectedInput = fl;
+            listener.maxInputChanged(null, selectedInput);
             return fl.getUpdatedInputValue() - value;
         }
 
+        AbstractFieldLink oldSelectedInput = selectedInput;
         selectedInput = getInputs().stream()
                 .max(getComparator(fl))
                 .orElse(null);
 
+        listener.maxInputChanged(oldSelectedInput, selectedInput);
         return getInput(selectedInput, fl) - value;
     }
 

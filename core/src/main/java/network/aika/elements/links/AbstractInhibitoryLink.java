@@ -37,8 +37,6 @@ public abstract class AbstractInhibitoryLink<S extends AbstractInhibitorySynapse
 
     public AbstractInhibitoryLink(S s, I input, InhibitoryActivation output) {
         super(s, input, output);
-
-        initFields();
     }
 
     protected void initFields() {

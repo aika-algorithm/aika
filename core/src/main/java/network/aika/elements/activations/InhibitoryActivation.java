@@ -19,10 +19,17 @@ package network.aika.elements.activations;
 import network.aika.Thought;
 import network.aika.elements.links.*;
 import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.fields.AbstractFieldLink;
+import network.aika.fields.MaxField;
+import network.aika.fields.QueueSumField;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
+
+import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.fields.Fields.add;
+import static network.aika.steps.Phase.INFERENCE;
 
 
 /**
@@ -32,10 +39,42 @@ import java.util.stream.Stream;
 public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron> {
 
 
+    private MaxField maxInputNet;
+
     public InhibitoryActivation(int id, Thought t, InhibitoryNeuron neuron) {
         super(id, t, neuron);
     }
 
+    @Override
+    protected void initNet() {
+        maxInputNet = new MaxField(this, "max-input-net", (ofl, nfl) -> {
+            if(ofl != null) {
+                updateConnect(ofl, true);
+            }
+            updateConnect(nfl, false);
+        });
+
+        net = new QueueSumField(this, INFERENCE, "net", null);
+        linkAndConnect(getNeuron().getBias(), maxInputNet);
+        linkAndConnect(getNeuron().getBias(), net)
+                .setPropagateUpdates(false);
+    }
+
+    private void updateConnect(AbstractFieldLink fl, boolean connected) {
+        InhibitoryLink il = (InhibitoryLink) fl.getInput().getReference();
+        BindingActivation bAct = il.getInput();
+        NegativeFeedbackLink nfl = (NegativeFeedbackLink) bAct.getInputLink(neuron);
+        nfl.getInputValue().getInputs().forEach(ifl -> {
+            if(connected)
+                ifl.connect(false);
+            else
+                ifl.disconnect(false);
+        });
+    }
+
+    public MaxField getMaxInputNet() {
+        return maxInputNet;
+    }
 
     @Override
     public boolean isActiveTemplateInstance() {
@@ -51,16 +90,11 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
         return getInputLinksByType(InhibitoryLink.class);
     }
 
-    public Stream<NegativeFeedbackLink> getAllNegativeFeedbackLinks() {
-        return getRelatedInhibitoryActivations()
-                .flatMap(InhibitoryActivation::getOwnNegativeFeedbackLinks);
-    }
-
     public Stream<NegativeFeedbackLink> getOwnNegativeFeedbackLinks() {
         return getOutputLinksByType(NegativeFeedbackLink.class);
     }
 
-    private Stream<InhibitoryActivation> getRelatedInhibitoryActivations() {
+    public Stream<InhibitoryActivation> getRelatedInhibitoryActivations() {
         return Stream.concat(
                 Stream.of(this),
                 isAbstract() ?
@@ -86,7 +120,7 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
     public static void crossConnectFields(InhibitoryActivation concrInhibAct, InhibitoryActivation templateInhibAct) {
         if(concrInhibAct == null || templateInhibAct == null)
             return;
-
+/*
         InhibitoryActivation.connectFields(
                 concrInhibAct.getOwnInhibitoryLinks(),
                 templateInhibAct.getOwnNegativeFeedbackLinks()
@@ -95,16 +129,6 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
         InhibitoryActivation.connectFields(
                 templateInhibAct.getOwnInhibitoryLinks(),
                 concrInhibAct.getOwnNegativeFeedbackLinks()
-        );
-    }
-
-    public static void connectFields(Stream<InhibitoryLink> in, Stream<NegativeFeedbackLink> out) {
-        List<NegativeFeedbackLink> nfls = out.toList();
-
-        in.forEach(il ->
-                nfls.forEach(nfl ->
-                        il.connectFields(nfl)
-                )
-        );
+        );*/
     }
 }
