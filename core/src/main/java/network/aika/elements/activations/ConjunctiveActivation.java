@@ -64,7 +64,7 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<?>> exte
     protected void initNet() {
         super.initNet();
 
-        linkAndConnect(getNeuron().getSynapseBiasSum(), net)
+        linkAndConnect(getNeuron().getSynapseBiasSum(), netUnsuppressed)
                 .setPropagateUpdates(false);
     }
 }

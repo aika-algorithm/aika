@@ -17,7 +17,7 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InhibitoryActivation;
+import network.aika.elements.activations.InputInhibitoryActivation;
 import network.aika.fields.*;
 import network.aika.elements.synapses.NegativeFeedbackSynapse;
 import network.aika.visitor.binding.BindingVisitor;
@@ -30,19 +30,19 @@ import static network.aika.fields.Fields.mul;
 /**
  * @author Lukas Molzberger
  */
-public class NegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, InhibitoryActivation> {
+public class NegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, InputInhibitoryActivation> {
 
     private Field weightUpdate;
 
     private Multiplication innerWeightedInput;
 
-    public NegativeFeedbackLink(NegativeFeedbackSynapse s, InhibitoryActivation input, BindingActivation output) {
+    public NegativeFeedbackLink(NegativeFeedbackSynapse s, InputInhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
 
         if(input == null)
             return;
 
-        InhibitoryActivation.connectFields(
+        InputInhibitoryActivation.connectFields(
                 input.getAllInhibitoryLinks(),
                 Stream.of(this)
         );
@@ -51,6 +51,11 @@ public class NegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, 
     @Override
     protected void initInputValue() {
         inputValue = new MaxField(this, "max-input-value");
+    }
+
+    @Override
+    public Field getOutputNet() {
+        return getOutput().getNet();
     }
 
     @Override

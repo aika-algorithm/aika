@@ -17,9 +17,7 @@
 package network.aika.debugger.neurons.properties;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.InhibitoryNeuron;
-import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.neurons.InputInhibitoryNeuron;
 
 import static network.aika.utils.Utils.doubleToString;
 
@@ -27,16 +25,16 @@ import static network.aika.utils.Utils.doubleToString;
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<InhibitoryNeuron> {
+public class InhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<InputInhibitoryNeuron> {
 
 
-    public InhibitoryNeuronPropertyPanel(InhibitoryNeuron n, Activation ref) {
+    public InhibitoryNeuronPropertyPanel(InputInhibitoryNeuron n, Activation ref) {
         super(n, ref);
 
         addConstant("IdentityReference: ", n.getIdentityReference().name());
     }
 
-    public static InhibitoryNeuronPropertyPanel create(InhibitoryNeuron n, Activation ref) {
+    public static InhibitoryNeuronPropertyPanel create(InputInhibitoryNeuron n, Activation ref) {
         return new InhibitoryNeuronPropertyPanel(n, ref);
     }
 }

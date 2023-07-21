@@ -21,7 +21,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.elements.neurons.InputInhibitoryNeuron;
 import network.aika.elements.neurons.TokenNeuron;
 import network.aika.elements.synapses.InhibitorySynapse;
 import network.aika.elements.synapses.NegativeFeedbackSynapse;
@@ -110,7 +110,7 @@ public class TestUtils {
     }
 
 
-    public static InhibitoryNeuron addInhibitoryLoop(InhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
+    public static InputInhibitoryNeuron addInhibitoryLoop(InputInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
         if(inhibN == null)
             return null;
 

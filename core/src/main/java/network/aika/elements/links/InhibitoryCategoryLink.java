@@ -17,21 +17,21 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.InhibitoryActivation;
+import network.aika.elements.activations.InputInhibitoryActivation;
 import network.aika.elements.synapses.InhibitoryCategorySynapse;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
 
-import static network.aika.elements.activations.InhibitoryActivation.crossConnectFields;
+import static network.aika.elements.activations.InputInhibitoryActivation.crossConnectFields;
 
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryCategoryLink extends CategoryLink<InhibitoryCategorySynapse, InhibitoryActivation> {
+public class InhibitoryCategoryLink extends CategoryLink<InhibitoryCategorySynapse, InputInhibitoryActivation> {
 
-    public InhibitoryCategoryLink(InhibitoryCategorySynapse s, InhibitoryActivation input, CategoryActivation output) {
+    public InhibitoryCategoryLink(InhibitoryCategorySynapse s, InputInhibitoryActivation input, CategoryActivation output) {
         super(s, input, output);
 
-        crossConnectFields(input, (InhibitoryActivation) output.getTemplate());
+        crossConnectFields(input, (InputInhibitoryActivation) output.getTemplate());
     }
 
     @Override

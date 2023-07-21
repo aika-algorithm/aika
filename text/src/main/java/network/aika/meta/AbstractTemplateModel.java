@@ -115,11 +115,11 @@ public abstract class AbstractTemplateModel {
         makeAbstract((PatternNeuron) patternN.getNeuron());
 
 
-        inhibitoryN = new InhibitoryNeuron(Scope.SAME)
+        inhibitoryN = new InputInhibitoryNeuron(Scope.SAME)
                 .init(model, "I")
                 .getProvider(true);
 
-        makeAbstract((InhibitoryNeuron) inhibitoryN.getNeuron());
+        makeAbstract((InputInhibitoryNeuron) inhibitoryN.getNeuron());
 
         log.info(getPatternType() + " Pattern: netTarget:" + patternNetTarget);
 

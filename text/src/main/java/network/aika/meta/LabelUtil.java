@@ -58,7 +58,7 @@ public class LabelUtil {
             if(act.getNeuron().getLabel() == null) {
                 act.getNeuron().setLabel(actTxt);
             }
-        } else if(act instanceof InhibitoryActivation) {
+        } else if(act instanceof InputInhibitoryActivation) {
             if(act.getNeuron().getLabel() == null) {
                 act.getNeuron().setLabel(actTxt);
             }
@@ -80,7 +80,7 @@ public class LabelUtil {
             BindingActivation act = (BindingActivation) l.getInput();
             return act != null &&
                     (!fired || act.isFired()) &&
-                    (!netPreAnneal || act.getNetPreAnneal().getValue() > 0.0);
+                    (!netPreAnneal || act.getNetUnsuppressed().getValue() > 0.0);
         });
     }
 

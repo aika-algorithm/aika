@@ -17,7 +17,7 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InhibitoryActivation;
+import network.aika.elements.activations.InputInhibitoryActivation;
 import network.aika.elements.synapses.InhibitorySynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.Field;
@@ -37,13 +37,13 @@ import static network.aika.utils.Utils.TOLERANCE;
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingActivation, InhibitoryActivation> {
+public class InputInhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingActivation, InputInhibitoryActivation> {
 
     protected FieldOutput value;
 
     protected Field net;
 
-    public InhibitoryLink(InhibitorySynapse inhibitorySynapse, BindingActivation input, InhibitoryActivation output) {
+    public InputInhibitoryLink(InhibitorySynapse inhibitorySynapse, BindingActivation input, InputInhibitoryActivation output) {
         super(inhibitorySynapse, input, output);
 
         net = new QueueSumField(this, NEGATIVE_FEEDBACK, "net", null);
@@ -59,7 +59,7 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
                 x -> output.getActivationFunction().f(x)
         );
 
-        InhibitoryActivation.connectFields(
+        InputInhibitoryActivation.connectFields(
                 Stream.of(this),
                 output.getAllNegativeFeedbackLinks()
         );
@@ -74,7 +74,7 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
     }
 
     public void connectFields(NegativeFeedbackLink out) {
-        Scope identityRef = getOutput().getNeuron().getIdentityReference();
+        Scope identityRef = Scope.INPUT;
 
         if(isSelfRef(getInput(), out.getOutput(), identityRef))
             return;

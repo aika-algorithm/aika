@@ -17,7 +17,7 @@
 package network.aika.debugger.activations.layout;
 
 import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.elements.links.InhibitoryLink;
+import network.aika.elements.links.InputInhibitoryLink;
 import org.graphstream.graph.Edge;
 
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
@@ -26,13 +26,13 @@ import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryParticleLink<L extends InhibitoryLink> extends ParticleLink<L> {
+public class InhibitoryParticleLink<L extends InputInhibitoryLink> extends ParticleLink<L> {
 
     public InhibitoryParticleLink(L l, Edge e, ActivationGraphManager gm) {
         super(l, e, gm);
     }
 
-    public static ParticleLink create(InhibitoryLink l, Edge e, ActivationGraphManager gm) {
+    public static ParticleLink create(InputInhibitoryLink l, Edge e, ActivationGraphManager gm) {
 
         return new InhibitoryParticleLink(l, e, gm);
     }

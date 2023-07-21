@@ -69,7 +69,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected FieldOutput value;
 
     protected MultiInputField net;
-    protected MultiInputField netPreAnneal;
+    protected MultiInputField netUnsuppressed;
 
     protected FieldOutput isFired;
 
@@ -139,19 +139,13 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void initNet() {
-        net = new QueueSumField(this, INFERENCE, "net", null);
-        linkAndConnect(getNeuron().getBias(), net)
+        netUnsuppressed = new QueueSumField(this, PRE_ANNEAL, "netUnsuppressed", TOLERANCE);
+        linkAndConnect(getNeuron().getBias(), netUnsuppressed)
                 .setPropagateUpdates(false);
 
-        netPreAnneal = new QueueSumField(this, PRE_ANNEAL, "netPreAnneal", TOLERANCE);
-        linkAndConnect(net, netPreAnneal);
+        linkAndConnect(netUnsuppressed, net);
 
-        netPreAnneal.addListener(
-                "disconnect listener",
-                (fl, nr, u) ->
-                        netPreAnneal.disconnectAndUnlinkInputs(false),
-                true
-        );
+        net = new QueueSumField(this, INFERENCE, "net", null);
     }
 
     protected void initDummyLinks() {
@@ -191,7 +185,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                         this,
                         "f'(netPreAnneal)",
                         TOLERANCE,
-                        netPreAnneal,
+                        netUnsuppressed,
                         x -> getNeuron().getActivationFunction().outerGrad(x)
         );
     }
@@ -232,8 +226,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return net;
     }
 
-    public MultiInputField getNetPreAnneal() {
-        return netPreAnneal;
+    public MultiInputField getNetUnsuppressed() {
+        return netUnsuppressed;
     }
 
     public Timestamp getCreated() {
@@ -392,6 +386,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     @Override
     public void disconnect() {
+        netUnsuppressed.disconnectAndUnlinkInputs(false);
         net.disconnectAndUnlinkInputs(false);
 
         if(updateValue != null)

@@ -43,7 +43,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         super.initWeightInput();
 
         if(synapse.isOptional())
-            linkAndConnect(getSynapse().getSynapseBias(), getOutput().getNet());
+            linkAndConnect(getSynapse().getSynapseBias(), getOutputNet());
     }
 
     @Override

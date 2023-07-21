@@ -20,7 +20,7 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.neurons.TokenPositionRelationNeuron;
-import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.elements.neurons.InputInhibitoryNeuron;
 import network.aika.elements.synapses.InputPatternSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SamePatternSynapse;
@@ -34,7 +34,7 @@ import static network.aika.TestUtils.*;
  */
 public class TestHelper {
 
-    public static void initPatternTheCat(Model m, InhibitoryNeuron inhibNThe, InhibitoryNeuron inhibNCat, int variant) {
+    public static void initPatternTheCat(Model m, InputInhibitoryNeuron inhibNThe, InputInhibitoryNeuron inhibNCat, int variant) {
         PatternNeuron theIN = lookupToken(m, "the");
         PatternNeuron catIN = lookupToken(m, "cat");
 
@@ -121,7 +121,7 @@ public class TestHelper {
         setBias(catBN, 3.0);
     }
 
-    public static void initPatternTheDog(Model m, InhibitoryNeuron inhibNThe, InhibitoryNeuron inhibNDog, int variant) {
+    public static void initPatternTheDog(Model m, InputInhibitoryNeuron inhibNThe, InputInhibitoryNeuron inhibNDog, int variant) {
         PatternNeuron theIN = lookupToken(m, "the");
         PatternNeuron dogIN = lookupToken(m, "dog");
 
@@ -165,7 +165,7 @@ public class TestHelper {
         PatternNeuron theDogP = initPatternLoop(m, "the dog", theBN, dogBN);
 
         addInhibitoryLoop(inhibNThe, false, theBN);
-        addInhibitoryLoop(new InhibitoryNeuron(Scope.SAME).init(m, "I-the (tg)"), true, theBN);
+        addInhibitoryLoop(new InputInhibitoryNeuron(Scope.SAME).init(m, "I-the (tg)"), true, theBN);
 
         setBias(theDogP, 3.0);
 

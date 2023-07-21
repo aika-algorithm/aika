@@ -19,9 +19,9 @@ package network.aika.elements.synapses;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InhibitoryActivation;
+import network.aika.elements.activations.InputInhibitoryActivation;
 import network.aika.elements.links.NegativeFeedbackLink;
-import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.elements.neurons.InputInhibitoryNeuron;
 
 /**
  *
@@ -29,9 +29,9 @@ import network.aika.elements.neurons.InhibitoryNeuron;
  */
 public class NegativeFeedbackSynapse extends FeedbackSynapse<
         NegativeFeedbackSynapse,
-        InhibitoryNeuron,
+        InputInhibitoryNeuron,
         NegativeFeedbackLink,
-        InhibitoryActivation
+        InputInhibitoryActivation
         >
 {
     public NegativeFeedbackSynapse() {
@@ -45,12 +45,12 @@ public class NegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public NegativeFeedbackLink createLink(InhibitoryActivation input, BindingActivation output) {
+    public NegativeFeedbackLink createLink(InputInhibitoryActivation input, BindingActivation output) {
         return new NegativeFeedbackLink(this, input, output);
     }
 
     @Override
-    public void linkAndPropagateOut(InhibitoryActivation act) {
+    public void linkAndPropagateOut(InputInhibitoryActivation act) {
         getOutput()
                 .linkOutgoing(this, act);
     }
@@ -67,7 +67,7 @@ public class NegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public double getPropagatePreNet(InhibitoryActivation iAct) {
+    public double getPropagatePreNet(InputInhibitoryActivation iAct) {
         return weight.getValue();
     }
 }

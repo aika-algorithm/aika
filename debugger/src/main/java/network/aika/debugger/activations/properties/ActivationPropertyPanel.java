@@ -59,7 +59,7 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
     public void initInferenceSection(E act) {
         addField(act.getValue());
         addField(act.getNet());
-        addField(act.getNetPreAnneal());
+        addField(act.getNetUnsuppressed());
         addConstant("CreationTS: ", "" + act.getCreated());
         addConstant("FiredTS: ", "" + act.getFired());
         addField(act.getIsFired());
@@ -86,8 +86,8 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
             return new PatternActivationPropertyPanel((PatternActivation) act);
         } else if(act instanceof BindingActivation) {
             return new BindingActivationPropertyPanel((BindingActivation) act);
-        } else if(act instanceof InhibitoryActivation) {
-            return new InhibitoryActivationPropertyPanel((InhibitoryActivation) act);
+        } else if(act instanceof InputInhibitoryActivation) {
+            return new InhibitoryActivationPropertyPanel((InputInhibitoryActivation) act);
         }
 
         return new ActivationPropertyPanel(act);

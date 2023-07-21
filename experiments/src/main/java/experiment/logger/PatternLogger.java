@@ -36,7 +36,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static experiment.logger.ExperimentLogger.CSV_FORMAT;
 import static network.aika.utils.Utils.doubleToString;
@@ -144,7 +143,7 @@ public class PatternLogger {
                             pAct.getId(),
                             pn.getId() + (pn.isAbstract() ? "-abstr" : ""),
                             print(pAct.getNet()),
-                            print(pAct.getNetPreAnneal()),
+                            print(pAct.getNetUnsuppressed()),
                             print(pAct.getNetOuterGradient()),
                             print(pAct.getGradient()),
                             print(pAct.getUpdateValue()),
@@ -188,7 +187,7 @@ public class PatternLogger {
                 iAct.getId(),
                 bn.getId() + (bn.isAbstract() ? "-abstr" : ""),
                 print(iAct.getNet()),
-                print(iAct.getNetPreAnneal()),
+                print(iAct.getNetUnsuppressed()),
                 print(iAct.getNetOuterGradient()),
                 print(iAct.getGradient()),
                 print(iAct.getUpdateValue()),
@@ -220,7 +219,7 @@ public class PatternLogger {
     private static String getSuppressingBindingActLabel(BindingActivation act) {
         return act.getInputLinksByType(NegativeFeedbackLink.class)
                 .map(Link::getInput)
-                .flatMap(inhibAct -> inhibAct.getInputLinksByType(InhibitoryLink.class))
+                .flatMap(inhibAct -> inhibAct.getInputLinksByType(InputInhibitoryLink.class))
                 .map(Link::getInput)
                 .filter(supprAct -> supprAct.getNet().getUpdatedValue() > 0.0)
                 .map(Activation::getLabel)

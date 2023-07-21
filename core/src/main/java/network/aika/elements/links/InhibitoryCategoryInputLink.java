@@ -20,20 +20,20 @@ import network.aika.elements.activations.*;
 import network.aika.elements.synapses.*;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
 
-import static network.aika.elements.activations.InhibitoryActivation.crossConnectFields;
+import static network.aika.elements.activations.InputInhibitoryActivation.crossConnectFields;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCategoryInputSynapse, CategoryActivation, InhibitoryActivation> implements CategoryInputLink {
+public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCategoryInputSynapse, CategoryActivation, InputInhibitoryActivation> implements CategoryInputLink {
 
-    public InhibitoryCategoryInputLink(InhibitoryCategoryInputSynapse s, CategoryActivation input, InhibitoryActivation output) {
+    public InhibitoryCategoryInputLink(InhibitoryCategoryInputSynapse s, CategoryActivation input, InputInhibitoryActivation output) {
         super(s, input, output);
 
         input.getCategoryInputs()
                 .forEach(act ->
-                        crossConnectFields((InhibitoryActivation) act, output)
+                        crossConnectFields((InputInhibitoryActivation) act, output)
                 );
     }
 
@@ -47,7 +47,7 @@ public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCateg
     }
 
     @Override
-    public void instantiateTemplate(CategoryActivation iAct, InhibitoryActivation oAct) {
+    public void instantiateTemplate(CategoryActivation iAct, InputInhibitoryActivation oAct) {
         instantiateTemplate(iAct, oAct, this);
     }
 }

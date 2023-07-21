@@ -19,10 +19,10 @@ package network.aika.elements.synapses;
 import network.aika.Model;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InhibitoryActivation;
-import network.aika.elements.links.InhibitoryLink;
+import network.aika.elements.activations.InputInhibitoryActivation;
+import network.aika.elements.links.InputInhibitoryLink;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.elements.neurons.InputInhibitoryNeuron;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -35,10 +35,10 @@ import java.io.IOException;
 public class InhibitorySynapse extends DisjunctiveSynapse<
         InhibitorySynapse,
         BindingNeuron,
-        InhibitoryNeuron,
-        InhibitoryLink,
+        InputInhibitoryNeuron,
+        InputInhibitoryLink,
         BindingActivation,
-        InhibitoryActivation
+        InputInhibitoryActivation
         > {
 
     private Scope type;
@@ -53,12 +53,12 @@ public class InhibitorySynapse extends DisjunctiveSynapse<
     }
 
     @Override
-    public InhibitoryLink createLink(BindingActivation input, InhibitoryActivation output) {
-        return new InhibitoryLink(this, input, output);
+    public InputInhibitoryLink createLink(BindingActivation input, InputInhibitoryActivation output) {
+        return new InputInhibitoryLink(this, input, output);
     }
 
     @Override
-    public InhibitorySynapse instantiateTemplate(BindingNeuron input, InhibitoryNeuron output) {
+    public InhibitorySynapse instantiateTemplate(BindingNeuron input, InputInhibitoryNeuron output) {
         InhibitorySynapse s = new InhibitorySynapse(getType());
         s.initFromTemplate(input, output, this);
         return s;

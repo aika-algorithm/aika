@@ -18,7 +18,7 @@ package network.aika.elements.activations;
 
 import network.aika.Thought;
 import network.aika.elements.links.*;
-import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.elements.neurons.InputInhibitoryNeuron;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,9 +29,9 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron> {
+public class InputInhibitoryActivation extends DisjunctiveActivation<InputInhibitoryNeuron> {
 
-    public InhibitoryActivation(int id, Thought t, InhibitoryNeuron neuron) {
+    public InputInhibitoryActivation(int id, Thought t, InputInhibitoryNeuron neuron) {
         super(id, t, neuron);
     }
 
@@ -40,25 +40,25 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
         return true;
     }
 
-    public Stream<InhibitoryLink> getAllInhibitoryLinks() {
+    public Stream<InputInhibitoryLink> getAllInhibitoryLinks() {
         return getRelatedInhibitoryActivations()
-                .flatMap(InhibitoryActivation::getOwnInhibitoryLinks);
+                .flatMap(InputInhibitoryActivation::getOwnInhibitoryLinks);
     }
 
-    public Stream<InhibitoryLink> getOwnInhibitoryLinks() {
-        return getInputLinksByType(InhibitoryLink.class);
+    public Stream<InputInhibitoryLink> getOwnInhibitoryLinks() {
+        return getInputLinksByType(InputInhibitoryLink.class);
     }
 
     public Stream<NegativeFeedbackLink> getAllNegativeFeedbackLinks() {
         return getRelatedInhibitoryActivations()
-                .flatMap(InhibitoryActivation::getOwnNegativeFeedbackLinks);
+                .flatMap(InputInhibitoryActivation::getOwnNegativeFeedbackLinks);
     }
 
     public Stream<NegativeFeedbackLink> getOwnNegativeFeedbackLinks() {
         return getOutputLinksByType(NegativeFeedbackLink.class);
     }
 
-    private Stream<InhibitoryActivation> getRelatedInhibitoryActivations() {
+    private Stream<InputInhibitoryActivation> getRelatedInhibitoryActivations() {
         return Stream.concat(
                 Stream.of(this),
                 isAbstract() ?
@@ -67,36 +67,36 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
         );
     }
 
-    private Stream<InhibitoryActivation> getConcreteInhibitoryActivations() {
+    private Stream<InputInhibitoryActivation> getConcreteInhibitoryActivations() {
         return getInputLinksByType(InhibitoryCategoryInputLink.class)
                 .map(Link::getInput)
                 .flatMap(CategoryActivation::getCategoryInputs)
-                .map(act -> (InhibitoryActivation) act);
+                .map(act -> (InputInhibitoryActivation) act);
     }
 
-    private Stream<InhibitoryActivation> getAbstractInhibitoryActivations() {
+    private Stream<InputInhibitoryActivation> getAbstractInhibitoryActivations() {
         return getOutputLinksByType(InhibitoryCategoryLink.class)
                 .map(Link::getOutput)
-                .map(act -> (InhibitoryActivation) act.getTemplate())
+                .map(act -> (InputInhibitoryActivation) act.getTemplate())
                 .filter(Objects::nonNull);
     }
 
-    public static void crossConnectFields(InhibitoryActivation concrInhibAct, InhibitoryActivation templateInhibAct) {
+    public static void crossConnectFields(InputInhibitoryActivation concrInhibAct, InputInhibitoryActivation templateInhibAct) {
         if(concrInhibAct == null || templateInhibAct == null)
             return;
 
-        InhibitoryActivation.connectFields(
+        InputInhibitoryActivation.connectFields(
                 concrInhibAct.getOwnInhibitoryLinks(),
                 templateInhibAct.getOwnNegativeFeedbackLinks()
         );
 
-        InhibitoryActivation.connectFields(
+        InputInhibitoryActivation.connectFields(
                 templateInhibAct.getOwnInhibitoryLinks(),
                 concrInhibAct.getOwnNegativeFeedbackLinks()
         );
     }
 
-    public static void connectFields(Stream<InhibitoryLink> in, Stream<NegativeFeedbackLink> out) {
+    public static void connectFields(Stream<InputInhibitoryLink> in, Stream<NegativeFeedbackLink> out) {
         List<NegativeFeedbackLink> nfls = out.toList();
 
         in.forEach(il ->
