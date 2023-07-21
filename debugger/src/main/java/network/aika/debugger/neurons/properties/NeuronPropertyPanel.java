@@ -21,6 +21,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.InputInhibitoryNeuron;
 import network.aika.elements.neurons.Neuron;
+import network.aika.elements.neurons.SameInhibitoryNeuron;
 
 
 /**
@@ -50,7 +51,9 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
         if(n instanceof ConjunctiveNeuron<?>) {
             return ConjunctiveNeuronPropertyPanel.create((ConjunctiveNeuron) n, ref);
         } else if(n instanceof InputInhibitoryNeuron) {
-            return InhibitoryNeuronPropertyPanel.create((InputInhibitoryNeuron) n, ref);
+            return InputInhibitoryNeuronPropertyPanel.create((InputInhibitoryNeuron) n, ref);
+        } else if(n instanceof SameInhibitoryNeuron) {
+            return SameInhibitoryNeuronPropertyPanel.create((SameInhibitoryNeuron) n, ref);
         }
 
         return new NeuronPropertyPanel(n, ref);

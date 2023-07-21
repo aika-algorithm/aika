@@ -157,13 +157,13 @@ public class JacksonCookTest {
                 .init(cookProfessionBN, professionCN);
 
         addInhibitoryLoop(
-                new InputInhibitoryNeuron(Scope.SAME).init(m, "I-jackson"),
+                new SameInhibitoryNeuron().init(m, "I-jackson"),
                 false,
                 jacksonForenameBN,
                 jacksonCityBN
         );
         addInhibitoryLoop(
-                new InputInhibitoryNeuron(Scope.SAME).init(m, "I-cook"),
+                new SameInhibitoryNeuron().init(m, "I-cook"),
                 false,
                 cookSurnameBN,
                 cookProfessionBN

@@ -49,13 +49,13 @@ public class InputInhibitoryActivation extends DisjunctiveActivation<InputInhibi
         return getInputLinksByType(InputInhibitoryLink.class);
     }
 
-    public Stream<NegativeFeedbackLink> getAllNegativeFeedbackLinks() {
+    public Stream<InputNegativeFeedbackLink> getAllNegativeFeedbackLinks() {
         return getRelatedInhibitoryActivations()
                 .flatMap(InputInhibitoryActivation::getOwnNegativeFeedbackLinks);
     }
 
-    public Stream<NegativeFeedbackLink> getOwnNegativeFeedbackLinks() {
-        return getOutputLinksByType(NegativeFeedbackLink.class);
+    public Stream<InputNegativeFeedbackLink> getOwnNegativeFeedbackLinks() {
+        return getOutputLinksByType(InputNegativeFeedbackLink.class);
     }
 
     private Stream<InputInhibitoryActivation> getRelatedInhibitoryActivations() {
@@ -96,8 +96,8 @@ public class InputInhibitoryActivation extends DisjunctiveActivation<InputInhibi
         );
     }
 
-    public static void connectFields(Stream<InputInhibitoryLink> in, Stream<NegativeFeedbackLink> out) {
-        List<NegativeFeedbackLink> nfls = out.toList();
+    public static void connectFields(Stream<InputInhibitoryLink> in, Stream<InputNegativeFeedbackLink> out) {
+        List<InputNegativeFeedbackLink> nfls = out.toList();
 
         in.forEach(il ->
                 nfls.forEach(nfl ->

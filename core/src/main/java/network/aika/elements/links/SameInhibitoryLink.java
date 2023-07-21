@@ -17,9 +17,8 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InputInhibitoryActivation;
 import network.aika.elements.activations.SameInhibitoryActivation;
-import network.aika.elements.synapses.InhibitorySynapse;
+import network.aika.elements.synapses.SameInhibitorySynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.Field;
 import network.aika.fields.FieldOutput;
@@ -38,13 +37,13 @@ import static network.aika.utils.Utils.TOLERANCE;
 /**
  * @author Lukas Molzberger
  */
-public class SameInhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingActivation, SameInhibitoryActivation> {
+public class SameInhibitoryLink extends DisjunctiveLink<SameInhibitorySynapse, BindingActivation, SameInhibitoryActivation> {
 
     protected FieldOutput value;
 
     protected Field net;
 
-    public SameInhibitoryLink(InhibitorySynapse inhibitorySynapse, BindingActivation input, SameInhibitoryActivation output) {
+    public SameInhibitoryLink(SameInhibitorySynapse inhibitorySynapse, BindingActivation input, SameInhibitoryActivation output) {
         super(inhibitorySynapse, input, output);
 
         net = new QueueSumField(this, NEGATIVE_FEEDBACK, "net", null);
@@ -74,7 +73,7 @@ public class SameInhibitoryLink extends DisjunctiveLink<InhibitorySynapse, Bindi
     public void patternCatVisit(PatternCategoryVisitor v, int depth) {
     }
 
-    public void connectFields(NegativeFeedbackLink out) {
+    public void connectFields(SameNegativeFeedbackLink out) {
         if(isSelfRef(getInput(), out.getOutput(), Scope.SAME))
             return;
 

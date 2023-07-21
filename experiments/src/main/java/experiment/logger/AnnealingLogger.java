@@ -16,9 +16,8 @@
  */
 package experiment.logger;
 
-import network.aika.elements.links.NegativeFeedbackLink;
+import network.aika.elements.links.InputNegativeFeedbackLink;
 import network.aika.fields.Field;
-import network.aika.fields.ListenerFieldLink;
 import network.aika.text.Document;
 import org.apache.commons.csv.CSVPrinter;
 
@@ -77,7 +76,7 @@ public class AnnealingLogger {
                 .toList();
     }
 
-    private static String getLinkLabel(NegativeFeedbackLink l) {
+    private static String getLinkLabel(InputNegativeFeedbackLink l) {
         return l.getInput().toKeyString() + " -> " + l.getOutput().toKeyString();
     }
 
@@ -93,13 +92,13 @@ public class AnnealingLogger {
                 .toList();
     }
 
-    public Stream<NegativeFeedbackLink> getNegativeFeedbackLinks(Document doc) {
+    public Stream<InputNegativeFeedbackLink> getNegativeFeedbackLinks(Document doc) {
         return doc.getAnnealing()
                 .getReceivers()
                 .stream()
                 .filter(fl -> fl.getOutput() instanceof Field)
                 .map(fl ->  (Field) fl.getOutput())
-                .map(f -> (NegativeFeedbackLink) f.getReference());
+                .map(f -> (InputNegativeFeedbackLink) f.getReference());
     }
 
     public void close() {

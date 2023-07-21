@@ -52,7 +52,7 @@ public class NetworkMotivs {
     }
 
     public static void addNegativeFeedbackLoop(BindingNeuron bn, InputInhibitoryNeuron in, double weight) {
-        new InhibitorySynapse(Scope.INPUT)
+        new InputInhibitorySynapse(Scope.INPUT)
                 .setWeight(1.0)
                 .init(bn, in);
 

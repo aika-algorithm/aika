@@ -32,8 +32,8 @@ import java.io.IOException;
  *
  * @author Lukas Molzberger
  */
-public class InhibitorySynapse extends DisjunctiveSynapse<
-        InhibitorySynapse,
+public class InputInhibitorySynapse extends DisjunctiveSynapse<
+        InputInhibitorySynapse,
         BindingNeuron,
         InputInhibitoryNeuron,
         InputInhibitoryLink,
@@ -43,11 +43,11 @@ public class InhibitorySynapse extends DisjunctiveSynapse<
 
     private Scope type;
 
-    public InhibitorySynapse() {
+    public InputInhibitorySynapse() {
         super(null);
     }
 
-    public InhibitorySynapse(Scope type) {
+    public InputInhibitorySynapse(Scope type) {
         this();
         this.type = type;
     }
@@ -58,8 +58,8 @@ public class InhibitorySynapse extends DisjunctiveSynapse<
     }
 
     @Override
-    public InhibitorySynapse instantiateTemplate(BindingNeuron input, InputInhibitoryNeuron output) {
-        InhibitorySynapse s = new InhibitorySynapse(getType());
+    public InputInhibitorySynapse instantiateTemplate(BindingNeuron input, InputInhibitoryNeuron output) {
+        InputInhibitorySynapse s = new InputInhibitorySynapse(getType());
         s.initFromTemplate(input, output, this);
         return s;
     }

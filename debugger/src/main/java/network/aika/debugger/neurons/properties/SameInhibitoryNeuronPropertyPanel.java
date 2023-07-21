@@ -14,32 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.neurons.properties;
 
-import network.aika.elements.links.InputNegativeFeedbackLink;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.InputInhibitoryNeuron;
+import network.aika.elements.neurons.SameInhibitoryNeuron;
+
 
 /**
  * @author Lukas Molzberger
  */
-public class NegativeFeedbackLinkPropertyPanel extends FeedbackLinkPropertyPanel<InputNegativeFeedbackLink> {
+public class SameInhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<SameInhibitoryNeuron> {
 
 
-    public NegativeFeedbackLinkPropertyPanel(InputNegativeFeedbackLink l) {
-        super(l);
+    public SameInhibitoryNeuronPropertyPanel(SameInhibitoryNeuron n, Activation ref) {
+        super(n, ref);
     }
 
-    @Override
-    public void initIdentitySection(InputNegativeFeedbackLink l) {
-        super.initIdentitySection(l);
-    }
-
-    @Override
-    public void initInferenceSection(InputNegativeFeedbackLink l) {
-        super.initInferenceSection(l);
-    }
-
-    @Override
-    public void initTrainingSection(InputNegativeFeedbackLink l) {
-        super.initTrainingSection(l);
+    public static SameInhibitoryNeuronPropertyPanel create(SameInhibitoryNeuron n, Activation ref) {
+        return new SameInhibitoryNeuronPropertyPanel(n, ref);
     }
 }

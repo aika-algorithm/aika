@@ -16,14 +16,9 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.Neuron;
+import network.aika.elements.neurons.*;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.InputInhibitoryNeuron;
-import network.aika.elements.neurons.TokenNeuron;
-import network.aika.elements.synapses.InhibitorySynapse;
+import network.aika.elements.synapses.InputInhibitorySynapse;
 import network.aika.elements.synapses.NegativeFeedbackSynapse;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
@@ -115,7 +110,23 @@ public class TestUtils {
             return null;
 
         for(BindingNeuron bn: bns) {
-            new InhibitorySynapse(sameInhibSynapse ? SAME : INPUT)
+            new InputInhibitorySynapse(sameInhibSynapse ? SAME : INPUT)
+                    .setWeight(1.0)
+                    .init(bn, inhibN);
+
+            new NegativeFeedbackSynapse()
+                    .setWeight(-20.0)
+                    .init(inhibN, bn);
+        }
+        return inhibN;
+    }
+
+    public static SameInhibitoryNeuron addInhibitoryLoop(SameInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
+        if(inhibN == null)
+            return null;
+
+        for(BindingNeuron bn: bns) {
+            new InputInhibitorySynapse(sameInhibSynapse ? SAME : INPUT)
                     .setWeight(1.0)
                     .init(bn, inhibN);
 

@@ -54,7 +54,7 @@ public abstract class AbstractParticleLink<E extends Element> {
         synapseTypeModifiers.put(PositiveFeedbackSynapse.class, "fill-color: rgb(120,200,50); ");
         synapseTypeModifiers.put(ReversePatternSynapse.class, "fill-color: rgb(120,200,50); ");
 
-        synapseTypeModifiers.put(InhibitorySynapse.class, "fill-color: rgb(100,100,255);");
+        synapseTypeModifiers.put(InputInhibitorySynapse.class, "fill-color: rgb(100,100,255);");
 
         synapseTypeModifiers.put(PatternCategorySynapse.class, "fill-color: rgb(100,0,200);");
         synapseTypeModifiers.put(BindingCategorySynapse.class, "fill-color: rgb(110,0,220);");

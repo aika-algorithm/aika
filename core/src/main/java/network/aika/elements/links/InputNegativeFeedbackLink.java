@@ -30,13 +30,13 @@ import static network.aika.fields.Fields.mul;
 /**
  * @author Lukas Molzberger
  */
-public class NegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, InputInhibitoryActivation> {
+public class InputNegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, InputInhibitoryActivation> {
 
     private Field weightUpdate;
 
     private Multiplication innerWeightedInput;
 
-    public NegativeFeedbackLink(NegativeFeedbackSynapse s, InputInhibitoryActivation input, BindingActivation output) {
+    public InputNegativeFeedbackLink(NegativeFeedbackSynapse s, InputInhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
 
         if(input == null)

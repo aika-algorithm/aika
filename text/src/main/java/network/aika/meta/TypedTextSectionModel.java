@@ -233,7 +233,7 @@ public class TypedTextSectionModel extends TextSectionModel {
     }
 
     private static void instantiateInhibitorySynapse(InputInhibitoryNeuron tInhibN, InputInhibitoryNeuron inhibN, BindingNeuron tbn, BindingNeuron bn) {
-        InhibitorySynapse inhibS = (InhibitorySynapse) tInhibN.getInputSynapse(tbn.getProvider());
+        InputInhibitorySynapse inhibS = (InputInhibitorySynapse) tInhibN.getInputSynapse(tbn.getProvider());
         inhibS.instantiateTemplate(bn, inhibN);
     }
 

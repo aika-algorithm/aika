@@ -16,11 +16,7 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.LatentRelationNeuron;
-import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.neurons.TokenPositionRelationNeuron;
-import network.aika.elements.neurons.InputInhibitoryNeuron;
+import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.InputPatternSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SamePatternSynapse;
@@ -97,7 +93,7 @@ public class ABCDTest {
                 .setWeight(10.0)
                 .init(b_IN, b_bcBN)
                 .adjustBias();
-        addInhibitoryLoop(new InputInhibitoryNeuron(Scope.SAME).init(m, "I-b"), false, b_abBN, b_bcBN);
+        addInhibitoryLoop(new SameInhibitoryNeuron().init(m, "I-b"), false, b_abBN, b_bcBN);
         setBias(b_abBN, 3.0);
         setBias(b_bcBN, 2.5);
 

@@ -49,13 +49,13 @@ public class SameInhibitoryActivation extends DisjunctiveActivation<SameInhibito
         return getInputLinksByType(SameInhibitoryLink.class);
     }
 
-    public Stream<NegativeFeedbackLink> getAllNegativeFeedbackLinks() {
+    public Stream<SameNegativeFeedbackLink> getAllNegativeFeedbackLinks() {
         return getRelatedInhibitoryActivations()
                 .flatMap(SameInhibitoryActivation::getOwnNegativeFeedbackLinks);
     }
 
-    public Stream<NegativeFeedbackLink> getOwnNegativeFeedbackLinks() {
-        return getOutputLinksByType(NegativeFeedbackLink.class);
+    public Stream<SameNegativeFeedbackLink> getOwnNegativeFeedbackLinks() {
+        return getOutputLinksByType(SameNegativeFeedbackLink.class);
     }
 
     private Stream<SameInhibitoryActivation> getRelatedInhibitoryActivations() {
@@ -81,8 +81,8 @@ public class SameInhibitoryActivation extends DisjunctiveActivation<SameInhibito
                 .filter(Objects::nonNull);
     }
 
-    public static void connectFields(Stream<SameInhibitoryLink> in, Stream<NegativeFeedbackLink> out) {
-        List<NegativeFeedbackLink> nfls = out.toList();
+    public static void connectFields(Stream<SameInhibitoryLink> in, Stream<SameNegativeFeedbackLink> out) {
+        List<SameNegativeFeedbackLink> nfls = out.toList();
 
         in.forEach(il ->
                 nfls.forEach(nfl ->

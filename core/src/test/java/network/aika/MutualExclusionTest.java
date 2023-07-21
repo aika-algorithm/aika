@@ -35,11 +35,8 @@ package network.aika;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.TokenActivation;
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.neurons.TokenNeuron;
-import network.aika.elements.neurons.InputInhibitoryNeuron;
-import network.aika.elements.synapses.InhibitorySynapse;
+import network.aika.elements.neurons.*;
+import network.aika.elements.synapses.InputInhibitorySynapse;
 import network.aika.elements.synapses.InputPatternSynapse;
 import network.aika.elements.synapses.NegativeFeedbackSynapse;
 import network.aika.enums.Scope;
@@ -72,7 +69,7 @@ public class MutualExclusionTest {
         BindingNeuron na = new BindingNeuron().init(m, "A");
         BindingNeuron nb = new BindingNeuron().init(m, "B");
         BindingNeuron nc = new BindingNeuron().init(m, "C");
-        InputInhibitoryNeuron inhib = new InputInhibitoryNeuron(Scope.SAME).init(m, "I");
+        InputInhibitoryNeuron inhib = new SameInhibitoryNeuron().init(m, "I");
 
         new InputPatternSynapse()
                 .setWeight(10.0)
@@ -106,15 +103,15 @@ public class MutualExclusionTest {
 
         TestUtils.setBias(nc, 1.2);
 
-        new InhibitorySynapse(INPUT)
+        new InputInhibitorySynapse(INPUT)
                 .setWeight(1.0)
                 .init(na, inhib);
 
-        new InhibitorySynapse(INPUT)
+        new InputInhibitorySynapse(INPUT)
                 .setWeight(1.0)
                 .init(nb, inhib);
 
-        new InhibitorySynapse(INPUT)
+        new InputInhibitorySynapse(INPUT)
                 .setWeight(1.0)
                 .init(nc, inhib);
 
@@ -150,7 +147,7 @@ public class MutualExclusionTest {
         TokenNeuron in = new TokenNeuron().init(m, "I");
         BindingNeuron na = new BindingNeuron().init(m, "A");
         BindingNeuron nb = new BindingNeuron().init(m, "B");
-        InputInhibitoryNeuron inhib =new InputInhibitoryNeuron(Scope.SAME).init(m, "I");
+        InputInhibitoryNeuron inhib =new SameInhibitoryNeuron().init(m, "I");
 
         new InputPatternSynapse()
                 .setWeight(10.0)
@@ -180,11 +177,11 @@ public class MutualExclusionTest {
         PatternNeuron pb = initPatternLoop(m, "B", nb);
         setBias(pb, 3.0);
 
-        new InhibitorySynapse(INPUT)
+        new InputInhibitorySynapse(INPUT)
                 .setWeight(1.0)
                 .init(na, inhib);
 
-        new InhibitorySynapse(INPUT)
+        new InputInhibitorySynapse(INPUT)
                 .setWeight(1.0)
                 .init(nb, inhib);
 

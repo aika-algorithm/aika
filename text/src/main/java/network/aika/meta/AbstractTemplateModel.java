@@ -115,7 +115,7 @@ public abstract class AbstractTemplateModel {
         makeAbstract((PatternNeuron) patternN.getNeuron());
 
 
-        inhibitoryN = new InputInhibitoryNeuron(Scope.SAME)
+        inhibitoryN = new SameInhibitoryNeuron()
                 .init(model, "I")
                 .getProvider(true);
 
