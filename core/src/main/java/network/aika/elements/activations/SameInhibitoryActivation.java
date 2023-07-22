@@ -19,10 +19,17 @@ package network.aika.elements.activations;
 import network.aika.Thought;
 import network.aika.elements.links.*;
 import network.aika.elements.neurons.SameInhibitoryNeuron;
+import network.aika.fields.MaxField;
+import network.aika.fields.QueueSumField;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
+
+import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.steps.Phase.INFERENCE;
+import static network.aika.steps.Phase.PRE_ANNEAL;
+import static network.aika.utils.Utils.TOLERANCE;
 
 
 /**
@@ -36,58 +43,12 @@ public class SameInhibitoryActivation extends DisjunctiveActivation<SameInhibito
     }
 
     @Override
+    protected void initNet() {
+        net = new MaxField(this, "net");
+    }
+
+    @Override
     public boolean isActiveTemplateInstance() {
         return true;
-    }
-
-    public Stream<SameInhibitoryLink> getAllInhibitoryLinks() {
-        return getRelatedInhibitoryActivations()
-                .flatMap(SameInhibitoryActivation::getOwnInhibitoryLinks);
-    }
-
-    public Stream<SameInhibitoryLink> getOwnInhibitoryLinks() {
-        return getInputLinksByType(SameInhibitoryLink.class);
-    }
-
-    public Stream<SameNegativeFeedbackLink> getAllNegativeFeedbackLinks() {
-        return getRelatedInhibitoryActivations()
-                .flatMap(SameInhibitoryActivation::getOwnNegativeFeedbackLinks);
-    }
-
-    public Stream<SameNegativeFeedbackLink> getOwnNegativeFeedbackLinks() {
-        return getOutputLinksByType(SameNegativeFeedbackLink.class);
-    }
-
-    private Stream<SameInhibitoryActivation> getRelatedInhibitoryActivations() {
-        return Stream.concat(
-                Stream.of(this),
-                isAbstract() ?
-                        getConcreteInhibitoryActivations() :
-                        getAbstractInhibitoryActivations()
-        );
-    }
-
-    private Stream<SameInhibitoryActivation> getConcreteInhibitoryActivations() {
-        return getInputLinksByType(InhibitoryCategoryInputLink.class)
-                .map(Link::getInput)
-                .flatMap(CategoryActivation::getCategoryInputs)
-                .map(act -> (SameInhibitoryActivation) act);
-    }
-
-    private Stream<SameInhibitoryActivation> getAbstractInhibitoryActivations() {
-        return getOutputLinksByType(InhibitoryCategoryLink.class)
-                .map(Link::getOutput)
-                .map(act -> (SameInhibitoryActivation) act.getTemplate())
-                .filter(Objects::nonNull);
-    }
-
-    public static void connectFields(Stream<SameInhibitoryLink> in, Stream<SameNegativeFeedbackLink> out) {
-        List<SameNegativeFeedbackLink> nfls = out.toList();
-
-        in.forEach(il ->
-                nfls.forEach(nfl ->
-                        il.connectFields(nfl)
-                )
-        );
     }
 }

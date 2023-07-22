@@ -56,7 +56,7 @@ public class NetworkMotivs {
                 .setWeight(1.0)
                 .init(bn, in);
 
-        new NegativeFeedbackSynapse()
+        new InputNegativeFeedbackSynapse()
                 .setWeight(weight)
                 .init(in, bn)
                 .adjustBias();

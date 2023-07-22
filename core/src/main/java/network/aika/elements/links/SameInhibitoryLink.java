@@ -39,30 +39,8 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public class SameInhibitoryLink extends DisjunctiveLink<SameInhibitorySynapse, BindingActivation, SameInhibitoryActivation> {
 
-    protected FieldOutput value;
-
-    protected Field net;
-
     public SameInhibitoryLink(SameInhibitorySynapse inhibitorySynapse, BindingActivation input, SameInhibitoryActivation output) {
         super(inhibitorySynapse, input, output);
-
-        net = new QueueSumField(this, NEGATIVE_FEEDBACK, "net", null);
-        linkAndConnect(weightedInput, net);
-        linkAndConnect(output.getNeuron().getBias(), net)
-                .setPropagateUpdates(false);
-
-        value = Fields.func(
-                this,
-                "value = f(net)",
-                TOLERANCE,
-                net,
-                x -> output.getActivationFunction().f(x)
-        );
-
-        SameInhibitoryActivation.connectFields(
-                Stream.of(this),
-                output.getAllNegativeFeedbackLinks()
-        );
     }
 
     @Override
@@ -71,26 +49,5 @@ public class SameInhibitoryLink extends DisjunctiveLink<SameInhibitorySynapse, B
 
     @Override
     public void patternCatVisit(PatternCategoryVisitor v, int depth) {
-    }
-
-    public void connectFields(SameNegativeFeedbackLink out) {
-        if(isSelfRef(getInput(), out.getOutput(), Scope.SAME))
-            return;
-
-        linkAndConnect(getNet(), out.getInputValue());
-    }
-
-    @Override
-    public void disconnect() {
-        super.disconnect();
-        net.disconnectAndUnlinkInputs(false);
-    }
-
-    public FieldOutput getValue() {
-        return value;
-    }
-
-    public FieldOutput getNet() {
-        return net;
     }
 }

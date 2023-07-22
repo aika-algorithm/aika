@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static network.aika.TestUtils.*;
 
 /**
  *
@@ -47,7 +46,7 @@ public class PropagateTest {
                 .setWeight(10.0)
                 .init(in, out);
 
-        setBias(out, 1.0);
+        out.setBias(1.0);
 
         Document doc = new Document(m, "test");
         doc.setConfig(c);

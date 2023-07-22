@@ -27,14 +27,14 @@ import network.aika.elements.neurons.InputInhibitoryNeuron;
  *
  * @author Lukas Molzberger
  */
-public class NegativeFeedbackSynapse extends FeedbackSynapse<
-        NegativeFeedbackSynapse,
+public class InputNegativeFeedbackSynapse extends FeedbackSynapse<
+        InputNegativeFeedbackSynapse,
         InputInhibitoryNeuron,
         InputNegativeFeedbackLink,
         InputInhibitoryActivation
         >
 {
-    public NegativeFeedbackSynapse() {
+    public InputNegativeFeedbackSynapse() {
         super(Scope.INPUT);
     }
 
@@ -56,7 +56,7 @@ public class NegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public NegativeFeedbackSynapse setWeight(double w) {
+    public InputNegativeFeedbackSynapse setWeight(double w) {
         weight.receiveUpdate(false, w);
         return this;
     }

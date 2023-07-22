@@ -17,9 +17,7 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InputInhibitoryActivation;
 import network.aika.elements.activations.SameInhibitoryActivation;
-import network.aika.elements.synapses.NegativeFeedbackSynapse;
 import network.aika.elements.synapses.SameNegativeFeedbackSynapse;
 import network.aika.fields.Field;
 import network.aika.fields.MaxField;
@@ -38,23 +36,9 @@ public class SameNegativeFeedbackLink extends FeedbackLink<SameNegativeFeedbackS
 
     private Field weightUpdate;
 
-    private Multiplication innerWeightedInput;
 
     public SameNegativeFeedbackLink(SameNegativeFeedbackSynapse s, SameInhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
-
-        if(input == null)
-            return;
-
-        SameInhibitoryActivation.connectFields(
-                input.getAllInhibitoryLinks(),
-                Stream.of(this)
-        );
-    }
-
-    @Override
-    protected void initInputValue() {
-        inputValue = new MaxField(this, "max-input-value");
     }
 
     @Override
@@ -66,16 +50,6 @@ public class SameNegativeFeedbackLink extends FeedbackLink<SameNegativeFeedbackS
     protected void connectInputValue() {
     }
 
-    @Override
-    protected Multiplication initWeightedInput() {
-        innerWeightedInput = super.initWeightedInput();
-        return mul(
-                this,
-                "annealing * iAct(" + getInputKeyString() + ").value * weight",
-                getThought().getAnnealing(),
-                innerWeightedInput
-        );
-    }
 
     @Override
     public void bindingVisit(BindingVisitor v, int depth) {
@@ -100,8 +74,6 @@ public class SameNegativeFeedbackLink extends FeedbackLink<SameNegativeFeedbackS
     @Override
     public void disconnect() {
         super.disconnect();
-
-        innerWeightedInput.disconnectAndUnlinkInputs(false);
 
         if(weightUpdate != null)
             weightUpdate.disconnectAndUnlinkOutputs(false);

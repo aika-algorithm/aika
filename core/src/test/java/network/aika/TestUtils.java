@@ -16,14 +16,14 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.*;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.TokenActivation;
+import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.InputInhibitorySynapse;
-import network.aika.elements.synapses.NegativeFeedbackSynapse;
+import network.aika.elements.synapses.InputNegativeFeedbackSynapse;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.text.Document;
-import network.aika.elements.activations.TokenActivation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,94 +83,5 @@ public class TestUtils {
             n.setAllowTraining(false);
             return n;
         });
-    }
-
-    public static Config getConfig() {
-        return new Config() {
-            public String getLabel(Activation act) {
-               // Activation iAct = bs.getOriginActivation();
-                Neuron n = act.getNeuron();
-
-                if(n instanceof BindingNeuron) {
-                    return "B-"; // + trimPrefix(iAct.getLabel());
-                } else if (n instanceof PatternNeuron) {
-                    return "P-" + ((Document)act.getThought()).getContent();
-                }else if (n instanceof CategoryNeuron) {
-                    return "C-" + ((Document)act.getThought()).getContent();
-                } else {
-                    return "I-"; // + trimPrefix(iAct.getLabel());
-                }
-            }
-        };
-    }
-
-
-    public static InputInhibitoryNeuron addInputInhibitoryLoop(InputInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
-        if(inhibN == null)
-            return null;
-
-        for(BindingNeuron bn: bns) {
-            new InputInhibitorySynapse(sameInhibSynapse ? SAME : INPUT)
-                    .setWeight(1.0)
-                    .init(bn, inhibN);
-
-            new NegativeFeedbackSynapse()
-                    .setWeight(-20.0)
-                    .init(inhibN, bn);
-        }
-        return inhibN;
-    }
-
-    public static SameInhibitoryNeuron addSameInhibitoryLoop(SameInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
-        if(inhibN == null)
-            return null;
-
-        for(BindingNeuron bn: bns) {
-            new InputInhibitorySynapse(sameInhibSynapse ? SAME : INPUT)
-                    .setWeight(1.0)
-                    .init(bn, inhibN);
-
-            new NegativeFeedbackSynapse()
-                    .setWeight(-20.0)
-                    .init(inhibN, bn);
-        }
-        return inhibN;
-    }
-
-    public static PatternNeuron initPatternLoop(Model m, String label, BindingNeuron... bns) {
-        PatternNeuron patternN = new PatternNeuron()
-                .init(m, "P-" + label);
-
-        for(BindingNeuron bn: bns) {
-            new PatternSynapse()
-                    .setWeight(10.0)
-                    .init(bn, patternN)
-                    .adjustBias();
-
-            createPositiveFeedbackSynapse(new PositiveFeedbackSynapse(), patternN, bn, 0.0, 10.0);
-        }
-        return patternN;
-    }
-
-    public static void setBias(Neuron n, double bias) {
-        n.setBias(bias);
-    }
-
-    public static PositiveFeedbackSynapse createPositiveFeedbackSynapse(PositiveFeedbackSynapse s, PatternNeuron input, BindingNeuron output, double weight, double feedbackWeight) {
-        s.setInput(input);
-        s.setOutput(output);
-        s.setWeight(weight);
-
-        s.getPInput().addOutputSynapse(s);
-        s.getPOutput().addInputSynapse(s);
-        s.getOutput().getBias().receiveUpdate(false, -weight);
-        s.getWeight().receiveUpdate(false, feedbackWeight);
-        return s;
-    }
-
-    public static void setStatistic(PatternNeuron n, double frequency, int N, long lastPosition) {
-        n.setFrequency(frequency);
-        n.getSampleSpace().setN(N);
-        n.getSampleSpace().setLastPosition(lastPosition);
     }
 }
