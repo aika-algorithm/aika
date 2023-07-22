@@ -132,7 +132,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         sectionHintRelations(textSectionEndBN.getNeuron(), textSectionRelationNT.getNeuron());
 
 
-        tsBeginInhibitoryN = new InputInhibitoryNeuron(Scope.INPUT)
+        tsBeginInhibitoryN = new SameInhibitoryNeuron()
                 .init(model, "I TS Begin")
                 .getProvider(true);
 
@@ -143,7 +143,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 NEG_MARGIN_TS_BEGIN * -netTarget
         );
 
-        tsEndInhibitoryN = new InputInhibitoryNeuron(Scope.INPUT)
+        tsEndInhibitoryN = new SameInhibitoryNeuron()
                 .init(model, "I TS End")
                 .getProvider(true);
 
@@ -153,7 +153,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 NEG_MARGIN_TS_END * -netTarget
         );
 
-        tsInhibitoryN = new InputInhibitoryNeuron(Scope.SAME)
+        tsInhibitoryN = new InputInhibitoryNeuron()
                 .init(model, "I TS")
                 .getProvider(true);
 

@@ -105,7 +105,7 @@ public class TestUtils {
     }
 
 
-    public static InputInhibitoryNeuron addInhibitoryLoop(InputInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
+    public static InputInhibitoryNeuron addInputInhibitoryLoop(InputInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
         if(inhibN == null)
             return null;
 
@@ -121,7 +121,7 @@ public class TestUtils {
         return inhibN;
     }
 
-    public static SameInhibitoryNeuron addInhibitoryLoop(SameInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
+    public static SameInhibitoryNeuron addSameInhibitoryLoop(SameInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
         if(inhibN == null)
             return null;
 

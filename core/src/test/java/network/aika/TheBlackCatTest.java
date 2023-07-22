@@ -39,8 +39,8 @@ public class TheBlackCatTest {
     public void testTheBlackCat()  {
         Model m = new Model();
 
-        InputInhibitoryNeuron inhibNThe = new SameInhibitoryNeuron().init(m, "I-the");
-        InputInhibitoryNeuron inhibNCat = new SameInhibitoryNeuron().init(m, "I-cat");
+        SameInhibitoryNeuron inhibNThe = new SameInhibitoryNeuron().init(m, "I-the");
+        SameInhibitoryNeuron inhibNCat = new SameInhibitoryNeuron().init(m, "I-cat");
         initPatternTheCat(m, inhibNThe, inhibNCat, 0);
         initPatternBlackCat(m);
 
