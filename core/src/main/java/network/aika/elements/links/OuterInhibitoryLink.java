@@ -74,9 +74,7 @@ public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse,
     }
 
     public void connectFields(OuterNegativeFeedbackLink out) {
-        Scope identityRef = Scope.INPUT;
-
-        if(isSelfRef(getInput(), out.getOutput(), identityRef))
+        if(isSelfRef(getInput(), out.getOutput(), Scope.INPUT))
             return;
 
         linkAndConnect(getNet(), out.getInputValue());

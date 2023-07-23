@@ -59,7 +59,7 @@ public class InnerInhibitionTest {
     private static final Logger log = LoggerFactory.getLogger(InnerInhibitionTest.class);
 
     @Test
-    public void testPropagationInner() {
+    public void testInnerInhibition() {
         Model m = new Model();
 
         TokenNeuron inA = new TokenNeuron().init(m, "A");

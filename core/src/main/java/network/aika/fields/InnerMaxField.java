@@ -14,36 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.activations;
+package network.aika.fields;
 
-import network.aika.Thought;
-import network.aika.elements.links.InnerNegativeFeedbackLink;
-import network.aika.elements.neurons.InnerInhibitoryNeuron;
 import network.aika.enums.Scope;
-import network.aika.fields.InnerMaxField;
-import network.aika.fields.MaxField;
 
 import static network.aika.elements.activations.BindingActivation.isSelfRef;
-import static network.aika.fields.FieldLink.linkAndConnect;
-
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class InnerInhibitoryActivation extends DisjunctiveActivation<InnerInhibitoryNeuron> {
+public class InnerMaxField extends MaxField {
 
-    public InnerInhibitoryActivation(int id, Thought t, InnerInhibitoryNeuron neuron) {
-        super(id, t, neuron);
+    public InnerMaxField(FieldObject ref, String label) {
+        super(ref, label);
     }
 
-    @Override
-    protected void initNet() {
-        net = new InnerMaxField(this, "net");
-    }
 
-    @Override
-    public boolean isActiveTemplateInstance() {
-        return true;
+    protected void onSelectionChanged(AbstractFieldLink lastSelectedInput, AbstractFieldLink selectedInput) {
+        getReceivers().stream().forEach(fl -> {
+            if(isSelfRef(getInput(), out.getOutput(), Scope.INPUT))
+                return;
+        });
+
+
     }
 }
