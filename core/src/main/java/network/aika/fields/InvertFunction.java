@@ -27,7 +27,7 @@ public class InvertFunction extends AbstractFunction {
     }
 
     @Override
-    protected double computeUpdate(AbstractFieldLink fl, double u) {
+    protected double computeUpdate(FieldLink fl, double u) {
         return (1.0 - fl.getUpdatedInputValue()) - value;
     }
 }

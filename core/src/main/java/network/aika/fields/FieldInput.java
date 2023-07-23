@@ -21,7 +21,7 @@ import java.util.Collection;
 /**
  * @author Lukas Molzberger
  */
-public interface FieldInput extends UpdateListener {
+public interface FieldInput extends UpdateListener<FieldLink> {
 
     String getLabel();
 

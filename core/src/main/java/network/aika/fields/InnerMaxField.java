@@ -16,6 +16,8 @@
  */
 package network.aika.fields;
 
+import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.links.InnerNegativeFeedbackLink;
 import network.aika.enums.Scope;
 
 import static network.aika.elements.activations.BindingActivation.isSelfRef;
@@ -29,13 +31,27 @@ public class InnerMaxField extends MaxField {
         super(ref, label);
     }
 
+    protected void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput) {
+        BindingActivation lAct = lastSelectedInput != null ?
+                (BindingActivation) lastSelectedInput.getInput().getReference() :
+                null;
+        BindingActivation cAct = (BindingActivation) selectedInput.getInput().getReference();
 
-    protected void onSelectionChanged(AbstractFieldLink lastSelectedInput, AbstractFieldLink selectedInput) {
-        getReceivers().stream().forEach(fl -> {
-            if(isSelfRef(getInput(), out.getOutput(), Scope.INPUT))
-                return;
+        getReceivers().stream()
+                .filter(FieldLink.class::isInstance)
+                .map(FieldLink.class::cast)
+                .forEach(fl -> {
+                    InnerNegativeFeedbackLink l = (InnerNegativeFeedbackLink) fl.getOutput().getReference();
+                    BindingActivation act = l.getOutput();
+
+                    updateConnected(fl, lAct, act, false);
+                    updateConnected(fl, cAct, act, true);
         });
+    }
 
-
+    private void updateConnected(FieldLink fl, BindingActivation aAct, BindingActivation bAct, boolean current) {
+        if(fl.isConnected() != current && isSelfRef(aAct, bAct, Scope.SAME)) {
+            fl.updateConnected(current, true);
+        }
     }
 }

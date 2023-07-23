@@ -33,7 +33,7 @@ import java.text.NumberFormat;
 /**
  * @author Lukas Molzberger
  */
-public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty implements UpdateListener {
+public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty implements UpdateListener<ListenerFieldLink> {
 
     protected F field;
     protected AbstractFieldLink listenerLink;
@@ -100,7 +100,7 @@ public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty
     }
 
     @Override
-    public void receiveUpdate(AbstractFieldLink fl, boolean nextRound, double u) {
+    public void receiveUpdate(ListenerFieldLink fl, boolean nextRound, double u) {
         withinUpdate = true;
         currentValueField.setValue(field.getValue());
         withinUpdate = false;

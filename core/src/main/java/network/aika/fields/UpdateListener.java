@@ -19,7 +19,7 @@ package network.aika.fields;
 /**
  * @author Lukas Molzberger
  */
-public interface UpdateListener {
+public interface UpdateListener<F extends AbstractFieldLink> {
 
-    void receiveUpdate(AbstractFieldLink fl, boolean nextRound, double u);
+    void receiveUpdate(F fl, boolean nextRound, double u);
 }

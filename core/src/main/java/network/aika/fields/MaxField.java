@@ -23,27 +23,27 @@ import java.util.Comparator;
  */
 public class MaxField extends MultiInputField {
 
-    private AbstractFieldLink selectedInput;
+    private FieldLink selectedInput;
 
 
     public MaxField(FieldObject ref, String label) {
         super(ref, label, null);
     }
 
-    public AbstractFieldLink getSelectedInput() {
+    public FieldLink getSelectedInput() {
         return selectedInput;
     }
 
     @Override
-    public void receiveUpdate(AbstractFieldLink fl, boolean nextRound, double u) {
+    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
         triggerUpdate(
                 nextRound,
                 computeUpdate(fl, u)
         );
     }
 
-    protected double computeUpdate(AbstractFieldLink fl, double u) {
-        AbstractFieldLink lastSelectedInput = selectedInput;
+    protected double computeUpdate(FieldLink fl, double u) {
+        FieldLink lastSelectedInput = selectedInput;
 
         selectedInput = getInputs().stream()
                 .max(Comparator.comparingDouble(AbstractFieldLink::getUpdatedInputValue))
@@ -55,7 +55,7 @@ public class MaxField extends MultiInputField {
         return selectedInput.getUpdatedInputValue() - value;
     }
 
-    protected void onSelectionChanged(AbstractFieldLink lastSelectedInput, AbstractFieldLink selectedInput) {
+    protected void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput) {
 
     }
 }

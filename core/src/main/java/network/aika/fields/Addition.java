@@ -31,7 +31,7 @@ public class Addition extends AbstractFunction {
     }
 
     @Override
-    protected double computeUpdate(AbstractFieldLink fl, double u) {
+    protected double computeUpdate(FieldLink fl, double u) {
         return u;
     }
 }
