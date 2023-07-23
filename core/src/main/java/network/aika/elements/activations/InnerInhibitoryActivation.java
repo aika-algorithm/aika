@@ -14,25 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.neurons.properties;
+package network.aika.elements.activations;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.OuterInhibitoryNeuron;
+import network.aika.Thought;
+import network.aika.elements.neurons.InnerInhibitoryNeuron;
+import network.aika.fields.MaxField;
 
-import static network.aika.utils.Utils.doubleToString;
+import static network.aika.fields.FieldLink.linkAndConnect;
 
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class InputInhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<OuterInhibitoryNeuron> {
+public class InnerInhibitoryActivation extends DisjunctiveActivation<InnerInhibitoryNeuron> {
 
-
-    public InputInhibitoryNeuronPropertyPanel(OuterInhibitoryNeuron n, Activation ref) {
-        super(n, ref);
+    public InnerInhibitoryActivation(int id, Thought t, InnerInhibitoryNeuron neuron) {
+        super(id, t, neuron);
     }
 
-    public static InputInhibitoryNeuronPropertyPanel create(OuterInhibitoryNeuron n, Activation ref) {
-        return new InputInhibitoryNeuronPropertyPanel(n, ref);
+    @Override
+    protected void initNet() {
+        net = new MaxField(this, "net");
+    }
+
+    @Override
+    public boolean isActiveTemplateInstance() {
+        return true;
     }
 }

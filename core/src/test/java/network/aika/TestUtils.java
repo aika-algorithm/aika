@@ -16,20 +16,13 @@
  */
 package network.aika;
 
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.TokenActivation;
 import network.aika.elements.neurons.*;
-import network.aika.elements.synapses.InputInhibitorySynapse;
-import network.aika.elements.synapses.InputNegativeFeedbackSynapse;
-import network.aika.elements.synapses.PatternSynapse;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.text.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static network.aika.enums.Scope.INPUT;
-import static network.aika.enums.Scope.SAME;
 import static network.aika.steps.Phase.INFERENCE;
 import static network.aika.steps.keys.QueueKey.MAX_ROUND;
 

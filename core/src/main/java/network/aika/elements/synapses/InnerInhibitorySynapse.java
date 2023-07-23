@@ -18,13 +18,10 @@ package network.aika.elements.synapses;
 
 import network.aika.Model;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InputInhibitoryActivation;
-import network.aika.elements.activations.SameInhibitoryActivation;
-import network.aika.elements.links.InputInhibitoryLink;
-import network.aika.elements.links.SameInhibitoryLink;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.links.InnerInhibitoryLink;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.InputInhibitoryNeuron;
-import network.aika.elements.neurons.SameInhibitoryNeuron;
+import network.aika.elements.neurons.InnerInhibitoryNeuron;
 import network.aika.enums.Scope;
 
 import java.io.DataInput;
@@ -35,34 +32,34 @@ import java.io.IOException;
  *
  * @author Lukas Molzberger
  */
-public class SameInhibitorySynapse extends DisjunctiveSynapse<
-        SameInhibitorySynapse,
+public class InnerInhibitorySynapse extends DisjunctiveSynapse<
+        InnerInhibitorySynapse,
         BindingNeuron,
-        SameInhibitoryNeuron,
-        SameInhibitoryLink,
+        InnerInhibitoryNeuron,
+        InnerInhibitoryLink,
         BindingActivation,
-        SameInhibitoryActivation
+        InnerInhibitoryActivation
         > {
 
     private Scope type;
 
-    public SameInhibitorySynapse() {
+    public InnerInhibitorySynapse() {
         super(null);
     }
 
-    public SameInhibitorySynapse(Scope type) {
+    public InnerInhibitorySynapse(Scope type) {
         this();
         this.type = type;
     }
 
     @Override
-    public SameInhibitoryLink createLink(BindingActivation input, SameInhibitoryActivation output) {
-        return new SameInhibitoryLink(this, input, output);
+    public InnerInhibitoryLink createLink(BindingActivation input, InnerInhibitoryActivation output) {
+        return new InnerInhibitoryLink(this, input, output);
     }
 
     @Override
-    public SameInhibitorySynapse instantiateTemplate(BindingNeuron input, SameInhibitoryNeuron output) {
-        SameInhibitorySynapse s = new SameInhibitorySynapse(getType());
+    public InnerInhibitorySynapse instantiateTemplate(BindingNeuron input, InnerInhibitoryNeuron output) {
+        InnerInhibitorySynapse s = new InnerInhibitorySynapse(getType());
         s.initFromTemplate(input, output, this);
         return s;
     }

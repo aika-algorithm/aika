@@ -17,8 +17,8 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InputInhibitoryActivation;
-import network.aika.elements.synapses.InputInhibitorySynapse;
+import network.aika.elements.activations.OuterInhibitoryActivation;
+import network.aika.elements.synapses.OuterInhibitorySynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.Field;
 import network.aika.fields.FieldOutput;
@@ -37,13 +37,13 @@ import static network.aika.utils.Utils.TOLERANCE;
 /**
  * @author Lukas Molzberger
  */
-public class InputInhibitoryLink extends DisjunctiveLink<InputInhibitorySynapse, BindingActivation, InputInhibitoryActivation> {
+public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse, BindingActivation, OuterInhibitoryActivation> {
 
     protected FieldOutput value;
 
     protected Field net;
 
-    public InputInhibitoryLink(InputInhibitorySynapse inhibitorySynapse, BindingActivation input, InputInhibitoryActivation output) {
+    public OuterInhibitoryLink(OuterInhibitorySynapse inhibitorySynapse, BindingActivation input, OuterInhibitoryActivation output) {
         super(inhibitorySynapse, input, output);
 
         net = new QueueSumField(this, NEGATIVE_FEEDBACK, "net", null);
@@ -59,7 +59,7 @@ public class InputInhibitoryLink extends DisjunctiveLink<InputInhibitorySynapse,
                 x -> output.getActivationFunction().f(x)
         );
 
-        InputInhibitoryActivation.connectFields(
+        OuterInhibitoryActivation.connectFields(
                 Stream.of(this),
                 output.getAllNegativeFeedbackLinks()
         );
@@ -73,7 +73,7 @@ public class InputInhibitoryLink extends DisjunctiveLink<InputInhibitorySynapse,
     public void patternCatVisit(PatternCategoryVisitor v, int depth) {
     }
 
-    public void connectFields(InputNegativeFeedbackLink out) {
+    public void connectFields(OuterNegativeFeedbackLink out) {
         Scope identityRef = Scope.INPUT;
 
         if(isSelfRef(getInput(), out.getOutput(), identityRef))

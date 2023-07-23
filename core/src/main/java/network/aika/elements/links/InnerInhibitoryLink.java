@@ -14,41 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.activations;
+package network.aika.elements.links;
 
-import network.aika.Thought;
-import network.aika.elements.links.*;
-import network.aika.elements.neurons.SameInhibitoryNeuron;
-import network.aika.fields.MaxField;
-import network.aika.fields.QueueSumField;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
+import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.synapses.InnerInhibitorySynapse;
+import network.aika.visitor.pattern.PatternCategoryVisitor;
+import network.aika.visitor.pattern.PatternVisitor;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
-import static network.aika.steps.Phase.INFERENCE;
-import static network.aika.steps.Phase.PRE_ANNEAL;
-import static network.aika.utils.Utils.TOLERANCE;
-
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class SameInhibitoryActivation extends DisjunctiveActivation<SameInhibitoryNeuron> {
+public class InnerInhibitoryLink extends DisjunctiveLink<InnerInhibitorySynapse, BindingActivation, InnerInhibitoryActivation> {
 
-    public SameInhibitoryActivation(int id, Thought t, SameInhibitoryNeuron neuron) {
-        super(id, t, neuron);
+    public InnerInhibitoryLink(InnerInhibitorySynapse inhibitorySynapse, BindingActivation input, InnerInhibitoryActivation output) {
+        super(inhibitorySynapse, input, output);
     }
 
     @Override
-    protected void initNet() {
-        net = new MaxField(this, "net");
+    public void patternVisit(PatternVisitor v, int depth) {
     }
 
     @Override
-    public boolean isActiveTemplateInstance() {
-        return true;
+    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
     }
 }

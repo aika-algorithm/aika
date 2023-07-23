@@ -16,28 +16,25 @@
  */
 package network.aika.elements.synapses;
 
+import network.aika.enums.Scope;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InputInhibitoryActivation;
-import network.aika.elements.activations.SameInhibitoryActivation;
-import network.aika.elements.links.InputNegativeFeedbackLink;
-import network.aika.elements.links.SameNegativeFeedbackLink;
-import network.aika.elements.neurons.InputInhibitoryNeuron;
-import network.aika.elements.neurons.SameInhibitoryNeuron;
-import network.aika.enums.Scope;
+import network.aika.elements.activations.OuterInhibitoryActivation;
+import network.aika.elements.links.OuterNegativeFeedbackLink;
+import network.aika.elements.neurons.OuterInhibitoryNeuron;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class SameNegativeFeedbackSynapse extends FeedbackSynapse<
-        SameNegativeFeedbackSynapse,
-        SameInhibitoryNeuron,
-        SameNegativeFeedbackLink,
-        SameInhibitoryActivation
+public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
+        OuterNegativeFeedbackSynapse,
+        OuterInhibitoryNeuron,
+        OuterNegativeFeedbackLink,
+        OuterInhibitoryActivation
         >
 {
-    public SameNegativeFeedbackSynapse() {
+    public OuterNegativeFeedbackSynapse() {
         super(Scope.INPUT);
     }
 
@@ -48,18 +45,18 @@ public class SameNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public SameNegativeFeedbackLink createLink(SameInhibitoryActivation input, BindingActivation output) {
-        return new SameNegativeFeedbackLink(this, input, output);
+    public OuterNegativeFeedbackLink createLink(OuterInhibitoryActivation input, BindingActivation output) {
+        return new OuterNegativeFeedbackLink(this, input, output);
     }
 
     @Override
-    public void linkAndPropagateOut(SameInhibitoryActivation act) {
+    public void linkAndPropagateOut(OuterInhibitoryActivation act) {
         getOutput()
                 .linkOutgoing(this, act);
     }
 
     @Override
-    public SameNegativeFeedbackSynapse setWeight(double w) {
+    public OuterNegativeFeedbackSynapse setWeight(double w) {
         weight.receiveUpdate(false, w);
         return this;
     }
@@ -70,7 +67,7 @@ public class SameNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public double getPropagatePreNet(SameInhibitoryActivation iAct) {
+    public double getPropagatePreNet(OuterInhibitoryActivation iAct) {
         return weight.getValue();
     }
 }

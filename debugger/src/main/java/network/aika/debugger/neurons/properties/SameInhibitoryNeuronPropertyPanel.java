@@ -17,21 +17,20 @@
 package network.aika.debugger.neurons.properties;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.InputInhibitoryNeuron;
-import network.aika.elements.neurons.SameInhibitoryNeuron;
+import network.aika.elements.neurons.InnerInhibitoryNeuron;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class SameInhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<SameInhibitoryNeuron> {
+public class SameInhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<InnerInhibitoryNeuron> {
 
 
-    public SameInhibitoryNeuronPropertyPanel(SameInhibitoryNeuron n, Activation ref) {
+    public SameInhibitoryNeuronPropertyPanel(InnerInhibitoryNeuron n, Activation ref) {
         super(n, ref);
     }
 
-    public static SameInhibitoryNeuronPropertyPanel create(SameInhibitoryNeuron n, Activation ref) {
+    public static SameInhibitoryNeuronPropertyPanel create(InnerInhibitoryNeuron n, Activation ref) {
         return new SameInhibitoryNeuronPropertyPanel(n, ref);
     }
 }

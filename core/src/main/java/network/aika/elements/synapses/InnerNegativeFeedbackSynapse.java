@@ -16,25 +16,25 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.enums.Scope;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InputInhibitoryActivation;
-import network.aika.elements.links.InputNegativeFeedbackLink;
-import network.aika.elements.neurons.InputInhibitoryNeuron;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.links.InnerNegativeFeedbackLink;
+import network.aika.elements.neurons.InnerInhibitoryNeuron;
+import network.aika.enums.Scope;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class InputNegativeFeedbackSynapse extends FeedbackSynapse<
-        InputNegativeFeedbackSynapse,
-        InputInhibitoryNeuron,
-        InputNegativeFeedbackLink,
-        InputInhibitoryActivation
+public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
+        InnerNegativeFeedbackSynapse,
+        InnerInhibitoryNeuron,
+        InnerNegativeFeedbackLink,
+        InnerInhibitoryActivation
         >
 {
-    public InputNegativeFeedbackSynapse() {
+    public InnerNegativeFeedbackSynapse() {
         super(Scope.INPUT);
     }
 
@@ -45,18 +45,18 @@ public class InputNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public InputNegativeFeedbackLink createLink(InputInhibitoryActivation input, BindingActivation output) {
-        return new InputNegativeFeedbackLink(this, input, output);
+    public InnerNegativeFeedbackLink createLink(InnerInhibitoryActivation input, BindingActivation output) {
+        return new InnerNegativeFeedbackLink(this, input, output);
     }
 
     @Override
-    public void linkAndPropagateOut(InputInhibitoryActivation act) {
+    public void linkAndPropagateOut(InnerInhibitoryActivation act) {
         getOutput()
                 .linkOutgoing(this, act);
     }
 
     @Override
-    public InputNegativeFeedbackSynapse setWeight(double w) {
+    public InnerNegativeFeedbackSynapse setWeight(double w) {
         weight.receiveUpdate(false, w);
         return this;
     }
@@ -67,7 +67,7 @@ public class InputNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public double getPropagatePreNet(InputInhibitoryActivation iAct) {
+    public double getPropagatePreNet(InnerInhibitoryActivation iAct) {
         return weight.getValue();
     }
 }

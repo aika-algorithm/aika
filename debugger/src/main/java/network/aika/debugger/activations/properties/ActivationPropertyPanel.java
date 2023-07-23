@@ -86,8 +86,8 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
             return new PatternActivationPropertyPanel((PatternActivation) act);
         } else if(act instanceof BindingActivation) {
             return new BindingActivationPropertyPanel((BindingActivation) act);
-        } else if(act instanceof InputInhibitoryActivation) {
-            return new InhibitoryActivationPropertyPanel((InputInhibitoryActivation) act);
+        } else if(act instanceof OuterInhibitoryActivation) {
+            return new InhibitoryActivationPropertyPanel((OuterInhibitoryActivation) act);
         }
 
         return new ActivationPropertyPanel(act);

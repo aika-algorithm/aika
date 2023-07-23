@@ -16,30 +16,30 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.elements.links.InputNegativeFeedbackLink;
+import network.aika.elements.links.OuterNegativeFeedbackLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class NegativeFeedbackLinkPropertyPanel extends FeedbackLinkPropertyPanel<InputNegativeFeedbackLink> {
+public class NegativeFeedbackLinkPropertyPanel extends FeedbackLinkPropertyPanel<OuterNegativeFeedbackLink> {
 
 
-    public NegativeFeedbackLinkPropertyPanel(InputNegativeFeedbackLink l) {
+    public NegativeFeedbackLinkPropertyPanel(OuterNegativeFeedbackLink l) {
         super(l);
     }
 
     @Override
-    public void initIdentitySection(InputNegativeFeedbackLink l) {
+    public void initIdentitySection(OuterNegativeFeedbackLink l) {
         super.initIdentitySection(l);
     }
 
     @Override
-    public void initInferenceSection(InputNegativeFeedbackLink l) {
+    public void initInferenceSection(OuterNegativeFeedbackLink l) {
         super.initInferenceSection(l);
     }
 
     @Override
-    public void initTrainingSection(InputNegativeFeedbackLink l) {
+    public void initTrainingSection(OuterNegativeFeedbackLink l) {
         super.initTrainingSection(l);
     }
 }

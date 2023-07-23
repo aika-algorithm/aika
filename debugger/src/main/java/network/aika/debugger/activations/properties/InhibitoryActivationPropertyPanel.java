@@ -16,31 +16,31 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.elements.activations.InputInhibitoryActivation;
+import network.aika.elements.activations.OuterInhibitoryActivation;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryActivationPropertyPanel extends ActivationPropertyPanel<InputInhibitoryActivation> {
+public class InhibitoryActivationPropertyPanel extends ActivationPropertyPanel<OuterInhibitoryActivation> {
 
 
-    public InhibitoryActivationPropertyPanel(InputInhibitoryActivation act) {
+    public InhibitoryActivationPropertyPanel(OuterInhibitoryActivation act) {
         super(act);
     }
 
     @Override
-    public void initIdentitySection(InputInhibitoryActivation act) {
+    public void initIdentitySection(OuterInhibitoryActivation act) {
         super.initIdentitySection(act);
     }
 
     @Override
-    public void initInferenceSection(InputInhibitoryActivation act) {
+    public void initInferenceSection(OuterInhibitoryActivation act) {
         super.initInferenceSection(act);
     }
 
     @Override
-    public void initTrainingSection(InputInhibitoryActivation act) {
+    public void initTrainingSection(OuterInhibitoryActivation act) {
         super.initTrainingSection(act);
     }
 }

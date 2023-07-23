@@ -17,48 +17,40 @@
 package network.aika.elements.neurons;
 
 import network.aika.ActivationFunction;
-import network.aika.Model;
+import network.aika.enums.Scope;
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.InputInhibitoryActivation;
-import network.aika.elements.activations.SameInhibitoryActivation;
-import network.aika.elements.synapses.CategorySynapse;
-import network.aika.elements.synapses.InhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.InhibitoryCategorySynapse;
-import network.aika.elements.synapses.Synapse;
-import network.aika.enums.Scope;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
+import network.aika.elements.activations.OuterInhibitoryActivation;
+import network.aika.elements.synapses.*;
 import network.aika.visitor.operator.LinkingOperator;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import network.aika.visitor.inhibitory.InhibitoryVisitor;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class SameInhibitoryNeuron extends DisjunctiveNeuron<SameInhibitoryActivation> {
+public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryActivation> {
 
     @Override
-    public SameInhibitoryNeuron instantiateTemplate() {
-        SameInhibitoryNeuron n = new SameInhibitoryNeuron();
+    public OuterInhibitoryNeuron instantiateTemplate() {
+        OuterInhibitoryNeuron n = new OuterInhibitoryNeuron();
         n.initFromTemplate(this);
         return n;
     }
 
     @Override
-    public SameInhibitoryActivation createActivation(Thought t) {
-        return new SameInhibitoryActivation(t.createActivationId(), t, this);
+    public OuterInhibitoryActivation createActivation(Thought t) {
+        return new OuterInhibitoryActivation(t.createActivationId(), t, this);
     }
 
     public ActivationFunction getActivationFunction() {
         return ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
     }
 
+
     @Override
     public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
-        new InhibitoryVisitor(act.getThought(), c, Scope.INPUT)
+        new InhibitoryVisitor(act.getThought(), c, Scope.SAME)
                 .start(act);
     }
 

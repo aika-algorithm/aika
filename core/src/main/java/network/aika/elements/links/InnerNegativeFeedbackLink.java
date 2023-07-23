@@ -17,14 +17,10 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.SameInhibitoryActivation;
-import network.aika.elements.synapses.SameNegativeFeedbackSynapse;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
 import network.aika.fields.Field;
-import network.aika.fields.MaxField;
-import network.aika.fields.Multiplication;
 import network.aika.visitor.binding.BindingVisitor;
-
-import java.util.stream.Stream;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
@@ -32,12 +28,12 @@ import static network.aika.fields.Fields.mul;
 /**
  * @author Lukas Molzberger
  */
-public class SameNegativeFeedbackLink extends FeedbackLink<SameNegativeFeedbackSynapse, SameInhibitoryActivation> {
+public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbackSynapse, InnerInhibitoryActivation> {
 
     private Field weightUpdate;
 
 
-    public SameNegativeFeedbackLink(SameNegativeFeedbackSynapse s, SameInhibitoryActivation input, BindingActivation output) {
+    public InnerNegativeFeedbackLink(InnerNegativeFeedbackSynapse s, InnerInhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
     }
 

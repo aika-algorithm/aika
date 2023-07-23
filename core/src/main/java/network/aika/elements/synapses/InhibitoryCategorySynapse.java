@@ -17,7 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.InputInhibitoryActivation;
+import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.links.InhibitoryCategoryLink;
 import network.aika.elements.neurons.Neuron;
 
@@ -25,14 +25,14 @@ import network.aika.elements.neurons.Neuron;
  *
  * @author Lukas Molzberger
  */
-public class InhibitoryCategorySynapse extends CategorySynapse<InhibitoryCategorySynapse, Neuron, InputInhibitoryActivation> {
+public class InhibitoryCategorySynapse extends CategorySynapse<InhibitoryCategorySynapse, Neuron, OuterInhibitoryActivation> {
 
     public InhibitoryCategorySynapse() {
         super(null);
     }
 
     @Override
-    public InhibitoryCategoryLink createLink(InputInhibitoryActivation input, CategoryActivation output) {
+    public InhibitoryCategoryLink createLink(OuterInhibitoryActivation input, CategoryActivation output) {
         return new InhibitoryCategoryLink(this, input, output);
     }
 }
