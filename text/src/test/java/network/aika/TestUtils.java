@@ -18,10 +18,7 @@ package network.aika;
 
 import network.aika.elements.neurons.*;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.synapses.InputInhibitorySynapse;
-import network.aika.elements.synapses.InputNegativeFeedbackSynapse;
-import network.aika.elements.synapses.PatternSynapse;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
+import network.aika.elements.synapses.*;
 import network.aika.text.Document;
 import network.aika.elements.activations.TokenActivation;
 
@@ -105,32 +102,32 @@ public class TestUtils {
     }
 
 
-    public static InputInhibitoryNeuron addInputInhibitoryLoop(InputInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
+    public static OuterInhibitoryNeuron addOuterInhibitoryLoop(OuterInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
         if(inhibN == null)
             return null;
 
         for(BindingNeuron bn: bns) {
-            new InputInhibitorySynapse(sameInhibSynapse ? SAME : INPUT)
+            new OuterInhibitorySynapse(sameInhibSynapse ? SAME : INPUT)
                     .setWeight(1.0)
                     .init(bn, inhibN);
 
-            new InputNegativeFeedbackSynapse()
+            new OuterNegativeFeedbackSynapse()
                     .setWeight(-20.0)
                     .init(inhibN, bn);
         }
         return inhibN;
     }
 
-    public static SameInhibitoryNeuron addSameInhibitoryLoop(SameInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
+    public static InnerInhibitoryNeuron addInnerInhibitoryLoop(InnerInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
         if(inhibN == null)
             return null;
 
         for(BindingNeuron bn: bns) {
-            new InputInhibitorySynapse(sameInhibSynapse ? SAME : INPUT)
+            new InnerInhibitorySynapse(sameInhibSynapse ? SAME : INPUT)
                     .setWeight(1.0)
                     .init(bn, inhibN);
 
-            new InputNegativeFeedbackSynapse()
+            new InnerNegativeFeedbackSynapse()
                     .setWeight(-20.0)
                     .init(inhibN, bn);
         }

@@ -217,9 +217,9 @@ public class PatternLogger {
     }
 
     private static String getSuppressingBindingActLabel(BindingActivation act) {
-        return act.getInputLinksByType(InputNegativeFeedbackLink.class)
+        return act.getInputLinksByType(OuterNegativeFeedbackLink.class)
                 .map(Link::getInput)
-                .flatMap(inhibAct -> inhibAct.getInputLinksByType(InputInhibitoryLink.class))
+                .flatMap(inhibAct -> inhibAct.getInputLinksByType(OuterInhibitoryLink.class))
                 .map(Link::getInput)
                 .filter(supprAct -> supprAct.getNet().getUpdatedValue() > 0.0)
                 .map(Activation::getLabel)

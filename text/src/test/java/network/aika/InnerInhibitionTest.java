@@ -35,7 +35,10 @@ package network.aika;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.neurons.*;
-import network.aika.elements.synapses.*;
+import network.aika.elements.synapses.InnerInhibitorySynapse;
+import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
+import network.aika.elements.synapses.InputPatternSynapse;
+import network.aika.elements.synapses.PatternSynapse;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -43,7 +46,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.SortedSet;
 
-import static network.aika.TestUtils.*;
+import static network.aika.TestUtils.getConfig;
 import static network.aika.enums.Scope.INPUT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -51,62 +54,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Lukas Molzberger
  */
-public class MutualExclusionTest {
+public class InnerInhibitionTest {
 
-    private static final Logger log = LoggerFactory.getLogger(MutualExclusionTest.class);
-
-    @Test
-    public void testPropagationInput() {
-        Model m = new Model();
-
-        TokenNeuron in = new TokenNeuron().init(m, "IN");
-        InputInhibitoryNeuron inhib = new InputInhibitoryNeuron().init(m, "I");
-
-        BindingNeuron na = addBindingNeuronInput(m,  "A", 1.0, in, inhib);
-        BindingNeuron nb = addBindingNeuronInput(m, "B", 1.5, in, inhib);
-        BindingNeuron nc = addBindingNeuronInput(m, "C", 1.2, in, inhib);
-
-        Document doc = new Document(m, "test");
-
-        Config c = getConfig()
-                .setAlpha(0.99)
-                .setLearnRate(0.01)
-                .setTrainingEnabled(true);
-        doc.setConfig(c);
-
-        doc.addToken(in, 0, 0, 4);
-
-        doc.postProcessing();
-        doc.updateModel();
-
-        log.info("" + doc);
-
-        SortedSet<BindingActivation> nbActs = nb.getActivations(doc);
-        Activation nbAct = nbActs.stream().findFirst().orElse(null);
-
-        assertTrue(nbAct.getValue().getValue() > 0.38);
-
-        doc.disconnect();
-    }
+    private static final Logger log = LoggerFactory.getLogger(InnerInhibitionTest.class);
 
     @Test
-    public void testPropagationSame() {
+    public void testPropagationInner() {
         Model m = new Model();
 
         TokenNeuron inA = new TokenNeuron().init(m, "A");
         TokenNeuron inB = new TokenNeuron().init(m, "B");
         TokenNeuron inC = new TokenNeuron().init(m, "C");
 
-        SameInhibitoryNeuron inhib = new SameInhibitoryNeuron().init(m, "I");
+        InnerInhibitoryNeuron inhib = new InnerInhibitoryNeuron().init(m, "I");
 
         PatternNeuron patternN = new PatternNeuron()
                 .init(m, "P");
 
         patternN.setBias(1.0);
 
-        BindingNeuron na = addBindingNeuronSame(m,  "A", 1.0, inA, inhib, patternN);
-        BindingNeuron nb = addBindingNeuronSame(m, "B", 1.5, inB, inhib, patternN);
-        BindingNeuron nc = addBindingNeuronSame(m, "C", 1.2, inC, inhib, patternN);
+        BindingNeuron na = addBindingNeuronInner(m,  "A", 1.0, inA, inhib, patternN);
+        BindingNeuron nb = addBindingNeuronInner(m, "B", 1.5, inB, inhib, patternN);
+        BindingNeuron nc = addBindingNeuronInner(m, "C", 1.2, inC, inhib, patternN);
 
         Document doc = new Document(m, "test");
 
@@ -133,27 +102,7 @@ public class MutualExclusionTest {
         doc.disconnect();
     }
 
-    private static BindingNeuron addBindingNeuronInput(Model m, String label, double bias, TokenNeuron in, InputInhibitoryNeuron inhib) {
-        BindingNeuron bn = new BindingNeuron().init(m, label);
-
-        new InputPatternSynapse()
-                .setWeight(10.0)
-                .init(in, bn)
-                .adjustBias();
-        new InputNegativeFeedbackSynapse()
-                .setWeight(-20.0)
-                .init(inhib, bn);
-
-        new InputInhibitorySynapse(INPUT)
-                .setWeight(1.0)
-                .init(bn, inhib);
-
-        TestUtils.setBias(bn, bias);
-
-        return bn;
-    }
-
-    private static BindingNeuron addBindingNeuronSame(Model m, String label, double bias, TokenNeuron in, SameInhibitoryNeuron inhib, PatternNeuron patternN) {
+    private static BindingNeuron addBindingNeuronInner(Model m, String label, double bias, TokenNeuron in, InnerInhibitoryNeuron inhib, PatternNeuron patternN) {
         BindingNeuron bn = new BindingNeuron().init(m, label);
 
         new InputPatternSynapse()
@@ -161,11 +110,11 @@ public class MutualExclusionTest {
                 .init(in, bn)
                 .adjustBias();
 
-        new SameNegativeFeedbackSynapse()
+        new InnerNegativeFeedbackSynapse()
                 .setWeight(-20.0)
                 .init(inhib, bn);
 
-        new SameInhibitorySynapse(INPUT)
+        new InnerInhibitorySynapse(INPUT)
                 .setWeight(1.0)
                 .init(bn, inhib);
 

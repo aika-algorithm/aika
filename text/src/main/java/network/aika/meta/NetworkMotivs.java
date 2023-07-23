@@ -51,12 +51,12 @@ public class NetworkMotivs {
         return bn;
     }
 
-    public static void addNegativeFeedbackLoop(BindingNeuron bn, InputInhibitoryNeuron in, double weight) {
-        new InputInhibitorySynapse(Scope.INPUT)
+    public static void addNegativeFeedbackLoop(BindingNeuron bn, OuterInhibitoryNeuron in, double weight) {
+        new OuterInhibitorySynapse(Scope.INPUT)
                 .setWeight(1.0)
                 .init(bn, in);
 
-        new InputNegativeFeedbackSynapse()
+        new OuterNegativeFeedbackSynapse()
                 .setWeight(weight)
                 .init(in, bn)
                 .adjustBias();
@@ -130,7 +130,7 @@ public class NetworkMotivs {
         return patternCategory;
     }
 
-    public static InhibitoryCategoryNeuron makeAbstract(InputInhibitoryNeuron n) {
+    public static InhibitoryCategoryNeuron makeAbstract(OuterInhibitoryNeuron n) {
         InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(Scope.SAME)
                 .init(n.getModel(), n.getLabel() + CATEGORY_LABEL);
 

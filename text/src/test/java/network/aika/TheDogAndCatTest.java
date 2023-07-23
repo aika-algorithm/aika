@@ -16,9 +16,7 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.InputInhibitoryNeuron;
-import network.aika.elements.neurons.SameInhibitoryNeuron;
-import network.aika.enums.Scope;
+import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 
@@ -39,13 +37,13 @@ public class TheDogAndCatTest {
     public void testTheDogAndTheCat()  {
         Model m = new Model();
 
-        SameInhibitoryNeuron inhibNThe = new SameInhibitoryNeuron()
+        OuterInhibitoryNeuron inhibNThe = new OuterInhibitoryNeuron()
                 .init(m, "I-the");
 
-        SameInhibitoryNeuron inhibNCat = new SameInhibitoryNeuron()
+        OuterInhibitoryNeuron inhibNCat = new OuterInhibitoryNeuron()
                 .init(m, "I-cat");
 
-        SameInhibitoryNeuron inhibNDog = new SameInhibitoryNeuron()
+        OuterInhibitoryNeuron inhibNDog = new OuterInhibitoryNeuron()
                 .init(m, "I-dog");
 
         initPatternTheCat(m, inhibNThe, inhibNCat, 3);

@@ -132,7 +132,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         sectionHintRelations(textSectionEndBN.getNeuron(), textSectionRelationNT.getNeuron());
 
 
-        tsBeginInhibitoryN = new SameInhibitoryNeuron()
+        tsBeginInhibitoryN = new InnerInhibitoryNeuron()
                 .init(model, "I TS Begin")
                 .getProvider(true);
 
@@ -143,7 +143,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 NEG_MARGIN_TS_BEGIN * -netTarget
         );
 
-        tsEndInhibitoryN = new SameInhibitoryNeuron()
+        tsEndInhibitoryN = new InnerInhibitoryNeuron()
                 .init(model, "I TS End")
                 .getProvider(true);
 
@@ -153,7 +153,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 NEG_MARGIN_TS_END * -netTarget
         );
 
-        tsInhibitoryN = new InputInhibitoryNeuron()
+        tsInhibitoryN = new OuterInhibitoryNeuron()
                 .init(model, "I TS")
                 .getProvider(true);
 
@@ -183,8 +183,8 @@ public class TypedTextSectionModel extends TextSectionModel {
         PatternNeuron pn = instantiatePatternNeuron(tpn);
         templateMapping.put(tpn.getProvider(), pn);
 
-        InputInhibitoryNeuron tInhibN = phraseModel.inhibitoryN.getNeuron();
-        InputInhibitoryNeuron inhibN = instantiateInhibitoryNeuron(tInhibN);
+        OuterInhibitoryNeuron tInhibN = phraseModel.inhibitoryN.getNeuron();
+        OuterInhibitoryNeuron inhibN = instantiateInhibitoryNeuron(tInhibN);
         templateMapping.put(tInhibN.getProvider(), inhibN);
 
         List<BindingNeuron> templateBindingNeurons = tpn.getInputSynapsesByType(PatternSynapse.class)
@@ -217,8 +217,8 @@ public class TypedTextSectionModel extends TextSectionModel {
         return pn;
     }
 
-    private InputInhibitoryNeuron instantiateInhibitoryNeuron(InputInhibitoryNeuron tInhibN) {
-        InputInhibitoryNeuron inhibN;
+    private OuterInhibitoryNeuron instantiateInhibitoryNeuron(OuterInhibitoryNeuron tInhibN) {
+        OuterInhibitoryNeuron inhibN;
         inhibN = tInhibN
                 .instantiateTemplate()
                 .init(model, "Inhib. TS-Headline");
@@ -232,8 +232,8 @@ public class TypedTextSectionModel extends TextSectionModel {
         ps.instantiateTemplate(bn, pn);
     }
 
-    private static void instantiateInhibitorySynapse(InputInhibitoryNeuron tInhibN, InputInhibitoryNeuron inhibN, BindingNeuron tbn, BindingNeuron bn) {
-        InputInhibitorySynapse inhibS = (InputInhibitorySynapse) tInhibN.getInputSynapse(tbn.getProvider());
+    private static void instantiateInhibitorySynapse(OuterInhibitoryNeuron tInhibN, OuterInhibitoryNeuron inhibN, BindingNeuron tbn, BindingNeuron bn) {
+        OuterInhibitorySynapse inhibS = (OuterInhibitorySynapse) tInhibN.getInputSynapse(tbn.getProvider());
         inhibS.instantiateTemplate(bn, inhibN);
     }
 

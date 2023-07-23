@@ -93,7 +93,7 @@ public class ABCDTest {
                 .setWeight(10.0)
                 .init(b_IN, b_bcBN)
                 .adjustBias();
-        addSameInhibitoryLoop(new SameInhibitoryNeuron().init(m, "I-b"), false, b_abBN, b_bcBN);
+        addOuterInhibitoryLoop(new OuterInhibitoryNeuron().init(m, "I-b"), false, b_abBN, b_bcBN);
         setBias(b_abBN, 3.0);
         setBias(b_bcBN, 2.5);
 
