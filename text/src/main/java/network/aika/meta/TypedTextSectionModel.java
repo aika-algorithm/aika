@@ -17,7 +17,6 @@
 package network.aika.meta;
 
 import network.aika.elements.synapses.*;
-import network.aika.enums.Scope;
 import network.aika.elements.neurons.*;
 import network.aika.text.Document;
 import org.slf4j.Logger;
@@ -137,7 +136,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 .getProvider(true);
 
 
-        addNegativeFeedbackLoop(
+        addOuterNegativeFeedbackLoop(
                 textSectionBeginBN.getNeuron(),
                 tsBeginInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS_BEGIN * -netTarget
@@ -147,7 +146,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 .init(model, "I TS End")
                 .getProvider(true);
 
-        addNegativeFeedbackLoop(
+        addOuterNegativeFeedbackLoop(
                 textSectionEndBN.getNeuron(),
                 tsBeginInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS_END * -netTarget
@@ -157,19 +156,19 @@ public class TypedTextSectionModel extends TextSectionModel {
                 .init(model, "I TS")
                 .getProvider(true);
 
-        addNegativeFeedbackLoop(
+        addOuterNegativeFeedbackLoop(
                 textSectionHintBN.getNeuron(),
                 tsInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS * -netTarget
         );
 
-        addNegativeFeedbackLoop(
+        addOuterNegativeFeedbackLoop(
                 textSectionBeginBN.getNeuron(),
                 tsInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS * -netTarget
         );
 
-        addNegativeFeedbackLoop(
+        addOuterNegativeFeedbackLoop(
                 textSectionEndBN.getNeuron(),
                 tsInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS * -netTarget

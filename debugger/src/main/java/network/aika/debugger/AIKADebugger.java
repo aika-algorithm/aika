@@ -53,7 +53,7 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
 
     private NavigableSet<Long> breakpoints = new TreeSet<>();
 
-    public AIKADebugger() {
+    public AIKADebugger(boolean templatesOnly) {
         super(new GridLayout(1, 1));
 
         tabbedPane = new JTabbedPane();
@@ -69,7 +69,7 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
 
         tabbedPane.addChangeListener(event-> {
             if(tabbedPane.getSelectedIndex() == NEURON_TAB_INDEX) {
-                neuronViewManager.updateGraphNeurons();
+                neuronViewManager.updateGraphNeurons(templatesOnly);
             }
         });
     }
@@ -181,6 +181,14 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
         return debugger;
     }
 
+    public static AIKADebugger createAndShowGUI(Document doc, boolean templatesOnly) {
+        AIKADebugger debugger = createAndShowGUI(templatesOnly);
+        debugger.setDocument(doc);
+        debugger.setModel(doc.getModel());
+
+        return debugger;
+    }
+
     public static AIKADebugger createAndShowGUI(Document doc, int fromTokenPos, int toTokenPos) {
         AIKADebugger debugger = createAndShowGUI();
         debugger.setDocument(doc);
@@ -195,12 +203,16 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
     }
 
     public static AIKADebugger createAndShowGUI() {
+        return createAndShowGUI(true);
+    }
+
+    public static AIKADebugger createAndShowGUI(boolean templatesOnly) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        AIKADebugger d = new AIKADebugger();
+        AIKADebugger d = new AIKADebugger(templatesOnly);
 
         EventQueue.invokeLater(() -> {
             // Create and set up the window.

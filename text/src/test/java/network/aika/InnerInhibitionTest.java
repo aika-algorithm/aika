@@ -40,6 +40,7 @@ import network.aika.elements.synapses.InnerInhibitorySynapse;
 import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
 import network.aika.elements.synapses.InputPatternSynapse;
 import network.aika.elements.synapses.PatternSynapse;
+import network.aika.meta.NetworkMotivs;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -49,6 +50,8 @@ import java.util.SortedSet;
 
 import static network.aika.TestUtils.getConfig;
 import static network.aika.enums.Scope.INPUT;
+import static network.aika.meta.NetworkMotivs.addInnerNegativeFeedbackLoop;
+import static network.aika.meta.NetworkMotivs.addPositiveFeedbackLoop;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -79,7 +82,7 @@ public class InnerInhibitionTest {
         BindingNeuron nc = addBindingNeuronInner(m, "C", 1.2, inC, inhib, patternN);
 
         Document doc = new Document(m, "test");
-        AIKADebugger.createAndShowGUI(doc);
+        AIKADebugger.createAndShowGUI(doc, false);
 
         Config c = getConfig()
                 .setAlpha(0.99)
@@ -115,18 +118,17 @@ public class InnerInhibitionTest {
                 .init(in, bn)
                 .adjustBias();
 
-        new InnerNegativeFeedbackSynapse()
-                .setWeight(-5.0)
-                .init(inhib, bn);
+        addInnerNegativeFeedbackLoop(bn, inhib, -5.0);
 
-        new InnerInhibitorySynapse(INPUT)
-                .setWeight(1.0)
-                .init(bn, inhib);
-
-        new PatternSynapse()
-                .setWeight(3.0)
-                .init(bn, patternN)
-                .adjustBias();
+        addPositiveFeedbackLoop(
+                bn,
+                patternN,
+                3.0,
+                1.0,
+                2.0,
+                0.0,
+                false
+        );
 
         TestUtils.setBias(bn, bias);
 

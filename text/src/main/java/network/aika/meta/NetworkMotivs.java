@@ -51,12 +51,23 @@ public class NetworkMotivs {
         return bn;
     }
 
-    public static void addNegativeFeedbackLoop(BindingNeuron bn, OuterInhibitoryNeuron in, double weight) {
+    public static void addOuterNegativeFeedbackLoop(BindingNeuron bn, OuterInhibitoryNeuron in, double weight) {
         new OuterInhibitorySynapse(Scope.INPUT)
                 .setWeight(1.0)
                 .init(bn, in);
 
         new OuterNegativeFeedbackSynapse()
+                .setWeight(weight)
+                .init(in, bn)
+                .adjustBias();
+    }
+
+    public static void addInnerNegativeFeedbackLoop(BindingNeuron bn, InnerInhibitoryNeuron in, double weight) {
+        new InnerInhibitorySynapse(Scope.INPUT)
+                .setWeight(1.0)
+                .init(bn, in);
+
+        new InnerNegativeFeedbackSynapse()
                 .setWeight(weight)
                 .init(in, bn)
                 .adjustBias();
