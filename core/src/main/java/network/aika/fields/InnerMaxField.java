@@ -17,6 +17,8 @@
 package network.aika.fields;
 
 import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.links.InnerInhibitoryLink;
 import network.aika.elements.links.InnerNegativeFeedbackLink;
 import network.aika.enums.Scope;
 
@@ -32,21 +34,25 @@ public class InnerMaxField extends MaxField {
     }
 
     protected void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput) {
-        BindingActivation lAct = lastSelectedInput != null ?
-                (BindingActivation) lastSelectedInput.getInput().getReference() :
-                null;
-        BindingActivation cAct = (BindingActivation) selectedInput.getInput().getReference();
+        BindingActivation lAct = getBindingActivation(lastSelectedInput);
+        BindingActivation cAct = getBindingActivation(selectedInput);
 
-        getReceivers().stream()
-                .filter(FieldLink.class::isInstance)
-                .map(FieldLink.class::cast)
-                .forEach(fl -> {
-                    InnerNegativeFeedbackLink l = (InnerNegativeFeedbackLink) fl.getOutput().getReference();
-                    BindingActivation act = l.getOutput();
+        InnerInhibitoryActivation inhibAct = (InnerInhibitoryActivation) getReference();
+        inhibAct.getOutputLinksByType(InnerNegativeFeedbackLink.class)
+                        .forEach(l -> {
+                            BindingActivation oAct = l.getOutput();
+                            FieldLink fl = ((IdentityFunction)l.getInputValue()).getInputLinkByArg(0);
+                            updateConnected(fl, lAct, oAct, false);
+                            updateConnected(fl, cAct, oAct, true);
+                        });
+    }
 
-                    updateConnected(fl, lAct, act, false);
-                    updateConnected(fl, cAct, act, true);
-        });
+    private static BindingActivation getBindingActivation(FieldLink fl) {
+        if(fl == null)
+            return null;
+
+        InnerInhibitoryLink l = (InnerInhibitoryLink) fl.getInput().getReference();
+        return l.getInput();
     }
 
     private void updateConnected(FieldLink fl, BindingActivation aAct, BindingActivation bAct, boolean current) {

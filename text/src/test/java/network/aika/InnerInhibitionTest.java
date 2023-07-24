@@ -32,6 +32,7 @@
  */
 package network.aika;
 
+import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.neurons.*;
@@ -78,6 +79,7 @@ public class InnerInhibitionTest {
         BindingNeuron nc = addBindingNeuronInner(m, "C", 1.2, inC, inhib, patternN);
 
         Document doc = new Document(m, "test");
+        AIKADebugger.createAndShowGUI(doc);
 
         Config c = getConfig()
                 .setAlpha(0.99)
@@ -85,9 +87,12 @@ public class InnerInhibitionTest {
                 .setTrainingEnabled(true);
         doc.setConfig(c);
 
-        doc.addToken(inA, 0, 0, 1);
-        doc.addToken(inB, 1, 1, 2);
-        doc.addToken(inC, 2, 2, 3);
+        doc.addToken(inA, 0, 0, 1)
+                .setNet(10.0);
+        doc.addToken(inB, 1, 1, 2)
+                .setNet(10.0);
+        doc.addToken(inC, 2, 2, 3)
+                .setNet(10.0);
 
         doc.postProcessing();
         doc.updateModel();
@@ -111,7 +116,7 @@ public class InnerInhibitionTest {
                 .adjustBias();
 
         new InnerNegativeFeedbackSynapse()
-                .setWeight(-20.0)
+                .setWeight(-5.0)
                 .init(inhib, bn);
 
         new InnerInhibitorySynapse(INPUT)
@@ -119,7 +124,7 @@ public class InnerInhibitionTest {
                 .init(bn, inhib);
 
         new PatternSynapse()
-                .setWeight(10.0)
+                .setWeight(3.0)
                 .init(bn, patternN)
                 .adjustBias();
 

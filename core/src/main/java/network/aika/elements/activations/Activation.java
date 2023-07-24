@@ -68,6 +68,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected FieldOutput value;
 
+    protected FieldOutput valueUnsuppressed;
+
     protected MultiInputField net;
     protected MultiInputField netUnsuppressed;
 
@@ -116,6 +118,14 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 "value = f(net)",
                 TOLERANCE,
                 net,
+                x -> getActivationFunction().f(x)
+        );
+
+        valueUnsuppressed = func(
+                this,
+                "valueUnsuppressed = f(netUnsuppressed)",
+                TOLERANCE,
+                netUnsuppressed,
                 x -> getActivationFunction().f(x)
         );
 
@@ -216,6 +226,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public FieldOutput getValue() {
         return value;
+    }
+
+    public FieldOutput getValueUnsuppressed() {
+        return valueUnsuppressed;
     }
 
     public boolean isInput() {
