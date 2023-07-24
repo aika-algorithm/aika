@@ -143,9 +143,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         linkAndConnect(getNeuron().getBias(), netUnsuppressed)
                 .setPropagateUpdates(false);
 
-        linkAndConnect(netUnsuppressed, net);
-
         net = new QueueSumField(this, INFERENCE, "net", null);
+
+        linkAndConnect(netUnsuppressed, net);
     }
 
     protected void initDummyLinks() {
