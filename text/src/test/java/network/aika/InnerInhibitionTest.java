@@ -49,9 +49,10 @@ import org.slf4j.LoggerFactory;
 import java.util.SortedSet;
 
 import static network.aika.TestUtils.getConfig;
-import static network.aika.enums.Scope.INPUT;
 import static network.aika.meta.NetworkMotivs.addInnerNegativeFeedbackLoop;
 import static network.aika.meta.NetworkMotivs.addPositiveFeedbackLoop;
+import static network.aika.steps.Phase.INFERENCE;
+import static network.aika.steps.keys.QueueKey.MAX_ROUND;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -90,12 +91,16 @@ public class InnerInhibitionTest {
                 .setTrainingEnabled(true);
         doc.setConfig(c);
 
+        doc.setFeedbackTriggerRound();
+
         doc.addToken(inA, 0, 0, 1)
                 .setNet(10.0);
         doc.addToken(inB, 1, 1, 2)
                 .setNet(10.0);
         doc.addToken(inC, 2, 2, 3)
                 .setNet(10.0);
+
+        doc.process(MAX_ROUND, INFERENCE);
 
         doc.postProcessing();
         doc.updateModel();
