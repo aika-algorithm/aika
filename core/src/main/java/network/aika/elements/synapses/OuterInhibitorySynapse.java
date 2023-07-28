@@ -44,7 +44,7 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
     private Scope type;
 
     public OuterInhibitorySynapse() {
-        super(null);
+        super(Scope.SAME);
     }
 
     public OuterInhibitorySynapse(Scope type) {
@@ -66,6 +66,11 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
 
     public Scope getType() {
         return type;
+    }
+
+    @Override
+    public int outgoingLinkingOrder() {
+        return 1;
     }
 
     @Override

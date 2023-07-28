@@ -16,7 +16,6 @@
  */
 package experiment.logger;
 
-import experiment.LabelUtil;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
@@ -26,6 +25,7 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.fields.FieldOutput;
+import network.aika.meta.LabelUtil;
 import network.aika.text.Document;
 import org.apache.commons.csv.CSVPrinter;
 
@@ -160,7 +160,7 @@ public class PatternLogger {
                 PatternSynapse s = inputSynapses.get(i);
                 BindingNeuron bn = s.getInput();
 
-                PatternLink il = (PatternLink) pAct.getInputLink(bn);
+                PatternLink il = (PatternLink) pAct.getInputLinks(bn).findAny().orElse(null);
                 BindingActivation iAct = il != null ? il.getInput() : null;
 
                 entry.addAll(

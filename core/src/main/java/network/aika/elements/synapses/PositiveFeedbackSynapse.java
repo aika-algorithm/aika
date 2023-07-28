@@ -46,7 +46,7 @@ public class PositiveFeedbackSynapse extends FeedbackSynapse<
     }
 
     public void initDummyLink(BindingActivation oAct) {
-        if(oAct.getInputLink(this) == null)
+        if(!linkExists(oAct))
             createAndInitLink(null, oAct);
     }
 

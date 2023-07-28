@@ -18,6 +18,7 @@ package network.aika.elements.links;
 
 import network.aika.Thought;
 import network.aika.elements.Element;
+import network.aika.elements.LinkKey;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
 import network.aika.enums.Scope;
@@ -110,7 +111,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         if(iAct == null || oAct == null)
             return;
 
-        Link l = oAct.getInputLink(iAct.getNeuron());
+        Link l = oAct.getInputLink(iAct);
 
         if(l != null)
             return;
@@ -123,6 +124,18 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         s.createLinkFromTemplate(iAct, oAct, this);
     }
 
+    public LinkKey getInputLinkKey() {
+        return input != null ?
+                input.getLinkKey() :
+                new LinkKey(
+                        synapse.getPInput().getId(),
+                        null
+                );
+    }
+
+    public LinkKey getOutputLinkKey() {
+        return output.getLinkKey();
+    }
 
     public abstract void connectWeightUpdate();
 

@@ -87,6 +87,11 @@ public class PatternSynapse extends ConjunctiveSynapse<
     }
 
     @Override
+    public int outgoingLinkingOrder() {
+        return 2;
+    }
+
+    @Override
     public void delete() {
         super.delete();
         getInput().delete();

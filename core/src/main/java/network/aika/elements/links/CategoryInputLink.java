@@ -37,8 +37,7 @@ public interface CategoryInputLink {
         if(iAct == null || oAct == null)
             return;
 
-        Link l = iAct.getInputLink(oAct.getNeuron());
-
+        Link l = iAct.getInputLink(oAct);
         if(l != null)
             return;
 

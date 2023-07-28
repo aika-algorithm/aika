@@ -76,7 +76,9 @@ public class LabelUtil {
     public static String generateLabel(PatternActivation pAct, boolean fired, boolean netPreAnneal) {
         PatternNeuron pn = pAct.getNeuron();
         return generateLabel(pn, bn -> {
-            Link l = pAct.getInputLink(bn);
+            Link l = pAct.getInputLinks(bn)
+                    .findAny()
+                    .orElse(null);
 
             if(l == null)
                 return false;
