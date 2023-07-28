@@ -42,8 +42,7 @@ public class SamePatternLink extends BindingNeuronLink<SamePatternSynapse, Bindi
 
     @Override
     public void patternVisit(PatternVisitor v, int depth) {
-        if(v.getDirection().isDown())
-            v.next(this, depth);
+        v.next(this, depth);
     }
 
     @Override

@@ -43,15 +43,6 @@ public abstract class LinkingOperator implements Operator {
 
     public abstract Direction getRelationDir(Scope fromScope);
 
-    public void link(Activation bsA, Synapse synA, Link linkA, Synapse synB, Stream<Activation> bsStream) {
-        bsStream
-                .filter(bsB ->
-                        synB.checkLinkingEvent(bsB)
-                ).forEach(bsB ->
-                        link(bsA, synA, linkA, bsB, synB)
-                );
-    }
-
     public Link link(Activation actA, Synapse synA, Link linkA, Activation actB, Synapse synB) {
         Activation oAct;
         if (linkA == null) {

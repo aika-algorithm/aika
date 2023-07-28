@@ -438,7 +438,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Stream<Link> getOutputLinks() {
-        return outputLinks.values()
+        return new ArrayList<>(outputLinks.values())
                 .stream();
     }
 

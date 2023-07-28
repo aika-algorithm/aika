@@ -27,7 +27,9 @@ public class Up implements Step {
 
     public void next(Visitor v, Activation<?> act, int depth) {
         act.getOutputLinks()
-                .forEach(l -> v.visit(l, depth));
+                .forEach(l ->
+                        v.visit(l, depth)
+                );
     }
 
     public void next(Visitor v, Link<?, ?, ?> l, int depth) {

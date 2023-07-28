@@ -317,14 +317,14 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         if(input == null)
             return null;
 
-        return (I) input.getNeuron();
+        return input.getNeuron();
     }
 
     public O getOutput() {
         if(output == null)
             return null;
 
-        return (O) output.getNeuron();
+        return output.getNeuron();
     }
 
     public Model getModel() {
@@ -377,9 +377,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return MAX;
     }
 
-
     public void delete() {
-        log.info("Delete synapse: " + this);
+        if(log.isInfoEnabled())
+            log.info("Delete synapse: " + this);
+
         input.removeOutputSynapse(this);
         output.removeInputSynapse(this);
     }
