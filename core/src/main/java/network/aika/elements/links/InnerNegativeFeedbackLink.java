@@ -21,6 +21,7 @@ import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
 import network.aika.fields.Field;
 import network.aika.visitor.binding.BindingVisitor;
+import network.aika.visitor.inhibitory.InhibitoryVisitor;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
@@ -50,6 +51,10 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
     @Override
     public void bindingVisit(BindingVisitor v, int depth) {
         // don't allow negative feedback links to create new links; i.d. do nothing
+    }
+
+    @Override
+    public void inhibVisit(InhibitoryVisitor v, int depth) {
     }
 
     @Override

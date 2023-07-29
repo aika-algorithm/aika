@@ -50,7 +50,7 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryActi
 
     @Override
     public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
-        new InhibitoryVisitor(act.getThought(), c, Scope.SAME)
+        new InhibitoryVisitor(act.getThought(), c, Scope.INPUT)
                 .start(act);
     }
 

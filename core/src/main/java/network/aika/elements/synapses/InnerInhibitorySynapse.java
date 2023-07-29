@@ -70,7 +70,7 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
 
     @Override
     public int outgoingLinkingOrder() {
-        return 1;
+        return 3;
     }
 
     @Override

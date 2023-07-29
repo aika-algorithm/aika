@@ -52,7 +52,7 @@ public class InnerInhibitoryNeuron extends DisjunctiveNeuron<InnerInhibitoryActi
 
     @Override
     public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
-        new InhibitoryVisitor(act.getThought(), c, Scope.INPUT)
+        new InhibitoryVisitor(act.getThought(), c, Scope.SAME)
                 .start(act);
     }
 

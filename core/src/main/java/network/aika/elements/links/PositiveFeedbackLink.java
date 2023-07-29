@@ -110,8 +110,4 @@ public class PositiveFeedbackLink extends FeedbackLink<PositiveFeedbackSynapse, 
     @Override
     public void patternVisit(PatternVisitor v, int depth) {
     }
-
-    @Override
-    public void inhibVisit(InhibitoryVisitor v, int depth) {
-    }
 }

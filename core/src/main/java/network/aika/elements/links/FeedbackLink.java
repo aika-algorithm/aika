@@ -58,10 +58,6 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     @Override
-    public void inhibVisit(InhibitoryVisitor v, int depth) {
-    }
-
-    @Override
     public void patternCatVisit(PatternCategoryVisitor v, int depth) {
     }
 
