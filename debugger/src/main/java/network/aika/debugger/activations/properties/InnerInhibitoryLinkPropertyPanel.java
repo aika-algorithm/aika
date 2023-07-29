@@ -16,31 +16,29 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.elements.links.OuterInhibitoryLink;
+import network.aika.elements.links.InnerInhibitoryLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryLinkPropertyPanel extends LinkPropertyPanel<OuterInhibitoryLink> {
+public class InnerInhibitoryLinkPropertyPanel extends LinkPropertyPanel<InnerInhibitoryLink> {
 
-    public InhibitoryLinkPropertyPanel(OuterInhibitoryLink l) {
+    public InnerInhibitoryLinkPropertyPanel(InnerInhibitoryLink l) {
         super(l);
     }
 
     @Override
-    public void initIdentitySection(OuterInhibitoryLink l) {
+    public void initIdentitySection(InnerInhibitoryLink l) {
         super.initIdentitySection(l);
     }
 
     @Override
-    public void initInferenceSection(OuterInhibitoryLink l) {
+    public void initInferenceSection(InnerInhibitoryLink l) {
         addField(l.getInputValue());
-        addField(l.getValue());
-        addField(l.getNet());
     }
 
     @Override
-    public void initTrainingSection(OuterInhibitoryLink l) {
+    public void initTrainingSection(InnerInhibitoryLink l) {
         super.initTrainingSection(l);
     }
 }

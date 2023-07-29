@@ -33,8 +33,6 @@ import static network.aika.fields.Fields.mul;
  */
 public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbackSynapse, OuterInhibitoryActivation> {
 
-    private Field weightUpdate;
-
     private Multiplication innerWeightedInput;
 
     public OuterNegativeFeedbackLink(OuterNegativeFeedbackSynapse s, OuterInhibitoryActivation input, BindingActivation output) {
@@ -84,27 +82,9 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
     }
 
     @Override
-    public void connectWeightUpdate() {
-        weightUpdate = mul(
-                this,
-                "weight update",
-                getInputIsFired(),
-                getOutput().getNegUpdateValue()
-        );
-
-        linkAndConnect(
-                weightUpdate,
-                synapse.getWeight()
-        );
-    }
-
-    @Override
     public void disconnect() {
         super.disconnect();
 
         innerWeightedInput.disconnectAndUnlinkInputs(false);
-
-        if(weightUpdate != null)
-            weightUpdate.disconnectAndUnlinkOutputs(false);
     }
 }

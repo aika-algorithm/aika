@@ -47,7 +47,7 @@ public class InnerMaxField extends MaxField {
                         });
     }
 
-    private static BindingActivation getBindingActivation(FieldLink fl) {
+    public static BindingActivation getBindingActivation(FieldLink fl) {
         if(fl == null)
             return null;
 
@@ -55,8 +55,8 @@ public class InnerMaxField extends MaxField {
         return l.getInput();
     }
 
-    private void updateConnected(FieldLink fl, BindingActivation aAct, BindingActivation bAct, boolean current) {
-        if(fl.isConnected() != current && isSelfRef(aAct, bAct, Scope.SAME)) {
+    public static void updateConnected(FieldLink fl, BindingActivation aAct, BindingActivation bAct, boolean current) {
+        if(fl.isConnected() != current && !isSelfRef(aAct, bAct, Scope.INPUT)) {
             fl.updateConnected(current, true);
         }
     }

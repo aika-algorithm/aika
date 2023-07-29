@@ -20,18 +20,18 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
 import network.aika.fields.Field;
+import network.aika.fields.FieldLink;
+import network.aika.fields.InnerMaxField;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
 
-import static network.aika.fields.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.mul;
+import static network.aika.fields.InnerMaxField.getBindingActivation;
+import static network.aika.fields.InnerMaxField.updateConnected;
 
 /**
  * @author Lukas Molzberger
  */
 public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbackSynapse, InnerInhibitoryActivation> {
-
-    private Field weightUpdate;
 
 
     public InnerNegativeFeedbackLink(InnerNegativeFeedbackSynapse s, InnerInhibitoryActivation input, BindingActivation output) {
@@ -45,8 +45,12 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
 
     @Override
     protected void connectInputValue() {
-    }
+        FieldLink fl = FieldLink.link(input.getValue(), 0, inputValue);
+        InnerMaxField inhibNet = (InnerMaxField) input.getNet();
+        BindingActivation selectBindingAct = getBindingActivation(inhibNet.getSelectedInput());
 
+        updateConnected(fl, selectBindingAct, output, true);
+    }
 
     @Override
     public void bindingVisit(BindingVisitor v, int depth) {
@@ -55,28 +59,5 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
 
     @Override
     public void inhibVisit(InhibitoryVisitor v, int depth) {
-    }
-
-    @Override
-    public void connectWeightUpdate() {
-        weightUpdate = mul(
-                this,
-                "weight update",
-                getInputIsFired(),
-                getOutput().getNegUpdateValue()
-        );
-
-        linkAndConnect(
-                weightUpdate,
-                synapse.getWeight()
-        );
-    }
-
-    @Override
-    public void disconnect() {
-        super.disconnect();
-
-        if(weightUpdate != null)
-            weightUpdate.disconnectAndUnlinkOutputs(false);
     }
 }
