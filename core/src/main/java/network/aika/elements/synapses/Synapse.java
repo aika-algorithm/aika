@@ -149,6 +149,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                 );
     }
 
+    public L getDummyLink(OA oAct) {
+        return (L) oAct.getInputDummyLink(input.getNeuron());
+    }
+
     public L checkExistingLink(IA iAct, OA oAct) {
         return (L) oAct.getInputLink(iAct);
     }

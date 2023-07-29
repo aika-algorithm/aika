@@ -340,6 +340,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return inputLinks.get(iAct.getLinkKey());
     }
 
+    public Link getInputDummyLink(Neuron n) {
+        return inputLinks.get(new LinkKey(n.getId(), null));
+    }
+
     public <IL extends Link> Optional<IL> getInputLinkByType(Class<IL> linkType) {
         return getInputLinksByType(linkType)
                 .findAny();
