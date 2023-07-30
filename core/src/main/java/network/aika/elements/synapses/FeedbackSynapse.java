@@ -38,6 +38,10 @@ public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuro
     }
 
     @Override
+    public void linkFields() {
+    }
+
+    @Override
     protected void warmUpInputNeuron(Thought t) {
     }
 

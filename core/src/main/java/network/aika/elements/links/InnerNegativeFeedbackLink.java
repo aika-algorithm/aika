@@ -39,11 +39,6 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
     }
 
     @Override
-    public Field getOutputNet() {
-        return getOutput().getNet();
-    }
-
-    @Override
     protected void connectInputValue() {
         FieldLink fl = FieldLink.link(input.getValue(), 0, inputValue);
         InnerMaxField inhibNet = (InnerMaxField) input.getNet();
