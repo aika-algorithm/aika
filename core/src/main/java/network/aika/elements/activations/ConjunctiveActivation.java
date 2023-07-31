@@ -20,6 +20,11 @@ import network.aika.Thought;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.elements.synapses.Synapse;
+import network.aika.fields.MaxField;
+
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.scale;
@@ -31,8 +36,20 @@ import static network.aika.fields.Fields.scale;
  */
 public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<?>> extends Activation<N> {
 
+    protected NavigableMap<Long, MaxField> maxedInputs;
+
     public ConjunctiveActivation(int id, Thought t, N n) {
         super(id, t, n);
+
+        maxedInputs = new TreeMap<>();
+    }
+
+    public MaxField lookupMaxedInput(Synapse s) {
+        return maxedInputs.computeIfAbsent(s.getInput().getId(), nId -> {
+            MaxField f = new MaxField(s, "max-syn-" + nId);
+            linkAndConnect(f, getDefaultNet());
+            return f;
+        });
     }
 
     @Override
@@ -64,7 +81,7 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<?>> exte
     protected void initNet() {
         super.initNet();
 
-        linkAndConnect(getNeuron().getSynapseBiasSum(), netUnsuppressed)
+        linkAndConnect(getNeuron().getSynapseBiasSum(), getDefaultNet())
                 .setPropagateUpdates(false);
     }
 }

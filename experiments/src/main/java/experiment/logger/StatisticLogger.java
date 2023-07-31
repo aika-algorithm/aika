@@ -94,8 +94,8 @@ public class StatisticLogger  {
         if(act.getNet().getValue() > 0.9)
             count(STRONG_ACTS);
 
-        if(act.getNetUnsuppressed().getValue() > 0.0 && act.getNet().getValue() <= 0.0)
-            count(SUPPRESSED_ACTS);
+//        if(act.getNetUnsuppressed().getValue() > 0.0 && act.getNet().getValue() <= 0.0)
+//            count(SUPPRESSED_ACTS);
 
         Activation tAct = act.getTemplate();
         if(tAct != null) {

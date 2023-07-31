@@ -41,7 +41,6 @@ import network.aika.visitor.pattern.PatternVisitor;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static java.lang.Integer.MAX_VALUE;
 import static network.aika.debugger.EventType.*;
 import static network.aika.elements.LinkKey.getFromLinkKey;
 import static network.aika.elements.LinkKey.getToLinkKey;
@@ -70,10 +69,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected FieldOutput value;
 
-    protected FieldOutput valueUnsuppressed;
-
     protected MultiInputField net;
-    protected MultiInputField netUnsuppressed;
 
     protected FieldOutput isFired;
 
@@ -123,14 +119,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 x -> getActivationFunction().f(x)
         );
 
-        valueUnsuppressed = func(
-                this,
-                "valueUnsuppressed = f(netUnsuppressed)",
-                TOLERANCE,
-                netUnsuppressed,
-                x -> getActivationFunction().f(x)
-        );
-
         gradient = new QueueSumField(this, TRAINING, "gradient", TOLERANCE);
 
         if (getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
@@ -158,13 +146,14 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void initNet() {
-        netUnsuppressed = new MultiInputField(this, "netUnsuppressed", TOLERANCE);
-        linkAndConnect(getNeuron().getBias(), netUnsuppressed)
-                .setPropagateUpdates(false);
-
         net = new QueueSumField(this, INFERENCE, "net", null);
 
-        linkAndConnect(netUnsuppressed, net);
+        linkAndConnect(getNeuron().getBias(), getDefaultNet())
+                .setPropagateUpdates(false);
+    }
+
+    public Field getDefaultNet() {
+        return net;
     }
 
     protected void initDummyLinks() {
@@ -204,7 +193,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                         this,
                         "f'(netPreAnneal)",
                         TOLERANCE,
-                        netUnsuppressed,
+                        getDefaultNet(),
                         x -> getNeuron().getActivationFunction().outerGrad(x)
         );
     }
@@ -237,20 +226,12 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return value;
     }
 
-    public FieldOutput getValueUnsuppressed() {
-        return valueUnsuppressed;
-    }
-
     public boolean isInput() {
         return false;
     }
 
     public MultiInputField getNet() {
         return net;
-    }
-
-    public MultiInputField getNetUnsuppressed() {
-        return netUnsuppressed;
     }
 
     public Timestamp getCreated() {
@@ -422,8 +403,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     @Override
     public void disconnect() {
-        if(netUnsuppressed != null)
-            netUnsuppressed.disconnectAndUnlinkInputs(false);
         net.disconnectAndUnlinkInputs(false);
 
         if(updateValue != null)

@@ -35,5 +35,7 @@ public class BindingActivationPropertyPanel extends ConjunctiveActivationPropert
         addField(act.getThought().getAnnealing());
         addField(act.getThought().getFeedbackTrigger());
         super.initInferenceSection(act);
+        addField(act.getNetUnsuppressed());
+        addField(act.getValueUnsuppressed());
     }
 }

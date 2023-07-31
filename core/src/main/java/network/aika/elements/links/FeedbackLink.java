@@ -43,11 +43,16 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     protected void initWeightInput() {
         super.initWeightInput();
 
-        linkAndConnect(getSynapse().getSynapseBias(), getOutputNet());
+        linkAndConnect(getSynapse().getSynapseBias(), getOutputNetForBias());
     }
 
     @Override
-    public Field getOutputNet() {
+    public Field getOutputNetForBias() {
+        return getOutput().getNet();
+    }
+
+    @Override
+    public Field getOutputNetForWeight() {
         return getOutput().getNet();
     }
 

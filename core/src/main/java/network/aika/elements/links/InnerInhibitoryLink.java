@@ -45,11 +45,6 @@ public class InnerInhibitoryLink extends DisjunctiveLink<InnerInhibitorySynapse,
     }
 
     @Override
-    public Field getOutputNet() {
-        return getOutput().getNet();
-    }
-
-    @Override
     protected void connectInputValue() {
         linkAndConnect(input.getValueUnsuppressed(), 0, inputValue);
     }

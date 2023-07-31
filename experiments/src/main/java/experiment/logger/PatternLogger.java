@@ -143,7 +143,6 @@ public class PatternLogger {
                             pAct.getId(),
                             pn.getId() + (pn.isAbstract() ? "-abstr" : ""),
                             print(pAct.getNet()),
-                            print(pAct.getNetUnsuppressed()),
                             print(pAct.getNetOuterGradient()),
                             print(pAct.getGradient()),
                             print(pAct.getUpdateValue()),

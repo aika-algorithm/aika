@@ -146,14 +146,18 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         negInputIsFired = invert(this,"!inputIsFired", inputIsFired);
 
         weightedInput = initWeightedInput();
-        linkAndConnect(weightedInput, getOutputNet());
+        linkAndConnect(weightedInput, getOutputNetForWeight());
 
         if(input != null)
             connectInputValue();
     }
 
-    public Field getOutputNet() {
-        return getOutput().getNetUnsuppressed();
+    public Field getOutputNetForBias() {
+        return output.getDefaultNet();
+    }
+
+    public Field getOutputNetForWeight() {
+        return output.getDefaultNet();
     }
 
     protected void initInputValue() {

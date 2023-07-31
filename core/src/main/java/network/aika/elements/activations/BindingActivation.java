@@ -32,7 +32,10 @@ import network.aika.visitor.pattern.PatternVisitor;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.fields.Fields.func;
 import static network.aika.fields.Fields.isTrue;
+import static network.aika.steps.Phase.INFERENCE;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -42,9 +45,45 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     private boolean isInput;
 
+    protected MultiInputField netUnsuppressed;
+
+    protected FieldOutput valueUnsuppressed;
+
+
     public BindingActivation(int id, Thought t, BindingNeuron n) {
         super(id, t, n);
+
+        valueUnsuppressed = func(
+                this,
+                "valueUnsuppressed = f(netUnsuppressed)",
+                TOLERANCE,
+                netUnsuppressed,
+                x -> getActivationFunction().f(x)
+        );
     }
+
+    @Override
+    public Field getDefaultNet() {
+        return netUnsuppressed;
+    }
+
+    @Override
+    protected void initNet() {
+        netUnsuppressed = new MultiInputField(this, "netUnsuppressed", TOLERANCE);
+
+        super.initNet();
+
+        linkAndConnect(netUnsuppressed, net);
+    }
+
+    public MultiInputField getNetUnsuppressed() {
+        return netUnsuppressed;
+    }
+
+    public FieldOutput getValueUnsuppressed() {
+        return valueUnsuppressed;
+    }
+
 
     @Override
     public boolean isActiveTemplateInstance() {
@@ -114,7 +153,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         }
     }
 
-
     @Override
     protected void initDummyLinks() {
         neuron.getInputSynapsesByType(PositiveFeedbackSynapse.class)
@@ -133,5 +171,13 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     public void updateBias(double u) {
         getNet().receiveUpdate(false, u);
+    }
+
+    @Override
+    public void disconnect() {
+        if(netUnsuppressed != null)
+            netUnsuppressed.disconnectAndUnlinkInputs(false);
+
+        super.disconnect();
     }
 }
