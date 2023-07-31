@@ -422,7 +422,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     @Override
     public void disconnect() {
-        netUnsuppressed.disconnectAndUnlinkInputs(false);
+        if(netUnsuppressed != null)
+            netUnsuppressed.disconnectAndUnlinkInputs(false);
         net.disconnectAndUnlinkInputs(false);
 
         if(updateValue != null)

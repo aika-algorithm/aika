@@ -76,10 +76,10 @@ public class TestHelper {
         //addInhibitoryLoop(inhibNThe, false, theBN);
         //addInhibitoryLoop(new InhibitoryNeuron().init(m, "I-the (tc)"), true, theBN);
 
-        setBias(theCatP, 3.0);
+        theCatP.setBias(3.0);
 
-        setBias(theBN, 3.0);
-        setBias(catBN, 3.0);
+        theBN.setBias(3.0);
+        catBN.setBias(3.0);
     }
 
     public static void initPatternBlackCat(Model m) {
@@ -111,10 +111,10 @@ public class TestHelper {
                 .adjustBias();
 
         PatternNeuron blackCat = initPatternLoop(m, "black cat", blackBN, catBN);
-        setBias(blackCat, 3.0);
+        blackCat.setBias(3.0);
 
-        setBias(blackBN, 3.0);
-        setBias(catBN, 3.0);
+        blackBN.setBias(3.0);
+        catBN.setBias(3.0);
     }
 
     public static void initPatternTheDog(Model m, OuterInhibitoryNeuron inhibNThe, OuterInhibitoryNeuron inhibNDog, int variant) {
@@ -163,9 +163,9 @@ public class TestHelper {
         addOuterInhibitoryLoop(inhibNThe, false, theBN);
         addOuterInhibitoryLoop(new OuterInhibitoryNeuron().init(m, "I-the (tg)"), true, theBN);
 
-        setBias(theDogP, 3.0);
+        theDogP.setBias(3.0);
 
-        setBias(theBN, 3.0);
-        setBias(dogBN, 3.0);
+        theBN.setBias(3.0);
+        dogBN.setBias(3.0);
     }
 }

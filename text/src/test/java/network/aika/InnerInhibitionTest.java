@@ -62,6 +62,11 @@ public class InnerInhibitionTest {
 
     private static final Logger log = LoggerFactory.getLogger(InnerInhibitionTest.class);
 
+    protected double inputPatternNetTarget = 5.0;
+    protected double patternNetTarget = 0.7;
+
+
+
     @Test
     public void testInnerInhibition1() {
         Model m = new Model();
@@ -74,10 +79,10 @@ public class InnerInhibitionTest {
         PatternNeuron patternN = new PatternNeuron()
                 .init(m, "P");
 
-        patternN.setBias(1.0);
+        patternN.setBias(patternNetTarget);
 
-        BindingNeuron na = addBindingNeuronInner(m,  "A", 1.0, inA, inhib, patternN);
-        BindingNeuron nx = addBindingNeuronInner(m,  "X", 1.0, inX, null, patternN);
+        BindingNeuron na = addBindingNeuronInner(m,  "A", 2.5, inA, inhib, patternN);
+        BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
         TokenPositionRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, -300, -1);
 
@@ -132,12 +137,12 @@ public class InnerInhibitionTest {
         PatternNeuron patternN = new PatternNeuron()
                 .init(m, "P");
 
-        patternN.setBias(1.0);
+        patternN.setBias(patternNetTarget);
 
-        BindingNeuron na = addBindingNeuronInner(m,  "A", 1.0, inA, inhib, patternN);
-        BindingNeuron nb = addBindingNeuronInner(m, "B", 1.5, inB, inhib, patternN);
-        BindingNeuron nc = addBindingNeuronInner(m, "C", 1.2, inC, inhib, patternN);
-        BindingNeuron nx = addBindingNeuronInner(m,  "X", 1.0, inX, null, patternN);
+        BindingNeuron na = addBindingNeuronInner(m,  "A", 2.5, inA, inhib, patternN);
+        BindingNeuron nb = addBindingNeuronInner(m, "B", 3.0, inB, inhib, patternN);
+        BindingNeuron nc = addBindingNeuronInner(m, "C", 2.7, inC, inhib, patternN);
+        BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
         TokenPositionRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, -300, -1);
 
@@ -157,13 +162,13 @@ public class InnerInhibitionTest {
         doc.setFeedbackTriggerRound();
 
         doc.addToken(inA, 0, 0, 1)
-                .setNet(10.0);
+                .setNet(inputPatternNetTarget);
         doc.addToken(inB, 1, 1, 2)
-                .setNet(10.0);
+                .setNet(inputPatternNetTarget);
         doc.addToken(inC, 2, 2, 3)
-                .setNet(10.0);
+                .setNet(inputPatternNetTarget);
         doc.addToken(inX, 3, 3, 4)
-                .setNet(10.0);
+                .setNet(inputPatternNetTarget);
 
         doc.process(MAX_ROUND, INFERENCE);
 
@@ -180,28 +185,31 @@ public class InnerInhibitionTest {
         doc.disconnect();
     }
 
-    private static BindingNeuron addBindingNeuronInner(Model m, String label, double bias, TokenNeuron in, InnerInhibitoryNeuron inhib, PatternNeuron patternN) {
+    private BindingNeuron addBindingNeuronInner(Model m, String label, double bindingNetTarget, TokenNeuron in, InnerInhibitoryNeuron inhib, PatternNeuron patternN) {
         BindingNeuron bn = new BindingNeuron().init(m, label);
+
+        double inputValueTarget = in.getActivationFunction()
+                .f(inputPatternNetTarget);
 
         new InputPatternSynapse()
                 .setWeight(10.0)
                 .init(in, bn)
-                .adjustBias();
+                .adjustBias(inputValueTarget);
 
         if(inhib != null)
-            addInnerNegativeFeedbackLoop(bn, inhib, -5.0);
+            addInnerNegativeFeedbackLoop(bn, inhib, 1.5 * -bindingNetTarget);
 
         addPositiveFeedbackLoop(
                 bn,
                 patternN,
-                3.0,
-                1.0,
-                2.0,
+                2.5,
+                patternNetTarget,
+                bindingNetTarget,
                 0.0,
                 false
         );
 
-        TestUtils.setBias(bn, bias);
+        bn.setBias(bindingNetTarget);
 
         return bn;
     }

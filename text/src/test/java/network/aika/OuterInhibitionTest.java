@@ -104,7 +104,7 @@ public class OuterInhibitionTest {
                 .setWeight(1.0)
                 .init(bn, inhib);
 
-        TestUtils.setBias(bn, bias);
+        bn.setBias(bias);
 
         return bn;
     }

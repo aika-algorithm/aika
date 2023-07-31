@@ -149,10 +149,6 @@ public class TestUtils {
         return patternN;
     }
 
-    public static void setBias(Neuron n, double bias) {
-        n.setBias(bias);
-    }
-
     public static PositiveFeedbackSynapse createPositiveFeedbackSynapse(PositiveFeedbackSynapse s, PatternNeuron input, BindingNeuron output, double weight, double feedbackWeight) {
         s.setInput(input);
         s.setOutput(output);
