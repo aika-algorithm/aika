@@ -100,13 +100,13 @@ public class InnerInhibitionTest {
         doc.setFeedbackTriggerRound();
 
         doc.addToken(inA, 0, 0, 1)
-                .setNet(10.0);
+                .setNet(inputPatternNetTarget - 2);
         doc.addToken(inA, 1, 1, 2)
-                .setNet(10.0);
+                .setNet(inputPatternNetTarget);
         doc.addToken(inA, 2, 2, 3)
-                .setNet(10.0);
+                .setNet(inputPatternNetTarget - 1);
         doc.addToken(inX, 3, 3, 4)
-                .setNet(10.0);
+                .setNet(inputPatternNetTarget);
 
         doc.process(MAX_ROUND, INFERENCE);
 
