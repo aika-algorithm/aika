@@ -17,8 +17,6 @@
 package network.aika.elements;
 
 
-import java.util.Comparator;
-
 /**
  *
  * @author Lukas Molzberger
@@ -34,7 +32,7 @@ public class LinkKey implements Comparable<LinkKey> {
     }
 
     public static LinkKey getFromLinkKey(long nId) {
-        return new LinkKey(nId, Integer.MIN_VALUE);
+        return new LinkKey(nId, null);
     }
 
     public static LinkKey getToLinkKey(long nId) {
