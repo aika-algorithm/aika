@@ -136,7 +136,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 .getProvider(true);
 
 
-        addOuterNegativeFeedbackLoop(
+        addInnerNegativeFeedbackLoop(
                 textSectionBeginBN.getNeuron(),
                 tsBeginInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS_BEGIN * -netTarget
@@ -146,7 +146,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 .init(model, "I TS End")
                 .getProvider(true);
 
-        addOuterNegativeFeedbackLoop(
+        addInnerNegativeFeedbackLoop(
                 textSectionEndBN.getNeuron(),
                 tsBeginInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS_END * -netTarget
