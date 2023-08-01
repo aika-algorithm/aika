@@ -46,7 +46,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     private PhraseTemplateModel templateModel;
     private Tokenizer tokenizer;
 
-    private String exampleTxt = "Java Softwaredeveloper\n" +
+/*    private String exampleTxt = "Java Softwaredeveloper\n" +
             " \n" +
             "Bla bla \n" +
             "\n" +
@@ -55,6 +55,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
             "\n" +
             requirementsHeadline + "\n" +
             "Bla java solr bla \n" +
+            "\n";
+*/
+    private String exampleTxt = tasksHeadline + "\n" +
+            "Bla programming testing bla \n" +
             "\n";
 
     @BeforeEach
@@ -72,7 +76,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     @Override
     protected Document initDocument(String txt, TestContext context, ParserPhase phase) {
         Document doc = super.initDocument(txt, context, phase);
-        if(phase == TRAINING) {
+        if(phase == TRAINING && txt.equalsIgnoreCase(exampleTxt)) {
             AIKADebugger.createAndShowGUI(doc);
         }
 
