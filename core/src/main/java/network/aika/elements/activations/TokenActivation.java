@@ -18,6 +18,7 @@ package network.aika.elements.activations;
 
 import network.aika.Thought;
 import network.aika.elements.links.Link;
+import network.aika.elements.neurons.Neuron;
 import network.aika.text.Range;
 import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.elements.neurons.TokenNeuron;
@@ -36,7 +37,7 @@ import java.util.TreeMap;
 public class TokenActivation extends PatternActivation {
 
     private Map<LatentRelationNeuron, LatentRelationActivation> toRelations = new TreeMap<>(
-            Comparator.comparingLong(n -> n.getId())
+            Comparator.comparingLong(Neuron::getId)
     );
 
     public TokenActivation(int id, Thought t, TokenNeuron tokenNeuron) {

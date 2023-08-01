@@ -17,6 +17,7 @@
 package experiment;
 
 import network.aika.meta.AbstractTemplateModel;
+import network.aika.meta.LabelUtil;
 import network.aika.meta.SyllableTemplateModel;
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
@@ -38,7 +39,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static experiment.LabelUtil.generateTemplateInstanceLabels;
+import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
 import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.parser.ParserPhase.TRAINING;
 import static network.aika.utils.Utils.doubleToString;
@@ -188,7 +189,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
         if(act.getNetPreAnneal().getValue() <= 0.0 || act.isAbstract())
             return;
 
-        System.out.println("   " +
+        log.info("   " +
                 (act.isFired() ? "Matching " : "Inactive Match ") +
                 (act.isAbstract() ? "abstract " : "") +
                 act.getClass().getSimpleName() +

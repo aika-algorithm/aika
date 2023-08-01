@@ -173,11 +173,12 @@ public class NeuronViewManager extends AbstractViewManager<Neuron, NeuronGraphMa
         //     loop = false;
     }
 
-    public void updateGraphNeurons() {
+    public void updateGraphNeurons(boolean templateOnly) {
+        Stream<Neuron> neurons = getNeurons();
         updateGraphNeurons(
-                getNeurons()
-                        .filter(Neuron::isAbstract)
-                        .toList()
+                templateOnly ?
+                        neurons.filter(Neuron::isAbstract).toList() :
+                        neurons.toList()
         );
     }
 

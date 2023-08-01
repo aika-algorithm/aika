@@ -17,7 +17,6 @@
 package network.aika.meta;
 
 import network.aika.Model;
-import network.aika.enums.Scope;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.TokenActivation;
 import network.aika.elements.neurons.*;
@@ -115,11 +114,11 @@ public abstract class AbstractTemplateModel {
         makeAbstract((PatternNeuron) patternN.getNeuron());
 
 
-        inhibitoryN = new InhibitoryNeuron(Scope.SAME)
+        inhibitoryN = new OuterInhibitoryNeuron()
                 .init(model, "I")
                 .getProvider(true);
 
-        makeAbstract((InhibitoryNeuron) inhibitoryN.getNeuron());
+        makeAbstract((OuterInhibitoryNeuron) inhibitoryN.getNeuron());
 
         log.info(getPatternType() + " Pattern: netTarget:" + patternNetTarget);
 
@@ -200,7 +199,7 @@ public abstract class AbstractTemplateModel {
         );
         makeAbstract(bn);
 
-        addNegativeFeedbackLoop(
+        addOuterNegativeFeedbackLoop(
                 bn,
                 inhibitoryN.getNeuron(),
                 getNegMargin(pos) * -netTarget
@@ -258,7 +257,7 @@ public abstract class AbstractTemplateModel {
 
         makeAbstract(bn);
 
-        addNegativeFeedbackLoop(
+        addOuterNegativeFeedbackLoop(
                 bn,
                 inhibitoryN.getNeuron(),
                 getNegMargin(pos) * -netTarget

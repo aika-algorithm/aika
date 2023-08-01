@@ -14,28 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.debugger.neurons.properties;
 
-import java.util.Collection;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.InnerInhibitoryNeuron;
+
 
 /**
  * @author Lukas Molzberger
  */
-public interface FieldInput extends UpdateListener<FieldLink> {
+public class SameInhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<InnerInhibitoryNeuron> {
 
-    String getLabel();
 
-    void addInput(FieldLink fl);
+    public SameInhibitoryNeuronPropertyPanel(InnerInhibitoryNeuron n, Activation ref) {
+        super(n, ref);
+    }
 
-    void removeInput(FieldLink fl);
-
-    Collection<FieldLink> getInputs();
-
-    void connectInputs(boolean initialize);
-
-    void disconnectAndUnlinkInputs(boolean deinitialize);
-
-    int getNextArg();
-
-    FieldObject getReference();
+    public static SameInhibitoryNeuronPropertyPanel create(InnerInhibitoryNeuron n, Activation ref) {
+        return new SameInhibitoryNeuronPropertyPanel(n, ref);
+    }
 }

@@ -16,25 +16,27 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.enums.Scope;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InhibitoryActivation;
-import network.aika.elements.links.NegativeFeedbackLink;
-import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.links.InnerNegativeFeedbackLink;
+import network.aika.elements.links.PositiveFeedbackLink;
+import network.aika.elements.neurons.InnerInhibitoryNeuron;
+import network.aika.enums.Scope;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class NegativeFeedbackSynapse extends FeedbackSynapse<
-        NegativeFeedbackSynapse,
-        InhibitoryNeuron,
-        NegativeFeedbackLink,
-        InhibitoryActivation
+public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
+        InnerNegativeFeedbackSynapse,
+        InnerInhibitoryNeuron,
+        InnerNegativeFeedbackLink,
+        InnerInhibitoryActivation
         >
 {
-    public NegativeFeedbackSynapse() {
+    public InnerNegativeFeedbackSynapse() {
         super(Scope.INPUT);
     }
 
@@ -45,18 +47,27 @@ public class NegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public NegativeFeedbackLink createLink(InhibitoryActivation input, BindingActivation output) {
-        return new NegativeFeedbackLink(this, input, output);
+    public InnerNegativeFeedbackLink createLink(InnerInhibitoryActivation input, BindingActivation output) {
+        return new InnerNegativeFeedbackLink(this, input, output);
     }
 
     @Override
-    public void linkAndPropagateOut(InhibitoryActivation act) {
+    public InnerNegativeFeedbackLink checkExistingLink(InnerInhibitoryActivation iAct, BindingActivation oAct) {
+        InnerNegativeFeedbackLink l = super.checkExistingLink(iAct, oAct);
+        if(l == null)
+            l = createLink(iAct, oAct);
+
+        return l;
+    }
+
+    @Override
+    public void linkAndPropagateOut(InnerInhibitoryActivation act) {
         getOutput()
                 .linkOutgoing(this, act);
     }
 
     @Override
-    public NegativeFeedbackSynapse setWeight(double w) {
+    public InnerNegativeFeedbackSynapse setWeight(double w) {
         weight.receiveUpdate(false, w);
         return this;
     }
@@ -67,7 +78,7 @@ public class NegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public double getPropagatePreNet(InhibitoryActivation iAct) {
+    public double getPropagatePreNet(InnerInhibitoryActivation iAct) {
         return weight.getValue();
     }
 }

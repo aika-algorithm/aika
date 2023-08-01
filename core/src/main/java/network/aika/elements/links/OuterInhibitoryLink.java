@@ -17,8 +17,8 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InhibitoryActivation;
-import network.aika.elements.synapses.InhibitorySynapse;
+import network.aika.elements.activations.OuterInhibitoryActivation;
+import network.aika.elements.synapses.OuterInhibitorySynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.Field;
 import network.aika.fields.FieldOutput;
@@ -37,13 +37,13 @@ import static network.aika.utils.Utils.TOLERANCE;
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingActivation, InhibitoryActivation> {
+public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse, BindingActivation, OuterInhibitoryActivation> {
 
     protected FieldOutput value;
 
     protected Field net;
 
-    public InhibitoryLink(InhibitorySynapse inhibitorySynapse, BindingActivation input, InhibitoryActivation output) {
+    public OuterInhibitoryLink(OuterInhibitorySynapse inhibitorySynapse, BindingActivation input, OuterInhibitoryActivation output) {
         super(inhibitorySynapse, input, output);
 
         net = new QueueSumField(this, NEGATIVE_FEEDBACK, "net", null);
@@ -59,7 +59,7 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
                 x -> output.getActivationFunction().f(x)
         );
 
-        InhibitoryActivation.connectFields(
+        OuterInhibitoryActivation.connectFields(
                 Stream.of(this),
                 output.getAllNegativeFeedbackLinks()
         );
@@ -73,10 +73,8 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
     public void patternCatVisit(PatternCategoryVisitor v, int depth) {
     }
 
-    public void connectFields(NegativeFeedbackLink out) {
-        Scope identityRef = getOutput().getNeuron().getIdentityReference();
-
-        if(isSelfRef(getInput(), out.getOutput(), identityRef))
+    public void connectFields(OuterNegativeFeedbackLink out) {
+        if(isSelfRef(getInput(), out.getOutput(), Scope.INPUT))
             return;
 
         linkAndConnect(getNet(), out.getInputValue());

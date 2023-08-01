@@ -19,7 +19,7 @@ package network.aika.elements.activations;
 import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.Element;
-import network.aika.elements.OutputKey;
+import network.aika.elements.LinkKey;
 import network.aika.elements.Timestamp;
 import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.links.CategoryLink;
@@ -41,9 +41,11 @@ import network.aika.visitor.pattern.PatternVisitor;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static java.lang.Integer.MAX_VALUE;
 import static network.aika.debugger.EventType.*;
+import static network.aika.elements.LinkKey.getFromLinkKey;
+import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
+import static network.aika.steps.Phase.PRE_ANNEAL;
 import static network.aika.text.Range.joinTokenPosition;
 import static network.aika.text.Range.tokenPositionEquals;
 import static network.aika.fields.FieldLink.linkAndConnect;
@@ -69,6 +71,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected FieldOutput value;
 
     protected MultiInputField net;
+
     protected MultiInputField netPreAnneal;
 
     protected FieldOutput isFired;
@@ -80,8 +83,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected FieldOutput negUpdateValue;
 
-    protected Map<NeuronProvider, Link> inputLinks;
-    protected NavigableMap<OutputKey, Link> outputLinks;
+    protected NavigableMap<LinkKey, Link> inputLinks;
+    protected NavigableMap<LinkKey, Link> outputLinks;
 
     public boolean instantiationIsQueued;
     protected boolean isNewInstance;
@@ -96,7 +99,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         setCreated(t.getCurrentTimestamp());
 
         inputLinks = new TreeMap<>();
-        outputLinks = new TreeMap<>(OutputKey.COMPARATOR);
+        outputLinks = new TreeMap<>();
 
         initNet();
 
@@ -134,13 +137,21 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         thought.onElementEvent(CREATE, this);
     }
 
+    public LinkKey getLinkKey() {
+        return new LinkKey(
+                neuron.getId(),
+                id
+        );
+    }
+
     protected void connectWeightUpdate() {
 
     }
 
     protected void initNet() {
         net = new QueueSumField(this, INFERENCE, "net", null);
-        linkAndConnect(getNeuron().getBias(), net)
+
+        linkAndConnect(getNeuron().getBias(), getDefaultNet())
                 .setPropagateUpdates(false);
 
         netPreAnneal = new QueueSumField(this, PRE_ANNEAL, "netPreAnneal", TOLERANCE);
@@ -152,6 +163,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                         netPreAnneal.disconnectAndUnlinkInputs(false),
                 true
         );
+    }
+
+    public Field getDefaultNet() {
+        return net;
     }
 
     protected void initDummyLinks() {
@@ -319,12 +334,12 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return neuron.getProvider();
     }
 
-    public Link getInputLink(Neuron n) {
-        return inputLinks.get(n.getProvider());
+    public Link getInputLink(Activation iAct) {
+        return inputLinks.get(iAct.getLinkKey());
     }
 
-    public Link getInputLink(Synapse s) {
-        return inputLinks.get(s.getPInput());
+    public Link getInputDummyLink(Neuron n) {
+        return inputLinks.get(new LinkKey(n.getId(), null));
     }
 
     public <IL extends Link> Optional<IL> getInputLinkByType(Class<IL> linkType) {
@@ -344,15 +359,35 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .map(linkType::cast);
     }
 
-    public Stream<Link> getOutputLinks(Synapse s) {
-        return outputLinks
+    public Stream<Link> getInputLinks(Neuron n) {
+        return inputLinks
                 .subMap(
-                        new OutputKey(s.getOutput().getProvider(), Integer.MIN_VALUE),
+                        getFromLinkKey(n.getId()),
                         true,
-                        new OutputKey(s.getOutput().getProvider(), MAX_VALUE),
+                        getToLinkKey(n.getId()),
                         true
                 ).values()
-                .stream()
+                .stream();
+    }
+
+    public Stream<Link> getOutputLinks(Neuron n) {
+        return outputLinks
+                .subMap(
+                        getFromLinkKey(n.getId()),
+                        true,
+                        getToLinkKey(n.getId()),
+                        true
+                ).values()
+                .stream();
+    }
+
+    public Stream<Link> getInputLinks(Synapse s) {
+        return getInputLinks(s.getInput())
+                .filter(l -> l.getSynapse() == s);
+    }
+
+    public Stream<Link> getOutputLinks(Synapse s) {
+        return getOutputLinks(s.getOutput())
                 .filter(l -> l.getSynapse() == s);
     }
 
@@ -369,19 +404,12 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public void linkOutputLink(Link l) {
-        Link el = outputLinks.put(
-                new OutputKey(l.getOutput().getNeuronProvider(), l.getOutput().getId()),
-                l
-        );
-
+        Link el = outputLinks.put(l.getOutputLinkKey(), l);
         assert el == null;
     }
 
     public void linkInputLink(Link l) {
-        Link el = inputLinks.put(
-                l.getInput() != null ? l.getInput().getNeuronProvider() : l.getSynapse().getPInput(),
-                l
-        );
+        Link el = inputLinks.put(l.getInputLinkKey(), l);
         assert el == null;
     }
 
@@ -411,7 +439,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Stream<Link> getOutputLinks() {
-        return outputLinks.values()
+        return new ArrayList<>(outputLinks.values())
                 .stream();
     }
 

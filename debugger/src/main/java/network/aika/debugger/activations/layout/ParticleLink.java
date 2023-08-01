@@ -72,8 +72,8 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
             return PatternParticleLink.create((PatternLink) l, e, gm);
         } else if(l instanceof PatternCategoryInputLink) {
             return PatternCategoryInputParticleLink.create((PatternCategoryInputLink) l, e, gm);
-        } else if(l instanceof InhibitoryLink) {
-            return InhibitoryParticleLink.create((InhibitoryLink) l, e, gm);
+        } else if(l instanceof OuterInhibitoryLink) {
+            return InhibitoryParticleLink.create((OuterInhibitoryLink) l, e, gm);
         }
         return new ParticleLink(l, e, gm);
     }

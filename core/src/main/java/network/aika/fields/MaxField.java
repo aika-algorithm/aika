@@ -23,44 +23,39 @@ import java.util.Comparator;
  */
 public class MaxField extends MultiInputField {
 
-    private AbstractFieldLink selectedInput;
+    private FieldLink selectedInput;
+
 
     public MaxField(FieldObject ref, String label) {
         super(ref, label, null);
     }
 
-    public AbstractFieldLink getSelectedInput() {
+    public FieldLink getSelectedInput() {
         return selectedInput;
     }
 
     @Override
-    public void receiveUpdate(AbstractFieldLink fl, boolean nextRound, double u) {
+    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
         triggerUpdate(
                 nextRound,
                 computeUpdate(fl, u)
         );
     }
 
-    protected double computeUpdate(AbstractFieldLink fl, double u) {
-        if(selectedInput == null) {
-            selectedInput = fl;
-            return fl.getUpdatedInputValue() - value;
-        }
+    protected double computeUpdate(FieldLink fl, double u) {
+        FieldLink lastSelectedInput = selectedInput;
 
         selectedInput = getInputs().stream()
-                .max(getComparator(fl))
+                .max(Comparator.comparingDouble(AbstractFieldLink::getUpdatedInputValue))
                 .orElse(null);
 
-        return getInput(selectedInput, fl) - value;
+        if(lastSelectedInput != selectedInput)
+            onSelectionChanged(lastSelectedInput, selectedInput);
+
+        return selectedInput.getUpdatedInputValue() - value;
     }
 
-    private Comparator<FieldLink> getComparator(AbstractFieldLink fl) {
-        return Comparator.comparingDouble(in -> getInput(in, fl));
-    }
+    protected void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput) {
 
-    private double getInput(AbstractFieldLink fl, AbstractFieldLink updateFL) {
-        return fl == updateFL ?
-                fl.getUpdatedInputValue() :
-                fl.getInputValue();
     }
 }

@@ -17,32 +17,40 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.synapses.SamePatternSynapse;
-import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.synapses.InnerInhibitorySynapse;
+import network.aika.elements.synapses.Synapse;
+import network.aika.fields.Field;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
 import network.aika.visitor.pattern.PatternVisitor;
+
+import static network.aika.fields.FieldLink.linkAndConnect;
 
 /**
  * @author Lukas Molzberger
  */
-public class SamePatternLink extends BindingNeuronLink<SamePatternSynapse, BindingActivation> {
+public class InnerInhibitoryLink extends DisjunctiveLink<InnerInhibitorySynapse, BindingActivation, InnerInhibitoryActivation> {
 
-    public SamePatternLink(SamePatternSynapse s, BindingActivation input, BindingActivation output) {
-        super(s, input, output);
+    public InnerInhibitoryLink(InnerInhibitorySynapse inhibitorySynapse, BindingActivation input, InnerInhibitoryActivation output) {
+        super(inhibitorySynapse, input, output);
     }
 
     @Override
-    public void propagateRangeOrTokenPos() {
+    public void addInputLinkingStep() {
+        super.addInputLinkingStep();
+
+        Synapse innerNegFeedbackSyn = input.getNeuron().getInputSynapse(output.getNeuronProvider());
+        if(innerNegFeedbackSyn != null)
+            innerNegFeedbackSyn.checkExistingLink(output, input);
     }
 
     @Override
-    public void bindingVisit(BindingVisitor v, int depth) {
+    protected void connectInputValue() {
+        linkAndConnect(input.getValueUnsuppressed(), 0, inputValue);
     }
 
     @Override
     public void patternVisit(PatternVisitor v, int depth) {
-        v.next(this, depth);
     }
 
     @Override

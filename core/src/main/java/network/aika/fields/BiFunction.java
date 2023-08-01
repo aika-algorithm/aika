@@ -36,7 +36,7 @@ public class BiFunction extends AbstractFunction {
     }
 
     @Override
-    protected double computeUpdate(AbstractFieldLink fl, double u) {
+    protected double computeUpdate(FieldLink fl, double u) {
         return switch (fl.getArgument()) {
             case 0 -> function.applyAsDouble(
                     fl.getUpdatedInputValue(),

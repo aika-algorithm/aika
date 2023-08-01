@@ -129,7 +129,7 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
         this.receivers.remove(fl);
     }
 
-    public void receiveUpdate(AbstractFieldLink fl, boolean nextRound, double u) {
+    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
         receiveUpdate(
                 nextRound,
                 u

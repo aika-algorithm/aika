@@ -16,15 +16,13 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.InhibitoryNeuron;
-import network.aika.enums.Scope;
+import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static network.aika.TestHelper.initPatternTheCat;
-import static network.aika.TestHelper.initPatternTheDog;
 import static network.aika.TestUtils.*;
 
 
@@ -32,33 +30,31 @@ import static network.aika.TestUtils.*;
  *
  * @author Lukas Molzberger
  */
-public class TheDogAndCatTest {
+public class TheCatTest {
 
     @Test
-    public void testTheDogAndTheCat()  {
+    public void testTheBlackCat()  {
+        for(int variant = 0; variant < 4; variant++) {
+            performTest(variant);
+        }
+    }
+
+    private void performTest(int variant) {
         Model m = new Model();
 
-        InhibitoryNeuron inhibNThe = new InhibitoryNeuron(Scope.SAME)
-                .init(m, "I-the");
+        OuterInhibitoryNeuron inhibNThe = null; //new InhibitoryNeuron().init(m, "I-the");
+        OuterInhibitoryNeuron inhibNCat = null; //new InhibitoryNeuron().init(m, "I-cat");
+        initPatternTheCat(m, inhibNThe, inhibNCat, variant);
 
-        InhibitoryNeuron inhibNCat = new InhibitoryNeuron(Scope.SAME)
-                .init(m, "I-cat");
-
-        InhibitoryNeuron inhibNDog = new InhibitoryNeuron(Scope.SAME)
-                .init(m, "I-dog");
-
-        initPatternTheCat(m, inhibNThe, inhibNCat, 3);
-        initPatternTheDog(m, inhibNThe, inhibNDog, 3);
-
-        Document doc = new Document(m, "the dog and the cat");
+        Document doc = new Document(m, "the cat");
 
         Config c = getConfig()
                 .setAlpha(0.99)
                 .setLearnRate(0.01)
-                .setTrainingEnabled(false);
+                .setTrainingEnabled(true);
         doc.setConfig(c);
 
-        processTokens(m, doc, List.of("the", "dog", "and", "the", "cat"));
+        processTokens(m, doc, List.of("the", "cat"));
 
         doc.postProcessing();
         doc.updateModel();

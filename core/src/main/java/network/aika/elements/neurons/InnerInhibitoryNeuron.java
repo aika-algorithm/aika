@@ -17,55 +17,42 @@
 package network.aika.elements.neurons;
 
 import network.aika.ActivationFunction;
-import network.aika.Model;
-import network.aika.enums.Scope;
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.InhibitoryActivation;
-import network.aika.elements.synapses.*;
-import network.aika.visitor.operator.LinkingOperator;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.synapses.CategorySynapse;
+import network.aika.elements.synapses.InhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.InhibitoryCategorySynapse;
+import network.aika.elements.synapses.Synapse;
+import network.aika.enums.Scope;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import network.aika.visitor.operator.LinkingOperator;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryActivation> {
-
-    private Scope identityReference;
-
-    public InhibitoryNeuron(Scope identityReference) {
-        this.identityReference = identityReference;
-    }
-
-    public Scope getIdentityReference() {
-        return identityReference;
-    }
+public class InnerInhibitoryNeuron extends DisjunctiveNeuron<InnerInhibitoryActivation> {
 
     @Override
-    public InhibitoryNeuron instantiateTemplate() {
-        InhibitoryNeuron n = new InhibitoryNeuron(identityReference);
+    public InnerInhibitoryNeuron instantiateTemplate() {
+        InnerInhibitoryNeuron n = new InnerInhibitoryNeuron();
         n.initFromTemplate(this);
         return n;
     }
 
     @Override
-    public InhibitoryActivation createActivation(Thought t) {
-        return new InhibitoryActivation(t.createActivationId(), t, this);
+    public InnerInhibitoryActivation createActivation(Thought t) {
+        return new InnerInhibitoryActivation(t.createActivationId(), t, this);
     }
 
     public ActivationFunction getActivationFunction() {
         return ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
     }
 
-
     @Override
     public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
-        new InhibitoryVisitor(act.getThought(), c, identityReference.getInverted())
+        new InhibitoryVisitor(act.getThought(), c, Scope.SAME)
                 .start(act);
     }
 
@@ -87,19 +74,5 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryActivation> {
     @Override
     public boolean isTrainingAllowed() {
         return false;
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        super.write(out);
-
-        out.writeInt(identityReference.ordinal());
-    }
-
-    @Override
-    public void readFields(DataInput in, Model m) throws Exception {
-        super.readFields(in, m);
-
-        identityReference = Scope.values()[in.readInt()];
     }
 }

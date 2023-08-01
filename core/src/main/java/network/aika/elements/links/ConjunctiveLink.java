@@ -19,6 +19,7 @@ package network.aika.elements.links;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.fields.Field;
 import network.aika.fields.FieldOutput;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
@@ -43,7 +44,12 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         super.initWeightInput();
 
         if(synapse.isOptional())
-            linkAndConnect(getSynapse().getSynapseBias(), getOutput().getNet());
+            linkAndConnect(getSynapse().getSynapseBias(), getOutputNetForBias());
+    }
+
+    @Override
+    public Field getOutputNetForWeight() {
+        return output.lookupMaxedInput(synapse);
     }
 
     @Override

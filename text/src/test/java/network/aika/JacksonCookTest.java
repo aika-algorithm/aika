@@ -156,25 +156,25 @@ public class JacksonCookTest {
                 .setWeight(10.0)
                 .init(cookProfessionBN, professionCN);
 
-        addInhibitoryLoop(
-                new InhibitoryNeuron(Scope.SAME).init(m, "I-jackson"),
+        addOuterInhibitoryLoop(
+                new OuterInhibitoryNeuron().init(m, "I-jackson"),
                 false,
                 jacksonForenameBN,
                 jacksonCityBN
         );
-        addInhibitoryLoop(
-                new InhibitoryNeuron(Scope.SAME).init(m, "I-cook"),
+        addOuterInhibitoryLoop(
+                new OuterInhibitoryNeuron().init(m, "I-cook"),
                 false,
                 cookSurnameBN,
                 cookProfessionBN
         );
 
-        setBias(jacksonJCBN, 2.0);
-        setBias(jacksonForenameBN, 2.0);
-        setBias(jacksonCityBN, 3.0);
-        setBias(cookJCBN, 2.0);
-        setBias(cookSurnameBN, 2.0);
-        setBias(cookProfessionBN, 3.0);
+        jacksonJCBN.setBias(2.0);
+        jacksonForenameBN.setBias(2.0);
+        jacksonCityBN.setBias(3.0);
+        cookJCBN.setBias(2.0);
+        cookSurnameBN.setBias(2.0);
+        cookProfessionBN.setBias(3.0);
 
         new BindingCategoryInputSynapse()
                 .setWeight(10.0)
@@ -194,8 +194,8 @@ public class JacksonCookTest {
                 .init(forenameBN, surnameBN)
                 .adjustBias();
 
-        setBias(forenameBN, 2.0);
-        setBias(surnameBN, 2.0);
+        forenameBN.setBias(2.0);
+        surnameBN.setBias(2.0);
 
         PatternNeuron jacksonCookPattern = initPatternLoop(
                 m,
@@ -203,7 +203,7 @@ public class JacksonCookTest {
                 jacksonJCBN,
                 cookJCBN
         );
-        setBias(jacksonCookPattern, 3.0);
+        jacksonCookPattern.setBias(3.0);
 
         PatternNeuron personNamePattern = initPatternLoop(
                 m,
@@ -211,7 +211,7 @@ public class JacksonCookTest {
                 forenameBN,
                 surnameBN
         );
-        setBias(personNamePattern, 3.0);
+        personNamePattern.setBias(3.0);
 
         Document doc = new Document(m, "Jackson Cook");
 

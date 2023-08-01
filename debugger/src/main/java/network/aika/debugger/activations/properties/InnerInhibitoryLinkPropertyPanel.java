@@ -14,29 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.neurons.properties;
+package network.aika.debugger.activations.properties;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.InhibitoryNeuron;
-import network.aika.elements.neurons.LatentRelationNeuron;
-
-import static network.aika.utils.Utils.doubleToString;
-
+import network.aika.elements.links.InnerInhibitoryLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<InhibitoryNeuron> {
+public class InnerInhibitoryLinkPropertyPanel extends LinkPropertyPanel<InnerInhibitoryLink> {
 
-
-    public InhibitoryNeuronPropertyPanel(InhibitoryNeuron n, Activation ref) {
-        super(n, ref);
-
-        addConstant("IdentityReference: ", n.getIdentityReference().name());
+    public InnerInhibitoryLinkPropertyPanel(InnerInhibitoryLink l) {
+        super(l);
     }
 
-    public static InhibitoryNeuronPropertyPanel create(InhibitoryNeuron n, Activation ref) {
-        return new InhibitoryNeuronPropertyPanel(n, ref);
+    @Override
+    public void initIdentitySection(InnerInhibitoryLink l) {
+        super.initIdentitySection(l);
+    }
+
+    @Override
+    public void initInferenceSection(InnerInhibitoryLink l) {
+        addField(l.getInputValue());
+    }
+
+    @Override
+    public void initTrainingSection(InnerInhibitoryLink l) {
+        super.initTrainingSection(l);
     }
 }

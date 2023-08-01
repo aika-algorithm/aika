@@ -34,8 +34,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static network.aika.TestUtils.getConfig;
-import static network.aika.TestUtils.setBias;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.suspension.SuspensionMode.SAVE;
@@ -53,7 +51,7 @@ public class SuspensionTest {
         NeuronProvider inStrong = new TokenNeuron().init(m, "IN Strong").getProvider(true);
         NeuronProvider inWeak = new TokenNeuron().init(m, "IN Weak").getProvider(true);
         NeuronProvider out = new BindingNeuron().init(m, "OUT").getProvider(true);
-        setBias(out.getNeuron(), 1.0);
+        out.getNeuron().setBias(1.0);
 
         Synapse sStrong = new InputPatternSynapse()
                 .setWeight(10.0)
@@ -75,7 +73,7 @@ public class SuspensionTest {
         // Reactivate
         inStrong = m.lookupNeuronProvider(inStrong.getId());
 
-        Config c = getConfig()
+        Config c = new Config()
                 .setAlpha(0.99)
                 .setLearnRate(0.1)
                 .setTrainingEnabled(false);

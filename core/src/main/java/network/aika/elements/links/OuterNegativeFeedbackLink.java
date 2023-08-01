@@ -17,10 +17,11 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InhibitoryActivation;
+import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.fields.*;
-import network.aika.elements.synapses.NegativeFeedbackSynapse;
+import network.aika.elements.synapses.OuterNegativeFeedbackSynapse;
 import network.aika.visitor.binding.BindingVisitor;
+import network.aika.visitor.inhibitory.InhibitoryVisitor;
 
 import java.util.stream.Stream;
 
@@ -30,19 +31,17 @@ import static network.aika.fields.Fields.mul;
 /**
  * @author Lukas Molzberger
  */
-public class NegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, InhibitoryActivation> {
-
-    private Field weightUpdate;
+public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbackSynapse, OuterInhibitoryActivation> {
 
     private Multiplication innerWeightedInput;
 
-    public NegativeFeedbackLink(NegativeFeedbackSynapse s, InhibitoryActivation input, BindingActivation output) {
+    public OuterNegativeFeedbackLink(OuterNegativeFeedbackSynapse s, OuterInhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
 
         if(input == null)
             return;
 
-        InhibitoryActivation.connectFields(
+        OuterInhibitoryActivation.connectFields(
                 input.getAllInhibitoryLinks(),
                 Stream.of(this)
         );
@@ -74,18 +73,7 @@ public class NegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, 
     }
 
     @Override
-    public void connectWeightUpdate() {
-        weightUpdate = mul(
-                this,
-                "weight update",
-                getInputIsFired(),
-                getOutput().getNegUpdateValue()
-        );
-
-        linkAndConnect(
-                weightUpdate,
-                synapse.getWeight()
-        );
+    public void inhibVisit(InhibitoryVisitor v, int depth) {
     }
 
     @Override
@@ -93,8 +81,5 @@ public class NegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, 
         super.disconnect();
 
         innerWeightedInput.disconnectAndUnlinkInputs(false);
-
-        if(weightUpdate != null)
-            weightUpdate.disconnectAndUnlinkOutputs(false);
     }
 }

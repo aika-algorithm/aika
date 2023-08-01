@@ -16,12 +16,13 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static network.aika.TestHelper.initPatternBlackCat;
 import static network.aika.TestHelper.initPatternTheCat;
 import static network.aika.TestUtils.*;
 
@@ -30,23 +31,18 @@ import static network.aika.TestUtils.*;
  *
  * @author Lukas Molzberger
  */
-public class TheCatTest {
+public class TheBlackCatTest {
 
     @Test
     public void testTheBlackCat()  {
-        for(int variant = 0; variant < 4; variant++) {
-            performTest(variant);
-        }
-    }
-
-    private void performTest(int variant) {
         Model m = new Model();
 
-        InhibitoryNeuron inhibNThe = null; //new InhibitoryNeuron().init(m, "I-the");
-        InhibitoryNeuron inhibNCat = null; //new InhibitoryNeuron().init(m, "I-cat");
-        initPatternTheCat(m, inhibNThe, inhibNCat, variant);
+        OuterInhibitoryNeuron inhibNThe = new OuterInhibitoryNeuron().init(m, "I-the");
+        OuterInhibitoryNeuron inhibNCat = new OuterInhibitoryNeuron().init(m, "I-cat");
+        initPatternTheCat(m, inhibNThe, inhibNCat, 0);
+        initPatternBlackCat(m);
 
-        Document doc = new Document(m, "the cat");
+        Document doc = new Document(m, "the black cat");
 
         Config c = getConfig()
                 .setAlpha(0.99)
@@ -54,7 +50,7 @@ public class TheCatTest {
                 .setTrainingEnabled(true);
         doc.setConfig(c);
 
-        processTokens(m, doc, List.of("the", "cat"));
+        processTokens(m, doc, List.of("the", "black", "cat"));
 
         doc.postProcessing();
         doc.updateModel();

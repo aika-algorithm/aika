@@ -14,37 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.step;
+package network.aika.elements.activations;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.links.Link;
-import network.aika.visitor.Visitor;
+import network.aika.Thought;
+import network.aika.elements.links.InnerNegativeFeedbackLink;
+import network.aika.elements.neurons.InnerInhibitoryNeuron;
+import network.aika.enums.Scope;
+import network.aika.fields.InnerMaxField;
+import network.aika.fields.MaxField;
+
+import static network.aika.elements.activations.BindingActivation.isSelfRef;
+import static network.aika.fields.FieldLink.linkAndConnect;
+
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class Up implements Step {
+public class InnerInhibitoryActivation extends DisjunctiveActivation<InnerInhibitoryNeuron> {
 
-    public void next(Visitor v, Activation<?> act, int depth) {
-        act.getOutputLinks()
-                .forEach(l ->
-                        v.visit(l, depth)
-                );
+    public InnerInhibitoryActivation(int id, Thought t, InnerInhibitoryNeuron neuron) {
+        super(id, t, neuron);
     }
 
-    public void next(Visitor v, Link<?, ?, ?> l, int depth) {
-        v.visit(l.getOutput(), l, depth);
+    @Override
+    protected void initNet() {
+        net = new InnerMaxField(this, "net");
     }
 
-    public boolean isDown() {
-        return false;
-    }
-
-    public boolean isUp() {
+    @Override
+    public boolean isActiveTemplateInstance() {
         return true;
-    }
-
-    public String toString() {
-        return "UP";
     }
 }

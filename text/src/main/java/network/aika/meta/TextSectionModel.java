@@ -68,10 +68,10 @@ public class TextSectionModel {
     protected void initTextSectionTemplates() {
         log.info("Text-Section");
 
-        textSectionRelationPT = TokenPositionRelationNeuron.lookupRelation(model, -1, -300)
+        textSectionRelationPT = TokenPositionRelationNeuron.lookupRelation(model, -300, -1)
                 .getProvider(true);
 
-        textSectionRelationNT = TokenPositionRelationNeuron.lookupRelation(model, 300, 1)
+        textSectionRelationNT = TokenPositionRelationNeuron.lookupRelation(model, 1, 300)
                 .getProvider(true);
 
         textSectionPatternN = new PatternNeuron()

@@ -44,7 +44,7 @@ public class  ThresholdOperator extends AbstractFunction {
     }
 
     @Override
-    protected double computeUpdate(AbstractFieldLink fl, double u) {
+    protected double computeUpdate(FieldLink fl, double u) {
         if(isFinal && value > 0.5)
             return 0.0;
 

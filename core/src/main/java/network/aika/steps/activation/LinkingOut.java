@@ -18,9 +18,12 @@ package network.aika.steps.activation;
 
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.synapses.Synapse;
+import network.aika.enums.Scope;
 import network.aika.steps.Phase;
 import network.aika.steps.Step;
 
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 import static network.aika.steps.Phase.OUTPUT_LINKING;
@@ -45,6 +48,7 @@ public class LinkingOut extends Step<Activation> {
         Neuron<?> n = act.getNeuron();
 
         n.getOutputSynapsesAsStream(act.getThought())
+                .sorted(Comparator.comparingInt(Synapse::outgoingLinkingOrder))
                 .toList()
                 .forEach(s ->
                         s.linkAndPropagateOut(act)

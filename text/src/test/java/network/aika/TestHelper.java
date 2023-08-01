@@ -16,11 +16,7 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.LatentRelationNeuron;
-import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.neurons.TokenPositionRelationNeuron;
-import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.InputPatternSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SamePatternSynapse;
@@ -34,7 +30,7 @@ import static network.aika.TestUtils.*;
  */
 public class TestHelper {
 
-    public static void initPatternTheCat(Model m, InhibitoryNeuron inhibNThe, InhibitoryNeuron inhibNCat, int variant) {
+    public static void initPatternTheCat(Model m, OuterInhibitoryNeuron inhibNThe, OuterInhibitoryNeuron inhibNCat, int variant) {
         PatternNeuron theIN = lookupToken(m, "the");
         PatternNeuron catIN = lookupToken(m, "cat");
 
@@ -80,10 +76,10 @@ public class TestHelper {
         //addInhibitoryLoop(inhibNThe, false, theBN);
         //addInhibitoryLoop(new InhibitoryNeuron().init(m, "I-the (tc)"), true, theBN);
 
-        setBias(theCatP, 3.0);
+        theCatP.setBias(3.0);
 
-        setBias(theBN, 3.0);
-        setBias(catBN, 3.0);
+        theBN.setBias(3.0);
+        catBN.setBias(3.0);
     }
 
     public static void initPatternBlackCat(Model m) {
@@ -115,13 +111,13 @@ public class TestHelper {
                 .adjustBias();
 
         PatternNeuron blackCat = initPatternLoop(m, "black cat", blackBN, catBN);
-        setBias(blackCat, 3.0);
+        blackCat.setBias(3.0);
 
-        setBias(blackBN, 3.0);
-        setBias(catBN, 3.0);
+        blackBN.setBias(3.0);
+        catBN.setBias(3.0);
     }
 
-    public static void initPatternTheDog(Model m, InhibitoryNeuron inhibNThe, InhibitoryNeuron inhibNDog, int variant) {
+    public static void initPatternTheDog(Model m, OuterInhibitoryNeuron inhibNThe, OuterInhibitoryNeuron inhibNDog, int variant) {
         PatternNeuron theIN = lookupToken(m, "the");
         PatternNeuron dogIN = lookupToken(m, "dog");
 
@@ -164,12 +160,12 @@ public class TestHelper {
 
         PatternNeuron theDogP = initPatternLoop(m, "the dog", theBN, dogBN);
 
-        addInhibitoryLoop(inhibNThe, false, theBN);
-        addInhibitoryLoop(new InhibitoryNeuron(Scope.SAME).init(m, "I-the (tg)"), true, theBN);
+        addOuterInhibitoryLoop(inhibNThe, false, theBN);
+        addOuterInhibitoryLoop(new OuterInhibitoryNeuron().init(m, "I-the (tg)"), true, theBN);
 
-        setBias(theDogP, 3.0);
+        theDogP.setBias(3.0);
 
-        setBias(theBN, 3.0);
-        setBias(dogBN, 3.0);
+        theBN.setBias(3.0);
+        dogBN.setBias(3.0);
     }
 }

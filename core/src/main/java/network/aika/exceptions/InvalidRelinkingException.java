@@ -16,7 +16,6 @@
  */
 package network.aika.exceptions;
 
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 

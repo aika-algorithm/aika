@@ -16,11 +16,7 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.LatentRelationNeuron;
-import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.neurons.TokenPositionRelationNeuron;
-import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.InputPatternSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SamePatternSynapse;
@@ -70,7 +66,7 @@ public class ABCDTest {
                 .setWeight(10.0)
                 .init(a_IN, a_abBN)
                 .adjustBias();
-        setBias(a_abBN, 2.5);
+        a_abBN.setBias(2.5);
 
         new InputPatternSynapse()
                 .setWeight(10.0)
@@ -78,7 +74,7 @@ public class ABCDTest {
                 .adjustBias();
 
         PatternNeuron abPattern = initPatternLoop(m, "ab", a_abBN, b_abBN);
-        setBias(abPattern, 3.0);
+        abPattern.setBias(3.0);
 
         // Pattern bc
         BindingNeuron b_bcBN = new BindingNeuron().init(m, "b (bc)");
@@ -97,18 +93,18 @@ public class ABCDTest {
                 .setWeight(10.0)
                 .init(b_IN, b_bcBN)
                 .adjustBias();
-        addInhibitoryLoop(new InhibitoryNeuron(Scope.SAME).init(m, "I-b"), false, b_abBN, b_bcBN);
-        setBias(b_abBN, 3.0);
-        setBias(b_bcBN, 2.5);
+        addOuterInhibitoryLoop(new OuterInhibitoryNeuron().init(m, "I-b"), false, b_abBN, b_bcBN);
+        b_abBN.setBias(3.0);
+        b_bcBN.setBias(2.5);
 
         new InputPatternSynapse()
                 .setWeight(10.0)
                 .init(c_IN, c_bcBN)
                 .adjustBias();
-        setBias(c_bcBN, 3.0);
+        c_bcBN.setBias(3.0);
 
         PatternNeuron bcPattern = initPatternLoop(m, "bc", b_bcBN, c_bcBN);
-        setBias(bcPattern, 3.0);
+        bcPattern.setBias(3.0);
 
         // Pattern bcd
         BindingNeuron bc_bcdBN = new BindingNeuron().init(m, "bc (bcd)");
@@ -132,16 +128,16 @@ public class ABCDTest {
                 .setWeight(10.0)
                 .init(bcPattern, bc_bcdBN)
                 .adjustBias();
-        setBias(bc_bcdBN, 2.5);
+        bc_bcdBN.setBias(2.5);
 
         new InputPatternSynapse()
                 .setWeight(10.0)
                 .init(d_IN, d_bcdBN)
                 .adjustBias();
-        setBias(d_bcdBN, 3.0);
+        d_bcdBN.setBias(3.0);
 
         PatternNeuron bcdPattern = initPatternLoop(m, "bcd", bc_bcdBN, d_bcdBN);
-        setBias(bcdPattern, 3.0);
+        bcdPattern.setBias(3.0);
 
 
         Document doc = new Document(m, "abcd");

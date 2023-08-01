@@ -64,7 +64,7 @@ public class TestFsModel {
     private Document generateDocument(Model m, String txt, boolean train) {
         Document doc = new Document(m, txt);
 
-        Config c = TestUtils.getConfig()
+        Config c = new Config()
                 .setAlpha(0.99)
                 .setLearnRate(0.01)
                 .setTrainingEnabled(train);

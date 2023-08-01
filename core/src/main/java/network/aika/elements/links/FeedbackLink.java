@@ -19,11 +19,13 @@ package network.aika.elements.links;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.synapses.FeedbackSynapse;
+import network.aika.fields.Field;
 import network.aika.visitor.Visitor;
 import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
 import network.aika.visitor.pattern.PatternVisitor;
+
+import static network.aika.fields.FieldLink.linkAndConnect;
 
 /**
  * @author Lukas Molzberger
@@ -35,6 +37,23 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
 
     public FeedbackLink(S s, IA input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    protected void initWeightInput() {
+        super.initWeightInput();
+
+        linkAndConnect(getSynapse().getSynapseBias(), getOutputNetForBias());
+    }
+
+    @Override
+    public Field getOutputNetForBias() {
+        return getOutput().getNet();
+    }
+
+    @Override
+    public Field getOutputNetForWeight() {
+        return getOutput().getNet();
     }
 
     @Override
@@ -55,10 +74,6 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
             return;
 
         super.patternVisit(v, depth);
-    }
-
-    @Override
-    public void inhibVisit(InhibitoryVisitor v, int depth) {
     }
 
     @Override

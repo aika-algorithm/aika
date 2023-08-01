@@ -16,7 +16,6 @@
  */
 package experiment.logger;
 
-import experiment.LabelUtil;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
@@ -26,6 +25,7 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.fields.FieldOutput;
+import network.aika.meta.LabelUtil;
 import network.aika.text.Document;
 import org.apache.commons.csv.CSVPrinter;
 
@@ -36,7 +36,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static experiment.logger.ExperimentLogger.CSV_FORMAT;
 import static network.aika.utils.Utils.doubleToString;
@@ -161,7 +160,7 @@ public class PatternLogger {
                 PatternSynapse s = inputSynapses.get(i);
                 BindingNeuron bn = s.getInput();
 
-                PatternLink il = (PatternLink) pAct.getInputLink(bn);
+                PatternLink il = (PatternLink) pAct.getInputLinks(bn).findAny().orElse(null);
                 BindingActivation iAct = il != null ? il.getInput() : null;
 
                 entry.addAll(
@@ -189,6 +188,7 @@ public class PatternLogger {
                 bn.getId() + (bn.isAbstract() ? "-abstr" : ""),
                 print(iAct.getNet()),
                 print(iAct.getNetPreAnneal()),
+                print(iAct.getNetUnsuppressed()),
                 print(iAct.getNetOuterGradient()),
                 print(iAct.getGradient()),
                 print(iAct.getUpdateValue()),
@@ -218,9 +218,9 @@ public class PatternLogger {
     }
 
     private static String getSuppressingBindingActLabel(BindingActivation act) {
-        return act.getInputLinksByType(NegativeFeedbackLink.class)
+        return act.getInputLinksByType(OuterNegativeFeedbackLink.class)
                 .map(Link::getInput)
-                .flatMap(inhibAct -> inhibAct.getInputLinksByType(InhibitoryLink.class))
+                .flatMap(inhibAct -> inhibAct.getInputLinksByType(OuterInhibitoryLink.class))
                 .map(Link::getInput)
                 .filter(supprAct -> supprAct.getNet().getUpdatedValue() > 0.0)
                 .map(Activation::getLabel)

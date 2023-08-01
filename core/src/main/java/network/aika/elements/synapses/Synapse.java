@@ -88,6 +88,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return scope;
     }
 
+    public int outgoingLinkingOrder() {
+        return 0;
+    }
+
     public boolean isLatentLinkingAllowed() {
         return true;
     }
@@ -139,15 +143,24 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public static boolean latentActivationExists(Synapse synA, Synapse synB, Activation iActA, Activation iActB) {
         Stream<Link> linksA = iActA.getOutputLinks(synA);
-        return linksA.map(lA -> lA.getOutput())
-                .map(oAct -> oAct.getInputLink(synB))
-                .filter(Objects::nonNull)
-                .map(lB -> lB.getInput())
-                .anyMatch(iAct -> iAct == iActB);
+        return linksA.map(Link::getOutput)
+                .anyMatch(oAct ->
+                        oAct.getInputLink(iActB) != null
+                );
+    }
+
+    public L getDummyLink(OA oAct) {
+        return (L) oAct.getInputDummyLink(input.getNeuron());
+    }
+
+    public L checkExistingLink(IA iAct, OA oAct) {
+        return (L) oAct.getInputLink(iAct);
     }
 
     public boolean linkExists(OA oAct) {
-        return oAct.getInputLink(getInput()) != null;
+        return oAct.getInputLinks(this)
+                .findAny()
+                .isPresent();
     }
 
     public boolean propagateLinkExists(IA iAct) {
@@ -250,10 +263,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return l;
     }
 
-    public L checkExistingLink(IA iAct, OA oAct) {
-        return (L) oAct.getInputLink(iAct.getNeuron());
-    }
-
     public L createLinkFromTemplate(IA input, OA output, Link template) {
         L l = createLink(input, output);
         l.initFromTemplate(template);
@@ -312,14 +321,14 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         if(input == null)
             return null;
 
-        return (I) input.getNeuron();
+        return input.getNeuron();
     }
 
     public O getOutput() {
         if(output == null)
             return null;
 
-        return (O) output.getNeuron();
+        return output.getNeuron();
     }
 
     public Model getModel() {
@@ -372,9 +381,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return MAX;
     }
 
-
     public void delete() {
-        log.info("Delete synapse: " + this);
+        if(log.isInfoEnabled())
+            log.info("Delete synapse: " + this);
+
         input.removeOutputSynapse(this);
         output.removeInputSynapse(this);
     }

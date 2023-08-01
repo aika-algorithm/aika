@@ -31,7 +31,7 @@ public class FeedbackFunction extends IdentityFunction {
     }
 
     @Override
-    public void receiveUpdate(AbstractFieldLink fl, boolean nextRound, double u) {
+    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
         if (u == 0.0)
             return;
 

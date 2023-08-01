@@ -19,8 +19,9 @@ package network.aika.debugger.neurons.properties;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.elements.neurons.Neuron;
+import network.aika.elements.neurons.InnerInhibitoryNeuron;
 
 
 /**
@@ -49,8 +50,10 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
     public static NeuronPropertyPanel create(Neuron n, Activation ref) {
         if(n instanceof ConjunctiveNeuron<?>) {
             return ConjunctiveNeuronPropertyPanel.create((ConjunctiveNeuron) n, ref);
-        } else if(n instanceof InhibitoryNeuron) {
-            return InhibitoryNeuronPropertyPanel.create((InhibitoryNeuron) n, ref);
+        } else if(n instanceof OuterInhibitoryNeuron) {
+            return InputInhibitoryNeuronPropertyPanel.create((OuterInhibitoryNeuron) n, ref);
+        } else if(n instanceof InnerInhibitoryNeuron) {
+            return SameInhibitoryNeuronPropertyPanel.create((InnerInhibitoryNeuron) n, ref);
         }
 
         return new NeuronPropertyPanel(n, ref);

@@ -72,10 +72,10 @@ public abstract class AbstractFunction extends Field implements FieldInput {
         return inputs[arg];
     }
 
-    protected abstract double computeUpdate(AbstractFieldLink fl, double u);
+    protected abstract double computeUpdate(FieldLink fl, double u);
 
     @Override
-    public void receiveUpdate(AbstractFieldLink fl, boolean nextRound, double u) {
+    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
         double update = computeUpdate(fl, u);
         if(update == 0.0)
             return;

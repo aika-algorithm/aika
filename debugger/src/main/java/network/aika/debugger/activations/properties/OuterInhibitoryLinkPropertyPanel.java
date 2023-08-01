@@ -14,28 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.debugger.activations.properties;
 
-import java.util.Collection;
+import network.aika.elements.links.OuterInhibitoryLink;
 
 /**
  * @author Lukas Molzberger
  */
-public interface FieldInput extends UpdateListener<FieldLink> {
+public class OuterInhibitoryLinkPropertyPanel extends LinkPropertyPanel<OuterInhibitoryLink> {
 
-    String getLabel();
+    public OuterInhibitoryLinkPropertyPanel(OuterInhibitoryLink l) {
+        super(l);
+    }
 
-    void addInput(FieldLink fl);
+    @Override
+    public void initIdentitySection(OuterInhibitoryLink l) {
+        super.initIdentitySection(l);
+    }
 
-    void removeInput(FieldLink fl);
+    @Override
+    public void initInferenceSection(OuterInhibitoryLink l) {
+        addField(l.getInputValue());
+        addField(l.getValue());
+        addField(l.getNet());
+    }
 
-    Collection<FieldLink> getInputs();
-
-    void connectInputs(boolean initialize);
-
-    void disconnectAndUnlinkInputs(boolean deinitialize);
-
-    int getNextArg();
-
-    FieldObject getReference();
+    @Override
+    public void initTrainingSection(OuterInhibitoryLink l) {
+        super.initTrainingSection(l);
+    }
 }

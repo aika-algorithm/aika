@@ -17,7 +17,6 @@
 package network.aika.meta;
 
 import network.aika.elements.synapses.*;
-import network.aika.enums.Scope;
 import network.aika.elements.neurons.*;
 import network.aika.text.Document;
 import org.slf4j.Logger;
@@ -132,44 +131,44 @@ public class TypedTextSectionModel extends TextSectionModel {
         sectionHintRelations(textSectionEndBN.getNeuron(), textSectionRelationNT.getNeuron());
 
 
-        tsBeginInhibitoryN = new InhibitoryNeuron(Scope.INPUT)
+        tsBeginInhibitoryN = new InnerInhibitoryNeuron()
                 .init(model, "I TS Begin")
                 .getProvider(true);
 
 
-        addNegativeFeedbackLoop(
+        addInnerNegativeFeedbackLoop(
                 textSectionBeginBN.getNeuron(),
                 tsBeginInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS_BEGIN * -netTarget
         );
 
-        tsEndInhibitoryN = new InhibitoryNeuron(Scope.INPUT)
+        tsEndInhibitoryN = new InnerInhibitoryNeuron()
                 .init(model, "I TS End")
                 .getProvider(true);
 
-        addNegativeFeedbackLoop(
+        addInnerNegativeFeedbackLoop(
                 textSectionEndBN.getNeuron(),
                 tsBeginInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS_END * -netTarget
         );
 
-        tsInhibitoryN = new InhibitoryNeuron(Scope.SAME)
+        tsInhibitoryN = new OuterInhibitoryNeuron()
                 .init(model, "I TS")
                 .getProvider(true);
 
-        addNegativeFeedbackLoop(
+        addOuterNegativeFeedbackLoop(
                 textSectionHintBN.getNeuron(),
                 tsInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS * -netTarget
         );
 
-        addNegativeFeedbackLoop(
+        addOuterNegativeFeedbackLoop(
                 textSectionBeginBN.getNeuron(),
                 tsInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS * -netTarget
         );
 
-        addNegativeFeedbackLoop(
+        addOuterNegativeFeedbackLoop(
                 textSectionEndBN.getNeuron(),
                 tsInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS * -netTarget
@@ -183,8 +182,8 @@ public class TypedTextSectionModel extends TextSectionModel {
         PatternNeuron pn = instantiatePatternNeuron(tpn);
         templateMapping.put(tpn.getProvider(), pn);
 
-        InhibitoryNeuron tInhibN = phraseModel.inhibitoryN.getNeuron();
-        InhibitoryNeuron inhibN = instantiateInhibitoryNeuron(tInhibN);
+        OuterInhibitoryNeuron tInhibN = phraseModel.inhibitoryN.getNeuron();
+        OuterInhibitoryNeuron inhibN = instantiateInhibitoryNeuron(tInhibN);
         templateMapping.put(tInhibN.getProvider(), inhibN);
 
         List<BindingNeuron> templateBindingNeurons = tpn.getInputSynapsesByType(PatternSynapse.class)
@@ -217,8 +216,8 @@ public class TypedTextSectionModel extends TextSectionModel {
         return pn;
     }
 
-    private InhibitoryNeuron instantiateInhibitoryNeuron(InhibitoryNeuron tInhibN) {
-        InhibitoryNeuron inhibN;
+    private OuterInhibitoryNeuron instantiateInhibitoryNeuron(OuterInhibitoryNeuron tInhibN) {
+        OuterInhibitoryNeuron inhibN;
         inhibN = tInhibN
                 .instantiateTemplate()
                 .init(model, "Inhib. TS-Headline");
@@ -232,8 +231,8 @@ public class TypedTextSectionModel extends TextSectionModel {
         ps.instantiateTemplate(bn, pn);
     }
 
-    private static void instantiateInhibitorySynapse(InhibitoryNeuron tInhibN, InhibitoryNeuron inhibN, BindingNeuron tbn, BindingNeuron bn) {
-        InhibitorySynapse inhibS = (InhibitorySynapse) tInhibN.getInputSynapse(tbn.getProvider());
+    private static void instantiateInhibitorySynapse(OuterInhibitoryNeuron tInhibN, OuterInhibitoryNeuron inhibN, BindingNeuron tbn, BindingNeuron bn) {
+        OuterInhibitorySynapse inhibS = (OuterInhibitorySynapse) tInhibN.getInputSynapse(tbn.getProvider());
         inhibS.instantiateTemplate(bn, inhibN);
     }
 

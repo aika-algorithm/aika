@@ -38,7 +38,7 @@ public class GradientTest {
 
         Document doc = new Document(m, "A B ");
         doc.setConfig(
-                getConfig()
+                new Config()
                 .setAlpha(0.99)
                 .setLearnRate(0.1)
                 .setTrainingEnabled(true)
@@ -71,7 +71,7 @@ public class GradientTest {
 
         Document doc = new Document(m, "A B C ");
         doc.setConfig(
-                getConfig()
+                new Config()
                         .setAlpha(0.99)
                         .setLearnRate(0.1)
                         .setTrainingEnabled(true)
@@ -103,7 +103,7 @@ public class GradientTest {
 
         Document doc1 = new Document(m, "A B ");
         doc1.setConfig(
-                getConfig()
+                new Config()
                         .setAlpha(0.99)
                         .setLearnRate(0.1)
                         .setTrainingEnabled(true)
@@ -122,7 +122,7 @@ public class GradientTest {
 
         Document doc2 = new Document(m, "A C ");
         doc2.setConfig(
-                getConfig()
+                new Config()
                         .setAlpha(0.99)
                         .setLearnRate(0.1)
                         .setTrainingEnabled(true)
@@ -141,5 +141,11 @@ public class GradientTest {
 
     private void processDoc(Model m, Document doc) {
         processTokens(m, doc, Arrays.asList(doc.getContent().split(" ")));
+    }
+
+    public static void setStatistic(PatternNeuron n, double frequency, int N, long lastPosition) {
+        n.setFrequency(frequency);
+        n.getSampleSpace().setN(N);
+        n.getSampleSpace().setLastPosition(lastPosition);
     }
 }

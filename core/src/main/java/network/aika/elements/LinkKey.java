@@ -16,29 +16,48 @@
  */
 package network.aika.elements;
 
-import network.aika.elements.neurons.NeuronProvider;
-
-import java.util.Comparator;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class OutputKey {
+public class LinkKey implements Comparable<LinkKey> {
 
-    public static final Comparator<OutputKey> COMPARATOR = Comparator
-            .<OutputKey, NeuronProvider>comparing(ok -> ok.n)
-            .thenComparingInt(ok -> ok.actId);
-
-    private final NeuronProvider n;
+    private final long nId;
     private final Integer actId;
 
-    public OutputKey(NeuronProvider n, Integer actId) {
-        this.n = n;
+    public LinkKey(long nId, Integer actId) {
+        this.nId = nId;
         this.actId = actId;
     }
 
+    public static LinkKey getFromLinkKey(long nId) {
+        return new LinkKey(nId, null);
+    }
+
+    public static LinkKey getToLinkKey(long nId) {
+        return new LinkKey(nId, Integer.MAX_VALUE);
+    }
+
     public String toString() {
-        return "[" + n.getId() + "]:" + actId;
+        return "[" + nId + "]:" + actId;
+    }
+
+    @Override
+    public int compareTo(LinkKey lk) {
+        int r = Long.compare(nId, lk.nId);
+        if(r != 0)
+            return r;
+
+        if(actId == lk.actId)
+            return 0;
+
+        if(actId == null)
+            return -1;
+
+        if(lk.actId == null)
+            return 1;
+
+        return Integer.compare(actId, lk.actId);
     }
 }

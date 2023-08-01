@@ -67,8 +67,10 @@ public class LinkPropertyPanel<E extends Link> extends AbstractPropertyPanel {
     public static LinkPropertyPanel create(Link l) {
         if(l instanceof ConjunctiveLink) {
             return ConjunctiveLinkPropertyPanel.create((ConjunctiveLink) l);
-        } else if(l instanceof InhibitoryLink) {
-            return new InhibitoryLinkPropertyPanel((InhibitoryLink) l);
+        } else if(l instanceof OuterInhibitoryLink) {
+            return new OuterInhibitoryLinkPropertyPanel((OuterInhibitoryLink) l);
+        } else if(l instanceof InnerInhibitoryLink) {
+            return new InnerInhibitoryLinkPropertyPanel((InnerInhibitoryLink) l);
         }
 
         return new LinkPropertyPanel(l);
