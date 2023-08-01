@@ -186,7 +186,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     }
 
     private static void logPatternMatch(PatternActivation act) {
-        if(act.isAbstract())
+        if(act.getNetPreAnneal().getValue() <= 0.0 || act.isAbstract())
             return;
 
         log.info("   " +

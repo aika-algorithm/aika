@@ -45,6 +45,7 @@ import static network.aika.debugger.EventType.*;
 import static network.aika.elements.LinkKey.getFromLinkKey;
 import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
+import static network.aika.steps.Phase.PRE_ANNEAL;
 import static network.aika.text.Range.joinTokenPosition;
 import static network.aika.text.Range.tokenPositionEquals;
 import static network.aika.fields.FieldLink.linkAndConnect;
@@ -70,6 +71,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected FieldOutput value;
 
     protected MultiInputField net;
+
+    protected MultiInputField netPreAnneal;
 
     protected FieldOutput isFired;
 
@@ -150,6 +153,16 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         linkAndConnect(getNeuron().getBias(), getDefaultNet())
                 .setPropagateUpdates(false);
+
+        netPreAnneal = new QueueSumField(this, PRE_ANNEAL, "netPreAnneal", TOLERANCE);
+        linkAndConnect(net, netPreAnneal);
+
+        netPreAnneal.addListener(
+                "disconnect listener",
+                (fl, nr, u) ->
+                        netPreAnneal.disconnectAndUnlinkInputs(false),
+                true
+        );
     }
 
     public Field getDefaultNet() {
@@ -193,7 +206,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                         this,
                         "f'(netPreAnneal)",
                         TOLERANCE,
-                        getDefaultNet(),
+                        netPreAnneal,
                         x -> getNeuron().getActivationFunction().outerGrad(x)
         );
     }
@@ -232,6 +245,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public MultiInputField getNet() {
         return net;
+    }
+
+    public MultiInputField getNetPreAnneal() {
+        return netPreAnneal;
     }
 
     public Timestamp getCreated() {

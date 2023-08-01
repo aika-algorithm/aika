@@ -86,7 +86,7 @@ public class LabelUtil {
             BindingActivation act = (BindingActivation) l.getInput();
             return act != null &&
                     (!fired || act.isFired()) &&
-                    (!netPreAnneal || act.getNetUnsuppressed().getValue() > 0.0);
+                    (!netPreAnneal || act.getNetPreAnneal().getValue() > 0.0);
         });
     }
 
