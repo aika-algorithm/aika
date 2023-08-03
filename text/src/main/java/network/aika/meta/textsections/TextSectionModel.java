@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.meta;
+package network.aika.meta.textsections;
 
 import network.aika.Model;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.BeforeRelationNeuron;
+import network.aika.meta.PhraseTemplateModel;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 import static network.aika.meta.NetworkMotivs.addPositiveFeedbackLoop;
 import static network.aika.meta.NetworkMotivs.addRelation;
@@ -46,14 +46,14 @@ public class TextSectionModel {
 
     protected Model model;
 
-    protected NeuronProvider textSectionRelationPT;
-    protected NeuronProvider textSectionRelationNT;
+    protected NeuronProvider relationPT;
+    protected NeuronProvider relationNT;
 
-    protected NeuronProvider textSectionPatternN;
+    protected NeuronProvider patternN;
 
-    protected NeuronProvider textSectionBeginBN;
+    protected NeuronProvider beginBN;
 
-    protected NeuronProvider textSectionEndBN;
+    protected NeuronProvider endBN;
 
     protected double bindingNetTarget = 2.5;
 
@@ -68,35 +68,35 @@ public class TextSectionModel {
     protected void initTextSectionTemplates() {
         log.info("Text-Section");
 
-        textSectionRelationPT = TokenPositionRelationNeuron.lookupRelation(model, -300, -1)
+        relationPT = BeforeRelationNeuron.lookupRelation(model, -300, -1)
                 .getProvider(true);
 
-        textSectionRelationNT = TokenPositionRelationNeuron.lookupRelation(model, 1, 300)
+        relationNT = BeforeRelationNeuron.lookupRelation(model, 1, 300)
                 .getProvider(true);
 
-        textSectionPatternN = new PatternNeuron()
+        patternN = new PatternNeuron()
                 .init(model, "Abstract Text-Section")
                 .getProvider(true);
 
-        textSectionBeginBN = new BindingNeuron()
+        beginBN = new BindingNeuron()
                 .init(model, "Abstract Text-Section-Begin")
                 .getProvider(true);
 
-        textSectionEndBN = new BindingNeuron()
+        endBN = new BindingNeuron()
                 .init(model, "Abstract Text-Section-End")
                 .getProvider(true);
 
         addRelation(
-                textSectionBeginBN.getNeuron(),
-                textSectionEndBN.getNeuron(),
-                textSectionRelationPT.getNeuron(),
+                beginBN.getNeuron(),
+                endBN.getNeuron(),
+                relationPT.getNeuron(),
                 5.0,
                 10.0
         );
 
         addPositiveFeedbackLoop(
-                textSectionBeginBN.getNeuron(),
-                textSectionPatternN.getNeuron(),
+                beginBN.getNeuron(),
+                patternN.getNeuron(),
                 2.5,
                 patternNetTarget,
                 bindingNetTarget,
@@ -105,8 +105,8 @@ public class TextSectionModel {
         );
 
         addPositiveFeedbackLoop(
-                textSectionEndBN.getNeuron(),
-                textSectionPatternN.getNeuron(),
+                endBN.getNeuron(),
+                patternN.getNeuron(),
                 2.5,
                 patternNetTarget,
                 bindingNetTarget,
@@ -116,6 +116,6 @@ public class TextSectionModel {
     }
 
     public PatternActivation addTextSection(Document doc, int begin, int end) {
-        return new PatternActivation(doc.createActivationId(), doc, textSectionPatternN.getNeuron());
+        return new PatternActivation(doc.createActivationId(), doc, patternN.getNeuron());
     }
 }

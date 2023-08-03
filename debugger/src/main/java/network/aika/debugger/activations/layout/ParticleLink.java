@@ -116,9 +116,9 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
     }
 
     private Integer getTokenPos() {
-        Integer tp = link.getInput().getTokenPos();
+        Integer tp = link.getInput().getTokenPosRange();
         return tp != null ?
                 tp :
-                link.getOutput().getTokenPos();
+                link.getOutput().getTokenPosRange();
     }
 }

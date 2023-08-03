@@ -22,23 +22,23 @@ import network.aika.elements.activations.TokenActivation;
  *
  * @author Lukas Molzberger
  */
-public class PositionKey {
+public class TokenPositionKey {
 
-    private int tokenPosition;
+    private Range range;
     private int actId;
 
-    public PositionKey(int tokenPosition, int actId) {
-        this.tokenPosition = tokenPosition;
+    public TokenPositionKey(Range range, int actId) {
+        this.range = range;
         this.actId = actId;
     }
 
-    public PositionKey(TokenActivation tokenAct) {
-        this.tokenPosition = tokenAct.getTokenPos();
+    public TokenPositionKey(TokenActivation tokenAct) {
+        this.range = tokenAct.getTokenPosRange();
         this.actId = tokenAct.getId();
     }
 
-    public int getTokenPosition() {
-        return tokenPosition;
+    public Range getRange() {
+        return range;
     }
 
     public int getActId() {

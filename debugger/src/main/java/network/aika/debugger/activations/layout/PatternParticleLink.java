@@ -51,7 +51,7 @@ public class PatternParticleLink<L extends PatternLink> extends ParticleLink<L> 
         OptionalDouble avgXPos = oAct.getInputLinks()
                 .map(Link::getInput)
                 .filter(Objects::nonNull)
-                .map(Activation::getTokenPos)
+                .map(Activation::getTokenPosRange)
                 .filter(Objects::nonNull)
                 .mapToDouble(Integer::intValue)
                 .average();

@@ -17,9 +17,10 @@
 package network.aika.meta;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.TokenActivation;
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.LatentRelationNeuron;
+import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,16 +40,16 @@ public abstract class AbstractTemplateModel {
 
     protected NeuronProvider inputTokenCategory;
     protected NeuronProvider inputToken;
-    protected NeuronProvider relPT;
-    protected NeuronProvider relNT;
+    public NeuronProvider relPT;
+    public NeuronProvider relNT;
 
-    protected NeuronProvider inhibitoryN;
+    public NeuronProvider inhibitoryN;
 
     protected NeuronProvider inhibCat;
 
-    protected NeuronProvider patternN;
+    public NeuronProvider patternN;
 
-    protected NeuronProvider primaryBN;
+    public NeuronProvider primaryBN;
 
     protected double inputPatternNetTarget = 5.0;
     protected double patternNetTarget = 0.7;
@@ -89,10 +90,6 @@ public abstract class AbstractTemplateModel {
         return inputToken;
     }
 
-    public boolean evaluatePrimaryBindingActs(Activation act) {
-        return false;
-    }
-
     public double getInputPatternNetTarget() {
         return inputPatternNetTarget;
     }
@@ -128,10 +125,10 @@ public abstract class AbstractTemplateModel {
     }
 
     public void initStaticNeurons() {
-        relPT = TokenPositionRelationNeuron.lookupRelation(model, -1, -1)
+        relPT = BeforeRelationNeuron.lookupRelation(model, -1, -1)
                 .getProvider(true);
 
-        relNT = TokenPositionRelationNeuron.lookupRelation(model, 1, 1)
+        relNT = BeforeRelationNeuron.lookupRelation(model, 1, 1)
                 .getProvider(true);
 
         inputToken = model.lookupNeuronByLabel("Abstract Input Token", l ->
@@ -205,9 +202,7 @@ public abstract class AbstractTemplateModel {
                 getNegMargin(pos) * -netTarget
         );
 
-        if(lastPos == null || lastBN == null) {
-            bn.setCallActivationCheckCallback(true);
-        } else {
+        if(pos != 0) {
             LatentRelationNeuron rel = pos > 0 ?
                     relPT.getNeuron() :
                     relNT.getNeuron();

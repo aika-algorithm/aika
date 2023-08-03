@@ -38,7 +38,7 @@ public class LatentRelationActivationParticle extends BindingActivationParticle<
         if(act.getFromAct() != null && act.getToAct() != null) {
             node.setAttribute(
                     "x",
-                    STANDARD_DISTANCE_X * (act.getFromAct().getTokenPos() + act.getToAct().getTokenPos()) / 2.0
+                    STANDARD_DISTANCE_X * (act.getFromAct().getTokenPosRange() + act.getToAct().getTokenPosRange()) / 2.0
             );
         }
     }

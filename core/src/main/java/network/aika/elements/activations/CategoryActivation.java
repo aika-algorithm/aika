@@ -66,14 +66,14 @@ public class CategoryActivation extends DisjunctiveActivation<CategoryNeuron> {
     }
 
     @Override
-    public Range getRange() {
+    public Range getCharRange() {
         Activation iAct = getCategoryInput();
-        return iAct != null ? iAct.getRange() : null;
+        return iAct != null ? iAct.getCharRange() : null;
     }
 
     @Override
-    public Integer getTokenPos() {
+    public Range getTokenPosRange() {
         Activation iAct = getCategoryInput();
-        return iAct != null ? iAct.getTokenPos() : null;
+        return iAct != null ? iAct.getTokenPosRange() : null;
     }
 }

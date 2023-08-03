@@ -23,7 +23,7 @@ import network.aika.elements.activations.LatentRelationActivation;
 import network.aika.elements.links.RelationInputLink;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.activations.TokenActivation;
-import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.neurons.relations.LatentRelationNeuron;
 
 import static network.aika.debugger.EventType.UPDATE;
 

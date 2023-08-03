@@ -40,7 +40,7 @@ public class LabelUtil {
 
     public static void generateTemplateInstanceLabels(Activation<?> act) {
         Document doc = (Document) act.getThought();
-        String actTxt = doc.getTextSegment(act.getRange());
+        String actTxt = doc.getTextSegment(act.getCharRange());
         if(act instanceof BindingActivation) {
             if(act.getNeuron().getLabel() == null) {
                 Activation<?> tAct = act.getTemplate();
@@ -49,7 +49,7 @@ public class LabelUtil {
                 String context = "...";
                 if(pfl != null && pfl.getInput() != null) {
                     PatternActivation pAct = pfl.getInput();
-                    context = doc.getTextSegment(pAct.getRange());
+                    context = doc.getTextSegment(pAct.getCharRange());
                 }
 
                 act.getNeuron().setLabel(actTxt + " (" + context + ")");

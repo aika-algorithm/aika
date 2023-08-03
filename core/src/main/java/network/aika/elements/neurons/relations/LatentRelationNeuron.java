@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.neurons;
+package network.aika.elements.neurons.relations;
 
 import network.aika.Thought;
+import network.aika.elements.neurons.BindingNeuron;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.QueueSumField;
 import network.aika.fields.MultiInputField;
@@ -35,33 +36,12 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public abstract class LatentRelationNeuron extends BindingNeuron {
 
-    private int rangeBegin = -1;
-    private int rangeEnd = -1;
-
-
-    public int getRangeBegin() {
-        return rangeBegin;
-    }
-
-    public void setRangeBegin(int rangeBegin) {
-        this.rangeBegin = rangeBegin;
-    }
-
-    public int getRangeEnd() {
-        return rangeEnd;
-    }
-
-    public void setRangeEnd(int rangeEnd) {
-        this.rangeEnd = rangeEnd;
-    }
-
 
     public abstract Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromOriginAct, Direction dir);
 
     @Override
     protected MultiInputField initBias() {
-        return (MultiInputField) new QueueSumField(this, TRAINING, "bias", TOLERANCE)
-                .setInitialValue(10.0);
+        return new QueueSumField(this, TRAINING, "bias", TOLERANCE);
     }
 
     @Override

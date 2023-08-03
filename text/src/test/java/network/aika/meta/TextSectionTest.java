@@ -82,13 +82,13 @@ public class TextSectionTest extends TrainingParser<TestContext> {
 
         return doc;
     }
-
+/*
     @Override
     public boolean check(Synapse s, Activation iAct) {
-        return iAct.getTokenPos() == 0 &&
+       return iAct.getTokenPos() == 0 &&
                 ((currentContext != null && currentContext.isHeadlineTarget()) == templateModel.textSectionModel.isHeadlinePrimaryInput((BindingNeuron) s.getOutput()));
     }
-
+*/
     @Test
     public void testTextSections() {
         log.info("Start");

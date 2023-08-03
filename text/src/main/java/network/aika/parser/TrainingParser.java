@@ -16,7 +16,6 @@
  */
 package network.aika.parser;
 
-import network.aika.callbacks.ActivationCheckCallback;
 import network.aika.callbacks.InstantiationCallback;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.Synapse;
@@ -30,7 +29,7 @@ import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
  *
  * @author Lukas Molzberger
  */
-public abstract class TrainingParser<C extends Context> extends Parser<C> implements ActivationCheckCallback, InstantiationCallback {
+public abstract class TrainingParser<C extends Context> extends Parser<C> implements InstantiationCallback {
 
     protected static final Logger log = LoggerFactory.getLogger(TrainingParser.class);
 
@@ -39,15 +38,9 @@ public abstract class TrainingParser<C extends Context> extends Parser<C> implem
     @Override
     protected Document initDocument(String txt, C context, ParserPhase phase) {
         Document doc = super.initDocument(txt, context, phase);
-        doc.setActivationCheckCallback(this);
         doc.setInstantiationCallback(this);
 
         return doc;
-    }
-
-    @Override
-    public boolean check(Synapse s, Activation iAct) {
-        return getTemplateModel().evaluatePrimaryBindingActs(iAct);
     }
 
     public void onInstantiation(Activation act) {

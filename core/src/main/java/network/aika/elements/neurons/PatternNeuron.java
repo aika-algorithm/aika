@@ -87,7 +87,7 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternActivation> {
     public void count(PatternActivation act) {
         double oldN = sampleSpace.getN();
 
-        Range absoluteRange = act.getAbsoluteRange();
+        Range absoluteRange = act.getAbsoluteCharRange();
         sampleSpace.countSkippedInstances(absoluteRange);
 
         sampleSpace.count();

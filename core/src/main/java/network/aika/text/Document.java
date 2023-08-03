@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.elements.Timestamp.NOT_SET;
+import static network.aika.text.Slot.END;
 
 
 /**
@@ -40,17 +41,17 @@ public class Document extends Thought {
 
     private final StringBuilder content;
 
-    private NavigableMap<PositionKey, TokenActivation> tokenPosIndex = new TreeMap<>(Comparator
-            .<PositionKey>comparingInt(pk -> pk.getTokenPosition())
-            .thenComparingInt(pk -> pk.getActId())
-    );
-
-    private NavigableMap<RangeKey, TokenActivation> rangeIndex = new TreeMap<>(Comparator
-            .<RangeKey>comparingLong(rk -> rk.getRange().getBegin())
+    private NavigableMap<TokenPositionKey, TokenActivation> tokenPosBeginIndex = new TreeMap<>(Comparator
+            .<TokenPositionKey>comparingLong(rk -> rk.getRange().getBegin())
             .thenComparingLong(rk -> -rk.getRange().getEnd())
             .thenComparingInt(rk -> rk.getActId())
     );
 
+    private NavigableMap<TokenPositionKey, TokenActivation> tokenPosEndIndex = new TreeMap<>(Comparator
+            .<TokenPositionKey>comparingLong(rk -> rk.getRange().getEnd())
+            .thenComparingLong(rk -> -rk.getRange().getBegin())
+            .thenComparingInt(rk -> rk.getActId())
+    );
 
     public Document(Model model, String content) {
         super(model);
@@ -61,25 +62,27 @@ public class Document extends Thought {
     }
 
     public void registerTokenActivation(TokenActivation tokenAct) {
-        if(tokenAct.getTokenPos() != null)
-            tokenPosIndex.put(new PositionKey(tokenAct), tokenAct);
-
-        if(tokenAct.getRange() != null)
-            rangeIndex.put(new RangeKey(tokenAct), tokenAct);
+        if(tokenAct.getTokenPosRange() != null) {
+            tokenPosBeginIndex.put(new TokenPositionKey(tokenAct), tokenAct);
+            tokenPosEndIndex.put(new TokenPositionKey(tokenAct), tokenAct);
+        }
     }
 
-    public Stream<TokenActivation> getRelatedTokensByTokenPosition(TokenActivation fromTokenAct, int relFrom, int relTo) {
-        return tokenPosIndex.subMap(
-                new PositionKey(fromTokenAct.getTokenPos() + relFrom, Integer.MIN_VALUE),
-                new PositionKey(fromTokenAct.getTokenPos() + relTo, Integer.MAX_VALUE)
-        ).values().stream();
+    public Stream<TokenActivation> getRelatedTokensByTokenPosition(Slot slot, Range r) {
+        return getPositionIndex(slot)
+                .subMap(
+                        new TokenPositionKey(new Range(r.getBegin(), Integer.MIN_VALUE), Integer.MIN_VALUE),
+                        new TokenPositionKey(new Range(r.getEnd(), Integer.MAX_VALUE), Integer.MAX_VALUE)
+                )
+                .values()
+                .stream();
     }
 
-    public Stream<TokenActivation> getRelatedTokensByCharPosition(Range fromRange, Range toRange) {
-        return rangeIndex.subMap(
-                new RangeKey(fromRange, Integer.MIN_VALUE),
-                new RangeKey(toRange, Integer.MAX_VALUE)
-        ).values().stream();
+    private NavigableMap<TokenPositionKey, TokenActivation> getPositionIndex(Slot slot) {
+        NavigableMap<TokenPositionKey, TokenActivation> tokenPosIndex = slot == END ?
+                tokenPosEndIndex :
+                tokenPosBeginIndex;
+        return tokenPosIndex;
     }
 
     public void append(String txt) {
@@ -107,11 +110,16 @@ public class Document extends Thought {
     }
 
     public static String getText(Activation<?> act) {
-        return ((Document)act.getThought()).getTextSegment(act.getRange());
+        return ((Document)act.getThought()).getTextSegment(act.getCharRange());
     }
 
     public TokenActivation addToken(TokenNeuron n, Integer pos, int begin, int end) {
-        return new TokenActivation(createActivationId(), pos, begin, end, this, n);
+        return new TokenActivation(
+                createActivationId(),
+                pos != null ? new Range(pos, pos) : null,
+                new Range(begin, end),
+                this, n
+        );
     }
 
     @Override

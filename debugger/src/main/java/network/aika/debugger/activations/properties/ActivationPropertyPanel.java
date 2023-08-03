@@ -48,12 +48,12 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
         if(act.isInput())
             addConstant("IsInput: ", "" + act.isInput());
 
-        addConstant("Range: ", act.getRange() != null ? "" + act.getRange() : NOT_SET_STR);
-        addConstant("Absolute Range: ", act.getAbsoluteRange() != null ? "" + act.getAbsoluteRange() : NOT_SET_STR);
-        addConstant("Token Position: ", "" + act.getTokenPos());
+        addConstant("Char Range: ", act.getCharRange() != null ? "" + act.getCharRange() : NOT_SET_STR);
+        addConstant("Absolute Char Range: ", act.getAbsoluteCharRange() != null ? "" + act.getAbsoluteCharRange() : NOT_SET_STR);
+        addConstant("Token Position Range: ", "" + act.getTokenPosRange());
 
         Document doc = (Document) act.getThought();
-        addConstant("Covered Text: ", act.getRange() != null ? "" + doc.getTextSegment(act.getRange()) : NOT_SET_STR);
+        addConstant("Covered Text: ", act.getCharRange() != null ? "" + doc.getTextSegment(act.getCharRange()) : NOT_SET_STR);
     }
 
     public void initInferenceSection(E act) {

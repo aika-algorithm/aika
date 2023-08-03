@@ -80,9 +80,6 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
     private final WeakHashMap<Long, WeakReference<PreActivation<A>>> activations = new WeakHashMap<>();
 
-    private boolean callActivationCheckCallback;
-
-
     public Long getId() {
         return provider.getId();
     }
@@ -95,13 +92,6 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         this.label = label;
     }
 
-    public boolean isCallActivationCheckCallback() {
-        return callActivationCheckCallback;
-    }
-
-    public void setCallActivationCheckCallback(boolean callActivationCheckCallback) {
-        this.callActivationCheckCallback = callActivationCheckCallback;
-    }
     @Override
     public void disconnect() {
     }
@@ -482,8 +472,6 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         out.writeBoolean(customData != null);
         if(customData != null)
             customData.write(out);
-
-        out.writeBoolean(callActivationCheckCallback);
     }
 
     public static Neuron read(DataInput in, Model m) throws Exception {
@@ -515,8 +503,6 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
             customData = m.getCustomDataInstanceSupplier().get();
             customData.readFields(in, m);
         }
-
-        callActivationCheckCallback = in.readBoolean();
     }
 
     @Override

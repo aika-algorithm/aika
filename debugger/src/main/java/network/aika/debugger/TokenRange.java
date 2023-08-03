@@ -50,14 +50,14 @@ public class TokenRange {
         if(tokenRange == null)
             return true;
 
-        return tokenRange.within(act.getTokenPos());
+        return tokenRange.within(act.getTokenPosRange());
     }
 
     public static boolean within(TokenRange tokenRange, Link l) {
         if(tokenRange == null)
             return true;
 
-        return tokenRange.within(l.getInput().getTokenPos()) &&
-                tokenRange.within(l.getOutput().getTokenPos());
+        return tokenRange.within(l.getInput().getTokenPosRange()) &&
+                tokenRange.within(l.getOutput().getTokenPosRange());
     }
 }

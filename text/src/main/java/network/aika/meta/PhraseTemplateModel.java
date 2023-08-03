@@ -17,14 +17,11 @@
 package network.aika.meta;
 
 import network.aika.Model;
-import network.aika.elements.activations.*;
 import network.aika.elements.neurons.*;
-import network.aika.enums.sign.Sign;
+import network.aika.meta.textsections.TypedTextSectionModel;
+import network.aika.meta.topics.TopicModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Comparator;
-import java.util.List;
 
 
 /**
@@ -40,7 +37,6 @@ public class PhraseTemplateModel extends AbstractTemplateModel {
 
     NeuronProvider upperCaseN;
 
-    PatternActivation maxSurprisalAct = null;
 
     public PhraseTemplateModel(Model m) {
         super(m);
@@ -99,27 +95,5 @@ public class PhraseTemplateModel extends AbstractTemplateModel {
 
         textSectionModel.initTextSectionTemplates();
         topicModel.initTopicTemplates();
-    }
-
-
-    private PatternActivation initMaxSurprisalTokenAct(List<TokenActivation> tokenActs) {
-        return tokenActs.stream()
-                .filter(PatternActivation.class::isInstance)
-                .map(PatternActivation.class::cast)
-                .max(Comparator.comparingDouble(act ->
-                        act.getSurprisal(Sign.POS)
-                ))
-                .orElse(null);
-    }
-
-    @Override
-    public void setTokenInputNet(List<TokenActivation> tokenActs) {
-        maxSurprisalAct = initMaxSurprisalTokenAct(tokenActs);
-        super.setTokenInputNet(tokenActs);
-    }
-
-    @Override
-    public boolean evaluatePrimaryBindingActs(Activation act) {
-        return maxSurprisalAct == act.getActiveTemplateInstance();
     }
 }

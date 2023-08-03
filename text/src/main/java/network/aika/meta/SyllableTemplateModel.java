@@ -18,7 +18,6 @@ package network.aika.meta;
 
 import network.aika.Model;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.BindingNeuron;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,14 +55,5 @@ public class SyllableTemplateModel extends AbstractTemplateModel {
                 4,
                 1
         );
-    }
-
-    @Override
-    public boolean evaluatePrimaryBindingActs(Activation act) {
-        Activation tiAct = act.getActiveTemplateInstance();
-        if(tiAct == null)
-            return false;
-
-        return tiAct.getTokenPos() == 0;
     }
 }

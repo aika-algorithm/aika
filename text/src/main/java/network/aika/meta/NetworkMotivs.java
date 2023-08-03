@@ -16,6 +16,7 @@
  */
 package network.aika.meta;
 
+import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.enums.Scope;
 import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.*;

@@ -17,10 +17,11 @@
 package network.aika;
 
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.LatentRelationNeuron;
+import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.InputPatternSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SamePatternSynapse;
-import network.aika.enums.Scope;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +52,7 @@ public class ABCDTest {
         BindingNeuron a_abBN = new BindingNeuron().init(m, "a (ab)");
         BindingNeuron b_abBN = new BindingNeuron().init(m, "b (ab)");
 
-        LatentRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, -1, -1);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -1, -1);
 
         new RelationInputSynapse()
                 .setWeight(10.0)

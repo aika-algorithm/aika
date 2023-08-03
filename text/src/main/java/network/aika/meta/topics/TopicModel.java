@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.meta;
+package network.aika.meta.topics;
 
 import network.aika.Model;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.meta.PhraseTemplateModel;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public class TopicModel {
         log.info(doc.getContent() + " : " + tsLabels.stream().collect(Collectors.joining(", ")));
     }
 
-    protected void initTopicTemplates() {
+    public void initTopicTemplates() {
 
     }
 }

@@ -196,7 +196,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
                 " '" + act.getLabel() + "'" +
                 (!act.isAbstract() ? " '" + LabelUtil.generateLabel(act.getNeuron()) + "'" : "") +
                 " nId:" + act.getNeuron().getId() +
-                " r:" + act.getRange() +
+                " r:" + act.getCharRange() +
                 " grad:" + doubleToString(act.getGradient().getValue(), "#.######")
         );
     }
@@ -209,7 +209,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
                 instanceAct.getClass().getSimpleName() +
                 " '" + label + "'" +
                 " nId:" + instanceAct.getNeuron().getId() +
-                " r:" + instanceAct.getRange()
+                " r:" + instanceAct.getCharRange()
         );
     }
 

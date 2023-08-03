@@ -107,6 +107,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         weightedInput.disconnectAndUnlinkInputs(false);
     }
 
+
     public void instantiateTemplate(I iAct, O oAct) {
         if(iAct == null || oAct == null)
             return;
@@ -263,10 +264,10 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         if(input == null)
             return;
 
-        if(input.getRange() != null || input.getTokenPos() != null)
-            output.updateRangeAndTokenPos(
-                    input.getRange(),
-                    input.getTokenPos()
+        if(input.getCharRange() != null || input.getTokenPosRange() != null)
+            output.updateRanges(
+                    input.getCharRange(),
+                    input.getTokenPosRange()
             );
     }
 

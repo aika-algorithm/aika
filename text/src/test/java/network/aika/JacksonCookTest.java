@@ -17,8 +17,9 @@
 package network.aika;
 
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.LatentRelationNeuron;
+import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.*;
-import network.aika.enums.Scope;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 
@@ -45,7 +46,7 @@ public class JacksonCookTest {
         TokenNeuron jacksonIN = lookupToken(m, "Jackson");
         TokenNeuron cookIN = lookupToken(m, "Cook");
 
-        LatentRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, -1, -1);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -1, -1);
 
         BindingNeuron forenameBN = new BindingNeuron()
                 .init(m, "forename (person name)");

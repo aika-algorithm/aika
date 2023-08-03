@@ -17,10 +17,11 @@
 package network.aika;
 
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.LatentRelationNeuron;
+import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.InputPatternSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SamePatternSynapse;
-import network.aika.enums.Scope;
 
 import static network.aika.TestUtils.*;
 
@@ -37,7 +38,7 @@ public class TestHelper {
         int relFrom = variant < 2 ? -5 : 1;
         int relTo = variant < 2 ? -1 : 5;
 
-        LatentRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, relFrom, relTo);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, relFrom, relTo);
 
         BindingNeuron theBN = new BindingNeuron().init(m, "the (the cat)");
         new InputPatternSynapse()
@@ -86,7 +87,7 @@ public class TestHelper {
         PatternNeuron blackIN = lookupToken(m, "black");
         PatternNeuron catIN = lookupToken(m, "cat");
 
-        LatentRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, -1, -1);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -1, -1);
 
         BindingNeuron blackBN = new BindingNeuron().init(m, "black (black cat)");
         new InputPatternSynapse()
@@ -124,7 +125,7 @@ public class TestHelper {
         int relFrom = variant < 2 ? -5 : 1;
         int relTo = variant < 2 ? -1 : 5;
 
-        LatentRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, relFrom, relTo);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, relFrom, relTo);
 
         BindingNeuron theBN = new BindingNeuron().init(m, "the (the dog)");
         new InputPatternSynapse()

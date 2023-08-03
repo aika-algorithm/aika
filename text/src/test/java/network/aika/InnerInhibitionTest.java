@@ -36,11 +36,8 @@ import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.neurons.*;
-import network.aika.elements.synapses.InnerInhibitorySynapse;
-import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
+import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.InputPatternSynapse;
-import network.aika.elements.synapses.PatternSynapse;
-import network.aika.meta.NetworkMotivs;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -84,7 +81,7 @@ public class InnerInhibitionTest {
         BindingNeuron na = addBindingNeuronInner(m,  "A", 2.5, inA, inhib, patternN);
         BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
-        TokenPositionRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, -300, -1);
+        BeforeRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -300, -1);
 
         addRelation(na, nx, relPT, 5.0, 10.0);
 
@@ -144,7 +141,7 @@ public class InnerInhibitionTest {
         BindingNeuron nc = addBindingNeuronInner(m, "C", 2.7, inC, inhib, patternN);
         BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
-        TokenPositionRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, -300, -1);
+        BeforeRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -300, -1);
 
         addRelation(na, nx, relPT, 5.0, 10.0);
         addRelation(nb, nx, relPT, 5.0, 10.0);
