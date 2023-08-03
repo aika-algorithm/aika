@@ -31,7 +31,7 @@ public class RelationInputLink extends BindingNeuronLink<RelationInputSynapse, B
     }
 
     @Override
-    public void propagateRangeOrTokenPos() {
+    public void propagateRanges() {
     }
 
     @Override

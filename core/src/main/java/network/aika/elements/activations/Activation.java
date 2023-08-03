@@ -282,18 +282,20 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         Range newRange = join(charRange, charR);
         Range newTokenPos = join(tokenPosRange, tpR);
 
-        if(!charRange.equals(newRange) || !tokenPosRange.equals(newTokenPos))
+        if (charRange == null || !charRange.equals(newRange) ||
+                tokenPosRange == null || !tokenPosRange.equals(newTokenPos)) {
+
+            this.charRange = newRange;
+            this.tokenPosRange = newTokenPos;
+
             propagateRanges();
-
-        this.charRange = newRange;
-        this.tokenPosRange = newTokenPos;
-
+        }
         thought.onElementEvent(TOKEN_POSITION, this);
     }
 
     protected void propagateRanges() {
         outputLinks.values()
-                .forEach(Link::propagateRangeOrTokenPos);
+                .forEach(Link::propagateRanges);
     }
 
     public Range getAbsoluteCharRange() {

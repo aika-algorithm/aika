@@ -70,7 +70,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
             }
         }
 
-        propagateRangeOrTokenPos();
+        propagateRanges();
         getThought().onElementEvent(CREATE, this);
     }
 
@@ -260,7 +260,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         output.linkInputLink(this);
     }
 
-    public void propagateRangeOrTokenPos() {
+    public void propagateRanges() {
         if(input == null)
             return;
 
