@@ -16,32 +16,32 @@
  */
 package network.aika.text;
 
-import network.aika.elements.activations.TokenActivation;
-
 /**
  *
  * @author Lukas Molzberger
  */
-public class TokenPositionKey {
+public class TokenPositionKey implements Comparable<TokenPositionKey> {
 
-    private Range range;
+    private long pos;
     private int actId;
 
-    public TokenPositionKey(Range range, int actId) {
-        this.range = range;
+    public TokenPositionKey(long pos, int actId) {
+        this.pos = pos;
         this.actId = actId;
     }
 
-    public TokenPositionKey(TokenActivation tokenAct) {
-        this.range = tokenAct.getTokenPosRange();
-        this.actId = tokenAct.getId();
-    }
-
-    public Range getRange() {
-        return range;
+    public long getPosition() {
+        return pos;
     }
 
     public int getActId() {
         return actId;
+    }
+
+    @Override
+    public int compareTo(TokenPositionKey k) {
+        int r = Long.compare(pos, k.pos);
+        if(r != 0) return r;
+        return Integer.compare(actId, k.actId);
     }
 }

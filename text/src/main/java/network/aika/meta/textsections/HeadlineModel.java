@@ -40,7 +40,7 @@ public class HeadlineModel {
 
     protected void initHeadlineTemplates() {
         headlineTargetInput = model.lookupNeuronByLabel("Abstract TS Headline Target Input", l ->
-                new TokenNeuron()
+                new BindingNeuron()
                         .init(model, l)
         ).getProvider(true);
 

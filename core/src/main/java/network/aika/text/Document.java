@@ -41,17 +41,9 @@ public class Document extends Thought {
 
     private final StringBuilder content;
 
-    private NavigableMap<TokenPositionKey, TokenActivation> tokenPosBeginIndex = new TreeMap<>(Comparator
-            .<TokenPositionKey>comparingLong(rk -> rk.getRange().getBegin())
-            .thenComparingLong(rk -> -rk.getRange().getEnd())
-            .thenComparingInt(rk -> rk.getActId())
-    );
+    private NavigableMap<TokenPositionKey, TokenActivation> tokenPosBeginIndex = new TreeMap<>();
 
-    private NavigableMap<TokenPositionKey, TokenActivation> tokenPosEndIndex = new TreeMap<>(Comparator
-            .<TokenPositionKey>comparingLong(rk -> rk.getRange().getEnd())
-            .thenComparingLong(rk -> -rk.getRange().getBegin())
-            .thenComparingInt(rk -> rk.getActId())
-    );
+    private NavigableMap<TokenPositionKey, TokenActivation> tokenPosEndIndex = new TreeMap<>();
 
     public Document(Model model, String content) {
         super(model);
@@ -63,16 +55,16 @@ public class Document extends Thought {
 
     public void registerTokenActivation(TokenActivation tokenAct) {
         if(tokenAct.getTokenPosRange() != null) {
-            tokenPosBeginIndex.put(new TokenPositionKey(tokenAct), tokenAct);
-            tokenPosEndIndex.put(new TokenPositionKey(tokenAct), tokenAct);
+            tokenPosBeginIndex.put(new TokenPositionKey(tokenAct.getTokenPosRange().getBegin(), tokenAct.getId()), tokenAct);
+            tokenPosEndIndex.put(new TokenPositionKey(tokenAct.getTokenPosRange().getBegin(), tokenAct.getId()), tokenAct);
         }
     }
 
     public Stream<TokenActivation> getRelatedTokensByTokenPosition(Slot slot, Range r) {
         return getPositionIndex(slot)
                 .subMap(
-                        new TokenPositionKey(new Range(r.getBegin(), Integer.MIN_VALUE), Integer.MIN_VALUE),
-                        new TokenPositionKey(new Range(r.getEnd(), Integer.MAX_VALUE), Integer.MAX_VALUE)
+                        new TokenPositionKey(r.getBegin(), Integer.MIN_VALUE),
+                        new TokenPositionKey(r.getEnd(), Integer.MAX_VALUE)
                 )
                 .values()
                 .stream();

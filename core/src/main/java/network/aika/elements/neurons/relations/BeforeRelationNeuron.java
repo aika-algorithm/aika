@@ -37,7 +37,6 @@ import static network.aika.text.Slot.END;
  */
 public class BeforeRelationNeuron extends LatentRelationNeuron {
 
-
     private Slot fromSlot;
     private Slot toSlot;
 
@@ -82,25 +81,25 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
     }
 
     private Slot getFromSlot(Direction dir) {
-        return dir == Direction.INPUT ?
+        return dir == OUTPUT ?
                 fromSlot :
                 toSlot;
     }
 
     private Slot getToSlot(Direction dir) {
-        return dir == Direction.INPUT ?
+        return dir == OUTPUT ?
                 toSlot :
                 fromSlot;
     }
 
     private int getRelBegin(Direction dir) {
-        return dir == Direction.INPUT ?
+        return dir == INPUT ?
                 beginOffset :
                 -endOffset;
     }
 
     private int getRelEnd(Direction dir) {
-        return dir == Direction.INPUT ?
+        return dir == INPUT ?
                 endOffset :
                 -beginOffset;
     }
