@@ -137,6 +137,6 @@ public class LabelUtil {
         if (rs == null)
             return null;
 
-        return rs.getInput().getRangeBegin() > 0 ? INPUT : OUTPUT;
+        return rs.getInput().getDirection();
     }
 }

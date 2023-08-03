@@ -73,6 +73,11 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
         );
     }
 
+    @Override
+    public Direction getDirection() {
+        return Direction.INPUT;
+    }
+
     private Slot getFromSlot(Direction dir) {
         return dir == Direction.INPUT ?
                 fromSlot :

@@ -18,6 +18,7 @@ package network.aika.elements.neurons.relations;
 
 import network.aika.Thought;
 import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.QueueSumField;
 import network.aika.fields.MultiInputField;
@@ -27,6 +28,8 @@ import network.aika.elements.activations.TokenActivation;
 
 import java.util.stream.Stream;
 
+import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.steps.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -48,4 +51,6 @@ public abstract class LatentRelationNeuron extends BindingNeuron {
     public LatentRelationActivation createActivation(Thought t) {
         return new LatentRelationActivation(t.createActivationId(), t, this);
     }
+
+    public abstract Direction getDirection();
 }

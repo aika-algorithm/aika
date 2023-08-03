@@ -25,6 +25,8 @@ import network.aika.text.Slot;
 
 import java.util.stream.Stream;
 
+import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.text.Slot.BEGIN;
 import static network.aika.text.Slot.END;
 
@@ -101,5 +103,19 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
         return dir == Direction.INPUT ?
                 endOffset :
                 -beginOffset;
+    }
+
+    public Direction getDirection() {
+        return beginOffset > 0 ?
+                INPUT :
+                OUTPUT;
+    }
+
+    public int getBeginOffset() {
+        return beginOffset;
+    }
+
+    public int getEndOffset() {
+        return endOffset;
     }
 }

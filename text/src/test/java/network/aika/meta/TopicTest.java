@@ -49,11 +49,6 @@ public class TopicTest extends TrainingParser {
         tokenizer = new SimpleWordTokenizer(templateModel);
     }
 
-    @Override
-    public boolean check(Synapse s, Activation iAct) {
-        return true;
-    }
-
     @Test
     public void testTopics() {
         process("a b", null, COUNTING);

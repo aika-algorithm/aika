@@ -101,7 +101,7 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
 
     @Override
     public void processLayout() {
-        Integer tp = getTokenPos();
+        Long tp = getTokenPos();
         if(tp == null)
             return;
 
@@ -115,10 +115,10 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
         );
     }
 
-    private Integer getTokenPos() {
-        Integer tp = link.getInput().getTokenPosRange();
+    private Long getTokenPos() {
+        Long tp = link.getInput().getTokenPosRange().getBegin();
         return tp != null ?
                 tp :
-                link.getOutput().getTokenPosRange();
+                link.getOutput().getTokenPosRange().getBegin();
     }
 }

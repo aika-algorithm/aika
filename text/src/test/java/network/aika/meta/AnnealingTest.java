@@ -48,12 +48,6 @@ public class AnnealingTest extends TrainingParser {
 
         tokenizer = new SimpleWordTokenizer(templateModel);
     }
-
-    @Override
-    public boolean check(Synapse s, Activation iAct) {
-        return true;
-    }
-
     @Test
     public void testAnnealing() {
         process("a b", null, COUNTING);
