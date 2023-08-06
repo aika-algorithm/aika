@@ -29,8 +29,8 @@ public class WordTemplateModel extends AbstractTemplateModel {
 
     private static final Logger log = LoggerFactory.getLogger(WordTemplateModel.class);
 
-    public WordTemplateModel(Model m) {
-        super(m);
+    public WordTemplateModel(Model m, Dictionary dict) {
+        super(m, dict);
     }
 
     @Override
@@ -44,7 +44,6 @@ public class WordTemplateModel extends AbstractTemplateModel {
                 patternNetTarget,
                 false,
                 0,
-                null,
                 null
         ).getProvider(true);
 

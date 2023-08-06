@@ -29,8 +29,8 @@ public class SyllableTemplateModel extends AbstractTemplateModel {
 
     private static final Logger log = LoggerFactory.getLogger(SyllableTemplateModel.class);
 
-    public SyllableTemplateModel(Model m) {
-        super(m);
+    public SyllableTemplateModel(Model m, Dictionary dict) {
+        super(m, dict);
     }
 
     @Override
@@ -44,7 +44,6 @@ public class SyllableTemplateModel extends AbstractTemplateModel {
                 patternNetTarget,
                 false,
                 0,
-                null,
                 null
         ).getProvider(true);
 

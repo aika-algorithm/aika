@@ -105,12 +105,24 @@ public class Document extends Thought {
         return ((Document)act.getThought()).getTextSegment(act.getCharRange());
     }
 
-    public TokenActivation addToken(TokenNeuron n, Integer pos, int begin, int end) {
-        return new TokenActivation(
+    public TokenActivation addToken(TokenNeuron n, Range posRange, Range charRange, double inputNet) {
+        TokenActivation act = new TokenActivation(
                 createActivationId(),
+                posRange,
+                charRange,
+                this,
+                n
+        );
+        act.setNet(inputNet);
+        return act;
+    }
+
+    public TokenActivation addToken(TokenNeuron n, Integer pos, int begin, int end, double inputNet) {
+        return addToken(
+                n,
                 pos != null ? new Range(pos, pos) : null,
                 new Range(begin, end),
-                this, n
+                inputNet
         );
     }
 

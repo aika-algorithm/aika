@@ -17,16 +17,18 @@
 package network.aika.meta;
 
 import network.aika.Model;
-import network.aika.elements.activations.TokenActivation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
+import network.aika.elements.synapses.PatternCategorySynapse;
+import network.aika.enums.sign.Sign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.Objects;
 
 import static network.aika.meta.NetworkMotivs.*;
+import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  *
@@ -38,12 +40,14 @@ public abstract class AbstractTemplateModel {
 
     protected Model model;
 
-    protected NeuronProvider inputTokenCategory;
-    protected NeuronProvider inputToken;
+    protected Dictionary dictionary;
+
     public NeuronProvider relPT;
     public NeuronProvider relNT;
 
-    public NeuronProvider inhibitoryN;
+    public NeuronProvider outerInhibitoryN;
+
+    public NeuronProvider primaryBNInhibitoryN;
 
     protected NeuronProvider inhibCat;
 
@@ -51,20 +55,17 @@ public abstract class AbstractTemplateModel {
 
     public NeuronProvider primaryBN;
 
-    protected double inputPatternNetTarget = 5.0;
     protected double patternNetTarget = 0.7;
 
     protected static double POS_MARGIN = 1.0;
     protected static double NEG_MARGIN_LEFT = 1.2;
     protected static double NEG_MARGIN_RIGHT = 1.1;
 
-    public AbstractTemplateModel(Model m) {
+    public AbstractTemplateModel(Model m, Dictionary dict) {
         model = m;
+        dictionary = dict;
     }
 
-    public NeuronProvider getInputTokenCategory() {
-        return inputTokenCategory;
-    }
 
     public NeuronProvider getRelationPreviousToken() {
         return relPT;
@@ -74,8 +75,8 @@ public abstract class AbstractTemplateModel {
         return relNT;
     }
 
-    public NeuronProvider getInhibitoryNeuron() {
-        return inhibitoryN;
+    public NeuronProvider getOuterInhibitoryNeuron() {
+        return outerInhibitoryN;
     }
 
     public NeuronProvider getInhibitoryCategory() {
@@ -86,18 +87,24 @@ public abstract class AbstractTemplateModel {
         return patternN;
     }
 
-    public NeuronProvider getInputToken() {
-        return inputToken;
+
+    public void initInputTokenWeights() {
+        model.getAllNeurons()
+                .map(NeuronProvider::getNeuron)
+                .filter(TokenNeuron.class::isInstance)
+                .map(TokenNeuron.class::cast)
+                .map(n -> n.getOutputSynapseByType(PatternCategorySynapse.class))
+                .filter(Objects::nonNull)
+                .forEach(this::mapSurprisalToWeight);
     }
 
-    public double getInputPatternNetTarget() {
-        return inputPatternNetTarget;
-    }
+    private void mapSurprisalToWeight(PatternCategorySynapse s) {
+        double surprisal = s.getInput().getSurprisal(Sign.POS, null, false);
 
-    public void setTokenInputNet(List<TokenActivation> tokenActs) {
-        for(TokenActivation tAct: tokenActs) {
-            tAct.setNet(inputPatternNetTarget);
-        }
+        double weight = 1.0 + (-0.1 * surprisal);
+        s.setWeight(weight);
+
+        log.debug("Set category synapse weight for token: " + s.getInput().getLabel() + " (weight: " + weight + " surprisal: " + surprisal + ")");
     }
 
     public abstract String getPatternType();
@@ -111,11 +118,18 @@ public abstract class AbstractTemplateModel {
         makeAbstract((PatternNeuron) patternN.getNeuron());
 
 
-        inhibitoryN = new OuterInhibitoryNeuron()
+        outerInhibitoryN = new OuterInhibitoryNeuron()
                 .init(model, "I")
                 .getProvider(true);
 
-        makeAbstract((OuterInhibitoryNeuron) inhibitoryN.getNeuron());
+        makeAbstract((OuterInhibitoryNeuron) outerInhibitoryN.getNeuron());
+
+
+        primaryBNInhibitoryN = new InnerInhibitoryNeuron()
+                .init(model, "I")
+                .getProvider(true);
+
+        makeAbstract((InnerInhibitoryNeuron) primaryBNInhibitoryN.getNeuron());
 
         log.info(getPatternType() + " Pattern: netTarget:" + patternNetTarget);
 
@@ -131,18 +145,7 @@ public abstract class AbstractTemplateModel {
         relNT = BeforeRelationNeuron.lookupRelation(model, 1, 1)
                 .getProvider(true);
 
-        inputToken = model.lookupNeuronByLabel("Abstract Input Token", l ->
-                new TokenNeuron()
-                        .init(model, l)
-        ).getProvider(true);
-
-        inputToken.getNeuron()
-                .setBias(inputPatternNetTarget);
-
-        inputTokenCategory = makeAbstract((PatternNeuron) inputToken.getNeuron())
-                .getProvider(true);
-
-        log.info("Input Token: netTarget:" + inputPatternNetTarget);
+        dictionary.initStaticNeurons();
     }
 
     protected abstract void initTemplateBindingNeurons();
@@ -162,7 +165,6 @@ public abstract class AbstractTemplateModel {
                         patternNetTarget,
                         pos >= optionalStart,
                         dir * pos,
-                        dir * lastPos,
                         lastSylBN
                 );
             } else {
@@ -180,7 +182,6 @@ public abstract class AbstractTemplateModel {
             double patternNetTarget,
             boolean isOptional,
             int pos,
-            Integer lastPos,
             BindingNeuron lastBN
     ) {
         double netTarget = 2.5;
@@ -188,17 +189,17 @@ public abstract class AbstractTemplateModel {
         log.info("Strong Binding-Neuron: netTarget:" + netTarget);
 
         BindingNeuron bn = addBindingNeuron(
-                inputToken.getNeuron(),
+                dictionary.getInputToken().getNeuron(),
                 "Abstract (S) Pos:" + pos,
                 10.0,
-                inputPatternNetTarget,
+                dictionary.getInputPatternNetTarget(),
                 netTarget
         );
         makeAbstract(bn);
 
-        addOuterNegativeFeedbackLoop(
+        addOuterInhibitoryLoop(
                 bn,
-                inhibitoryN.getNeuron(),
+                outerInhibitoryN.getNeuron(),
                 getNegMargin(pos) * -netTarget
         );
 
@@ -213,6 +214,12 @@ public abstract class AbstractTemplateModel {
                     rel,
                     5.0,
                     10.0
+            );
+        } else {
+            addInnerInhibitoryLoop(
+                    bn,
+                    primaryBNInhibitoryN.getNeuron(),
+                    getNegMargin(pos) * -netTarget
             );
         }
 
@@ -243,18 +250,18 @@ public abstract class AbstractTemplateModel {
         log.info("Weak Binding-Neuron: netTarget:" + netTarget);
 
         BindingNeuron bn = addBindingNeuron(
-                inputToken.getNeuron(),
+                dictionary.getInputToken().getNeuron(),
                 "Abstract (W) Pos:" + pos,
                 10.0,
-                inputPatternNetTarget,
+                dictionary.getInputPatternNetTarget(),
                 netTarget
         );
 
         makeAbstract(bn);
 
-        addOuterNegativeFeedbackLoop(
+        addOuterInhibitoryLoop(
                 bn,
-                inhibitoryN.getNeuron(),
+                outerInhibitoryN.getNeuron(),
                 getNegMargin(pos) * -netTarget
         );
 
@@ -283,20 +290,6 @@ public abstract class AbstractTemplateModel {
         return bn;
     }
 
-    public TokenNeuron lookupInputToken(String label) {
-        return model.lookupNeuronByLabel(label, l -> {
-                    TokenNeuron inputTokenN = inputToken.getNeuron();
-                    TokenNeuron n = inputTokenN.instantiateTemplate()
-                            .init(model, label);
-
-                    n.setTokenLabel(label);
-                    n.setAllowTraining(false);
-
-                    return n;
-                }
-        );
-    }
-
     private double getNegMargin(int pos) {
         return pos >= 0 ?
                 NEG_MARGIN_RIGHT :
@@ -305,5 +298,9 @@ public abstract class AbstractTemplateModel {
 
     public Model getModel() {
         return model;
+    }
+
+    public Dictionary getDictionary() {
+        return dictionary;
     }
 }

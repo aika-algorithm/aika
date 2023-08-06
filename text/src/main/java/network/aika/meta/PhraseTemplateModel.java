@@ -32,17 +32,12 @@ public class PhraseTemplateModel extends AbstractTemplateModel {
 
     private static final Logger log = LoggerFactory.getLogger(PhraseTemplateModel.class);
 
-    TypedTextSectionModel textSectionModel;
-    TopicModel topicModel;
 
     NeuronProvider upperCaseN;
 
 
-    public PhraseTemplateModel(Model m) {
-        super(m);
-
-        textSectionModel = new TypedTextSectionModel(this);
-        topicModel = new TopicModel(this);
+    public PhraseTemplateModel(Model m, Dictionary dict) {
+        super(m, dict);
     }
 
     @Override
@@ -59,21 +54,12 @@ public class PhraseTemplateModel extends AbstractTemplateModel {
         return "Phrase";
     }
 
-    public TypedTextSectionModel getTextSectionModel() {
-        return textSectionModel;
-    }
-
-    public TopicModel getTopicModel() {
-        return topicModel;
-    }
-
     @Override
     protected void initTemplateBindingNeurons() {
         primaryBN = createStrongBindingNeuron(
                 patternNetTarget,
                 false,
                 0,
-                null,
                 null
         ).getProvider(true);
 
@@ -92,8 +78,5 @@ public class PhraseTemplateModel extends AbstractTemplateModel {
                 5,
                 -1
         );
-
-        textSectionModel.initTextSectionTemplates();
-        topicModel.initTopicTemplates();
     }
 }

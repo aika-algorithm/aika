@@ -17,6 +17,7 @@
 package experiment;
 
 import network.aika.meta.AbstractTemplateModel;
+import network.aika.meta.Dictionary;
 import network.aika.meta.LabelUtil;
 import network.aika.meta.SyllableTemplateModel;
 import network.aika.Model;
@@ -38,6 +39,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
 import static network.aika.parser.ParserPhase.COUNTING;
@@ -51,9 +53,11 @@ import static network.aika.utils.Utils.doubleToString;
 public class SyllablesExperiment extends TrainingParser<Context> {
 
     Model model;
+
+    Dictionary dict;
+    Tokenizer charTokenizer;
     AbstractTemplateModel syllableModel;
 
-    Tokenizer charTokenizer;
 
     ExperimentLogger experimentLogger;
 
@@ -62,12 +66,14 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     public SyllablesExperiment() {
         model = new Model();
 
-        syllableModel = new SyllableTemplateModel(model);
+        dict = new Dictionary(model);
+
+        syllableModel = new SyllableTemplateModel(model, dict);
         syllableModel.initStaticNeurons();
 
         model.setN(0);
 
-        charTokenizer = new SimpleCharTokenizer(syllableModel);
+        charTokenizer = new SimpleCharTokenizer(dict);
     }
 
     @Override
@@ -87,13 +93,15 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     }
 
     @Override
-    protected AbstractTemplateModel getTemplateModel() {
-        return syllableModel;
+    protected void prepareInputs(Document doc, Context context) {
+        charTokenizer.tokenize(doc, context, (n, pos, begin, end) ->
+                doc.addToken(n, pos, begin, end, dict.getInputPatternNetTarget())
+        );
     }
 
     @Override
-    public Tokenizer getTokenizer() {
-        return charTokenizer;
+    protected AbstractTemplateModel getTemplateModel() {
+        return syllableModel;
     }
 
     public static void main(String[] args) throws IOException {

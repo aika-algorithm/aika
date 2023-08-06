@@ -17,15 +17,13 @@
 package network.aika;
 
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
+import network.aika.meta.Dictionary;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static network.aika.TestHelper.initPatternTheCat;
 import static network.aika.TestHelper.initPatternTheDog;
-import static network.aika.TestUtils.*;
-
+import static network.aika.TestUtils.processTokens;
 
 /**
  *
@@ -36,6 +34,7 @@ public class TheDogAndCatTest {
     @Test
     public void testTheDogAndTheCat()  {
         Model m = new Model();
+        Dictionary dict = new Dictionary(m);
 
         OuterInhibitoryNeuron inhibNThe = new OuterInhibitoryNeuron()
                 .init(m, "I-the");
@@ -46,18 +45,18 @@ public class TheDogAndCatTest {
         OuterInhibitoryNeuron inhibNDog = new OuterInhibitoryNeuron()
                 .init(m, "I-dog");
 
-        initPatternTheCat(m, inhibNThe, inhibNCat, 3);
-        initPatternTheDog(m, inhibNThe, inhibNDog, 3);
+        initPatternTheCat(m, dict, inhibNThe, inhibNCat, 3);
+        initPatternTheDog(m, dict, inhibNThe, inhibNDog, 3);
 
         Document doc = new Document(m, "the dog and the cat");
 
-        Config c = getConfig()
+        Config c = new Config()
                 .setAlpha(0.99)
                 .setLearnRate(0.01)
                 .setTrainingEnabled(false);
         doc.setConfig(c);
 
-        processTokens(m, doc, List.of("the", "dog", "and", "the", "cat"));
+        processTokens(m, doc, "the", "dog", "and", "the", "cat");
 
         doc.postProcessing();
         doc.updateModel();

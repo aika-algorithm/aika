@@ -27,6 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import java.util.Set;
+
 import static network.aika.parser.ParserPhase.TRAINING;
 import static network.aika.steps.Phase.ANNEAL;
 import static network.aika.steps.Phase.INFERENCE;
@@ -39,8 +41,6 @@ import static network.aika.steps.keys.QueueKey.MAX_ROUND;
 public abstract class Parser<C extends Context> {
 
     protected static final Logger log = LoggerFactory.getLogger(Parser.class);
-
-    public abstract Tokenizer getTokenizer();
 
     protected Document initDocument(String txt, C context, ParserPhase phase) {
         Document doc = new Document(getTemplateModel().getModel(), txt);
@@ -76,20 +76,19 @@ public abstract class Parser<C extends Context> {
         return doc;
     }
 
-    protected void infer(Document doc, Context context, ParserPhase phase) {
+    protected void infer(Document doc, C context, ParserPhase phase) {
         if(phase == ParserPhase.TRAINING) {
     //        debugger = AIKADebugger.createAndShowGUI(doc);
         }
 
         doc.setFeedbackTriggerRound();
 
-        getTokenizer().tokenize(doc, context, (n, pos, begin, end) -> {
-            TokenActivation tAct = doc.addToken(n, pos, begin, end);
-            tAct.setNet(getTemplateModel().getInputPatternNetTarget());
-        });
+        prepareInputs(doc, context);
 
         doc.process(MAX_ROUND, INFERENCE);
     }
+
+    protected abstract void prepareInputs(Document doc, C context);
 
     public void anneal(Document doc) {
         doc.anneal();

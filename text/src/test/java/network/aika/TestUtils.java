@@ -17,19 +17,8 @@
 package network.aika;
 
 import network.aika.elements.neurons.*;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.synapses.*;
+import network.aika.meta.NetworkMotivs;
 import network.aika.text.Document;
-import network.aika.elements.activations.TokenActivation;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static network.aika.enums.Scope.INPUT;
-import static network.aika.enums.Scope.SAME;
-import static network.aika.steps.Phase.INFERENCE;
-import static network.aika.steps.keys.QueueKey.MAX_ROUND;
-
 
 /**
  *
@@ -37,83 +26,17 @@ import static network.aika.steps.keys.QueueKey.MAX_ROUND;
  */
 public class TestUtils {
 
-    public static void processTokens(Model m, Document doc, Iterable<String> tokens) {
-        int i = 0;
-        int pos = 0;
+    public static void processTokens(Model m, Document doc, String... tokens) {
 
-        List<TokenActivation> tokenActs = new ArrayList<>();
-        for(String t: tokens) {
-            int j = i + t.length();
 
-            tokenActs.add(
-                    addToken(m, doc, t, pos++, i,  j)
-            );
-
-            i = j + 1;
-        }
-
-        process(doc, tokenActs);
     }
-
-    public static void process(Document doc, List<TokenActivation> tokenActs) {
-        for(TokenActivation tAct: tokenActs) {
-            tAct.setNet(10.0);
-            doc.process(MAX_ROUND, INFERENCE);
-        }
-
-        doc.anneal();
-
-        doc.updateModel();
-    }
-
-    public static TokenActivation addToken(Model m, Document doc, String t, Integer pos, int i, int j) {
-        return doc.addToken(lookupToken(m, t), pos, i, j);
-    }
-
-    public static TokenNeuron lookupToken(Model m, String tokenLabel) {
-        return m.lookupNeuronByLabel(tokenLabel, l -> {
-            TokenNeuron n = new TokenNeuron();
-            n.addProvider(m);
-
-            n.setTokenLabel(l);
-            n.setLabel(l);
-            n.setAllowTraining(false);
-            return n;
-        });
-    }
-
-    public static Config getConfig() {
-        return new Config() {
-            public String getLabel(Activation act) {
-               // Activation iAct = bs.getOriginActivation();
-                Neuron n = act.getNeuron();
-
-                if(n instanceof BindingNeuron) {
-                    return "B-"; // + trimPrefix(iAct.getLabel());
-                } else if (n instanceof PatternNeuron) {
-                    return "P-" + ((Document)act.getThought()).getContent();
-                }else if (n instanceof CategoryNeuron) {
-                    return "C-" + ((Document)act.getThought()).getContent();
-                } else {
-                    return "I-"; // + trimPrefix(iAct.getLabel());
-                }
-            }
-        };
-    }
-
 
     public static OuterInhibitoryNeuron addOuterInhibitoryLoop(OuterInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
         if(inhibN == null)
             return null;
 
         for(BindingNeuron bn: bns) {
-            new OuterInhibitorySynapse(sameInhibSynapse ? SAME : INPUT)
-                    .setWeight(1.0)
-                    .init(bn, inhibN);
-
-            new OuterNegativeFeedbackSynapse()
-                    .setWeight(-20.0)
-                    .init(inhibN, bn);
+            NetworkMotivs.addOuterInhibitoryLoop(bn, inhibN, -20.0);
         }
         return inhibN;
     }
@@ -123,13 +46,7 @@ public class TestUtils {
             return null;
 
         for(BindingNeuron bn: bns) {
-            new InnerInhibitorySynapse(sameInhibSynapse ? SAME : INPUT)
-                    .setWeight(1.0)
-                    .init(bn, inhibN);
-
-            new InnerNegativeFeedbackSynapse()
-                    .setWeight(-20.0)
-                    .init(inhibN, bn);
+            NetworkMotivs.addInnerInhibitoryLoop(bn, inhibN, -20.0);
         }
         return inhibN;
     }
@@ -139,25 +56,8 @@ public class TestUtils {
                 .init(m, "P-" + label);
 
         for(BindingNeuron bn: bns) {
-            new PatternSynapse()
-                    .setWeight(10.0)
-                    .init(bn, patternN)
-                    .adjustBias();
-
-            createPositiveFeedbackSynapse(new PositiveFeedbackSynapse(), patternN, bn, 0.0, 10.0);
+            NetworkMotivs.addPositiveFeedbackLoop(bn, patternN, 10.0, 1.0, 2.0, 0.1, false);
         }
         return patternN;
-    }
-
-    public static PositiveFeedbackSynapse createPositiveFeedbackSynapse(PositiveFeedbackSynapse s, PatternNeuron input, BindingNeuron output, double weight, double feedbackWeight) {
-        s.setInput(input);
-        s.setOutput(output);
-        s.setWeight(weight);
-
-        s.getPInput().addOutputSynapse(s);
-        s.getPOutput().addInputSynapse(s);
-        s.getOutput().getBias().receiveUpdate(false, -weight);
-        s.getWeight().receiveUpdate(false, feedbackWeight);
-        return s;
     }
 }

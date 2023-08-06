@@ -22,12 +22,13 @@ import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.InputPatternSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SamePatternSynapse;
+import network.aika.meta.Dictionary;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import static network.aika.TestUtils.initPatternLoop;
+import static network.aika.TestUtils.processTokens;
 
-import static network.aika.TestUtils.*;
 
 /**
  *
@@ -41,12 +42,13 @@ public class ABCDTest {
     @Test
     public void testABCD() throws InterruptedException {
         Model m = new Model();
+        Dictionary dict = new Dictionary(m);
 
-        PatternNeuron a_IN = lookupToken(m, "a");
+        PatternNeuron a_IN = dict.lookupInputToken("a");
 
-        PatternNeuron b_IN = lookupToken(m, "b");
-        PatternNeuron c_IN = lookupToken(m, "c");
-        PatternNeuron d_IN = lookupToken(m, "d");
+        PatternNeuron b_IN = dict.lookupInputToken("b");
+        PatternNeuron c_IN = dict.lookupInputToken("c");
+        PatternNeuron d_IN = dict.lookupInputToken("d");
 
         // Pattern ab
         BindingNeuron a_abBN = new BindingNeuron().init(m, "a (ab)");
@@ -94,7 +96,7 @@ public class ABCDTest {
                 .setWeight(10.0)
                 .init(b_IN, b_bcBN)
                 .adjustBias();
-        addOuterInhibitoryLoop(new OuterInhibitoryNeuron().init(m, "I-b"), false, b_abBN, b_bcBN);
+        TestUtils.addOuterInhibitoryLoop(new OuterInhibitoryNeuron().init(m, "I-b"), false, b_abBN, b_bcBN);
         b_abBN.setBias(3.0);
         b_bcBN.setBias(2.5);
 
@@ -143,13 +145,13 @@ public class ABCDTest {
 
         Document doc = new Document(m, "abcd");
 
-        Config c = getConfig()
+        Config c = new Config()
                 .setAlpha(0.99)
                 .setLearnRate(0.01)
                 .setTrainingEnabled(true);
         doc.setConfig(c);
 
-        processTokens(m, doc, List.of("a", "b", "c", "d"));
+        processTokens(m, doc, "a", "b", "c", "d");
 
         doc.postProcessing();
         doc.updateModel();

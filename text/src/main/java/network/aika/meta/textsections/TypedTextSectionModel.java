@@ -52,14 +52,13 @@ public class TypedTextSectionModel extends TextSectionModel {
         headlineModel = new HeadlineModel(phraseModel);
     }
 
-    public void addTargetTSHeadline(Document doc, Set<String> headlineLabels, int begin, int end) {
-        log.info(doc.getContent() + " : " + headlineLabels.stream().collect(Collectors.joining(", ")));
-    }
-
     public void addTargetTextSections(Document doc, Set<String> tsLabels) {
         log.info(doc.getContent() + " : " + tsLabels.stream().collect(Collectors.joining(", ")));
     }
 
+    public HeadlineModel getHeadlineModel() {
+        return headlineModel;
+    }
 
     public void initTextSectionTemplates() {
         super.initTextSectionTemplates();
@@ -114,7 +113,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 .getProvider(true);
 
 
-        addInnerNegativeFeedbackLoop(
+        addInnerInhibitoryLoop(
                 beginBN.getNeuron(),
                 tsBeginInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS_BEGIN * -netTarget
@@ -124,7 +123,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 .init(model, "I TS End")
                 .getProvider(true);
 
-        addInnerNegativeFeedbackLoop(
+        addInnerInhibitoryLoop(
                 endBN.getNeuron(),
                 tsBeginInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS_END * -netTarget
@@ -134,19 +133,19 @@ public class TypedTextSectionModel extends TextSectionModel {
                 .init(model, "I TS")
                 .getProvider(true);
 
-        addOuterNegativeFeedbackLoop(
+        addOuterInhibitoryLoop(
                 textSectionHintBN.getNeuron(),
                 tsInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS * -netTarget
         );
 
-        addOuterNegativeFeedbackLoop(
+        addOuterInhibitoryLoop(
                 beginBN.getNeuron(),
                 tsInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS * -netTarget
         );
 
-        addOuterNegativeFeedbackLoop(
+        addOuterInhibitoryLoop(
                 endBN.getNeuron(),
                 tsInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS * -netTarget

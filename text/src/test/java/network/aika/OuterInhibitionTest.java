@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.SortedSet;
 
-import static network.aika.TestUtils.*;
 import static network.aika.enums.Scope.INPUT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -68,13 +67,13 @@ public class OuterInhibitionTest {
 
         Document doc = new Document(m, "test");
 
-        Config c = getConfig()
+        Config c = new Config()
                 .setAlpha(0.99)
                 .setLearnRate(0.01)
                 .setTrainingEnabled(true);
         doc.setConfig(c);
 
-        doc.addToken(in, 0, 0, 4);
+        doc.addToken(in, 0, 0, 4, 5.0);
 
         doc.postProcessing();
         doc.updateModel();

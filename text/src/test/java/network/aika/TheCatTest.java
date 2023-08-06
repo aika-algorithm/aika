@@ -17,13 +17,12 @@
 package network.aika;
 
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
+import network.aika.meta.Dictionary;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static network.aika.TestHelper.initPatternTheCat;
-import static network.aika.TestUtils.*;
+import static network.aika.TestUtils.processTokens;
 
 
 /**
@@ -41,20 +40,21 @@ public class TheCatTest {
 
     private void performTest(int variant) {
         Model m = new Model();
+        Dictionary dict = new Dictionary(m);
 
         OuterInhibitoryNeuron inhibNThe = null; //new InhibitoryNeuron().init(m, "I-the");
         OuterInhibitoryNeuron inhibNCat = null; //new InhibitoryNeuron().init(m, "I-cat");
-        initPatternTheCat(m, inhibNThe, inhibNCat, variant);
+        initPatternTheCat(m, dict, inhibNThe, inhibNCat, variant);
 
         Document doc = new Document(m, "the cat");
 
-        Config c = getConfig()
+        Config c = new Config()
                 .setAlpha(0.99)
                 .setLearnRate(0.01)
                 .setTrainingEnabled(true);
         doc.setConfig(c);
 
-        processTokens(m, doc, List.of("the", "cat"));
+        processTokens(m, doc, "the", "cat");
 
         doc.postProcessing();
         doc.updateModel();

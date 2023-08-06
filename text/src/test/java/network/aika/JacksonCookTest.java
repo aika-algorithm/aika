@@ -20,10 +20,10 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.*;
+import network.aika.meta.Dictionary;
 import network.aika.text.Document;
+import network.aika.tokenizer.SimpleWordTokenizer;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static network.aika.TestUtils.*;
 
@@ -35,6 +35,8 @@ public class JacksonCookTest {
 
     protected static double PASSIVE_SYNAPSE_WEIGHT = 0.0;
 
+    private SimpleWordTokenizer tokenizer;
+
     @Test
     public void testJacksonCook()  {
         setupJacksonCookTest();
@@ -42,9 +44,12 @@ public class JacksonCookTest {
 
     public void setupJacksonCookTest() {
         Model m = new Model();
+        Dictionary dict = new Dictionary(m);
 
-        TokenNeuron jacksonIN = lookupToken(m, "Jackson");
-        TokenNeuron cookIN = lookupToken(m, "Cook");
+        SimpleWordTokenizer tokenizer = new SimpleWordTokenizer(dict);
+
+        TokenNeuron jacksonIN = dict.lookupInputToken("Jackson");
+        TokenNeuron cookIN = dict.lookupInputToken("Cook");
 
         LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -1, -1);
 
@@ -216,13 +221,13 @@ public class JacksonCookTest {
 
         Document doc = new Document(m, "Jackson Cook");
 
-        Config c = getConfig()
+        Config c = new Config()
                 .setAlpha(0.99)
                 .setLearnRate(0.01)
                 .setTrainingEnabled(true);
         doc.setConfig(c);
 
-        processTokens(m, doc, List.of("Jackson", "Cook"));
+        processTokens(m, doc, "Jackson", "Cook");
 
         doc.postProcessing();
         doc.updateModel();

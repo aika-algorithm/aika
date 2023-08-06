@@ -18,6 +18,7 @@ package network.aika.tokenizer;
 
 
 import network.aika.meta.AbstractTemplateModel;
+import network.aika.meta.Dictionary;
 import network.aika.parser.Context;
 import network.aika.text.Document;
 
@@ -27,10 +28,10 @@ import network.aika.text.Document;
  */
 public class SimpleWordTokenizer implements Tokenizer {
 
-    private AbstractTemplateModel model;
+    private Dictionary dict;
 
-    public SimpleWordTokenizer(AbstractTemplateModel model) {
-        this.model = model;
+    public SimpleWordTokenizer(Dictionary dict) {
+        this.dict = dict;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class SimpleWordTokenizer implements Tokenizer {
             int j = i + w.length();
 
             tokenConsumer.processToken(
-                    model.lookupInputToken(w),
+                    dict.lookupInputToken(w),
                     pos,
                     i,
                     j

@@ -50,7 +50,7 @@ public class PropagateTest {
 
         Document doc = new Document(m, "test");
         doc.setConfig(c);
-        doc.addToken(in, 0, 0, 4);
+        doc.addToken(in, 0, 0, 4, 5.0);
         log.info("" + doc);
 
         doc.disconnect();

@@ -80,7 +80,7 @@ public class SuspensionTest {
 
         Document doc = new Document(m, "test");
         doc.setConfig(c);
-        doc.addToken(inStrong.getNeuron(), 0, 0, 4);
+        doc.addToken(inStrong.getNeuron(), 0, 0, 4, 5.0);
     }
 
 

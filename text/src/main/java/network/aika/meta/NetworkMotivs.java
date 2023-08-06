@@ -32,9 +32,6 @@ import static network.aika.meta.AbstractTemplateModel.POS_MARGIN;
 public class NetworkMotivs {
     private static final Logger log = LoggerFactory.getLogger(NetworkMotivs.class);
 
-    protected static double PASSIVE_SYNAPSE_WEIGHT = 0.0;
-
-    private static final String CATEGORY_LABEL = " Category";
 
     public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double inputNetTarget, double netTarget) {
         BindingNeuron bn = new BindingNeuron()
@@ -52,7 +49,7 @@ public class NetworkMotivs {
         return bn;
     }
 
-    public static void addOuterNegativeFeedbackLoop(BindingNeuron bn, OuterInhibitoryNeuron in, double weight) {
+    public static void addOuterInhibitoryLoop(BindingNeuron bn, OuterInhibitoryNeuron in, double weight) {
         new OuterInhibitorySynapse(Scope.INPUT)
                 .setWeight(1.0)
                 .init(bn, in);
@@ -63,7 +60,7 @@ public class NetworkMotivs {
                 .adjustBias();
     }
 
-    public static void addInnerNegativeFeedbackLoop(BindingNeuron bn, InnerInhibitoryNeuron in, double weight) {
+    public static void addInnerInhibitoryLoop(BindingNeuron bn, InnerInhibitoryNeuron in, double weight) {
         new InnerInhibitorySynapse(Scope.INPUT)
                 .setWeight(1.0)
                 .init(bn, in);
@@ -127,44 +124,5 @@ public class NetworkMotivs {
                 .adjustBias(prevValueTarget);
 
         log.info("  " + spSyn + " targetNetContr:" + -spSyn.getSynapseBias().getValue());
-    }
-
-    public static PatternCategoryNeuron makeAbstract(PatternNeuron n) {
-        PatternCategoryNeuron patternCategory = new PatternCategoryNeuron()
-                .init(n.getModel(), n.getLabel() + CATEGORY_LABEL);
-
-        patternCategory.getProvider(true);
-
-        new PatternCategoryInputSynapse()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT)
-                .init(patternCategory, n);
-
-        return patternCategory;
-    }
-
-    public static InhibitoryCategoryNeuron makeAbstract(OuterInhibitoryNeuron n) {
-        InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(Scope.SAME)
-                .init(n.getModel(), n.getLabel() + CATEGORY_LABEL);
-
-        inhibCategory.getProvider(true);
-
-        new InhibitoryCategoryInputSynapse()
-                .setWeight(1.0)
-                .init(inhibCategory, n);
-
-        return inhibCategory;
-    }
-
-    public static BindingCategoryNeuron makeAbstract(BindingNeuron n) {
-        BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron()
-                .init(n.getModel(), n.getLabel() + CATEGORY_LABEL);
-
-        bindingCategory.getProvider(true);
-
-        new BindingCategoryInputSynapse()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT)
-                .init(bindingCategory, n);
-
-        return bindingCategory;
     }
 }

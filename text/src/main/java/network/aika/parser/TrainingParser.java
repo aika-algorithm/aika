@@ -33,7 +33,6 @@ public abstract class TrainingParser<C extends Context> extends Parser<C> implem
 
     protected static final Logger log = LoggerFactory.getLogger(TrainingParser.class);
 
-    protected C currentContext;
 
     @Override
     protected Document initDocument(String txt, C context, ParserPhase phase) {
@@ -53,7 +52,6 @@ public abstract class TrainingParser<C extends Context> extends Parser<C> implem
 
         try {
             infer(doc, context, phase);
-            addTargets(doc, context);
             anneal(doc);
             train(doc);
         } catch(Exception e) {
@@ -63,10 +61,6 @@ public abstract class TrainingParser<C extends Context> extends Parser<C> implem
         }
 
         return doc;
-    }
-
-    protected void addTargets(Document doc, C context) {
-        currentContext = context;
     }
 
     protected void train(Document doc) {

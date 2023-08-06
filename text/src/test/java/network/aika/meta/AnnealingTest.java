@@ -17,13 +17,15 @@
 package network.aika.meta;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.synapses.Synapse;
+import network.aika.parser.Context;
 import network.aika.parser.TrainingParser;
+import network.aika.text.Document;
 import network.aika.tokenizer.SimpleWordTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
 
 import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.parser.ParserPhase.TRAINING;
@@ -34,20 +36,30 @@ import static network.aika.parser.ParserPhase.TRAINING;
  */
 public class AnnealingTest extends TrainingParser {
 
-    private AbstractTemplateModel templateModel;
+    private Dictionary dict;
     private Tokenizer tokenizer;
+    private AbstractTemplateModel templateModel;
 
     @BeforeEach
     public void init() {
         Model model = new Model();
+        dict = new Dictionary(model);
 
-        templateModel = new PhraseTemplateModel(model);
+        templateModel = new PhraseTemplateModel(model, dict);
         templateModel.initStaticNeurons();
 
         model.setN(0);
 
-        tokenizer = new SimpleWordTokenizer(templateModel);
+        tokenizer = new SimpleWordTokenizer(dict);
     }
+
+    @Override
+    protected void prepareInputs(Document doc, Context context) {
+        tokenizer.tokenize(doc, context, (n, pos, begin, end) ->
+            doc.addToken(n, pos, begin, end, dict.getInputPatternNetTarget())
+        );
+    }
+
     @Test
     public void testAnnealing() {
         process("a b", null, COUNTING);
@@ -60,8 +72,4 @@ public class AnnealingTest extends TrainingParser {
         return templateModel;
     }
 
-    @Override
-    public Tokenizer getTokenizer() {
-        return tokenizer;
-    }
 }
