@@ -23,7 +23,7 @@ import network.aika.elements.synapses.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static network.aika.meta.sequences.SequenceTemplateModel.POS_MARGIN;
+import static network.aika.meta.sequences.SequenceModel.POS_MARGIN;
 
 /**
  *

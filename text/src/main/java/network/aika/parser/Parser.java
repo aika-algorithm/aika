@@ -19,7 +19,7 @@ package network.aika.parser;
 
 import network.aika.Config;
 import network.aika.debugger.AIKADebugger;
-import network.aika.meta.sequences.SequenceTemplateModel;
+import network.aika.meta.sequences.SequenceModel;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +53,7 @@ public abstract class Parser<C extends Context> {
         return doc;
     }
 
-    protected abstract SequenceTemplateModel getTemplateModel();
+    protected abstract SequenceModel getTemplateModel();
 
     protected AIKADebugger debugger = null;
 

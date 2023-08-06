@@ -18,7 +18,7 @@ package network.aika.meta.topics;
 
 import network.aika.Model;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.meta.sequences.PhraseTemplateModel;
+import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class TopicModel {
     private static final Logger log = LoggerFactory.getLogger(TopicModel.class);
 
-    private PhraseTemplateModel phraseModel;
+    private PhraseModel phraseModel;
 
     protected Model model;
 
@@ -42,7 +42,7 @@ public class TopicModel {
     protected NeuronProvider topicPatternCategory;
 
 
-    public TopicModel(PhraseTemplateModel phraseModel) {
+    public TopicModel(PhraseModel phraseModel) {
         this.phraseModel = phraseModel;
         model = phraseModel.getModel();
     }

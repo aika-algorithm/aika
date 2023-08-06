@@ -18,7 +18,7 @@ package network.aika.meta.textsections;
 
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
-import network.aika.meta.sequences.PhraseTemplateModel;
+import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     protected NeuronProvider tsInhibitoryN;
 
-    public TypedTextSectionModel(PhraseTemplateModel phraseModel) {
+    public TypedTextSectionModel(PhraseModel phraseModel) {
         super(phraseModel);
 
         headlineModel = new HeadlineModel(phraseModel);

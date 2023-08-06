@@ -35,9 +35,9 @@ import static network.aika.utils.NetworkUtils.makeAbstract;
  *
  * @author Lukas Molzberger
  */
-public abstract class SequenceTemplateModel {
+public abstract class SequenceModel {
 
-    private static final Logger log = LoggerFactory.getLogger(SequenceTemplateModel.class);
+    private static final Logger log = LoggerFactory.getLogger(SequenceModel.class);
 
     protected Model model;
 
@@ -62,7 +62,7 @@ public abstract class SequenceTemplateModel {
     public static double NEG_MARGIN_LEFT = 1.2;
     public static double NEG_MARGIN_RIGHT = 1.1;
 
-    public SequenceTemplateModel(Model m, Dictionary dict) {
+    public SequenceModel(Model m, Dictionary dict) {
         model = m;
         dictionary = dict;
     }

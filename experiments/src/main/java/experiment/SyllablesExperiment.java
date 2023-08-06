@@ -16,10 +16,10 @@
  */
 package experiment;
 
-import network.aika.meta.sequences.SequenceTemplateModel;
+import network.aika.meta.sequences.SequenceModel;
 import network.aika.meta.Dictionary;
 import network.aika.meta.LabelUtil;
-import network.aika.meta.sequences.SyllableTemplateModel;
+import network.aika.meta.sequences.SyllableModel;
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.*;
@@ -55,7 +55,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
 
     Dictionary dict;
     Tokenizer charTokenizer;
-    SequenceTemplateModel syllableModel;
+    SequenceModel syllableModel;
 
 
     ExperimentLogger experimentLogger;
@@ -67,7 +67,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
 
         dict = new Dictionary(model);
 
-        syllableModel = new SyllableTemplateModel(model, dict);
+        syllableModel = new SyllableModel(model, dict);
         syllableModel.initStaticNeurons();
 
         model.setN(0);
@@ -99,7 +99,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     }
 
     @Override
-    protected SequenceTemplateModel getTemplateModel() {
+    protected SequenceModel getTemplateModel() {
         return syllableModel;
     }
 

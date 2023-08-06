@@ -25,17 +25,17 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lukas Molzberger
  */
-public class WordTemplateModel extends SequenceTemplateModel {
+public class SyllableModel extends SequenceModel {
 
-    private static final Logger log = LoggerFactory.getLogger(WordTemplateModel.class);
+    private static final Logger log = LoggerFactory.getLogger(SyllableModel.class);
 
-    public WordTemplateModel(Model m, Dictionary dict) {
+    public SyllableModel(Model m, Dictionary dict) {
         super(m, dict);
     }
 
     @Override
     public String getPatternType() {
-        return "Word";
+        return "Syllable";
     }
 
     @Override
@@ -49,18 +49,10 @@ public class WordTemplateModel extends SequenceTemplateModel {
 
         expandContinueBindingNeurons(
                 patternNetTarget,
-                1,
+                2,
                 primaryBN.getNeuron(),
-                5,
+                4,
                 1
-        );
-
-        expandContinueBindingNeurons(
-                patternNetTarget,
-                1,
-                primaryBN.getNeuron(),
-                5,
-                -1
         );
     }
 }

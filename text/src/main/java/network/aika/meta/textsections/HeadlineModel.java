@@ -21,7 +21,7 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.ContainsRelationNeuron;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.meta.sequences.PhraseTemplateModel;
+import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import network.aika.text.Range;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class HeadlineModel {
 
     protected Model model;
 
-    private PhraseTemplateModel phraseModel;
+    private PhraseModel phraseModel;
 
     protected NeuronProvider headlineTargetInput;
 
@@ -59,7 +59,7 @@ public class HeadlineModel {
     protected double headlineInputPatternNetTarget = 5.0;
 
 
-    public HeadlineModel(PhraseTemplateModel phraseModel) {
+    public HeadlineModel(PhraseModel phraseModel) {
         this.phraseModel = phraseModel;
         this.model = phraseModel.getModel();
     }

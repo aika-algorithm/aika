@@ -18,8 +18,8 @@ package network.aika.meta;
 
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
-import network.aika.meta.sequences.SequenceTemplateModel;
-import network.aika.meta.sequences.PhraseTemplateModel;
+import network.aika.meta.sequences.SequenceModel;
+import network.aika.meta.sequences.PhraseModel;
 import network.aika.meta.textsections.TypedTextSectionModel;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;
@@ -46,7 +46,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     private Dictionary dictionary;
 
     private Tokenizer tokenizer;
-    private PhraseTemplateModel templateModel;
+    private PhraseModel templateModel;
     private TypedTextSectionModel textSectionModel;
 
 /*    private String exampleTxt = "Java Softwaredeveloper\n" +
@@ -71,7 +71,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         dictionary = new Dictionary(model);
         tokenizer = new SimpleWordTokenizer(dictionary);
 
-        templateModel = new PhraseTemplateModel(model, dictionary);
+        templateModel = new PhraseModel(model, dictionary);
         templateModel.initStaticNeurons();
 
         textSectionModel = new TypedTextSectionModel(templateModel);
@@ -124,7 +124,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     }
 
     @Override
-    protected SequenceTemplateModel getTemplateModel() {
+    protected SequenceModel getTemplateModel() {
         return templateModel;
     }
 

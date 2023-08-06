@@ -27,15 +27,15 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lukas Molzberger
  */
-public class PhraseTemplateModel extends SequenceTemplateModel {
+public class PhraseModel extends SequenceModel {
 
-    private static final Logger log = LoggerFactory.getLogger(PhraseTemplateModel.class);
+    private static final Logger log = LoggerFactory.getLogger(PhraseModel.class);
 
 
     NeuronProvider upperCaseN;
 
 
-    public PhraseTemplateModel(Model m, Dictionary dict) {
+    public PhraseModel(Model m, Dictionary dict) {
         super(m, dict);
     }
 
