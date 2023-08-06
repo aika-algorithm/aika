@@ -33,7 +33,7 @@ public class SamePatternLink extends BindingNeuronLink<SamePatternSynapse, Bindi
     }
 
     @Override
-    public void propagateRangeOrTokenPos() {
+    public void propagateRanges() {
     }
 
     @Override

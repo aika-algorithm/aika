@@ -107,7 +107,7 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
         Double s = cachedSurprisal[sign.index()];
         if(s == null) {
-            s = neuron.getSurprisal(sign, getAbsoluteRange(), true);
+            s = neuron.getSurprisal(sign, getAbsoluteCharRange(), true);
             cachedSurprisal[sign.index()] = s;
         }
         return s;

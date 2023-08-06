@@ -21,6 +21,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.PatternLink;
+import network.aika.text.Range;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
@@ -51,9 +52,9 @@ public class PatternParticleLink<L extends PatternLink> extends ParticleLink<L> 
         OptionalDouble avgXPos = oAct.getInputLinks()
                 .map(Link::getInput)
                 .filter(Objects::nonNull)
-                .map(Activation::getTokenPos)
+                .map(Activation::getTokenPosRange)
                 .filter(Objects::nonNull)
-                .mapToDouble(Integer::intValue)
+                .mapToDouble(Range::getBegin)
                 .average();
 
         if(!avgXPos.isPresent())

@@ -17,7 +17,6 @@
 package network.aika;
 
 
-import network.aika.callbacks.ActivationCheckCallback;
 import network.aika.debugger.EventListener;
 import network.aika.debugger.EventType;
 import network.aika.callbacks.InstantiationCallback;
@@ -56,7 +55,7 @@ public abstract class Thought implements Element {
     protected final Model model;
 
     private Long id;
-    private long absoluteBegin;
+    private long absoluteBeginChar;
 
     private Timestamp timestampOnProcess = new Timestamp(0);
     private long timestampCounter = 0;
@@ -76,14 +75,13 @@ public abstract class Thought implements Element {
 
     private Config config;
 
-    private ActivationCheckCallback activationCheckCallback;
     private InstantiationCallback instantiationCallback;
 
 
     public Thought(Model m) {
         model = m;
         id = model.createThoughtId();
-        absoluteBegin = m.getN();
+        absoluteBeginChar = m.getN();
 
         annealing = new InputField(this, "anneal", 0.0);
         feedbackTrigger = new QueueSumField(this, FEEDBACK_TRIGGER, "feedback trigger", 0.0);
@@ -162,14 +160,6 @@ public abstract class Thought implements Element {
         );
     }
 
-    public ActivationCheckCallback getActivationCheckCallBack() {
-        return this.activationCheckCallback;
-    }
-
-    public void setActivationCheckCallback(ActivationCheckCallback activationCheckCallback) {
-        this.activationCheckCallback = activationCheckCallback;
-    }
-
     public InstantiationCallback getInstantiationCallback() {
         return instantiationCallback;
     }
@@ -218,8 +208,8 @@ public abstract class Thought implements Element {
         return queue.values();
     }
 
-    public Range getRange() {
-        return new Range(absoluteBegin, absoluteBegin + length());
+    public Range getCharRange() {
+        return new Range(absoluteBeginChar, absoluteBeginChar + length());
     }
 
     public void process(int maxRound, Phase maxPhase) {

@@ -34,7 +34,7 @@ public class PatternSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel
     public PatternSynapsePropertyPanel(PatternSynapse s, Link ref) {
         super(s, ref);
 
-        Range range = ref != null && ref.getInput() != null ? ref.getInput().getAbsoluteRange() : null;
+        Range range = ref != null && ref.getInput() != null ? ref.getInput().getAbsoluteCharRange() : null;
         addConstant("Range: ", range != null ? "" + range : NOT_SET_STR);
 
         addConstant("Frequency(POS, POS): ", frequencyToString(POS, POS, s, range));

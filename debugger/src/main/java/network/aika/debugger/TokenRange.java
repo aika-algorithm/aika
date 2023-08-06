@@ -25,24 +25,24 @@ import network.aika.elements.links.Link;
  */
 public class TokenRange {
 
-    private int begin;
+    private long begin;
 
-    private int end;
+    private long end;
 
-    public TokenRange(int begin, int end) {
+    public TokenRange(long begin, long end) {
         this.begin = begin;
         this.end = end;
     }
 
-    public int getBegin() {
+    public long getBegin() {
         return begin;
     }
 
-    public int getEnd() {
+    public long getEnd() {
         return end;
     }
 
-    public boolean within(Integer tokenPos) {
+    public boolean within(Long tokenPos) {
         return begin <= tokenPos && tokenPos < end;
     }
 
@@ -50,14 +50,14 @@ public class TokenRange {
         if(tokenRange == null)
             return true;
 
-        return tokenRange.within(act.getTokenPos());
+        return tokenRange.within(act.getTokenPosRange().getBegin());
     }
 
     public static boolean within(TokenRange tokenRange, Link l) {
         if(tokenRange == null)
             return true;
 
-        return tokenRange.within(l.getInput().getTokenPos()) &&
-                tokenRange.within(l.getOutput().getTokenPos());
+        return tokenRange.within(l.getInput().getTokenPosRange().getBegin()) &&
+                tokenRange.within(l.getOutput().getTokenPosRange().getBegin());
     }
 }

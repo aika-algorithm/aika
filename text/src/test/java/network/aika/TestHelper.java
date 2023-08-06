@@ -17,12 +17,16 @@
 package network.aika;
 
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.LatentRelationNeuron;
+import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.InputPatternSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SamePatternSynapse;
-import network.aika.enums.Scope;
+import network.aika.meta.Dictionary;
 
-import static network.aika.TestUtils.*;
+import static network.aika.TestUtils.initPatternLoop;
+import static network.aika.meta.NetworkMotivs.addOuterInhibitoryLoop;
+
 
 /**
  *
@@ -30,14 +34,14 @@ import static network.aika.TestUtils.*;
  */
 public class TestHelper {
 
-    public static void initPatternTheCat(Model m, OuterInhibitoryNeuron inhibNThe, OuterInhibitoryNeuron inhibNCat, int variant) {
-        PatternNeuron theIN = lookupToken(m, "the");
-        PatternNeuron catIN = lookupToken(m, "cat");
+    public static void initPatternTheCat(Model m, Dictionary dict, OuterInhibitoryNeuron inhibNThe, OuterInhibitoryNeuron inhibNCat, int variant) {
+        PatternNeuron theIN = dict.lookupInputToken("the");
+        PatternNeuron catIN = dict.lookupInputToken("cat");
 
         int relFrom = variant < 2 ? -5 : 1;
         int relTo = variant < 2 ? -1 : 5;
 
-        LatentRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, relFrom, relTo);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, relFrom, relTo);
 
         BindingNeuron theBN = new BindingNeuron().init(m, "the (the cat)");
         new InputPatternSynapse()
@@ -82,11 +86,11 @@ public class TestHelper {
         catBN.setBias(3.0);
     }
 
-    public static void initPatternBlackCat(Model m) {
-        PatternNeuron blackIN = lookupToken(m, "black");
-        PatternNeuron catIN = lookupToken(m, "cat");
+    public static void initPatternBlackCat(Model m, Dictionary dict) {
+        PatternNeuron blackIN = dict.lookupInputToken("black");
+        PatternNeuron catIN = dict.lookupInputToken("cat");
 
-        LatentRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, -1, -1);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -1, -1);
 
         BindingNeuron blackBN = new BindingNeuron().init(m, "black (black cat)");
         new InputPatternSynapse()
@@ -117,14 +121,14 @@ public class TestHelper {
         catBN.setBias(3.0);
     }
 
-    public static void initPatternTheDog(Model m, OuterInhibitoryNeuron inhibNThe, OuterInhibitoryNeuron inhibNDog, int variant) {
-        PatternNeuron theIN = lookupToken(m, "the");
-        PatternNeuron dogIN = lookupToken(m, "dog");
+    public static void initPatternTheDog(Model m, Dictionary dict, OuterInhibitoryNeuron inhibNThe, OuterInhibitoryNeuron inhibNDog, int variant) {
+        PatternNeuron theIN = dict.lookupInputToken("the");
+        PatternNeuron dogIN = dict.lookupInputToken("dog");
 
         int relFrom = variant < 2 ? -5 : 1;
         int relTo = variant < 2 ? -1 : 5;
 
-        LatentRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, relFrom, relTo);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, relFrom, relTo);
 
         BindingNeuron theBN = new BindingNeuron().init(m, "the (the dog)");
         new InputPatternSynapse()
@@ -160,8 +164,8 @@ public class TestHelper {
 
         PatternNeuron theDogP = initPatternLoop(m, "the dog", theBN, dogBN);
 
-        addOuterInhibitoryLoop(inhibNThe, false, theBN);
-        addOuterInhibitoryLoop(new OuterInhibitoryNeuron().init(m, "I-the (tg)"), true, theBN);
+        addOuterInhibitoryLoop(theBN, inhibNThe, -10.0);
+        addOuterInhibitoryLoop(theBN, new OuterInhibitoryNeuron().init(m, "I-the (tg)"), -10.0);
 
         theDogP.setBias(3.0);
 

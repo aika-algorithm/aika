@@ -16,6 +16,7 @@
  */
 package network.aika;
 
+import network.aika.meta.Dictionary;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -23,8 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
-import static network.aika.TestUtils.addToken;
-import static network.aika.TestUtils.getConfig;
 
 /**
  *
@@ -51,8 +50,9 @@ public class SimplePhraseTest {
     @Test
     public void simplePhraseTest() {
         Model model = new Model();
+        Dictionary dict = new Dictionary(model);
 
-        Config c = getConfig()
+        Config c = new Config()
                         .setAlpha(0.99)
                         .setLearnRate(0.1)
                         .setTrainingEnabled(false);
@@ -71,7 +71,7 @@ public class SimplePhraseTest {
             int pos = 0;
             for(String t: doc.getContent().split(" ")) {
                 int j = i + t.length();
-                addToken(model, doc, t, pos++, i, j);
+                dict.addToken(doc, t, pos++, i, j);
 
                 i = j + 1;
             }

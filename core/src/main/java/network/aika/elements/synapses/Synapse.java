@@ -19,7 +19,6 @@ package network.aika.elements.synapses;
 import network.aika.Model;
 import network.aika.enums.Scope;
 import network.aika.Thought;
-import network.aika.callbacks.ActivationCheckCallback;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
@@ -37,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static network.aika.enums.direction.Direction.INPUT;
@@ -114,14 +112,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public double getPropagatePreNet(IA iAct) {
-        if (getOutput().isCallActivationCheckCallback() &&
-                iAct != null
-        ) {
-            ActivationCheckCallback acc = iAct.getThought().getActivationCheckCallBack();
-            if (acc == null || !acc.check(this, iAct))
-                return -1000.0;
-        }
-
         return getOutput().getCurrentCompleteBias() +
                 getWeight().getUpdatedValue();
     }

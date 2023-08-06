@@ -37,7 +37,7 @@ public class PatternNeuronPropertyPanel<E extends PatternNeuron> extends Conjunc
     public PatternNeuronPropertyPanel(E n, Activation ref) {
         super(n, ref);
 
-        Range range = ref != null ? ref.getAbsoluteRange() : null;
+        Range range = ref != null ? ref.getAbsoluteCharRange() : null;
         addConstant("Range: ", range != null ? "" + range : NOT_SET_STR);
         addConstant("Frequency: ", "" + doubleToString(n.getFrequency()));
         addConstant("SampleSpace: ", "" + n.getSampleSpace().toString(range));

@@ -14,34 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.text;
+package network.aika.debugger.neurons.properties;
 
-import network.aika.elements.activations.TokenActivation;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.relations.BeforeRelationNeuron;
+import network.aika.elements.neurons.relations.ContainsRelationNeuron;
+
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class RangeKey {
+public class ContainsRelationNeuronPropertyPanel extends BindingNeuronPropertyPanel<ContainsRelationNeuron> {
 
-    private Range range;
-    private int actId;
 
-    public RangeKey(Range range, int actId) {
-        this.range = range;
-        this.actId = actId;
+    public ContainsRelationNeuronPropertyPanel(ContainsRelationNeuron n, Activation ref) {
+        super(n, ref);
+
     }
 
-    public RangeKey(TokenActivation tokenAct) {
-        this.range = tokenAct.getRange();
-        this.actId = tokenAct.getId();
-    }
+    public static ContainsRelationNeuronPropertyPanel create(ContainsRelationNeuron n, Activation ref) {
 
-    public Range getRange() {
-        return range;
-    }
-
-    public int getActId() {
-        return actId;
+        return new ContainsRelationNeuronPropertyPanel(n, ref);
     }
 }

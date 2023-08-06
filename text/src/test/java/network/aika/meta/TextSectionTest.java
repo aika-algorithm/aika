@@ -18,9 +18,9 @@ package network.aika.meta;
 
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.synapses.Synapse;
+import network.aika.meta.sequences.SequenceModel;
+import network.aika.meta.sequences.PhraseModel;
+import network.aika.meta.textsections.TypedTextSectionModel;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;
 import network.aika.text.Document;
@@ -43,40 +43,46 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     String tasksHeadline = "Your Tasks";
     String requirementsHeadline = "Your Profile";
 
-    private PhraseTemplateModel templateModel;
+    private Dictionary dictionary;
+
     private Tokenizer tokenizer;
+    private PhraseModel phraseModel;
+    private TypedTextSectionModel textSectionModel;
 
 /*    private String exampleTxt = "Java Softwaredeveloper\n" +
             " \n" +
             "Bla bla \n" +
             "\n" +
             tasksHeadline + "\n" +
-            "Bla programming testing bla \n" +
-            "\n" +
+            "<p> Bla programming testing bla \n" +
+            "<p/>\n" +
             requirementsHeadline + "\n" +
-            "Bla java solr bla \n" +
-            "\n";
+            "<p> Bla java solr bla \n" +
+            "<p/>\n";
 */
     private String exampleTxt = tasksHeadline + "\n" +
-            "Bla programming testing bla \n" +
-            "\n";
+            "<p> Bla programming testing bla \n" +
+            "<p/>\n";
 
     @BeforeEach
     public void init() {
         Model model = new Model();
 
-        templateModel = new PhraseTemplateModel(model);
-        templateModel.initStaticNeurons();
+        dictionary = new Dictionary(model);
+        tokenizer = new SimpleWordTokenizer(dictionary);
+
+        phraseModel = new PhraseModel(model, dictionary);
+        phraseModel.initStaticNeurons();
+
+        textSectionModel = new TypedTextSectionModel(phraseModel);
 
         model.setN(0);
-
-        tokenizer = new SimpleWordTokenizer(templateModel);
     }
 
     @Override
     protected Document initDocument(String txt, TestContext context, ParserPhase phase) {
         Document doc = super.initDocument(txt, context, phase);
-        if(phase == TRAINING && txt.equalsIgnoreCase(exampleTxt)) {
+        if(phase == TRAINING) { //  && txt.equalsIgnoreCase(exampleTxt)
             AIKADebugger.createAndShowGUI(doc);
         }
 
@@ -84,9 +90,20 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     }
 
     @Override
-    public boolean check(Synapse s, Activation iAct) {
-        return iAct.getTokenPos() == 0 &&
-                ((currentContext != null && currentContext.isHeadlineTarget()) == templateModel.textSectionModel.isHeadlinePrimaryInput((BindingNeuron) s.getOutput()));
+    protected void prepareInputs(Document doc, TestContext context) {
+        tokenizer.tokenize(doc, context, (n, pos, begin, end) ->
+                doc.addToken(n, pos, begin, end, dictionary.getInputPatternNetTarget())
+        );
+
+        if(context != null && context.getHeadlineTargetString() != null) {
+            textSectionModel.getHeadlineModel()
+                    .addTargetTSHeadline(
+                            doc,
+                            Set.of(context.getHeadlineTargetLabel()),
+                            0,
+                            doc.length()
+                    );
+        }
     }
 
     @Test
@@ -97,7 +114,9 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         process(requirementsHeadline, null, COUNTING);
         process(exampleTxt, null, COUNTING);
 
-        templateModel.initTemplates();
+        phraseModel.initInputTokenWeights();
+        phraseModel.initTemplates();
+        textSectionModel.initTextSectionTemplates();
 
         process(tasksHeadline, new TestContext(tasksHeadline, "Task-HL"), TRAINING);
         process(requirementsHeadline, new TestContext(requirementsHeadline, "Requi.-HL"), TRAINING);
@@ -105,25 +124,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     }
 
     @Override
-    protected void addTargets(Document doc, TestContext context) {
-        if(context != null && context.getHeadlineTargetString() != null) {
-            templateModel.getTextSectionModel()
-                    .addTargetTSHeadline(
-                            doc,
-                            Set.of(context.getHeadlineTargetLabel()),
-                            0,
-                            doc.length()
-                    );
-        }
+    protected SequenceModel getPhraseModel() {
+        return phraseModel;
     }
 
-    @Override
-    protected AbstractTemplateModel getTemplateModel() {
-        return templateModel;
-    }
-
-    @Override
-    public Tokenizer getTokenizer() {
-        return tokenizer;
-    }
 }

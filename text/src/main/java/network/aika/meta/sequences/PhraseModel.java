@@ -14,39 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.meta;
+package network.aika.meta.sequences;
 
 import network.aika.Model;
-import network.aika.elements.activations.*;
 import network.aika.elements.neurons.*;
-import network.aika.enums.sign.Sign;
+import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Comparator;
-import java.util.List;
 
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class PhraseTemplateModel extends AbstractTemplateModel {
+public class PhraseModel extends SequenceModel {
 
-    private static final Logger log = LoggerFactory.getLogger(PhraseTemplateModel.class);
+    private static final Logger log = LoggerFactory.getLogger(PhraseModel.class);
 
-    TypedTextSectionModel textSectionModel;
-    TopicModel topicModel;
 
     NeuronProvider upperCaseN;
 
-    PatternActivation maxSurprisalAct = null;
 
-    public PhraseTemplateModel(Model m) {
-        super(m);
-
-        textSectionModel = new TypedTextSectionModel(this);
-        topicModel = new TopicModel(this);
+    public PhraseModel(Model m, Dictionary dict) {
+        super(m, dict);
     }
 
     @Override
@@ -63,21 +53,12 @@ public class PhraseTemplateModel extends AbstractTemplateModel {
         return "Phrase";
     }
 
-    public TypedTextSectionModel getTextSectionModel() {
-        return textSectionModel;
-    }
-
-    public TopicModel getTopicModel() {
-        return topicModel;
-    }
-
     @Override
     protected void initTemplateBindingNeurons() {
         primaryBN = createStrongBindingNeuron(
                 patternNetTarget,
                 false,
                 0,
-                null,
                 null
         ).getProvider(true);
 
@@ -96,30 +77,5 @@ public class PhraseTemplateModel extends AbstractTemplateModel {
                 5,
                 -1
         );
-
-        textSectionModel.initTextSectionTemplates();
-        topicModel.initTopicTemplates();
-    }
-
-
-    private PatternActivation initMaxSurprisalTokenAct(List<TokenActivation> tokenActs) {
-        return tokenActs.stream()
-                .filter(PatternActivation.class::isInstance)
-                .map(PatternActivation.class::cast)
-                .max(Comparator.comparingDouble(act ->
-                        act.getSurprisal(Sign.POS)
-                ))
-                .orElse(null);
-    }
-
-    @Override
-    public void setTokenInputNet(List<TokenActivation> tokenActs) {
-        maxSurprisalAct = initMaxSurprisalTokenAct(tokenActs);
-        super.setTokenInputNet(tokenActs);
-    }
-
-    @Override
-    public boolean evaluatePrimaryBindingActs(Activation act) {
-        return maxSurprisalAct == act.getActiveTemplateInstance();
     }
 }

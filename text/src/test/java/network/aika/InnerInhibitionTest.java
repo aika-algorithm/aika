@@ -36,11 +36,8 @@ import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.neurons.*;
-import network.aika.elements.synapses.InnerInhibitorySynapse;
-import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
+import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.InputPatternSynapse;
-import network.aika.elements.synapses.PatternSynapse;
-import network.aika.meta.NetworkMotivs;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -48,7 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.SortedSet;
 
-import static network.aika.TestUtils.getConfig;
 import static network.aika.meta.NetworkMotivs.*;
 import static network.aika.steps.Phase.INFERENCE;
 import static network.aika.steps.keys.QueueKey.MAX_ROUND;
@@ -64,8 +60,6 @@ public class InnerInhibitionTest {
 
     protected double inputPatternNetTarget = 5.0;
     protected double patternNetTarget = 0.7;
-
-
 
     @Test
     public void testInnerInhibition1() {
@@ -84,14 +78,14 @@ public class InnerInhibitionTest {
         BindingNeuron na = addBindingNeuronInner(m,  "A", 2.5, inA, inhib, patternN);
         BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
-        TokenPositionRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, -300, -1);
+        BeforeRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -300, -1);
 
         addRelation(na, nx, relPT, 5.0, 10.0);
 
         Document doc = new Document(m, "test");
         AIKADebugger.createAndShowGUI(doc, false);
 
-        Config c = getConfig()
+        Config c = new Config()
                 .setAlpha(0.99)
                 .setLearnRate(0.01)
                 .setTrainingEnabled(true);
@@ -99,14 +93,10 @@ public class InnerInhibitionTest {
 
         doc.setFeedbackTriggerRound();
 
-        doc.addToken(inA, 0, 0, 1)
-                .setNet(inputPatternNetTarget - 2);
-        doc.addToken(inA, 1, 1, 2)
-                .setNet(inputPatternNetTarget);
-        doc.addToken(inA, 2, 2, 3)
-                .setNet(inputPatternNetTarget - 1);
-        doc.addToken(inX, 3, 3, 4)
-                .setNet(inputPatternNetTarget);
+        doc.addToken(inA, 0, 0, 1, inputPatternNetTarget - 2);
+        doc.addToken(inA, 1, 1, 2, inputPatternNetTarget);
+        doc.addToken(inA, 2, 2, 3, inputPatternNetTarget - 1);
+        doc.addToken(inX, 3, 3, 4, inputPatternNetTarget);
 
         doc.process(MAX_ROUND, INFERENCE);
 
@@ -144,7 +134,7 @@ public class InnerInhibitionTest {
         BindingNeuron nc = addBindingNeuronInner(m, "C", 2.7, inC, inhib, patternN);
         BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
-        TokenPositionRelationNeuron relPT = TokenPositionRelationNeuron.lookupRelation(m, -300, -1);
+        BeforeRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -300, -1);
 
         addRelation(na, nx, relPT, 5.0, 10.0);
         addRelation(nb, nx, relPT, 5.0, 10.0);
@@ -153,7 +143,7 @@ public class InnerInhibitionTest {
         Document doc = new Document(m, "test");
         AIKADebugger.createAndShowGUI(doc, false);
 
-        Config c = getConfig()
+        Config c = new Config()
                 .setAlpha(0.99)
                 .setLearnRate(0.01)
                 .setTrainingEnabled(true);
@@ -161,14 +151,10 @@ public class InnerInhibitionTest {
 
         doc.setFeedbackTriggerRound();
 
-        doc.addToken(inA, 0, 0, 1)
-                .setNet(inputPatternNetTarget);
-        doc.addToken(inB, 1, 1, 2)
-                .setNet(inputPatternNetTarget);
-        doc.addToken(inC, 2, 2, 3)
-                .setNet(inputPatternNetTarget);
-        doc.addToken(inX, 3, 3, 4)
-                .setNet(inputPatternNetTarget);
+        doc.addToken(inA, 0, 0, 1, inputPatternNetTarget);
+        doc.addToken(inB, 1, 1, 2, inputPatternNetTarget);
+        doc.addToken(inC, 2, 2, 3, inputPatternNetTarget);
+        doc.addToken(inX, 3, 3, 4, inputPatternNetTarget);
 
         doc.process(MAX_ROUND, INFERENCE);
 
@@ -197,7 +183,7 @@ public class InnerInhibitionTest {
                 .adjustBias(inputValueTarget);
 
         if(inhib != null)
-            addInnerNegativeFeedbackLoop(bn, inhib, 1.5 * -bindingNetTarget);
+            addInnerInhibitoryLoop(bn, inhib, 1.5 * -bindingNetTarget);
 
         addPositiveFeedbackLoop(
                 bn,

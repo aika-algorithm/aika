@@ -18,8 +18,9 @@ package network.aika.debugger.neurons.properties;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.LatentRelationNeuron;
-import network.aika.utils.Utils;
+import network.aika.elements.neurons.relations.BeforeRelationNeuron;
+import network.aika.elements.neurons.relations.ContainsRelationNeuron;
+import network.aika.elements.neurons.relations.LatentRelationNeuron;
 
 import static network.aika.utils.Utils.doubleToString;
 
@@ -37,8 +38,10 @@ public class BindingNeuronPropertyPanel<E extends BindingNeuron> extends Conjunc
     }
 
     public static BindingNeuronPropertyPanel create(BindingNeuron n, Activation ref) {
-        if(n instanceof LatentRelationNeuron) {
-            return LatentRelationNeuronPropertyPanel.create((LatentRelationNeuron) n, ref);
+        if(n instanceof BeforeRelationNeuron) {
+            return BeforeRelationNeuronPropertyPanel.create((BeforeRelationNeuron) n, ref);
+        } else if(n instanceof ContainsRelationNeuron) {
+            return ContainsRelationNeuronPropertyPanel.create((ContainsRelationNeuron) n, ref);
         }
 
         return new BindingNeuronPropertyPanel(n, ref);

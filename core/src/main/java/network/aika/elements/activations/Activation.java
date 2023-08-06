@@ -46,12 +46,11 @@ import static network.aika.elements.LinkKey.getFromLinkKey;
 import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.steps.Phase.PRE_ANNEAL;
-import static network.aika.text.Range.joinTokenPosition;
-import static network.aika.text.Range.tokenPositionEquals;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.fields.ThresholdOperator.Type.*;
 import static network.aika.steps.Phase.*;
+import static network.aika.text.Range.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -89,8 +88,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     public boolean instantiationIsQueued;
     protected boolean isNewInstance;
 
-    protected Range range;
-    protected Integer tokenPos;
+    protected Range charRange;
+    protected Range tokenPosRange;
 
     public Activation(int id, Thought t, N n) {
         this.id = id;
@@ -271,38 +270,38 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return thought;
     }
 
-    public Range getRange() {
-        return range;
+    public Range getCharRange() {
+        return charRange;
     }
 
-    public Integer getTokenPos() {
-        return tokenPos;
+    public Range getTokenPosRange() {
+        return tokenPosRange;
     }
 
-    public void updateRangeAndTokenPos(Range r, Integer tp) {
-        Range newRange = Range.join(range, r);
+    public void updateRanges(Range tpR, Range charR) {
+        Range newRange = join(charRange, charR);
+        Range newTokenPos = join(tokenPosRange, tpR);
 
-        Integer newTokenPos = joinTokenPosition(tokenPos, tp);
+        if (charRange == null || !charRange.equals(newRange) ||
+                tokenPosRange == null || !tokenPosRange.equals(newTokenPos)) {
 
-        if(!r.equals(range) || !tokenPositionEquals(tokenPos, newTokenPos)) {
-            propagateRangeAndTokenPosition();
+            this.charRange = newRange;
+            this.tokenPosRange = newTokenPos;
+
+            propagateRanges();
         }
-
-        this.range = newRange;
-        this.tokenPos = newTokenPos;
-
         thought.onElementEvent(TOKEN_POSITION, this);
     }
 
-    protected void propagateRangeAndTokenPosition() {
+    protected void propagateRanges() {
         outputLinks.values()
-                .forEach(Link::propagateRangeOrTokenPos);
+                .forEach(Link::propagateRanges);
     }
 
-    public Range getAbsoluteRange() {
-        Range r = getRange();
+    public Range getAbsoluteCharRange() {
+        Range r = getCharRange();
         if(r == null) return null;
-        return r.getAbsoluteRange(thought.getRange());
+        return r.getAbsoluteRange(thought.getCharRange());
     }
 
     @Override
@@ -495,8 +494,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         Activation<N> ti = n.createActivation(getThought());
 
-        ti.tokenPos = tokenPos;
-        ti.range = range;
+        ti.tokenPosRange = tokenPosRange;
+        ti.charRange = charRange;
         ti.isNewInstance = true;
         ti.fired = fired;
 

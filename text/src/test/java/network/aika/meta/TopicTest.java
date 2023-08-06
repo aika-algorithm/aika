@@ -17,9 +17,11 @@
 package network.aika.meta;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.synapses.Synapse;
+import network.aika.meta.sequences.SequenceModel;
+import network.aika.meta.sequences.PhraseModel;
+import network.aika.parser.Context;
 import network.aika.parser.TrainingParser;
+import network.aika.text.Document;
 import network.aika.tokenizer.SimpleWordTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,24 +36,28 @@ import static network.aika.parser.ParserPhase.TRAINING;
  */
 public class TopicTest extends TrainingParser {
 
-    private AbstractTemplateModel templateModel;
+    private Dictionary dict;
     private Tokenizer tokenizer;
+    private SequenceModel templateModel;
 
     @BeforeEach
     public void init() {
         Model model = new Model();
+        dict = new Dictionary(model);
 
-        templateModel = new PhraseTemplateModel(model);
+        templateModel = new PhraseModel(model, dict);
         templateModel.initStaticNeurons();
 
         model.setN(0);
 
-        tokenizer = new SimpleWordTokenizer(templateModel);
+        tokenizer = new SimpleWordTokenizer(dict);
     }
 
     @Override
-    public boolean check(Synapse s, Activation iAct) {
-        return true;
+    protected void prepareInputs(Document doc, Context context) {
+        tokenizer.tokenize(doc, context, (n, pos, begin, end) ->
+                doc.addToken(n, pos, begin, end, dict.getInputPatternNetTarget())
+        );
     }
 
     @Test
@@ -62,13 +68,7 @@ public class TopicTest extends TrainingParser {
     }
 
     @Override
-    protected AbstractTemplateModel getTemplateModel() {
+    protected SequenceModel getPhraseModel() {
         return templateModel;
     }
-
-    @Override
-    public Tokenizer getTokenizer() {
-        return tokenizer;
-    }
-
 }

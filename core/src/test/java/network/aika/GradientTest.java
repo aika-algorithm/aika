@@ -22,7 +22,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-import static network.aika.TestUtils.*;
 
 /**
  *
@@ -140,7 +139,7 @@ public class GradientTest {
     }
 
     private void processDoc(Model m, Document doc) {
-        processTokens(m, doc, Arrays.asList(doc.getContent().split(" ")));
+        //TODO
     }
 
     public static void setStatistic(PatternNeuron n, double frequency, int N, long lastPosition) {

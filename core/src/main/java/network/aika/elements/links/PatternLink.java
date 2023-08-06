@@ -27,7 +27,6 @@ import network.aika.fields.MultiInputField;
 import network.aika.enums.sign.Sign;
 import network.aika.steps.link.LinkCounting;
 import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
 
 import static network.aika.fields.ConstantField.ZERO;
 import static network.aika.fields.FieldLink.linkAndConnect;
@@ -100,7 +99,7 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
     }
 
     private Range getAbsoluteRange() {
-        Range r = (input != null ? input : output).getAbsoluteRange();
+        Range r = (input != null ? input : output).getAbsoluteCharRange();
         return r;
     }
 

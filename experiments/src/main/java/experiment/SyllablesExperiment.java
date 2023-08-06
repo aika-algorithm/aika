@@ -16,9 +16,10 @@
  */
 package experiment;
 
-import network.aika.meta.AbstractTemplateModel;
+import network.aika.meta.sequences.SequenceModel;
+import network.aika.meta.Dictionary;
 import network.aika.meta.LabelUtil;
-import network.aika.meta.SyllableTemplateModel;
+import network.aika.meta.sequences.SyllableModel;
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.*;
@@ -51,9 +52,11 @@ import static network.aika.utils.Utils.doubleToString;
 public class SyllablesExperiment extends TrainingParser<Context> {
 
     Model model;
-    AbstractTemplateModel syllableModel;
 
+    Dictionary dict;
     Tokenizer charTokenizer;
+    SequenceModel syllableModel;
+
 
     ExperimentLogger experimentLogger;
 
@@ -62,12 +65,14 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     public SyllablesExperiment() {
         model = new Model();
 
-        syllableModel = new SyllableTemplateModel(model);
+        dict = new Dictionary(model);
+
+        syllableModel = new SyllableModel(model, dict);
         syllableModel.initStaticNeurons();
 
         model.setN(0);
 
-        charTokenizer = new SimpleCharTokenizer(syllableModel);
+        charTokenizer = new SimpleCharTokenizer(dict);
     }
 
     @Override
@@ -87,13 +92,15 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     }
 
     @Override
-    protected AbstractTemplateModel getTemplateModel() {
-        return syllableModel;
+    protected void prepareInputs(Document doc, Context context) {
+        charTokenizer.tokenize(doc, context, (n, pos, begin, end) ->
+                doc.addToken(n, pos, begin, end, dict.getInputPatternNetTarget())
+        );
     }
 
     @Override
-    public Tokenizer getTokenizer() {
-        return charTokenizer;
+    protected SequenceModel getPhraseModel() {
+        return syllableModel;
     }
 
     public static void main(String[] args) throws IOException {
@@ -196,7 +203,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
                 " '" + act.getLabel() + "'" +
                 (!act.isAbstract() ? " '" + LabelUtil.generateLabel(act.getNeuron()) + "'" : "") +
                 " nId:" + act.getNeuron().getId() +
-                " r:" + act.getRange() +
+                " r:" + act.getCharRange() +
                 " grad:" + doubleToString(act.getGradient().getValue(), "#.######")
         );
     }
@@ -209,7 +216,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
                 instanceAct.getClass().getSimpleName() +
                 " '" + label + "'" +
                 " nId:" + instanceAct.getNeuron().getId() +
-                " r:" + instanceAct.getRange()
+                " r:" + instanceAct.getCharRange()
         );
     }
 

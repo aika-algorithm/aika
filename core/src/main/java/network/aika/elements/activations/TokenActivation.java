@@ -20,7 +20,7 @@ import network.aika.Thought;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.text.Range;
-import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.TokenNeuron;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.text.Document;
@@ -44,13 +44,10 @@ public class TokenActivation extends PatternActivation {
         super(id, t, tokenNeuron);
     }
 
-    public TokenActivation(int id, Integer pos, int begin, int end, Document doc, TokenNeuron tokenNeuron) {
+    public TokenActivation(int id, Range tpRange, Range charRange, Document doc, TokenNeuron tokenNeuron) {
         this(id, doc, tokenNeuron);
 
-        updateRangeAndTokenPos(
-                new Range(begin, end),
-                pos
-        );
+        updateRanges(tpRange, charRange);
 
         doc.registerTokenActivation(this);
     }

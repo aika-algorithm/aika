@@ -57,7 +57,7 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     @Override
-    public void propagateRangeOrTokenPos() {
+    public void propagateRanges() {
     }
 
     @Override

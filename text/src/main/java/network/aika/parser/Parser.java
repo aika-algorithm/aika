@@ -19,10 +19,8 @@ package network.aika.parser;
 
 import network.aika.Config;
 import network.aika.debugger.AIKADebugger;
-import network.aika.elements.activations.TokenActivation;
-import network.aika.meta.AbstractTemplateModel;
+import network.aika.meta.sequences.SequenceModel;
 import network.aika.text.Document;
-import network.aika.tokenizer.Tokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,10 +38,8 @@ public abstract class Parser<C extends Context> {
 
     protected static final Logger log = LoggerFactory.getLogger(Parser.class);
 
-    public abstract Tokenizer getTokenizer();
-
     protected Document initDocument(String txt, C context, ParserPhase phase) {
-        Document doc = new Document(getTemplateModel().getModel(), txt);
+        Document doc = new Document(getPhraseModel().getModel(), txt);
 
         Config conf = new Config()
                 .setAlpha(null)
@@ -57,7 +53,7 @@ public abstract class Parser<C extends Context> {
         return doc;
     }
 
-    protected abstract AbstractTemplateModel getTemplateModel();
+    protected abstract SequenceModel getPhraseModel();
 
     protected AIKADebugger debugger = null;
 
@@ -76,20 +72,19 @@ public abstract class Parser<C extends Context> {
         return doc;
     }
 
-    protected void infer(Document doc, Context context, ParserPhase phase) {
+    protected void infer(Document doc, C context, ParserPhase phase) {
         if(phase == ParserPhase.TRAINING) {
     //        debugger = AIKADebugger.createAndShowGUI(doc);
         }
 
         doc.setFeedbackTriggerRound();
 
-        getTokenizer().tokenize(doc, context, (n, pos, begin, end) -> {
-            TokenActivation tAct = doc.addToken(n, pos, begin, end);
-            tAct.setNet(getTemplateModel().getInputPatternNetTarget());
-        });
+        prepareInputs(doc, context);
 
         doc.process(MAX_ROUND, INFERENCE);
     }
+
+    protected abstract void prepareInputs(Document doc, C context);
 
     public void anneal(Document doc) {
         doc.anneal();

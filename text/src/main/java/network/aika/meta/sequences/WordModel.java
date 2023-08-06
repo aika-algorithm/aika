@@ -14,11 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.meta;
+package network.aika.meta.sequences;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,17 +25,17 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lukas Molzberger
  */
-public class SyllableTemplateModel extends AbstractTemplateModel {
+public class WordModel extends SequenceModel {
 
-    private static final Logger log = LoggerFactory.getLogger(SyllableTemplateModel.class);
+    private static final Logger log = LoggerFactory.getLogger(WordModel.class);
 
-    public SyllableTemplateModel(Model m) {
-        super(m);
+    public WordModel(Model m, Dictionary dict) {
+        super(m, dict);
     }
 
     @Override
     public String getPatternType() {
-        return "Syllable";
+        return "Word";
     }
 
     @Override
@@ -45,25 +44,23 @@ public class SyllableTemplateModel extends AbstractTemplateModel {
                 patternNetTarget,
                 false,
                 0,
-                null,
                 null
         ).getProvider(true);
 
         expandContinueBindingNeurons(
                 patternNetTarget,
-                2,
+                1,
                 primaryBN.getNeuron(),
-                4,
+                5,
                 1
         );
-    }
 
-    @Override
-    public boolean evaluatePrimaryBindingActs(Activation act) {
-        Activation tiAct = act.getActiveTemplateInstance();
-        if(tiAct == null)
-            return false;
-
-        return tiAct.getTokenPos() == 0;
+        expandContinueBindingNeurons(
+                patternNetTarget,
+                1,
+                primaryBN.getNeuron(),
+                5,
+                -1
+        );
     }
 }
