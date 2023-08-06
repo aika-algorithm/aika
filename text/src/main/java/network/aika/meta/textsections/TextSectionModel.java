@@ -20,7 +20,7 @@ import network.aika.Model;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
-import network.aika.meta.PhraseTemplateModel;
+import network.aika.meta.sequences.PhraseTemplateModel;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

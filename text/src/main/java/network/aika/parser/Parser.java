@@ -19,15 +19,11 @@ package network.aika.parser;
 
 import network.aika.Config;
 import network.aika.debugger.AIKADebugger;
-import network.aika.elements.activations.TokenActivation;
-import network.aika.meta.AbstractTemplateModel;
+import network.aika.meta.sequences.SequenceTemplateModel;
 import network.aika.text.Document;
-import network.aika.tokenizer.Tokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import java.util.Set;
 
 import static network.aika.parser.ParserPhase.TRAINING;
 import static network.aika.steps.Phase.ANNEAL;
@@ -57,7 +53,7 @@ public abstract class Parser<C extends Context> {
         return doc;
     }
 
-    protected abstract AbstractTemplateModel getTemplateModel();
+    protected abstract SequenceTemplateModel getTemplateModel();
 
     protected AIKADebugger debugger = null;
 

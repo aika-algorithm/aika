@@ -16,10 +16,10 @@
  */
 package experiment;
 
-import network.aika.meta.AbstractTemplateModel;
+import network.aika.meta.sequences.SequenceTemplateModel;
 import network.aika.meta.Dictionary;
 import network.aika.meta.LabelUtil;
-import network.aika.meta.SyllableTemplateModel;
+import network.aika.meta.sequences.SyllableTemplateModel;
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.*;
@@ -39,7 +39,6 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
 import static network.aika.parser.ParserPhase.COUNTING;
@@ -56,7 +55,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
 
     Dictionary dict;
     Tokenizer charTokenizer;
-    AbstractTemplateModel syllableModel;
+    SequenceTemplateModel syllableModel;
 
 
     ExperimentLogger experimentLogger;
@@ -100,7 +99,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     }
 
     @Override
-    protected AbstractTemplateModel getTemplateModel() {
+    protected SequenceTemplateModel getTemplateModel() {
         return syllableModel;
     }
 

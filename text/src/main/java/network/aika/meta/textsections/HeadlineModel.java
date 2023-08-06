@@ -21,7 +21,7 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.ContainsRelationNeuron;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.meta.PhraseTemplateModel;
+import network.aika.meta.sequences.PhraseTemplateModel;
 import network.aika.text.Document;
 import network.aika.text.Range;
 import org.slf4j.Logger;

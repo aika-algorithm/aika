@@ -17,6 +17,8 @@
 package network.aika.meta;
 
 import network.aika.Model;
+import network.aika.meta.sequences.SequenceTemplateModel;
+import network.aika.meta.sequences.PhraseTemplateModel;
 import network.aika.parser.Context;
 import network.aika.parser.TrainingParser;
 import network.aika.text.Document;
@@ -24,8 +26,6 @@ import network.aika.tokenizer.SimpleWordTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.parser.ParserPhase.TRAINING;
@@ -38,7 +38,7 @@ public class AnnealingTest extends TrainingParser {
 
     private Dictionary dict;
     private Tokenizer tokenizer;
-    private AbstractTemplateModel templateModel;
+    private SequenceTemplateModel templateModel;
 
     @BeforeEach
     public void init() {
@@ -68,7 +68,7 @@ public class AnnealingTest extends TrainingParser {
     }
 
     @Override
-    protected AbstractTemplateModel getTemplateModel() {
+    protected SequenceTemplateModel getTemplateModel() {
         return templateModel;
     }
 

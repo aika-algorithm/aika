@@ -17,7 +17,6 @@
 package network.aika.tokenizer;
 
 
-import network.aika.meta.AbstractTemplateModel;
 import network.aika.meta.Dictionary;
 import network.aika.parser.Context;
 import network.aika.text.Document;

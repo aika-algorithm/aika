@@ -71,7 +71,7 @@ public class SimplePhraseTest {
             int pos = 0;
             for(String t: doc.getContent().split(" ")) {
                 int j = i + t.length();
-                doc.addToken(dict.lookupInputToken(t), pos++, i, j, 5.0);
+                dict.addToken(doc, t, pos++, i, j);
 
                 i = j + 1;
             }

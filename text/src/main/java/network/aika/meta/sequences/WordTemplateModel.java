@@ -14,44 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.meta;
+package network.aika.meta.sequences;
 
 import network.aika.Model;
-import network.aika.elements.neurons.*;
-import network.aika.meta.textsections.TypedTextSectionModel;
-import network.aika.meta.topics.TopicModel;
+import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class PhraseTemplateModel extends AbstractTemplateModel {
+public class WordTemplateModel extends SequenceTemplateModel {
 
-    private static final Logger log = LoggerFactory.getLogger(PhraseTemplateModel.class);
+    private static final Logger log = LoggerFactory.getLogger(WordTemplateModel.class);
 
-
-    NeuronProvider upperCaseN;
-
-
-    public PhraseTemplateModel(Model m, Dictionary dict) {
+    public WordTemplateModel(Model m, Dictionary dict) {
         super(m, dict);
     }
 
     @Override
-    public void initStaticNeurons() {
-        super.initStaticNeurons();
-
-        upperCaseN = new PatternCategoryNeuron()
-                .init(model, "Upper Case")
-                .getProvider(true);
-    }
-
-    @Override
     public String getPatternType() {
-        return "Phrase";
+        return "Word";
     }
 
     @Override

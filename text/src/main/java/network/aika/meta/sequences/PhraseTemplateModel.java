@@ -14,28 +14,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.meta;
+package network.aika.meta.sequences;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.*;
+import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class SyllableTemplateModel extends AbstractTemplateModel {
+public class PhraseTemplateModel extends SequenceTemplateModel {
 
-    private static final Logger log = LoggerFactory.getLogger(SyllableTemplateModel.class);
+    private static final Logger log = LoggerFactory.getLogger(PhraseTemplateModel.class);
 
-    public SyllableTemplateModel(Model m, Dictionary dict) {
+
+    NeuronProvider upperCaseN;
+
+
+    public PhraseTemplateModel(Model m, Dictionary dict) {
         super(m, dict);
     }
 
     @Override
+    public void initStaticNeurons() {
+        super.initStaticNeurons();
+
+        upperCaseN = new PatternCategoryNeuron()
+                .init(model, "Upper Case")
+                .getProvider(true);
+    }
+
+    @Override
     public String getPatternType() {
-        return "Syllable";
+        return "Phrase";
     }
 
     @Override
@@ -49,10 +64,18 @@ public class SyllableTemplateModel extends AbstractTemplateModel {
 
         expandContinueBindingNeurons(
                 patternNetTarget,
-                2,
+                1,
                 primaryBN.getNeuron(),
-                4,
+                5,
                 1
+        );
+
+        expandContinueBindingNeurons(
+                patternNetTarget,
+                1,
+                primaryBN.getNeuron(),
+                5,
+                -1
         );
     }
 }

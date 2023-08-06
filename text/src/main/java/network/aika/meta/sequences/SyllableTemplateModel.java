@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.meta;
+package network.aika.meta.sequences;
 
 import network.aika.Model;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,17 +25,17 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lukas Molzberger
  */
-public class WordTemplateModel extends AbstractTemplateModel {
+public class SyllableTemplateModel extends SequenceTemplateModel {
 
-    private static final Logger log = LoggerFactory.getLogger(WordTemplateModel.class);
+    private static final Logger log = LoggerFactory.getLogger(SyllableTemplateModel.class);
 
-    public WordTemplateModel(Model m, Dictionary dict) {
+    public SyllableTemplateModel(Model m, Dictionary dict) {
         super(m, dict);
     }
 
     @Override
     public String getPatternType() {
-        return "Word";
+        return "Syllable";
     }
 
     @Override
@@ -49,18 +49,10 @@ public class WordTemplateModel extends AbstractTemplateModel {
 
         expandContinueBindingNeurons(
                 patternNetTarget,
-                1,
+                2,
                 primaryBN.getNeuron(),
-                5,
+                4,
                 1
-        );
-
-        expandContinueBindingNeurons(
-                patternNetTarget,
-                1,
-                primaryBN.getNeuron(),
-                5,
-                -1
         );
     }
 }

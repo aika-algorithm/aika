@@ -18,13 +18,9 @@ package network.aika.meta;
 
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.TokenActivation;
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.synapses.Synapse;
+import network.aika.meta.sequences.SequenceTemplateModel;
+import network.aika.meta.sequences.PhraseTemplateModel;
 import network.aika.meta.textsections.TypedTextSectionModel;
-import network.aika.meta.topics.TopicModel;
-import network.aika.parser.Context;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;
 import network.aika.text.Document;
@@ -128,7 +124,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     }
 
     @Override
-    protected AbstractTemplateModel getTemplateModel() {
+    protected SequenceTemplateModel getTemplateModel() {
         return templateModel;
     }
 

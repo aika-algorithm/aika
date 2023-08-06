@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.meta;
+package network.aika.meta.sequences;
 
 import network.aika.Model;
 import network.aika.elements.neurons.*;
@@ -22,6 +22,7 @@ import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.PatternCategorySynapse;
 import network.aika.enums.sign.Sign;
+import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +35,9 @@ import static network.aika.utils.NetworkUtils.makeAbstract;
  *
  * @author Lukas Molzberger
  */
-public abstract class AbstractTemplateModel {
+public abstract class SequenceTemplateModel {
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractTemplateModel.class);
+    private static final Logger log = LoggerFactory.getLogger(SequenceTemplateModel.class);
 
     protected Model model;
 
@@ -57,11 +58,11 @@ public abstract class AbstractTemplateModel {
 
     protected double patternNetTarget = 0.7;
 
-    protected static double POS_MARGIN = 1.0;
-    protected static double NEG_MARGIN_LEFT = 1.2;
-    protected static double NEG_MARGIN_RIGHT = 1.1;
+    public static double POS_MARGIN = 1.0;
+    public static double NEG_MARGIN_LEFT = 1.2;
+    public static double NEG_MARGIN_RIGHT = 1.1;
 
-    public AbstractTemplateModel(Model m, Dictionary dict) {
+    public SequenceTemplateModel(Model m, Dictionary dict) {
         model = m;
         dictionary = dict;
     }

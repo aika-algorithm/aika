@@ -17,9 +17,8 @@
 package network.aika.meta;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.TokenActivation;
-import network.aika.elements.synapses.Synapse;
+import network.aika.meta.sequences.SequenceTemplateModel;
+import network.aika.meta.sequences.PhraseTemplateModel;
 import network.aika.parser.Context;
 import network.aika.parser.TrainingParser;
 import network.aika.text.Document;
@@ -39,7 +38,7 @@ public class TopicTest extends TrainingParser {
 
     private Dictionary dict;
     private Tokenizer tokenizer;
-    private AbstractTemplateModel templateModel;
+    private SequenceTemplateModel templateModel;
 
     @BeforeEach
     public void init() {
@@ -69,7 +68,7 @@ public class TopicTest extends TrainingParser {
     }
 
     @Override
-    protected AbstractTemplateModel getTemplateModel() {
+    protected SequenceTemplateModel getTemplateModel() {
         return templateModel;
     }
 }

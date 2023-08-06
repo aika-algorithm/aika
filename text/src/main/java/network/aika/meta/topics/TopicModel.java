@@ -18,7 +18,7 @@ package network.aika.meta.topics;
 
 import network.aika.Model;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.meta.PhraseTemplateModel;
+import network.aika.meta.sequences.PhraseTemplateModel;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

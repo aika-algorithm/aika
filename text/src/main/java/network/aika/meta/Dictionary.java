@@ -17,15 +17,12 @@
 package network.aika.meta;
 
 import network.aika.Model;
-import network.aika.elements.activations.TokenActivation;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.neurons.TokenNeuron;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 import static network.aika.utils.NetworkUtils.makeAbstract;
 

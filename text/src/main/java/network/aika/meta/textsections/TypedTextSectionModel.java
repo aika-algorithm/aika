@@ -18,7 +18,7 @@ package network.aika.meta.textsections;
 
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
-import network.aika.meta.PhraseTemplateModel;
+import network.aika.meta.sequences.PhraseTemplateModel;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
