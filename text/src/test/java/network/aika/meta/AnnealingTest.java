@@ -68,7 +68,7 @@ public class AnnealingTest extends TrainingParser {
     }
 
     @Override
-    protected SequenceModel getTemplateModel() {
+    protected SequenceModel getPhraseModel() {
         return templateModel;
     }
 

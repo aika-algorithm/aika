@@ -39,7 +39,7 @@ public abstract class Parser<C extends Context> {
     protected static final Logger log = LoggerFactory.getLogger(Parser.class);
 
     protected Document initDocument(String txt, C context, ParserPhase phase) {
-        Document doc = new Document(getTemplateModel().getModel(), txt);
+        Document doc = new Document(getPhraseModel().getModel(), txt);
 
         Config conf = new Config()
                 .setAlpha(null)
@@ -53,7 +53,7 @@ public abstract class Parser<C extends Context> {
         return doc;
     }
 
-    protected abstract SequenceModel getTemplateModel();
+    protected abstract SequenceModel getPhraseModel();
 
     protected AIKADebugger debugger = null;
 

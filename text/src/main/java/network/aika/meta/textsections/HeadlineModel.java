@@ -115,7 +115,8 @@ public class HeadlineModel {
                 headlinePrimaryInputBN.getNeuron(),
                 relContains.getNeuron(),
                 5.0,
-                10.0);
+                10.0
+        );
     }
 
     public BindingNeuron getPrimaryBindingNeuronInstance(BindingNeuron abstractPrimaryBN, PatternNeuron pn) {

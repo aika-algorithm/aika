@@ -99,7 +99,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     }
 
     @Override
-    protected SequenceModel getTemplateModel() {
+    protected SequenceModel getPhraseModel() {
         return syllableModel;
     }
 

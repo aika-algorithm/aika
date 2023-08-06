@@ -68,7 +68,7 @@ public class TopicTest extends TrainingParser {
     }
 
     @Override
-    protected SequenceModel getTemplateModel() {
+    protected SequenceModel getPhraseModel() {
         return templateModel;
     }
 }

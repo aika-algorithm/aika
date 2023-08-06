@@ -46,7 +46,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     private Dictionary dictionary;
 
     private Tokenizer tokenizer;
-    private PhraseModel templateModel;
+    private PhraseModel phraseModel;
     private TypedTextSectionModel textSectionModel;
 
 /*    private String exampleTxt = "Java Softwaredeveloper\n" +
@@ -71,10 +71,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         dictionary = new Dictionary(model);
         tokenizer = new SimpleWordTokenizer(dictionary);
 
-        templateModel = new PhraseModel(model, dictionary);
-        templateModel.initStaticNeurons();
+        phraseModel = new PhraseModel(model, dictionary);
+        phraseModel.initStaticNeurons();
 
-        textSectionModel = new TypedTextSectionModel(templateModel);
+        textSectionModel = new TypedTextSectionModel(phraseModel);
 
         model.setN(0);
     }
@@ -114,8 +114,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         process(requirementsHeadline, null, COUNTING);
         process(exampleTxt, null, COUNTING);
 
-        templateModel.initInputTokenWeights();
-        templateModel.initTemplates();
+        phraseModel.initInputTokenWeights();
+        phraseModel.initTemplates();
         textSectionModel.initTextSectionTemplates();
 
         process(tasksHeadline, new TestContext(tasksHeadline, "Task-HL"), TRAINING);
@@ -124,8 +124,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     }
 
     @Override
-    protected SequenceModel getTemplateModel() {
-        return templateModel;
+    protected SequenceModel getPhraseModel() {
+        return phraseModel;
     }
 
 }
