@@ -75,17 +75,20 @@ public class Dictionary {
     }
 
     public TokenNeuron lookupInputToken(String label) {
-        return model.lookupNeuronByLabel(label, l -> {
-                    TokenNeuron inputTokenN = inputToken.getNeuron();
-                    TokenNeuron n = inputTokenN.instantiateTemplate()
-                            .init(model, label);
-
-                    n.setTokenLabel(label);
-                    n.setAllowTraining(false);
-
-                    return n;
-                }
+        return model.lookupNeuronByLabel(label, l ->
+                createTokenNeuron(label)
         );
+    }
+
+    protected TokenNeuron createTokenNeuron(String label) {
+        TokenNeuron inputTokenN = inputToken.getNeuron();
+        TokenNeuron n = inputTokenN.instantiateTemplate()
+                .init(model, label);
+
+        n.setTokenLabel(label);
+        n.setAllowTraining(false);
+
+        return n;
     }
 
     public void addToken(Document doc, String token, int pos, int begin, int end) {
