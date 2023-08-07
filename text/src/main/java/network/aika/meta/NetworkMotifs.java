@@ -29,8 +29,8 @@ import static network.aika.meta.sequences.SequenceModel.POS_MARGIN;
  *
  * @author Lukas Molzberger
  */
-public class NetworkMotivs {
-    private static final Logger log = LoggerFactory.getLogger(NetworkMotivs.class);
+public class NetworkMotifs {
+    private static final Logger log = LoggerFactory.getLogger(NetworkMotifs.class);
 
 
     public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double inputNetTarget, double netTarget) {

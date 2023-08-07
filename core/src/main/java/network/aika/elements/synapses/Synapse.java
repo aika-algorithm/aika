@@ -86,10 +86,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return scope;
     }
 
-    public int outgoingLinkingOrder() {
-        return 0;
-    }
-
     public boolean isLatentLinkingAllowed() {
         return true;
     }

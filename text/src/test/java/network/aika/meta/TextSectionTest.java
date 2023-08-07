@@ -24,6 +24,7 @@ import network.aika.meta.textsections.TypedTextSectionModel;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;
 import network.aika.text.Document;
+import network.aika.text.Range;
 import network.aika.tokenizer.SimpleWordTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;
@@ -91,8 +92,11 @@ public class TextSectionTest extends TrainingParser<TestContext> {
 
     @Override
     protected void prepareInputs(Document doc, TestContext context) {
-        tokenizer.tokenize(doc, context, (n, pos, begin, end) ->
-                doc.addToken(n, pos, begin, end, dictionary.getInputPatternNetTarget())
+        int[] tokenCounter = new int[1];
+        tokenizer.tokenize(doc, context, (n, pos, begin, end) -> {
+                    doc.addToken(n, pos, begin, end, dictionary.getInputPatternNetTarget());
+                    tokenCounter[0]++;
+                }
         );
 
         if(context != null && context.getHeadlineTargetString() != null) {
@@ -100,8 +104,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
                     .addTargetTSHeadline(
                             doc,
                             Set.of(context.getHeadlineTargetLabel()),
-                            0,
-                            doc.length()
+                            new Range(0, tokenCounter[0]),
+                            new Range(0, doc.length())
                     );
         }
     }

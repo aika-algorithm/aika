@@ -18,6 +18,7 @@ package network.aika.meta.sequences;
 
 import network.aika.Model;
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.ContainsRelationNeuron;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.PatternCategorySynapse;
@@ -28,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
-import static network.aika.meta.NetworkMotivs.*;
+import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
@@ -43,8 +44,14 @@ public abstract class SequenceModel {
 
     protected Dictionary dictionary;
 
+    protected NeuronProvider targetInput;
+
+    protected NeuronProvider targetInputCategory;
+
     public NeuronProvider relPT;
     public NeuronProvider relNT;
+
+    protected NeuronProvider relContains;
 
     public NeuronProvider outerInhibitoryN;
 
@@ -57,6 +64,8 @@ public abstract class SequenceModel {
     public NeuronProvider primaryBN;
 
     protected double patternNetTarget = 0.7;
+
+    protected double targetInputNetTarget = 5.0;
 
     public static double POS_MARGIN = 1.0;
     public static double NEG_MARGIN_LEFT = 1.2;
@@ -136,6 +145,17 @@ public abstract class SequenceModel {
 
         patternN.getNeuron().setBias(patternNetTarget);
 
+        targetInput = model.lookupNeuronByLabel("Abstract Target Input", l ->
+                new TokenNeuron()
+                        .init(model, l)
+        ).getProvider(true);
+
+        targetInput.getNeuron()
+                .setBias(targetInputNetTarget);
+
+        targetInputCategory = makeAbstract((PatternNeuron) targetInput.getNeuron())
+                .getProvider(true);
+
         initTemplateBindingNeurons();
     }
 
@@ -159,7 +179,6 @@ public abstract class SequenceModel {
             int dir
     ) {
         BindingNeuron lastSylBN = sylBeginBN;
-        int lastPos = 0;
         for(int pos = 1; pos <= length; pos++) {
             if(pos < 2) {
                 lastSylBN = createStrongBindingNeuron(
@@ -175,8 +194,54 @@ public abstract class SequenceModel {
                         lastSylBN
                 );
             }
-            lastPos = pos;
         }
+    }
+
+    public TokenNeuron createTargetInputNeuron(String label) {
+        TokenNeuron targetInputN = targetInput.getNeuron();
+        TokenNeuron n = targetInputN.instantiateTemplate()
+                .init(model, label);
+
+        n.setTokenLabel(label);
+        n.setAllowTraining(false);
+
+        return n;
+    }
+
+    protected BindingNeuron createTargetInputBindingNeuron() {
+        double netTarget = 2.5;
+
+        BindingNeuron bn = addBindingNeuron(
+                targetInput.getNeuron(),
+                "Abstract Target Input",
+                10.0,
+                dictionary.getInputPatternNetTarget(),
+                netTarget
+        );
+        makeAbstract(bn);
+
+        addPositiveFeedbackLoop(
+                bn,
+                patternN.getNeuron(),
+                2.5,
+                patternNetTarget,
+                netTarget,
+                0.0,
+                false
+        );
+
+        relContains = ContainsRelationNeuron.lookupRelation(model, true)
+                .getProvider(true);
+
+        addRelation(
+                bn,
+                primaryBN.getNeuron(),
+                relContains.getNeuron(),
+                5.0,
+                10.0
+        );
+
+        return bn;
     }
 
     protected BindingNeuron createStrongBindingNeuron(
@@ -233,8 +298,6 @@ public abstract class SequenceModel {
                 0.0,
                 isOptional
         );
-
-        log.info("");
 
         return bn;
     }

@@ -39,6 +39,15 @@ public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
+    public void initDummyLink(BindingActivation oAct) {
+    }
+
+    @Override
+    public OuterNegativeFeedbackLink checkExistingLink(OuterInhibitoryActivation iAct, BindingActivation oAct) {
+        return (OuterNegativeFeedbackLink) oAct.getInputLink(iAct);
+    }
+
+    @Override
     protected void checkWeight() {
         if(!isNegative())
             delete();

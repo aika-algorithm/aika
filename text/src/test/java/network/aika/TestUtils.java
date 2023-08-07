@@ -17,7 +17,7 @@
 package network.aika;
 
 import network.aika.elements.neurons.*;
-import network.aika.meta.NetworkMotivs;
+import network.aika.meta.NetworkMotifs;
 import network.aika.text.Document;
 
 /**
@@ -36,7 +36,7 @@ public class TestUtils {
             return null;
 
         for(BindingNeuron bn: bns) {
-            NetworkMotivs.addOuterInhibitoryLoop(bn, inhibN, -20.0);
+            NetworkMotifs.addOuterInhibitoryLoop(bn, inhibN, -20.0);
         }
         return inhibN;
     }
@@ -46,7 +46,7 @@ public class TestUtils {
             return null;
 
         for(BindingNeuron bn: bns) {
-            NetworkMotivs.addInnerInhibitoryLoop(bn, inhibN, -20.0);
+            NetworkMotifs.addInnerInhibitoryLoop(bn, inhibN, -20.0);
         }
         return inhibN;
     }
@@ -56,7 +56,7 @@ public class TestUtils {
                 .init(m, "P-" + label);
 
         for(BindingNeuron bn: bns) {
-            NetworkMotivs.addPositiveFeedbackLoop(bn, patternN, 10.0, 1.0, 2.0, 0.1, false);
+            NetworkMotifs.addPositiveFeedbackLoop(bn, patternN, 10.0, 1.0, 2.0, 0.1, false);
         }
         return patternN;
     }

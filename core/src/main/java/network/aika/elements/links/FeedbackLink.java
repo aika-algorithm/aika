@@ -18,13 +18,16 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.FeedbackSynapse;
+import network.aika.exceptions.InvalidRelinkingException;
 import network.aika.fields.Field;
 import network.aika.visitor.Visitor;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
 import network.aika.visitor.pattern.PatternVisitor;
 
+import static network.aika.debugger.EventType.CREATE;
 import static network.aika.fields.FieldLink.linkAndConnect;
 
 /**
@@ -37,6 +40,25 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
 
     public FeedbackLink(S s, IA input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    public boolean relinkInput(IA in) {
+        if(input != null) {
+            if(input != in) {
+                throw new InvalidRelinkingException(output, input, in);
+            }
+            return false;
+        }
+
+        input = in;
+
+        linkInput();
+
+        linkAndConnect(input.getValue(), 0, inputValue);
+
+        getThought().onElementEvent(CREATE, this);
+
+        return true;
     }
 
     @Override

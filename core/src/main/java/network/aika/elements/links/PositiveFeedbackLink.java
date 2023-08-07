@@ -48,24 +48,15 @@ public class PositiveFeedbackLink extends FeedbackLink<PositiveFeedbackSynapse, 
         linkAndConnect(getThought().getFeedbackTrigger(), 1, inputValue);
     }
 
-    public void relinkInput(PatternActivation in) {
-        if(input != null) {
-            if(input != in) {
-                throw new InvalidRelinkingException(output, input, in);
-            }
-            return;
-        }
-
-        input = in;
-
-        linkInput();
-
-        linkAndConnect(input.getValue(), 0, inputValue);
+    @Override
+    public boolean relinkInput(PatternActivation in) {
+        if(!super.relinkInput(in))
+            return false;
 
         if(inputGradient != null)
             linkAndConnect(input.getGradient(), 0, inputGradient);
 
-        getThought().onElementEvent(CREATE, this);
+        return true;
     }
 
     @Override

@@ -16,6 +16,10 @@
  */
 package network.aika.elements.synapses;
 
+import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.links.FeedbackLink;
+import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.enums.Scope;
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
@@ -26,7 +30,7 @@ import network.aika.elements.neurons.Neuron;
  *
  * @author Lukas Molzberger
  */
-public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuron, L extends BindingNeuronLink<S, IA>, IA extends Activation<?>> extends BindingNeuronSynapse<
+public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuron, L extends FeedbackLink<S, IA>, IA extends Activation<?>> extends BindingNeuronSynapse<
         S,
         I,
         L,
@@ -35,6 +39,20 @@ public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuro
 
     public FeedbackSynapse(Scope scope) {
         super(scope);
+    }
+
+    public void initDummyLink(BindingActivation oAct) {
+        if(!linkExists(oAct))
+            createAndInitLink(null, oAct);
+    }
+
+    @Override
+    public L checkExistingLink(IA iAct, BindingActivation oAct) {
+        L l = super.getDummyLink(oAct);
+        if(l != null)
+            l.relinkInput(iAct);
+
+        return l;
     }
 
     @Override

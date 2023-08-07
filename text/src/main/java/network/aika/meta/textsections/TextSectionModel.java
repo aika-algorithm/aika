@@ -25,8 +25,8 @@ import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static network.aika.meta.NetworkMotivs.addPositiveFeedbackLoop;
-import static network.aika.meta.NetworkMotivs.addRelation;
+import static network.aika.meta.NetworkMotifs.addPositiveFeedbackLoop;
+import static network.aika.meta.NetworkMotifs.addRelation;
 
 /**
  *

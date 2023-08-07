@@ -77,5 +77,7 @@ public class PhraseModel extends SequenceModel {
                 5,
                 -1
         );
+
+        createTargetInputBindingNeuron();
     }
 }

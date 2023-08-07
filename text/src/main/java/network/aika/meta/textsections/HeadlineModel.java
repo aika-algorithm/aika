@@ -18,9 +18,6 @@ package network.aika.meta.textsections;
 
 import network.aika.Model;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.ContainsRelationNeuron;
-import network.aika.elements.synapses.PatternSynapse;
-import network.aika.elements.synapses.Synapse;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import network.aika.text.Range;
@@ -30,8 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static network.aika.meta.NetworkMotivs.*;
-import static network.aika.utils.InstantiationUtil.instantiatePatternWithBindingNeurons;
+import static network.aika.meta.NetworkMotifs.*;
 
 /**
  *
@@ -46,85 +42,40 @@ public class HeadlineModel {
 
     private PhraseModel phraseModel;
 
-    protected NeuronProvider headlineTargetInput;
-
-    protected NeuronProvider relContains;
-
-    protected NeuronProvider headlinePrimaryInputBN;
-
     protected NeuronProvider headlineBN;
 
-    protected NeuronProvider headlinePattern;
-
     protected double headlineInputPatternNetTarget = 5.0;
-
 
     public HeadlineModel(PhraseModel phraseModel) {
         this.phraseModel = phraseModel;
         this.model = phraseModel.getModel();
     }
 
-    public void addTargetTSHeadline(Document doc, Set<String> headlineLabels, int begin, int end) {
+    public void addTargetTSHeadline(Document doc, Set<String> headlineLabels, Range tokenPosRange, Range charRange) {
         log.info(doc.getContent() + " : " + headlineLabels.stream().collect(Collectors.joining(", ")));
 
         headlineLabels.forEach(label -> {
-            TokenNeuron headlineHintN = model.lookupNeuronByLabel("Headline Hint - " + label, l ->
-                    new TokenNeuron().init(model, l)
-            );
+            TokenNeuron targetInputN = phraseModel.createTargetInputNeuron(label);
+
             doc.addToken(
-                    headlineHintN,
-                    new Range(begin, end),
-                    null,
+                    targetInputN,
+                    tokenPosRange,
+                    charRange,
                     phraseModel.getDictionary().getInputPatternNetTarget()
             );
         });
     }
 
     protected void initHeadlineTemplates() {
-        headlineTargetInput = model.lookupNeuronByLabel("Abstract TS Headline Target Input", l ->
-                new BindingNeuron()
-                        .init(model, l)
-        ).getProvider(true);
-
-        headlinePattern = instantiatePatternWithBindingNeurons(
-                phraseModel.patternN.getNeuron(),
-                phraseModel.outerInhibitoryN.getNeuron(),
-                "TS-Headline"
-        ).getProvider(true);
-
         double netTarget = 2.5;
 
         headlineBN = addBindingNeuron(
-                headlinePattern.getNeuron(),
+                phraseModel.getPatternNeuron().getNeuron(),
                 "Text-Section-Headline",
                 10.0,
                 headlineInputPatternNetTarget,
                 netTarget
         ).getProvider(true);
 
-        headlinePrimaryInputBN = getPrimaryBindingNeuronInstance(
-                phraseModel.primaryBN.getNeuron(),
-                headlinePattern.getNeuron())
-                .getProvider();
-
-        relContains = ContainsRelationNeuron.lookupRelation(model, true)
-                .getProvider(true);
-
-        addRelation(
-                headlineTargetInput.getNeuron(),
-                headlinePrimaryInputBN.getNeuron(),
-                relContains.getNeuron(),
-                5.0,
-                10.0
-        );
-    }
-
-    public BindingNeuron getPrimaryBindingNeuronInstance(BindingNeuron abstractPrimaryBN, PatternNeuron pn) {
-        return pn.getInputSynapsesByType(PatternSynapse.class)
-                .map(Synapse::getInput)
-                .map(n -> (BindingNeuron) n)
-                .filter(n -> n.getTemplate() == abstractPrimaryBN)
-                .findFirst()
-                .orElse(null);
     }
 }

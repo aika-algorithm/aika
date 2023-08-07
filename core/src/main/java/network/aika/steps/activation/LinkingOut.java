@@ -48,7 +48,6 @@ public class LinkingOut extends Step<Activation> {
         Neuron<?> n = act.getNeuron();
 
         n.getOutputSynapsesAsStream(act.getThought())
-                .sorted(Comparator.comparingInt(Synapse::outgoingLinkingOrder))
                 .toList()
                 .forEach(s ->
                         s.linkAndPropagateOut(act)

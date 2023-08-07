@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static network.aika.meta.NetworkMotivs.*;
+import static network.aika.meta.NetworkMotifs.*;
 
 /**
  *

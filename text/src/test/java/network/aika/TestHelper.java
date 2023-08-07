@@ -25,7 +25,7 @@ import network.aika.elements.synapses.SamePatternSynapse;
 import network.aika.meta.Dictionary;
 
 import static network.aika.TestUtils.initPatternLoop;
-import static network.aika.meta.NetworkMotivs.addOuterInhibitoryLoop;
+import static network.aika.meta.NetworkMotifs.addOuterInhibitoryLoop;
 
 
 /**

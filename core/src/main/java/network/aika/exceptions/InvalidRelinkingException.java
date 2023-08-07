@@ -16,6 +16,7 @@
  */
 package network.aika.exceptions;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 
@@ -28,7 +29,7 @@ import static java.lang.String.format;
 public class InvalidRelinkingException extends RuntimeException {
 
 
-    public InvalidRelinkingException(BindingActivation bAct, PatternActivation oldAct, PatternActivation newAct) {
+    public InvalidRelinkingException(BindingActivation bAct, Activation oldAct, Activation newAct) {
         super(format("Attempt to replace the pattern act [%s] with pattern act [%s] linked to the binding act [%s]. (%s) ",
                 oldAct.getId(),
                 newAct.getId(),

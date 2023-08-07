@@ -69,11 +69,6 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
     }
 
     @Override
-    public int outgoingLinkingOrder() {
-        return 1;
-    }
-
-    @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
 
