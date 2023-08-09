@@ -36,6 +36,7 @@ public class TheBlackCatTest {
     public void testTheBlackCat()  {
         Model m = new Model();
         Dictionary dict = new Dictionary(m);
+        dict.initStaticNeurons();
 
         OuterInhibitoryNeuron inhibNThe = new OuterInhibitoryNeuron().init(m, "I-the");
         OuterInhibitoryNeuron inhibNCat = new OuterInhibitoryNeuron().init(m, "I-cat");
@@ -50,7 +51,7 @@ public class TheBlackCatTest {
                 .setTrainingEnabled(true);
         doc.setConfig(c);
 
-        processTokens(m, doc, "the", "black", "cat");
+        processTokens(dict, doc, "the", "black", "cat");
 
         doc.postProcessing();
         doc.updateModel();

@@ -45,6 +45,7 @@ public class JacksonCookTest {
     public void setupJacksonCookTest() {
         Model m = new Model();
         Dictionary dict = new Dictionary(m);
+        dict.initStaticNeurons();
 
         SimpleWordTokenizer tokenizer = new SimpleWordTokenizer(dict);
 
@@ -227,7 +228,7 @@ public class JacksonCookTest {
                 .setTrainingEnabled(true);
         doc.setConfig(c);
 
-        processTokens(m, doc, "Jackson", "Cook");
+        processTokens(dict, doc, "Jackson", "Cook");
 
         doc.postProcessing();
         doc.updateModel();

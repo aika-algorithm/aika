@@ -16,6 +16,7 @@
  */
 package network.aika;
 
+import network.aika.debugger.AIKADebugger;
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.meta.Dictionary;
 import network.aika.text.Document;
@@ -41,6 +42,7 @@ public class TheCatTest {
     private void performTest(int variant) {
         Model m = new Model();
         Dictionary dict = new Dictionary(m);
+        dict.initStaticNeurons();
 
         OuterInhibitoryNeuron inhibNThe = null; //new InhibitoryNeuron().init(m, "I-the");
         OuterInhibitoryNeuron inhibNCat = null; //new InhibitoryNeuron().init(m, "I-cat");
@@ -54,7 +56,9 @@ public class TheCatTest {
                 .setTrainingEnabled(true);
         doc.setConfig(c);
 
-        processTokens(m, doc, "the", "cat");
+        AIKADebugger.createAndShowGUI(doc);
+
+        processTokens(dict, doc, "the", "cat");
 
         doc.postProcessing();
         doc.updateModel();

@@ -43,6 +43,7 @@ public class ABCDTest {
     public void testABCD() throws InterruptedException {
         Model m = new Model();
         Dictionary dict = new Dictionary(m);
+        dict.initStaticNeurons();
 
         PatternNeuron a_IN = dict.lookupInputToken("a");
 
@@ -151,7 +152,7 @@ public class ABCDTest {
                 .setTrainingEnabled(true);
         doc.setConfig(c);
 
-        processTokens(m, doc, "a", "b", "c", "d");
+        processTokens(dict, doc, "a", "b", "c", "d");
 
         doc.postProcessing();
         doc.updateModel();

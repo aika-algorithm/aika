@@ -35,6 +35,7 @@ public class TheDogAndCatTest {
     public void testTheDogAndTheCat()  {
         Model m = new Model();
         Dictionary dict = new Dictionary(m);
+        dict.initStaticNeurons();
 
         OuterInhibitoryNeuron inhibNThe = new OuterInhibitoryNeuron()
                 .init(m, "I-the");
@@ -56,7 +57,7 @@ public class TheDogAndCatTest {
                 .setTrainingEnabled(false);
         doc.setConfig(c);
 
-        processTokens(m, doc, "the", "dog", "and", "the", "cat");
+        processTokens(dict, doc, "the", "dog", "and", "the", "cat");
 
         doc.postProcessing();
         doc.updateModel();

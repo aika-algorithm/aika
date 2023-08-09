@@ -161,9 +161,11 @@ public abstract class SequenceModel {
 
     public void initStaticNeurons() {
         relPT = BeforeRelationNeuron.lookupRelation(model, -1, -1)
+                .setBias(5.0)
                 .getProvider(true);
 
         relNT = BeforeRelationNeuron.lookupRelation(model, 1, 1)
+                .setBias(5.0)
                 .getProvider(true);
 
         dictionary.initStaticNeurons();
@@ -231,6 +233,7 @@ public abstract class SequenceModel {
         );
 
         relContains = ContainsRelationNeuron.lookupRelation(model, true)
+                .setBias(5.0)
                 .getProvider(true);
 
         addRelation(
