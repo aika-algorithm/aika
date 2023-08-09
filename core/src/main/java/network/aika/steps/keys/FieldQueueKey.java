@@ -58,7 +58,7 @@ public class FieldQueueKey extends QueueKey {
     @Override
     public String toString() {
         return "[r:" + getRoundStr() +
-                ",p:" + getPhraseStr() +
+                ",p:" + getPhaseStr() +
                 ",sv:" + getSortValueAsString() +
                 ",ts:" + getCurrentTimestamp() +
                 "]";

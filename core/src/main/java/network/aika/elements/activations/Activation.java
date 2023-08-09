@@ -73,8 +73,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected MultiInputField netPreAnneal;
 
-    protected FieldOutput isFired;
-
     protected FieldFunction netOuterGradient;
     protected MultiInputField gradient;
 
@@ -101,17 +99,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         outputLinks = new TreeMap<>();
 
         initNet();
-
-        isFired = threshold(this, "isFired", 0.0, ABOVE, net);
-
-        isFired.addListener("onFired", (fl, nr, u) -> {
-                    if(u > 0.0 && fired == NOT_SET) {
-                        fired = thought.getCurrentTimestamp();
-                        LinkingOut.add(this);
-                        Counting.add(this);
-                    }
-                }
-        );
 
         value = func(
                 this,
@@ -162,6 +149,15 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                         netPreAnneal.disconnectAndUnlinkInputs(false),
                 true
         );
+
+        net.addListener("onFired", (fl, nr, u) -> {
+                    if(fl.getInput().exceedsThreshold() && fired == NOT_SET) {
+                        fired = thought.getCurrentTimestamp();
+                        LinkingOut.add(this, false);
+                        Counting.add(this);
+                    }
+                }
+        );
     }
 
     public Field getDefaultNet() {
@@ -208,10 +204,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                         netPreAnneal,
                         x -> getNeuron().getActivationFunction().outerGrad(x)
         );
-    }
-
-    public FieldOutput getIsFired() {
-        return isFired;
     }
 
     public FieldFunction getNetOuterGradient() {

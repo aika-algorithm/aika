@@ -34,12 +34,16 @@ import static network.aika.steps.Phase.OUTPUT_LINKING;
  */
 public class LinkingOut extends Step<Activation> {
 
-    public static void add(Activation act) {
-        Step.add(new LinkingOut(act));
+    private boolean unsuppressed;
+
+    public static void add(Activation act, boolean unsuppressed) {
+        Step.add(new LinkingOut(act, unsuppressed));
     }
 
-    public LinkingOut(Activation act) {
+    public LinkingOut(Activation act, boolean unsuppressed) {
         super(act);
+
+        this.unsuppressed = unsuppressed;
     }
 
     @Override
@@ -48,6 +52,9 @@ public class LinkingOut extends Step<Activation> {
         Neuron<?> n = act.getNeuron();
 
         n.getOutputSynapsesAsStream(act.getThought())
+                .filter(s ->
+                        s.linkOnUnsuppressed() == unsuppressed
+                )
                 .toList()
                 .forEach(s ->
                         s.linkAndPropagateOut(act)
@@ -57,5 +64,10 @@ public class LinkingOut extends Step<Activation> {
     @Override
     public Phase getPhase() {
         return OUTPUT_LINKING;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " Unsuppressed:" + unsuppressed;
     }
 }

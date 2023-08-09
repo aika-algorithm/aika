@@ -21,6 +21,7 @@ import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
 import network.aika.fields.Field;
 import network.aika.fields.FieldLink;
+import network.aika.fields.IdentityFunction;
 import network.aika.fields.InnerMaxField;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
@@ -36,6 +37,12 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
 
     public InnerNegativeFeedbackLink(InnerNegativeFeedbackSynapse s, InnerInhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    protected void initInputValue() {
+        super.initInputValue();
+        inputValue.setInitialValue(1.0);
     }
 
     @Override

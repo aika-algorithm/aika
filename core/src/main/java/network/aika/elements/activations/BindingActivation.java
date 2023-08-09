@@ -25,6 +25,8 @@ import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.BindingNeuron;
+import network.aika.steps.activation.Counting;
+import network.aika.steps.activation.LinkingOut;
 import network.aika.visitor.operator.SelfRefOperator;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
@@ -33,6 +35,7 @@ import network.aika.visitor.pattern.PatternVisitor;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.func;
 import static network.aika.fields.Fields.isTrue;
@@ -75,6 +78,12 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         super.initNet();
 
         linkAndConnect(netUnsuppressed, net);
+
+        netUnsuppressed.addListener("onFiredUnsuppressed", (fl, nr, u) -> {
+                    if (fl.getInput().exceedsThreshold())
+                        LinkingOut.add(this, true);
+                }
+        );
     }
 
     public MultiInputField getNetUnsuppressed() {

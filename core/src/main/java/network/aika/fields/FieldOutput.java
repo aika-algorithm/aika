@@ -52,4 +52,8 @@ public interface FieldOutput {
         fl.connect(!assumeInitialized);
         return this;
     }
+
+    default boolean exceedsThreshold() {
+        return getValue() <= 0.0 && getUpdatedValue() > 0.0;
+    }
 }

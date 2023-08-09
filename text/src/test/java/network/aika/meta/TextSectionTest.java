@@ -131,5 +131,4 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     protected SequenceModel getPhraseModel() {
         return phraseModel;
     }
-
 }

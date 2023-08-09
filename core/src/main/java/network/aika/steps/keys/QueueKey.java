@@ -61,7 +61,7 @@ public abstract class QueueKey implements Comparable<QueueKey> {
         return phase;
     }
 
-    protected String getPhraseStr() {
+    protected String getPhaseStr() {
         return getPhase() + "-" + getPhase().ordinal();
     }
 

@@ -54,7 +54,7 @@ public class PatternParticleLink<L extends PatternLink> extends ParticleLink<L> 
                 .filter(Objects::nonNull)
                 .map(Activation::getTokenPosRange)
                 .filter(Objects::nonNull)
-                .mapToDouble(Range::getBegin)
+                .mapToDouble(Range::getEnd)
                 .average();
 
         if(!avgXPos.isPresent())

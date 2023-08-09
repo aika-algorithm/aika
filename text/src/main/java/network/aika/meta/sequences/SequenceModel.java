@@ -22,6 +22,7 @@ import network.aika.elements.neurons.relations.ContainsRelationNeuron;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.PatternCategorySynapse;
+import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.enums.sign.Sign;
 import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
@@ -183,11 +184,12 @@ public abstract class SequenceModel {
         BindingNeuron lastSylBN = sylBeginBN;
         for(int pos = 1; pos <= length; pos++) {
             if(pos < 2) {
-                lastSylBN = createStrongBindingNeuron(
+                lastSylBN = createStrongSecundaryBindingNeuron(
                         patternNetTarget,
                         pos >= optionalStart,
                         dir * pos,
-                        lastSylBN
+                        lastSylBN,
+                        2.5
                 );
             } else {
                 lastSylBN = createWeakBindingNeuron(
@@ -247,14 +249,68 @@ public abstract class SequenceModel {
         return bn;
     }
 
+    protected BindingNeuron createPrimaryBindingNeuron(
+            double patternNetTarget,
+            boolean isOptional,
+            double netTarget
+    ) {
+        BindingNeuron bn = createStrongBindingNeuron (
+                patternNetTarget,
+                isOptional,
+                0,
+                null,
+                netTarget
+        );
+
+        PositiveFeedbackSynapse pfs = bn.getInputSynapseByType(PositiveFeedbackSynapse.class);
+        double pfsMargin = pfs.getWeight().getValue() + pfs.getSynapseBias().getValue();
+
+        addInnerInhibitoryLoop(
+                bn,
+                primaryBNInhibitoryN.getNeuron(),
+                -(pfsMargin + netTarget)
+        );
+
+        return bn;
+    }
+
+    protected BindingNeuron createStrongSecundaryBindingNeuron(
+            double patternNetTarget,
+            boolean isOptional,
+            int pos,
+            BindingNeuron lastBN,
+            double netTarget
+    ) {
+        BindingNeuron bn = createStrongBindingNeuron(
+                patternNetTarget,
+                isOptional,
+                pos,
+                lastBN,
+                netTarget
+        );
+
+        LatentRelationNeuron rel = pos > 0 ?
+                relPT.getNeuron() :
+                relNT.getNeuron();
+
+        addRelation(
+                lastBN,
+                bn,
+                rel,
+                5.0,
+                10.0
+        );
+
+        return bn;
+    }
+
     protected BindingNeuron createStrongBindingNeuron(
             double patternNetTarget,
             boolean isOptional,
             int pos,
-            BindingNeuron lastBN
+            BindingNeuron lastBN,
+            double netTarget
     ) {
-        double netTarget = 2.5;
-
         log.info("Strong Binding-Neuron: netTarget:" + netTarget);
 
         BindingNeuron bn = addBindingNeuron(
@@ -271,26 +327,6 @@ public abstract class SequenceModel {
                 outerInhibitoryN.getNeuron(),
                 getNegMargin(pos) * -netTarget
         );
-
-        if(pos != 0) {
-            LatentRelationNeuron rel = pos > 0 ?
-                    relPT.getNeuron() :
-                    relNT.getNeuron();
-
-            addRelation(
-                    lastBN,
-                    bn,
-                    rel,
-                    5.0,
-                    10.0
-            );
-        } else {
-            addInnerInhibitoryLoop(
-                    bn,
-                    primaryBNInhibitoryN.getNeuron(),
-                    getNegMargin(pos) * -netTarget
-            );
-        }
 
         addPositiveFeedbackLoop(
                 bn,

@@ -42,12 +42,6 @@ public class FiredQueueKey extends QueueKey {
         this.fired = element.getFired();
     }
 
-    public FiredQueueKey(int round, Phase phase, Long fired, long created, long currentTimestamp) {
-        super(round, phase, new Timestamp(currentTimestamp));
-        this.fired = fired != null ? new Timestamp(fired) : NOT_SET;
-        this.created = new Timestamp(created);
-    }
-
     public Timestamp getFired() {
         return fired;
     }
@@ -63,7 +57,7 @@ public class FiredQueueKey extends QueueKey {
                 getFired();
 
         return "[r:" + getRoundStr() +
-                ",p:" + getPhraseStr() +
+                ",p:" + getPhaseStr() +
                 ",f:" + firedStr +
                 ",c:" + getCreated() +
                 ",ts:" + getCurrentTimestamp() +

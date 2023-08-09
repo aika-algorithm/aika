@@ -37,7 +37,7 @@ public class DisjunctiveLink<S extends DisjunctiveSynapse, IA extends Activation
                 mul(
                         this,
                         "weight update",
-                        getInput().getIsFired(),
+                        inputIsFired,
                         getOutput().getUpdateValue()
                 ),
                 synapse.getWeight()
