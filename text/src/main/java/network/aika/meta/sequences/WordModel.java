@@ -61,5 +61,7 @@ public class WordModel extends SequenceModel {
                 5,
                 -1
         );
+
+        applyMarginToInnerNegFeedbackSynapse(primaryBN.getNeuron());
     }
 }

@@ -167,6 +167,12 @@ public abstract class ConjunctiveNeuron<A extends ConjunctiveActivation> extends
         return inputsSynapses;
     }
 
+    public double getDeltaBetweenTargetAndMax() {
+        return getInputSynapsesByType(ConjunctiveSynapse.class)
+                .filter(s -> !s.isNegative())
+                .mapToDouble(s -> s.getWeight().getValue() + s.getSynapseBias().getValue())
+                .sum();
+    }
 
     @Override
     public void write(DataOutput out) throws IOException {

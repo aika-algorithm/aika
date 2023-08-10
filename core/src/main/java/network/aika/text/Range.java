@@ -70,6 +70,10 @@ public class Range {
         return end;
     }
 
+    public boolean contains(Range r) {
+        return begin <= r.begin && r.end <= end;
+    }
+
     public long length() {
         return end - begin;
     }

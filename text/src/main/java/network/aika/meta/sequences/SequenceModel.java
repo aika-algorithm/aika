@@ -21,8 +21,8 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.ContainsRelationNeuron;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
+import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
 import network.aika.elements.synapses.PatternCategorySynapse;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.enums.sign.Sign;
 import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
@@ -262,16 +262,19 @@ public abstract class SequenceModel {
                 netTarget
         );
 
-        PositiveFeedbackSynapse pfs = bn.getInputSynapseByType(PositiveFeedbackSynapse.class);
-        double pfsMargin = pfs.getWeight().getValue() + pfs.getSynapseBias().getValue();
-
         addInnerInhibitoryLoop(
                 bn,
                 primaryBNInhibitoryN.getNeuron(),
-                -(pfsMargin + netTarget)
+                -netTarget
         );
 
         return bn;
+    }
+
+    protected void applyMarginToInnerNegFeedbackSynapse(BindingNeuron primBN) {
+        double margin = primBN.getDeltaBetweenTargetAndMax();
+        InnerNegativeFeedbackSynapse innerNegSyn = primBN.getInputSynapseByType(InnerNegativeFeedbackSynapse.class);
+        innerNegSyn.setWeight(innerNegSyn.getWeight().getValue() - margin);
     }
 
     protected BindingNeuron createStrongSecundaryBindingNeuron(

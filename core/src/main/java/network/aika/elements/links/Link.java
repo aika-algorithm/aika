@@ -266,8 +266,8 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
         if(input.getCharRange() != null || input.getTokenPosRange() != null)
             output.updateRanges(
-                    input.getCharRange(),
-                    input.getTokenPosRange()
+                    input.getTokenPosRange(),
+                    input.getCharRange()
             );
     }
 

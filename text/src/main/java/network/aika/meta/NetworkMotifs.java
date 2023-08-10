@@ -32,7 +32,6 @@ import static network.aika.meta.sequences.SequenceModel.POS_MARGIN;
 public class NetworkMotifs {
     private static final Logger log = LoggerFactory.getLogger(NetworkMotifs.class);
 
-
     public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double inputNetTarget, double netTarget) {
         BindingNeuron bn = new BindingNeuron()
                 .init(input.getModel(), label);
@@ -67,8 +66,7 @@ public class NetworkMotifs {
 
         new InnerNegativeFeedbackSynapse()
                 .setWeight(weight)
-                .init(in, bn)
-                .adjustBias();
+                .init(in, bn);
     }
 
     public static void addPositiveFeedbackLoop(

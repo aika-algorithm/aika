@@ -56,7 +56,7 @@ public class Document extends Thought {
     public void registerTokenActivation(TokenActivation tokenAct) {
         if(tokenAct.getTokenPosRange() != null) {
             tokenPosBeginIndex.put(new TokenPositionKey(tokenAct.getTokenPosRange().getBegin(), tokenAct.getId()), tokenAct);
-            tokenPosEndIndex.put(new TokenPositionKey(tokenAct.getTokenPosRange().getBegin(), tokenAct.getId()), tokenAct);
+            tokenPosEndIndex.put(new TokenPositionKey(tokenAct.getTokenPosRange().getEnd(), tokenAct.getId()), tokenAct);
         }
     }
 

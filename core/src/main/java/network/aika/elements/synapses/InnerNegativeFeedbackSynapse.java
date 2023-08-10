@@ -67,12 +67,6 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public InnerNegativeFeedbackSynapse setWeight(double w) {
-        weight.receiveUpdate(false, w);
-        return this;
-    }
-
-    @Override
     public boolean checkLinkingEvent(Activation act) {
         return true;
     }

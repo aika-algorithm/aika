@@ -22,7 +22,6 @@ import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  *
  * @author Lukas Molzberger
@@ -61,6 +60,8 @@ public class PhraseModel extends SequenceModel {
                 2.5
         ).getProvider(true);
 
+        createTargetInputBindingNeuron();
+
         expandContinueBindingNeurons(
                 patternNetTarget,
                 1,
@@ -77,6 +78,6 @@ public class PhraseModel extends SequenceModel {
                 -1
         );
 
-        createTargetInputBindingNeuron();
+        applyMarginToInnerNegFeedbackSynapse(primaryBN.getNeuron());
     }
 }

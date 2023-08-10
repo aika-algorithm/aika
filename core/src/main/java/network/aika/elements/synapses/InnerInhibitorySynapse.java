@@ -64,6 +64,11 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
         return s;
     }
 
+    @Override
+    public boolean linkOnUnsuppressed() {
+        return true;
+    }
+
     public Scope getType() {
         return type;
     }
