@@ -18,15 +18,10 @@ package network.aika.elements.neurons;
 
 import network.aika.ActivationFunction;
 import network.aika.Thought;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.synapses.CategorySynapse;
-import network.aika.elements.synapses.InhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.OuterInhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.InhibitoryCategorySynapse;
-import network.aika.elements.synapses.Synapse;
-import network.aika.enums.Scope;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
-import network.aika.visitor.operator.LinkingOperator;
 
 /**
  *
@@ -51,19 +46,13 @@ public class InnerInhibitoryNeuron extends DisjunctiveNeuron<InnerInhibitoryActi
     }
 
     @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
-        new InhibitoryVisitor(act.getThought(), c, Scope.SAME)
-                .start(act);
-    }
-
-    @Override
     public CategorySynapse createCategorySynapse() {
         return new InhibitoryCategorySynapse();
     }
 
     @Override
-    public InhibitoryCategoryInputSynapse getCategoryInputSynapse() {
-        return getInputSynapseByType(InhibitoryCategoryInputSynapse.class);
+    public OuterInhibitoryCategoryInputSynapse getCategoryInputSynapse() {
+        return getInputSynapseByType(OuterInhibitoryCategoryInputSynapse.class);
     }
 
     @Override

@@ -16,11 +16,14 @@
  */
 package network.aika.elements.synapses;
 
+import network.aika.elements.activations.Activation;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.links.BindingCategoryLink;
 import network.aika.elements.neurons.Neuron;
+import network.aika.visitor.binding.BindingVisitor;
+import network.aika.visitor.operator.LinkingOperator;
 
 /**
  *
@@ -30,6 +33,12 @@ public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynap
 
     public BindingCategorySynapse() {
         super(Scope.SAME);
+    }
+
+    @Override
+    public void startVisitor(LinkingOperator c, Activation act) {
+        new BindingVisitor(act.getThought(), c)
+                .start(act);
     }
 
     @Override

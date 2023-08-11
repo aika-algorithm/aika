@@ -42,7 +42,7 @@ public class PhraseModel extends SequenceModel {
     public void initStaticNeurons() {
         super.initStaticNeurons();
 
-        upperCaseN = new PatternCategoryNeuron()
+        upperCaseN = new CategoryNeuron()
                 .init(model, "Upper Case")
                 .getProvider(true);
     }

@@ -26,9 +26,9 @@ import static network.aika.elements.activations.OuterInhibitoryActivation.crossC
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCategoryInputSynapse, CategoryActivation, OuterInhibitoryActivation> implements CategoryInputLink {
+public class InhibitoryCategoryInputLink extends DisjunctiveLink<OuterInhibitoryCategoryInputSynapse, CategoryActivation, OuterInhibitoryActivation> implements CategoryInputLink {
 
-    public InhibitoryCategoryInputLink(InhibitoryCategoryInputSynapse s, CategoryActivation input, OuterInhibitoryActivation output) {
+    public InhibitoryCategoryInputLink(OuterInhibitoryCategoryInputSynapse s, CategoryActivation input, OuterInhibitoryActivation output) {
         super(s, input, output);
 
         input.getCategoryInputs()

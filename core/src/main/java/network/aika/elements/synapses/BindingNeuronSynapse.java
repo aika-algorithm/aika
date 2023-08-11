@@ -22,6 +22,8 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.BindingNeuronLink;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.BindingNeuron;
+import network.aika.visitor.binding.BindingVisitor;
+import network.aika.visitor.operator.LinkingOperator;
 
 
 /**
@@ -42,6 +44,11 @@ public abstract class BindingNeuronSynapse<S extends BindingNeuronSynapse, I ext
         super(scope);
     }
 
+    @Override
+    public void startVisitor(LinkingOperator c, Activation act) {
+        new BindingVisitor(act.getThought(), c)
+                .start(act);
+    }
 
     @Override
     public double getPropagatePreNet(IA iAct) {

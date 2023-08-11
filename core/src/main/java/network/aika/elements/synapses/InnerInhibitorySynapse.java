@@ -17,12 +17,15 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.InnerInhibitoryLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
 import network.aika.enums.Scope;
+import network.aika.visitor.inhibitory.InhibitoryVisitor;
+import network.aika.visitor.operator.LinkingOperator;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -50,6 +53,12 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
     public InnerInhibitorySynapse(Scope type) {
         this();
         this.type = type;
+    }
+
+    @Override
+    public void startVisitor(LinkingOperator c, Activation act) {
+        new InhibitoryVisitor(act.getThought(), c, Scope.SAME)
+                .start(act);
     }
 
     @Override

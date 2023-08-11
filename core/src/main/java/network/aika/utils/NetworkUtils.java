@@ -18,7 +18,7 @@ package network.aika.utils;
 
 import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.BindingCategoryInputSynapse;
-import network.aika.elements.synapses.InhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.OuterInhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.PatternCategoryInputSynapse;
 import network.aika.enums.Scope;
 import org.slf4j.Logger;
@@ -37,8 +37,8 @@ public class NetworkUtils {
 
     private static final String CATEGORY_LABEL = " Category";
 
-    public static BindingCategoryNeuron makeAbstract(BindingNeuron n) {
-        BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron()
+    public static CategoryNeuron makeAbstract(BindingNeuron n) {
+        CategoryNeuron bindingCategory = new CategoryNeuron()
                 .init(n.getModel(), n.getLabel() + CATEGORY_LABEL);
 
         bindingCategory.getProvider(true);
@@ -51,8 +51,8 @@ public class NetworkUtils {
     }
 
 
-    public static PatternCategoryNeuron makeAbstract(PatternNeuron n) {
-        PatternCategoryNeuron patternCategory = new PatternCategoryNeuron()
+    public static CategoryNeuron makeAbstract(PatternNeuron n) {
+        CategoryNeuron patternCategory = new CategoryNeuron()
                 .init(n.getModel(), n.getLabel() + CATEGORY_LABEL);
 
         patternCategory.getProvider(true);
@@ -70,7 +70,7 @@ public class NetworkUtils {
 
         inhibCategory.getProvider(true);
 
-        new InhibitoryCategoryInputSynapse()
+        new OuterInhibitoryCategoryInputSynapse()
                 .setWeight(1.0)
                 .init(inhibCategory, n);
 
@@ -83,7 +83,7 @@ public class NetworkUtils {
 
         inhibCategory.getProvider(true);
 
-        new InhibitoryCategoryInputSynapse()
+        new OuterInhibitoryCategoryInputSynapse()
                 .setWeight(1.0)
                 .init(inhibCategory, n);
 

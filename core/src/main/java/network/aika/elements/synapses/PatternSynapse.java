@@ -30,6 +30,8 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.enums.sign.Sign;
 import network.aika.utils.Bound;
 import network.aika.utils.Utils;
+import network.aika.visitor.operator.LinkingOperator;
+import network.aika.visitor.pattern.PatternVisitor;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -63,6 +65,12 @@ public class PatternSynapse extends ConjunctiveSynapse<
 
     public PatternSynapse() {
         super(Scope.SAME);
+    }
+
+    @Override
+    public void startVisitor(LinkingOperator c, Activation act) {
+        new PatternVisitor(act.getThought(), c)
+                .start(act);
     }
 
     @Override

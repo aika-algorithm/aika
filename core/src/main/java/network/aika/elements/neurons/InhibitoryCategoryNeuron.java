@@ -16,11 +16,7 @@
  */
 package network.aika.elements.neurons;
 
-import network.aika.elements.activations.Activation;
 import network.aika.enums.Scope;
-import network.aika.elements.synapses.Synapse;
-import network.aika.visitor.operator.LinkingOperator;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
 
 /**
  * @author Lukas Molzberger
@@ -34,9 +30,7 @@ public class InhibitoryCategoryNeuron extends CategoryNeuron {
         this.identityReference = identityReference;
     }
 
-    @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
-        new InhibitoryVisitor(act.getThought(), c, identityReference)
-                .start(act);
+    public Scope getIdentityReference() {
+        return identityReference;
     }
 }

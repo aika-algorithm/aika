@@ -51,6 +51,15 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
     }
 
     @Override
+    public void addInputLinkingStep() {
+        super.addInputLinkingStep();
+
+        Synapse posFeedbackSyn = input.getNeuron().getInputSynapse(output.getNeuronProvider());
+        if(posFeedbackSyn != null)
+            posFeedbackSyn.checkExistingLink(output, input);
+    }
+
+    @Override
     public void connectGradientFields() {
         gradient = new MultiInputField(this, "Gradient", TOLERANCE);
 
