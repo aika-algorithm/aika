@@ -31,6 +31,8 @@ public interface Direction {
 
     Direction invert();
 
+    Direction combine(Direction dir);
+
     <I> I getInput(I from, I to);
 
     <O> O getOutput(O from, O to);

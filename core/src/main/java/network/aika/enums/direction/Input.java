@@ -33,6 +33,11 @@ public class Input implements Direction {
     }
 
     @Override
+    public Direction combine(Direction dir) {
+        return dir;
+    }
+
+    @Override
     public <I> I getInput(I from, I to) {
         return to;
     }

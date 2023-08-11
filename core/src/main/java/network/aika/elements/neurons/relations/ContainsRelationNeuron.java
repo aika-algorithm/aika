@@ -36,32 +36,31 @@ import static network.aika.text.Slot.END;
 public class ContainsRelationNeuron extends LatentRelationNeuron {
 
 
-    private Slot fromSlot;
-    private Slot toSlot;
+    private Direction relationDir;
 
 
-    public static ContainsRelationNeuron lookupRelation(Model m, boolean relDir) {
+    public static ContainsRelationNeuron lookupRelation(Model m, Direction relDir) {
         return m.lookupNeuronByLabel("Contains Rel.: ", l ->
                 createContainsRelationNeuron(m, l, relDir)
         );
     }
 
-    private static ContainsRelationNeuron createContainsRelationNeuron(Model m, String l, boolean relDir) {
+    private static ContainsRelationNeuron createContainsRelationNeuron(Model m, String l, Direction relDir) {
         ContainsRelationNeuron n = new ContainsRelationNeuron();
         n.addProvider(m);
         n.setLabel(l);
         n.setAllowTraining(false);
 
-        n.fromSlot = relDir ? BEGIN : END;
-        n.toSlot = relDir ? END : BEGIN;
+        n.relationDir = relDir;
 
         return n;
     }
 
     @Override
-    public Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromOriginAct, Direction dir) {
+    public Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromOriginAct, Direction vDir) {
         Document doc = (Document) fromOriginAct.getThought();
         Range r = fromOriginAct.getTokenPosRange();
+        Direction dir = relationDir.combine(vDir);
 
         return (
                 dir == Direction.OUTPUT ?

@@ -23,6 +23,8 @@ import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
 import network.aika.elements.synapses.PatternCategorySynapse;
+import network.aika.enums.direction.Direction;
+import network.aika.enums.direction.Input;
 import network.aika.enums.sign.Sign;
 import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
@@ -234,7 +236,7 @@ public abstract class SequenceModel {
                 false
         );
 
-        relContains = ContainsRelationNeuron.lookupRelation(model, true)
+        relContains = ContainsRelationNeuron.lookupRelation(model, Direction.INPUT)
                 .setBias(5.0)
                 .getProvider(true);
 
