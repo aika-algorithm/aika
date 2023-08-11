@@ -18,6 +18,7 @@ package network.aika.fields;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Lukas Molzberger
@@ -60,7 +61,7 @@ public abstract class AbstractFunction extends Field implements FieldInput {
     }
 
     @Override
-    public Collection<FieldLink> getInputs() {
+    public List<FieldLink> getInputs() {
         return Arrays.asList(inputs);
     }
 

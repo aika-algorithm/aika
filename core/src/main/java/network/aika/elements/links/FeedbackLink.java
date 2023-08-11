@@ -42,25 +42,6 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
         super(s, input, output);
     }
 
-    public boolean relinkInput(IA in) {
-        if(input != null) {
-            if(input != in) {
-                throw new InvalidRelinkingException(output, input, in);
-            }
-            return false;
-        }
-
-        input = in;
-
-        linkInput();
-
-        linkAndConnect(input.getValue(), 0, inputValue);
-
-        getThought().onElementEvent(CREATE, this);
-
-        return true;
-    }
-
     @Override
     protected void initWeightInput() {
         super.initWeightInput();

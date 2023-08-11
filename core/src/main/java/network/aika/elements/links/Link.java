@@ -22,6 +22,7 @@ import network.aika.elements.LinkKey;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
 import network.aika.enums.Scope;
+import network.aika.exceptions.InvalidRelinkingException;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.steps.link.LinkingIn;
@@ -151,6 +152,25 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
         if(input != null)
             connectInputValue();
+    }
+
+    public boolean relinkInput(I in) {
+        if(input != null) {
+            if(input != in) {
+                throw new InvalidRelinkingException(output, input, in);
+            }
+            return false;
+        }
+
+        input = in;
+        linkInput();
+
+        connectInputValue();
+//        linkAndConnect(input.getValue(), 0, inputValue);
+
+        getThought().onElementEvent(CREATE, this);
+
+        return true;
     }
 
     public Field getOutputNetForBias() {

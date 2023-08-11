@@ -29,7 +29,7 @@ import static java.lang.String.format;
 public class InvalidRelinkingException extends RuntimeException {
 
 
-    public InvalidRelinkingException(BindingActivation bAct, Activation oldAct, Activation newAct) {
+    public InvalidRelinkingException(Activation bAct, Activation oldAct, Activation newAct) {
         super(format("Attempt to replace the pattern act [%s] with pattern act [%s] linked to the binding act [%s]. (%s) ",
                 oldAct.getId(),
                 newAct.getId(),

@@ -18,6 +18,7 @@ package network.aika.fields;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Lukas Molzberger
@@ -38,7 +39,7 @@ public class InputField extends Field implements FieldOutput {
     }
 
     @Override
-    public Collection<FieldLink> getInputs() {
+    public List<FieldLink> getInputs() {
         return Collections.emptyList();
     }
 

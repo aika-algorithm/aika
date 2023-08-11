@@ -47,6 +47,9 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
 
     @Override
     protected void connectInputValue() {
+        if(inputValue.getInputs().get(0) == null)
+            inputValue.setValue(0.0);
+
         FieldLink fl = FieldLink.link(input.getValue(), 0, inputValue);
         InnerMaxField inhibNet = (InnerMaxField) input.getNet();
         BindingActivation selectBindingAct = getBindingActivation(inhibNet.getSelectedInput());

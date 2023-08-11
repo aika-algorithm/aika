@@ -2,10 +2,11 @@ package network.aika.fields;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class MultiInputField extends Field {
 
-    private Collection<FieldLink> inputs;
+    private List<FieldLink> inputs;
 
     public MultiInputField(FieldObject reference, String label, Double tolerance) {
         super(reference, label, tolerance);
@@ -34,7 +35,7 @@ public class MultiInputField extends Field {
     }
 
     @Override
-    public Collection<FieldLink> getInputs() {
+    public List<FieldLink> getInputs() {
         return inputs;
     }
 }
