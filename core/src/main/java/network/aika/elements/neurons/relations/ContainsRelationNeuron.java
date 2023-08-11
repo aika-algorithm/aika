@@ -57,9 +57,9 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
     }
 
     @Override
-    public Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromOriginAct, Direction vDir) {
-        Document doc = (Document) fromOriginAct.getThought();
-        Range r = fromOriginAct.getTokenPosRange();
+    public Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromAct, Direction vDir) {
+        Document doc = (Document) fromAct.getThought();
+        Range r = fromAct.getTokenPosRange();
         Direction dir = relationDir.combine(vDir);
 
         return (
@@ -67,7 +67,7 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
                         doc.getRelatedTokensByTokenPosition(BEGIN, r) :
                         doc.getRelatedTokensByTokenPosition(BEGIN, new Range(0, r.getBegin()))
         )
-                .filter(act -> fromOriginAct != act)
+                .filter(act -> fromAct != act)
                 .filter(act ->
                         contains(r, act.getTokenPosRange(), dir)
                 );

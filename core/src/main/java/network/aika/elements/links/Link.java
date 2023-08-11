@@ -156,9 +156,9 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
     public boolean relinkInput(I in) {
         if(input != null) {
-            if(input != in) {
+            if(input != in)
                 throw new InvalidRelinkingException(output, input, in);
-            }
+
             return false;
         }
 
@@ -166,7 +166,6 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         linkInput();
 
         connectInputValue();
-//        linkAndConnect(input.getValue(), 0, inputValue);
 
         getThought().onElementEvent(CREATE, this);
 

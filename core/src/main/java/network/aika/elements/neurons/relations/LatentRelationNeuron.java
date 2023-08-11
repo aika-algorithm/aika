@@ -40,7 +40,7 @@ import static network.aika.utils.Utils.TOLERANCE;
 public abstract class LatentRelationNeuron extends BindingNeuron {
 
 
-    public abstract Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromOriginAct, Direction dir);
+    public abstract Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromAct, Direction dir);
 
     @Override
     protected MultiInputField initBias() {

@@ -52,15 +52,6 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public InnerNegativeFeedbackLink checkExistingLink(InnerInhibitoryActivation iAct, BindingActivation oAct) {
-        InnerNegativeFeedbackLink l = super.checkExistingLink(iAct, oAct);
-        if(l == null)
-            l = createLink(iAct, oAct);
-
-        return l;
-    }
-
-    @Override
     public void linkAndPropagateOut(InnerInhibitoryActivation act) {
         getOutput()
                 .linkOutgoing(this, act);

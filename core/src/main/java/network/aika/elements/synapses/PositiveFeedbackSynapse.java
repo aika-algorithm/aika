@@ -45,15 +45,6 @@ public class PositiveFeedbackSynapse extends FeedbackSynapse<
         return new PositiveFeedbackLink(this, input, output);
     }
 
-    @Override
-    public PositiveFeedbackLink checkExistingLink(PatternActivation iAct, BindingActivation oAct) {
-        PositiveFeedbackLink l = super.getDummyLink(oAct);
-        if(l != null)
-            l.relinkInput(iAct);
-
-        return l;
-    }
-
     public Direction getStoredAt() {
         return OUTPUT;
     }

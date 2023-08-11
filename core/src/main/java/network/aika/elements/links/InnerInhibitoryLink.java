@@ -36,15 +36,6 @@ public class InnerInhibitoryLink extends DisjunctiveLink<InnerInhibitorySynapse,
     }
 
     @Override
-    public void addInputLinkingStep() {
-        super.addInputLinkingStep();
-
-        Synapse innerNegFeedbackSyn = input.getNeuron().getInputSynapse(output.getNeuronProvider());
-        if(innerNegFeedbackSyn != null)
-            innerNegFeedbackSyn.checkExistingLink(output, input);
-    }
-
-    @Override
     protected void connectInputValue() {
         linkAndConnect(input.getValueUnsuppressed(), 0, inputValue);
     }

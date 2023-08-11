@@ -66,18 +66,17 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
     }
 
     @Override
-    public Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromOriginAct, Direction dir) {
-        Document doc = (Document) fromOriginAct.getThought();
+    public Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromAct, Direction dir) {
+        Document doc = (Document) fromAct.getThought();
 
-        Range r = fromOriginAct.getTokenPosRange();
         Slot fromSlot = getFromSlot(dir);
-        return doc.getRelatedTokensByTokenPosition(
-                getToSlot(dir),
-                new Range(
-                        r.getPosition(fromSlot) + getRelBegin(dir),
-                        r.getPosition(fromSlot) + getRelEnd(dir)
-                )
+        Range inputRange = fromAct.getTokenPosRange();
+        Range targetRange = new Range(
+                inputRange.getPosition(fromSlot) + getRelBegin(dir),
+                inputRange.getPosition(fromSlot) + getRelEnd(dir)
         );
+
+        return doc.getRelatedTokensByTokenPosition(getToSlot(dir), targetRange);
     }
 
     private Slot getFromSlot(Direction dir) {

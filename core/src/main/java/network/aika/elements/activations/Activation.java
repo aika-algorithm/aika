@@ -48,7 +48,6 @@ import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.steps.Phase.PRE_ANNEAL;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
-import static network.aika.fields.ThresholdOperator.Type.*;
 import static network.aika.steps.Phase.*;
 import static network.aika.text.Range.*;
 import static network.aika.utils.Utils.TOLERANCE;
@@ -115,7 +114,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
             connectWeightUpdate();
         }
 
-        initDummyLinks();
+        initInactiveLinks();
 
         thought.register(this);
         neuron.register(this);
@@ -164,7 +163,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return net;
     }
 
-    protected void initDummyLinks() {
+    protected void initInactiveLinks() {
     }
 
     public boolean isNewInstance() {
