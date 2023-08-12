@@ -27,9 +27,8 @@ import network.aika.exceptions.PreviousThoughtNotDisconnected;
 import network.aika.fields.*;
 import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.queue.Queue;
 import network.aika.text.Range;
-import network.aika.queue.Phase;
-import network.aika.queue.keys.QueueKey;
 import network.aika.queue.Step;
 import network.aika.queue.activation.InactiveLinks;
 import network.aika.queue.activation.Instantiation;
@@ -47,7 +46,7 @@ import static network.aika.queue.keys.QueueKey.MAX_ROUND;
  *
  * @author Lukas Molzberger
  */
-public abstract class Thought implements Element {
+public abstract class Thought extends Queue implements Element {
 
     private Field annealing;
     private Field feedbackTrigger;
@@ -57,23 +56,13 @@ public abstract class Thought implements Element {
     private Long id;
     private long absoluteBeginChar;
 
-    private Timestamp timestampOnProcess = new Timestamp(0);
-    private long timestampCounter = 0;
     private int activationIdCounter = 0;
 
     private long visitorCounter = 0;
 
-    private Step currentStep;
-
-    int round = 0;
-
-    private final NavigableMap<QueueKey, Step> queue = new TreeMap<>(QueueKey.COMPARATOR);
-
     private final TreeMap<Integer, Activation> activationsById = new TreeMap<>();
     private final Map<NeuronProvider, PreActivation<? extends Activation>> actsPerNeuron = new HashMap<>();
     private final Set<EventListener> eventListeners = new HashSet<>();
-
-    private Config config;
 
     private InstantiationCallback instantiationCallback;
 
@@ -91,19 +80,6 @@ public abstract class Thought implements Element {
             throw new PreviousThoughtNotDisconnected(m.getCurrentThought(), this);
         }
         m.setCurrentThought(this);
-    }
-
-    public int getRound(boolean nextRound) {
-        return round + (nextRound ? 1 : 0);
-    }
-
-    public void updateRound(int r) {
-        if(currentStep.getRound() != MAX_ROUND && round < r)
-            round = r;
-    }
-
-    public void incrementRound() {
-        round++;
     }
 
     public long getNewVisitorId() {
@@ -185,74 +161,8 @@ public abstract class Thought implements Element {
         actsPerNeuron.put(np, acts);
     }
 
-    public void addStep(Step s) {
-        s.createQueueKey(getNextTimestamp());
-        queue.put(s.getQueueKey(), s);
-        queueEvent(ADDED, s);
-    }
-
-    public void removeStep(Step s) {
-        Step removedStep = queue.remove(s.getQueueKey());
-        assert removedStep != null;
-        s.removeQueueKey();
-    }
-
-    public Collection<Step> getQueue() {
-        return queue.values();
-    }
-
     public Range getCharRange() {
         return new Range(absoluteBeginChar, absoluteBeginChar + length());
-    }
-
-    public void process(int maxRound, Phase maxPhase) {
-        while (!queue.isEmpty()) {
-            if(checkMaxPhaseReached(maxRound, maxPhase))
-                break;
-
-            currentStep = queue.pollFirstEntry().getValue();
-            currentStep.removeQueueKey();
-
-            timestampOnProcess = getCurrentTimestamp();
-
-            queueEvent(BEFORE, currentStep);
-
-            updateRound(currentStep.getRound());
-
-            currentStep.process();
-            queueEvent(AFTER, currentStep);
-            currentStep = null;
-        }
-    }
-
-    private boolean checkMaxPhaseReached(int maxRound, Phase maxPhase) {
-        QueueKey fe = queue.firstEntry().getKey();
-        if(fe.getRound() > maxRound)
-            return true;
-
-        if(maxPhase == null)
-            return false;
-
-        return maxPhase.compareTo(fe.getPhase()) < 0;
-    }
-
-    /**
-     * The postprocessing steps such as counting, cleanup or save are executed.
-     */
-    public void postProcessing() {
-        process(MAX_ROUND, null);
-    }
-
-    public Timestamp getTimestampOnProcess() {
-        return timestampOnProcess;
-    }
-
-    public Timestamp getCurrentTimestamp() {
-        return new Timestamp(timestampCounter);
-    }
-
-    public Timestamp getNextTimestamp() {
-        return new Timestamp(timestampCounter++);
     }
 
     public int createActivationId() {
