@@ -21,11 +21,9 @@ import network.aika.elements.links.InputPatternLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.elements.synapses.FeedbackSynapse;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.steps.activation.Counting;
 import network.aika.steps.activation.LinkingOut;
 import network.aika.visitor.operator.SelfRefOperator;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
@@ -35,11 +33,9 @@ import network.aika.visitor.pattern.PatternVisitor;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.func;
 import static network.aika.fields.Fields.isTrue;
-import static network.aika.steps.Phase.INFERENCE;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -49,7 +45,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     private boolean isInput;
 
-    protected MultiInputField netUnsuppressed;
+    protected SumField netUnsuppressed;
 
     protected FieldOutput valueUnsuppressed;
 
@@ -73,11 +69,16 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     @Override
     protected void initNet() {
-        netUnsuppressed = new MultiInputField(this, "netUnsuppressed", TOLERANCE);
+        netUnsuppressed = new SumField(this, "netUnsuppressed", TOLERANCE);
 
         super.initNet();
 
         linkAndConnect(netUnsuppressed, net);
+    }
+
+    @Override
+    protected void initOnFiredListener() {
+        super.initOnFiredListener();
 
         netUnsuppressed.addListener("onFiredUnsuppressed", (fl, nr, u) -> {
                     if (fl.getInput().exceedsThreshold())
@@ -86,7 +87,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         );
     }
 
-    public MultiInputField getNetUnsuppressed() {
+    public SumField getNetUnsuppressed() {
         return netUnsuppressed;
     }
 
@@ -119,7 +120,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     @Override
     protected void connectWeightUpdate() {
-        updateValue = new MultiInputField(this, "updateValue", TOLERANCE);
+        updateValue = new SumField(this, "updateValue", TOLERANCE);
 
         super.connectWeightUpdate();
     }
@@ -180,7 +181,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     }
 
     public void updateBias(double u) {
-        getNet().receiveUpdate(false, u);
+        getNet().receiveUpdate(null, false, u);
     }
 
     @Override

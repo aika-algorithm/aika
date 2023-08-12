@@ -53,7 +53,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     protected AbstractFunction negInputIsFired;
     protected Multiplication weightedInput;
 
-    protected MultiInputField gradient;
+    protected SumField gradient;
 
     public Link(S s, I input, O output) {
         this.synapse = s;

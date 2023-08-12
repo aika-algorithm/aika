@@ -21,7 +21,7 @@ import java.util.Comparator;
 /**
  * @author Lukas Molzberger
  */
-public class MaxField extends MultiInputField {
+public class MaxField extends SumField {
 
     private FieldLink selectedInput;
 
@@ -56,6 +56,5 @@ public class MaxField extends MultiInputField {
     }
 
     protected void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput) {
-
     }
 }

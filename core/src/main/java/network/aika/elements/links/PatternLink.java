@@ -23,7 +23,7 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.fields.AbstractFunction;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.fields.FieldOutput;
-import network.aika.fields.MultiInputField;
+import network.aika.fields.SumField;
 import network.aika.enums.sign.Sign;
 import network.aika.steps.link.LinkCounting;
 import network.aika.visitor.binding.BindingVisitor;
@@ -61,7 +61,7 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
 
     @Override
     public void connectGradientFields() {
-        gradient = new MultiInputField(this, "Gradient", TOLERANCE);
+        gradient = new SumField(this, "Gradient", TOLERANCE);
 
         if(input != null)
             linkAndConnect(input.getGradient(), gradient);

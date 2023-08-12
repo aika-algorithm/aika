@@ -130,8 +130,8 @@ public abstract class Thought implements Element {
     }
 
     public void setFeedbackTriggerRound() {
-        feedbackTrigger.receiveUpdate(false, 1.0);
-        feedbackTrigger.receiveUpdate(true, -1.0);
+        feedbackTrigger.receiveUpdate(null, false, 1.0);
+        feedbackTrigger.receiveUpdate(null, true, -1.0);
     }
 
     public abstract int length();

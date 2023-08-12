@@ -18,27 +18,21 @@ package network.aika.fields;
 
 
 import network.aika.Thought;
-import network.aika.debugger.FieldObserver;
 import network.aika.elements.Element;
 import network.aika.steps.FieldStep;
 import network.aika.steps.Phase;
 import network.aika.steps.Step;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class QueueSumField extends MultiInputField implements QueueField {
+public class QueueSumField extends SumField implements QueueField {
 
     private Phase phase;
 
     protected FieldStep step;
-
-    protected List<FieldObserver> observers = new ArrayList<>();
 
     public QueueSumField(FieldObject e, Phase p, String label, Double tolerance) {
         super(e, label, tolerance);
@@ -50,20 +44,7 @@ public class QueueSumField extends MultiInputField implements QueueField {
     }
 
     @Override
-    public void addObserver(FieldObserver observer) {
-        if(observers.contains(observer))
-            return;
-
-        observers.add(observer);
-    }
-
-    @Override
-    public void removeObserver(FieldObserver observer) {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void receiveUpdate(boolean nextRound, double u) {
+    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
         updateObservers();
 
         FieldStep s = getOrCreateStep(getRound(nextRound));
@@ -93,11 +74,5 @@ public class QueueSumField extends MultiInputField implements QueueField {
         step = null;
 
         updateObservers();
-    }
-
-    private void updateObservers() {
-        observers.forEach(o ->
-                o.receiveUpdate(value)
-        );
     }
 }

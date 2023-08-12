@@ -27,7 +27,7 @@ import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 import network.aika.fields.FieldLink;
 import network.aika.fields.QueueSumField;
-import network.aika.fields.MultiInputField;
+import network.aika.fields.SumField;
 import network.aika.utils.Utils;
 
 import java.io.DataInput;
@@ -50,7 +50,7 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         Synapse<S, I, O, L, IA, OA>
 {
 
-    protected MultiInputField synapseBias = (MultiInputField) new QueueSumField(this, TRAINING, "synapseBias", TOLERANCE)
+    protected SumField synapseBias = (SumField) new QueueSumField(this, TRAINING, "synapseBias", TOLERANCE)
             .addListener("onSynapseBiasModified", (fl, nr, u) ->
                     setModified(),
                     true
@@ -83,7 +83,7 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         }
     }
 
-    private boolean biasLinkExists(MultiInputField synapseBias, MultiInputField synapseBiasSum) {
+    private boolean biasLinkExists(SumField synapseBias, SumField synapseBiasSum) {
         return synapseBias.getReceivers()
                 .stream()
                 .filter(fl -> fl instanceof FieldLink)
@@ -97,7 +97,7 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         return (S) this;
     }
 
-    public MultiInputField getSynapseBias() {
+    public SumField getSynapseBias() {
         return synapseBias;
     }
 
@@ -178,7 +178,7 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
 
     public S adjustBias(double x) {
         if(weight.getValue() > 0.0)
-            synapseBias.receiveUpdate(false, -weight.getValue() * x);
+            synapseBias.receiveUpdate(null, false, -weight.getValue() * x);
 
         return (S) this;
     }

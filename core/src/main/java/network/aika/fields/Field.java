@@ -130,13 +130,6 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
     }
 
     public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
-        receiveUpdate(
-                nextRound,
-                u
-        );
-    }
-
-    public void receiveUpdate(boolean nextRound, double u) {
         assert !withinUpdate;
 
         triggerUpdate(nextRound, u);

@@ -33,7 +33,6 @@ import network.aika.visitor.operator.ActLinkingOperator;
 import network.aika.visitor.operator.LinkLinkingOperator;
 import network.aika.steps.activation.Save;
 import network.aika.utils.Writable;
-import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +71,7 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
     private Writable customData;
 
-    protected MultiInputField bias = initBias();
+    protected SumField bias = initBias();
 
     protected boolean allowTraining = true;
 
@@ -244,8 +243,8 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
     public void count(A act) {
     }
 
-    protected MultiInputField initBias() {
-        return (MultiInputField) new QueueSumField(this, TRAINING, "bias", TOLERANCE)
+    protected SumField initBias() {
+        return (SumField) new QueueSumField(this, TRAINING, "bias", TOLERANCE)
                 .addListener("onBiasModified", (fl, nr, u) ->
                         setModified()
                 );
@@ -408,7 +407,7 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         return modified;
     }
 
-    public MultiInputField getBias() {
+    public SumField getBias() {
         return bias;
     }
 

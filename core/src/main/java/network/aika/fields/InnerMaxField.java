@@ -33,6 +33,7 @@ public class InnerMaxField extends MaxField {
         super(ref, label);
     }
 
+    @Override
     protected void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput) {
         BindingActivation lAct = getBindingActivation(lastSelectedInput);
         BindingActivation cAct = getBindingActivation(selectedInput);
