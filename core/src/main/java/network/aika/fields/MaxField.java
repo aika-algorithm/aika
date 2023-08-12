@@ -38,11 +38,11 @@ public class MaxField extends SumField {
     protected void receiveUpdateInternal(FieldLink fl, boolean nextRound, double u) {
         triggerUpdate(
                 nextRound,
-                computeUpdate(fl, u)
+                computeUpdate()
         );
     }
 
-    protected double computeUpdate(FieldLink fl, double u) {
+    protected double computeUpdate() {
         FieldLink lastSelectedInput = selectedInput;
 
         selectedInput = getInputs().stream()

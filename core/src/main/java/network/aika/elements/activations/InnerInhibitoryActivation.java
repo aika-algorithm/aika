@@ -17,14 +17,10 @@
 package network.aika.elements.activations;
 
 import network.aika.Thought;
-import network.aika.elements.links.InnerNegativeFeedbackLink;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
-import network.aika.enums.Scope;
 import network.aika.fields.InnerMaxField;
-import network.aika.fields.MaxField;
 
-import static network.aika.elements.activations.BindingActivation.isSelfRef;
-import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.queue.Phase.INFERENCE;
 
 
 /**
@@ -39,7 +35,8 @@ public class InnerInhibitoryActivation extends DisjunctiveActivation<InnerInhibi
 
     @Override
     protected void initNet() {
-        net = new InnerMaxField(this, "net");
+        net = new InnerMaxField(this, "net")
+                .setQueued(thought, INFERENCE);
     }
 
     @Override
