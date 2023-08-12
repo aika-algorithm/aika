@@ -30,7 +30,7 @@ import static network.aika.utils.Utils.*;
  *
  * @author Lukas Molzberger
  */
-public class FieldStep<E extends Element> extends Step {
+public class FieldStep<E extends Element> extends Step<E> {
 
     private QueueInterceptor interceptor;
 
@@ -77,7 +77,9 @@ public class FieldStep<E extends Element> extends Step {
     public void updateDelta(double delta) {
         this.delta += delta;
 
-        updateSortValue(Math.abs(delta));
+        updateSortValue(
+                Math.abs(this.delta)
+        );
     }
 
     public void reset() {
@@ -104,8 +106,8 @@ public class FieldStep<E extends Element> extends Step {
     }
 
     @Override
-    public Element getElement() {
-        return (Element) interceptor.getField().getReference();
+    public E getElement() {
+        return (E) interceptor.getField().getReference();
     }
 
     public double getDelta() {
