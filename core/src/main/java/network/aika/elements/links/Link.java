@@ -16,6 +16,7 @@
  */
 package network.aika.elements.links;
 
+import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.Element;
 import network.aika.elements.LinkKey;
@@ -65,7 +66,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         if(output != null) {
             initWeightInput();
 
-            if (getConfig().isTrainingEnabled() && getSynapse().isTrainingAllowed()) {
+            if (s.getModel().getConfig().isTrainingEnabled() && getSynapse().isTrainingAllowed()) {
                 connectGradientFields();
                 connectWeightUpdate();
             }
@@ -297,6 +298,11 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     @Override
     public Thought getThought() {
         return output.getThought();
+    }
+
+    @Override
+    public Model getModel() {
+        return output.getModel();
     }
 
     protected String getInputKeyString() {

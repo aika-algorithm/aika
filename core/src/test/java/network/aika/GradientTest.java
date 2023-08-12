@@ -32,16 +32,16 @@ public class GradientTest {
     @Test
     public void gradientAndInduction2() {
         Model m = new Model();
+        m.setConfig(
+                new Config()
+                        .setAlpha(0.99)
+                        .setLearnRate(0.1)
+                        .setTrainingEnabled(true)
+        );
 
         m.setN(912);
 
         Document doc = new Document(m, "A B ");
-        doc.setConfig(
-                new Config()
-                .setAlpha(0.99)
-                .setLearnRate(0.1)
-                .setTrainingEnabled(true)
-        );
 /*
         Neuron nA = m.getNeuron("A");
         nA.setFrequency(53.0);
@@ -65,16 +65,16 @@ public class GradientTest {
     @Test
     public void gradientAndInduction3() {
         Model m = new Model();
-
-        m.setN(912);
-
-        Document doc = new Document(m, "A B C ");
-        doc.setConfig(
+        m.setConfig(
                 new Config()
                         .setAlpha(0.99)
                         .setLearnRate(0.1)
                         .setTrainingEnabled(true)
         );
+
+        m.setN(912);
+
+        Document doc = new Document(m, "A B C ");
 
         processDoc(m, doc);
 
@@ -96,17 +96,18 @@ public class GradientTest {
     @Test
     public void gradientAndInduction2With2Docs() {
         Model m = new Model();
-
-        m.setN(912);
-     //   t.BINDING_TEMPLATE.getBias().receiveUpdate(-0.32);
-
-        Document doc1 = new Document(m, "A B ");
-        doc1.setConfig(
+        m.setConfig(
                 new Config()
                         .setAlpha(0.99)
                         .setLearnRate(0.1)
                         .setTrainingEnabled(true)
         );
+
+        m.setN(912);
+     //   t.BINDING_TEMPLATE.getBias().receiveUpdate(-0.32);
+
+        Document doc1 = new Document(m, "A B ");
+
         processDoc(m, doc1);
 
         PatternNeuron nA = m.getNeuronByLabel("A");
@@ -120,12 +121,6 @@ public class GradientTest {
         doc1.disconnect();
 
         Document doc2 = new Document(m, "A C ");
-        doc2.setConfig(
-                new Config()
-                        .setAlpha(0.99)
-                        .setLearnRate(0.1)
-                        .setTrainingEnabled(true)
-        );
         processDoc(m, doc2);
 
         PatternNeuron nC = m.getNeuronByLabel("C");

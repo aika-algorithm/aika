@@ -325,6 +325,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return output.getNeuron();
     }
 
+    @Override
     public Model getModel() {
         return output != null ?
                 output.getModel() :

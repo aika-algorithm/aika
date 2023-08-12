@@ -41,6 +41,12 @@ public class TheCatTest {
 
     private void performTest(int variant) {
         Model m = new Model();
+        Config c = new Config()
+                .setAlpha(0.99)
+                .setLearnRate(0.01)
+                .setTrainingEnabled(true);
+        m.setConfig(c);
+
         Dictionary dict = new Dictionary(m);
         dict.initStaticNeurons();
 
@@ -49,12 +55,6 @@ public class TheCatTest {
         initPatternTheCat(m, dict, inhibNThe, inhibNCat, variant);
 
         Document doc = new Document(m, "the cat");
-
-        Config c = new Config()
-                .setAlpha(0.99)
-                .setLearnRate(0.01)
-                .setTrainingEnabled(true);
-        doc.setConfig(c);
 
         AIKADebugger.createAndShowGUI(doc);
 

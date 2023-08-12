@@ -39,18 +39,7 @@ public abstract class Parser<C extends Context> {
     protected static final Logger log = LoggerFactory.getLogger(Parser.class);
 
     protected Document initDocument(String txt, C context, ParserPhase phase) {
-        Document doc = new Document(getPhraseModel().getModel(), txt);
-
-        Config conf = new Config()
-                .setAlpha(null)
-                .setLearnRate(0.01)
-                .setTrainingEnabled(phase == TRAINING)
-                .setMetaInstantiationEnabled(phase == TRAINING)
-                .setCountingEnabled(true);
-
-        doc.setConfig(conf);
-
-        return doc;
+        return new Document(getPhraseModel().getModel(), txt);
     }
 
     protected abstract SequenceModel getPhraseModel();

@@ -40,6 +40,9 @@ public class Model implements Writable {
 
     private long N = 0;
 
+    private Config config;
+
+
     private SuspensionCallback suspensionCallback;
     private final AtomicLong retrievalCounter = new AtomicLong(0);
     private final AtomicLong thoughtIdCounter = new AtomicLong(0);
@@ -216,6 +219,18 @@ public class Model implements Writable {
         }
     }
 
+    public long createThoughtId() {
+        return thoughtIdCounter.addAndGet(1);
+    }
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
+    }
+
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeLong(N);
@@ -228,9 +243,5 @@ public class Model implements Writable {
 
     public String toString() {
         return "N:" + N;
-    }
-
-    public long createThoughtId() {
-        return thoughtIdCounter.addAndGet(1);
     }
 }

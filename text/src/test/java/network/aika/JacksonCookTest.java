@@ -44,6 +44,12 @@ public class JacksonCookTest {
 
     public void setupJacksonCookTest() {
         Model m = new Model();
+        Config c = new Config()
+                .setAlpha(0.99)
+                .setLearnRate(0.01)
+                .setTrainingEnabled(true);
+        m.setConfig(c);
+
         Dictionary dict = new Dictionary(m);
         dict.initStaticNeurons();
 
@@ -221,12 +227,6 @@ public class JacksonCookTest {
         personNamePattern.setBias(3.0);
 
         Document doc = new Document(m, "Jackson Cook");
-
-        Config c = new Config()
-                .setAlpha(0.99)
-                .setLearnRate(0.01)
-                .setTrainingEnabled(true);
-        doc.setConfig(c);
 
         processTokens(dict, doc, "Jackson", "Cook");
 

@@ -382,11 +382,12 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         this.customData = customData;
     }
 
-    public <M extends Model> M getModel() {
+    @Override
+    public Model getModel() {
         if(provider == null)
             return null;
 
-        return (M) provider.getModel();
+        return provider.getModel();
     }
 
     public long getRetrievalCount() {

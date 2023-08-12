@@ -52,10 +52,12 @@ public class SimplePhraseTest {
         Model model = new Model();
         Dictionary dict = new Dictionary(model);
 
-        Config c = new Config()
+        model.setConfig(
+                new Config()
                         .setAlpha(0.99)
                         .setLearnRate(0.1)
-                        .setTrainingEnabled(false);
+                        .setTrainingEnabled(false)
+        );
 
         Random r = new Random(1);
 
@@ -64,8 +66,9 @@ public class SimplePhraseTest {
             System.out.println("  " + phrase);
 
             Document doc = new Document(model, phrase);
-            doc.setConfig(c);
-            c.setTrainingEnabled(k > 100);
+
+            model.getConfig()
+                    .setTrainingEnabled(k > 100);
 
             int i = 0;
             int pos = 0;

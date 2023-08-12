@@ -17,7 +17,7 @@
 package network.aika.elements;
 
 import network.aika.Config;
-import network.aika.Thought;
+import network.aika.Model;
 import network.aika.fields.FieldObject;
 
 /**
@@ -31,9 +31,9 @@ public interface Element extends FieldObject {
 
     Timestamp getFired();
 
-    Thought getThought();
+    Model getModel();
 
     default Config getConfig() {
-        return getThought().getConfig();
+        return getModel().getConfig();
     }
 }

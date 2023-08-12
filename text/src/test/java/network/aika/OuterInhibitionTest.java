@@ -57,6 +57,11 @@ public class OuterInhibitionTest {
     @Test
     public void testPropagationInput() {
         Model m = new Model();
+        Config c = new Config()
+                .setAlpha(0.99)
+                .setLearnRate(0.01)
+                .setTrainingEnabled(true);
+        m.setConfig(c);
 
         TokenNeuron in = new TokenNeuron().init(m, "IN");
         OuterInhibitoryNeuron inhib = new OuterInhibitoryNeuron().init(m, "I");
@@ -66,13 +71,6 @@ public class OuterInhibitionTest {
         BindingNeuron nc = addBindingNeuronOuter(m, "C", 1.2, in, inhib);
 
         Document doc = new Document(m, "test");
-
-        Config c = new Config()
-                .setAlpha(0.99)
-                .setLearnRate(0.01)
-                .setTrainingEnabled(true);
-        doc.setConfig(c);
-
         doc.addToken(in, 0, 0, 4, 5.0);
 
         doc.postProcessing();

@@ -16,6 +16,7 @@
  */
 package network.aika.meta;
 
+import network.aika.Config;
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
 import network.aika.meta.sequences.SequenceModel;
@@ -68,6 +69,12 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     @BeforeEach
     public void init() {
         Model model = new Model();
+        model.setConfig(
+                new Config()
+                        .setAlpha(null)
+                        .setLearnRate(0.01)
+                        .setCountingEnabled(true)
+        );
 
         dictionary = new Dictionary(model);
         tokenizer = new SimpleWordTokenizer(dictionary);

@@ -42,6 +42,13 @@ public class ABCDTest {
     @Test
     public void testABCD() throws InterruptedException {
         Model m = new Model();
+
+        Config c = new Config()
+                .setAlpha(0.99)
+                .setLearnRate(0.01)
+                .setTrainingEnabled(true);
+        m.setConfig(c);
+
         Dictionary dict = new Dictionary(m);
         dict.initStaticNeurons();
 
@@ -145,12 +152,6 @@ public class ABCDTest {
 
 
         Document doc = new Document(m, "abcd");
-
-        Config c = new Config()
-                .setAlpha(0.99)
-                .setLearnRate(0.01)
-                .setTrainingEnabled(true);
-        doc.setConfig(c);
 
         processTokens(dict, doc, "a", "b", "c", "d");
 

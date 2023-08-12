@@ -34,6 +34,12 @@ public class TheDogAndCatTest {
     @Test
     public void testTheDogAndTheCat()  {
         Model m = new Model();
+        Config c = new Config()
+                .setAlpha(0.99)
+                .setLearnRate(0.01)
+                .setTrainingEnabled(false);
+        m.setConfig(c);
+
         Dictionary dict = new Dictionary(m);
         dict.initStaticNeurons();
 
@@ -50,12 +56,6 @@ public class TheDogAndCatTest {
         initPatternTheDog(m, dict, inhibNThe, inhibNDog, 3);
 
         Document doc = new Document(m, "the dog and the cat");
-
-        Config c = new Config()
-                .setAlpha(0.99)
-                .setLearnRate(0.01)
-                .setTrainingEnabled(false);
-        doc.setConfig(c);
 
         processTokens(dict, doc, "the", "dog", "and", "the", "cat");
 

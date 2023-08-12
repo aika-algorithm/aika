@@ -35,6 +35,12 @@ public class TheBlackCatTest {
     @Test
     public void testTheBlackCat()  {
         Model m = new Model();
+        Config c = new Config()
+                .setAlpha(0.99)
+                .setLearnRate(0.01)
+                .setTrainingEnabled(true);
+        m.setConfig(c);
+
         Dictionary dict = new Dictionary(m);
         dict.initStaticNeurons();
 
@@ -44,12 +50,6 @@ public class TheBlackCatTest {
         initPatternBlackCat(m, dict);
 
         Document doc = new Document(m, "the black cat");
-
-        Config c = new Config()
-                .setAlpha(0.99)
-                .setLearnRate(0.01)
-                .setTrainingEnabled(true);
-        doc.setConfig(c);
 
         processTokens(dict, doc, "the", "black", "cat");
 

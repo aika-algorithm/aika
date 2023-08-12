@@ -64,6 +64,11 @@ public class InnerInhibitionTest {
     @Test
     public void testInnerInhibition1() {
         Model m = new Model();
+        Config c = new Config()
+                .setAlpha(0.99)
+                .setLearnRate(0.01)
+                .setTrainingEnabled(true);
+        m.setConfig(c);
 
         TokenNeuron inA = new TokenNeuron().init(m, "A");
         TokenNeuron inX = new TokenNeuron().init(m, "X");
@@ -84,12 +89,6 @@ public class InnerInhibitionTest {
 
         Document doc = new Document(m, "test");
         AIKADebugger.createAndShowGUI(doc, false);
-
-        Config c = new Config()
-                .setAlpha(0.99)
-                .setLearnRate(0.01)
-                .setTrainingEnabled(true);
-        doc.setConfig(c);
 
         doc.setFeedbackTriggerRound();
 
@@ -116,6 +115,11 @@ public class InnerInhibitionTest {
     @Test
     public void testInnerInhibition2() {
         Model m = new Model();
+        Config c = new Config()
+                .setAlpha(0.99)
+                .setLearnRate(0.01)
+                .setTrainingEnabled(true);
+        m.setConfig(c);
 
         TokenNeuron inA = new TokenNeuron().init(m, "A");
         TokenNeuron inB = new TokenNeuron().init(m, "B");
@@ -142,12 +146,6 @@ public class InnerInhibitionTest {
 
         Document doc = new Document(m, "test");
         AIKADebugger.createAndShowGUI(doc, false);
-
-        Config c = new Config()
-                .setAlpha(0.99)
-                .setLearnRate(0.01)
-                .setTrainingEnabled(true);
-        doc.setConfig(c);
 
         doc.setFeedbackTriggerRound();
 

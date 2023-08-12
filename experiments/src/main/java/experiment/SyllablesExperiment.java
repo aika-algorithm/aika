@@ -16,6 +16,7 @@
  */
 package experiment;
 
+import network.aika.Config;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.meta.Dictionary;
 import network.aika.meta.LabelUtil;
@@ -64,6 +65,12 @@ public class SyllablesExperiment extends TrainingParser<Context> {
 
     public SyllablesExperiment() {
         model = new Model();
+        model.setConfig(
+                new Config()
+                        .setAlpha(null)
+                        .setLearnRate(0.01)
+                        .setCountingEnabled(true)
+        );
 
         dict = new Dictionary(model);
 
@@ -78,10 +85,6 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     @Override
     protected Document initDocument(String txt, Context context, ParserPhase phase) {
         Document doc = super.initDocument(txt, context, phase);
-
-        doc.getConfig()
-                .setAlpha(null)
-                .setLearnRate(0.01);
 
         doc.setInstantiationCallback(act -> {
             generateTemplateInstanceLabels(act);

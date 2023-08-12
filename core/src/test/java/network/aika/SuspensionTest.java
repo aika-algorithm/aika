@@ -47,6 +47,11 @@ public class SuspensionTest {
     @Test
     public void testSuspendInputNeuron() {
         Model m = new Model(new DummySuspensionCallback());
+        Config c = new Config()
+                .setAlpha(0.99)
+                .setLearnRate(0.1)
+                .setTrainingEnabled(false);
+        m.setConfig(c);
 
         NeuronProvider inStrong = new TokenNeuron().init(m, "IN Strong").getProvider(true);
         NeuronProvider inWeak = new TokenNeuron().init(m, "IN Weak").getProvider(true);
@@ -73,13 +78,7 @@ public class SuspensionTest {
         // Reactivate
         inStrong = m.lookupNeuronProvider(inStrong.getId());
 
-        Config c = new Config()
-                .setAlpha(0.99)
-                .setLearnRate(0.1)
-                .setTrainingEnabled(false);
-
         Document doc = new Document(m, "test");
-        doc.setConfig(c);
         doc.addToken(inStrong.getNeuron(), 0, 0, 4, 5.0);
     }
 

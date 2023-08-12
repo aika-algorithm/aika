@@ -137,14 +137,6 @@ public abstract class Thought implements Element {
 
     public abstract int length();
 
-    public Config getConfig() {
-        return config;
-    }
-
-    public void setConfig(Config config) {
-        this.config = config;
-    }
-
     public Step getCurrentStep() {
         return currentStep;
     }

@@ -36,8 +36,7 @@ public class PropagateTest {
     @Test
     public void testPropagation() {
         Model m = new Model();
-
-        Config c = new Config();
+        m.setConfig(new Config());
 
         TokenNeuron in = new TokenNeuron().init(m, "IN");
         BindingNeuron out = new BindingNeuron().init(m, "OUT");
@@ -49,7 +48,6 @@ public class PropagateTest {
         out.setBias(1.0);
 
         Document doc = new Document(m, "test");
-        doc.setConfig(c);
         doc.addToken(in, 0, 0, 4, 5.0);
         log.info("" + doc);
 

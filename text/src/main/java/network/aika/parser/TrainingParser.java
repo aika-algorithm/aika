@@ -16,6 +16,7 @@
  */
 package network.aika.parser;
 
+import network.aika.Config;
 import network.aika.callbacks.InstantiationCallback;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.Synapse;
@@ -24,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
+import static network.aika.parser.ParserPhase.TRAINING;
 
 /**
  *
@@ -32,7 +34,6 @@ import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
 public abstract class TrainingParser<C extends Context> extends Parser<C> implements InstantiationCallback {
 
     protected static final Logger log = LoggerFactory.getLogger(TrainingParser.class);
-
 
     @Override
     protected Document initDocument(String txt, C context, ParserPhase phase) {
@@ -48,6 +49,10 @@ public abstract class TrainingParser<C extends Context> extends Parser<C> implem
 
     @Override
     public Document process(String txt, C context, ParserPhase phase) {
+        getPhraseModel().getModel().getConfig()
+                .setTrainingEnabled(phase == TRAINING)
+                .setMetaInstantiationEnabled(phase == TRAINING);
+
         Document doc = initDocument(txt, context, phase);
 
         try {

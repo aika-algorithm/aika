@@ -112,7 +112,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         gradient = new SumField(this, "gradient", TOLERANCE)
                 .setQueued(thought, TRAINING);
 
-        if (getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
+        if (getModel().getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
             connectGradientFields();
             connectWeightUpdate();
         }
@@ -323,8 +323,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return neuron.getActivationFunction();
     }
 
-    public <M extends Model> M getModel() {
-        return (M) neuron.getModel();
+    @Override
+    public Model getModel() {
+        return neuron.getModel();
     }
 
     public NeuronProvider getNeuronProvider() {
