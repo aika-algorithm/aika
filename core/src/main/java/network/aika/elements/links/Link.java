@@ -25,7 +25,7 @@ import network.aika.enums.Scope;
 import network.aika.exceptions.InvalidRelinkingException;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
-import network.aika.steps.link.LinkingIn;
+import network.aika.queue.link.LinkingIn;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
 import network.aika.visitor.pattern.PatternCategoryVisitor;

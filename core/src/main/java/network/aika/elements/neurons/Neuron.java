@@ -31,8 +31,9 @@ import network.aika.elements.Timestamp;
 import network.aika.elements.synapses.Synapse;
 import network.aika.visitor.operator.ActLinkingOperator;
 import network.aika.visitor.operator.LinkLinkingOperator;
-import network.aika.steps.activation.Save;
+import network.aika.queue.activation.Save;
 import network.aika.utils.Writable;
+import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +51,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.elements.synapses.Synapse.getLatentLinkingPreNet;
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
-import static network.aika.steps.Phase.TRAINING;
+import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -244,7 +245,8 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
     }
 
     protected SumField initBias() {
-        return (SumField) new QueueSumField(this, TRAINING, "bias", TOLERANCE)
+        return (SumField) new SumField(this, "bias", TOLERANCE)
+                .setQueued(getThought(), TRAINING)
                 .addListener("onBiasModified", (fl, nr, u) ->
                         setModified()
                 );

@@ -24,7 +24,7 @@ import network.aika.debugger.ElementPanel;
 import network.aika.elements.Element;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.steps.Step;
+import network.aika.queue.Step;
 import network.aika.text.Document;
 
 import javax.swing.*;

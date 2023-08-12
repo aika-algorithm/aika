@@ -14,43 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.steps.activation;
+package network.aika.queue.link;
 
-import network.aika.elements.neurons.Neuron;
-import network.aika.steps.Phase;
-import network.aika.steps.Step;
+import network.aika.elements.links.Link;
+import network.aika.queue.ElementStep;
+import network.aika.queue.Phase;
+import network.aika.queue.Step;
 
-import static network.aika.steps.keys.QueueKey.MAX_ROUND;
+import static network.aika.queue.Phase.INPUT_LINKING;
 
 /**
- * Store model
  *
  * @author Lukas Molzberger
  */
-public class Save extends Step<Neuron> {
+public class LinkingIn extends ElementStep<Link> {
 
-    public static void add(Neuron n) {
-        Step.add(new Save(n));
+    public static void add(Link l) {
+        Step.add(new LinkingIn(l));
     }
 
-    private Save(Neuron n) {
-        super(n);
-    }
-
-    @Override
-    public int getRound() {
-        return MAX_ROUND;
-    }
-
-    @Override
-    public Phase getPhase() {
-        return Phase.SAVE;
+    public LinkingIn(Link l) {
+        super(l);
     }
 
     @Override
     public void process() {
-        getElement()
-                .getProvider()
-                .save();
+        Link l = getElement();
+        l.getOutput().getNeuron()
+                .linkAndPropagateIn(l);
+    }
+
+    @Override
+    public Phase getPhase() {
+        return INPUT_LINKING;
     }
 }

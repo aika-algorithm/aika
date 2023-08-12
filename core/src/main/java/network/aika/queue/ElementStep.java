@@ -14,25 +14,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.queue;
 
-
-import network.aika.debugger.FieldObserver;
-import network.aika.steps.FieldStep;
+import network.aika.elements.Element;
+import network.aika.elements.Timestamp;
+import network.aika.queue.keys.FiredQueueKey;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public interface QueueField extends FieldOutput {
+public abstract class ElementStep<E extends Element> extends Step<E> {
 
-    void setValue(double v);
+    private E element;
 
-    void addObserver(FieldObserver observer);
+    public ElementStep(E element) {
+        super(element.getThought());
 
-    void removeObserver(FieldObserver observer);
+        this.element = element;
+    }
 
-    void process(FieldStep step);
+    @Override
+    public void createQueueKey(Timestamp timestamp) {
+        queueKey = new FiredQueueKey(
+                getRound(),
+                getPhase(),
+                element,
+                timestamp
+        );
+    }
 
-    FieldObject getReference();
+    public E getElement() {
+        return element;
+    }
+
+    @Override
+    public String toString() {
+        return "" + getElement();
+    }
 }

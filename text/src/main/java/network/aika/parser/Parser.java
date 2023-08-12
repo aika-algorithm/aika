@@ -26,9 +26,9 @@ import org.slf4j.LoggerFactory;
 
 
 import static network.aika.parser.ParserPhase.TRAINING;
-import static network.aika.steps.Phase.ANNEAL;
-import static network.aika.steps.Phase.INFERENCE;
-import static network.aika.steps.keys.QueueKey.MAX_ROUND;
+import static network.aika.queue.Phase.ANNEAL;
+import static network.aika.queue.Phase.INFERENCE;
+import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
  *

@@ -84,10 +84,10 @@ public class FieldReceiversDialog extends JDialog
         addConstant("Operator", field.getClass().getSimpleName());
         addField(field);
 
-        if(field instanceof QueueSumField) {
-            QueueSumField qsf = (QueueSumField) field;
+        if(field instanceof QueueInterceptor) {
+            QueueInterceptor qsf = (QueueInterceptor) field;
 
-            addConstant("Step:", qsf.getOrCreateStep() != null ? qsf.getOrCreateStep().toShortString() : "--");
+            addConstant("Step:", qsf.getStep() != null ? qsf.getStep().toShortString() : "--");
         }
 
         posCounter++;

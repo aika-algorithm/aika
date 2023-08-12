@@ -35,7 +35,7 @@ public class MaxField extends SumField {
     }
 
     @Override
-    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
+    protected void receiveUpdateInternal(FieldLink fl, boolean nextRound, double u) {
         triggerUpdate(
                 nextRound,
                 computeUpdate(fl, u)

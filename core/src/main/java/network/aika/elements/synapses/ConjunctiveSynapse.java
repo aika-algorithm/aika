@@ -26,7 +26,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 import network.aika.fields.FieldLink;
-import network.aika.fields.QueueSumField;
+import network.aika.fields.QueueInterceptor;
 import network.aika.fields.SumField;
 import network.aika.utils.Utils;
 
@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.FieldLink.linkAndConnect;
-import static network.aika.steps.Phase.TRAINING;
+import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
 
@@ -50,7 +50,8 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         Synapse<S, I, O, L, IA, OA>
 {
 
-    protected SumField synapseBias = (SumField) new QueueSumField(this, TRAINING, "synapseBias", TOLERANCE)
+    protected SumField synapseBias = (SumField) new SumField(this, "synapseBias", TOLERANCE)
+            .setQueued(getThought(), TRAINING)
             .addListener("onSynapseBiasModified", (fl, nr, u) ->
                     setModified(),
                     true

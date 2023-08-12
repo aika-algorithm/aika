@@ -14,37 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.steps;
+package network.aika.queue.activation;
+
+import network.aika.elements.neurons.Neuron;
+import network.aika.elements.activations.Activation;
+import network.aika.queue.ElementStep;
+import network.aika.queue.Phase;
+import network.aika.queue.Step;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public enum Phase {
-    INSTANTIATION(),
-    INPUT_LINKING(),
-    OUTPUT_LINKING(),
-    FEEDBACK_TRIGGER(),
-    INFERENCE(),
-    PRE_ANNEAL(),
-    NEGATIVE_FEEDBACK(true),
-    ANNEAL(true),
-    TRAINING(true),
-    INACTIVE_LINKS(),
-    COUNTING(true),
-    SAVE(true);
+public class InactiveLinks extends ElementStep<Activation> {
 
-
-    boolean delayed;
-
-    Phase() {
+    public static void add(Activation act) {
+        Step.add(new InactiveLinks(act));
     }
 
-    Phase(boolean delayed) {
-        this.delayed = delayed;
+    public InactiveLinks(Activation act) {
+        super(act);
     }
 
-    public boolean isDelayed() {
-        return delayed;
+    @Override
+    public Phase getPhase() {
+        return Phase.INACTIVE_LINKS;
+    }
+
+    @Override
+    public void process() {
+        Activation act = getElement();
+        Neuron n = act.getNeuron();
+
+        n.addInactiveLinks(act);
     }
 }

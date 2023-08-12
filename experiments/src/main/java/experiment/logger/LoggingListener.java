@@ -19,9 +19,9 @@ package experiment.logger;
 import network.aika.debugger.EventListener;
 import network.aika.debugger.EventType;
 import network.aika.elements.Element;
-import network.aika.steps.FieldStep;
-import network.aika.steps.Step;
-import network.aika.steps.thought.AnnealStep;
+import network.aika.queue.FieldStep;
+import network.aika.queue.Step;
+import network.aika.queue.thought.AnnealStep;
 
 /**
  * @author Lukas Molzberger
@@ -39,10 +39,10 @@ public class LoggingListener implements EventListener {
 
     private static void log(FieldStep fs) {
         System.out.println("" + fs);
-
+/*
         fs.getField().getReceivers().forEach(fl ->
                         System.out.println("     " + fl)
-                );
+                );*/
         System.out.println();
     }
 

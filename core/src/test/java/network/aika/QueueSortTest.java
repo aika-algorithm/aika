@@ -17,9 +17,9 @@
 package network.aika;
 
 import network.aika.elements.Timestamp;
-import network.aika.steps.keys.FieldQueueKey;
-import network.aika.steps.Phase;
-import network.aika.steps.keys.QueueKey;
+import network.aika.queue.keys.FieldQueueKey;
+import network.aika.queue.Phase;
+import network.aika.queue.keys.QueueKey;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

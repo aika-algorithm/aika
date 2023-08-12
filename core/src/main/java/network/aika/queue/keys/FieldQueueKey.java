@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.steps.keys;
+package network.aika.queue.keys;
 
 import network.aika.elements.Timestamp;
-import network.aika.steps.Phase;
+import network.aika.queue.Phase;
 
 import java.util.Comparator;
 

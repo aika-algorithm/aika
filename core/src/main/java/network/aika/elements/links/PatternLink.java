@@ -25,7 +25,7 @@ import network.aika.elements.synapses.PatternSynapse;
 import network.aika.fields.FieldOutput;
 import network.aika.fields.SumField;
 import network.aika.enums.sign.Sign;
-import network.aika.steps.link.LinkCounting;
+import network.aika.queue.link.LinkCounting;
 import network.aika.visitor.binding.BindingVisitor;
 
 import static network.aika.fields.ConstantField.ZERO;

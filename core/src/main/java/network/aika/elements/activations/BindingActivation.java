@@ -24,7 +24,7 @@ import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.steps.activation.LinkingOut;
+import network.aika.queue.activation.LinkingOut;
 import network.aika.visitor.operator.SelfRefOperator;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
 import network.aika.visitor.pattern.PatternCategoryVisitor;

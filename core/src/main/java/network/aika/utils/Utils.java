@@ -24,7 +24,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-import static network.aika.steps.keys.QueueKey.MAX_ROUND;
+import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
  *

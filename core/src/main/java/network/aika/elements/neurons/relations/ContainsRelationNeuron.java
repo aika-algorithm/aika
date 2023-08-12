@@ -35,9 +35,7 @@ import static network.aika.text.Slot.END;
  */
 public class ContainsRelationNeuron extends LatentRelationNeuron {
 
-
     private Direction relationDir;
-
 
     public static ContainsRelationNeuron lookupRelation(Model m, Direction relDir) {
         return m.lookupNeuronByLabel("Contains Rel.: ", l ->

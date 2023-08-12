@@ -18,28 +18,50 @@ package network.aika.fields;
 
 
 import network.aika.Thought;
+import network.aika.debugger.FieldObserver;
 import network.aika.elements.Element;
-import network.aika.steps.FieldStep;
-import network.aika.steps.Phase;
-import network.aika.steps.Step;
+import network.aika.queue.FieldStep;
+import network.aika.queue.Phase;
+import network.aika.queue.Step;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class QueueSumField extends SumField implements QueueField {
+public class QueueInterceptor implements UpdateListener<FieldLink> {
 
     private Phase phase;
 
-    protected FieldStep step;
+    private FieldStep step;
 
-    public QueueSumField(FieldObject e, Phase p, String label, Double tolerance) {
-        super(e, label, tolerance);
-        phase = p;
+    private Field field;
+
+    private Thought queue;
+
+    private List<FieldObserver> observers = new ArrayList<>();
+
+    public QueueInterceptor(Thought q, Field f, Phase p) {
+        this.queue = q;
+        this.field = f;
+        this.phase = p;
     }
 
-    public FieldStep getOrCreateStep() {
+    public FieldStep getStep() {
+        return step;
+    }
+
+    public Field getField() {
+        return field;
+    }
+
+    private FieldStep getOrCreateStep(int r) {
+        if(step == null || step.getRound() < r)
+            step = new FieldStep<>(queue, phase, r, this);
+
         return step;
     }
 
@@ -58,21 +80,36 @@ public class QueueSumField extends SumField implements QueueField {
     }
 
     private int getRound(boolean nextRound) {
-        Thought t = getReference().getThought();
+        Thought t = field.getReference().getThought();
         return t != null ? t.getRound(nextRound) : 0;
     }
 
-    private FieldStep getOrCreateStep(int r) {
-        if(step == null || step.getRound() < r)
-            step = new FieldStep<>((Element) getReference(), phase, r, this);
-
-        return step;
-    }
-
     public void process(FieldStep s) {
-        triggerUpdate(false, s.getDelta());
+        field.triggerUpdate(false, s.getDelta());
         step = null;
 
         updateObservers();
+    }
+
+
+    public void addObserver(FieldObserver observer) {
+        if(observers.contains(observer))
+            return;
+
+        observers.add(observer);
+    }
+
+    public void removeObserver(FieldObserver observer) {
+        observers.remove(observer);
+    }
+
+    protected void updateObservers() {
+        observers.forEach(o ->
+                o.receiveUpdate(field.value)
+        );
+    }
+
+    public Thought getQueue() {
+        return queue;
     }
 }

@@ -28,20 +28,20 @@ import network.aika.fields.*;
 import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.text.Range;
-import network.aika.steps.Phase;
-import network.aika.steps.keys.QueueKey;
-import network.aika.steps.Step;
-import network.aika.steps.activation.InactiveLinks;
-import network.aika.steps.activation.Instantiation;
-import network.aika.steps.thought.AnnealStep;
+import network.aika.queue.Phase;
+import network.aika.queue.keys.QueueKey;
+import network.aika.queue.Step;
+import network.aika.queue.activation.InactiveLinks;
+import network.aika.queue.activation.Instantiation;
+import network.aika.queue.thought.AnnealStep;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static network.aika.debugger.EventType.*;
-import static network.aika.steps.Phase.*;
-import static network.aika.steps.keys.QueueKey.MAX_ROUND;
+import static network.aika.queue.Phase.*;
+import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
  *
@@ -84,7 +84,8 @@ public abstract class Thought implements Element {
         absoluteBeginChar = m.getN();
 
         annealing = new InputField(this, "anneal", 0.0);
-        feedbackTrigger = new QueueSumField(this, FEEDBACK_TRIGGER, "feedback trigger", 0.0);
+        feedbackTrigger = new SumField(this, "feedback trigger", 0.0)
+                .setQueued(this, FEEDBACK_TRIGGER);
 
         if(m.getCurrentThought() != null) {
             throw new PreviousThoughtNotDisconnected(m.getCurrentThought(), this);
@@ -260,14 +261,6 @@ public abstract class Thought implements Element {
 
     public Timestamp getNextTimestamp() {
         return new Timestamp(timestampCounter++);
-    }
-
-    public <E extends Element> List<Step> getStepsByElement(E element) {
-        return queue
-                .values()
-                .stream()
-                .filter(s -> s.getElement() == element)
-                .toList();
     }
 
     public int createActivationId() {

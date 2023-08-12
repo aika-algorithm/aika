@@ -46,8 +46,8 @@ import org.slf4j.LoggerFactory;
 import java.util.SortedSet;
 
 import static network.aika.meta.NetworkMotifs.*;
-import static network.aika.steps.Phase.INFERENCE;
-import static network.aika.steps.keys.QueueKey.MAX_ROUND;
+import static network.aika.queue.Phase.INFERENCE;
+import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**

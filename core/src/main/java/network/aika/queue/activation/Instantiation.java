@@ -14,30 +14,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.steps.keys;
+package network.aika.queue.activation;
 
-import network.aika.elements.Timestamp;
-import network.aika.steps.Phase;
+import network.aika.elements.activations.Activation;
+import network.aika.queue.ElementStep;
+import network.aika.queue.Phase;
+import network.aika.queue.Step;
+
+import static network.aika.queue.Phase.INSTANTIATION;
+
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class DocQueueKey extends QueueKey {
+public class Instantiation extends ElementStep<Activation> {
 
-    public DocQueueKey(int round, Phase phase, Timestamp currentTimestamp) {
-        super(round, phase, currentTimestamp);
+    public static void add(Activation act) {
+        if(act.instantiationIsQueued)
+            return;
+
+        act.instantiationIsQueued = true;
+
+        if(act.getActiveTemplateInstance() != null)
+            return;
+
+        add(new Instantiation(act));
+    }
+
+    public Instantiation(Activation act) {
+        super(act);
     }
 
     @Override
-    public int compareTo(QueueKey qk) {
-        return 0;
+    public void process() {
+        getElement()
+                .instantiateTemplateNode();
+
+        getElement().instantiationIsQueued = false;
     }
 
     @Override
-    public String toString() {
-        return "[r:" + getRoundStr() +
-                ",p:" + getPhase() + "-" + getPhase().ordinal() +
-                ",ts:" + getCurrentTimestamp() +
-                "]";
+    public Phase getPhase() {
+        return INSTANTIATION;
     }
 }

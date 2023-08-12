@@ -20,10 +20,7 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.synapses.OuterInhibitorySynapse;
 import network.aika.enums.Scope;
-import network.aika.fields.Field;
-import network.aika.fields.FieldOutput;
-import network.aika.fields.Fields;
-import network.aika.fields.QueueSumField;
+import network.aika.fields.*;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
 import network.aika.visitor.pattern.PatternVisitor;
 
@@ -31,7 +28,7 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.activations.BindingActivation.isSelfRef;
 import static network.aika.fields.FieldLink.linkAndConnect;
-import static network.aika.steps.Phase.NEGATIVE_FEEDBACK;
+import static network.aika.queue.Phase.NEGATIVE_FEEDBACK;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -46,7 +43,8 @@ public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse,
     public OuterInhibitoryLink(OuterInhibitorySynapse inhibitorySynapse, BindingActivation input, OuterInhibitoryActivation output) {
         super(inhibitorySynapse, input, output);
 
-        net = new QueueSumField(this, NEGATIVE_FEEDBACK, "net", null);
+        net = new SumField(this, "net", null)
+                .setQueued(getThought(), NEGATIVE_FEEDBACK);
         linkAndConnect(weightedInput, net);
         linkAndConnect(output.getNeuron().getBias(), net)
                 .setPropagateUpdates(false);

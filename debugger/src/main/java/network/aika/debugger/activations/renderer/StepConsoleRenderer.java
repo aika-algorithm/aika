@@ -19,9 +19,11 @@ package network.aika.debugger.activations.renderer;
 import network.aika.Thought;
 import network.aika.debugger.ConsoleRenderer;
 import network.aika.debugger.Visible;
+import network.aika.elements.Element;
 import network.aika.elements.Timestamp;
-import network.aika.steps.Step;
-import network.aika.steps.keys.QueueKey;
+import network.aika.queue.ElementStep;
+import network.aika.queue.Step;
+import network.aika.queue.keys.QueueKey;
 import network.aika.utils.Utils;
 
 import javax.swing.text.StyledDocument;
@@ -37,10 +39,10 @@ public class StepConsoleRenderer implements ConsoleRenderer {
 
     private Visible sortKey;
 
-    public StepConsoleRenderer(Thought t, boolean selected, Visible sortKey) {
+    public StepConsoleRenderer(Thought t, Step step, Element highlightedElement, Visible sortKey) {
         this.t = t;
         this.sortKey = sortKey;
-        this.selected = selected;
+        this.selected = step.getElement() == highlightedElement;
     }
 
     public void render(StyledDocument sDoc, Step s) {

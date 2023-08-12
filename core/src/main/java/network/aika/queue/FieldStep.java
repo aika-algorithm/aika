@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.steps;
+package network.aika.queue;
 
 import network.aika.Thought;
 import network.aika.elements.Timestamp;
-import network.aika.fields.QueueField;
 import network.aika.elements.Element;
-import network.aika.steps.keys.FieldQueueKey;
+import network.aika.fields.QueueInterceptor;
+import network.aika.queue.keys.FieldQueueKey;
 import network.aika.utils.Utils;
 
-import static network.aika.steps.keys.FieldQueueKey.SORT_VALUE_PRECISION;
+import static network.aika.queue.keys.FieldQueueKey.SORT_VALUE_PRECISION;
 import static network.aika.utils.Utils.*;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class FieldStep<E extends Element> extends Step<E> {
+public class FieldStep<E extends Element> extends Step {
 
-    private QueueField field;
+    private QueueInterceptor interceptor;
 
     private Phase phase;
 
@@ -43,14 +43,14 @@ public class FieldStep<E extends Element> extends Step<E> {
     private double delta = 0.0;
 
 
-    public FieldStep(E e, Phase p, int round, QueueField qf) {
-        super(e);
+    public FieldStep(Thought queue, Phase p, int round, QueueInterceptor qf) {
+        super(queue);
         this.phase = p;
         this.round = p.isDelayed() ?
                 Integer.MAX_VALUE :
                 round;
 
-        this.field = qf;
+        this.interceptor = qf;
     }
 
     private void updateSortValue(double newSortValue) {
@@ -58,11 +58,10 @@ public class FieldStep<E extends Element> extends Step<E> {
             return;
 
         if(isQueued()) {
-            Element ref = (Element) field.getReference();
-            Thought t = ref.getThought();
-            t.removeStep(this);
+            Thought q = interceptor.getQueue();
+            q.removeStep(this);
             sortValue = convertSortValue(newSortValue);
-            t.addStep(this);
+            q.addStep(this);
         } else
             sortValue = convertSortValue(newSortValue);
     }
@@ -85,13 +84,14 @@ public class FieldStep<E extends Element> extends Step<E> {
         delta = 0.0;
     }
 
+    @Override
     public void createQueueKey(Timestamp timestamp) {
         queueKey = new FieldQueueKey(round, getPhase(), sortValue, timestamp);
     }
 
     @Override
     public void process() {
-        field.process(this);
+        interceptor.process(this);
     }
 
     public int getRound() {
@@ -103,12 +103,17 @@ public class FieldStep<E extends Element> extends Step<E> {
         return phase;
     }
 
+    @Override
+    public Element getElement() {
+        return (Element) interceptor.getField().getReference();
+    }
+
     public double getDelta() {
         return delta;
     }
 
-    public QueueField getField() {
-        return field;
+    public QueueInterceptor getInterceptor() {
+        return interceptor;
     }
 
     public String toShortString() {
@@ -118,7 +123,7 @@ public class FieldStep<E extends Element> extends Step<E> {
 
     public String toString() {
         return " Delta:" + doubleToString(delta) +
-                " Field: " + field +
-                " Ref:" + field.getReference();
+                " Field: " + interceptor.getField() +
+                " Ref:" + interceptor.getField().getReference();
     }
 }

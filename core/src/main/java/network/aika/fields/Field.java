@@ -17,6 +17,8 @@
 package network.aika.fields;
 
 import network.aika.Model;
+import network.aika.Thought;
+import network.aika.queue.Phase;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
 
@@ -48,12 +50,19 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
 
     protected Double tolerance;
 
+    UpdateListener<FieldLink> interceptor;
+
     public Field(FieldObject reference, String label, Double tolerance) {
         this.reference = reference;
         this.label = label;
         this.tolerance = tolerance;
 
         initIO();
+    }
+
+    public <F extends Field> F setQueued(Thought q, Phase p) {
+        interceptor = new QueueInterceptor(q, this, p);
+        return (F) this;
     }
 
     protected void initIO() {
@@ -129,7 +138,24 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
         this.receivers.remove(fl);
     }
 
+    public UpdateListener<FieldLink> getInterceptor() {
+        return interceptor;
+    }
+
+    public void setInterceptor(UpdateListener<FieldLink> interceptor) {
+        this.interceptor = interceptor;
+    }
+
+    @Override
     public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
+        if(interceptor != null) {
+            interceptor.receiveUpdate(fl, nextRound, u);
+        } else {
+            receiveUpdateInternal(fl, nextRound, u);
+        }
+    }
+
+    protected void receiveUpdateInternal(FieldLink fl, boolean nextRound, double u) {
         assert !withinUpdate;
 
         triggerUpdate(nextRound, u);

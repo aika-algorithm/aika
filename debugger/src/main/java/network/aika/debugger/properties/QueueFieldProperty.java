@@ -17,19 +17,18 @@
 package network.aika.debugger.properties;
 
 import network.aika.debugger.FieldObserver;
-import network.aika.fields.QueueField;
+import network.aika.fields.Field;
+import network.aika.fields.QueueInterceptor;
 
 import javax.swing.*;
 import java.awt.*;
 
-
 /**
  * @author Lukas Molzberger
  */
-public class QueueFieldProperty extends FieldOutputProperty<QueueField> implements FieldObserver {
+public class QueueFieldProperty extends FieldOutputProperty<Field> implements FieldObserver {
 
-
-    public QueueFieldProperty(Container parent, QueueField field, boolean showReference, Boolean isConnected, Boolean isPropagateUpdates) {
+    public QueueFieldProperty(Container parent, Field field, boolean showReference, Boolean isConnected, Boolean isPropagateUpdates) {
         super(parent, field, showReference, isConnected, isPropagateUpdates);
 
         currentValueField.addPropertyChangeListener("value", e -> {
@@ -48,12 +47,12 @@ public class QueueFieldProperty extends FieldOutputProperty<QueueField> implemen
 
     @Override
     public void registerListener() {
-        field.addObserver(this);
+        ((QueueInterceptor)field.getInterceptor()).addObserver(this);
     }
 
     @Override
     public void deregisterListener() {
-        field.removeObserver(this);
+        ((QueueInterceptor)field.getInterceptor()).removeObserver(this);
     }
 
     @Override

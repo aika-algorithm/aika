@@ -9,28 +9,8 @@ public class SumField extends Field {
 
     private List<FieldLink> inputs;
 
-    private List<FieldObserver> observers = new ArrayList<>();
-
-
     public SumField(FieldObject reference, String label, Double tolerance) {
         super(reference, label, tolerance);
-    }
-
-    public void addObserver(FieldObserver observer) {
-        if(observers.contains(observer))
-            return;
-
-        observers.add(observer);
-    }
-
-    public void removeObserver(FieldObserver observer) {
-        observers.remove(observer);
-    }
-
-    protected void updateObservers() {
-        observers.forEach(o ->
-                o.receiveUpdate(value)
-        );
     }
 
     @Override

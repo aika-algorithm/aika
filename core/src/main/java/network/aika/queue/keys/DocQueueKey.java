@@ -14,37 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.steps.link;
+package network.aika.queue.keys;
 
-import network.aika.elements.links.Link;
-import network.aika.steps.Phase;
-import network.aika.steps.Step;
-
-import static network.aika.steps.Phase.INPUT_LINKING;
+import network.aika.elements.Timestamp;
+import network.aika.queue.Phase;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class LinkingIn extends Step<Link> {
+public class DocQueueKey extends QueueKey {
 
-    public static void add(Link l) {
-        Step.add(new LinkingIn(l));
-    }
-
-    public LinkingIn(Link l) {
-        super(l);
+    public DocQueueKey(int round, Phase phase, Timestamp currentTimestamp) {
+        super(round, phase, currentTimestamp);
     }
 
     @Override
-    public void process() {
-        Link l = getElement();
-        l.getOutput().getNeuron()
-                .linkAndPropagateIn(l);
+    public int compareTo(QueueKey qk) {
+        return 0;
     }
 
     @Override
-    public Phase getPhase() {
-        return INPUT_LINKING;
+    public String toString() {
+        return "[r:" + getRoundStr() +
+                ",p:" + getPhase() + "-" + getPhase().ordinal() +
+                ",ts:" + getCurrentTimestamp() +
+                "]";
     }
 }

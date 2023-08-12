@@ -14,17 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.steps.thought;
+package network.aika.queue.thought;
 
 import network.aika.Thought;
 import network.aika.elements.Timestamp;
 import network.aika.ActivationFunction;
-import network.aika.steps.Phase;
-import network.aika.steps.Step;
-import network.aika.steps.keys.DocQueueKey;
+import network.aika.queue.ElementStep;
+import network.aika.queue.Phase;
+import network.aika.queue.Step;
+import network.aika.queue.keys.DocQueueKey;
 
-import static network.aika.steps.Phase.*;
-import static network.aika.steps.keys.QueueKey.MAX_ROUND;
+import static network.aika.queue.Phase.*;
+import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 import static network.aika.utils.Utils.doubleToString;
 
 
@@ -32,7 +33,7 @@ import static network.aika.utils.Utils.doubleToString;
  *
  * @author Lukas Molzberger
  */
-public class AnnealStep extends Step<Thought> {
+public class AnnealStep extends ElementStep<Thought> {
 
     double nextStep;
 
@@ -55,7 +56,7 @@ public class AnnealStep extends Step<Thought> {
 
     @Override
     public void process() {
-        Thought t = getElement();
+        Thought t = queue;
 
         double av = t.getAnnealing().getValue();
         nextStep = t.getConfig().getAnnealStepSize() / ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT.outerGrad(av);
@@ -77,8 +78,8 @@ public class AnnealStep extends Step<Thought> {
 
     @Override
     public String toString() {
-        return "docId:" + getElement().getId() +
+        return "docId:" + queue.getId() +
                 " NextStep:" + doubleToString(nextStep, "#.######") +
-                " NextAnnealValue:" + doubleToString(getElement().getAnnealing().getValue(), "#.######");
+                " NextAnnealValue:" + doubleToString(queue.getAnnealing().getValue(), "#.######");
     }
 }

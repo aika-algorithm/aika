@@ -31,8 +31,8 @@ import network.aika.text.Range;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
-import network.aika.steps.activation.Counting;
-import network.aika.steps.activation.LinkingOut;
+import network.aika.queue.activation.Counting;
+import network.aika.queue.activation.LinkingOut;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
@@ -45,10 +45,10 @@ import static network.aika.debugger.EventType.*;
 import static network.aika.elements.LinkKey.getFromLinkKey;
 import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
-import static network.aika.steps.Phase.PRE_ANNEAL;
+import static network.aika.queue.Phase.PRE_ANNEAL;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
-import static network.aika.steps.Phase.*;
+import static network.aika.queue.Phase.*;
 import static network.aika.text.Range.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -109,7 +109,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 x -> getActivationFunction().f(x)
         );
 
-        gradient = new QueueSumField(this, TRAINING, "gradient", TOLERANCE);
+        gradient = new SumField(this, "gradient", TOLERANCE)
+                .setQueued(thought, TRAINING);
 
         if (getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
             connectGradientFields();
@@ -136,12 +137,14 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void initNet() {
-        net = new QueueSumField(this, INFERENCE, "net", null);
+        net = new SumField(this, "net", null)
+                .setQueued(thought, INFERENCE);
 
         linkAndConnect(getNeuron().getBias(), getDefaultNet())
                 .setPropagateUpdates(false);
 
-        netPreAnneal = new QueueSumField(this, PRE_ANNEAL, "netPreAnneal", TOLERANCE);
+        netPreAnneal = new SumField(this, "netPreAnneal", TOLERANCE)
+                .setQueued(thought, PRE_ANNEAL);
         linkAndConnect(net, netPreAnneal);
 
         netPreAnneal.addListener(

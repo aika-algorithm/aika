@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.steps;
+package network.aika.queue;
 
 import network.aika.Thought;
 import network.aika.elements.Element;
 import network.aika.elements.Timestamp;
-import network.aika.steps.keys.FiredQueueKey;
-import network.aika.steps.keys.QueueKey;
+import network.aika.queue.keys.FiredQueueKey;
+import network.aika.queue.keys.QueueKey;
 
-import static network.aika.steps.keys.QueueKey.MAX_ROUND;
+import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 
 /**
@@ -30,11 +30,12 @@ import static network.aika.steps.keys.QueueKey.MAX_ROUND;
  */
 public abstract class Step<E extends Element> {
 
-    private E element;
+    protected Thought queue;
+
     protected QueueKey queueKey;
 
-    public Step(E element) {
-        this.element = element;
+    public Step(Thought queue) {
+        this.queue = queue;
     }
 
     public boolean isQueued() {
@@ -45,19 +46,12 @@ public abstract class Step<E extends Element> {
         return queueKey;
     }
 
-    public void createQueueKey(Timestamp timestamp) {
-        queueKey = new FiredQueueKey(
-                getRound(),
-                getPhase(),
-                element,
-                timestamp
-        );
-    }
+    public abstract void createQueueKey(Timestamp timestamp);
 
     public int getRound() {
         return getPhase().isDelayed() ?
                 MAX_ROUND :
-                element.getThought().getRound(false);
+                queue.getRound(false);
     }
 
     public void removeQueueKey() {
@@ -73,20 +67,12 @@ public abstract class Step<E extends Element> {
     public abstract Phase getPhase();
 
     public static boolean add(Step s) {
-        Thought t = s.getElement().getThought();
-        if(t == null)
+        if(s.queue == null)
             return false;
 
-        t.addStep(s);
+        s.queue.addStep(s);
         return true;
     }
 
-    public E getElement() {
-        return element;
-    }
-
-    @Override
-    public String toString() {
-        return "" + getElement();
-    }
+    public abstract E getElement();
 }
