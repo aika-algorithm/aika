@@ -17,8 +17,12 @@
 package network.aika.elements.neurons;
 
 import network.aika.Thought;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.synapses.*;
+import network.aika.visitor.operator.LinkingOperator;
+import network.aika.visitor.binding.BindingVisitor;
+import network.aika.visitor.binding.RelationBindingVisitor;
 
 import java.util.List;
 
@@ -39,6 +43,21 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingActivation> {
                 .filter(s -> s instanceof RelationInputSynapse)
                 .map(s -> (RelationInputSynapse) s)
                 .toList();
+    }
+
+    @Override
+    public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
+        Thought t = act.getThought();
+        RelationInputSynapse rel = findLatentRelationNeurons()
+                .stream()
+                .findAny()
+                .orElse(null);
+
+        BindingVisitor v = rel != null ?
+                new RelationBindingVisitor(t, c, rel, c.getRelationDir(syn.getScope())) :
+                new BindingVisitor(t, c);
+
+        v.start(act);
     }
 
     @Override

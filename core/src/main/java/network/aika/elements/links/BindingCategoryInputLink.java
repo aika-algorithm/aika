@@ -26,7 +26,7 @@ import network.aika.visitor.pattern.PatternCategoryVisitor;
 /**
  * @author Lukas Molzberger
  */
-public class BindingCategoryInputLink extends DisjunctiveLink<BindingCategoryInputSynapse, CategoryActivation, BindingActivation> implements CategoryInputLink {
+public class BindingCategoryInputLink extends DisjunctiveLink<BindingCategoryInputSynapse, CategoryActivation, Activation> implements CategoryInputLink {
 
     public BindingCategoryInputLink(BindingCategoryInputSynapse s, CategoryActivation input, BindingActivation output) {
         super(s, input, output);
@@ -42,7 +42,7 @@ public class BindingCategoryInputLink extends DisjunctiveLink<BindingCategoryInp
     }
 
     @Override
-    public void instantiateTemplate(CategoryActivation iAct, BindingActivation oAct) {
+    public void instantiateTemplate(CategoryActivation iAct, Activation oAct) {
         instantiateTemplate(iAct, oAct, this);
     }
 }

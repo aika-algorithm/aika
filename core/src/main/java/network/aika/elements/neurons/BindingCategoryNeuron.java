@@ -14,26 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.neurons;
 
-import network.aika.enums.Scope;
-import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.links.BindingCategoryLink;
-import network.aika.elements.neurons.Neuron;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.synapses.Synapse;
+import network.aika.visitor.operator.LinkingOperator;
+import network.aika.visitor.binding.BindingVisitor;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
-
-    public BindingCategorySynapse() {
-        super(Scope.SAME);
-    }
+public class BindingCategoryNeuron extends CategoryNeuron {
 
     @Override
-    public BindingCategoryLink createLink(BindingActivation input, CategoryActivation output) {
-        return new BindingCategoryLink(this, input, output);
+    public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
+        new BindingVisitor(act.getThought(), c)
+                .start(act);
     }
 }

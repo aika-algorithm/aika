@@ -30,7 +30,6 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
-import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,8 +98,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     @Override
     public void disconnect() {
     }
-
-    public abstract void startVisitor(LinkingOperator c, Activation act);
 
     public void propagate(IA iAct) {
         if(propagateLinkExists(iAct))

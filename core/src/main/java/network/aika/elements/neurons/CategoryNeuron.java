@@ -26,7 +26,7 @@ import network.aika.elements.synapses.CategorySynapse;
  *
  * @author Lukas Molzberger
  */
-public class CategoryNeuron extends DisjunctiveNeuron<CategoryActivation> {
+public abstract class CategoryNeuron extends DisjunctiveNeuron<CategoryActivation> {
 
     public CategoryNeuron() {
     }

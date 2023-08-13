@@ -32,6 +32,7 @@ public class TokenNeuron extends PatternNeuron {
 
     private String tokenLabel;
 
+
     @Override
     public TokenActivation createActivation(Thought t) {
         return new TokenActivation(t.createActivationId(), t, this);

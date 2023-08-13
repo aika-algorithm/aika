@@ -60,6 +60,12 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternActivation> {
     }
 
     @Override
+    public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
+        new PatternVisitor(act.getThought(), c)
+                .start(act);
+    }
+
+    @Override
     public PatternCategoryInputSynapse getCategoryInputSynapse() {
         return getInputSynapseByType(PatternCategoryInputSynapse.class);
     }

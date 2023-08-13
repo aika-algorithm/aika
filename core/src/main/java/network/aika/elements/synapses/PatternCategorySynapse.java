@@ -16,14 +16,11 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.activations.Activation;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.PatternCategoryLink;
 import network.aika.elements.neurons.PatternNeuron;
-import network.aika.visitor.operator.LinkingOperator;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
 
 /**
  *
@@ -33,12 +30,6 @@ public class PatternCategorySynapse extends CategorySynapse<PatternCategorySynap
 
     public PatternCategorySynapse() {
         super(Scope.SAME);
-    }
-
-    @Override
-    public void startVisitor(LinkingOperator c, Activation act) {
-        new PatternCategoryVisitor(act.getThought(), c)
-                .start(act);
     }
 
     @Override

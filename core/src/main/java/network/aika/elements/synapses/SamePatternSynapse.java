@@ -16,15 +16,10 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.Thought;
-import network.aika.elements.activations.Activation;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.SamePatternLink;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.binding.RelationBindingVisitor;
-import network.aika.visitor.operator.LinkingOperator;
 
 /**
  * The Same Pattern Binding Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
@@ -40,21 +35,6 @@ public class SamePatternSynapse extends BindingNeuronSynapse<
 {
     public SamePatternSynapse() {
         super(Scope.SAME);
-    }
-
-    @Override
-    public void startVisitor(LinkingOperator c, Activation act) {
-        Thought t = act.getThought();
-        RelationInputSynapse rel = getOutput().findLatentRelationNeurons()
-                .stream()
-                .findAny()
-                .orElse(null);
-
-        BindingVisitor v = rel != null ?
-                new RelationBindingVisitor(t, c, rel, c.getRelationDir(getScope())) :
-                new BindingVisitor(t, c);
-
-        v.start(act);
     }
 
     @Override

@@ -16,19 +16,21 @@
  */
 package network.aika.elements.links;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.PatternCategoryInputSynapse;
 import network.aika.elements.synapses.PatternCategorySynapse;
+import network.aika.visitor.Visitor;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class PatternCategoryInputLink extends DisjunctiveLink<PatternCategoryInputSynapse, CategoryActivation, PatternActivation>   implements CategoryInputLink {
+public class PatternCategoryInputLink extends DisjunctiveLink<PatternCategoryInputSynapse, CategoryActivation, Activation>   implements CategoryInputLink {
 
-    public PatternCategoryInputLink(PatternCategoryInputSynapse s, CategoryActivation input, PatternActivation output) {
+    public PatternCategoryInputLink(PatternCategoryInputSynapse s, CategoryActivation input, Activation output) {
         super(s, input, output);
     }
 
@@ -42,7 +44,7 @@ public class PatternCategoryInputLink extends DisjunctiveLink<PatternCategoryInp
     }
 
     @Override
-    public void instantiateTemplate(CategoryActivation iAct, PatternActivation oAct) {
+    public void instantiateTemplate(CategoryActivation iAct, Activation oAct) {
         instantiateTemplate(iAct, oAct, this);
     }
 }

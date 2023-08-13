@@ -145,10 +145,13 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         }
     }
 
+    public abstract void startVisitor(LinkingOperator c, Activation act, Synapse syn);
+
     public void linkOutgoing(Synapse synA, Activation iAct) {
-        synA.startVisitor(
+        synA.getOutput().startVisitor(
                 new LinkLinkingOperator(iAct, synA),
-                iAct
+                iAct,
+                synA
         );
     }
 
@@ -158,9 +161,10 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
                 .filter(Synapse::isLatentLinkingAllowed)
                 .filter(synB -> getLatentLinkingPreNet(synA, synB) > 0.0)
                 .forEach(synB ->
-                        synB.startVisitor(
+                        synB.getOutput().startVisitor(
                                 new ActLinkingOperator(iActA, synA, null, synB),
-                                iActA
+                                iActA,
+                                synB
                         )
                 );
     }
@@ -169,9 +173,10 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         getInputSynapsesAsStream()
                 .filter(synB -> synB != l.getSynapse())
                 .forEach(synB ->
-                        synB.startVisitor(
+                        startVisitor(
                                 new ActLinkingOperator(l.getInput(), l.getSynapse(), l, synB),
-                                l.getInput()
+                                l.getInput(),
+                                synB
                         )
                 );
     }
