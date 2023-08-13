@@ -74,11 +74,21 @@ public abstract class SequenceModel {
     public static double NEG_MARGIN_LEFT = 1.2;
     public static double NEG_MARGIN_RIGHT = 1.1;
 
+
+    record BindingNeuronParameters (
+            double patternNetTarget,
+            double netTarget,
+            double spsRelWeight,
+            double pfWeight,
+            double weakInputMargin,
+            boolean isOptional,
+            String labelPrefix
+    ) {}
+
     public SequenceModel(Model m, Dictionary dict) {
         model = m;
         dictionary = dict;
     }
-
 
     public NeuronProvider getRelationPreviousToken() {
         return relPT;
@@ -176,6 +186,31 @@ public abstract class SequenceModel {
 
     protected abstract void initTemplateBindingNeurons();
 
+    protected BindingNeuron createPrimaryBindingNeuron(
+            double patternNetTarget,
+            double netTarget
+    ) {
+        BindingNeuronParameters p = new BindingNeuronParameters(
+                patternNetTarget,
+                netTarget,
+                0.0,
+                2.5,
+                0.0,
+                false,
+                "Primary"
+        );
+
+        BindingNeuron bn = createBindingNeuron(p, 0);
+
+        addInnerInhibitoryLoop(
+                bn,
+                primaryBNInhibitoryN.getNeuron(),
+                -(netTarget + 0.1)
+        );
+
+        return bn;
+    }
+
     protected void expandContinueBindingNeurons(
             double patternNetTarget,
             int optionalStart,
@@ -185,31 +220,33 @@ public abstract class SequenceModel {
     ) {
         BindingNeuron lastSylBN = sylBeginBN;
         for(int pos = 1; pos <= length; pos++) {
-            if(pos < 2) {
-                lastSylBN = createSecundaryBindingNeuron(
-                        patternNetTarget,
-                        2.5,
-                        10.0,
-                        2.5,
-                        0.0,
-                        pos >= optionalStart,
-                        dir * pos,
-                        lastSylBN,
-                        "Strong"
-                );
-            } else {
-                lastSylBN = createSecundaryBindingNeuron(
-                        patternNetTarget,
-                        0.5,
-                        5.0,
-                        0.5,
-                        -0.05,
-                        true,
-                        dir * pos,
-                        lastSylBN,
-                        "Weak"
-                );
-            }
+            BindingNeuronParameters p;
+
+            p = pos < 2 ?
+                    new BindingNeuronParameters(
+                            patternNetTarget,
+                            2.5,
+                            10.0,
+                            2.5,
+                            0.0,
+                            pos >= optionalStart,
+                            "Strong"
+                    ) :
+                    new BindingNeuronParameters(
+                            patternNetTarget,
+                            0.5,
+                            5.0,
+                            0.5,
+                            -0.05,
+                            true,
+                            "Weak"
+                    );
+
+            lastSylBN = createSecundaryBindingNeuron(
+                    p,
+                    dir * pos,
+                    lastSylBN
+            );
         }
     }
 
@@ -261,29 +298,6 @@ public abstract class SequenceModel {
         return bn;
     }
 
-    protected BindingNeuron createPrimaryBindingNeuron(
-            double patternNetTarget,
-            double netTarget
-    ) {
-        BindingNeuron bn = createBindingNeuron (
-                patternNetTarget,
-                netTarget,
-                2.5,
-                0.0,
-                false,
-                0,
-                "Strong"
-        );
-
-        addInnerInhibitoryLoop(
-                bn,
-                primaryBNInhibitoryN.getNeuron(),
-                -(netTarget + 0.1)
-        );
-
-        return bn;
-    }
-
     protected void applyMarginToInnerNegFeedbackSynapse(BindingNeuron primBN) {
         double margin = primBN.getDeltaBetweenTargetAndMax();
         InnerNegativeFeedbackSynapse innerNegSyn = primBN.getInputSynapseByType(InnerNegativeFeedbackSynapse.class);
@@ -291,25 +305,11 @@ public abstract class SequenceModel {
     }
 
     protected BindingNeuron createSecundaryBindingNeuron(
-            double patternNetTarget,
-            double netTarget,
-            double spsRelWeight,
-            double pfWeight,
-            double weakInputMargin,
-            boolean isOptional,
+            BindingNeuronParameters p,
             int pos,
-            BindingNeuron lastBN,
-            String labelPrefix
+            BindingNeuron lastBN
     ) {
-        BindingNeuron bn = createBindingNeuron(
-                patternNetTarget,
-                netTarget,
-                pfWeight,
-                weakInputMargin,
-                isOptional,
-                pos,
-                labelPrefix
-        );
+        BindingNeuron bn = createBindingNeuron(p, pos);
 
         LatentRelationNeuron rel = pos > 0 ?
                 relPT.getNeuron() :
@@ -320,46 +320,41 @@ public abstract class SequenceModel {
                 bn,
                 rel,
                 5.0,
-                spsRelWeight
+                p.spsRelWeight
         );
 
         return bn;
     }
 
     protected BindingNeuron createBindingNeuron(
-            double patternNetTarget,
-            double netTarget,
-            double pfWeight,
-            double weakInputMargin,
-            boolean isOptional,
-            int pos,
-            String labelPrefix
+            BindingNeuronParameters p,
+            int pos
     ) {
-        log.info(labelPrefix + " Binding-Neuron: netTarget:" + netTarget);
+        log.info(p.labelPrefix + " Binding-Neuron: netTarget:" + p.netTarget);
 
         BindingNeuron bn = addBindingNeuron(
                 dictionary.getInputToken().getNeuron(),
-                "Abstract (" + labelPrefix + ") Pos:" + pos,
+                "Abstract (" + p.labelPrefix + ") Pos:" + pos,
                 10.0,
                 dictionary.getInputPatternNetTarget(),
-                netTarget
+                p.netTarget
         );
         makeAbstract(bn);
 
         addOuterInhibitoryLoop(
                 bn,
                 outerInhibitoryN.getNeuron(),
-                getNegMargin(pos) * -netTarget
+                getNegMargin(pos) * -p.netTarget
         );
 
         addPositiveFeedbackLoop(
                 bn,
                 patternN.getNeuron(),
                 patternNetTarget,
-                netTarget,
-                pfWeight,
-                weakInputMargin,
-                isOptional
+                p.netTarget,
+                p.pfWeight,
+                p.weakInputMargin,
+                p.isOptional
         );
 
         return bn;
