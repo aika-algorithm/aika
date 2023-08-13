@@ -40,13 +40,10 @@ public class WordModel extends SequenceModel {
 
     @Override
     protected void initTemplateBindingNeurons() {
-        primaryBN = createPrimaryBindingNeuron(
-                patternNetTarget,
-                2.5
-        ).getProvider(true);
+        primaryBN = createPrimaryBindingNeuron()
+                .getProvider(true);
 
         expandContinueBindingNeurons(
-                patternNetTarget,
                 1,
                 primaryBN.getNeuron(),
                 5,
@@ -54,7 +51,6 @@ public class WordModel extends SequenceModel {
         );
 
         expandContinueBindingNeurons(
-                patternNetTarget,
                 1,
                 primaryBN.getNeuron(),
                 5,

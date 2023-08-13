@@ -40,13 +40,10 @@ public class SyllableModel extends SequenceModel {
 
     @Override
     protected void initTemplateBindingNeurons() {
-        primaryBN = createPrimaryBindingNeuron(
-                patternNetTarget,
-                2.5
-        ).getProvider(true);
+        primaryBN = createPrimaryBindingNeuron()
+                .getProvider(true);
 
         expandContinueBindingNeurons(
-                patternNetTarget,
                 2,
                 primaryBN.getNeuron(),
                 4,

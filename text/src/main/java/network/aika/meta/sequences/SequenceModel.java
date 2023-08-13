@@ -66,7 +66,7 @@ public abstract class SequenceModel {
 
     public NeuronProvider primaryBN;
 
-    protected double patternNetTarget = 0.7;
+    public static double patternNetTarget = 0.7;
 
     protected double targetInputNetTarget = 5.0;
 
@@ -81,9 +81,35 @@ public abstract class SequenceModel {
             double spsRelWeight,
             double pfWeight,
             double weakInputMargin,
-            boolean isOptional,
             String labelPrefix
     ) {}
+
+    public static BindingNeuronParameters PRIMARY_BN_PARAMS = new BindingNeuronParameters(
+            patternNetTarget,
+            2.5,
+            0.0,
+            2.5,
+            0.0,
+            "Primary"
+    );
+
+    public static BindingNeuronParameters STRONG_BN_PARAMS = new BindingNeuronParameters(
+            patternNetTarget,
+            2.5,
+            10.0,
+            2.5,
+            0.0,
+            "Strong"
+    );
+
+    public static BindingNeuronParameters WEAK_BN_PARAMS = new BindingNeuronParameters(
+            patternNetTarget,
+            0.5,
+            5.0,
+            0.5,
+            -0.05,
+            "Weak"
+    );
 
     public SequenceModel(Model m, Dictionary dict) {
         model = m;
@@ -186,33 +212,19 @@ public abstract class SequenceModel {
 
     protected abstract void initTemplateBindingNeurons();
 
-    protected BindingNeuron createPrimaryBindingNeuron(
-            double patternNetTarget,
-            double netTarget
-    ) {
-        BindingNeuronParameters p = new BindingNeuronParameters(
-                patternNetTarget,
-                netTarget,
-                0.0,
-                2.5,
-                0.0,
-                false,
-                "Primary"
-        );
-
-        BindingNeuron bn = createBindingNeuron(p, 0);
+    protected BindingNeuron createPrimaryBindingNeuron() {
+        BindingNeuron bn = createBindingNeuron(PRIMARY_BN_PARAMS, 0, false);
 
         addInnerInhibitoryLoop(
                 bn,
                 primaryBNInhibitoryN.getNeuron(),
-                -(netTarget + 0.1)
+                -(PRIMARY_BN_PARAMS.netTarget + 0.1)
         );
 
         return bn;
     }
 
     protected void expandContinueBindingNeurons(
-            double patternNetTarget,
             int optionalStart,
             BindingNeuron sylBeginBN,
             int length,
@@ -223,27 +235,12 @@ public abstract class SequenceModel {
             BindingNeuronParameters p;
 
             p = pos < 2 ?
-                    new BindingNeuronParameters(
-                            patternNetTarget,
-                            2.5,
-                            10.0,
-                            2.5,
-                            0.0,
-                            pos >= optionalStart,
-                            "Strong"
-                    ) :
-                    new BindingNeuronParameters(
-                            patternNetTarget,
-                            0.5,
-                            5.0,
-                            0.5,
-                            -0.05,
-                            true,
-                            "Weak"
-                    );
+                    STRONG_BN_PARAMS :
+                    WEAK_BN_PARAMS;
 
             lastSylBN = createSecundaryBindingNeuron(
                     p,
+                    pos >= optionalStart,
                     dir * pos,
                     lastSylBN
             );
@@ -306,10 +303,11 @@ public abstract class SequenceModel {
 
     protected BindingNeuron createSecundaryBindingNeuron(
             BindingNeuronParameters p,
+            boolean isOptional,
             int pos,
             BindingNeuron lastBN
     ) {
-        BindingNeuron bn = createBindingNeuron(p, pos);
+        BindingNeuron bn = createBindingNeuron(p, pos, isOptional);
 
         LatentRelationNeuron rel = pos > 0 ?
                 relPT.getNeuron() :
@@ -328,7 +326,8 @@ public abstract class SequenceModel {
 
     protected BindingNeuron createBindingNeuron(
             BindingNeuronParameters p,
-            int pos
+            int pos,
+            boolean isOptional
     ) {
         log.info(p.labelPrefix + " Binding-Neuron: netTarget:" + p.netTarget);
 
@@ -354,7 +353,7 @@ public abstract class SequenceModel {
                 p.netTarget,
                 p.pfWeight,
                 p.weakInputMargin,
-                p.isOptional
+                isOptional
         );
 
         return bn;

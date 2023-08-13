@@ -54,15 +54,12 @@ public class PhraseModel extends SequenceModel {
 
     @Override
     protected void initTemplateBindingNeurons() {
-        primaryBN = createPrimaryBindingNeuron(
-                patternNetTarget,
-                2.5
-        ).getProvider(true);
+        primaryBN = createPrimaryBindingNeuron()
+                .getProvider(true);
 
         createTargetInputBindingNeuron();
 
         expandContinueBindingNeurons(
-                patternNetTarget,
                 1,
                 primaryBN.getNeuron(),
                 5,
@@ -70,7 +67,6 @@ public class PhraseModel extends SequenceModel {
         );
 
         expandContinueBindingNeurons(
-                patternNetTarget,
                 1,
                 primaryBN.getNeuron(),
                 5,
