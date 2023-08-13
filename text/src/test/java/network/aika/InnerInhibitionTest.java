@@ -186,9 +186,9 @@ public class InnerInhibitionTest {
         addPositiveFeedbackLoop(
                 bn,
                 patternN,
-                2.5,
                 patternNetTarget,
                 bindingNetTarget,
+                2.5,
                 0.0,
                 false
         );

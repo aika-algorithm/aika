@@ -97,9 +97,9 @@ public class TextSectionModel {
         addPositiveFeedbackLoop(
                 beginBN.getNeuron(),
                 patternN.getNeuron(),
-                2.5,
                 patternNetTarget,
                 bindingNetTarget,
+                2.5,
                 0.0,
                 false
         );
@@ -107,9 +107,9 @@ public class TextSectionModel {
         addPositiveFeedbackLoop(
                 endBN.getNeuron(),
                 patternN.getNeuron(),
-                2.5,
                 patternNetTarget,
                 bindingNetTarget,
+                2.5,
                 0.0,
                 false
         );

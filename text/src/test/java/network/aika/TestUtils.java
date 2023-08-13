@@ -59,7 +59,15 @@ public class TestUtils {
                 .init(m, "P-" + label);
 
         for(BindingNeuron bn: bns) {
-            NetworkMotifs.addPositiveFeedbackLoop(bn, patternN, 10.0, 1.0, 2.0, 0.1, false);
+            NetworkMotifs.addPositiveFeedbackLoop(
+                    bn,
+                    patternN,
+                    1.0,
+                    2.0,
+                    10.0,
+                    0.1,
+                    false
+            );
         }
         return patternN;
     }

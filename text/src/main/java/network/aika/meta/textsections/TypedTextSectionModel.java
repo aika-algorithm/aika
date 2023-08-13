@@ -75,9 +75,9 @@ public class TypedTextSectionModel extends TextSectionModel {
         addPositiveFeedbackLoop(
                 headlineModel.headlineBN.getNeuron(),
                 patternN.getNeuron(),
-                2.5,
                 patternNetTarget,
                 bindingNetTarget,
+                2.5,
                 0.0,
                 false
         );

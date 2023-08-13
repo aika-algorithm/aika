@@ -72,9 +72,9 @@ public class NetworkMotifs {
     public static void addPositiveFeedbackLoop(
             BindingNeuron bn,
             PatternNeuron pn,
-            double weight,
             double patternNetTarget,
             double bindingNetTarget,
+            double weight,
             double weakInputMargin,
             boolean isOptional
     ) {

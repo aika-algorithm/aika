@@ -56,7 +56,6 @@ public class PhraseModel extends SequenceModel {
     protected void initTemplateBindingNeurons() {
         primaryBN = createPrimaryBindingNeuron(
                 patternNetTarget,
-                false,
                 2.5
         ).getProvider(true);
 
