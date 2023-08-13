@@ -16,39 +16,33 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.enums.Scope;
-import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.links.BindingCategoryInputLink;
 import network.aika.elements.activations.CategoryActivation;
+import network.aika.elements.activations.OuterInhibitoryActivation;
+import network.aika.elements.links.OuterInhibitoryCategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
+import network.aika.elements.neurons.OuterInhibitoryNeuron;
 
 /**
- * The Same Pattern Binding Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
+ * The Inhibitory Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
  *
  * @author Lukas Molzberger
  */
-public class BindingCategoryInputSynapse extends DisjunctiveSynapse<
-        BindingCategoryInputSynapse,
+public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
+        OuterInhibitoryCategoryInputSynapse,
         CategoryNeuron,
-        BindingNeuron,
-        BindingCategoryInputLink,
+        OuterInhibitoryNeuron,
+        OuterInhibitoryCategoryInputLink,
         CategoryActivation,
-        BindingActivation
+        OuterInhibitoryActivation
         > implements CategoryInputSynapse
 {
-    public BindingCategoryInputSynapse() {
-        super(Scope.INPUT);
+    public OuterInhibitoryCategoryInputSynapse() {
+        super(null);
     }
 
     @Override
-    public BindingCategoryInputLink createLink(CategoryActivation input, BindingActivation output) {
-        return new BindingCategoryInputLink(this, input, output);
-    }
-
-    @Override
-    public boolean isLatentLinkingAllowed() {
-        return false;
+    public OuterInhibitoryCategoryInputLink createLink(CategoryActivation input, OuterInhibitoryActivation output) {
+        return new OuterInhibitoryCategoryInputLink(this, input, output);
     }
 
     @Override

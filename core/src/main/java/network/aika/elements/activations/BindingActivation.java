@@ -126,6 +126,9 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     }
 
     public static boolean isSelfRef(BindingActivation in, BindingActivation out, Scope identityRef) {
+        if(in == null)
+            return false;
+
         if (in.isAbstract() && !out.isAbstract())
             return in.isSelfRef((BindingActivation) out.getTemplate(), identityRef);
         else if (!in.isAbstract() && out.isAbstract())

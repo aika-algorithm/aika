@@ -33,7 +33,7 @@ import network.aika.visitor.operator.ActLinkingOperator;
 import network.aika.visitor.operator.LinkLinkingOperator;
 import network.aika.queue.activation.Save;
 import network.aika.utils.Writable;
-import org.apache.commons.math3.stat.descriptive.summary.Sum;
+import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -17,32 +17,32 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.OuterInhibitoryActivation;
-import network.aika.elements.links.InhibitoryCategoryInputLink;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.links.InnerInhibitoryCategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.OuterInhibitoryNeuron;
+import network.aika.elements.neurons.InnerInhibitoryNeuron;
 
 /**
  * The Inhibitory Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
  *
  * @author Lukas Molzberger
  */
-public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
-        InhibitoryCategoryInputSynapse,
+public class InnerInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
+        InnerInhibitoryCategoryInputSynapse,
         CategoryNeuron,
-        OuterInhibitoryNeuron,
-        InhibitoryCategoryInputLink,
+        InnerInhibitoryNeuron,
+        InnerInhibitoryCategoryInputLink,
         CategoryActivation,
-        OuterInhibitoryActivation
+        InnerInhibitoryActivation
         > implements CategoryInputSynapse
 {
-    public InhibitoryCategoryInputSynapse() {
+    public InnerInhibitoryCategoryInputSynapse() {
         super(null);
     }
 
     @Override
-    public InhibitoryCategoryInputLink createLink(CategoryActivation input, OuterInhibitoryActivation output) {
-        return new InhibitoryCategoryInputLink(this, input, output);
+    public InnerInhibitoryCategoryInputLink createLink(CategoryActivation input, InnerInhibitoryActivation output) {
+        return new InnerInhibitoryCategoryInputLink(this, input, output);
     }
 
     @Override

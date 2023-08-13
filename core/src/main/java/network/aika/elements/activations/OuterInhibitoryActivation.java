@@ -68,7 +68,7 @@ public class OuterInhibitoryActivation extends DisjunctiveActivation<OuterInhibi
     }
 
     private Stream<OuterInhibitoryActivation> getConcreteInhibitoryActivations() {
-        return getInputLinksByType(InhibitoryCategoryInputLink.class)
+        return getInputLinksByType(OuterInhibitoryCategoryInputLink.class)
                 .map(Link::getInput)
                 .flatMap(CategoryActivation::getCategoryInputs)
                 .map(act -> (OuterInhibitoryActivation) act);
