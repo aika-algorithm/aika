@@ -43,7 +43,7 @@ public class InnerInhibitoryActivationPropertyPanel extends ActivationPropertyPa
         InnerMaxField inhibNet = (InnerMaxField)act.getNet();
         if(inhibNet.getSelectedInput() != null) {
             BindingActivation selectedAct = getBindingActivation(inhibNet.getSelectedInput());
-            addConstant("Selected Input: ", "" + selectedAct.getLabel());
+            addConstant("Selected Input: ", selectedAct.getId() + " - '" + selectedAct.getLabel() + "'");
         }
         super.initInferenceSection(act);
     }
