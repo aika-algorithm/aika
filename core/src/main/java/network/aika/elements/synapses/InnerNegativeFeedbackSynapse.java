@@ -58,11 +58,6 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public boolean checkLinkingEvent(Activation act) {
-        return true;
-    }
-
-    @Override
     public double getPropagatePreNet(InnerInhibitoryActivation iAct) {
         return weight.getValue();
     }
