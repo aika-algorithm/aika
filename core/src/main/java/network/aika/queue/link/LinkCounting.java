@@ -33,8 +33,8 @@ public class LinkCounting extends ElementStep<Link> {
             add(new LinkCounting(l));
     }
 
-    private LinkCounting(Link act) {
-        super(act);
+    private LinkCounting(Link l) {
+        super(l);
     }
 
     @Override

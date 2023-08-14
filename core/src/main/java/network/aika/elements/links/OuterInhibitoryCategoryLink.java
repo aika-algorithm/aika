@@ -17,31 +17,24 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.InnerInhibitoryActivation;
-import network.aika.elements.synapses.*;
+import network.aika.elements.activations.OuterInhibitoryActivation;
+import network.aika.elements.synapses.OuterInhibitoryCategorySynapse;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
 
+import static network.aika.elements.activations.OuterInhibitoryActivation.crossConnectFields;
 
 /**
  * @author Lukas Molzberger
  */
-public class InnerInhibitoryCategoryInputLink extends DisjunctiveLink<InnerInhibitoryCategoryInputSynapse, CategoryActivation, InnerInhibitoryActivation> implements CategoryInputLink {
+public class OuterInhibitoryCategoryLink extends CategoryLink<OuterInhibitoryCategorySynapse, OuterInhibitoryActivation> {
 
-    public InnerInhibitoryCategoryInputLink(InnerInhibitoryCategoryInputSynapse s, CategoryActivation input, InnerInhibitoryActivation output) {
+    public OuterInhibitoryCategoryLink(OuterInhibitoryCategorySynapse s, OuterInhibitoryActivation input, CategoryActivation output) {
         super(s, input, output);
-    }
 
-    @Override
-    public CategorySynapse createCategorySynapse() {
-        return new InnerInhibitoryCategorySynapse();
+        crossConnectFields(input, (OuterInhibitoryActivation) output.getTemplate());
     }
 
     @Override
     public void patternCatVisit(PatternCategoryVisitor v, int depth) {
-    }
-
-    @Override
-    public void instantiateTemplate(CategoryActivation iAct, InnerInhibitoryActivation oAct) {
-        instantiateTemplate(iAct, oAct, this);
     }
 }

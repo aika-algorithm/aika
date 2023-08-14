@@ -22,6 +22,7 @@ package network.aika.queue;
  */
 public enum Phase {
     INSTANTIATION(),
+    POST_INSTANTIATION(),
     INPUT_LINKING(),
     OUTPUT_LINKING(),
     FEEDBACK_TRIGGER(),

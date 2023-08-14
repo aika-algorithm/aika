@@ -56,7 +56,7 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryActi
 
     @Override
     public CategorySynapse createCategorySynapse() {
-        return new InhibitoryCategorySynapse();
+        return new OuterInhibitoryCategorySynapse();
     }
 
     @Override
@@ -65,8 +65,8 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryActi
     }
 
     @Override
-    public InhibitoryCategorySynapse getCategoryOutputSynapse() {
-        return getOutputSynapseByType(InhibitoryCategorySynapse.class);
+    public OuterInhibitoryCategorySynapse getCategoryOutputSynapse() {
+        return getOutputSynapseByType(OuterInhibitoryCategorySynapse.class);
     }
 
     @Override

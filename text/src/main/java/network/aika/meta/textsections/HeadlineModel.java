@@ -44,7 +44,6 @@ public class HeadlineModel {
 
     protected NeuronProvider headlineBN;
 
-    protected double headlineInputPatternNetTarget = 5.0;
 
     public HeadlineModel(PhraseModel phraseModel) {
         this.phraseModel = phraseModel;
@@ -73,7 +72,7 @@ public class HeadlineModel {
                 phraseModel.getPatternNeuron().getNeuron(),
                 "Text-Section-Headline",
                 10.0,
-                headlineInputPatternNetTarget,
+                phraseModel.patternNetTarget,
                 netTarget
         ).getProvider(true);
 

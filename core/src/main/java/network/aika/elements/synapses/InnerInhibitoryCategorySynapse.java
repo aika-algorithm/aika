@@ -14,23 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.neurons.properties;
+package network.aika.elements.synapses;
 
-import network.aika.elements.links.Link;
-import network.aika.elements.synapses.RelationInputSynapse;
+import network.aika.elements.activations.CategoryActivation;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.links.InnerInhibitoryCategoryLink;
+import network.aika.elements.neurons.Neuron;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class RelationInputSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel<RelationInputSynapse> {
+public class InnerInhibitoryCategorySynapse extends CategorySynapse<InnerInhibitoryCategorySynapse, Neuron, InnerInhibitoryActivation> {
 
-    public RelationInputSynapsePropertyPanel(RelationInputSynapse s, Link ref) {
-        super(s, ref);
+    public InnerInhibitoryCategorySynapse() {
+        super(null);
+    }
 
-        String spsInput = s.getCorrespondingSPSInput() != null ?
-                s.getCorrespondingSPSInput().getId() + " - " + s.getCorrespondingSPSInput().getLabel() :
-                "--";
-
-        addConstant("Corresponding SPS Input: ", spsInput);
+    @Override
+    public InnerInhibitoryCategoryLink createLink(InnerInhibitoryActivation input, CategoryActivation output) {
+        return new InnerInhibitoryCategoryLink(this, input, output);
     }
 }

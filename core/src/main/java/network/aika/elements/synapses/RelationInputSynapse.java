@@ -36,7 +36,7 @@ public class RelationInputSynapse extends BindingNeuronSynapse<
         RelationInputSynapse,
         LatentRelationNeuron,
         RelationInputLink,
-        BindingActivation
+        LatentRelationActivation
         >
 {
     private NeuronProvider correspondingSPSInput;
@@ -51,8 +51,12 @@ public class RelationInputSynapse extends BindingNeuronSynapse<
         return correspondingSPSInput;
     }
 
+    public void setCorrespondingSPSInput(NeuronProvider spsInput) {
+        this.correspondingSPSInput = spsInput;
+    }
+
     public void setCorrespondingSPS(SamePatternSynapse correspondingSPS) {
-        this.correspondingSPSInput = correspondingSPS.getPInput();
+        setCorrespondingSPSInput(correspondingSPS.getPInput());
     }
 
     @Override
@@ -64,11 +68,11 @@ public class RelationInputSynapse extends BindingNeuronSynapse<
     }
 
     @Override
-    public void linkAndPropagateOut(BindingActivation act) {
+    public void linkAndPropagateOut(LatentRelationActivation act) {
     }
 
     @Override
-    public RelationInputLink createLink(BindingActivation input, BindingActivation output) {
+    public RelationInputLink createLink(LatentRelationActivation input, BindingActivation output) {
         return new RelationInputLink(this, input, output);
     }
 

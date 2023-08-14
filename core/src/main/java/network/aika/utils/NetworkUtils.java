@@ -18,6 +18,7 @@ package network.aika.utils;
 
 import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.BindingCategoryInputSynapse;
+import network.aika.elements.synapses.InnerInhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.OuterInhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.PatternCategoryInputSynapse;
 import network.aika.enums.Scope;
@@ -83,8 +84,8 @@ public class NetworkUtils {
 
         inhibCategory.getProvider(true);
 
-        new OuterInhibitoryCategoryInputSynapse()
-                .setWeight(1.0)
+        new InnerInhibitoryCategoryInputSynapse()
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT)
                 .init(inhibCategory, n);
 
         return inhibCategory;

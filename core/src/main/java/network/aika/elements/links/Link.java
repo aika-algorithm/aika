@@ -124,7 +124,12 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
                 oAct.getNeuron()
         );
 
-        s.createLinkFromTemplate(iAct, oAct, this);
+        Link newInstance = s.createLinkFromTemplate(iAct, oAct, this);
+        postInstantiation(newInstance);
+    }
+
+    protected void postInstantiation(Link newInstance) {
+
     }
 
     public LinkKey getInputLinkKey() {

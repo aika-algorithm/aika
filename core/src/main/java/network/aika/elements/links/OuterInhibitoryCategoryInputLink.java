@@ -39,7 +39,7 @@ public class OuterInhibitoryCategoryInputLink extends DisjunctiveLink<OuterInhib
 
     @Override
     public CategorySynapse createCategorySynapse() {
-        return new InhibitoryCategorySynapse();
+        return new OuterInhibitoryCategorySynapse();
     }
 
     @Override
