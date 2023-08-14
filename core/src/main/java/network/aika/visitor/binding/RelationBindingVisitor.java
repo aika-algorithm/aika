@@ -70,7 +70,12 @@ public class RelationBindingVisitor extends BindingVisitor {
 
     @Override
     public void expandRelations(TokenActivation origin, int depth) {
-        getRelation().getInput()
+        RelationInputSynapse relSyn = getRelation();
+
+        if(!operator.verifySamePatternSynapse(relSyn.getCorrespondingSPSInput()))
+            return;
+
+        relSyn.getInput()
                 .evaluateLatentRelation(origin, relationDir)
                 .forEach(relTokenAct ->
                         up(origin, relTokenAct, depth)
@@ -98,7 +103,7 @@ public class RelationBindingVisitor extends BindingVisitor {
 
     @Override
     public void createRelation(Link l) {
-        if(relation.linkExists((BindingActivation) l.getOutput()))
+        if(relation.linkExists((BindingActivation) l.getOutput(), true))
             return;
 
         LatentRelationActivation latentRelAct = relation.createOrLookupLatentActivation(

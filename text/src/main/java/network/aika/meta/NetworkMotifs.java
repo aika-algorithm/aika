@@ -107,7 +107,7 @@ public class NetworkMotifs {
             double relWeight,
             double spsWeight
     ) {
-        new RelationInputSynapse()
+        RelationInputSynapse relSyn = new RelationInputSynapse()
                 .setWeight(relWeight)
                 .init(rel, bn)
                 .adjustBias();
@@ -120,6 +120,8 @@ public class NetworkMotifs {
                 .setWeight(spsWeight)
                 .init(lastBN, bn)
                 .adjustBias(prevValueTarget);
+
+        relSyn.setCorrespondingSPS(spSyn);
 
         log.info("  " + spSyn + " targetNetContr:" + -spSyn.getSynapseBias().getValue());
     }

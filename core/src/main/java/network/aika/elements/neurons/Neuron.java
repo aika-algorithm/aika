@@ -172,6 +172,7 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
     public void linkAndPropagateIn(Link l) {
         getInputSynapsesAsStream()
                 .filter(synB -> synB != l.getSynapse())
+                .filter(synB -> synB.checkSingularLinkDoesNotExist(l.getOutput()))
                 .forEach(synB ->
                         startVisitor(
                                 new ActLinkingOperator(l.getInput(), l.getSynapse(), l, synB),

@@ -114,7 +114,7 @@ public abstract class ConjunctiveNeuron<A extends ConjunctiveActivation> extends
     @Override
     public void addInactiveLinks(Activation act) {
         getInputSynapsesAsStream()
-                .filter(s -> !s.linkExists(act))
+                .filter(s -> !s.linkExists(act, true))
                 .forEach(s ->
                         s.createAndInitLink(null, act)
                 );

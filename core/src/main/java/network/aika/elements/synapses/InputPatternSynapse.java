@@ -38,6 +38,11 @@ public class InputPatternSynapse extends BindingNeuronSynapse<
     }
 
     @Override
+    public boolean checkSingularLinkDoesNotExist(BindingActivation oAct) {
+        return !linkExists(oAct, true);
+    }
+
+    @Override
     public InputPatternLink createLink(PatternActivation input, BindingActivation output) {
         return new InputPatternLink(this, input, output);
     }

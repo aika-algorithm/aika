@@ -16,6 +16,7 @@
  */
 package network.aika.visitor.operator;
 
+import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.Scope;
 import network.aika.Thought;
 import network.aika.enums.direction.Direction;
@@ -23,7 +24,6 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 
-import java.util.stream.Stream;
 
 import static network.aika.elements.synapses.Synapse.latentActivationExists;
 
@@ -39,6 +39,11 @@ public abstract class LinkingOperator implements Operator {
     public LinkingOperator(Activation fromAct, Synapse syn) {
         this.fromAct = fromAct;
         this.syn = syn;
+    }
+
+    public boolean verifySamePatternSynapse(NeuronProvider candidateSPSInput) {
+        return candidateSPSInput == null ||
+                syn.getPInput() == candidateSPSInput;
     }
 
     public abstract Direction getRelationDir(Scope fromScope);

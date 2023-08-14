@@ -52,6 +52,9 @@ public class LinkLinkingOperator extends LinkingOperator {
         if(!v.compatible(syn.getScope(), l.getSynapse().getScope()))
             return;
 
+        if(!syn.checkSingularLinkDoesNotExist(l.getOutput()))
+            return;
+
         link(l.getInput(), l.getSynapse(), l, fromAct, syn);
     }
 }

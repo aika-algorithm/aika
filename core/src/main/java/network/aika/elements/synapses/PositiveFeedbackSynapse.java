@@ -41,6 +41,11 @@ public class PositiveFeedbackSynapse extends FeedbackSynapse<
         super(Scope.SAME);
     }
 
+    @Override
+    public boolean checkSingularLinkDoesNotExist(BindingActivation oAct) {
+        return !linkExists(oAct, false);
+    }
+
     public PositiveFeedbackLink createLink(PatternActivation input, BindingActivation output) {
         return new PositiveFeedbackLink(this, input, output);
     }

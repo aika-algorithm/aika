@@ -19,11 +19,9 @@ package network.aika.elements.synapses;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.FeedbackLink;
-import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.enums.Scope;
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.links.BindingNeuronLink;
 import network.aika.elements.neurons.Neuron;
 
 /**
@@ -42,7 +40,7 @@ public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuro
     }
 
     public void initDummyLink(BindingActivation oAct) {
-        if(!linkExists(oAct))
+        if(!linkExists(oAct, true))
             createAndInitLink(null, oAct);
     }
 

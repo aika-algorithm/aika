@@ -17,11 +17,7 @@
 package network.aika.debugger.neurons.properties;
 
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.elements.synapses.PatternSynapse;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
-import network.aika.elements.synapses.SamePatternSynapse;
-import network.aika.utils.Utils;
+import network.aika.elements.synapses.*;
 
 import static network.aika.utils.Utils.doubleToString;
 
@@ -52,6 +48,8 @@ public class ConjunctiveSynapsePropertyPanel<E extends ConjunctiveSynapse> exten
             return new SamePatternSynapsePropertyPanel((SamePatternSynapse) s, ref);
         } else if(s instanceof PatternSynapse) {
             return new PatternSynapsePropertyPanel((PatternSynapse) s, ref);
+        } else if(s instanceof RelationInputSynapse) {
+            return new RelationInputSynapsePropertyPanel((RelationInputSynapse) s, ref);
         }
 
         return new ConjunctiveSynapsePropertyPanel(s, ref);

@@ -16,6 +16,7 @@
  */
 package network.aika.visitor.operator;
 
+import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
@@ -38,6 +39,12 @@ public class ActLinkingOperator extends LinkingOperator {
         this.synA = synA;
         this.linkA = linkA;
         this.toScope = synA.getScope();
+    }
+
+    @Override
+    public boolean verifySamePatternSynapse(NeuronProvider candidateSPSInput) {
+        return super.verifySamePatternSynapse(candidateSPSInput) ||
+                synA.getPInput() == candidateSPSInput;
     }
 
     @Override

@@ -24,7 +24,6 @@ import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.QueueInterceptor;
 import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
@@ -144,13 +143,26 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return (L) oAct.getInputDummyLink(input.getNeuron());
     }
 
+
+    /**
+     * Returns true, if either the synapse allows more than one link or the link does not exist yet.
+     */
+    public boolean checkSingularLinkDoesNotExist(OA oAct) {
+        return true;
+    }
+
     public L checkExistingLink(IA iAct, OA oAct) {
         return (L) oAct.getInputLink(iAct);
     }
 
-    public boolean linkExists(OA oAct) {
-        return oAct.getInputLinks(this)
-                .findAny()
+    public boolean linkExists(OA oAct, boolean includeInactive) {
+        Stream<Link> links = oAct.getInputLinks(this);
+
+        if(!includeInactive)
+            links = links
+                    .filter(l -> l.getInput() != null);
+
+        return links.findAny()
                 .isPresent();
     }
 

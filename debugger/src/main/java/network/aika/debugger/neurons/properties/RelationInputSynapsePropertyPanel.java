@@ -14,23 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.operator;
+package network.aika.debugger.neurons.properties;
 
-import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.elements.neurons.NeuronProvider;
-import network.aika.visitor.LinkingVisitor;
+import network.aika.elements.synapses.RelationInputSynapse;
 
 /**
  * @author Lukas Molzberger
  */
-public interface Operator {
+public class RelationInputSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel<RelationInputSynapse> {
 
+    public RelationInputSynapsePropertyPanel(RelationInputSynapse s, Link ref) {
+        super(s, ref);
 
-    void check(LinkingVisitor v, Link lastLink, Activation act);
-
-    /**
-     * Checks whether the SamePatternSynapse corresponds to the RelationInputSynapse
-     */
-    boolean verifySamePatternSynapse(NeuronProvider candidateSPSInput);
+        addConstant("Corresponding SPS Input: ", s.getCorrespondingSPSInput().getLabel());
+    }
 }
