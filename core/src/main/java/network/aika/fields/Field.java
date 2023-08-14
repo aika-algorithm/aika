@@ -50,7 +50,7 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
 
     protected Double tolerance;
 
-    UpdateListener<FieldLink> interceptor;
+    QueueInterceptor interceptor;
 
     public Field(FieldObject reference, String label, Double tolerance) {
         this.reference = reference;
@@ -138,18 +138,18 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
         this.receivers.remove(fl);
     }
 
-    public UpdateListener<FieldLink> getInterceptor() {
+    public QueueInterceptor getInterceptor() {
         return interceptor;
     }
 
-    public void setInterceptor(UpdateListener<FieldLink> interceptor) {
+    public void setInterceptor(QueueInterceptor interceptor) {
         this.interceptor = interceptor;
     }
 
     @Override
     public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
         if(interceptor != null) {
-            interceptor.receiveUpdate(fl, nextRound, u);
+            interceptor.receiveUpdate(nextRound, u, false);
             return;
         }
 

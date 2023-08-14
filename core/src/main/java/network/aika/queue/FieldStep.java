@@ -74,7 +74,10 @@ public class FieldStep<E extends Element> extends Step<E> {
         return sortValue;
     }
 
-    public void updateDelta(double delta) {
+    public void updateDelta(double delta, boolean replaceUpdate) {
+        if(replaceUpdate)
+            this.delta = 0;
+
         this.delta += delta;
 
         updateSortValue(

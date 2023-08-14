@@ -19,7 +19,6 @@ package network.aika.fields;
 
 import network.aika.Thought;
 import network.aika.debugger.FieldObserver;
-import network.aika.elements.Element;
 import network.aika.queue.FieldStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
@@ -32,7 +31,7 @@ import java.util.List;
  *
  * @author Lukas Molzberger
  */
-public class QueueInterceptor implements UpdateListener<FieldLink> {
+public class QueueInterceptor {
 
     private Phase phase;
 
@@ -65,12 +64,11 @@ public class QueueInterceptor implements UpdateListener<FieldLink> {
         return step;
     }
 
-    @Override
-    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
+    public void receiveUpdate(boolean nextRound, double u, boolean replaceUpdate) {
         updateObservers();
 
         FieldStep s = getOrCreateStep(getRound(nextRound));
-        s.updateDelta(u);
+        s.updateDelta(u, replaceUpdate);
 
         if(u != 0.0 && !s.isQueued()) {
             if(!Step.add(s)) {

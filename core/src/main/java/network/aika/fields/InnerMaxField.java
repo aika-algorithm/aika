@@ -44,7 +44,7 @@ public class InnerMaxField extends MaxField {
     @Override
     public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
         if(interceptor != null) {
-            interceptor.receiveUpdate(fl, nextRound, u);
+            interceptor.receiveUpdate(nextRound, computeUpdate(), true);
             return;
         }
 

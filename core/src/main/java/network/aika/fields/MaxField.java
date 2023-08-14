@@ -35,7 +35,7 @@ public class MaxField extends SumField {
         );
     }
 
-    private double computeUpdate() {
+    protected double computeUpdate() {
         return getInputs().stream()
                 .mapToDouble(AbstractFieldLink::getUpdatedInputValue)
                 .max()
