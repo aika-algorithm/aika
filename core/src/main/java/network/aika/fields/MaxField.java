@@ -23,38 +23,22 @@ import java.util.Comparator;
  */
 public class MaxField extends SumField {
 
-    private FieldLink selectedInput;
-
-
     public MaxField(FieldObject ref, String label) {
         super(ref, label, null);
     }
 
-    public FieldLink getSelectedInput() {
-        return selectedInput;
-    }
-
     @Override
-    protected void receiveUpdateInternal(FieldLink fl, boolean nextRound, double u) {
+    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
         triggerUpdate(
                 nextRound,
                 computeUpdate()
         );
     }
 
-    protected double computeUpdate() {
-        FieldLink lastSelectedInput = selectedInput;
-
-        selectedInput = getInputs().stream()
-                .max(Comparator.comparingDouble(AbstractFieldLink::getUpdatedInputValue))
-                .orElse(null);
-
-        if(lastSelectedInput != selectedInput)
-            onSelectionChanged(lastSelectedInput, selectedInput);
-
-        return selectedInput.getUpdatedInputValue() - value;
-    }
-
-    protected void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput) {
+    private double computeUpdate() {
+        return getInputs().stream()
+                .mapToDouble(AbstractFieldLink::getUpdatedInputValue)
+                .max()
+                .orElse(0.0) - value;
     }
 }

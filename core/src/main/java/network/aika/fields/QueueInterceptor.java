@@ -85,7 +85,7 @@ public class QueueInterceptor implements UpdateListener<FieldLink> {
     }
 
     public void process(FieldStep s) {
-        field.receiveUpdateInternal(null, false, s.getDelta());
+        field.triggerUpdate(false, s.getDelta());
         step = null;
 
         updateObservers();

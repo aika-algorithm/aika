@@ -76,7 +76,7 @@ public abstract class AbstractFunction extends Field implements FieldInput {
     protected abstract double computeUpdate(FieldLink fl, double u);
 
     @Override
-    protected void receiveUpdateInternal(FieldLink fl, boolean nextRound, double u) {
+    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
         double update = computeUpdate(fl, u);
         if(update == 0.0)
             return;

@@ -150,14 +150,10 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
     public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
         if(interceptor != null) {
             interceptor.receiveUpdate(fl, nextRound, u);
-        } else {
-            receiveUpdateInternal(fl, nextRound, u);
+            return;
         }
-    }
 
-    protected void receiveUpdateInternal(FieldLink fl, boolean nextRound, double u) {
         assert !withinUpdate;
-
         triggerUpdate(nextRound, u);
     }
 

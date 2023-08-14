@@ -22,6 +22,8 @@ import network.aika.elements.links.InnerInhibitoryLink;
 import network.aika.elements.links.InnerNegativeFeedbackLink;
 import network.aika.enums.Scope;
 
+import java.util.Comparator;
+
 import static network.aika.elements.activations.BindingActivation.isSelfRef;
 
 /**
@@ -29,11 +31,43 @@ import static network.aika.elements.activations.BindingActivation.isSelfRef;
  */
 public class InnerMaxField extends MaxField {
 
+    private FieldLink selectedInput;
+
     public InnerMaxField(FieldObject ref, String label) {
         super(ref, label);
     }
 
+    public FieldLink getSelectedInput() {
+        return selectedInput;
+    }
+
     @Override
+    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
+        if(interceptor != null) {
+            interceptor.receiveUpdate(fl, nextRound, u);
+            return;
+        }
+
+        super.receiveUpdate(fl, nextRound, u);
+    }
+
+    public void triggerUpdate(boolean nextRound, double u) {
+        FieldLink lastSelectedInput = selectedInput;
+
+        updatedSelectedInput(lastSelectedInput);
+
+        super.triggerUpdate(nextRound, u);
+    }
+
+    private void updatedSelectedInput(FieldLink lastSelectedInput) {
+        selectedInput = getInputs().stream()
+                .max(Comparator.comparingDouble(AbstractFieldLink::getInputValue))
+                .orElse(null);
+
+        if(lastSelectedInput != selectedInput)
+            onSelectionChanged(lastSelectedInput, selectedInput);
+    }
+
     protected void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput) {
         BindingActivation lAct = getBindingActivation(lastSelectedInput);
         BindingActivation cAct = getBindingActivation(selectedInput);
