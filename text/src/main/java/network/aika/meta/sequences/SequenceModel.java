@@ -158,6 +158,24 @@ public abstract class SequenceModel {
 
     public abstract String getPatternType();
 
+    public void initStaticNeurons() {
+        relPT = BeforeRelationNeuron.lookupRelation(model, -1, -1)
+                .setBias(5.0)
+                .getProvider(true);
+
+        relNT = BeforeRelationNeuron.lookupRelation(model, 1, 1)
+                .setBias(5.0)
+                .getProvider(true);
+
+        targetInput = model.lookupNeuronByLabel("Abstract Target Input", l ->
+                new TokenNeuron()
+                        .init(model, l)
+        ).getProvider(true);
+
+        dictionary.initStaticNeurons();
+    }
+
+
     public void initTemplates() {
         // Abstract
         patternN = new PatternNeuron()
@@ -184,11 +202,6 @@ public abstract class SequenceModel {
 
         patternN.getNeuron().setBias(patternNetTarget);
 
-        targetInput = model.lookupNeuronByLabel("Abstract Target Input", l ->
-                new TokenNeuron()
-                        .init(model, l)
-        ).getProvider(true);
-
         targetInput.getNeuron()
                 .setBias(targetInputNetTarget);
 
@@ -196,18 +209,6 @@ public abstract class SequenceModel {
                 .getProvider(true);
 
         initTemplateBindingNeurons();
-    }
-
-    public void initStaticNeurons() {
-        relPT = BeforeRelationNeuron.lookupRelation(model, -1, -1)
-                .setBias(5.0)
-                .getProvider(true);
-
-        relNT = BeforeRelationNeuron.lookupRelation(model, 1, 1)
-                .setBias(5.0)
-                .getProvider(true);
-
-        dictionary.initStaticNeurons();
     }
 
     protected abstract void initTemplateBindingNeurons();
