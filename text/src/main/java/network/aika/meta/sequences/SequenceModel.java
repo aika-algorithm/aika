@@ -167,12 +167,22 @@ public abstract class SequenceModel {
                 .setBias(5.0)
                 .getProvider(true);
 
+        initTargetInput();
+
+        dictionary.initStaticNeurons();
+    }
+
+    protected void initTargetInput() {
         targetInput = model.lookupNeuronByLabel("Abstract Target Input", l ->
                 new TokenNeuron()
                         .init(model, l)
         ).getProvider(true);
 
-        dictionary.initStaticNeurons();
+        targetInput.getNeuron()
+                .setBias(targetInputNetTarget);
+
+        targetInputCategory = makeAbstract((PatternNeuron) targetInput.getNeuron())
+                .getProvider(true);
     }
 
 
@@ -201,12 +211,6 @@ public abstract class SequenceModel {
         log.info(getPatternType() + " Pattern: netTarget:" + patternNetTarget);
 
         patternN.getNeuron().setBias(patternNetTarget);
-
-        targetInput.getNeuron()
-                .setBias(targetInputNetTarget);
-
-        targetInputCategory = makeAbstract((PatternNeuron) targetInput.getNeuron())
-                .getProvider(true);
 
         initTemplateBindingNeurons();
     }
