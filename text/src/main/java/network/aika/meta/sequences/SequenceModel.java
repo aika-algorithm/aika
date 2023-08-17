@@ -136,26 +136,6 @@ public abstract class SequenceModel {
         return patternN;
     }
 
-
-    public void initInputTokenWeights() {
-        model.getAllNeurons()
-                .map(NeuronProvider::getNeuron)
-                .filter(TokenNeuron.class::isInstance)
-                .map(TokenNeuron.class::cast)
-                .map(n -> n.getOutputSynapseByType(PatternCategorySynapse.class))
-                .filter(Objects::nonNull)
-                .forEach(this::mapSurprisalToWeight);
-    }
-
-    private void mapSurprisalToWeight(PatternCategorySynapse s) {
-        double surprisal = s.getInput().getSurprisal(Sign.POS, null, false);
-
-        double weight = 1.0 + (-0.1 * surprisal);
-        s.setWeight(weight);
-
-        log.debug("Set category synapse weight for token: " + s.getInput().getLabel() + " (weight: " + weight + " surprisal: " + surprisal + ")");
-    }
-
     public abstract String getPatternType();
 
     public void initStaticNeurons() {
@@ -168,8 +148,6 @@ public abstract class SequenceModel {
                 .getProvider(true);
 
         initTargetInput();
-
-        dictionary.initStaticNeurons();
     }
 
     protected void initTargetInput() {

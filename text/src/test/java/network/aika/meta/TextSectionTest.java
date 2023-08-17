@@ -77,6 +77,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         );
 
         dictionary = new Dictionary(model);
+        dictionary.initStaticNeurons();
+
         tokenizer = new SimpleWordTokenizer(dictionary);
 
         phraseModel = new PhraseModel(model, dictionary);
@@ -125,7 +127,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         process(requirementsHeadline, null, COUNTING);
         process(exampleTxt, null, COUNTING);
 
-        phraseModel.initInputTokenWeights();
+        dictionary.initInputTokenWeights();
         phraseModel.initTemplates();
         textSectionModel.initTextSectionTemplates();
 

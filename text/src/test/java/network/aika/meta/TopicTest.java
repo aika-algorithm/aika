@@ -44,6 +44,7 @@ public class TopicTest extends TrainingParser {
     public void init() {
         Model model = new Model();
         dict = new Dictionary(model);
+        dict.initStaticNeurons();
 
         templateModel = new PhraseModel(model, dict);
         templateModel.initStaticNeurons();

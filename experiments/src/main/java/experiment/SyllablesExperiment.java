@@ -73,6 +73,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
         );
 
         dict = new Dictionary(model);
+        dict.initStaticNeurons();
 
         syllableModel = new SyllableModel(model, dict);
         syllableModel.initStaticNeurons();
@@ -121,6 +122,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     }
 
     private void train(List<String> inputs) {
+        dict.initStaticNeurons();
         syllableModel.initStaticNeurons();
 
         // Counting letters loop
