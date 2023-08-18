@@ -38,6 +38,11 @@ public class PhraseModel extends SequenceModel {
         super(m, dict);
     }
 
+
+    public void addTargetCategory(String category) {
+
+    }
+
     @Override
     public void initStaticNeurons() {
         super.initStaticNeurons();

@@ -36,7 +36,7 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     private static final Logger log = LoggerFactory.getLogger(TypedTextSectionModel.class);
 
-    HeadlineModel headlineModel;
+    protected NeuronProvider headlineBN;
 
     protected NeuronProvider textSectionHintBN;
 
@@ -48,22 +48,15 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     public TypedTextSectionModel(PhraseModel phraseModel) {
         super(phraseModel);
-
-        headlineModel = new HeadlineModel(phraseModel);
     }
 
     public void addTargetTextSections(Document doc, Set<String> tsLabels) {
         log.info(doc.getContent() + " : " + tsLabels.stream().collect(Collectors.joining(", ")));
     }
 
-    public HeadlineModel getHeadlineModel() {
-        return headlineModel;
-    }
-
     public void initTextSectionTemplates() {
         super.initTextSectionTemplates();
 
-        headlineModel.initHeadlineTemplates();
         log.info("Typed Text-Section");
 
         textSectionHintBN = new BindingNeuron()
@@ -72,8 +65,16 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         double netTarget = 2.5;
 
+        headlineBN = addBindingNeuron(
+                phraseModel.getPatternNeuron().getNeuron(),
+                "Text-Section-Headline",
+                10.0,
+                phraseModel.patternNetTarget,
+                netTarget
+        ).getProvider(true);
+
         addPositiveFeedbackLoop(
-                headlineModel.headlineBN.getNeuron(),
+                headlineBN.getNeuron(),
                 patternN.getNeuron(),
                 patternNetTarget,
                 bindingNetTarget,
@@ -83,7 +84,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         );
 
         addRelation(
-                headlineModel.headlineBN.getNeuron(),
+                headlineBN.getNeuron(),
                 beginBN.getNeuron(),
                 phraseModel.relPT.getNeuron(),
                 5.0,

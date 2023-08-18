@@ -150,6 +150,10 @@ public abstract class SequenceModel {
         initTargetInput();
     }
 
+    public NeuronProvider getTargetInput() {
+        return targetInput;
+    }
+
     protected void initTargetInput() {
         targetInput = model.lookupNeuronByLabel("Abstract Target Input", l ->
                 new TokenNeuron()

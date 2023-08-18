@@ -108,14 +108,16 @@ public class TextSectionTest extends TrainingParser<TestContext> {
                 }
         );
 
+        doc.addToken(
+                phraseModel.getTargetInput().getNeuron(),
+                new Range(0, tokenCounter[0]),
+                new Range(0, doc.length()),
+                dictionary.getInputPatternNetTarget()
+        );
+
         if(context != null && context.getHeadlineTargetString() != null) {
-            textSectionModel.getHeadlineModel()
-                    .addTargetTSHeadline(
-                            doc,
-                            Set.of(context.getHeadlineTargetLabel()),
-                            new Range(0, tokenCounter[0]),
-                            new Range(0, doc.length())
-                    );
+            phraseModel
+                    .addTargetCategory(context.getHeadlineTargetString());
         }
     }
 
