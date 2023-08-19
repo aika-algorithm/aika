@@ -64,7 +64,7 @@ public class AnnealingTest extends TrainingParser {
     @Test
     public void testAnnealing() {
         process("a b", null, COUNTING);
-        templateModel.initTemplates();
+        templateModel.initStaticNeurons();
         process("a b", null, TRAINING);
     }
 

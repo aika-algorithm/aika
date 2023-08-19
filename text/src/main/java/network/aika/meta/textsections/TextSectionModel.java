@@ -65,7 +65,7 @@ public class TextSectionModel {
         model = phraseModel.getModel();
     }
 
-    protected void initTextSectionTemplates() {
+    public void initStaticNeurons() {
         log.info("Text-Section");
 
         relationPT = BeforeRelationNeuron.lookupRelation(model, -300, -1)

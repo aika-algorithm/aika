@@ -54,8 +54,8 @@ public class TypedTextSectionModel extends TextSectionModel {
         log.info(doc.getContent() + " : " + tsLabels.stream().collect(Collectors.joining(", ")));
     }
 
-    public void initTextSectionTemplates() {
-        super.initTextSectionTemplates();
+    public void initStaticNeurons() {
+        super.initStaticNeurons();
 
         log.info("Typed Text-Section");
 

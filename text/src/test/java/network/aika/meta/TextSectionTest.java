@@ -87,8 +87,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         phraseModel.initStaticNeurons();
 
         entityModel = new EntityModel(phraseModel);
+        entityModel.initStaticNeurons();
 
         textSectionModel = new TypedTextSectionModel(phraseModel);
+        textSectionModel.initStaticNeurons();
 
         model.setN(0);
     }
@@ -134,8 +136,6 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         process(exampleTxt, null, COUNTING);
 
         dictionary.initInputTokenWeights();
-        phraseModel.initTemplates();
-        textSectionModel.initTextSectionTemplates();
 
         process(tasksHeadline, new TestContext(tasksHeadline, "Task-HL"), TRAINING);
         process(requirementsHeadline, new TestContext(requirementsHeadline, "Requi.-HL"), TRAINING);

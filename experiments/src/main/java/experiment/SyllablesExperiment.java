@@ -130,8 +130,6 @@ public class SyllablesExperiment extends TrainingParser<Context> {
             super.process(w, null, COUNTING)
         );
 
-        syllableModel.initTemplates();
-
         counter = new int[1];
 
         experimentLogger = new ExperimentLogger();
@@ -151,12 +149,6 @@ public class SyllablesExperiment extends TrainingParser<Context> {
 
         if(counter[0] >= 0) {// 3, 6, 11, 18, 100, 39, 49
             debugger = AIKADebugger.createAndShowGUI(doc);
-        }
-        if(txt.equalsIgnoreCase("kleider")) {
-//            debugger = AIKADebugger.createAndShowGUI(doc);
-        }
-        if(doc.getId() == 49289l) {
-     //       debugger = AIKADebugger.createAndShowGUI(doc);
         }
 
         LoggingListener logger = null;

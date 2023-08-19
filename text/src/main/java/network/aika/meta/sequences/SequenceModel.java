@@ -148,6 +148,7 @@ public abstract class SequenceModel {
                 .getProvider(true);
 
         initTargetInput();
+        initTemplates();
     }
 
     public NeuronProvider getTargetInput() {
@@ -168,7 +169,7 @@ public abstract class SequenceModel {
     }
 
 
-    public void initTemplates() {
+    protected void initTemplates() {
         // Abstract
         patternN = new PatternNeuron()
                 .init(model, getPatternType())

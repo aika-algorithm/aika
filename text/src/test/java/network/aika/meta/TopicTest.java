@@ -64,7 +64,7 @@ public class TopicTest extends TrainingParser {
     @Test
     public void testTopics() {
         process("a b", null, COUNTING);
-        templateModel.initTemplates();
+        templateModel.initStaticNeurons();
         process("a b", null, TRAINING);
     }
 
