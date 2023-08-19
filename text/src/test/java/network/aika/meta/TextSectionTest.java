@@ -19,6 +19,7 @@ package network.aika.meta;
 import network.aika.Config;
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
+import network.aika.meta.entities.EntityModel;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.meta.textsections.TypedTextSectionModel;
@@ -49,6 +50,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
 
     private Tokenizer tokenizer;
     private PhraseModel phraseModel;
+    private EntityModel entityModel;
     private TypedTextSectionModel textSectionModel;
 
 /*    private String exampleTxt = "Java Softwaredeveloper\n" +
@@ -84,6 +86,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         phraseModel = new PhraseModel(model, dictionary);
         phraseModel.initStaticNeurons();
 
+        entityModel = new EntityModel(phraseModel);
+
         textSectionModel = new TypedTextSectionModel(phraseModel);
 
         model.setN(0);
@@ -116,8 +120,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         );
 
         if(context != null && context.getHeadlineTargetLabel() != null) {
-            phraseModel
-                    .addTargetCategory(context.getHeadlineTargetLabel());
+            entityModel
+                    .addEntity(context.getHeadlineTargetLabel());
         }
     }
 
