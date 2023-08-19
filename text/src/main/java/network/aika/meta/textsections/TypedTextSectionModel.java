@@ -66,7 +66,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         double netTarget = 2.5;
 
         headlineBN = addBindingNeuron(
-                phraseModel.getPatternNeuron().getNeuron(),
+             //   phraseModel.getPatternNeuron().getNeuron(),
                 "Text-Section-Headline",
                 10.0,
                 phraseModel.patternNetTarget,

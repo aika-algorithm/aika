@@ -115,9 +115,9 @@ public class TextSectionTest extends TrainingParser<TestContext> {
                 dictionary.getInputPatternNetTarget()
         );
 
-        if(context != null && context.getHeadlineTargetString() != null) {
+        if(context != null && context.getHeadlineTargetLabel() != null) {
             phraseModel
-                    .addTargetCategory(context.getHeadlineTargetString());
+                    .addTargetCategory(context.getHeadlineTargetLabel());
         }
     }
 

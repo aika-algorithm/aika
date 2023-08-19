@@ -22,6 +22,8 @@ import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static network.aika.utils.NetworkUtils.makeAbstract;
+
 /**
  *
  * @author Lukas Molzberger
@@ -33,19 +35,50 @@ public class PhraseModel extends SequenceModel {
 
     NeuronProvider upperCaseN;
 
+    protected NeuronProvider targetCategoryCat;
+
+    protected NeuronProvider targetCategoryPattern;
+
+    protected double targetCategoryNetTarget = 5.0;
+
 
     public PhraseModel(Model m, Dictionary dict) {
         super(m, dict);
     }
 
 
-    public void addTargetCategory(String category) {
+    public PatternNeuron addTargetCategory(String category) {
+        return model.lookupNeuronByLabel(category, l ->
+                createTargetCategoryPattern(category)
+        );
+    }
 
+    protected PatternNeuron createTargetCategoryPattern(String label) {
+        PatternNeuron tcpN = targetCategoryPattern.getNeuron();
+        PatternNeuron n = tcpN.instantiateTemplate()
+                .init(model, label);
+
+        n.setLabel(label);
+        n.setAllowTraining(false);
+
+        return n;
     }
 
     @Override
     public void initStaticNeurons() {
         super.initStaticNeurons();
+
+        targetCategoryPattern = model.lookupNeuronByLabel("Abstract Target Category", l ->
+                new PatternNeuron()
+                        .init(model, l)
+        ).getProvider(true);
+
+        targetCategoryPattern.getNeuron()
+                .setBias(targetCategoryNetTarget);
+
+        targetCategoryCat = makeAbstract((PatternNeuron) targetCategoryPattern.getNeuron())
+                .getProvider(true);
+
 
         upperCaseN = new PatternCategoryNeuron()
                 .init(model, "Upper Case")
