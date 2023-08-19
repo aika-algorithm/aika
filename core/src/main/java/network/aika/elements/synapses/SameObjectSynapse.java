@@ -14,25 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links;
+package network.aika.elements.synapses;
 
-import network.aika.elements.activations.Activation;
+import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.synapses.ReversePatternSynapse;
-import network.aika.visitor.pattern.PatternVisitor;
-
+import network.aika.elements.links.SameObjectLink;
+import network.aika.elements.neurons.BindingNeuron;
 
 /**
+ * The Same Pattern Binding Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
  *
  * @author Lukas Molzberger
  */
-public class ReversePatternLink<IA extends Activation<?>> extends BindingNeuronLink<ReversePatternSynapse, IA> {
-
-    public ReversePatternLink(ReversePatternSynapse s, IA input, BindingActivation output) {
-        super(s, input, output);
+public class SameObjectSynapse extends BindingNeuronSynapse<
+        SameObjectSynapse,
+        BindingNeuron,
+        SameObjectLink,
+        BindingActivation
+        >
+{
+    public SameObjectSynapse() {
+        super(Scope.SAME);
     }
 
     @Override
-    public void patternVisit(PatternVisitor v, int depth) {
+    public SameObjectLink createLink(BindingActivation input, BindingActivation output) {
+        return new SameObjectLink(this, input, output);
     }
 }

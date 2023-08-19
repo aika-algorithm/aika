@@ -16,12 +16,12 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.elements.links.InputPatternLink;
+import network.aika.elements.links.InputObjectLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class InputPatternLinkPropertyPanel<E extends InputPatternLink> extends ConjunctiveLinkPropertyPanel<E> {
+public class InputPatternLinkPropertyPanel<E extends InputObjectLink> extends ConjunctiveLinkPropertyPanel<E> {
 
     public InputPatternLinkPropertyPanel(E l) {
         super(l);
@@ -44,7 +44,7 @@ public class InputPatternLinkPropertyPanel<E extends InputPatternLink> extends C
         super.initTrainingSection(l);
     }
 
-    public static InputPatternLinkPropertyPanel create(InputPatternLink l) {
+    public static InputPatternLinkPropertyPanel create(InputObjectLink l) {
         return new InputPatternLinkPropertyPanel(l);
     }
 }

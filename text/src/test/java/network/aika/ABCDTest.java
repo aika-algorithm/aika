@@ -19,9 +19,9 @@ package network.aika;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
-import network.aika.elements.synapses.InputPatternSynapse;
+import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
-import network.aika.elements.synapses.SamePatternSynapse;
+import network.aika.elements.synapses.SameObjectSynapse;
 import network.aika.meta.Dictionary;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
@@ -68,18 +68,18 @@ public class ABCDTest {
                 .setWeight(10.0)
                 .init(relPT, b_abBN)
                 .adjustBias();
-        new SamePatternSynapse()
+        new SameObjectSynapse()
                 .setWeight(11.0)
                 .init(a_abBN, b_abBN)
                 .adjustBias();
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(a_IN, a_abBN)
                 .adjustBias();
         a_abBN.setBias(2.5);
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(b_IN, b_abBN)
                 .adjustBias();
@@ -95,12 +95,12 @@ public class ABCDTest {
                 .setWeight(10.0)
                 .init(relPT, c_bcBN)
                 .adjustBias();
-        new SamePatternSynapse()
+        new SameObjectSynapse()
                 .setWeight(11.0)
                 .init(b_bcBN, c_bcBN)
                 .adjustBias();
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(b_IN, b_bcBN)
                 .adjustBias();
@@ -108,7 +108,7 @@ public class ABCDTest {
         b_abBN.setBias(3.0);
         b_bcBN.setBias(2.5);
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(c_IN, c_bcBN)
                 .adjustBias();
@@ -130,18 +130,18 @@ public class ABCDTest {
                 .init(relPT, d_bcdBN)
                 .adjustBias();
 
-        new SamePatternSynapse()
+        new SameObjectSynapse()
                 .setWeight(11.0)
                 .init(bc_bcdBN, d_bcdBN)
                 .adjustBias();
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(bcPattern, bc_bcdBN)
                 .adjustBias();
         bc_bcdBN.setBias(2.5);
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(d_IN, d_bcdBN)
                 .adjustBias();

@@ -87,7 +87,7 @@ public class JacksonCookTest {
         BindingNeuron jacksonJCBN = jacksonForenameBN.instantiateTemplate()
                 .init(m, "jackson (jackson cook)");
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(jacksonIN, jacksonJCBN)
                 .adjustBias();
@@ -102,7 +102,7 @@ public class JacksonCookTest {
                 .setWeight(10.0)
                 .init(jacksonForenameCN, jacksonForenameBN);
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(jacksonIN, jacksonForenameBN)
                 .adjustBias();
@@ -116,7 +116,7 @@ public class JacksonCookTest {
 
         BindingNeuron jacksonCityBN = new BindingNeuron()
                 .init(m, "jackson (city)");
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(jacksonIN, jacksonCityBN)
                 .adjustBias();
@@ -130,7 +130,7 @@ public class JacksonCookTest {
 
         BindingNeuron cookSurnameBN =  surnameBN.init(m, "cook (surname)");
         BindingNeuron cookJCBN =  cookSurnameBN.init(m, "cook (jackson cook)");
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(cookIN, cookJCBN)
                 .adjustBias();
@@ -145,7 +145,7 @@ public class JacksonCookTest {
                 .setWeight(10.0)
                 .init(cookSurnameCN, cookSurnameBN);
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(cookIN, cookSurnameBN)
                 .adjustBias();
@@ -158,7 +158,7 @@ public class JacksonCookTest {
 
         BindingNeuron cookProfessionBN =  new BindingNeuron()
                 .init(m, "cook (profession)");
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(cookIN, cookProfessionBN)
                 .adjustBias();
@@ -202,7 +202,7 @@ public class JacksonCookTest {
                 .init(relPT, surnameBN)
                 .adjustBias();
 
-        new SamePatternSynapse()
+        new SameObjectSynapse()
                 .setWeight(10.0)
                 .init(forenameBN, surnameBN)
                 .adjustBias();

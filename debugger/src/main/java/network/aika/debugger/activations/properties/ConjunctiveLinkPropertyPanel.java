@@ -50,8 +50,8 @@ public class ConjunctiveLinkPropertyPanel<E extends ConjunctiveLink> extends Lin
             return FeedbackLinkPropertyPanel.create((FeedbackLink) l);
         } else if(l instanceof PatternLink) {
             return new PatternLinkPropertyPanel((PatternLink)l);
-        } else if(l instanceof InputPatternLink) {
-            return InputPatternLinkPropertyPanel.create((InputPatternLink)l);
+        } else if(l instanceof InputObjectLink) {
+            return InputPatternLinkPropertyPanel.create((InputObjectLink)l);
         }
 
         return new ConjunctiveLinkPropertyPanel(l);

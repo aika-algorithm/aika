@@ -18,7 +18,7 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.synapses.InputPatternSynapse;
+import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.fields.AbstractFunction;
 import network.aika.fields.Fields;
 import network.aika.visitor.pattern.PatternVisitor;
@@ -26,11 +26,11 @@ import network.aika.visitor.pattern.PatternVisitor;
 /**
  * @author Lukas Molzberger
  */
-public class InputPatternLink extends BindingNeuronLink<InputPatternSynapse, PatternActivation> {
+public class InputObjectLink extends BindingNeuronLink<InputObjectSynapse, PatternActivation> {
 
     private AbstractFunction inputEntropy;
 
-    public InputPatternLink(InputPatternSynapse s, PatternActivation input, BindingActivation output) {
+    public InputObjectLink(InputObjectSynapse s, PatternActivation input, BindingActivation output) {
         super(s, input, output);
     }
 

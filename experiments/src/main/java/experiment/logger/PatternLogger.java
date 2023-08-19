@@ -238,7 +238,7 @@ public class PatternLogger {
     }
 
     private static String getDominantBindingActLabel(TokenActivation tAct) {
-        return tAct.getOutputLinksByType(InputPatternLink.class).map(Link::getOutput)
+        return tAct.getOutputLinksByType(InputObjectLink.class).map(Link::getOutput)
                 .filter(act -> !act.isAbstract())
                 .filter(supprAct -> supprAct.getNet().getUpdatedValue() > 0.0)
                 .map(act -> act.getTokenPosRange() + "-" + act.getLabel())

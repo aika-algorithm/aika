@@ -41,7 +41,7 @@ public class RelationInputLink extends BindingNeuronLink<RelationInputSynapse, L
     public void instantiateCorrespondingSPS(RelationInputLink newInstance) {
         if (synapse.getCorrespondingSPSInput() != null) {
             newInstance.getSynapse().setCorrespondingSPSInput(
-                    newInstance.getOutput().getInputLinksByType(SamePatternLink.class)
+                    newInstance.getOutput().getInputLinksByType(SameObjectLink.class)
                             .map(Link::getInput)
                             .map(Activation::getNeuron)
                             .filter(n -> n.getTemplate().getId() == synapse.getCorrespondingSPSInput().getId())

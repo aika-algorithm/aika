@@ -19,21 +19,21 @@ package network.aika.elements.synapses;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.links.InputPatternLink;
+import network.aika.elements.links.InputObjectLink;
 import network.aika.elements.neurons.PatternNeuron;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class InputPatternSynapse extends BindingNeuronSynapse<
-        InputPatternSynapse,
+public class InputObjectSynapse extends BindingNeuronSynapse<
+        InputObjectSynapse,
         PatternNeuron,
-        InputPatternLink,
+        InputObjectLink,
         PatternActivation
         >
 {
-    public InputPatternSynapse() {
+    public InputObjectSynapse() {
         super(Scope.INPUT);
     }
 
@@ -43,7 +43,7 @@ public class InputPatternSynapse extends BindingNeuronSynapse<
     }
 
     @Override
-    public InputPatternLink createLink(PatternActivation input, BindingActivation output) {
-        return new InputPatternLink(this, input, output);
+    public InputObjectLink createLink(PatternActivation input, BindingActivation output) {
+        return new InputObjectLink(this, input, output);
     }
 }

@@ -39,7 +39,7 @@ public class NetworkMotifs {
         double inputValueTarget = input.getActivationFunction()
                 .f(inputNetTarget);
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(weight)
                 .init(input, bn)
                 .adjustBias(inputValueTarget);
@@ -116,7 +116,7 @@ public class NetworkMotifs {
         double prevValueTarget = lastBN.getActivationFunction()
                 .f(prevNetTarget);
 
-        SamePatternSynapse spSyn = new SamePatternSynapse()
+        SameObjectSynapse spSyn = new SameObjectSynapse()
                 .setWeight(spsWeight)
                 .init(lastBN, bn)
                 .adjustBias(prevValueTarget);

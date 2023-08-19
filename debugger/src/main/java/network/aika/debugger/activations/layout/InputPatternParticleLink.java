@@ -17,7 +17,7 @@
 package network.aika.debugger.activations.layout;
 
 import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.elements.links.InputPatternLink;
+import network.aika.elements.links.InputObjectLink;
 import org.graphstream.graph.Edge;
 
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
@@ -26,13 +26,13 @@ import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
 /**
  * @author Lukas Molzberger
  */
-public class InputPatternParticleLink<L extends InputPatternLink> extends ParticleLink<L> {
+public class InputPatternParticleLink<L extends InputObjectLink> extends ParticleLink<L> {
 
     public InputPatternParticleLink(L l, Edge e, ActivationGraphManager gm) {
         super(l, e, gm);
     }
 
-    public static ParticleLink create(InputPatternLink l, Edge e, ActivationGraphManager gm) {
+    public static ParticleLink create(InputObjectLink l, Edge e, ActivationGraphManager gm) {
         return new InputPatternParticleLink(l, e, gm);
     }
 

@@ -55,7 +55,7 @@ public class RelationInputSynapse extends BindingNeuronSynapse<
         this.correspondingSPSInput = spsInput;
     }
 
-    public void setCorrespondingSPS(SamePatternSynapse correspondingSPS) {
+    public void setCorrespondingSPS(SameObjectSynapse correspondingSPS) {
         setCorrespondingSPSInput(correspondingSPS.getPInput());
     }
 

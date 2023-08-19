@@ -14,33 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.links;
 
-import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.links.ReversePatternLink;
-import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.synapses.SameObjectSynapse;
+import network.aika.visitor.binding.BindingVisitor;
+import network.aika.visitor.pattern.PatternCategoryVisitor;
+import network.aika.visitor.pattern.PatternVisitor;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class ReversePatternSynapse extends
-        BindingNeuronSynapse<
-                ReversePatternSynapse,
-                PatternNeuron,
-                ReversePatternLink<PatternActivation>,
-                PatternActivation
-                >
-{
+public class SameObjectLink extends BindingNeuronLink<SameObjectSynapse, BindingActivation> {
 
-    public ReversePatternSynapse() {
-        super(Scope.SAME);
+    public SameObjectLink(SameObjectSynapse s, BindingActivation input, BindingActivation output) {
+        super(s, input, output);
     }
 
     @Override
-    public ReversePatternLink createLink(PatternActivation input, BindingActivation output) {
-        return new ReversePatternLink(this, input, output);
+    public void propagateRanges() {
+    }
+
+    @Override
+    public void bindingVisit(BindingVisitor v, int depth) {
+    }
+
+    @Override
+    public void patternVisit(PatternVisitor v, int depth) {
+        v.next(this, depth);
+    }
+
+    @Override
+    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
     }
 }

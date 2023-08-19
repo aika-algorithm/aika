@@ -20,7 +20,7 @@ package network.aika;
 
 import network.aika.suspension.SuspensionCallback;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.synapses.InputPatternSynapse;
+import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.TokenNeuron;
@@ -58,12 +58,12 @@ public class SuspensionTest {
         NeuronProvider out = new BindingNeuron().init(m, "OUT").getProvider(true);
         out.getNeuron().setBias(1.0);
 
-        Synapse sStrong = new InputPatternSynapse()
+        Synapse sStrong = new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(inStrong.getNeuron(), out.getNeuron())
                 .adjustBias();
 
-        Synapse sWeak = new InputPatternSynapse()
+        Synapse sWeak = new InputObjectSynapse()
                 .setWeight(0.5)
                 .init(inWeak.getNeuron(), out.getNeuron())
                 .adjustBias();

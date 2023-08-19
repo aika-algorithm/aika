@@ -31,12 +31,12 @@ public class BindingParticleLink<L extends BindingNeuronLink> extends ParticleLi
     }
 
     public static ParticleLink create(BindingNeuronLink l, Edge e, ActivationGraphManager gm) {
-        if(l instanceof InputPatternLink) {
-            return InputPatternParticleLink.create((InputPatternLink) l, e, gm);
+        if(l instanceof InputObjectLink) {
+            return InputPatternParticleLink.create((InputObjectLink) l, e, gm);
         } else if (l instanceof FeedbackLink<?, ?>) {
             return FeedbackParticleLink.create((FeedbackLink) l, e, gm);
-        } else if (l instanceof SamePatternLink) {
-            return SamePatternParticleLink.create((SamePatternLink) l, e, gm);
+        } else if (l instanceof SameObjectLink) {
+            return SamePatternParticleLink.create((SameObjectLink) l, e, gm);
         } else if (l instanceof RelationInputLink) {
             return RelationInputParticleLink.create((RelationInputLink) l, e, gm);
         }

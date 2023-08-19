@@ -17,14 +17,14 @@
 package network.aika.debugger.neurons.properties;
 
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.SamePatternSynapse;
+import network.aika.elements.synapses.SameObjectSynapse;
 
 /**
  * @author Lukas Molzberger
  */
-public class SamePatternSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel<SamePatternSynapse> {
+public class SamePatternSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel<SameObjectSynapse> {
 
-    public SamePatternSynapsePropertyPanel(SamePatternSynapse s, Link ref) {
+    public SamePatternSynapsePropertyPanel(SameObjectSynapse s, Link ref) {
         super(s, ref);
     }
 }

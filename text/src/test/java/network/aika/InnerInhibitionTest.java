@@ -37,7 +37,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
-import network.aika.elements.synapses.InputPatternSynapse;
+import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -175,7 +175,7 @@ public class InnerInhibitionTest {
         double inputValueTarget = in.getActivationFunction()
                 .f(inputPatternNetTarget);
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(in, bn)
                 .adjustBias(inputValueTarget);

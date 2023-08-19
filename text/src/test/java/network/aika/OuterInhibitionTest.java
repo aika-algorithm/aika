@@ -89,7 +89,7 @@ public class OuterInhibitionTest {
     private static BindingNeuron addBindingNeuronOuter(Model m, String label, double bias, TokenNeuron in, OuterInhibitoryNeuron inhib) {
         BindingNeuron bn = new BindingNeuron().init(m, label);
 
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(in, bn)
                 .adjustBias();

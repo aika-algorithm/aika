@@ -19,9 +19,9 @@ package network.aika;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
-import network.aika.elements.synapses.InputPatternSynapse;
+import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
-import network.aika.elements.synapses.SamePatternSynapse;
+import network.aika.elements.synapses.SameObjectSynapse;
 import network.aika.meta.Dictionary;
 
 import static network.aika.TestUtils.initPatternLoop;
@@ -44,13 +44,13 @@ public class TestHelper {
         LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, relFrom, relTo);
 
         BindingNeuron theBN = new BindingNeuron().init(m, "the (the cat)");
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(theIN, theBN)
                 .adjustBias();
 
         BindingNeuron catBN = new BindingNeuron().init(m, "cat (the cat)");
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(variant == 0  || variant == 2 ? 10.0 : 5.0)
                 .init(catIN, catBN)
                 .adjustBias();
@@ -60,7 +60,7 @@ public class TestHelper {
                     .setWeight(5.0)
                     .init(relPT, catBN)
                     .adjustBias();
-            new SamePatternSynapse()
+            new SameObjectSynapse()
                     .setWeight(variant == 1 || variant == 3 ? 10.0 : 5.0)
                     .init(theBN, catBN)
                     .adjustBias();
@@ -69,7 +69,7 @@ public class TestHelper {
                     .setWeight(5.0)
                     .init(relPT, theBN)
                     .adjustBias();
-            new SamePatternSynapse()
+            new SameObjectSynapse()
                     .setWeight(variant == 1 || variant == 3 ? 10.0 : 5.0)
                     .init(catBN, theBN)
                     .adjustBias();
@@ -93,13 +93,13 @@ public class TestHelper {
         LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -1, -1);
 
         BindingNeuron blackBN = new BindingNeuron().init(m, "black (black cat)");
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(blackIN, blackBN)
                 .adjustBias();
 
         BindingNeuron catBN = new BindingNeuron().init(m, "cat (black cat)");
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(20.0)
                 .init(catIN, catBN)
                 .adjustBias();
@@ -109,7 +109,7 @@ public class TestHelper {
                 .init(relPT, catBN)
                 .adjustBias();
 
-        new SamePatternSynapse()
+        new SameObjectSynapse()
                 .setWeight(5.0)
                 .init(blackBN, catBN)
                 .adjustBias();
@@ -131,13 +131,13 @@ public class TestHelper {
         LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, relFrom, relTo);
 
         BindingNeuron theBN = new BindingNeuron().init(m, "the (the dog)");
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(theIN, theBN)
                 .adjustBias();
 
         BindingNeuron dogBN = new BindingNeuron().init(m, "dog (the dog)");
-        new InputPatternSynapse()
+        new InputObjectSynapse()
                 .setWeight(variant == 0  || variant == 2 ? 10.0 : 5.0)
                 .init(dogIN, dogBN)
                 .adjustBias();
@@ -147,7 +147,7 @@ public class TestHelper {
                     .setWeight(5.0)
                     .init(relPT, dogBN)
                     .adjustBias();
-            new SamePatternSynapse()
+            new SameObjectSynapse()
                     .setWeight(variant == 1 || variant == 3 ? 10.0 : 5.0)
                     .init(theBN, dogBN)
                     .adjustBias();
@@ -156,7 +156,7 @@ public class TestHelper {
                     .setWeight(5.0)
                     .init(relPT, theBN)
                     .adjustBias();
-            new SamePatternSynapse()
+            new SameObjectSynapse()
                     .setWeight(variant == 1 || variant == 3 ? 10.0 : 5.0)
                     .init(dogBN, theBN)
                     .adjustBias();
