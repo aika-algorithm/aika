@@ -32,62 +32,24 @@ public class PhraseModel extends SequenceModel {
 
     private static final Logger log = LoggerFactory.getLogger(PhraseModel.class);
 
-
     NeuronProvider upperCaseN;
-
-    protected NeuronProvider targetCategoryCat;
-
-    protected NeuronProvider targetCategoryPattern;
-
-    protected double targetCategoryNetTarget = 5.0;
-
 
     public PhraseModel(Model m, Dictionary dict) {
         super(m, dict);
     }
 
-
-    public PatternNeuron addTargetCategory(String category) {
-        return model.lookupNeuronByLabel(category, l ->
-                createTargetCategoryPattern(category)
-        );
-    }
-
-    protected PatternNeuron createTargetCategoryPattern(String label) {
-        PatternNeuron tcpN = targetCategoryPattern.getNeuron();
-        PatternNeuron n = tcpN.instantiateTemplate()
-                .init(model, label);
-
-        n.setLabel(label);
-        n.setAllowTraining(false);
-
-        return n;
+    @Override
+    public String getPatternType() {
+        return "Phrase";
     }
 
     @Override
     public void initStaticNeurons() {
         super.initStaticNeurons();
 
-        targetCategoryPattern = model.lookupNeuronByLabel("Abstract Target Category", l ->
-                new PatternNeuron()
-                        .init(model, l)
-        ).getProvider(true);
-
-        targetCategoryPattern.getNeuron()
-                .setBias(targetCategoryNetTarget);
-
-        targetCategoryCat = makeAbstract((PatternNeuron) targetCategoryPattern.getNeuron())
-                .getProvider(true);
-
-
         upperCaseN = new PatternCategoryNeuron()
                 .init(model, "Upper Case")
                 .getProvider(true);
-    }
-
-    @Override
-    public String getPatternType() {
-        return "Phrase";
     }
 
     @Override

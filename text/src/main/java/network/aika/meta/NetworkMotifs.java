@@ -69,6 +69,21 @@ public class NetworkMotifs {
                 .init(in, bn);
     }
 
+    public static void addPositiveFeedbackSynapse(
+            BindingNeuron bn,
+            PatternNeuron pn,
+            double patternNetTarget,
+            double bindingNetTarget
+    ) {
+        double patternValueTarget = pn.getActivationFunction()
+                .f(patternNetTarget);
+
+        new PositiveFeedbackSynapse()
+                .setWeight(POS_MARGIN * (bindingNetTarget / patternValueTarget))
+                .init(pn, bn)
+                .adjustBias(patternValueTarget);
+    }
+
     public static void addPositiveFeedbackLoop(
             BindingNeuron bn,
             PatternNeuron pn,
