@@ -73,12 +73,11 @@ public class EntityModel {
 
     public void initStaticNeurons() {
         targetInput = new TargetInput(model);
-        targetInput.initTargetInput();
+        targetInput.initTargetInput("Entity Target Input");
 
-        entityPattern = model.lookupNeuronByLabel("Abstract Entity", l ->
-                new PatternNeuron()
-                        .init(model, l)
-        ).getProvider(true);
+        entityPattern = new PatternNeuron()
+                .init(model, "Abstract Entity")
+                .getProvider(true);
 
         entityPattern.getNeuron()
                 .setBias(entityNetTarget);
@@ -132,13 +131,12 @@ public class EntityModel {
     }
 
     private void instantiateBN(String label, PatternNeuron pn, BindingNeuron bn) {
-        BindingNeuron tEBN = entityBN.getNeuron();
-        BindingNeuron iEBN = tEBN.instantiateTemplate()
+        BindingNeuron iEBN = bn.instantiateTemplate()
                 .init(model, label);
 
-        tEBN.getInputSynapseByType(PositiveFeedbackSynapse.class)
+        bn.getInputSynapseByType(PositiveFeedbackSynapse.class)
                 .instantiateTemplate(pn, iEBN);
-        tEBN.getInputSynapseByType(PrimarySameObjectSynapse.class)
+        bn.getInputSynapseByType(PrimarySameObjectSynapse.class)
                 .instantiateTemplate(pn, iEBN);
 
         entityPattern.getNeuron().getInputSynapseByType(PatternSynapse.class)

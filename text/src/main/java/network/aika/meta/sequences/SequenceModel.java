@@ -145,7 +145,7 @@ public abstract class SequenceModel {
                 .getProvider(true);
 
         targetInput = new TargetInput(model);
-        targetInput.initTargetInput();
+        targetInput.initTargetInput("Phrase Target Input");
         initTemplates();
     }
 

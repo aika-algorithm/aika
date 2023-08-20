@@ -73,7 +73,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         super.initStaticNeurons();
 
         targetInput = new TargetInput(model);
-        targetInput.initTargetInput();
+        targetInput.initTargetInput("Text Section Target Input");
 
         log.info("Typed Text-Section");
 

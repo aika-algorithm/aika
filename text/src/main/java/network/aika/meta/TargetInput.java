@@ -73,11 +73,10 @@ public class TargetInput {
         return n;
     }
 
-    public void initTargetInput() {
-        targetInput = model.lookupNeuronByLabel("Abstract Target Input", l ->
-                new TokenNeuron()
-                        .init(model, l)
-        ).getProvider(true);
+    public void initTargetInput(String label) {
+        targetInput = new TokenNeuron()
+                        .init(model, label)
+                .getProvider(true);
 
         targetInput.getNeuron()
                 .setBias(targetInputNetTarget);
