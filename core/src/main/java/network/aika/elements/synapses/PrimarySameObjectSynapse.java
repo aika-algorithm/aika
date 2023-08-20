@@ -16,26 +16,26 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.links.InputObjectLink;
+import network.aika.elements.links.PrimarySameObjectLink;
+import network.aika.enums.Scope;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class InputObjectSynapse extends PrimaryInputSynapse<
-        InputObjectSynapse,
-        InputObjectLink
+public class PrimarySameObjectSynapse extends PrimaryInputSynapse<
+        PrimarySameObjectSynapse,
+        PrimarySameObjectLink
         >
 {
-    public InputObjectSynapse() {
-        super(Scope.INPUT);
+    public PrimarySameObjectSynapse() {
+        super(Scope.SAME);
     }
 
     @Override
-    public InputObjectLink createLink(PatternActivation input, BindingActivation output) {
-        return new InputObjectLink(this, input, output);
+    public PrimarySameObjectLink createLink(PatternActivation input, BindingActivation output) {
+        return new PrimarySameObjectLink(this, input, output);
     }
 }

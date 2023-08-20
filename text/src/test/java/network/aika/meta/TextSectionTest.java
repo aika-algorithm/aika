@@ -89,7 +89,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         entityModel = new EntityModel(phraseModel);
         entityModel.initStaticNeurons();
 
-        textSectionModel = new TypedTextSectionModel(phraseModel);
+        textSectionModel = new TypedTextSectionModel(entityModel);
         textSectionModel.initStaticNeurons();
 
         model.setN(0);
@@ -115,7 +115,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         );
 
         doc.addToken(
-                phraseModel.getTargetInput().getNeuron(),
+                phraseModel.getTargetInput().getTargetInput().getNeuron(),
                 new Range(0, tokenCounter[0]),
                 new Range(0, doc.length()),
                 dictionary.getInputPatternNetTarget()

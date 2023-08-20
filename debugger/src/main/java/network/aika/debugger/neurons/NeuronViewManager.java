@@ -20,8 +20,6 @@ import network.aika.Model;
 import network.aika.debugger.AbstractGraphMouseManager;
 import network.aika.debugger.AbstractParticleLink;
 import network.aika.debugger.AbstractViewManager;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.neurons.Neuron;
@@ -251,6 +249,10 @@ public class NeuronViewManager extends AbstractViewManager<Neuron, NeuronGraphMa
     }
 
     protected void drawNeuron(Neuron<?> n, double x, double y) {
+        Node node = graphManager.getNode(n);
+        if(node != null)
+            return;
+
         NeuronParticle np = graphManager.lookupParticle(n);
         np.updateNode(x, y);
     }

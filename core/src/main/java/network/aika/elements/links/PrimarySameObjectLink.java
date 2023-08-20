@@ -14,28 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.links;
 
-import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.links.InputObjectLink;
+import network.aika.elements.synapses.PrimarySameObjectSynapse;
+import network.aika.visitor.pattern.PatternVisitor;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class InputObjectSynapse extends PrimaryInputSynapse<
-        InputObjectSynapse,
-        InputObjectLink
-        >
-{
-    public InputObjectSynapse() {
-        super(Scope.INPUT);
+public class PrimarySameObjectLink extends PrimaryInputLink<PrimarySameObjectSynapse> {
+
+    public PrimarySameObjectLink(PrimarySameObjectSynapse s, PatternActivation input, BindingActivation output) {
+        super(s, input, output);
     }
 
     @Override
-    public InputObjectLink createLink(PatternActivation input, BindingActivation output) {
-        return new InputObjectLink(this, input, output);
+    public void patternVisit(PatternVisitor v, int depth) {
     }
 }

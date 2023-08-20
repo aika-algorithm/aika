@@ -18,7 +18,9 @@ package network.aika.meta.textsections;
 
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
-import network.aika.meta.sequences.PhraseModel;
+import network.aika.enums.Scope;
+import network.aika.meta.TargetInput;
+import network.aika.meta.entities.EntityModel;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,12 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     private static final Logger log = LoggerFactory.getLogger(TypedTextSectionModel.class);
 
+
+    protected EntityModel entityModel;
+
+    protected TargetInput targetInput;
+
+
     protected NeuronProvider headlineBN;
 
     protected NeuronProvider textSectionHintBN;
@@ -46,16 +54,26 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     protected NeuronProvider tsInhibitoryN;
 
-    public TypedTextSectionModel(PhraseModel phraseModel) {
-        super(phraseModel);
+    protected NeuronProvider targetInputBN;
+
+    public TypedTextSectionModel(EntityModel entityModel) {
+        super(entityModel.getPhraseModel());
+        this.entityModel = entityModel;
     }
 
     public void addTargetTextSections(Document doc, Set<String> tsLabels) {
         log.info(doc.getContent() + " : " + tsLabels.stream().collect(Collectors.joining(", ")));
+
+        tsLabels.forEach(l ->
+                targetInput.addTarget(doc, l)
+        );
     }
 
     public void initStaticNeurons() {
         super.initStaticNeurons();
+
+        targetInput = new TargetInput(model);
+        targetInput.initTargetInput();
 
         log.info("Typed Text-Section");
 
@@ -65,11 +83,14 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         double netTarget = 2.5;
 
+        PatternNeuron headlineEntity = entityModel.addEntityPattern("Text-Section-Headline");
+
         headlineBN = addBindingNeuron(
-                patternN.getNeuron(),
+                headlineEntity,
+                Scope.INPUT,
                 "Text-Section-Headline",
                 10.0,
-                phraseModel.patternNetTarget,
+                entityModel.entityNetTarget,
                 netTarget
         ).getProvider(true);
 
@@ -108,6 +129,10 @@ public class TypedTextSectionModel extends TextSectionModel {
         sectionHintRelations(beginBN.getNeuron(), relationPT.getNeuron());
         sectionHintRelations(endBN.getNeuron(), relationNT.getNeuron());
 
+        targetInputBN = targetInput.createTargetInputBindingNeuron(
+                patternN.getNeuron(),
+                patternNetTarget
+        ).getProvider(true);
 
         tsBeginInhibitoryN = new InnerInhibitoryNeuron()
                 .init(model, "I TS Begin")

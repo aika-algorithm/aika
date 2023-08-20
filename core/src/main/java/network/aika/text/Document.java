@@ -117,11 +117,11 @@ public class Document extends Thought {
         return act;
     }
 
-    public TokenActivation addToken(TokenNeuron n, Integer pos, int begin, int end, double inputNet) {
+    public TokenActivation addToken(TokenNeuron n, Integer pos, Integer begin, Integer end, double inputNet) {
         return addToken(
                 n,
                 pos != null ? new Range(pos, pos) : null,
-                new Range(begin, end),
+                begin != null && end != null ? new Range(begin, end) : null,
                 inputNet
         );
     }

@@ -14,28 +14,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.links;
 
-import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.links.InputObjectLink;
+import network.aika.elements.synapses.PrimaryInputSynapse;
+import network.aika.fields.AbstractFunction;
+import network.aika.fields.Fields;
+import network.aika.visitor.pattern.PatternVisitor;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class InputObjectSynapse extends PrimaryInputSynapse<
-        InputObjectSynapse,
-        InputObjectLink
-        >
-{
-    public InputObjectSynapse() {
-        super(Scope.INPUT);
+public abstract class PrimaryInputLink<S extends PrimaryInputSynapse> extends BindingNeuronLink<S, PatternActivation> {
+
+    private AbstractFunction inputEntropy;
+
+    public PrimaryInputLink(S s, PatternActivation input, BindingActivation output) {
+        super(s, input, output);
+    }
+
+    public AbstractFunction getInputEntropy() {
+        return inputEntropy;
     }
 
     @Override
-    public InputObjectLink createLink(PatternActivation input, BindingActivation output) {
-        return new InputObjectLink(this, input, output);
+    public void connectGradientFields() {
+        if(input == null)
+            return;
+
+        inputEntropy = Fields.scale(this, "-Entropy", -1,
+                input.getEntropy(),
+                output.getGradient()
+        );
+    }
+
+    @Override
+    public void patternVisit(PatternVisitor v, int depth) {
     }
 }

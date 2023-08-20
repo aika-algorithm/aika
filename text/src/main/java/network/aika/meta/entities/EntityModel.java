@@ -17,18 +17,17 @@
 package network.aika.meta.entities;
 
 import network.aika.Model;
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.PatternCategoryNeuron;
-import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.neurons.*;
+import network.aika.elements.synapses.PatternSynapse;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
-import network.aika.meta.Dictionary;
+import network.aika.elements.synapses.PrimarySameObjectSynapse;
+import network.aika.enums.Scope;
+import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static network.aika.meta.NetworkMotifs.*;
-import static network.aika.meta.sequences.SequenceModel.POS_MARGIN;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
@@ -43,13 +42,18 @@ public class EntityModel {
     protected Model model;
     protected PhraseModel phraseModel;
 
+    protected TargetInput targetInput;
+
     protected NeuronProvider entityCategory;
 
     protected NeuronProvider entityPattern;
 
     protected NeuronProvider entityBN;
 
-    protected double entityNetTarget = 0.7;
+    protected NeuronProvider targetInputBN;
+
+
+    public double entityNetTarget = 0.7;
 
     protected double bindingNetTarget = 2.5;
 
@@ -59,24 +63,18 @@ public class EntityModel {
         this.phraseModel = pm;
     }
 
-    public PatternNeuron addEntity(String entity) {
-        return model.lookupNeuronByLabel(entity, l ->
-                createEntityPattern(entity)
-        );
+    public NeuronProvider getEntityPattern() {
+        return entityPattern;
     }
 
-    protected PatternNeuron createEntityPattern(String label) {
-        PatternNeuron tcpN = entityPattern.getNeuron();
-        PatternNeuron n = tcpN.instantiateTemplate()
-                .init(model, label);
-
-        n.setLabel(label);
-        n.setAllowTraining(false);
-
-        return n;
+    public PhraseModel getPhraseModel() {
+        return phraseModel;
     }
 
     public void initStaticNeurons() {
+        targetInput = new TargetInput(model);
+        targetInput.initTargetInput();
+
         entityPattern = model.lookupNeuronByLabel("Abstract Entity", l ->
                 new PatternNeuron()
                         .init(model, l)
@@ -88,16 +86,19 @@ public class EntityModel {
         entityCategory = makeAbstract((PatternNeuron) entityPattern.getNeuron())
                 .getProvider(true);
 
+        entityBN = addBindingNeuron(
+                phraseModel.getPatternNeuron().getNeuron(),
+                Scope.SAME,
+                "Abstract Entity",
+                10.0,
+                phraseModel.patternNetTarget,
+                bindingNetTarget
+        ).getProvider(true);
 
-        BindingNeuron bn = new BindingNeuron()
-                .init(model, "Abstract Entity");
-        bn.setBias(bindingNetTarget);
-        makeAbstract(bn);
-        entityBN = bn.getProvider(true);
-
+        makeAbstract((BindingNeuron) entityBN.getNeuron());
 
         addPositiveFeedbackLoop(
-                bn,
+                entityBN.getNeuron(),
                 entityPattern.getNeuron(),
                 entityNetTarget,
                 bindingNetTarget,
@@ -106,11 +107,41 @@ public class EntityModel {
                 false
         );
 
-        addPositiveFeedbackSynapse(
-                bn,
-                phraseModel.getPatternNeuron().getNeuron(),
-                phraseModel.patternNetTarget,
-                bindingNetTarget
-        );
+        targetInputBN = targetInput.createTargetInputBindingNeuron(
+                entityPattern.getNeuron(),
+                entityNetTarget
+        ).getProvider(true);
+    }
+
+    public TokenNeuron addEntity(String entity) {
+        return targetInput.addTarget(entity);
+    }
+
+    public PatternNeuron addEntityPattern(String label) {
+        PatternNeuron tEPN = entityPattern.getNeuron();
+        PatternNeuron n = tEPN.instantiateTemplate()
+                .init(model, label);
+
+        n.setLabel(label);
+        n.setAllowTraining(false);
+
+        instantiateBN(label, n, entityBN.getNeuron());
+        instantiateBN(label, n, targetInputBN.getNeuron());
+
+        return n;
+    }
+
+    private void instantiateBN(String label, PatternNeuron pn, BindingNeuron bn) {
+        BindingNeuron tEBN = entityBN.getNeuron();
+        BindingNeuron iEBN = tEBN.instantiateTemplate()
+                .init(model, label);
+
+        tEBN.getInputSynapseByType(PositiveFeedbackSynapse.class)
+                .instantiateTemplate(pn, iEBN);
+        tEBN.getInputSynapseByType(PrimarySameObjectSynapse.class)
+                .instantiateTemplate(pn, iEBN);
+
+        entityPattern.getNeuron().getInputSynapseByType(PatternSynapse.class)
+                .instantiateTemplate(iEBN, pn);
     }
 }

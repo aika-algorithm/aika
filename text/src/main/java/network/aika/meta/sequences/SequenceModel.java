@@ -22,15 +22,12 @@ import network.aika.elements.neurons.relations.ContainsRelationNeuron;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
-import network.aika.elements.synapses.PatternCategorySynapse;
+import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
-import network.aika.enums.direction.Input;
-import network.aika.enums.sign.Sign;
 import network.aika.meta.Dictionary;
+import network.aika.meta.TargetInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Objects;
 
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.utils.NetworkUtils.makeAbstract;
@@ -47,9 +44,7 @@ public abstract class SequenceModel {
 
     protected Dictionary dictionary;
 
-    protected NeuronProvider targetInput;
-
-    protected NeuronProvider targetInputCategory;
+    protected TargetInput targetInput;
 
     public NeuronProvider relPT;
     public NeuronProvider relNT;
@@ -67,8 +62,6 @@ public abstract class SequenceModel {
     public NeuronProvider primaryBN;
 
     public static double patternNetTarget = 0.7;
-
-    protected double targetInputNetTarget = 5.0;
 
     public static double POS_MARGIN = 1.0;
     public static double NEG_MARGIN_LEFT = 1.2;
@@ -116,6 +109,10 @@ public abstract class SequenceModel {
         dictionary = dict;
     }
 
+    public TargetInput getTargetInput() {
+        return targetInput;
+    }
+
     public NeuronProvider getRelationPreviousToken() {
         return relPT;
     }
@@ -147,27 +144,10 @@ public abstract class SequenceModel {
                 .setBias(5.0)
                 .getProvider(true);
 
-        initTargetInput();
+        targetInput = new TargetInput(model);
+        targetInput.initTargetInput();
         initTemplates();
     }
-
-    public NeuronProvider getTargetInput() {
-        return targetInput;
-    }
-
-    protected void initTargetInput() {
-        targetInput = model.lookupNeuronByLabel("Abstract Target Input", l ->
-                new TokenNeuron()
-                        .init(model, l)
-        ).getProvider(true);
-
-        targetInput.getNeuron()
-                .setBias(targetInputNetTarget);
-
-        targetInputCategory = makeAbstract((PatternNeuron) targetInput.getNeuron())
-                .getProvider(true);
-    }
-
 
     protected void initTemplates() {
         // Abstract
@@ -235,37 +215,10 @@ public abstract class SequenceModel {
         }
     }
 
-    public TokenNeuron createTargetInputNeuron(String label) {
-        TokenNeuron targetInputN = targetInput.getNeuron();
-        TokenNeuron n = targetInputN.instantiateTemplate()
-                .init(model, label);
-
-        n.setTokenLabel(label);
-        n.setAllowTraining(false);
-
-        return n;
-    }
-
     protected BindingNeuron createTargetInputBindingNeuron() {
-        double netTarget = 2.5;
-
-        BindingNeuron bn = addBindingNeuron(
-                targetInput.getNeuron(),
-                "Abstract Target Input",
-                10.0,
-                dictionary.getInputPatternNetTarget(),
-                netTarget
-        );
-        makeAbstract(bn);
-
-        addPositiveFeedbackLoop(
-                bn,
+        BindingNeuron bn = targetInput.createTargetInputBindingNeuron(
                 patternN.getNeuron(),
-                patternNetTarget,
-                netTarget,
-                2.5,
-                0.0,
-                false
+                patternNetTarget
         );
 
         relContains = ContainsRelationNeuron.lookupRelation(model, Direction.INPUT)
@@ -321,6 +274,7 @@ public abstract class SequenceModel {
 
         BindingNeuron bn = addBindingNeuron(
                 dictionary.getInputToken().getNeuron(),
+                Scope.INPUT,
                 "Abstract (" + p.labelPrefix + ") Pos:" + pos,
                 10.0,
                 dictionary.getInputPatternNetTarget(),

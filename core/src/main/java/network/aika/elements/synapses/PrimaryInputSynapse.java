@@ -16,26 +16,29 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.links.InputObjectLink;
+import network.aika.elements.links.PrimaryInputLink;
+import network.aika.elements.neurons.PatternNeuron;
+import network.aika.enums.Scope;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class InputObjectSynapse extends PrimaryInputSynapse<
-        InputObjectSynapse,
-        InputObjectLink
+public abstract class PrimaryInputSynapse<S extends PrimaryInputSynapse, L extends PrimaryInputLink<S>> extends BindingNeuronSynapse<
+        S,
+        PatternNeuron,
+        L,
+        PatternActivation
         >
 {
-    public InputObjectSynapse() {
-        super(Scope.INPUT);
+    public PrimaryInputSynapse(Scope scope) {
+        super(scope);
     }
 
     @Override
-    public InputObjectLink createLink(PatternActivation input, BindingActivation output) {
-        return new InputObjectLink(this, input, output);
+    public boolean checkSingularLinkDoesNotExist(BindingActivation oAct) {
+        return !linkExists(oAct, true);
     }
 }

@@ -32,14 +32,18 @@ import static network.aika.meta.sequences.SequenceModel.POS_MARGIN;
 public class NetworkMotifs {
     private static final Logger log = LoggerFactory.getLogger(NetworkMotifs.class);
 
-    public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double inputNetTarget, double netTarget) {
+    public static BindingNeuron addBindingNeuron(PatternNeuron input, Scope primaryScope, String label, double weight, double inputNetTarget, double netTarget) {
         BindingNeuron bn = new BindingNeuron()
                 .init(input.getModel(), label);
 
         double inputValueTarget = input.getActivationFunction()
                 .f(inputNetTarget);
 
-        new InputObjectSynapse()
+        (
+                primaryScope == Scope.INPUT ?
+                new InputObjectSynapse() :
+                new PrimarySameObjectSynapse()
+        )
                 .setWeight(weight)
                 .init(input, bn)
                 .adjustBias(inputValueTarget);
