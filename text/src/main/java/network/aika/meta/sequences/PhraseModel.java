@@ -19,10 +19,10 @@ package network.aika.meta.sequences;
 import network.aika.Model;
 import network.aika.elements.neurons.*;
 import network.aika.meta.Dictionary;
+import network.aika.text.Document;
+import network.aika.text.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  *
@@ -50,6 +50,15 @@ public class PhraseModel extends SequenceModel {
         upperCaseN = new PatternCategoryNeuron()
                 .init(model, "Upper Case")
                 .getProvider(true);
+    }
+
+    public void addPhraseTarget(Document doc, int numTokens) {
+        doc.addToken(
+                targetInput.getTargetInput().getNeuron(),
+                new Range(0, numTokens),
+                new Range(0, doc.length()),
+                dictionary.getInputPatternNetTarget()
+        );
     }
 
     @Override

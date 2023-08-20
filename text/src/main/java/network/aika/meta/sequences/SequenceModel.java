@@ -109,6 +109,10 @@ public abstract class SequenceModel {
         dictionary = dict;
     }
 
+    public Model getModel() {
+        return model;
+    }
+
     public TargetInput getTargetInput() {
         return targetInput;
     }
@@ -305,13 +309,5 @@ public abstract class SequenceModel {
         return pos >= 0 ?
                 NEG_MARGIN_RIGHT :
                 NEG_MARGIN_LEFT;
-    }
-
-    public Model getModel() {
-        return model;
-    }
-
-    public Dictionary getDictionary() {
-        return dictionary;
     }
 }
