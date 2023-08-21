@@ -21,6 +21,7 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.elements.synapses.PrimarySameObjectSynapse;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
@@ -136,8 +137,10 @@ public class EntityModel {
 
         bn.getInputSynapseByType(PositiveFeedbackSynapse.class)
                 .instantiateTemplate(pn, iEBN);
-        bn.getInputSynapseByType(PrimarySameObjectSynapse.class)
-                .instantiateTemplate(pn, iEBN);
+
+        Synapse s = bn.getInputSynapseByType(PrimarySameObjectSynapse.class);
+        if(s != null)
+            s.instantiateTemplate(pn, iEBN);
 
         entityPattern.getNeuron().getInputSynapseByType(PatternSynapse.class)
                 .instantiateTemplate(iEBN, pn);
