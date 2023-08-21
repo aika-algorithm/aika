@@ -40,6 +40,8 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addConstant("Input: ", s.getInput().toString());
         addConstant("Output: ", s.getOutput().toString());
 
+        addConstant("Is Template Only: ", "" + s.isTemplateOnly());
+
         addConstant("Template: ",
                 s.getTemplate() != null ?
                         "" + s.getTemplate() :

@@ -40,14 +40,6 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
-    public void instantiateTemplate(IA iAct, OA oAct) {
-        if(synapse.isTemplateOnly())
-            return;
-
-        super.instantiateTemplate(iAct, oAct);
-    }
-
-    @Override
     protected void initWeightInput() {
         super.initWeightInput();
 

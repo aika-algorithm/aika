@@ -489,6 +489,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public void instantiateTemplateNode() {
+        if(neuron.isTemplateOnly())
+            return;
+
         N n = (N) neuron.instantiateTemplate();
 
         Activation<N> ti = n.createActivation(getThought());
