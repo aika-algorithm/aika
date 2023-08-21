@@ -40,15 +40,34 @@ public class TargetInput {
 
     protected NeuronProvider targetInputCategory;
 
+    protected NeuronProvider targetInputBN;
+
     protected double targetInputNetTarget = 5.0;
 
+    public double bindingNetTarget = 2.5;
 
-    public TargetInput(Model model) {
+    private String label;
+
+    public TargetInput(Model model, String label) {
         this.model = model;
+        this.label = label;
     }
 
     public NeuronProvider getTargetInput() {
         return targetInput;
+    }
+
+    public void setTemplateOnly(boolean templateOnly) {
+        targetInput.getNeuron().setTemplateOnly(templateOnly);
+        targetInputCategory.getNeuron().setTemplateOnly(templateOnly);
+        targetInputBN.getNeuron().setTemplateOnly(templateOnly);
+
+        targetInput.getInputSynapses().forEach(s ->
+                s.setTemplateOnly(templateOnly)
+        );
+        targetInput.getOutputSynapses().forEach(s ->
+                s.setTemplateOnly(templateOnly)
+        );
     }
 
     public TokenNeuron addTarget(String target) {
@@ -73,7 +92,7 @@ public class TargetInput {
         return n;
     }
 
-    public void initTargetInput(String label) {
+    public void initTargetInput() {
         targetInput = new TokenNeuron()
                         .init(model, label)
                 .getProvider(true);
@@ -86,15 +105,13 @@ public class TargetInput {
     }
 
     public BindingNeuron createTargetInputBindingNeuron(PatternNeuron pn, double patternNetTarget) {
-        double netTarget = 2.5;
-
         BindingNeuron bn = addBindingNeuron(
                 targetInput.getNeuron(),
                 Scope.INPUT,
-                "Abstract Target Input",
+                "Abstr. " + label + " Target Input",
                 10.0,
                 targetInputNetTarget,
-                netTarget
+                bindingNetTarget
         );
         makeAbstract(bn);
 
@@ -102,23 +119,14 @@ public class TargetInput {
                 bn,
                 pn,
                 patternNetTarget,
-                netTarget,
+                bindingNetTarget,
                 2.5,
                 0.0,
                 false
         );
 
+        targetInputBN = bn.getProvider(true);
+
         return bn;
-    }
-
-    public TokenNeuron createTargetInputNeuron(String label) {
-        TokenNeuron targetInputN = targetInput.getNeuron();
-        TokenNeuron n = targetInputN.instantiateTemplate()
-                .init(model, label);
-
-        n.setTokenLabel(label);
-        n.setAllowTraining(false);
-
-        return n;
     }
 }

@@ -18,10 +18,7 @@ package network.aika.meta.entities;
 
 import network.aika.Model;
 import network.aika.elements.neurons.*;
-import network.aika.elements.synapses.PatternSynapse;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
-import network.aika.elements.synapses.PrimarySameObjectSynapse;
-import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.*;
 import network.aika.enums.Scope;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
@@ -73,8 +70,8 @@ public class EntityModel {
     }
 
     public void initStaticNeurons() {
-        targetInput = new TargetInput(model);
-        targetInput.initTargetInput("Entity Target Input");
+        targetInput = new TargetInput(model, "Entity");
+        targetInput.initTargetInput();
 
         entityPattern = new PatternNeuron()
                 .init(model, "Abstract Entity")
@@ -111,6 +108,14 @@ public class EntityModel {
                 entityPattern.getNeuron(),
                 entityNetTarget
         ).getProvider(true);
+
+        new SameObjectSynapse()
+                .setWeight(10.0)
+                .setOptional(true)
+                .init(targetInputBN.getNeuron(), entityBN.getNeuron())
+                .adjustBias(targetInput.bindingNetTarget);
+
+        targetInput.setTemplateOnly(true);
     }
 
     public TokenNeuron addEntity(String entity) {

@@ -78,6 +78,8 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
     protected Neuron<?> template;
 
+    private boolean templateOnly;
+
     private final WeakHashMap<Long, WeakReference<PreActivation<A>>> activations = new WeakHashMap<>();
 
     public Long getId() {
@@ -225,6 +227,16 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
                 .init(this, cis.getInput());
 
         this.template = templateN;
+    }
+
+    public <N extends Neuron<A>> N setTemplateOnly(boolean templateOnly) {
+        this.templateOnly = templateOnly;
+
+        return (N) this;
+    }
+
+    public boolean isTemplateOnly() {
+        return templateOnly;
     }
 
     public abstract CategorySynapse createCategorySynapse();
@@ -475,6 +487,8 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         out.writeBoolean(customData != null);
         if(customData != null)
             customData.write(out);
+
+        out.writeBoolean(templateOnly);
     }
 
     public static Neuron read(DataInput in, Model m) throws Exception {
@@ -506,6 +520,8 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
             customData = m.getCustomDataInstanceSupplier().get();
             customData.readFields(in, m);
         }
+
+        templateOnly = in.readBoolean();
     }
 
     @Override

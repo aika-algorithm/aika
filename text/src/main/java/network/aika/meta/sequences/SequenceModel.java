@@ -148,9 +148,10 @@ public abstract class SequenceModel {
                 .setBias(5.0)
                 .getProvider(true);
 
-        targetInput = new TargetInput(model);
-        targetInput.initTargetInput("Phrase Target Input");
+        targetInput = new TargetInput(model, "Phrase");
+        targetInput.initTargetInput();
         initTemplates();
+        targetInput.setTemplateOnly(true);
     }
 
     protected void initTemplates() {

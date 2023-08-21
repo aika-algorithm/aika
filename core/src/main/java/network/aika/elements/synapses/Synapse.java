@@ -55,6 +55,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     protected NeuronProvider output;
 
     protected S template;
+    private boolean templateOnly;
 
     protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
             .setQueued(getThought(), TRAINING)
@@ -226,6 +227,16 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         setInitialWeight(templateSyn);
     }
 
+    public S setTemplateOnly(boolean templateOnly) {
+        this.templateOnly = templateOnly;
+
+        return (S) this;
+    }
+
+    public boolean isTemplateOnly() {
+        return templateOnly;
+    }
+
     protected void setInitialWeight(Synapse templateSyn) {
         weight.setInitialValue(
                 templateSyn.weight.getUpdatedValue()
@@ -357,6 +368,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         out.writeLong(output.getId());
 
         weight.write(out);
+        out.writeBoolean(templateOnly);
     }
 
     public static Synapse read(DataInput in, Model m) throws IOException {
@@ -373,6 +385,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         output = m.lookupNeuronProvider(in.readLong());
 
         weight.readFields(in, m);
+        templateOnly = in.readBoolean();
     }
 
     @Override

@@ -58,7 +58,6 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
             );
 
     private boolean optional;
-    private boolean templateOnly;
 
     private double sumOfLowerWeights;
     protected Direction currentStoredAt = INPUT;
@@ -108,16 +107,6 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
 
     public S setOptional(boolean optional) {
         this.optional = optional;
-
-        return (S) this;
-    }
-
-    public boolean isTemplateOnly() {
-        return templateOnly;
-    }
-
-    public S setTemplateOnly(boolean templateOnly) {
-        this.templateOnly = templateOnly;
 
         return (S) this;
     }
@@ -191,7 +180,6 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         out.writeDouble(sumOfLowerWeights);
         out.writeBoolean(currentStoredAt == OUTPUT);
         out.writeBoolean(optional);
-        out.writeBoolean(templateOnly);
     }
 
     @Override
@@ -201,7 +189,6 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         sumOfLowerWeights = in.readDouble();
         currentStoredAt = in.readBoolean() ? OUTPUT : INPUT;
         optional = in.readBoolean();
-        templateOnly = in.readBoolean();
 
         linkFields();
     }

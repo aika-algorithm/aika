@@ -72,8 +72,8 @@ public class TypedTextSectionModel extends TextSectionModel {
     public void initStaticNeurons() {
         super.initStaticNeurons();
 
-        targetInput = new TargetInput(model);
-        targetInput.initTargetInput("Text Section Target Input");
+        targetInput = new TargetInput(model, "Text Section");
+        targetInput.initTargetInput();
 
         log.info("Typed Text-Section");
 
@@ -176,6 +176,8 @@ public class TypedTextSectionModel extends TextSectionModel {
                 tsInhibitoryN.getNeuron(),
                 NEG_MARGIN_TS * -netTarget
         );
+
+        targetInput.setTemplateOnly(true);
     }
 
     private void sectionHintRelations(BindingNeuron fromBN, LatentRelationNeuron relN) {
