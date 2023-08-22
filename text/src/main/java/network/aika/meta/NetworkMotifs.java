@@ -124,10 +124,12 @@ public class NetworkMotifs {
             BindingNeuron bn,
             LatentRelationNeuron rel,
             double relWeight,
-            double spsWeight
+            double spsWeight,
+            boolean templateOnly
     ) {
         RelationInputSynapse relSyn = new RelationInputSynapse()
                 .setWeight(relWeight)
+                .setTemplateOnly(templateOnly)
                 .init(rel, bn)
                 .adjustBias();
 
@@ -137,6 +139,7 @@ public class NetworkMotifs {
 
         SameObjectSynapse spSyn = new SameObjectSynapse()
                 .setWeight(spsWeight)
+                .setTemplateOnly(templateOnly)
                 .init(lastBN, bn)
                 .adjustBias(prevValueTarget);
 

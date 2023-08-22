@@ -91,7 +91,8 @@ public class TextSectionModel {
                 endBN.getNeuron(),
                 relationPT.getNeuron(),
                 5.0,
-                10.0
+                10.0,
+                false
         );
 
         addPositiveFeedbackLoop(

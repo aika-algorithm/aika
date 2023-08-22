@@ -85,7 +85,7 @@ public class InnerInhibitionTest {
 
         BeforeRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -300, -1);
 
-        addRelation(na, nx, relPT, 5.0, 10.0);
+        addRelation(na, nx, relPT, 5.0, 10.0, false);
 
         Document doc = new Document(m, "test");
         AIKADebugger.createAndShowGUI(doc, false);
@@ -140,9 +140,9 @@ public class InnerInhibitionTest {
 
         BeforeRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -300, -1);
 
-        addRelation(na, nx, relPT, 5.0, 10.0);
-        addRelation(nb, nx, relPT, 5.0, 10.0);
-        addRelation(nc, nx, relPT, 5.0, 10.0);
+        addRelation(na, nx, relPT, 5.0, 10.0, false);
+        addRelation(nb, nx, relPT, 5.0, 10.0, false);
+        addRelation(nc, nx, relPT, 5.0, 10.0, false);
 
         Document doc = new Document(m, "test");
         AIKADebugger.createAndShowGUI(doc, false);

@@ -237,7 +237,8 @@ public abstract class SequenceModel {
                 primaryBN.getNeuron(),
                 relContains.getNeuron(),
                 5.0,
-                10.0
+                10.0,
+                true
         );
 
         return bn;
@@ -266,7 +267,8 @@ public abstract class SequenceModel {
                 bn,
                 rel,
                 5.0,
-                p.spsRelWeight
+                p.spsRelWeight,
+                false
         );
 
         return bn;

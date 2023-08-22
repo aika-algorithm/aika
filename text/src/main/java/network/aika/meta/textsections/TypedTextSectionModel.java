@@ -109,7 +109,8 @@ public class TypedTextSectionModel extends TextSectionModel {
                 beginBN.getNeuron(),
                 phraseModel.relPT.getNeuron(),
                 5.0,
-                10.0
+                10.0,
+                false
         );
 
         textSectionHintBN = new BindingNeuron()
@@ -186,7 +187,8 @@ public class TypedTextSectionModel extends TextSectionModel {
                 textSectionHintBN.getNeuron(),
                 relN,
                 5.0,
-                10.0
+                10.0,
+                false
         );
     }
 }
