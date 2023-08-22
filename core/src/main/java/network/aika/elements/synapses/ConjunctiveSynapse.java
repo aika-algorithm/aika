@@ -25,8 +25,6 @@ import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
-import network.aika.fields.FieldLink;
-import network.aika.fields.QueueInterceptor;
 import network.aika.fields.SumField;
 import network.aika.utils.Utils;
 
@@ -165,6 +163,7 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
     public void write(DataOutput out) throws IOException {
         super.write(out);
 
+        synapseBias.write(out);
         out.writeDouble(sumOfLowerWeights);
         out.writeBoolean(currentStoredAt == OUTPUT);
         out.writeBoolean(optional);
@@ -174,6 +173,7 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
 
+        synapseBias.readFields(in, m);
         sumOfLowerWeights = in.readDouble();
         currentStoredAt = in.readBoolean() ? OUTPUT : INPUT;
         optional = in.readBoolean();
