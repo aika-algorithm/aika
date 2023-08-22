@@ -53,6 +53,11 @@ public class TargetInput {
         this.label = label;
     }
 
+    public double getBindingValueTarget() {
+        return targetInputBN.getNeuron().getActivationFunction()
+                .f(bindingNetTarget);
+    }
+
     public NeuronProvider getTargetInput() {
         return targetInput;
     }

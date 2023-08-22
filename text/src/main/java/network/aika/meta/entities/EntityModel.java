@@ -113,7 +113,7 @@ public class EntityModel {
         new SameObjectSynapse()
                 .setWeight(10.0)
                 .init(targetInputBN.getNeuron(), entityBN.getNeuron())
-                .adjustBias(targetInput.bindingNetTarget);
+                .adjustBias(targetInput.getBindingValueTarget());
 
         targetInput.setTemplateOnly(true);
     }
