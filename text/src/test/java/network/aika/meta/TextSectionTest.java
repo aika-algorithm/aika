@@ -114,12 +114,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
                 }
         );
 
-        doc.addToken(
-                phraseModel.getTargetInput().getTargetInput().getNeuron(),
-                new Range(0, tokenCounter[0]),
-                new Range(0, doc.length()),
-                dictionary.getInputPatternNetTarget()
-        );
+        phraseModel.addPhraseTarget(doc, tokenCounter[0]);
 
         if(context != null && context.getHeadlineTargetLabel() != null) {
             entityModel
