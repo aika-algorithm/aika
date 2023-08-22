@@ -29,6 +29,7 @@ import network.aika.meta.TargetInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
@@ -39,6 +40,13 @@ import static network.aika.utils.NetworkUtils.makeAbstract;
 public abstract class SequenceModel {
 
     private static final Logger log = LoggerFactory.getLogger(SequenceModel.class);
+
+    public static final double PATTERN_NET_TARGET = 0.7;
+
+    public static final double POS_MARGIN = 1.0;
+    public static final double NEG_MARGIN_LEFT = 1.2;
+    public static final double NEG_MARGIN_RIGHT = 1.1;
+
 
     protected Model model;
 
@@ -61,12 +69,6 @@ public abstract class SequenceModel {
 
     public NeuronProvider primaryBN;
 
-    public static double patternNetTarget = 0.7;
-
-    public static double POS_MARGIN = 1.0;
-    public static double NEG_MARGIN_LEFT = 1.2;
-    public static double NEG_MARGIN_RIGHT = 1.1;
-
 
     record BindingNeuronParameters (
             double patternNetTarget,
@@ -78,7 +80,7 @@ public abstract class SequenceModel {
     ) {}
 
     public static BindingNeuronParameters PRIMARY_BN_PARAMS = new BindingNeuronParameters(
-            patternNetTarget,
+            PATTERN_NET_TARGET,
             2.5,
             0.0,
             2.5,
@@ -87,7 +89,7 @@ public abstract class SequenceModel {
     );
 
     public static BindingNeuronParameters STRONG_BN_PARAMS = new BindingNeuronParameters(
-            patternNetTarget,
+            PATTERN_NET_TARGET,
             2.5,
             10.0,
             2.5,
@@ -96,7 +98,7 @@ public abstract class SequenceModel {
     );
 
     public static BindingNeuronParameters WEAK_BN_PARAMS = new BindingNeuronParameters(
-            patternNetTarget,
+            PATTERN_NET_TARGET,
             0.5,
             5.0,
             0.5,
@@ -176,9 +178,9 @@ public abstract class SequenceModel {
 
         makeAbstract((InnerInhibitoryNeuron) primaryBNInhibitoryN.getNeuron());
 
-        log.info(getPatternType() + " Pattern: netTarget:" + patternNetTarget);
+        log.info(getPatternType() + " Pattern: netTarget:" + PATTERN_NET_TARGET);
 
-        patternN.getNeuron().setBias(patternNetTarget);
+        patternN.getNeuron().setBias(PATTERN_NET_TARGET);
 
         initTemplateBindingNeurons();
     }
@@ -223,7 +225,7 @@ public abstract class SequenceModel {
     protected BindingNeuron createTargetInputBindingNeuron() {
         BindingNeuron bn = targetInput.createTargetInputBindingNeuron(
                 patternN.getNeuron(),
-                patternNetTarget
+                PATTERN_NET_TARGET
         );
 
         relContains = ContainsRelationNeuron.lookupRelation(model, Direction.INPUT)
@@ -282,7 +284,7 @@ public abstract class SequenceModel {
                 Scope.INPUT,
                 "Abstract (" + p.labelPrefix + ") Pos:" + pos,
                 10.0,
-                dictionary.getInputPatternNetTarget(),
+                INPUT_TOKEN_NET_TARGET,
                 p.netTarget
         );
         makeAbstract(bn);
@@ -296,7 +298,7 @@ public abstract class SequenceModel {
         addPositiveFeedbackLoop(
                 bn,
                 patternN.getNeuron(),
-                patternNetTarget,
+                PATTERN_NET_TARGET,
                 p.netTarget,
                 p.pfWeight,
                 p.weakInputMargin,

@@ -90,7 +90,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 Scope.INPUT,
                 "Text-Section-Headline",
                 10.0,
-                entityModel.entityNetTarget,
+                EntityModel.ENTITY_NET_TARGET,
                 netTarget
         ).getProvider(true);
 

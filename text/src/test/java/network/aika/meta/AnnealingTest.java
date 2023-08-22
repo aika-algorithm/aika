@@ -27,6 +27,7 @@ import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.parser.ParserPhase.TRAINING;
 
@@ -57,7 +58,7 @@ public class AnnealingTest extends TrainingParser {
     @Override
     protected void prepareInputs(Document doc, Context context) {
         tokenizer.tokenize(doc, context, (n, pos, begin, end) ->
-            doc.addToken(n, pos, begin, end, dict.getInputPatternNetTarget())
+            doc.addToken(n, pos, begin, end, INPUT_TOKEN_NET_TARGET)
         );
     }
 

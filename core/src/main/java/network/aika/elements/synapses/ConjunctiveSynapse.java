@@ -52,8 +52,10 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
 
     protected SumField synapseBias = (SumField) new SumField(this, "synapseBias", TOLERANCE)
             .setQueued(getThought(), TRAINING)
-            .addListener("onSynapseBiasModified", (fl, nr, u) ->
-                    setModified(),
+            .addListener("onSynapseBiasModified", (fl, nr, u) -> {
+                        setModified();
+                        getOutput().updateSumOfLowerWeights();
+                    },
                     true
             );
 
@@ -73,22 +75,9 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         return super.init(input, output);
     }
 
-    @Override
-    public void linkFields() {
-        if(!optional && !output.isSuspended()) {
-            if(biasLinkExists(synapseBias, getOutput().getSynapseBiasSum()))
-                return;
-
-            linkAndConnect(synapseBias, getOutput().getSynapseBiasSum());
-        }
-    }
-
-    private boolean biasLinkExists(SumField synapseBias, SumField synapseBiasSum) {
-        return synapseBias.getReceivers()
-                .stream()
-                .filter(fl -> fl instanceof FieldLink)
-                .map(fl -> (FieldLink) fl)
-                .anyMatch(fl -> fl.getOutput() == synapseBiasSum);
+    public void initBiasInput(ConjunctiveActivation act) {
+        linkAndConnect(synapseBias, act.getDefaultNet())
+                .setPropagateUpdates(false);
     }
 
     public S setSynapseBias(double b) {
@@ -113,11 +102,10 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
 
     @Override
     public void initFromTemplate(I input, O output, Synapse templateSyn) {
-        super.initFromTemplate(input, output, templateSyn);
-
         synapseBias.setInitialValue(
                 ((ConjunctiveSynapse)templateSyn).synapseBias.getUpdatedValue()
         );
+        super.initFromTemplate(input, output, templateSyn);
     }
 
     @Override
@@ -189,7 +177,5 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         sumOfLowerWeights = in.readDouble();
         currentStoredAt = in.readBoolean() ? OUTPUT : INPUT;
         optional = in.readBoolean();
-
-        linkFields();
     }
 }

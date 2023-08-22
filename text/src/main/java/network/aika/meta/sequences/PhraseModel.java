@@ -24,6 +24,8 @@ import network.aika.text.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
+
 /**
  *
  * @author Lukas Molzberger
@@ -57,7 +59,7 @@ public class PhraseModel extends SequenceModel {
                 targetInput.getTargetInput().getNeuron(),
                 new Range(0, numTokens),
                 new Range(0, doc.length()),
-                dictionary.getInputPatternNetTarget()
+                INPUT_TOKEN_NET_TARGET
         );
     }
 

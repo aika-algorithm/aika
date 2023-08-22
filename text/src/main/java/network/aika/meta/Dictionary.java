@@ -38,6 +38,7 @@ public class Dictionary {
 
     private static final Logger log = LoggerFactory.getLogger(Dictionary.class);
 
+    public static final double INPUT_TOKEN_NET_TARGET = 5.0;
 
     protected Model model;
 
@@ -45,14 +46,9 @@ public class Dictionary {
 
     protected NeuronProvider inputToken;
 
-    protected double inputPatternNetTarget = 5.0;
 
     public Dictionary(Model m) {
         this.model = m;
-    }
-
-    public double getInputPatternNetTarget() {
-        return inputPatternNetTarget;
     }
 
     public NeuronProvider getInputTokenCategory() {
@@ -70,12 +66,12 @@ public class Dictionary {
         ).getProvider(true);
 
         inputToken.getNeuron()
-                .setBias(inputPatternNetTarget);
+                .setBias(INPUT_TOKEN_NET_TARGET);
 
         inputTokenCategory = makeAbstract((PatternNeuron) inputToken.getNeuron())
                 .getProvider(true);
 
-        log.info("Input Token: netTarget:" + inputPatternNetTarget);
+        log.info("Input Token: netTarget:" + INPUT_TOKEN_NET_TARGET);
     }
 
     public void initInputTokenWeights() {
@@ -116,6 +112,6 @@ public class Dictionary {
 
     public void addToken(Document doc, String token, int pos, int begin, int end) {
         TokenNeuron n = lookupInputToken(token);
-        doc.addToken(n, pos, begin, end, inputPatternNetTarget);
+        doc.addToken(n, pos, begin, end, INPUT_TOKEN_NET_TARGET);
     }
 }

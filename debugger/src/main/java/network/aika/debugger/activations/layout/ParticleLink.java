@@ -118,8 +118,12 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
 
     private Long getTokenPos() {
         Range tp = link.getInput().getTokenPosRange();
-        return tp != null ?
-                tp.getEnd() :
-                link.getOutput().getTokenPosRange().getEnd();
+        if(tp != null)
+            return tp.getEnd();
+
+        if(link.getOutput().getTokenPosRange() != null)
+            return link.getOutput().getTokenPosRange().getEnd();
+
+        return null;
     }
 }

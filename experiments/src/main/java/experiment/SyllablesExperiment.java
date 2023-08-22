@@ -41,6 +41,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
 import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.parser.ParserPhase.TRAINING;
@@ -98,7 +99,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     @Override
     protected void prepareInputs(Document doc, Context context) {
         charTokenizer.tokenize(doc, context, (n, pos, begin, end) ->
-                doc.addToken(n, pos, begin, end, dict.getInputPatternNetTarget())
+                doc.addToken(n, pos, begin, end, INPUT_TOKEN_NET_TARGET)
         );
     }
 

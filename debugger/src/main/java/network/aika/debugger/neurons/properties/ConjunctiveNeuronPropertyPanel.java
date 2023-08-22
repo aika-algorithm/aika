@@ -30,8 +30,6 @@ public class ConjunctiveNeuronPropertyPanel<E extends ConjunctiveNeuron> extends
 
     public ConjunctiveNeuronPropertyPanel(E n, Activation ref) {
         super(n, ref);
-
-        addField(n.getSynapseBiasSum());
     }
 
     public static ConjunctiveNeuronPropertyPanel create(ConjunctiveNeuron n, Activation ref) {

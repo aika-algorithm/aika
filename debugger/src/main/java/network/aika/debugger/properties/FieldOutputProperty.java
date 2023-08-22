@@ -127,7 +127,9 @@ public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty
         String label = "";
 
         if(isConnected != null)
-            label += isConnected ? "connected " : "unconnected ";
+            label += isConnected ? "connected" : "unconnected";
+
+        label += ", ";
 
         if(isPropagateUpdate != null)
             label += isPropagateUpdate ? "prop" : "no prop";

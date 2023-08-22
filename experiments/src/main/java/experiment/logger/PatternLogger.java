@@ -148,8 +148,7 @@ public class PatternLogger {
                             print(pAct.getGradient()),
                             print(pAct.getUpdateValue()),
                             print(pAct.getNegUpdateValue()),
-                            print(pn.getBias()),
-                            print(pn.getSynapseBiasSum())
+                            print(pn.getBias())
                     )
             );
 
@@ -193,8 +192,7 @@ public class PatternLogger {
                 print(iAct.getGradient()),
                 print(iAct.getUpdateValue()),
                 print(iAct.getNegUpdateValue()),
-                print(bn.getBias()),
-                print(bn.getSynapseBiasSum())
+                print(bn.getBias())
         );
     }
 
@@ -212,8 +210,7 @@ public class PatternLogger {
                 "--",
                 "--",
                 "--",
-                print(bn.getBias()),
-                print(bn.getSynapseBiasSum())
+                print(bn.getBias())
         );
     }
 

@@ -222,7 +222,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         setOutput(output);
 
         link();
-        linkFields();
 
         setInitialWeight(templateSyn);
     }
@@ -248,12 +247,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         setOutput((O) output);
 
         link();
-        linkFields();
 
         return (S) this;
-    }
-
-    public void linkFields() {
     }
 
     public void link() {

@@ -22,9 +22,12 @@ import network.aika.elements.synapses.*;
 import network.aika.enums.Scope;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
+import network.aika.text.Document;
+import network.aika.text.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
@@ -35,6 +38,10 @@ import static network.aika.utils.NetworkUtils.makeAbstract;
 public class EntityModel {
 
     private static final Logger log = LoggerFactory.getLogger(EntityModel.class);
+
+    public static final double ENTITY_NET_TARGET = 0.7;
+
+    protected static final double BINDING_NET_TARGET = 2.5;
 
 
     protected Model model;
@@ -49,12 +56,6 @@ public class EntityModel {
     protected NeuronProvider entityBN;
 
     protected NeuronProvider targetInputBN;
-
-
-    public double entityNetTarget = 0.7;
-
-    protected double bindingNetTarget = 2.5;
-
 
     public EntityModel(PhraseModel pm) {
         this.model = pm.getModel();
@@ -78,7 +79,7 @@ public class EntityModel {
                 .getProvider(true);
 
         entityPattern.getNeuron()
-                .setBias(entityNetTarget);
+                .setBias(ENTITY_NET_TARGET);
 
         entityCategory = makeAbstract((PatternNeuron) entityPattern.getNeuron())
                 .getProvider(true);
@@ -88,8 +89,8 @@ public class EntityModel {
                 Scope.SAME,
                 "Abstract Entity",
                 10.0,
-                phraseModel.patternNetTarget,
-                bindingNetTarget
+                phraseModel.PATTERN_NET_TARGET,
+                BINDING_NET_TARGET
         ).getProvider(true);
 
         makeAbstract((BindingNeuron) entityBN.getNeuron());
@@ -97,8 +98,8 @@ public class EntityModel {
         addPositiveFeedbackLoop(
                 entityBN.getNeuron(),
                 entityPattern.getNeuron(),
-                entityNetTarget,
-                bindingNetTarget,
+                ENTITY_NET_TARGET,
+                BINDING_NET_TARGET,
                 2.5,
                 0.0,
                 false
@@ -106,7 +107,7 @@ public class EntityModel {
 
         targetInputBN = targetInput.createTargetInputBindingNeuron(
                 entityPattern.getNeuron(),
-                entityNetTarget
+                ENTITY_NET_TARGET
         ).getProvider(true);
 
         new SameObjectSynapse()
@@ -117,8 +118,17 @@ public class EntityModel {
         targetInput.setTemplateOnly(true);
     }
 
-    public TokenNeuron addEntity(String entity) {
-        return targetInput.addTarget(entity);
+    public TokenNeuron addEntity(String entityLabel) {
+        return targetInput.addTarget(entityLabel);
+    }
+
+    public void addEntityTarget(Document doc, String entityLabel) {
+        doc.addToken(
+                addEntity(entityLabel),
+                null,
+                new Range(0, doc.length()),
+                INPUT_TOKEN_NET_TARGET
+        );
     }
 
     public PatternNeuron addEntityPattern(String label) {

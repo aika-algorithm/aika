@@ -17,26 +17,22 @@
 package network.aika.elements.neurons;
 
 import network.aika.ActivationFunction;
-import network.aika.Model;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.fields.SumField;
+import network.aika.fields.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.stream.Stream;
 
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
@@ -46,8 +42,6 @@ public abstract class ConjunctiveNeuron<A extends ConjunctiveActivation> extends
 
     private static final Logger log = LoggerFactory.getLogger(ConjunctiveNeuron.class);
 
-    protected SumField synapseBiasSum = initSynapseBiasSum();
-
     public ConjunctiveNeuron() {
         bias.addListener(
                 "onBiasUpdate",
@@ -55,48 +49,20 @@ public abstract class ConjunctiveNeuron<A extends ConjunctiveActivation> extends
                         updateSumOfLowerWeights(),
                 true
         );
-        synapseBiasSum.addListener(
-                "onSynapseBiasSumUpdate",
-                (fl, nr, u) ->
-                        updateSumOfLowerWeights(),
-                true
-        );
-    }
-
-    protected SumField initSynapseBiasSum() {
-        SumField synBiasSum = (SumField) new SumField(this, "synapseBiasSum", TOLERANCE)
-                .addListener("onSynapseBiasSumModified", (fl, nr, u) ->
-                        setModified()
-                );
-        synBiasSum.setInitialValue(0.0);
-        return synBiasSum;
-    }
-
-    public SumField getSynapseBiasSum() {
-        return synapseBiasSum;
-    }
-
-    @Override
-    public void reactivate(Model m) {
-        super.reactivate(m);
-
-        getProvider().getInputSynapses()
-                .forEach(Synapse::linkFields);
     }
 
     @Override
     public double getCurrentCompleteBias() {
         return getBias().getUpdatedValue() +
-                synapseBiasSum.getUpdatedValue();
+                getSynapseBiasSynapses()
+                        .map(ConjunctiveSynapse::getSynapseBias)
+                        .mapToDouble(Field::getUpdatedValue)
+                        .sum();
     }
 
-    @Override
-    protected void initFromTemplate(Neuron templateN) {
-        super.initFromTemplate(templateN);
-
-        synapseBiasSum.setInitialValue(
-                ((ConjunctiveNeuron)templateN).getSynapseBiasSum().getUpdatedValue()
-        );
+    public Stream<ConjunctiveSynapse> getSynapseBiasSynapses() {
+        return getInputSynapsesByType(ConjunctiveSynapse.class)
+                .filter(s -> !s.isOptional());
     }
 
     public boolean isInstanceOf(ConjunctiveNeuron templateNeuron) {
@@ -124,7 +90,7 @@ public abstract class ConjunctiveNeuron<A extends ConjunctiveActivation> extends
         return ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
     }
 
-    protected void updateSumOfLowerWeights() {
+    public void updateSumOfLowerWeights() {
         ConjunctiveSynapse[] inputSynapses = sortInputSynapses();
 
         double sum = bias.getUpdatedValue();
@@ -172,19 +138,5 @@ public abstract class ConjunctiveNeuron<A extends ConjunctiveActivation> extends
                 .filter(s -> !s.isNegative())
                 .mapToDouble(s -> s.getWeight().getValue() + s.getSynapseBias().getValue())
                 .sum();
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        super.write(out);
-
-        synapseBiasSum.write(out);
-    }
-
-    @Override
-    public void readFields(DataInput in, Model m) throws Exception {
-        super.readFields(in, m);
-
-        synapseBiasSum.readFields(in, m);
     }
 }

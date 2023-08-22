@@ -76,7 +76,7 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternActivation> {
     }
 
     @Override
-    protected void updateSumOfLowerWeights() {
+    public void updateSumOfLowerWeights() {
     }
 
     public SampleSpace getSampleSpace() {

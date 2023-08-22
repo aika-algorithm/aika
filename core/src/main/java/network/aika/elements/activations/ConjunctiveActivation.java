@@ -17,9 +17,7 @@
 package network.aika.elements.activations;
 
 import network.aika.Thought;
-import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.MaxField;
 
@@ -53,16 +51,6 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<?>> exte
     }
 
     @Override
-    protected void instantiateBias(Activation<N> ti) {
-        double optionalSynBiasSum = getInputLinksByType(ConjunctiveLink.class)
-                .map(l -> (ConjunctiveSynapse) l.getSynapse())
-                .filter(ConjunctiveSynapse::isOptional)
-                .mapToDouble(s -> s.getSynapseBias().getUpdatedValue())
-                .sum();
-        ti.getNeuron().getSynapseBiasSum().receiveUpdate(null, false, optionalSynBiasSum);
-    }
-
-    @Override
     protected void connectWeightUpdate() {
         negUpdateValue = scale(
                 this,
@@ -81,7 +69,9 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<?>> exte
     protected void initNet() {
         super.initNet();
 
-        linkAndConnect(getNeuron().getSynapseBiasSum(), getDefaultNet())
-                .setPropagateUpdates(false);
+        neuron.getSynapseBiasSynapses()
+                .forEach(s ->
+                        s.initBiasInput(this)
+                );
     }
 }
