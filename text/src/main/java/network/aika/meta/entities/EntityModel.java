@@ -18,6 +18,7 @@ package network.aika.meta.entities;
 
 import network.aika.Model;
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.EqualsRelationNeuron;
 import network.aika.elements.synapses.*;
 import network.aika.enums.Scope;
 import network.aika.meta.TargetInput;
@@ -56,6 +57,9 @@ public class EntityModel {
     protected NeuronProvider entityBN;
 
     protected NeuronProvider targetInputBN;
+
+    protected NeuronProvider relEquals;
+
 
     public EntityModel(PhraseModel pm) {
         this.model = pm.getModel();
@@ -105,17 +109,32 @@ public class EntityModel {
                 false
         );
 
-        targetInputBN = targetInput.createTargetInputBindingNeuron(
-                entityPattern.getNeuron(),
-                ENTITY_NET_TARGET
-        ).getProvider(true);
-
-        new SameObjectSynapse()
-                .setWeight(10.0)
-                .init(targetInputBN.getNeuron(), entityBN.getNeuron())
-                .adjustBias(targetInput.getBindingValueTarget());
+        targetInputBN = createTargetInputBindingNeuron()
+                .getProvider(true);
 
         targetInput.setTemplateOnly(true);
+    }
+
+    protected BindingNeuron createTargetInputBindingNeuron() {
+        BindingNeuron bn = targetInput.createTargetInputBindingNeuron(
+                entityPattern.getNeuron(),
+                ENTITY_NET_TARGET
+        );
+
+        relEquals = EqualsRelationNeuron.lookupRelation(model)
+                .setBias(5.0)
+                .getProvider(true);
+
+        addRelation(
+                bn,
+                entityBN.getNeuron(),
+                relEquals.getNeuron(),
+                5.0,
+                10.0,
+                true
+        );
+
+        return bn;
     }
 
     public TokenNeuron addEntity(String entityLabel) {

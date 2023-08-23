@@ -78,6 +78,10 @@ public class Range {
         return begin <= r.begin && r.end <= end;
     }
 
+    public boolean equals(Range r) {
+        return begin == r.begin && r.end == end;
+    }
+
     public long length() {
         return end - begin;
     }
