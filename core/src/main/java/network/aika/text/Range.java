@@ -49,9 +49,13 @@ public class Range {
     }
 
     public Range getAbsoluteRange(Range referenceRange) {
+        return getAbsoluteRange(referenceRange.getBegin());
+    }
+
+    public Range getAbsoluteRange(long offset) {
         return new Range(
-                referenceRange.getBegin() + begin,
-                referenceRange.getBegin() + end
+                offset + begin,
+                offset + end
         );
     }
 

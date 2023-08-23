@@ -94,6 +94,7 @@ public class Dictionary {
             return;
 
         Range r = new Range(0, tn.getTokenLabel().length());
+        r = r.getAbsoluteRange(model.getN());
 
         double surprisal = s.getInput().getSurprisal(Sign.POS, r, false);
 
