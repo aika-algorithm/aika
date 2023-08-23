@@ -23,6 +23,7 @@ import network.aika.elements.neurons.TokenNeuron;
 import network.aika.elements.synapses.PatternCategorySynapse;
 import network.aika.enums.sign.Sign;
 import network.aika.text.Document;
+import network.aika.text.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +86,16 @@ public class Dictionary {
     }
 
     private void mapSurprisalToWeight(PatternCategorySynapse s) {
-        double surprisal = s.getInput().getSurprisal(Sign.POS, null, false);
+        if(!(s.getInput() instanceof TokenNeuron))
+            return;
+
+        TokenNeuron tn = (TokenNeuron) s.getInput();
+        if(tn.getSampleSpace().getN() == 0)
+            return;
+
+        Range r = new Range(0, tn.getTokenLabel().length());
+
+        double surprisal = s.getInput().getSurprisal(Sign.POS, r, false);
 
         double weight = 1.0 + (-0.1 * surprisal);
         s.setWeight(weight);

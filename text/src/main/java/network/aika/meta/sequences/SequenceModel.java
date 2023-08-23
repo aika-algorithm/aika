@@ -213,7 +213,7 @@ public abstract class SequenceModel {
                     STRONG_BN_PARAMS :
                     WEAK_BN_PARAMS;
 
-            lastSylBN = createSecundaryBindingNeuron(
+            lastSylBN = createSecondaryBindingNeuron(
                     p,
                     pos >= optionalStart,
                     dir * pos,
@@ -250,7 +250,7 @@ public abstract class SequenceModel {
         innerNegSyn.setWeight(innerNegSyn.getWeight().getValue() - margin);
     }
 
-    protected BindingNeuron createSecundaryBindingNeuron(
+    protected BindingNeuron createSecondaryBindingNeuron(
             BindingNeuronParameters p,
             boolean isOptional,
             int pos,
