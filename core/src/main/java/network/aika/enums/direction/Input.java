@@ -21,6 +21,9 @@ import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 
+import java.io.DataOutput;
+import java.io.IOException;
+
 /**
  *
  * @author Lukas Molzberger
@@ -55,6 +58,11 @@ public class Input implements Direction {
     @Override
     public Activation getActivation(Link l) {
         return l.getInput();
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeBoolean(false);
     }
 
     public String toString() {

@@ -23,6 +23,9 @@ import network.aika.text.Document;
 import network.aika.text.Range;
 import network.aika.text.Slot;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.stream.Stream;
 
 import static network.aika.text.Slot.BEGIN;
@@ -80,5 +83,19 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
     @Override
     public Direction getDirection() {
         return Direction.INPUT;
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+
+        relationDir.write(out);
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        super.readFields(in, m);
+
+        relationDir = Direction.read(in);
     }
 }

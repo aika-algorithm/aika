@@ -23,6 +23,9 @@ import network.aika.text.Document;
 import network.aika.text.Range;
 import network.aika.text.Slot;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.stream.Stream;
 
 import static network.aika.enums.direction.Direction.INPUT;
@@ -115,5 +118,28 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
 
     public int getEndOffset() {
         return endOffset;
+    }
+
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+
+        out.writeInt(fromSlot.ordinal());
+        out.writeInt(toSlot.ordinal());
+
+        out.writeInt(beginOffset);
+        out.writeInt(endOffset);
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        super.readFields(in, m);
+
+        fromSlot = Slot.values()[in.readInt()];
+        toSlot = Slot.values()[in.readInt()];
+
+        beginOffset = in.readInt();
+        endOffset = in.readInt();
     }
 }

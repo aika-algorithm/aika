@@ -21,6 +21,10 @@ import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 /**
  *
  * @author Lukas Molzberger
@@ -40,4 +44,10 @@ public interface Direction {
     Neuron getNeuron(Synapse s);
 
     Activation getActivation(Link l);
+
+    void write(DataOutput out) throws IOException;
+
+    static Direction read(DataInput in) throws IOException {
+        return in.readBoolean() ? OUTPUT : INPUT;
+    }
 }
