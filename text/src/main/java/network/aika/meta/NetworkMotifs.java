@@ -53,7 +53,7 @@ public class NetworkMotifs {
     }
 
     public static void addOuterInhibitoryLoop(BindingNeuron bn, OuterInhibitoryNeuron in, double weight) {
-        new OuterInhibitorySynapse(Scope.INPUT)
+        new OuterInhibitorySynapse()
                 .setWeight(1.0)
                 .init(bn, in);
 
@@ -64,7 +64,7 @@ public class NetworkMotifs {
     }
 
     public static void addInnerInhibitoryLoop(BindingNeuron bn, InnerInhibitoryNeuron in, double weight) {
-        new InnerInhibitorySynapse(Scope.INPUT)
+        new InnerInhibitorySynapse()
                 .setWeight(1.0)
                 .init(bn, in);
 

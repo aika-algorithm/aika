@@ -97,7 +97,7 @@ public class OuterInhibitionTest {
                 .setWeight(-20.0)
                 .init(inhib, bn);
 
-        new OuterInhibitorySynapse(INPUT)
+        new OuterInhibitorySynapse()
                 .setWeight(1.0)
                 .init(bn, inhib);
 

@@ -16,17 +16,12 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.Model;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.links.OuterInhibitoryLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 
 /**
  *
@@ -41,15 +36,8 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
         OuterInhibitoryActivation
         > {
 
-    private Scope type;
-
     public OuterInhibitorySynapse() {
         super(Scope.SAME);
-    }
-
-    public OuterInhibitorySynapse(Scope type) {
-        this();
-        this.type = type;
     }
 
     @Override
@@ -59,29 +47,8 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
 
     @Override
     public OuterInhibitorySynapse instantiateTemplate(BindingNeuron input, OuterInhibitoryNeuron output) {
-        OuterInhibitorySynapse s = new OuterInhibitorySynapse(getType());
+        OuterInhibitorySynapse s = new OuterInhibitorySynapse();
         s.initFromTemplate(input, output, this);
         return s;
-    }
-
-    public Scope getType() {
-        return type;
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        super.write(out);
-
-        out.writeBoolean(type != null);
-        if(type != null)
-            out.writeInt(type.ordinal());
-    }
-
-    @Override
-    public void readFields(DataInput in, Model m) throws IOException {
-        super.readFields(in, m);
-
-        if(in.readBoolean())
-            type = Scope.values()[in.readInt()];
     }
 }
