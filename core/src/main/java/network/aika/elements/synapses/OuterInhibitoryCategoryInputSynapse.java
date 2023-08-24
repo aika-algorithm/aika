@@ -21,6 +21,7 @@ import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.links.OuterInhibitoryCategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
+import network.aika.enums.Scope;
 
 /**
  * The Inhibitory Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
@@ -37,7 +38,7 @@ public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         > implements CategoryInputSynapse
 {
     public OuterInhibitoryCategoryInputSynapse() {
-        super(null);
+        super(Scope.SAME);
     }
 
     @Override

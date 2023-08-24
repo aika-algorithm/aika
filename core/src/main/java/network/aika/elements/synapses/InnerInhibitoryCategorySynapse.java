@@ -20,6 +20,7 @@ import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.InnerInhibitoryCategoryLink;
 import network.aika.elements.neurons.Neuron;
+import network.aika.enums.Scope;
 
 /**
  *
@@ -28,7 +29,7 @@ import network.aika.elements.neurons.Neuron;
 public class InnerInhibitoryCategorySynapse extends CategorySynapse<InnerInhibitoryCategorySynapse, Neuron, InnerInhibitoryActivation> {
 
     public InnerInhibitoryCategorySynapse() {
-        super(null);
+        super(Scope.SAME);
     }
 
     @Override
