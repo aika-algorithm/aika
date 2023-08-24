@@ -24,6 +24,7 @@ import network.aika.exceptions.InvalidRelinkingException;
 import network.aika.fields.Field;
 import network.aika.visitor.Visitor;
 import network.aika.visitor.binding.BindingVisitor;
+import network.aika.visitor.inhibitory.InhibitoryVisitor;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
 import network.aika.visitor.pattern.PatternVisitor;
 
@@ -77,6 +78,14 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
             return;
 
         super.patternVisit(v, depth);
+    }
+
+    @Override
+    public void inhibVisit(InhibitoryVisitor v, int depth) {
+        if(checkVisited(v))
+            return;
+
+        super.inhibVisit(v, depth);
     }
 
     @Override

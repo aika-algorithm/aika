@@ -87,8 +87,7 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
     @Override
     public void inhibVisit(InhibitoryVisitor v, Link lastLink, int depth) {
-        if(lastLink == null)
-            super.inhibVisit(v, lastLink, depth);
+        super.inhibVisit(v, lastLink, depth);
 
         v.up(this, depth);
     }

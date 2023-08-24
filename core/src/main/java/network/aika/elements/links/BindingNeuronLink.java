@@ -19,6 +19,8 @@ package network.aika.elements.links;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.synapses.BindingNeuronSynapse;
+import network.aika.enums.Scope;
+import network.aika.visitor.inhibitory.InhibitoryVisitor;
 
 /**
  * @author Lukas Molzberger
@@ -27,5 +29,14 @@ public abstract class BindingNeuronLink<S extends BindingNeuronSynapse, IA exten
 
     public BindingNeuronLink(S s, IA input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    public void inhibVisit(InhibitoryVisitor v, int depth) {
+        Scope s = synapse.getScope();
+        if(s != null && s != v.getIdentityRef())
+            return;
+
+        v.next(this, depth);
     }
 }

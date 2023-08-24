@@ -90,11 +90,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void inhibVisit(InhibitoryVisitor v, int depth) {
-        Scope s = synapse.getScope();
-        if(s != null && s != v.getIdentityRef())
-            return;
-
-        v.next(this, depth);
+         v.next(this, depth);
     }
 
     public void patternCatVisit(PatternCategoryVisitor v, int depth) {
