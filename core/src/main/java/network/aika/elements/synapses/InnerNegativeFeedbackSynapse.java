@@ -42,13 +42,17 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
 
     @Override
     protected void checkWeight() {
-        if(!isNegative())
+        if(isNegative())
             delete();
     }
 
     @Override
     public InnerNegativeFeedbackLink createLink(InnerInhibitoryActivation input, BindingActivation output) {
         return new InnerNegativeFeedbackLink(this, input, output);
+    }
+
+    @Override
+    public void initDummyLink(BindingActivation oAct) {
     }
 
     @Override

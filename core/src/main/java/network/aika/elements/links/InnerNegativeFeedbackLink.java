@@ -24,6 +24,8 @@ import network.aika.fields.FieldLink;
 import network.aika.fields.MaxField;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
+import network.aika.visitor.pattern.PatternCategoryVisitor;
+import network.aika.visitor.pattern.PatternVisitor;
 
 import static network.aika.elements.activations.InnerInhibitoryActivation.getBindingActivation;
 import static network.aika.elements.activations.InnerInhibitoryActivation.updateConnected;
@@ -63,10 +65,17 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
 
     @Override
     public void bindingVisit(BindingVisitor v, int depth) {
-        // don't allow negative feedback links to create new links; i.d. do nothing
+    }
+
+    @Override
+    public void patternVisit(PatternVisitor v, int depth) {
     }
 
     @Override
     public void inhibVisit(InhibitoryVisitor v, int depth) {
+    }
+
+    @Override
+    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
     }
 }

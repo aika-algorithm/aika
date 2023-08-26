@@ -22,10 +22,11 @@ import network.aika.fields.*;
 import network.aika.elements.synapses.OuterNegativeFeedbackSynapse;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
+import network.aika.visitor.pattern.PatternCategoryVisitor;
+import network.aika.visitor.pattern.PatternVisitor;
 
 import java.util.stream.Stream;
 
-import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
 
 /**
@@ -74,11 +75,18 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
 
     @Override
     public void bindingVisit(BindingVisitor v, int depth) {
-        // don't allow negative feedback links to create new links; i.d. do nothing
+    }
+
+    @Override
+    public void patternVisit(PatternVisitor v, int depth) {
     }
 
     @Override
     public void inhibVisit(InhibitoryVisitor v, int depth) {
+    }
+
+    @Override
+    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
     }
 
     @Override

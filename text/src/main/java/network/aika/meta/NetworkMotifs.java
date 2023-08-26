@@ -69,8 +69,9 @@ public class NetworkMotifs {
                 .init(bn, in);
 
         new InnerNegativeFeedbackSynapse()
-                .setWeight(weight)
-                .init(in, bn);
+                .setWeight(-weight)
+                .init(in, bn)
+                .setSynapseBias(weight);
     }
 
     public static void addPositiveFeedbackSynapse(

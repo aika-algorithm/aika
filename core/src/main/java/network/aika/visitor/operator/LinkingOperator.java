@@ -25,7 +25,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 
 
-import static network.aika.elements.synapses.Synapse.latentActivationExists;
+import static network.aika.elements.synapses.Synapse.getLatentLink;
 
 /**
  * @author Lukas Molzberger
@@ -48,24 +48,21 @@ public abstract class LinkingOperator implements Operator {
 
     public abstract Direction getRelationDir(Scope fromScope);
 
-    public Link link(Activation actA, Synapse synA, Link linkA, Activation actB, Synapse synB) {
-        Activation oAct;
-        if (linkA == null) {
-            if (latentActivationExists(synA, synB, actA, actB))
-                return null;
+    public static Link link(Activation actA, Synapse synA, Link linkA, Activation actB, Synapse synB) {
+        if (linkA == null)
+            linkA = latentLink(actA, synA, actB, synB);
 
-            Thought t = actA.getThought();
-            oAct = synA.getOutput().createActivation(t);
+        return synB.link(actB, linkA.getOutput());
+    }
 
-            synA.createAndInitLink(actA, oAct);
-        } else {
-            oAct = linkA.getOutput();
+    public static Link latentLink(Activation actA, Synapse synA, Activation actB, Synapse synB) {
+        Link linkA = getLatentLink(synA, synB, actA, actB);
+        if (linkA != null)
+            return linkA;
 
-            Link l = synB.getExistingLink(actB, oAct);
-            if (l != null)
-                return l;
-        }
+        Thought t = actA.getThought();
+        Activation oAct = synA.getOutput().createActivation(t);
 
-        return synB.createAndInitLink(actB, oAct);
+        return synA.createAndInitLink(actA, oAct);
     }
 }

@@ -141,12 +141,11 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return preUB;
     }
 
-    public static boolean latentActivationExists(Synapse synA, Synapse synB, Activation iActA, Activation iActB) {
+    public static Link getLatentLink(Synapse synA, Synapse synB, Activation iActA, Activation iActB) {
         Stream<Link> linksA = iActA.getOutputLinks(synA);
-        return linksA.map(Link::getOutput)
-                .anyMatch(oAct ->
-                        oAct.getInputLink(iActB) != null
-                );
+        return linksA.filter(l -> synB.getLink(iActB, l.getOutput()) != null)
+                .findAny()
+                .orElse(null);
     }
 
     /**
@@ -156,8 +155,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return true;
     }
 
-    public L getExistingLink(IA iAct, OA oAct) {
-        return (L) oAct.getInputLink(iAct);
+    public L getLink(IA iAct, OA oAct) {
+        L l = (L) oAct.getInputLink(iAct);
+        assert l == null || l.getSynapse() == this;
+        return l;
     }
 
     public boolean linkExists(OA oAct, boolean includeInactive) {
@@ -190,6 +191,14 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         } else if(getStoredAt() == INPUT) {
             warmUpRelatedInputNeurons(act);
         }
+    }
+
+    public L link(IA iAct, OA oAct) {
+        L l = getLink(iAct, oAct);
+        if (l != null)
+            return l;
+
+        return createAndInitLink(iAct, oAct);
     }
 
     public void setModified() {

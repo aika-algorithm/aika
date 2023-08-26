@@ -67,7 +67,7 @@ public class InnerInhibitoryActivation extends DisjunctiveActivation<InnerInhibi
     }
 
     public static void updateConnected(FieldLink fl, BindingActivation aAct, BindingActivation bAct, boolean current) {
-        if(!isSelfRef(aAct, bAct, Scope.INPUT))
+        if(isSelfRef(aAct, bAct, Scope.INPUT))
             fl.updateConnected(current, true);
     }
 

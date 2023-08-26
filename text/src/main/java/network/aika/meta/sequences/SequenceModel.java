@@ -193,7 +193,7 @@ public abstract class SequenceModel {
         addInnerInhibitoryLoop(
                 bn,
                 primaryBNInhibitoryN.getNeuron(),
-                -(PRIMARY_BN_PARAMS.netTarget + 0.1)
+                -(1.5 * PRIMARY_BN_PARAMS.netTarget)
         );
 
         return bn;
