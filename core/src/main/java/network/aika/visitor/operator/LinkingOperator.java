@@ -61,7 +61,7 @@ public abstract class LinkingOperator implements Operator {
         } else {
             oAct = linkA.getOutput();
 
-            Link l = synB.checkExistingLink(actB, oAct);
+            Link l = synB.getExistingLink(actB, oAct);
             if (l != null)
                 return l;
         }

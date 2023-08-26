@@ -18,16 +18,14 @@ package network.aika.debugger.activations.properties;
 
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
-import network.aika.fields.InnerMaxField;
+import network.aika.fields.MaxField;
 
-import static network.aika.fields.InnerMaxField.getBindingActivation;
-
+import static network.aika.elements.activations.InnerInhibitoryActivation.getBindingActivation;
 
 /**
  * @author Lukas Molzberger
  */
 public class InnerInhibitoryActivationPropertyPanel extends ActivationPropertyPanel<InnerInhibitoryActivation> {
-
 
     public InnerInhibitoryActivationPropertyPanel(InnerInhibitoryActivation act) {
         super(act);
@@ -40,7 +38,7 @@ public class InnerInhibitoryActivationPropertyPanel extends ActivationPropertyPa
 
     @Override
     public void initInferenceSection(InnerInhibitoryActivation act) {
-        InnerMaxField inhibNet = (InnerMaxField)act.getNet();
+        MaxField inhibNet = (MaxField)act.getNet();
         if(inhibNet.getSelectedInput() != null) {
             BindingActivation selectedAct = getBindingActivation(inhibNet.getSelectedInput());
             addConstant("Selected Input: ", selectedAct.getId() + " - '" + selectedAct.getLabel() + "'");

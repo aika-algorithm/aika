@@ -19,10 +19,13 @@ package network.aika.elements.links;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.fields.Field;
-import network.aika.fields.FieldOutput;
+import network.aika.fields.*;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.binding.BindingVisitor;
+import network.aika.visitor.inhibitory.InhibitoryVisitor;
+import network.aika.visitor.pattern.PatternCategoryVisitor;
+import network.aika.visitor.pattern.PatternVisitor;
 
-import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 
 
@@ -40,6 +43,35 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
+    public void bindingVisit(BindingVisitor v, int depth) {
+        next(v, depth);
+    }
+
+    @Override
+    public void patternVisit(PatternVisitor v, int depth) {
+        next(v, depth);
+    }
+
+    @Override
+    public void inhibVisit(InhibitoryVisitor v, int depth) {
+        next(v, depth);
+    }
+
+    @Override
+    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
+        next(v, depth);
+    }
+
+    private void next(Visitor v, int depth) {
+        if(input == null)
+            return;
+
+        SynapseSlot slot = output.getSlot(synapse);
+        if(slot.getSelectedLink() == this)
+            v.next(this, depth);
+    }
+
+    @Override
     protected void initWeightInput() {
         super.initWeightInput();
 
@@ -48,8 +80,8 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
-    public Field getOutputNetForWeight() {
-        return output.lookupMaxedInput(synapse);
+    public Field getWeightedOutput() {
+        return output.lookupSlot(synapse);
     }
 
     @Override

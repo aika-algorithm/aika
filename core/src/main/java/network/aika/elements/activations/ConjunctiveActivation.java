@@ -19,7 +19,7 @@ package network.aika.elements.activations;
 import network.aika.Thought;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.Synapse;
-import network.aika.fields.MaxField;
+import network.aika.fields.SynapseSlot;
 
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -34,18 +34,23 @@ import static network.aika.fields.Fields.scale;
  */
 public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<?>> extends Activation<N> {
 
-    protected NavigableMap<Long, MaxField> maxedInputs;
+    protected NavigableMap<Long, SynapseSlot> slots;
 
     public ConjunctiveActivation(int id, Thought t, N n) {
         super(id, t, n);
-
-        maxedInputs = new TreeMap<>();
     }
 
-    public MaxField lookupMaxedInput(Synapse s) {
-        return maxedInputs.computeIfAbsent(s.getInput().getId(), nId -> {
-            MaxField f = new MaxField(s, "max-syn-" + nId);
-            linkAndConnect(f, getDefaultNet());
+    public SynapseSlot getSlot(Synapse s) {
+        return slots.get(s.getInput().getId());
+    }
+
+    public SynapseSlot lookupSlot(Synapse s) {
+        if(slots == null)
+            slots = new TreeMap<>();
+
+        return slots.computeIfAbsent(s.getInput().getId(), nId -> {
+            SynapseSlot f = new SynapseSlot(s, "slot-" + nId);
+            linkAndConnect(f, s.getOutputNetForWeight(this));
             return f;
         });
     }

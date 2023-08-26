@@ -141,11 +141,11 @@ public class EntityModel {
         return targetInput.addTarget(entityLabel);
     }
 
-    public void addEntityTarget(Document doc, String entityLabel) {
+    public void addEntityTarget(Document doc, Range posRange, Range charRange , String entityLabel) {
         doc.addToken(
                 addEntity(entityLabel),
-                null,
-                new Range(0, doc.length()),
+                posRange,
+                charRange,
                 INPUT_TOKEN_NET_TARGET
         );
     }

@@ -17,28 +17,62 @@
 package network.aika.fields;
 
 import java.util.Comparator;
+import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger
+ *
  */
 public class MaxField extends SumField {
+
+    private FieldLink selectedInput;
+    private MaxFieldListener listener;
 
     public MaxField(FieldObject ref, String label) {
         super(ref, label, null);
     }
 
-    @Override
-    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
-        triggerUpdate(
-                nextRound,
-                computeUpdate()
-        );
+    public MaxField(FieldObject ref, String label, MaxFieldListener listener) {
+        this(ref, label);
+
+        this.listener = listener;
     }
 
-    protected double computeUpdate() {
-        return getInputs().stream()
+    public FieldLink getSelectedInput() {
+        return selectedInput;
+    }
+
+    @Override
+    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
+        double update = getInputs().stream()
                 .mapToDouble(AbstractFieldLink::getUpdatedInputValue)
                 .max()
                 .orElse(0.0) - value;
+
+        if(interceptor != null) {
+            interceptor.receiveUpdate(nextRound, update, true);
+            return;
+        }
+
+        triggerUpdate(nextRound, update);
+    }
+
+    @Override
+    public void triggerUpdate(boolean nextRound, double u) {
+        FieldLink lastSelectedInput = selectedInput;
+
+        selectedInput = getInputs().stream()
+                .filter(this::isCandidate)
+                .max(Comparator.comparingDouble(AbstractFieldLink::getInputValue))
+                .orElse(null);
+
+        if(listener != null && lastSelectedInput != selectedInput)
+            listener.onSelectionChanged(lastSelectedInput, selectedInput);
+
+        super.triggerUpdate(nextRound, u);
+    }
+
+    protected boolean isCandidate(FieldLink fl) {
+        return true;
     }
 }

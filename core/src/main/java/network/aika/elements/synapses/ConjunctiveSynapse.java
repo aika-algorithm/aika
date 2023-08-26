@@ -73,8 +73,8 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         return super.init(input, output);
     }
 
-    public void initBiasInput(ConjunctiveActivation act) {
-        linkAndConnect(synapseBias, act.getDefaultNet())
+    public void initBiasInput(OA act) {
+        linkAndConnect(synapseBias, getOutputNetForBias(act))
                 .setPropagateUpdates(false);
     }
 

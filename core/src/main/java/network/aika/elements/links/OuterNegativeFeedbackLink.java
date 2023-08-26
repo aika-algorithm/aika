@@ -53,6 +53,11 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
     }
 
     @Override
+    public Field getWeightedOutput() {
+        return getOutput().getNet();
+    }
+
+    @Override
     protected void connectInputValue() {
     }
 

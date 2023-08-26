@@ -194,7 +194,7 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
 
     @Override
     public String toString() {
-        return getLabel() + ":" + getValueString();
+        return getLabel() + ": " + getValueString();
     }
 
     public String getValueString() {

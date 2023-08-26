@@ -14,27 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.exceptions;
-
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.PatternActivation;
-
-import static java.lang.String.format;
+package network.aika.fields;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class InvalidRelinkingException extends RuntimeException {
+public interface MaxFieldListener {
 
-
-    public InvalidRelinkingException(Activation bAct, Activation oldAct, Activation newAct) {
-        super(format("Attempt to replace the pattern act [%s] with pattern act [%s] linked to the binding act [%s]. (%s) ",
-                oldAct.getId(),
-                newAct.getId(),
-                bAct.getId(),
-                oldAct.getThought().toString())
-        );
-    }
+    void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput);
 }

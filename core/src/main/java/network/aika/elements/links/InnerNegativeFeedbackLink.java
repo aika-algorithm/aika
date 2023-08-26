@@ -21,19 +21,18 @@ import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
 import network.aika.fields.Field;
 import network.aika.fields.FieldLink;
-import network.aika.fields.IdentityFunction;
-import network.aika.fields.InnerMaxField;
+import network.aika.fields.MaxField;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
 
-import static network.aika.fields.InnerMaxField.getBindingActivation;
-import static network.aika.fields.InnerMaxField.updateConnected;
+import static network.aika.elements.activations.InnerInhibitoryActivation.getBindingActivation;
+import static network.aika.elements.activations.InnerInhibitoryActivation.updateConnected;
+
 
 /**
  * @author Lukas Molzberger
  */
 public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbackSynapse, InnerInhibitoryActivation> {
-
 
     public InnerNegativeFeedbackLink(InnerNegativeFeedbackSynapse s, InnerInhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
@@ -46,12 +45,17 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
     }
 
     @Override
+    public Field getWeightedOutput() {
+        return getOutput().getNet();
+    }
+
+    @Override
     protected void connectInputValue() {
         if(inputValue.getInputs().get(0) == null)
             inputValue.setValue(0.0);
 
         FieldLink fl = FieldLink.link(input.getValue(), 0, inputValue);
-        InnerMaxField inhibNet = (InnerMaxField) input.getNet();
+        MaxField inhibNet = (MaxField) input.getNet();
         BindingActivation selectBindingAct = getBindingActivation(inhibNet.getSelectedInput());
 
         updateConnected(fl, selectBindingAct, output, true);

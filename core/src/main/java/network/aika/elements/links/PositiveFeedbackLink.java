@@ -19,13 +19,10 @@ package network.aika.elements.links;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
-import network.aika.exceptions.InvalidRelinkingException;
 import network.aika.fields.*;
 import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
 import network.aika.visitor.pattern.PatternVisitor;
 
-import static network.aika.debugger.EventType.CREATE;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
 import static network.aika.fields.Fields.scale;
@@ -44,19 +41,10 @@ public class PositiveFeedbackLink extends FeedbackLink<PositiveFeedbackSynapse, 
 
     @Override
     protected void initInputValue() {
-        inputValue = new FeedbackFunction(this, "input value");
-        linkAndConnect(getThought().getFeedbackTrigger(), 1, inputValue);
-    }
+        super.initInputValue();
 
-    @Override
-    public boolean relinkInput(PatternActivation in) {
-        if(!super.relinkInput(in))
-            return false;
-
-        if(inputGradient != null)
-            linkAndConnect(input.getGradient(), 0, inputGradient);
-
-        return true;
+        if(input == null)
+            linkAndConnect(getThought().getFeedbackTrigger(), 0, inputValue);
     }
 
     @Override

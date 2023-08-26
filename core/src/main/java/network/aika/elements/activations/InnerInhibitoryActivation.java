@@ -17,9 +17,15 @@
 package network.aika.elements.activations;
 
 import network.aika.Thought;
+import network.aika.elements.links.InnerInhibitoryLink;
+import network.aika.elements.links.InnerNegativeFeedbackLink;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
-import network.aika.fields.InnerMaxField;
+import network.aika.enums.Scope;
+import network.aika.fields.FieldLink;
+import network.aika.fields.IdentityFunction;
+import network.aika.fields.MaxField;
 
+import static network.aika.elements.activations.BindingActivation.isSelfRef;
 import static network.aika.queue.Phase.INFERENCE;
 
 
@@ -35,8 +41,34 @@ public class InnerInhibitoryActivation extends DisjunctiveActivation<InnerInhibi
 
     @Override
     protected void initNet() {
-        net = new InnerMaxField(this, "net")
+        net = new MaxField(this, "net", this::onSelectionChanged)
                 .setQueued(thought, INFERENCE);
+    }
+
+    protected void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput) {
+        BindingActivation lAct = getBindingActivation(lastSelectedInput);
+        BindingActivation cAct = getBindingActivation(selectedInput);
+
+        getOutputLinksByType(InnerNegativeFeedbackLink.class)
+                .forEach(l -> {
+                    BindingActivation oAct = l.getOutput();
+                    FieldLink fl = ((IdentityFunction)l.getInputValue()).getInputLinkByArg(0);
+                    updateConnected(fl, lAct, oAct, false);
+                    updateConnected(fl, cAct, oAct, true);
+                });
+    }
+
+    public static BindingActivation getBindingActivation(FieldLink fl) {
+        if(fl == null)
+            return null;
+
+        InnerInhibitoryLink l = (InnerInhibitoryLink) fl.getInput().getReference();
+        return l.getInput();
+    }
+
+    public static void updateConnected(FieldLink fl, BindingActivation aAct, BindingActivation bAct, boolean current) {
+        if(!isSelfRef(aAct, bAct, Scope.INPUT))
+            fl.updateConnected(current, true);
     }
 
     @Override

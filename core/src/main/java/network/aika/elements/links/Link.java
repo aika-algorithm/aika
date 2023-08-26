@@ -22,8 +22,6 @@ import network.aika.elements.Element;
 import network.aika.elements.LinkKey;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
-import network.aika.enums.Scope;
-import network.aika.exceptions.InvalidRelinkingException;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.queue.link.LinkingIn;
@@ -79,7 +77,6 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     public void addInputLinkingStep() {
         LinkingIn.add(this);
     }
-
 
     public void bindingVisit(BindingVisitor v, int depth) {
         v.next(this, depth);
@@ -152,36 +149,14 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         negInputIsFired = invert(this,"!inputIsFired", inputIsFired);
 
         weightedInput = initWeightedInput();
-        linkAndConnect(weightedInput, getOutputNetForWeight());
+        linkAndConnect(weightedInput, getWeightedOutput());
 
         if(input != null)
             connectInputValue();
     }
 
-    public boolean relinkInput(I in) {
-        if(input != null) {
-            if(input != in)
-                throw new InvalidRelinkingException(output, input, in);
-
-            return false;
-        }
-
-        input = in;
-        linkInput();
-
-        connectInputValue();
-
-        getThought().onElementEvent(CREATE, this);
-
-        return true;
-    }
-
-    public Field getOutputNetForBias() {
-        return output.getDefaultNet();
-    }
-
-    public Field getOutputNetForWeight() {
-        return output.getDefaultNet();
+    public Field getWeightedOutput() {
+        return synapse.getOutputNetForWeight(output);
     }
 
     protected void initInputValue() {
