@@ -63,6 +63,10 @@ public class NetworkMotifs {
                 .adjustBias();
     }
 
+    public static double getMaxBindingNetTarget(double bindingNetTarget, double patternValueTarget) {
+        return bindingNetTarget + getPosFeedbackMargin(bindingNetTarget, patternValueTarget);
+    }
+
     public static void addInnerInhibitoryLoop(BindingNeuron bn, InnerInhibitoryNeuron in, double weight) {
         new InnerInhibitorySynapse()
                 .setWeight(1.0)
@@ -72,21 +76,6 @@ public class NetworkMotifs {
                 .setWeight(-weight)
                 .init(in, bn)
                 .setSynapseBias(weight);
-    }
-
-    public static void addPositiveFeedbackSynapse(
-            BindingNeuron bn,
-            PatternNeuron pn,
-            double patternNetTarget,
-            double bindingNetTarget
-    ) {
-        double patternValueTarget = pn.getActivationFunction()
-                .f(patternNetTarget);
-
-        new PositiveFeedbackSynapse()
-                .setWeight(POS_MARGIN * (bindingNetTarget / patternValueTarget))
-                .init(pn, bn)
-                .adjustBias(patternValueTarget);
     }
 
     public static void addPositiveFeedbackLoop(
@@ -113,11 +102,19 @@ public class NetworkMotifs {
                 .f(patternNetTarget);
 
         PositiveFeedbackSynapse posFeedSyn = new PositiveFeedbackSynapse()
-                .setWeight(POS_MARGIN * (bindingNetTarget / patternValueTarget))
+                .setWeight(getPositiveFeedbackWeight(bindingNetTarget, patternValueTarget))
                 .init(pn, bn)
                 .adjustBias(patternValueTarget);
 
         log.info("  " + posFeedSyn + " targetNetContr:" + -posFeedSyn.getSynapseBias().getValue());
+    }
+
+    public static double getPosFeedbackMargin(double bindingNetTarget, double patternValueTarget) {
+        return getPositiveFeedbackWeight(bindingNetTarget, patternValueTarget) - getPositiveFeedbackWeight(bindingNetTarget, 1.0);
+    }
+
+    public static double getPositiveFeedbackWeight(double bindingNetTarget, double patternValueTarget) {
+        return POS_MARGIN * (bindingNetTarget / patternValueTarget);
     }
 
     public static void addRelation(

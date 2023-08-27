@@ -410,8 +410,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         if(log.isInfoEnabled())
             log.info("Delete synapse: " + this);
 
-        input.removeOutputSynapse(this);
-        output.removeInputSynapse(this);
+        if(input != null)
+            input.removeOutputSynapse(this);
+        if(output != null)
+            output.removeInputSynapse(this);
     }
 
     @Override

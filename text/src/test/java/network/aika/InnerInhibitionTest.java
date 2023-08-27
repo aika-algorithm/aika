@@ -180,8 +180,10 @@ public class InnerInhibitionTest {
                 .init(in, bn)
                 .adjustBias(inputValueTarget);
 
+        double patternValueTarget = patternN.getActivationFunction().f(patternNetTarget);
+
         if(inhib != null)
-            addInnerInhibitoryLoop(bn, inhib, 1.5 * -bindingNetTarget);
+            addInnerInhibitoryLoop(bn, inhib, getMaxBindingNetTarget(bindingNetTarget, patternValueTarget));
 
         addPositiveFeedbackLoop(
                 bn,

@@ -49,7 +49,5 @@ public class SyllableModel extends SequenceModel {
                 4,
                 1
         );
-
-        applyMarginToInnerNegFeedbackSynapse(primaryBN.getNeuron());
     }
 }
