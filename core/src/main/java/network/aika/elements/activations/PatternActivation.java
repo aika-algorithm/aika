@@ -18,13 +18,21 @@ package network.aika.elements.activations;
 
 import network.aika.Thought;
 import network.aika.elements.links.Link;
+import network.aika.elements.neurons.Neuron;
+import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.PatternNeuron;
+import network.aika.text.Document;
+import network.aika.text.Range;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
 import network.aika.enums.sign.Sign;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
+
+import java.util.Comparator;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static network.aika.fields.Fields.*;
 import static network.aika.utils.Utils.TOLERANCE;
@@ -35,12 +43,28 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
+    private Map<LatentRelationNeuron, LatentRelationActivation> toRelations = new TreeMap<>(
+            Comparator.comparingLong(Neuron::getId)
+    );
+
     private FieldFunction entropy;
 
     private Double[] cachedSurprisal;
 
     public PatternActivation(int id, Thought t, PatternNeuron patternNeuron) {
         super(id, t, patternNeuron);
+    }
+
+
+    public Map<LatentRelationNeuron, LatentRelationActivation> getToRelations() {
+        return toRelations;
+    }
+
+
+    protected void registerPosRange(Range oldTokenPosRange, Range newTokenPosRange) {
+        Document doc = (Document) thought;
+
+        doc.updateTokenPosition(this, oldTokenPosRange, newTokenPosRange);
     }
 
     @Override
@@ -83,7 +107,11 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
         super.bindingVisit(v, lastLink, depth);
 
         v.up(this, depth);
+
+        if(v.getDirection().isDown())
+            v.expandRelations(this, depth);
     }
+
 
     @Override
     public void inhibVisit(InhibitoryVisitor v, Link lastLink, int depth) {

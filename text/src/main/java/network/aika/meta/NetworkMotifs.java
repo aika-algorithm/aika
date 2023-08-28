@@ -32,6 +32,8 @@ import static network.aika.meta.sequences.SequenceModel.POS_MARGIN;
 public class NetworkMotifs {
     private static final Logger log = LoggerFactory.getLogger(NetworkMotifs.class);
 
+    public static double SAME_OBJECT_MARGIN = 0.15;
+
     public static BindingNeuron addBindingNeuron(PatternNeuron input, Scope primaryScope, String label, double weight, double inputNetTarget, double netTarget) {
         BindingNeuron bn = new BindingNeuron()
                 .init(input.getModel(), label);
@@ -64,7 +66,9 @@ public class NetworkMotifs {
     }
 
     public static double getMaxBindingNetTarget(double bindingNetTarget, double patternValueTarget) {
-        return bindingNetTarget + getPosFeedbackMargin(bindingNetTarget, patternValueTarget);
+        return bindingNetTarget +
+                getPosFeedbackMargin(bindingNetTarget, patternValueTarget) +
+                SAME_OBJECT_MARGIN;
     }
 
     public static void addInnerInhibitoryLoop(BindingNeuron bn, InnerInhibitoryNeuron in, double weight) {

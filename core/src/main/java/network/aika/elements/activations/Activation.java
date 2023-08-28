@@ -283,12 +283,16 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         if (charRange == null || !charRange.equals(newCharRange) ||
                 tokenPosRange == null || !tokenPosRange.equals(newTokenPos)) {
 
+            registerPosRange(tokenPosRange, newTokenPos);
             this.charRange = newCharRange;
             this.tokenPosRange = newTokenPos;
 
             propagateRanges();
         }
         thought.onElementEvent(TOKEN_POSITION, this);
+    }
+
+    protected void registerPosRange(Range oldTokenPosRange, Range newTokenPosRange) {
     }
 
     protected void propagateRanges() {
@@ -537,6 +541,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public void instantiateTemplateEdges(Activation<N> instanceAct) {
         getInputLinks()
+                .filter(l -> l.getInput() != null)
                 .forEach(l ->
                         l.instantiateTemplate(
                                 l.getInput().resolveAbstractInputActivation(),

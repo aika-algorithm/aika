@@ -17,13 +17,11 @@
 package network.aika.elements.neurons.relations;
 
 import network.aika.Thought;
+import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.QueueInterceptor;
 import network.aika.fields.SumField;
 import network.aika.elements.activations.LatentRelationActivation;
-import network.aika.elements.activations.TokenActivation;
-
 
 import java.util.stream.Stream;
 
@@ -37,7 +35,7 @@ import static network.aika.utils.Utils.TOLERANCE;
 public abstract class LatentRelationNeuron extends BindingNeuron {
 
 
-    public abstract Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromAct, Direction dir);
+    public abstract Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir);
 
     @Override
     protected SumField initBias() {

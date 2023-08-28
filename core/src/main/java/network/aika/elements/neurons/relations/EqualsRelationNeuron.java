@@ -17,7 +17,7 @@
 package network.aika.elements.neurons.relations;
 
 import network.aika.Model;
-import network.aika.elements.activations.TokenActivation;
+import network.aika.elements.activations.PatternActivation;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Document;
 import network.aika.text.Range;
@@ -49,7 +49,7 @@ public class EqualsRelationNeuron extends LatentRelationNeuron {
     }
 
     @Override
-    public Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromAct, Direction vDir) {
+    public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction vDir) {
         Document doc = (Document) fromAct.getThought();
         Range r = fromAct.getTokenPosRange();
 

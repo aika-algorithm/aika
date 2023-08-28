@@ -16,6 +16,7 @@
  */
 package network.aika.elements.synapses;
 
+import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.Scope;
 import network.aika.Thought;
@@ -23,7 +24,6 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.LatentRelationActivation;
 import network.aika.elements.links.RelationInputLink;
 import network.aika.enums.direction.Direction;
-import network.aika.elements.activations.TokenActivation;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 
 import static network.aika.debugger.EventType.UPDATE;
@@ -76,7 +76,7 @@ public class RelationInputSynapse extends BindingNeuronSynapse<
         return new RelationInputLink(this, input, output);
     }
 
-    public LatentRelationActivation createOrLookupLatentActivation(TokenActivation fromOriginAct, TokenActivation toOriginAct) {
+    public LatentRelationActivation createOrLookupLatentActivation(PatternActivation fromOriginAct, PatternActivation toOriginAct) {
         return fromOriginAct.getToRelations().computeIfAbsent(getInput(), n -> {
             LatentRelationActivation relAct = getInput().createActivation(fromOriginAct.getThought());
             relAct.setFromAct(fromOriginAct);

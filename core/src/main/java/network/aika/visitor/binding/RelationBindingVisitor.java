@@ -34,8 +34,8 @@ public class RelationBindingVisitor extends BindingVisitor {
 
     protected RelationInputSynapse relation;
     protected Direction relationDir;
-    protected TokenActivation downOrigin;
-    protected TokenActivation upOrigin;
+    protected PatternActivation downOrigin;
+    protected PatternActivation upOrigin;
 
     public RelationBindingVisitor(Thought t, LinkingOperator operator, RelationInputSynapse rel, Direction relationDir) {
         super(t, operator);
@@ -44,7 +44,7 @@ public class RelationBindingVisitor extends BindingVisitor {
         this.relationDir = relationDir;
     }
 
-    protected RelationBindingVisitor(RelationBindingVisitor parent, TokenActivation downOrigin, TokenActivation upOrigin) {
+    protected RelationBindingVisitor(RelationBindingVisitor parent, PatternActivation downOrigin, PatternActivation upOrigin) {
         super(parent, downOrigin);
         this.downOrigin = downOrigin;
         this.upOrigin = upOrigin;
@@ -64,12 +64,12 @@ public class RelationBindingVisitor extends BindingVisitor {
         return downOrigin;
     }
 
-    public TokenActivation getUpOrigin() {
+    public PatternActivation getUpOrigin() {
         return upOrigin;
     }
 
     @Override
-    public void expandRelations(TokenActivation origin, int depth) {
+    public void expandRelations(PatternActivation origin, int depth) {
         RelationInputSynapse relSyn = getRelation();
 
         if(!operator.verifySamePatternSynapse(relSyn.getCorrespondingSPSInput()))
@@ -82,7 +82,7 @@ public class RelationBindingVisitor extends BindingVisitor {
                 );
     }
 
-    private void up(TokenActivation origin, TokenActivation relOrigin, int depth) {
+    private void up(PatternActivation origin, PatternActivation relOrigin, int depth) {
         new RelationBindingVisitor(this, origin, relOrigin)
                 .visit(relOrigin, null, depth);
     }

@@ -36,10 +36,6 @@ import java.util.TreeMap;
  */
 public class TokenActivation extends PatternActivation {
 
-    private Map<LatentRelationNeuron, LatentRelationActivation> toRelations = new TreeMap<>(
-            Comparator.comparingLong(Neuron::getId)
-    );
-
     public TokenActivation(int id, Thought t, TokenNeuron tokenNeuron) {
         super(id, t, tokenNeuron);
     }
@@ -49,24 +45,12 @@ public class TokenActivation extends PatternActivation {
 
         updateRanges(tpRange, charRange);
 
-        doc.registerTokenActivation(this);
+        registerPosRange(null, tpRange);
     }
 
     @Override
     protected void connectWeightUpdate() {
         // Input activations don't need weight updates
-    }
-
-    public Map<LatentRelationNeuron, LatentRelationActivation> getToRelations() {
-        return toRelations;
-    }
-
-    @Override
-    public void bindingVisit(BindingVisitor v, Link lastLink, int depth) {
-        super.bindingVisit(v, lastLink, depth);
-
-        if(v.getDirection().isDown())
-            v.expandRelations(this, depth);
     }
 
     public boolean isInput() {

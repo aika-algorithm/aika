@@ -20,6 +20,7 @@ import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.activations.TokenActivation;
 import network.aika.elements.neurons.TokenNeuron;
 
@@ -41,9 +42,9 @@ public class Document extends Thought {
 
     private final StringBuilder content;
 
-    private NavigableMap<TokenPositionKey, TokenActivation> tokenPosBeginIndex = new TreeMap<>();
+    private NavigableMap<TokenPositionKey, PatternActivation> tokenPosBeginIndex = new TreeMap<>();
 
-    private NavigableMap<TokenPositionKey, TokenActivation> tokenPosEndIndex = new TreeMap<>();
+    private NavigableMap<TokenPositionKey, PatternActivation> tokenPosEndIndex = new TreeMap<>();
 
     public Document(Model model, String content) {
         super(model);
@@ -53,14 +54,23 @@ public class Document extends Thought {
         }
     }
 
-    public void registerTokenActivation(TokenActivation tokenAct) {
-        if(tokenAct.getTokenPosRange() != null) {
-            tokenPosBeginIndex.put(new TokenPositionKey(tokenAct.getTokenPosRange().getBegin(), tokenAct.getId()), tokenAct);
-            tokenPosEndIndex.put(new TokenPositionKey(tokenAct.getTokenPosRange().getEnd(), tokenAct.getId()), tokenAct);
-        }
+    public void updateTokenPosition(PatternActivation tokenAct, Range oldTR, Range newTR) {
+        updateTokenPosition(tokenPosBeginIndex, tokenAct, Range.getBegin(oldTR), newTR.getBegin());
+        updateTokenPosition(tokenPosEndIndex, tokenAct, Range.getEnd(oldTR), newTR.getEnd());
     }
 
-    public Stream<TokenActivation> getRelatedTokensByTokenPosition(Slot slot, Range r) {
+    private void updateTokenPosition(NavigableMap<TokenPositionKey, PatternActivation> index, PatternActivation tokenAct, Long oldPos, long newPos) {
+        if(oldPos != null) {
+            if (oldPos == newPos)
+                return;
+
+            index.remove(new TokenPositionKey(oldPos, tokenAct.getId()));
+        }
+
+        index.put(new TokenPositionKey(newPos, tokenAct.getId()), tokenAct);
+    }
+
+    public Stream<PatternActivation> getRelatedTokensByTokenPosition(Slot slot, Range r) {
         return getPositionIndex(slot)
                 .subMap(
                         new TokenPositionKey(r.getBegin(), Integer.MIN_VALUE),
@@ -70,8 +80,8 @@ public class Document extends Thought {
                 .stream();
     }
 
-    private NavigableMap<TokenPositionKey, TokenActivation> getPositionIndex(Slot slot) {
-        NavigableMap<TokenPositionKey, TokenActivation> tokenPosIndex = slot == END ?
+    private NavigableMap<TokenPositionKey, PatternActivation> getPositionIndex(Slot slot) {
+        NavigableMap<TokenPositionKey, PatternActivation> tokenPosIndex = slot == END ?
                 tokenPosEndIndex :
                 tokenPosBeginIndex;
         return tokenPosIndex;

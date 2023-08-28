@@ -70,8 +70,16 @@ public class Range {
         return begin;
     }
 
+    public static Long getBegin(Range r) {
+        return r != null ? r.begin : null;
+    }
+
     public long getEnd() {
         return end;
+    }
+
+    public static Long getEnd(Range r) {
+        return r != null ? r.end : null;
     }
 
     public boolean contains(Range r) {

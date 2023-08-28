@@ -17,6 +17,7 @@
 package network.aika.elements.neurons.relations;
 
 import network.aika.Model;
+import network.aika.elements.activations.PatternActivation;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.activations.TokenActivation;
 import network.aika.text.Document;
@@ -69,7 +70,7 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
     }
 
     @Override
-    public Stream<TokenActivation> evaluateLatentRelation(TokenActivation fromAct, Direction dir) {
+    public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir) {
         Document doc = (Document) fromAct.getThought();
 
         Slot fromSlot = getFromSlot(dir);

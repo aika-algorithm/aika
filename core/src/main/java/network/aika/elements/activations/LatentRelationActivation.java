@@ -19,33 +19,32 @@ package network.aika.elements.activations;
 import network.aika.Thought;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 
-import static network.aika.fields.Fields.func;
 
 /**
  * @author Lukas Molzberger
  */
 public class LatentRelationActivation extends BindingActivation {
 
-    private TokenActivation fromAct;
-    private TokenActivation toAct;
+    private PatternActivation fromAct;
+    private PatternActivation toAct;
 
     public LatentRelationActivation(int id, Thought t, LatentRelationNeuron n) {
         super(id, t, n);
     }
 
-    public TokenActivation getFromAct() {
+    public PatternActivation getFromAct() {
         return fromAct;
     }
 
-    public void setFromAct(TokenActivation fromAct) {
+    public void setFromAct(PatternActivation fromAct) {
         this.fromAct = fromAct;
     }
 
-    public TokenActivation getToAct() {
+    public PatternActivation getToAct() {
         return toAct;
     }
 
-    public void setToAct(TokenActivation toAct) {
+    public void setToAct(PatternActivation toAct) {
         this.toAct = toAct;
     }
 }
