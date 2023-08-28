@@ -55,8 +55,8 @@ public class Document extends Thought {
     }
 
     public void updateTokenPosition(PatternActivation tokenAct, Range oldTR, Range newTR) {
-        updateTokenPosition(tokenPosBeginIndex, tokenAct, Range.getBegin(oldTR), newTR.getBegin());
-        updateTokenPosition(tokenPosEndIndex, tokenAct, Range.getEnd(oldTR), newTR.getEnd());
+        updateTokenPosition(tokenPosBeginIndex, tokenAct, Range.getBegin(oldTR), Range.getBegin(newTR));
+        updateTokenPosition(tokenPosEndIndex, tokenAct, Range.getEnd(oldTR), Range.getEnd(newTR));
     }
 
     private void updateTokenPosition(NavigableMap<TokenPositionKey, PatternActivation> index, PatternActivation tokenAct, Long oldPos, long newPos) {
