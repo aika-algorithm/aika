@@ -59,7 +59,7 @@ public class Document extends Thought {
         updateTokenPosition(tokenPosEndIndex, tokenAct, Range.getEnd(oldTR), Range.getEnd(newTR));
     }
 
-    private void updateTokenPosition(NavigableMap<TokenPositionKey, PatternActivation> index, PatternActivation tokenAct, Long oldPos, long newPos) {
+    private void updateTokenPosition(NavigableMap<TokenPositionKey, PatternActivation> index, PatternActivation tokenAct, Long oldPos, Long newPos) {
         if(oldPos != null) {
             if (oldPos == newPos)
                 return;
@@ -67,7 +67,8 @@ public class Document extends Thought {
             index.remove(new TokenPositionKey(oldPos, tokenAct.getId()));
         }
 
-        index.put(new TokenPositionKey(newPos, tokenAct.getId()), tokenAct);
+        if(newPos != null)
+            index.put(new TokenPositionKey(newPos, tokenAct.getId()), tokenAct);
     }
 
     public Stream<PatternActivation> getRelatedTokensByTokenPosition(Slot slot, Range r) {
