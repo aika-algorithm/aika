@@ -47,7 +47,6 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
     private int beginOffset;
     private int endOffset;
 
-
     public static BeforeRelationNeuron lookupRelation(Model m, int rangeBegin, int rangeEnd) {
         return m.lookupNeuronByLabel("Prev. Token Rel.: " + rangeBegin + "," + rangeEnd, l ->
             createTokenPositionRelationNeuron(m, rangeBegin, rangeEnd, l)
@@ -63,7 +62,7 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
         n.endOffset = rangeEnd;
 
         n.fromSlot = n.beginOffset < 0 ? BEGIN : END;
-        n.toSlot = n.beginOffset < 0 ? END : BEGIN;
+        n.toSlot = n.endOffset < 0 ? END : BEGIN;
 
         n.setAllowTraining(false);
         return n;
@@ -97,14 +96,14 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
 
     private int getRelBegin(Direction dir) {
         return dir == INPUT ?
-                beginOffset :
-                -endOffset;
+                -beginOffset :
+                endOffset;
     }
 
     private int getRelEnd(Direction dir) {
         return dir == INPUT ?
-                endOffset :
-                -beginOffset;
+                -endOffset :
+                beginOffset;
     }
 
     public Direction getDirection() {
