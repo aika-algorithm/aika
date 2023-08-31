@@ -17,13 +17,13 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
-import network.aika.enums.Scope;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.PatternLink;
 import network.aika.elements.neurons.PatternNeuron;
+import network.aika.enums.Scope;
 import network.aika.text.Range;
 import network.aika.statistic.SampleSpace;
 import network.aika.elements.neurons.BindingNeuron;
@@ -61,8 +61,9 @@ public class PatternSynapse extends ConjunctiveSynapse<
 
     protected SampleSpace sampleSpace = new SampleSpace();
 
-    public PatternSynapse() {
-        super(Scope.SAME);
+    @Override
+    public Scope getScope() {
+        return Scope.SAME;
     }
 
     @Override

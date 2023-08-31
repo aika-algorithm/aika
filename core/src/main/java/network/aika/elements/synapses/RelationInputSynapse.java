@@ -39,24 +39,13 @@ public class RelationInputSynapse extends BindingNeuronSynapse<
         LatentRelationActivation
         >
 {
-    private NeuronProvider correspondingSPSInput;
-
-
     public RelationInputSynapse() {
-        super(Scope.INPUT);
         currentStoredAt = Direction.OUTPUT;
     }
 
-    public NeuronProvider getCorrespondingSPSInput() {
-        return correspondingSPSInput;
-    }
-
-    public void setCorrespondingSPSInput(NeuronProvider spsInput) {
-        this.correspondingSPSInput = spsInput;
-    }
-
-    public void setCorrespondingSPS(SameObjectSynapse correspondingSPS) {
-        setCorrespondingSPSInput(correspondingSPS.getPInput());
+    @Override
+    public Scope getScope() {
+        return Scope.INPUT;
     }
 
     @Override

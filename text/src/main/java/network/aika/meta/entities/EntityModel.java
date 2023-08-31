@@ -171,7 +171,7 @@ public class EntityModel {
         bn.getInputSynapseByType(PositiveFeedbackSynapse.class)
                 .instantiateTemplate(pn, iEBN);
 
-        Synapse s = bn.getInputSynapseByType(PrimarySameObjectSynapse.class);
+        Synapse s = bn.getInputSynapseByType(InputObjectSynapse.class);
         if(s != null)
             s.instantiateTemplate(pn, iEBN);
 

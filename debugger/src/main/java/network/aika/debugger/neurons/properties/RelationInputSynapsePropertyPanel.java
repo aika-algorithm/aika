@@ -26,11 +26,5 @@ public class RelationInputSynapsePropertyPanel extends ConjunctiveSynapsePropert
 
     public RelationInputSynapsePropertyPanel(RelationInputSynapse s, Link ref) {
         super(s, ref);
-
-        String spsInput = s.getCorrespondingSPSInput() != null ?
-                s.getCorrespondingSPSInput().getId() + " - " + s.getCorrespondingSPSInput().getLabel() :
-                "--";
-
-        addConstant("Corresponding SPS Input: ", spsInput);
     }
 }

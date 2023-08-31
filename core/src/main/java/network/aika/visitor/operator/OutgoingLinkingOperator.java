@@ -16,26 +16,18 @@
  */
 package network.aika.visitor.operator;
 
-import network.aika.enums.direction.Direction;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.enums.Scope;
 import network.aika.visitor.LinkingVisitor;
 
 /**
  * @author Lukas Molzberger
  */
-public class LinkLinkingOperator extends LinkingOperator {
+public class OutgoingLinkingOperator extends LinkingOperator {
 
-
-    public LinkLinkingOperator(Activation fromAct, Synapse syn) {
-        super(fromAct, syn);
-    }
-
-    @Override
-    public Direction getRelationDir(Scope fromScope) {
-        return fromScope.getRelationDir().invert();
+    public OutgoingLinkingOperator(Activation sourceAct, Synapse targetSyn) {
+        super(sourceAct, targetSyn);
     }
 
     @Override
@@ -43,18 +35,18 @@ public class LinkLinkingOperator extends LinkingOperator {
         if(l == null)
             return;
 
-        if(act.getNeuron() != syn.getOutput())
+        if(act.getNeuron() != targetSyn.getOutput())
             return;
 
-        if(act == fromAct)
+        if(act == sourceAct)
             return;
 
-        if(!v.compatible(syn.getScope(), l.getSynapse().getScope()))
+        if(!v.compatible(l.getSynapse(), targetSyn))
             return;
 
-        if(!syn.checkSingularLinkDoesNotExist(l.getOutput()))
+        if(!targetSyn.checkSingularLinkDoesNotExist(l.getOutput()))
             return;
 
-        syn.link(fromAct, l.getOutput());
+        targetSyn.link(sourceAct, l.getOutput());
     }
 }

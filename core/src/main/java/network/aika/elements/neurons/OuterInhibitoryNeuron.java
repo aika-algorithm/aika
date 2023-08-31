@@ -32,6 +32,12 @@ import network.aika.visitor.inhibitory.InhibitoryVisitor;
 public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryActivation> {
 
     @Override
+    public void startVisitor(LinkingOperator c, Activation act, Synapse targetSyn) {
+        new InhibitoryVisitor(act.getThought(), c, Scope.INPUT)
+                .start(act);
+    }
+
+    @Override
     public OuterInhibitoryNeuron instantiateTemplate() {
         OuterInhibitoryNeuron n = new OuterInhibitoryNeuron();
         n.initFromTemplate(this);
@@ -47,12 +53,6 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryActi
         return ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
     }
 
-
-    @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
-        new InhibitoryVisitor(act.getThought(), c, Scope.INPUT)
-                .start(act);
-    }
 
     @Override
     public CategorySynapse createCategorySynapse() {

@@ -45,8 +45,11 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternActivation> {
 
     protected SampleSpace sampleSpace = new SampleSpace();
 
-    public PatternNeuron() {
-        super();
+
+    @Override
+    public void startVisitor(LinkingOperator c, Activation act, Synapse targetSyn) {
+        new PatternVisitor(act.getThought(), c)
+                .start(act);
     }
 
     @Override
@@ -57,12 +60,6 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternActivation> {
     @Override
     public PatternActivation createActivation(Thought t) {
         return new PatternActivation(t.createActivationId(), t, this);
-    }
-
-    @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
-        new PatternVisitor(act.getThought(), c)
-                .start(act);
     }
 
     @Override

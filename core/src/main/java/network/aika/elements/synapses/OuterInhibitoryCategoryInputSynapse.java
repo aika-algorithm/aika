@@ -37,8 +37,9 @@ public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         OuterInhibitoryActivation
         > implements CategoryInputSynapse
 {
-    public OuterInhibitoryCategoryInputSynapse() {
-        super(Scope.SAME);
+    @Override
+    public Scope getScope() {
+        return Scope.SAME;
     }
 
     @Override

@@ -27,7 +27,7 @@ import network.aika.visitor.pattern.PatternCategoryVisitor;
 public class PatternCategoryNeuron extends CategoryNeuron {
 
     @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
+    public void startVisitor(LinkingOperator c, Activation act, Synapse targetSyn) {
         new PatternCategoryVisitor(act.getThought(), c)
                 .start(act);
     }

@@ -45,7 +45,7 @@ public class ConjunctiveSynapsePropertyPanel<E extends ConjunctiveSynapse> exten
         if(s instanceof PositiveFeedbackSynapse) {
             return new PositiveFeedbackSynapsePropertyPanel((PositiveFeedbackSynapse) s, ref);
         } else if(s instanceof SameObjectSynapse) {
-            return new SamePatternSynapsePropertyPanel((SameObjectSynapse) s, ref);
+            return new SameObjectSynapsePropertyPanel((SameObjectSynapse) s, ref);
         } else if(s instanceof PatternSynapse) {
             return new PatternSynapsePropertyPanel((PatternSynapse) s, ref);
         } else if(s instanceof RelationInputSynapse) {

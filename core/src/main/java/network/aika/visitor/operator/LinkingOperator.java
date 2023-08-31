@@ -32,21 +32,19 @@ import static network.aika.elements.synapses.Synapse.getLatentLink;
  */
 public abstract class LinkingOperator implements Operator {
 
-    protected Activation fromAct;
+    protected Activation sourceAct;
 
-    protected Synapse syn;
+    protected Synapse targetSyn;
 
-    public LinkingOperator(Activation fromAct, Synapse syn) {
-        this.fromAct = fromAct;
-        this.syn = syn;
+    public LinkingOperator(Activation sourceAct, Synapse targetSyn) {
+        this.sourceAct = sourceAct;
+        this.targetSyn = targetSyn;
     }
 
     public boolean verifySamePatternSynapse(NeuronProvider candidateSPSInput) {
         return candidateSPSInput == null ||
-                syn.getPInput() == candidateSPSInput;
+                targetSyn.getPInput() == candidateSPSInput;
     }
-
-    public abstract Direction getRelationDir(Scope fromScope);
 
     public static Link link(Activation actA, Synapse synA, Link linkA, Activation actB, Synapse synB) {
         if (linkA == null)

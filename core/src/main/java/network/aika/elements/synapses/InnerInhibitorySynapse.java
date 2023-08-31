@@ -36,8 +36,9 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
         InnerInhibitoryActivation
         > {
 
-    public InnerInhibitorySynapse() {
-        super(Scope.SAME);
+    @Override
+    public Scope getScope() {
+        return Scope.SAME;
     }
 
     @Override

@@ -26,12 +26,17 @@ import network.aika.visitor.binding.RelationBindingVisitor;
 
 import java.util.List;
 
-
 /**
  * @author Lukas Molzberger
  */
 public class BindingNeuron extends ConjunctiveNeuron<BindingActivation> {
 
+
+    @Override
+    public void startVisitor(LinkingOperator c, Activation act, Synapse startSyn) {
+        BindingVisitor v = new RelationBindingVisitor(act.getThought(), c, startSyn);
+        v.start(act);
+    }
 
     @Override
     public CategorySynapse createCategorySynapse() {
@@ -43,21 +48,6 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingActivation> {
                 .filter(s -> s instanceof RelationInputSynapse)
                 .map(s -> (RelationInputSynapse) s)
                 .toList();
-    }
-
-    @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
-        Thought t = act.getThought();
-        RelationInputSynapse rel = findLatentRelationNeurons()
-                .stream()
-                .findAny()
-                .orElse(null);
-
-        BindingVisitor v = rel != null ?
-                new RelationBindingVisitor(t, c, rel, c.getRelationDir(syn.getScope())) :
-                new BindingVisitor(t, c);
-
-        v.start(act);
     }
 
     @Override

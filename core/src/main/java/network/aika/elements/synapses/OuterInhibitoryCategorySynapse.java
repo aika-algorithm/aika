@@ -28,8 +28,9 @@ import network.aika.enums.Scope;
  */
 public class OuterInhibitoryCategorySynapse extends CategorySynapse<OuterInhibitoryCategorySynapse, Neuron, OuterInhibitoryActivation> {
 
-    public OuterInhibitoryCategorySynapse() {
-        super(Scope.SAME);
+    @Override
+    public Scope getScope() {
+        return Scope.SAME;
     }
 
     @Override

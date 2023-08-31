@@ -28,8 +28,9 @@ import network.aika.enums.Scope;
  */
 public class InnerInhibitoryCategorySynapse extends CategorySynapse<InnerInhibitoryCategorySynapse, Neuron, InnerInhibitoryActivation> {
 
-    public InnerInhibitoryCategorySynapse() {
-        super(Scope.SAME);
+    @Override
+    public Scope getScope() {
+        return Scope.SAME;
     }
 
     @Override

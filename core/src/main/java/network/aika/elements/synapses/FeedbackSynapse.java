@@ -18,13 +18,10 @@ package network.aika.elements.synapses;
 
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.FeedbackLink;
-import network.aika.enums.Scope;
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.Neuron;
 import network.aika.fields.Field;
-
-import static network.aika.fields.FieldLink.linkAndConnect;
 
 /**
  *
@@ -36,11 +33,6 @@ public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuro
         L,
         IA
         > {
-
-    public FeedbackSynapse(Scope scope) {
-        super(scope);
-    }
-
 
     @Override
     public Field getOutputNetForBias(BindingActivation act) {

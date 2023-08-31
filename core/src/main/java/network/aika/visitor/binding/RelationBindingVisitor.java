@@ -17,47 +17,51 @@
 package network.aika.visitor.binding;
 
 import network.aika.Thought;
+import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.LatentRelationActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.activations.TokenActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.RelationInputSynapse;
-import network.aika.enums.Scope;
 import network.aika.visitor.operator.LinkingOperator;
+
+import java.util.stream.Stream;
+
+import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 
 /**
  * @author Lukas Molzberger
  */
 public class RelationBindingVisitor extends BindingVisitor {
 
-    protected RelationInputSynapse relation;
-    protected Direction relationDir;
+    protected Synapse startSyn;
     protected PatternActivation downOrigin;
     protected PatternActivation upOrigin;
 
-    public RelationBindingVisitor(Thought t, LinkingOperator operator, RelationInputSynapse rel, Direction relationDir) {
+    protected RelationInputSynapse relation;
+    protected Direction relationDir;
+
+    public RelationBindingVisitor(Thought t, LinkingOperator operator, Synapse startSyn) {
         super(t, operator);
 
-        this.relation = rel;
-        this.relationDir = relationDir;
+        this.startSyn = startSyn;
     }
 
-    protected RelationBindingVisitor(RelationBindingVisitor parent, PatternActivation downOrigin, PatternActivation upOrigin) {
+    protected RelationBindingVisitor(
+            RelationBindingVisitor parent,
+            PatternActivation downOrigin,
+            PatternActivation upOrigin,
+            RelationInputSynapse relation,
+            Direction relationDir
+    ) {
         super(parent, downOrigin);
         this.downOrigin = downOrigin;
         this.upOrigin = upOrigin;
-        this.relation = parent.relation;
-        this.relationDir = parent.relationDir;
-    }
-
-    public RelationInputSynapse getRelation() {
-        return relation;
-    }
-
-    public Direction getRelationDir() {
-        return relationDir;
+        this.relation = relation;
+        this.relationDir = relationDir;
     }
 
     public PatternActivation getDownOrigin() {
@@ -68,37 +72,53 @@ public class RelationBindingVisitor extends BindingVisitor {
         return upOrigin;
     }
 
+
     @Override
     public void expandRelations(PatternActivation origin, int depth) {
-        RelationInputSynapse relSyn = getRelation();
+        BindingNeuron bn = (BindingNeuron) startSyn.getOutput();
+        Stream<RelationInputSynapse> relations = bn.findLatentRelationNeurons().stream();
 
-        if(!operator.verifySamePatternSynapse(relSyn.getCorrespondingSPSInput()))
-            return;
+        if(startSyn.getRelationSynId() != null) {
+            relationDir = OUTPUT;
+            relations = relations.filter(s -> s.getSynapseId() == startSyn.getRelationSynId());
+        } else
+            relationDir = INPUT;
 
-        relSyn.getInput()
-                .evaluateLatentRelation(origin, relationDir)
-                .forEach(relTokenAct ->
-                        up(origin, relTokenAct, depth)
-                );
+        relations.forEach(rel ->
+                rel.getInput()
+                        .evaluateLatentRelation(origin, relationDir.invert())
+                        .forEach(relTokenAct ->
+                                up(origin, relTokenAct, rel, relationDir, depth)
+                        )
+        );
     }
 
-    private void up(PatternActivation origin, PatternActivation relOrigin, int depth) {
-        new RelationBindingVisitor(this, origin, relOrigin)
+    private void up(
+            PatternActivation origin,
+            PatternActivation relOrigin,
+            RelationInputSynapse relation,
+            Direction relationDir,
+            int depth
+    ) {
+        new RelationBindingVisitor(this, origin, relOrigin, relation, relationDir)
                 .visit(relOrigin, null, depth);
     }
 
+    public void up(PatternActivation origin, int depth) {
+        if(!direction.isUp() && startSyn.getRelationSynId() == null)
+            super.up(origin, depth);
+    }
+
     @Override
-    public boolean compatible(Scope from, Scope to) {
+    public boolean compatible(Synapse from, Synapse to) {
         if(downOrigin == null)
             return false;
 
-        if(from == to)
-            return downOrigin == upOrigin;
+        if(relationDir == OUTPUT)
+            return true;
 
-        if(from != to)
-            return downOrigin != upOrigin;
-
-        return false;
+        Integer relId = to.getRelationSynId();
+        return relId != null && relation.getSynapseId() == relId;
     }
 
     @Override

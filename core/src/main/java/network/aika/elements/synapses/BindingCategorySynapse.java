@@ -16,11 +16,11 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.links.BindingCategoryLink;
 import network.aika.elements.neurons.Neuron;
+import network.aika.enums.Scope;
 
 /**
  *
@@ -28,8 +28,9 @@ import network.aika.elements.neurons.Neuron;
  */
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
 
-    public BindingCategorySynapse() {
-        super(Scope.SAME);
+    @Override
+    public Scope getScope() {
+        return Scope.SAME;
     }
 
     @Override

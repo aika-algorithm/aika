@@ -62,11 +62,6 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
     private double sumOfLowerWeights;
     protected Direction currentStoredAt = INPUT;
 
-
-    public ConjunctiveSynapse(Scope scope) {
-        super(scope);
-    }
-
     @Override
     public S init(Neuron input, Neuron output) {
         synapseBias.setValue(0.0);

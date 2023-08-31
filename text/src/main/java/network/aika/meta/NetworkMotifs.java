@@ -41,11 +41,7 @@ public class NetworkMotifs {
         double inputValueTarget = input.getActivationFunction()
                 .f(inputNetTarget);
 
-        (
-                primaryScope == Scope.INPUT ?
-                new InputObjectSynapse() :
-                new PrimarySameObjectSynapse()
-        )
+        new InputObjectSynapse()
                 .setWeight(weight)
                 .init(input, bn)
                 .adjustBias(inputValueTarget);
@@ -145,7 +141,7 @@ public class NetworkMotifs {
                 .init(lastBN, bn)
                 .adjustBias(prevValueTarget);
 
-        relSyn.setCorrespondingSPS(spSyn);
+        spSyn.setRelationSynId(relSyn.getSynapseId());
 
         log.info("  " + spSyn + " targetNetContr:" + -spSyn.getSynapseBias().getValue());
     }

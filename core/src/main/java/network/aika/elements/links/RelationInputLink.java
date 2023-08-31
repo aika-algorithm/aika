@@ -16,12 +16,9 @@
  */
 package network.aika.elements.links;
 
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.LatentRelationActivation;
-import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.RelationInputSynapse;
-import network.aika.queue.link.InstantiateCorrespondingSPS;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
 import network.aika.visitor.pattern.PatternVisitor;
 
@@ -32,24 +29,6 @@ public class RelationInputLink extends BindingNeuronLink<RelationInputSynapse, L
 
     public RelationInputLink(RelationInputSynapse s, LatentRelationActivation input, BindingActivation output) {
         super(s, input, output);
-    }
-
-    protected void postInstantiation(Link newInstance) {
-        InstantiateCorrespondingSPS.add(this, (RelationInputLink) newInstance);
-    }
-
-    public void instantiateCorrespondingSPS(RelationInputLink newInstance) {
-        if (synapse.getCorrespondingSPSInput() != null) {
-            newInstance.getSynapse().setCorrespondingSPSInput(
-                    newInstance.getOutput().getInputLinksByType(SameObjectLink.class)
-                            .map(Link::getInput)
-                            .map(Activation::getNeuron)
-                            .filter(n -> n.getTemplate().getId() == synapse.getCorrespondingSPSInput().getId())
-                            .map(Neuron::getProvider)
-                            .findFirst()
-                            .orElse(null)
-            );
-        }
     }
 
     @Override

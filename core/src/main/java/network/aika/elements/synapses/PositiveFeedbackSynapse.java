@@ -37,8 +37,9 @@ public class PositiveFeedbackSynapse extends FeedbackSynapse<
         PatternActivation
         >
 {
-    public PositiveFeedbackSynapse() {
-        super(Scope.SAME);
+    @Override
+    public Scope getScope() {
+        return Scope.SAME;
     }
 
     @Override

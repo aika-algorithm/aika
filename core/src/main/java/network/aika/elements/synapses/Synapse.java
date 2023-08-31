@@ -52,6 +52,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
+    protected int synapseId;
     protected NeuronProvider input;
     protected NeuronProvider output;
 
@@ -67,10 +68,19 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     protected boolean trainingAllowed = true;
 
-    protected Scope scope;
+    public Synapse() {
+    }
 
-    public Synapse(Scope scope) {
-        this.scope = scope;
+    public int getSynapseId() {
+        return synapseId;
+    }
+
+    public void setSynapseId(int synapseId) {
+        this.synapseId = synapseId;
+    }
+
+    public Scope getScope() {
+        return null;
     }
 
     public abstract double getSumOfLowerWeights();
@@ -94,10 +104,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public boolean linkOnUnsuppressed() {
         return false;
-    }
-
-    public Scope getScope() {
-        return scope;
     }
 
     public boolean isLatentLinkingAllowed() {
@@ -231,6 +237,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public void initFromTemplate(I input, O output, Synapse templateSyn) {
+        synapseId = templateSyn.synapseId;
         setInput(input);
         setOutput(output);
 
@@ -256,6 +263,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public S init(Neuron input, Neuron output) {
+        synapseId = output.getNewSynapseId();
+
         setInput((I) input);
         setOutput((O) output);
 
@@ -353,6 +362,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return output.getNeuron();
     }
 
+    public Integer getRelationSynId() {
+        return null;
+    }
+
     @Override
     public Model getModel() {
         return output != null ?
@@ -371,6 +384,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeUTF(getClass().getName());
+        out.writeInt(synapseId);
 
         out.writeLong(input.getId());
         out.writeLong(output.getId());
@@ -389,6 +403,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     @Override
     public void readFields(DataInput in, Model m) throws IOException {
+        synapseId = in.readInt();
         input = m.lookupNeuronProvider(in.readLong());
         output = m.lookupNeuronProvider(in.readLong());
 

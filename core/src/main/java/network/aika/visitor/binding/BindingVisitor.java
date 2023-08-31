@@ -18,9 +18,9 @@ package network.aika.visitor.binding;
 
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.TokenActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.synapses.Synapse;
 import network.aika.visitor.operator.Operator;
 import network.aika.visitor.LinkingVisitor;
 
@@ -44,6 +44,10 @@ public class BindingVisitor extends LinkingVisitor<PatternActivation> {
     }
 
     public void expandRelations(PatternActivation origin, int depth) {
+    }
+
+    public boolean compatible(Synapse from, Synapse to) {
+        return to.getRelationSynId() == null;
     }
 
     public void visit(Link l, int depth) {

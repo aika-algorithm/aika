@@ -32,9 +32,20 @@ public class SameObjectSynapse extends BindingNeuronSynapse<
         SameObjectLink,
         BindingActivation
         >
-{
-    public SameObjectSynapse() {
-        super(Scope.SAME);
+{    private Integer relationSynId;
+
+    @Override
+    public Integer getRelationSynId() {
+        return relationSynId;
+    }
+
+    public void setRelationSynId(Integer relationSynId) {
+        this.relationSynId = relationSynId;
+    }
+
+    @Override
+    public Scope getScope() {
+        return Scope.SAME;
     }
 
     @Override

@@ -19,6 +19,7 @@ package network.aika.visitor;
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.visitor.operator.Operator;
 
@@ -41,11 +42,8 @@ public abstract class LinkingVisitor<T extends Activation> extends Visitor<T> {
             operator.check(this, lastLink, act);
     }
 
-    public boolean compatible(Scope from, Scope to) {
-        if(origin == null)
-            return false;
-
-        return from == to;
+    public boolean compatible(Synapse from, Synapse to) {
+        return origin != null;
     }
 
     public void createRelation(Link l) {

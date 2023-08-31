@@ -14,23 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links;
+package network.aika.debugger.neurons.properties;
 
-import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.synapses.PrimarySameObjectSynapse;
-import network.aika.visitor.pattern.PatternVisitor;
+import network.aika.elements.links.Link;
+import network.aika.elements.synapses.SameObjectSynapse;
 
 /**
  * @author Lukas Molzberger
  */
-public class PrimarySameObjectLink extends PrimaryInputLink<PrimarySameObjectSynapse> {
+public class SameObjectSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel<SameObjectSynapse> {
 
-    public PrimarySameObjectLink(PrimarySameObjectSynapse s, PatternActivation input, BindingActivation output) {
-        super(s, input, output);
+    public SameObjectSynapsePropertyPanel(SameObjectSynapse s, Link ref) {
+        super(s, ref);
     }
 
-    @Override
-    public void patternVisit(PatternVisitor v, int depth) {
+    public void initSynapseProperties(SameObjectSynapse s) {
+        super.initSynapseProperties(s);
+
+        addConstant("Relation-SynapseId: ", "" + s.getRelationSynId());
     }
 }

@@ -37,8 +37,10 @@ public class InnerInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InnerInhibitoryActivation
         > implements CategoryInputSynapse
 {
-    public InnerInhibitoryCategoryInputSynapse() {
-        super(Scope.SAME);
+
+    @Override
+    public Scope getScope() {
+        return Scope.SAME;
     }
 
     @Override

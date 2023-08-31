@@ -19,15 +19,34 @@ package network.aika.elements.links;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.InputObjectSynapse;
+import network.aika.fields.AbstractFunction;
+import network.aika.fields.Fields;
 import network.aika.visitor.pattern.PatternVisitor;
 
 /**
  * @author Lukas Molzberger
  */
-public class InputObjectLink extends PrimaryInputLink<InputObjectSynapse> {
+public class InputObjectLink extends BindingNeuronLink<InputObjectSynapse, PatternActivation> {
+
+    private AbstractFunction inputEntropy;
 
     public InputObjectLink(InputObjectSynapse s, PatternActivation input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    public AbstractFunction getInputEntropy() {
+        return inputEntropy;
+    }
+
+    @Override
+    public void connectGradientFields() {
+        if(input == null)
+            return;
+
+        inputEntropy = Fields.scale(this, "-Entropy", -1,
+                input.getEntropy(),
+                output.getGradient()
+        );
     }
 
     @Override

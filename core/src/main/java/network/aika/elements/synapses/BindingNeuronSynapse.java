@@ -16,13 +16,11 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.enums.Scope;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.BindingNeuronLink;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.BindingNeuron;
-
 
 /**
  *
@@ -38,11 +36,6 @@ public abstract class BindingNeuronSynapse<S extends BindingNeuronSynapse, I ext
                 BindingActivation
                 >
 {
-    public BindingNeuronSynapse(Scope scope) {
-        super(scope);
-    }
-
-
     @Override
     public double getPropagatePreNet(IA iAct) {
         return getOutput().getPreNetUBDummyWeightSum() +

@@ -16,11 +16,11 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.enums.Scope;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.PatternCategoryLink;
 import network.aika.elements.neurons.PatternNeuron;
+import network.aika.enums.Scope;
 
 /**
  *
@@ -28,8 +28,9 @@ import network.aika.elements.neurons.PatternNeuron;
  */
 public class PatternCategorySynapse extends CategorySynapse<PatternCategorySynapse, PatternNeuron, PatternActivation> {
 
-    public PatternCategorySynapse() {
-        super(Scope.SAME);
+    @Override
+    public Scope getScope() {
+        return Scope.SAME;
     }
 
     @Override

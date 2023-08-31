@@ -32,6 +32,15 @@ public class SameObjectLink extends BindingNeuronLink<SameObjectSynapse, Binding
     }
 
     @Override
+    protected void postInstantiation(Link newInstance) {
+        SameObjectLink nl = (SameObjectLink) newInstance;
+
+        nl.synapse.setRelationSynId(
+                synapse.getRelationSynId()
+        );
+    }
+
+    @Override
     public void propagateRanges() {
     }
 

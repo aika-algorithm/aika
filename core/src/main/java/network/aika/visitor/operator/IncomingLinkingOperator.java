@@ -17,56 +17,47 @@
 package network.aika.visitor.operator;
 
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.enums.direction.Direction;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.enums.Scope;
 import network.aika.visitor.LinkingVisitor;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class ActLinkingOperator extends LinkingOperator {
+public class IncomingLinkingOperator extends LinkingOperator {
 
-    private Scope toScope;
-    private Synapse synA;
-    private Link linkA;
+    private Synapse sourceSyn;
+    private Link sourceLink;
 
-    public ActLinkingOperator(Activation fromAct, Synapse synA, Link linkA, Synapse synB) {
-        super(fromAct, synB);
-        this.synA = synA;
-        this.linkA = linkA;
-        this.toScope = synA.getScope();
+    public IncomingLinkingOperator(Activation fromAct, Synapse sourceSyn, Link sourceLink, Synapse targetSyn) {
+        super(fromAct, targetSyn);
+        this.sourceSyn = sourceSyn;
+        this.sourceLink = sourceLink;
     }
 
     @Override
     public boolean verifySamePatternSynapse(NeuronProvider candidateSPSInput) {
         return super.verifySamePatternSynapse(candidateSPSInput) ||
-                synA.getPInput() == candidateSPSInput;
-    }
-
-    @Override
-    public Direction getRelationDir(Scope fromScope) {
-        return fromScope.getRelationDir();
+                sourceSyn.getPInput() == candidateSPSInput;
     }
 
     @Override
     public void check(LinkingVisitor v, Link lastLink, Activation act) {
-        if (act.getNeuron() != syn.getInput())
+        if (act.getNeuron() != targetSyn.getInput())
             return;
 
-        if (act == fromAct)
+        if (act == sourceAct)
             return;
 
-        if (!v.compatible(syn.getScope(), toScope))
+        if (!v.compatible(sourceSyn, targetSyn))
             return;
 
-        if (!syn.checkLinkingEvent(act))
+        if (!targetSyn.checkLinkingEvent(act))
             return;
 
-        Link l = link(fromAct, synA, linkA, act, syn);
+        Link l = link(sourceAct, sourceSyn, sourceLink, act, targetSyn);
         if (l != null)
             v.createRelation(l);
     }

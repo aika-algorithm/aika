@@ -42,6 +42,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
 
     private volatile Neuron neuron;
 
+    HashMap<Integer, Synapse> inputSynapsesBySynId = new HashMap<>();
     HashMap<Long, Synapse> inputSynapses = new HashMap<>();
     HashMap<Long, Synapse> outputSynapses = new HashMap<>();
 
@@ -97,6 +98,10 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
 
     public Neuron getIfNotSuspended() {
         return neuron;
+    }
+
+    public Synapse getSynapseBySynId(int synId) {
+        return inputSynapsesBySynId.get(synId);
     }
 
     public Stream<Synapse> getInputSynapses() {
@@ -180,6 +185,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
 
     public void addInputSynapse(Synapse s) {
         lock.acquireWriteLock();
+        inputSynapsesBySynId.put(s.getSynapseId(), s);
         inputSynapses.put(s.getPInput().getId(), s);
         if(neuron != null)
             neuron.addInputSynapse(s);
@@ -190,6 +196,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
 
     public void removeInputSynapse(Synapse s) {
         lock.acquireWriteLock();
+        inputSynapsesBySynId.remove(s.getSynapseId());
         inputSynapses.remove(s.getPInput().getId());
         if(neuron != null)
             neuron.removeInputSynapse(s);

@@ -230,7 +230,7 @@ public abstract class SequenceModel {
                 PATTERN_NET_TARGET
         );
 
-        relContains = ContainsRelationNeuron.lookupRelation(model, Direction.INPUT)
+        relContains = ContainsRelationNeuron.lookupRelation(model, Direction.OUTPUT)
                 .setBias(5.0)
                 .getProvider(true);
 

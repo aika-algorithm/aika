@@ -29,10 +29,10 @@ import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;
 import network.aika.elements.synapses.Synapse;
-import network.aika.visitor.operator.ActLinkingOperator;
-import network.aika.visitor.operator.LinkLinkingOperator;
+import network.aika.visitor.operator.IncomingLinkingOperator;
 import network.aika.queue.activation.Save;
 import network.aika.utils.Writable;
+import network.aika.visitor.operator.OutgoingLinkingOperator;
 import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +63,8 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
     protected static final Logger log = LoggerFactory.getLogger(Neuron.class);
 
     volatile long retrievalCount = 0;
+
+    private int synapseIdCounter = 0;
 
     private volatile boolean modified;
 
@@ -96,6 +98,14 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
     @Override
     public void disconnect() {
+    }
+
+    public void setSynapseIdCounter(int synapseIdCounter) {
+        this.synapseIdCounter = synapseIdCounter;
+    }
+
+    public int getNewSynapseId() {
+        return synapseIdCounter++;
     }
 
     public void addProvider(Model m) {
@@ -149,37 +159,37 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
     public abstract void startVisitor(LinkingOperator c, Activation act, Synapse syn);
 
-    public void linkOutgoing(Synapse synA, Activation iAct) {
-        synA.getOutput().startVisitor(
-                new LinkLinkingOperator(iAct, synA),
+    public void linkOutgoing(Synapse targetSyn, Activation iAct) {
+        targetSyn.getOutput().startVisitor(
+                new OutgoingLinkingOperator(iAct, targetSyn),
                 iAct,
-                synA
+                targetSyn
         );
     }
 
-    public void latentLinkOutgoing(Synapse synA, Activation iActA) {
+    public void latentLinkOutgoing(Synapse sourceSyn, Activation iActA) {
         getInputSynapsesAsStream()
-                .filter(synB -> synA != synB)
+                .filter(targetSyn -> sourceSyn != targetSyn)
                 .filter(Synapse::isLatentLinkingAllowed)
-                .filter(synB -> getLatentLinkingPreNet(synA, synB) > 0.0)
-                .forEach(synB ->
-                        synB.getOutput().startVisitor(
-                                new ActLinkingOperator(iActA, synA, null, synB),
+                .filter(targetSyn -> getLatentLinkingPreNet(sourceSyn, targetSyn) > 0.0)
+                .forEach(targetSyn ->
+                        targetSyn.getOutput().startVisitor(
+                                new IncomingLinkingOperator(iActA, sourceSyn, null, targetSyn),
                                 iActA,
-                                synB
+                                sourceSyn
                         )
                 );
     }
 
     public void linkAndPropagateIn(Link l) {
         getInputSynapsesAsStream()
-                .filter(synB -> synB != l.getSynapse())
-                .filter(synB -> synB.checkSingularLinkDoesNotExist(l.getOutput()))
-                .forEach(synB ->
+                .filter(targetSyn -> targetSyn != l.getSynapse())
+                .filter(targetSyn -> targetSyn.checkSingularLinkDoesNotExist(l.getOutput()))
+                .forEach(targetSyn ->
                         startVisitor(
-                                new ActLinkingOperator(l.getInput(), l.getSynapse(), l, synB),
+                                new IncomingLinkingOperator(l.getInput(), l.getSynapse(), l, targetSyn),
                                 l.getInput(),
-                                synB
+                                l.getSynapse()
                         )
                 );
     }
@@ -489,6 +499,7 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
             customData.write(out);
 
         out.writeBoolean(templateOnly);
+        out.writeInt(synapseIdCounter);
     }
 
     public static Neuron read(DataInput in, Model m) throws Exception {
@@ -522,6 +533,7 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         }
 
         templateOnly = in.readBoolean();
+        synapseIdCounter = in.readInt();
     }
 
     @Override

@@ -34,9 +34,13 @@ public class InhibitoryCategoryNeuron extends CategoryNeuron {
         this.identityReference = identityReference;
     }
 
+    public Scope getIdentityReference() {
+        return identityReference;
+    }
+
     @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
-        new InhibitoryVisitor(act.getThought(), c, identityReference)
+    public void startVisitor(LinkingOperator c, Activation act, Synapse targetSyn) {
+        new InhibitoryVisitor(act.getThought(), c, getIdentityReference())
                 .start(act);
     }
 }

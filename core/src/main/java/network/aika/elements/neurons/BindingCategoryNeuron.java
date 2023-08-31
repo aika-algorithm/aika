@@ -27,7 +27,7 @@ import network.aika.visitor.binding.BindingVisitor;
 public class BindingCategoryNeuron extends CategoryNeuron {
 
     @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse syn) {
+    public void startVisitor(LinkingOperator c, Activation act, Synapse targetSyn) {
         new BindingVisitor(act.getThought(), c)
                 .start(act);
     }

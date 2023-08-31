@@ -37,6 +37,8 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addField(s.getWeight());
         initSynapseProperties(s);
 
+        addConstant("Synapse Id: ", "" + s.getSynapseId());
+
         addConstant("Input: ", s.getInput().toString());
         addConstant("Output: ", s.getOutput().toString());
 
@@ -54,7 +56,6 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addConstant("Latent-Linking Pre net: ", doubleToString(getLatentLinkingPreNet(s, null)));
         addConstant("Is Training Allowed: ", "" + s.isTrainingAllowed());
         addConstant("Stored At: ", "" + s.getStoredAt());
-        addConstant("Scope: ", "" + s.getScope());
     }
 
     public static SynapsePropertyPanel create(Synapse s, Link ref) {
