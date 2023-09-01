@@ -34,11 +34,11 @@ import static network.aika.utils.Utils.idToString;
  */
 public abstract class Visitor<T extends Activation> {
 
-    private static final Logger log = LoggerFactory.getLogger(Visitor.class);
+    protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
 
     private long v;
 
-    protected T origin;
+    protected T bindingSource;
 
     protected Step direction;
 
@@ -47,16 +47,18 @@ public abstract class Visitor<T extends Activation> {
     public Visitor(Thought t, Operator operator) {
         this.v = t.getNewVisitorId();
 
-        if(log.isDebugEnabled())
+        if(log.isDebugEnabled()) {
+            log.debug("");
             log.debug(depthToSpace(0) + "Start:" + getClass().getSimpleName() + " " + operator.getClass().getSimpleName());
+        }
 
         this.operator = operator;
         direction = new Down();
     }
 
-    protected Visitor(Visitor<T> parent, T origin) {
+    protected Visitor(Visitor<T> parent, T bindingSource) {
         this.v = parent.v;
-        this.origin = origin;
+        this.bindingSource = bindingSource;
         this.operator = parent.operator;
 
         direction = new Up();
@@ -73,8 +75,7 @@ public abstract class Visitor<T extends Activation> {
             return;
 
         if(log.isDebugEnabled()) {
-            log.debug("");
-            log.debug(depthToSpace(depth) + origin.getClass().getSimpleName() + " " + origin.getId() + " " + origin.getLabel());
+            log.debug(depthToSpace(depth) + "U-TURN " + origin.getClass().getSimpleName() + " " + origin.getId() + " " + origin.getLabel());
         }
         upIntern(origin, depth);
     }

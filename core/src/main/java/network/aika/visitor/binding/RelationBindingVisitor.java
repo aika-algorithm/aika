@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
+import static network.aika.utils.Utils.depthToSpace;
 
 /**
  * @author Lukas Molzberger
@@ -38,8 +39,8 @@ import static network.aika.enums.direction.Direction.OUTPUT;
 public class RelationBindingVisitor extends BindingVisitor {
 
     protected Synapse startSyn;
-    protected PatternActivation downOrigin;
-    protected PatternActivation upOrigin;
+    protected PatternActivation downBindingSource;
+    protected PatternActivation upBindingSource;
 
     protected RelationInputSynapse relation;
     protected Direction relationDir;
@@ -52,29 +53,29 @@ public class RelationBindingVisitor extends BindingVisitor {
 
     protected RelationBindingVisitor(
             RelationBindingVisitor parent,
-            PatternActivation downOrigin,
-            PatternActivation upOrigin,
+            PatternActivation downBindingSource,
+            PatternActivation upBindingSource,
             RelationInputSynapse relation,
             Direction relationDir
     ) {
-        super(parent, downOrigin);
-        this.downOrigin = downOrigin;
-        this.upOrigin = upOrigin;
+        super(parent, downBindingSource);
+        this.downBindingSource = downBindingSource;
+        this.upBindingSource = upBindingSource;
         this.relation = relation;
         this.relationDir = relationDir;
     }
 
-    public PatternActivation getDownOrigin() {
-        return downOrigin;
+    public PatternActivation getDownBindingSource() {
+        return downBindingSource;
     }
 
-    public PatternActivation getUpOrigin() {
-        return upOrigin;
+    public PatternActivation getUpBindingSource() {
+        return upBindingSource;
     }
 
 
     @Override
-    public void expandRelations(PatternActivation origin, int depth) {
+    public void expandRelations(PatternActivation downBindingSource, int depth) {
         BindingNeuron bn = (BindingNeuron) startSyn.getOutput();
         Stream<RelationInputSynapse> relations = bn.findLatentRelationNeurons().stream();
 
@@ -86,22 +87,29 @@ public class RelationBindingVisitor extends BindingVisitor {
 
         relations.forEach(rel ->
                 rel.getInput()
-                        .evaluateLatentRelation(origin, relationDir.invert())
+                        .evaluateLatentRelation(downBindingSource, relationDir.invert())
                         .forEach(relTokenAct ->
-                                up(origin, relTokenAct, rel, relationDir, depth)
+                                up(downBindingSource, relTokenAct, rel, relationDir, depth)
                         )
         );
     }
 
     private void up(
-            PatternActivation origin,
-            PatternActivation relOrigin,
+            PatternActivation downBindingSource,
+            PatternActivation upBindingSource,
             RelationInputSynapse relation,
             Direction relationDir,
             int depth
     ) {
-        new RelationBindingVisitor(this, origin, relOrigin, relation, relationDir)
-                .visit(relOrigin, null, depth);
+        if(log.isDebugEnabled()) {
+            log.debug(
+                    depthToSpace(depth) + "U-TURN (rel) " +
+                            "downBS:" + downBindingSource.getClass().getSimpleName() + " " + downBindingSource.getId() + " " + downBindingSource.getLabel() + "  " +
+                            "upBS:" + upBindingSource.getClass().getSimpleName() + " " + upBindingSource.getId() + " " + upBindingSource.getLabel());
+        }
+
+        new RelationBindingVisitor(this, downBindingSource, upBindingSource, relation, relationDir)
+                .visit(upBindingSource, null, depth);
     }
 
     public void up(PatternActivation origin, int depth) {
@@ -111,7 +119,7 @@ public class RelationBindingVisitor extends BindingVisitor {
 
     @Override
     public boolean compatible(Synapse from, Synapse to) {
-        if(downOrigin == null)
+        if(downBindingSource == null)
             return false;
 
         if(relationDir == OUTPUT)
@@ -127,8 +135,8 @@ public class RelationBindingVisitor extends BindingVisitor {
             return;
 
         LatentRelationActivation latentRelAct = relation.createOrLookupLatentActivation(
-                relationDir.getInput(downOrigin, upOrigin),
-                relationDir.getOutput(downOrigin, upOrigin)
+                relationDir.getInput(downBindingSource, upBindingSource),
+                relationDir.getOutput(downBindingSource, upBindingSource)
         );
 
         relation.createAndInitLink(latentRelAct, (BindingActivation) l.getOutput());
