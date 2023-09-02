@@ -116,8 +116,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         phraseModel.addPhraseTarget(doc, tokenCounter[0]);
 
         if(context != null && context.getHeadlineTargetLabel() != null) {
-            entityModel
-                    .addEntityTarget(
+            textSectionModel
+                    .addHeadlineTarget(
                             doc,
                             new Range(0, tokenCounter[0]),
                             new Range(0, doc.length()),

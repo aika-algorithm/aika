@@ -76,9 +76,10 @@ public class TargetInput {
     }
 
     public TokenNeuron addTarget(String target) {
-        return model.lookupNeuronByLabel(target, l ->
-                createTargetInput(target)
-        );
+        return model.lookupNeuronByLabel(target, targetInput.getNeuron(), n -> {
+            n.setTokenLabel(label);
+            n.setAllowTraining(false);
+        });
     }
 
     public void addTarget(Document doc, String target) {
@@ -86,20 +87,9 @@ public class TargetInput {
         doc.addToken(n, null, null, null, targetInputNetTarget);
     }
 
-    protected TokenNeuron createTargetInput(String label) {
-        TokenNeuron inputTokenN = targetInput.getNeuron();
-        TokenNeuron n = inputTokenN.instantiateTemplate()
-                .init(model, label);
-
-        n.setTokenLabel(label);
-        n.setAllowTraining(false);
-
-        return n;
-    }
-
     public void initTargetInput() {
         targetInput = new TokenNeuron()
-                        .init(model, label)
+                        .init(model, label + " Target Input")
                 .getProvider(true);
 
         targetInput.getNeuron()
@@ -133,5 +123,15 @@ public class TargetInput {
         targetInputBN = bn.getProvider(true);
 
         return bn;
+    }
+
+    public PatternNeuron instantiateTargetInput(String label) {
+        PatternNeuron ttiPN = targetInput.getNeuron();
+        PatternNeuron n = ttiPN.instantiateTemplate()
+                .init(model, label + " Target Input");
+
+        n.setAllowTraining(false);
+
+        return n;
     }
 }

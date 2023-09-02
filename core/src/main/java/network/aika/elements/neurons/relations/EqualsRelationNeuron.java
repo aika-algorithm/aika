@@ -33,13 +33,7 @@ import static network.aika.text.Slot.BEGIN;
  */
 public class EqualsRelationNeuron extends LatentRelationNeuron {
 
-    public static EqualsRelationNeuron lookupRelation(Model m) {
-        return m.lookupNeuronByLabel("Equals Rel.: ", l ->
-                createEqualsRelationNeuron(m, l)
-        );
-    }
-
-    private static EqualsRelationNeuron createEqualsRelationNeuron(Model m, String l) {
+    public static EqualsRelationNeuron createEqualsRelationNeuron(Model m, String l) {
         EqualsRelationNeuron n = new EqualsRelationNeuron();
         n.addProvider(m);
         n.setLabel(l);

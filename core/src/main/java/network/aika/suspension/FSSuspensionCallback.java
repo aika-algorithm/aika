@@ -38,7 +38,7 @@ public class FSSuspensionCallback implements SuspensionCallback {
 
     private AtomicLong currentId = new AtomicLong(0);
 
-    private Map<String, Long> labels = Collections.synchronizedMap(new HashMap<>());
+    private Map<LabelKey, Long> labels = Collections.synchronizedMap(new TreeMap<>());
     private Map<Long, long[]> index = Collections.synchronizedMap(new TreeMap<>());
 
     private Path path;
@@ -77,21 +77,21 @@ public class FSSuspensionCallback implements SuspensionCallback {
     }
 
     @Override
-    public Long getIdByLabel(String label) {
-        return labels.get(label);
+    public Long getIdByLabel(String label, Long templateId) {
+        return labels.get(new LabelKey(label, templateId));
     }
 
     @Override
-    public void putLabel(String label, Long id) {
-        labels.put(label, id);
+    public void putLabel(String label, Long templateId, Long id) {
+        labels.put(new LabelKey(label, templateId), id);
     }
 
     @Override
-    public void removeLabel(String label) {
+    public void removeLabel(String label, Long templateId) {
         if (label == null)
             return;
 
-        labels.remove(label);
+        labels.remove(new LabelKey(label, templateId));
     }
 
     @Override
@@ -173,8 +173,9 @@ public class FSSuspensionCallback implements SuspensionCallback {
         labels.clear();
         while(in.readBoolean()) {
             String l = in.readUTF();
+            Long templateId = in.readLong();
             Long id = in.readLong();
-            labels.put(l, id);
+            labels.put(new LabelKey(l, templateId), id);
         }
 
         index.clear();
@@ -191,9 +192,10 @@ public class FSSuspensionCallback implements SuspensionCallback {
     private void writeIndex(DataOutput out) throws IOException {
         out.writeLong(currentId.get());
 
-        for(Map.Entry<String, Long> me: labels.entrySet()) {
+        for(Map.Entry<LabelKey, Long> me: labels.entrySet()) {
             out.writeBoolean(true);
-            out.writeUTF(me.getKey());
+            out.writeUTF(me.getKey().getLabel());
+            out.writeLong(me.getKey().getTemplateId());
             out.writeLong(me.getValue());
         }
         out.writeBoolean(false);

@@ -17,8 +17,9 @@
 package network.aika;
 
 
+import network.aika.elements.neurons.CategoryNeuron;
+import network.aika.elements.neurons.PatternNeuron;
 import network.aika.suspension.InMemorySuspensionCallback;
-import network.aika.callbacks.NeuronProducer;
 import network.aika.suspension.SuspensionCallback;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
@@ -28,6 +29,7 @@ import network.aika.utils.Writable;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -59,14 +61,6 @@ public class Model implements Writable {
 
     public Model(SuspensionCallback sc) {
         suspensionCallback = sc;
-    }
-
-    public Long getIdByLabel(String label) {
-        return suspensionCallback.getIdByLabel(label);
-    }
-
-    public void putLabel(String label, Long id) {
-        suspensionCallback.putLabel(label, id);
     }
 
     public Supplier<Writable> getCustomDataInstanceSupplier() {
@@ -101,21 +95,25 @@ public class Model implements Writable {
         return new ArrayList<>(providers.values());
     }
 
-    public <N extends Neuron> N lookupNeuronByLabel(String tokenLabel, NeuronProducer<N> onNewCallback) {
-        N n = getNeuronByLabel(tokenLabel);
+    public <N extends Neuron> N lookupNeuronByLabel(String tokenLabel, PatternNeuron template, Consumer<N> onNewCallback) {
+        N n = getNeuronByLabel(tokenLabel, template.getId());
         if(n != null)
             return n;
 
-        n = onNewCallback.createNeuron(tokenLabel);
+        n = template.instantiateTemplate()
+                .init(this, tokenLabel);
+
         n.addProvider(this);
 
-        suspensionCallback.putLabel(tokenLabel, n.getId());
+        onNewCallback.accept(n);
+
+        suspensionCallback.putLabel(tokenLabel, template.getId(), n.getId());
         n.getProvider().save();
         return n;
     }
 
-    public <N extends Neuron> N getNeuronByLabel(String tokenLabel) {
-        Long id = suspensionCallback.getIdByLabel(tokenLabel);
+    public <N extends Neuron> N getNeuronByLabel(String tokenLabel, Long templateId) {
+        Long id = suspensionCallback.getIdByLabel(tokenLabel, templateId);
         return id != null ? (N) lookupNeuronProvider(id).getNeuron() : null;
     }
 

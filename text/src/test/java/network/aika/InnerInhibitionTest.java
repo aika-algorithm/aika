@@ -83,7 +83,7 @@ public class InnerInhibitionTest {
         BindingNeuron na = addBindingNeuronInner(m,  "A", 2.5, inA, inhib, patternN);
         BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
-        BeforeRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -300, -1);
+        BeforeRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -300, -1, "relPT");
 
         addRelation(na, nx, relPT, 5.0, 10.0, false);
 
@@ -138,7 +138,7 @@ public class InnerInhibitionTest {
         BindingNeuron nc = addBindingNeuronInner(m, "C", 2.7, inC, inhib, patternN);
         BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
-        BeforeRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -300, -1);
+        BeforeRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -300, -1, "relPT");
 
         addRelation(na, nx, relPT, 5.0, 10.0, false);
         addRelation(nb, nx, relPT, 5.0, 10.0, false);

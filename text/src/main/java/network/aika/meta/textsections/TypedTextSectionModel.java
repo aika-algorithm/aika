@@ -16,19 +16,24 @@
  */
 package network.aika.meta.textsections;
 
+import network.aika.Model;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
-import network.aika.enums.Scope;
 import network.aika.meta.TargetInput;
 import network.aika.meta.entities.EntityModel;
 import network.aika.text.Document;
+import network.aika.text.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Set;
-import java.util.stream.Collectors;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
+import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
+import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  *
@@ -46,6 +51,8 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     protected NeuronProvider headlineBN;
 
+    protected NeuronProvider headlineTargetInput;
+
     protected NeuronProvider textSectionHintBN;
 
     protected NeuronProvider tsBeginInhibitoryN;
@@ -61,11 +68,18 @@ public class TypedTextSectionModel extends TextSectionModel {
         this.entityModel = entityModel;
     }
 
-    public void addTargetTextSections(Document doc, Set<String> tsLabels) {
-        log.info(doc.getContent() + " : " + tsLabels.stream().collect(Collectors.joining(", ")));
+    public TokenNeuron addTextSection(String headlineTarget) {
+        return targetInput.addTarget(headlineTarget);
+    }
 
-        tsLabels.forEach(l ->
-                targetInput.addTarget(doc, l)
+    public void addTextSectionTarget(Document doc, Range posRange, Range charRange, String tsTarget) {
+        log.info(doc.getContent() + " : " + tsTarget);
+
+        doc.addToken(
+                addTextSection(tsTarget),
+                posRange,
+                charRange,
+                INPUT_TOKEN_NET_TARGET
         );
     }
 
@@ -78,21 +92,20 @@ public class TypedTextSectionModel extends TextSectionModel {
         log.info("Typed Text-Section");
 
         textSectionHintBN = new BindingNeuron()
-                .init(model, "Text-Section-Hint")
+                .init(model, "Abstr. Text-Section-Hint")
                 .getProvider(true);
 
         double netTarget = 2.5;
 
-        PatternNeuron headlineEntity = entityModel.addEntityPattern("Text-Section-Headline");
+        EntityModel.EntityInstance headlineEntity = entityModel.addEntityPattern("Abstr. Text-Section-Headline");
 
-        headlineBN = addBindingNeuron(
-                headlineEntity,
-                Scope.INPUT,
-                "Text-Section-Headline",
-                10.0,
-                EntityModel.ENTITY_NET_TARGET,
-                netTarget
-        ).getProvider(true);
+        headlineBN = headlineEntity.entityBN()
+                .getProvider(true);
+
+        headlineTargetInput = headlineEntity.targetInputPN()
+                .getProvider(true);
+
+        makeAbstract((PatternNeuron) headlineTargetInput.getNeuron());
 
         addPositiveFeedbackLoop(
                 headlineBN.getNeuron(),
@@ -181,6 +194,23 @@ public class TypedTextSectionModel extends TextSectionModel {
         targetInput.setTemplateOnly(true);
     }
 
+    public TokenNeuron addHeadline(String headlineLabel) {
+        return model.lookupNeuronByLabel(headlineLabel, headlineTargetInput.getNeuron(), n -> {
+            n.setTokenLabel(headlineLabel);
+            n.setAllowTraining(false);
+        });
+    }
+
+    public void addHeadlineTarget(Document doc, Range posRange, Range charRange, String headlineLabel) {
+        doc.addToken(
+                addHeadline(headlineLabel),
+                posRange,
+                charRange,
+                INPUT_TOKEN_NET_TARGET
+        );
+    }
+
+
     private void sectionHintRelations(BindingNeuron fromBN, LatentRelationNeuron relN) {
         addRelation(
                 fromBN,
@@ -190,5 +220,31 @@ public class TypedTextSectionModel extends TextSectionModel {
                 10.0,
                 false
         );
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+
+        out.writeLong(headlineBN.getId());
+        out.writeLong(headlineTargetInput.getId());
+        out.writeLong(textSectionHintBN.getId());
+        out.writeLong(tsBeginInhibitoryN.getId());
+        out.writeLong(tsEndInhibitoryN.getId());
+        out.writeLong(tsInhibitoryN.getId());
+        out.writeLong(targetInputBN.getId());
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        super.readFields(in, m);
+
+        headlineBN = m.lookupNeuronProvider(in.readLong());
+        headlineTargetInput = m.lookupNeuronProvider(in.readLong());
+        textSectionHintBN = m.lookupNeuronProvider(in.readLong());
+        tsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong());
+        tsEndInhibitoryN = m.lookupNeuronProvider(in.readLong());
+        tsInhibitoryN = m.lookupNeuronProvider(in.readLong());
+        targetInputBN = m.lookupNeuronProvider(in.readLong());
     }
 }

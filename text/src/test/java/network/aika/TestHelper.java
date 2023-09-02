@@ -41,7 +41,7 @@ public class TestHelper {
         int relFrom = variant < 2 ? -5 : 1;
         int relTo = variant < 2 ? -1 : 5;
 
-        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, relFrom, relTo);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, relFrom, relTo, "relPT");
 
         BindingNeuron theBN = new BindingNeuron().init(m, "the (the cat)");
         new InputObjectSynapse()
@@ -90,7 +90,7 @@ public class TestHelper {
         PatternNeuron blackIN = dict.lookupInputToken("black");
         PatternNeuron catIN = dict.lookupInputToken("cat");
 
-        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -1, -1);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -1, -1, "relPT");
 
         BindingNeuron blackBN = new BindingNeuron().init(m, "black (black cat)");
         new InputObjectSynapse()
@@ -128,7 +128,7 @@ public class TestHelper {
         int relFrom = variant < 2 ? -5 : 1;
         int relTo = variant < 2 ? -1 : 5;
 
-        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, relFrom, relTo);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, relFrom, relTo, "relPT");
 
         BindingNeuron theBN = new BindingNeuron().init(m, "the (the dog)");
         new InputObjectSynapse()

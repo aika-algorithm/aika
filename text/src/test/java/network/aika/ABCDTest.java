@@ -62,7 +62,7 @@ public class ABCDTest {
         BindingNeuron a_abBN = new BindingNeuron().init(m, "a (ab)");
         BindingNeuron b_abBN = new BindingNeuron().init(m, "b (ab)");
 
-        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -1, -1);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -1, -1, "relPT");
 
         new RelationInputSynapse()
                 .setWeight(10.0)

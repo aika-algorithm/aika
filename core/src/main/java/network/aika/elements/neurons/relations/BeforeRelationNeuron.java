@@ -19,7 +19,6 @@ package network.aika.elements.neurons.relations;
 import network.aika.Model;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.enums.direction.Direction;
-import network.aika.elements.activations.TokenActivation;
 import network.aika.text.Document;
 import network.aika.text.Range;
 import network.aika.text.Slot;
@@ -47,13 +46,7 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
     private int beginOffset;
     private int endOffset;
 
-    public static BeforeRelationNeuron lookupRelation(Model m, int rangeBegin, int rangeEnd) {
-        return m.lookupNeuronByLabel("Prev. Token Rel.: " + rangeBegin + "," + rangeEnd, l ->
-            createTokenPositionRelationNeuron(m, rangeBegin, rangeEnd, l)
-        );
-    }
-
-    private static BeforeRelationNeuron createTokenPositionRelationNeuron(Model m, int rangeBegin, int rangeEnd, String l) {
+    public static BeforeRelationNeuron createBeforeRelationNeuron(Model m, int rangeBegin, int rangeEnd, String l) {
         BeforeRelationNeuron n = new BeforeRelationNeuron();
         n.addProvider(m);
         n.setLabel(l);

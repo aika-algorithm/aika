@@ -25,8 +25,13 @@ import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.meta.Dictionary;
 import network.aika.meta.TargetInput;
+import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
@@ -36,7 +41,7 @@ import static network.aika.utils.NetworkUtils.makeAbstract;
  *
  * @author Lukas Molzberger
  */
-public abstract class SequenceModel {
+public abstract class SequenceModel implements Writable {
 
     private static final Logger log = LoggerFactory.getLogger(SequenceModel.class);
 
@@ -141,11 +146,11 @@ public abstract class SequenceModel {
     public abstract String getPatternType();
 
     public void initStaticNeurons() {
-        relPT = BeforeRelationNeuron.lookupRelation(model, -1, -1)
+        relPT = BeforeRelationNeuron.createBeforeRelationNeuron(model, -1, -1, "Prev. Token Rel.: -1,-1")
                 .setBias(5.0)
                 .getProvider(true);
 
-        relNT = BeforeRelationNeuron.lookupRelation(model, 1, 1)
+        relNT = BeforeRelationNeuron.createBeforeRelationNeuron(model, 1, 1, "Next. Token Rel.: 1,1")
                 .setBias(5.0)
                 .getProvider(true);
 
@@ -230,7 +235,7 @@ public abstract class SequenceModel {
                 PATTERN_NET_TARGET
         );
 
-        relContains = ContainsRelationNeuron.lookupRelation(model, Direction.OUTPUT)
+        relContains = ContainsRelationNeuron.createContainsRelationNeuron(model, "Contains Rel.: ", Direction.OUTPUT)
                 .setBias(5.0)
                 .getProvider(true);
 
@@ -310,5 +315,29 @@ public abstract class SequenceModel {
         return pos >= 0 ?
                 NEG_MARGIN_RIGHT :
                 NEG_MARGIN_LEFT;
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeLong(relPT.getId());
+        out.writeLong(relNT.getId());
+        out.writeLong(relContains.getId());
+        out.writeLong(outerInhibitoryN.getId());
+        out.writeLong(primaryBNInhibitoryN.getId());
+        out.writeLong(inhibCat.getId());
+        out.writeLong(patternN.getId());
+        out.writeLong(primaryBN.getId());
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        relPT = m.lookupNeuronProvider(in.readLong());
+        relNT = m.lookupNeuronProvider(in.readLong());
+        relContains = m.lookupNeuronProvider(in.readLong());
+        outerInhibitoryN = m.lookupNeuronProvider(in.readLong());
+        primaryBNInhibitoryN = m.lookupNeuronProvider(in.readLong());
+        inhibCat = m.lookupNeuronProvider(in.readLong());
+        patternN = m.lookupNeuronProvider(in.readLong());
+        primaryBN = m.lookupNeuronProvider(in.readLong());
     }
 }

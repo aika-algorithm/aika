@@ -41,13 +41,8 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
 
     private Direction relationDir;
 
-    public static ContainsRelationNeuron lookupRelation(Model m, Direction relDir) {
-        return m.lookupNeuronByLabel("Contains Rel.: ", l ->
-                createContainsRelationNeuron(m, l, relDir)
-        );
-    }
 
-    private static ContainsRelationNeuron createContainsRelationNeuron(Model m, String l, Direction relDir) {
+    public static ContainsRelationNeuron createContainsRelationNeuron(Model m, String l, Direction relDir) {
         ContainsRelationNeuron n = new ContainsRelationNeuron();
         n.addProvider(m);
         n.setLabel(l);

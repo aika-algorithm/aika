@@ -36,7 +36,7 @@ public class InMemorySuspensionCallback implements SuspensionCallback {
     private AtomicInteger currentId = new AtomicInteger(0);
 
     private Map<Long, byte[]> storage = new TreeMap<>();
-    private final Map<String, Long> labels = new HashMap<>();
+    private final Map<LabelKey, Long> labels = new TreeMap<>();
 
     @Override
     public void prepareNewModel() {
@@ -69,24 +69,23 @@ public class InMemorySuspensionCallback implements SuspensionCallback {
     }
 
     @Override
-    public void putLabel(String label, Long id) {
-        labels.put(label, id);
-    }
-
-    @Override
-    public void removeLabel(String label) {
-        labels.remove(label);
-    }
-
-
-    @Override
     public byte[] retrieve(Long id) {
         return storage.get(id);
     }
 
     @Override
-    public Long getIdByLabel(String label) {
-        return labels.get(label);
+    public Long getIdByLabel(String label, Long templateId) {
+        return labels.get(new LabelKey(label, templateId));
+    }
+
+    @Override
+    public void putLabel(String label, Long templateId, Long id) {
+        labels.put(new LabelKey(label, templateId), id);
+    }
+
+    @Override
+    public void removeLabel(String label, Long templateId) {
+        labels.remove(new LabelKey(label, templateId));
     }
 
     @Override

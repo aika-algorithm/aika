@@ -58,7 +58,7 @@ public class JacksonCookTest {
         TokenNeuron jacksonIN = dict.lookupInputToken("Jackson");
         TokenNeuron cookIN = dict.lookupInputToken("Cook");
 
-        LatentRelationNeuron relPT = BeforeRelationNeuron.lookupRelation(m, -1, -1);
+        LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -1, -1, "relPT");
 
         BindingNeuron forenameBN = new BindingNeuron()
                 .init(m, "forename (person name)");

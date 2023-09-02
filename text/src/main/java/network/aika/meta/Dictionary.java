@@ -43,8 +43,6 @@ public class Dictionary {
 
     protected Model model;
 
-    protected NeuronProvider inputTokenCategory;
-
     protected NeuronProvider inputToken;
 
 
@@ -52,24 +50,17 @@ public class Dictionary {
         this.model = m;
     }
 
-    public NeuronProvider getInputTokenCategory() {
-        return inputTokenCategory;
-    }
-
     public NeuronProvider getInputToken() {
         return inputToken;
     }
 
     public void initStaticNeurons() {
-        inputToken = model.lookupNeuronByLabel("Abstract Input Token", l ->
-                new TokenNeuron()
-                        .init(model, l)
-        ).getProvider(true);
+        TokenNeuron itN = new TokenNeuron()
+                .init(model, "Input Token");
+        itN.setBias(INPUT_TOKEN_NET_TARGET);
+        inputToken = itN.getProvider(true);
 
-        inputToken.getNeuron()
-                .setBias(INPUT_TOKEN_NET_TARGET);
-
-        inputTokenCategory = makeAbstract((PatternNeuron) inputToken.getNeuron())
+        makeAbstract(itN)
                 .getProvider(true);
 
         log.info("Input Token: netTarget:" + INPUT_TOKEN_NET_TARGET);
@@ -105,20 +96,10 @@ public class Dictionary {
     }
 
     public TokenNeuron lookupInputToken(String label) {
-        return model.lookupNeuronByLabel(label, l ->
-                createTokenNeuron(label)
-        );
-    }
-
-    protected TokenNeuron createTokenNeuron(String label) {
-        TokenNeuron inputTokenN = inputToken.getNeuron();
-        TokenNeuron n = inputTokenN.instantiateTemplate()
-                .init(model, label);
-
-        n.setTokenLabel(label);
-        n.setAllowTraining(false);
-
-        return n;
+        return model.lookupNeuronByLabel(label, inputToken.getNeuron(), n -> {
+            n.setTokenLabel(label);
+            n.setAllowTraining(false);
+        });
     }
 
     public void addToken(Document doc, String token, int pos, int begin, int end) {

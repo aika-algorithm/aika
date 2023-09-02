@@ -21,6 +21,10 @@ import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 /**
  *
  * @author Lukas Molzberger
@@ -49,5 +53,15 @@ public class SyllableModel extends SequenceModel {
                 4,
                 1
         );
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        super.readFields(in, m);
     }
 }

@@ -18,6 +18,7 @@ package network.aika;
 
 
 
+import network.aika.suspension.LabelKey;
 import network.aika.suspension.SuspensionCallback;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.InputObjectSynapse;
@@ -87,7 +88,7 @@ public class SuspensionTest {
         public AtomicInteger currentId = new AtomicInteger(0);
 
         Map<Long, byte[]> storage = new TreeMap<>();
-        private Map<String, Long> labels = new TreeMap<>();
+        private Map<LabelKey, Long> labels = new TreeMap<>();
 
 
         @Override
@@ -128,18 +129,18 @@ public class SuspensionTest {
         }
 
         @Override
-        public Long getIdByLabel(String label) {
-            return labels.get(label);
+        public Long getIdByLabel(String label, Long templateId) {
+            return labels.get(new LabelKey(label, templateId));
         }
 
         @Override
-        public void putLabel(String label, Long id) {
-            labels.put(label, id);
+        public void putLabel(String label, Long templateId, Long id) {
+            labels.put(new LabelKey(label, templateId), id);
         }
 
         @Override
-        public void removeLabel(String label) {
-            labels.remove(label);
+        public void removeLabel(String label, Long templateId) {
+            labels.remove(new LabelKey(label, templateId));
         }
 
         @Override

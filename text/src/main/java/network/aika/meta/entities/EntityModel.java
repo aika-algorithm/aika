@@ -25,8 +25,13 @@ import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import network.aika.text.Range;
+import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
@@ -36,7 +41,7 @@ import static network.aika.utils.NetworkUtils.makeAbstract;
  *
  * @author Lukas Molzberger
  */
-public class EntityModel {
+public class EntityModel implements Writable {
 
     private static final Logger log = LoggerFactory.getLogger(EntityModel.class);
 
@@ -59,6 +64,13 @@ public class EntityModel {
     protected NeuronProvider targetInputBN;
 
     protected NeuronProvider relEquals;
+
+    public record EntityInstance (
+            PatternNeuron entityPatternN,
+            BindingNeuron entityBN,
+            BindingNeuron targetInputBN,
+            PatternNeuron targetInputPN
+    ) {}
 
 
     public EntityModel(PhraseModel pm) {
@@ -121,7 +133,7 @@ public class EntityModel {
                 ENTITY_NET_TARGET
         );
 
-        relEquals = EqualsRelationNeuron.lookupRelation(model)
+        relEquals = EqualsRelationNeuron.createEqualsRelationNeuron(model, "Equals Rel.: ")
                 .setBias(5.0)
                 .getProvider(true);
 
@@ -141,7 +153,7 @@ public class EntityModel {
         return targetInput.addTarget(entityLabel);
     }
 
-    public void addEntityTarget(Document doc, Range posRange, Range charRange , String entityLabel) {
+    public void addEntityTarget(Document doc, Range posRange, Range charRange, String entityLabel) {
         doc.addToken(
                 addEntity(entityLabel),
                 posRange,
@@ -150,7 +162,7 @@ public class EntityModel {
         );
     }
 
-    public PatternNeuron addEntityPattern(String label) {
+    public EntityInstance addEntityPattern(String label) {
         PatternNeuron tEPN = entityPattern.getNeuron();
         PatternNeuron n = tEPN.instantiateTemplate()
                 .init(model, label);
@@ -158,13 +170,19 @@ public class EntityModel {
         n.setLabel(label);
         n.setAllowTraining(false);
 
-        instantiateBN(label, n, entityBN.getNeuron());
-        instantiateBN(label, n, targetInputBN.getNeuron());
+        BindingNeuron iEBN = instantiateBN(label, n, entityBN.getNeuron());
+        BindingNeuron iTIBN = instantiateBN(label, n, targetInputBN.getNeuron());
 
-        return n;
+        PatternNeuron targetInputPN = targetInput.instantiateTargetInput(label);
+
+        Synapse s = iTIBN.getInputSynapseByType(InputObjectSynapse.class);
+        if(s != null)
+            s.instantiateTemplate(targetInputPN, iTIBN);
+
+        return new EntityInstance(n, iEBN, iTIBN, targetInputPN);
     }
 
-    private void instantiateBN(String label, PatternNeuron pn, BindingNeuron bn) {
+    private BindingNeuron instantiateBN(String label, PatternNeuron pn, BindingNeuron bn) {
         BindingNeuron iEBN = bn.instantiateTemplate()
                 .init(model, label);
 
@@ -177,5 +195,29 @@ public class EntityModel {
 
         entityPattern.getNeuron().getInputSynapseByType(PatternSynapse.class)
                 .instantiateTemplate(iEBN, pn);
+
+        return iEBN;
+    }
+
+    public Model getModel() {
+        return phraseModel.getModel();
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeLong(entityCategory.getId());
+        out.writeLong(entityPattern.getId());
+        out.writeLong(entityBN.getId());
+        out.writeLong(targetInputBN.getId());
+        out.writeLong(relEquals.getId());
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        entityCategory = m.lookupNeuronProvider(in.readLong());
+        entityPattern = m.lookupNeuronProvider(in.readLong());
+        entityBN = m.lookupNeuronProvider(in.readLong());
+        targetInputBN = m.lookupNeuronProvider(in.readLong());
+        relEquals = m.lookupNeuronProvider(in.readLong());
     }
 }

@@ -22,8 +22,13 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
+import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import static network.aika.meta.NetworkMotifs.addPositiveFeedbackLoop;
 import static network.aika.meta.NetworkMotifs.addRelation;
@@ -32,7 +37,7 @@ import static network.aika.meta.NetworkMotifs.addRelation;
  *
  * @author Lukas Molzberger
  */
-public class TextSectionModel {
+public class TextSectionModel implements Writable {
 
     private static final Logger log = LoggerFactory.getLogger(TextSectionModel.class);
 
@@ -68,10 +73,10 @@ public class TextSectionModel {
     public void initStaticNeurons() {
         log.info("Text-Section");
 
-        relationPT = BeforeRelationNeuron.lookupRelation(model, -300, -1)
+        relationPT = BeforeRelationNeuron.createBeforeRelationNeuron(model, -300, -1, "Prev. Token Rel.: -300, -1")
                 .getProvider(true);
 
-        relationNT = BeforeRelationNeuron.lookupRelation(model, 1, 300)
+        relationNT = BeforeRelationNeuron.createBeforeRelationNeuron(model, 1, 300, "Next. Token Rel.: 1, 300")
                 .getProvider(true);
 
         patternN = new PatternNeuron()
@@ -118,5 +123,23 @@ public class TextSectionModel {
 
     public PatternActivation addTextSection(Document doc, int begin, int end) {
         return new PatternActivation(doc.createActivationId(), doc, patternN.getNeuron());
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeLong(relationPT.getId());
+        out.writeLong(relationNT.getId());;
+        out.writeLong(patternN.getId());;
+        out.writeLong(beginBN.getId());;
+        out.writeLong(endBN.getId());;
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        relationPT = m.lookupNeuronProvider(in.readLong());
+        relationNT = m.lookupNeuronProvider(in.readLong());
+        patternN = m.lookupNeuronProvider(in.readLong());
+        beginBN = m.lookupNeuronProvider(in.readLong());
+        endBN = m.lookupNeuronProvider(in.readLong());
     }
 }

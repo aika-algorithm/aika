@@ -50,11 +50,11 @@ public interface SuspensionCallback {
     Collection<Long> getAllIds();
 
 
-    Long getIdByLabel(String label);
+    Long getIdByLabel(String label, Long templateId);
 
-    void putLabel(String label, Long id);
+    void putLabel(String label, Long templateId, Long id);
 
-    void removeLabel(String label);
+    void removeLabel(String label, Long templateId);
 
     void loadIndex(Model m);
 
