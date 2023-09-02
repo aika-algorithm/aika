@@ -162,12 +162,7 @@ public abstract class SequenceModel implements Writable {
 
     protected void initTemplates() {
         // Abstract
-        patternN = new PatternNeuron()
-                .init(model, getPatternType())
-                .getProvider(true);
-
-        makeAbstract((PatternNeuron) patternN.getNeuron());
-
+        patternN = PatternNeuron.create(model, getPatternType(), true);
 
         outerInhibitoryN = new OuterInhibitoryNeuron()
                 .init(model, "I")

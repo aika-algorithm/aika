@@ -34,6 +34,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.enums.sign.Sign.POS;
+import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  *
@@ -45,6 +46,20 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternActivation> {
 
     protected SampleSpace sampleSpace = new SampleSpace();
 
+
+    public static NeuronProvider create(Model m, String label) {
+        return create(m, label, false);
+    }
+
+    public static NeuronProvider create(Model m, String label, boolean abstr) {
+        PatternNeuron pn = new PatternNeuron()
+                .init(m, label);
+
+        if(abstr)
+            makeAbstract(pn);
+
+        return pn.getProvider(true);
+    }
 
     @Override
     public void startVisitor(LinkingOperator c, Activation act, Synapse targetSyn) {

@@ -16,6 +16,7 @@
  */
 package network.aika.elements.neurons;
 
+import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
@@ -26,11 +27,26 @@ import network.aika.visitor.binding.RelationBindingVisitor;
 
 import java.util.List;
 
+import static network.aika.utils.NetworkUtils.makeAbstract;
+
 /**
  * @author Lukas Molzberger
  */
 public class BindingNeuron extends ConjunctiveNeuron<BindingActivation> {
 
+    public static NeuronProvider create(Model m, String label) {
+        return create(m, label, false);
+    }
+
+    public static NeuronProvider create(Model m, String label, boolean abstr) {
+        BindingNeuron bn = new BindingNeuron()
+                .init(m, label);
+
+        if(abstr)
+            makeAbstract(bn);
+
+        return bn.getProvider(true);
+    }
 
     @Override
     public void startVisitor(LinkingOperator c, Activation act, Synapse startSyn) {

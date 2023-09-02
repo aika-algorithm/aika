@@ -79,17 +79,9 @@ public class TextSectionModel implements Writable {
         relationNT = BeforeRelationNeuron.createBeforeRelationNeuron(model, 1, 300, "Next. Token Rel.: 1, 300")
                 .getProvider(true);
 
-        patternN = new PatternNeuron()
-                .init(model, "Abstract Text-Section")
-                .getProvider(true);
-
-        beginBN = new BindingNeuron()
-                .init(model, "Abstract Text-Section-Begin")
-                .getProvider(true);
-
-        endBN = new BindingNeuron()
-                .init(model, "Abstract Text-Section-End")
-                .getProvider(true);
+        patternN = PatternNeuron.create(model, "Abstract Text-Section", true);
+        beginBN = BindingNeuron.create(model, "Abstract Text-Section-Begin", true);
+        endBN = BindingNeuron.create(model, "Abstract Text-Section-End", true);
 
         addRelation(
                 beginBN.getNeuron(),
