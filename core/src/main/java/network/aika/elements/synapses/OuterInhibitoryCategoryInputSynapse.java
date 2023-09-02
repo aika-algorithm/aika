@@ -37,6 +37,9 @@ public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         OuterInhibitoryActivation
         > implements CategoryInputSynapse
 {
+
+    private double initialCategorySynapseWeight;
+
     @Override
     public Scope getScope() {
         return Scope.SAME;
@@ -50,5 +53,15 @@ public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
     @Override
     public boolean isTrainingAllowed() {
         return false;
+    }
+
+    @Override
+    public void setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
+        this.initialCategorySynapseWeight = initialCategorySynapseWeight;
+    }
+
+    @Override
+    public double getInitialInstanceWeight() {
+        return initialCategorySynapseWeight;
     }
 }

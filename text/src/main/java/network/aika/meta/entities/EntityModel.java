@@ -35,6 +35,7 @@ import java.io.IOException;
 
 import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
+import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
@@ -98,7 +99,8 @@ public class EntityModel implements Writable {
                 .setBias(ENTITY_NET_TARGET);
 
         entityCategory = makeAbstract((PatternNeuron) entityPattern.getNeuron())
-                .getProvider(true);
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT)
+                .getPInput();
 
         entityBN = addBindingNeuron(
                 phraseModel.getPatternNeuron().getNeuron(),
@@ -109,7 +111,8 @@ public class EntityModel implements Writable {
                 BINDING_NET_TARGET
         ).getProvider(true);
 
-        makeAbstract((BindingNeuron) entityBN.getNeuron());
+        makeAbstract((BindingNeuron) entityBN.getNeuron())
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addPositiveFeedbackLoop(
                 entityBN.getNeuron(),

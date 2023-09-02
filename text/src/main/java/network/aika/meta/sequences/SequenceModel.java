@@ -35,6 +35,7 @@ import java.io.IOException;
 
 import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
+import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
@@ -168,14 +169,16 @@ public abstract class SequenceModel implements Writable {
                 .init(model, "I")
                 .getProvider(true);
 
-        makeAbstract((OuterInhibitoryNeuron) outerInhibitoryN.getNeuron());
+        makeAbstract((OuterInhibitoryNeuron) outerInhibitoryN.getNeuron())
+                .setWeight(1.0);
 
 
         primaryBNInhibitoryN = new InnerInhibitoryNeuron()
                 .init(model, "I")
                 .getProvider(true);
 
-        makeAbstract((InnerInhibitoryNeuron) primaryBNInhibitoryN.getNeuron());
+        makeAbstract((InnerInhibitoryNeuron) primaryBNInhibitoryN.getNeuron())
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         log.info(getPatternType() + " Pattern: netTarget:" + PATTERN_NET_TARGET);
 
@@ -285,7 +288,8 @@ public abstract class SequenceModel implements Writable {
                 INPUT_TOKEN_NET_TARGET,
                 p.netTarget
         );
-        makeAbstract(bn);
+        makeAbstract(bn)
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addOuterInhibitoryLoop(
                 bn,

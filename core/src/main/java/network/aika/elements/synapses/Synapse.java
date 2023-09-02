@@ -243,7 +243,13 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
         link();
 
-        setInitialWeight(templateSyn);
+        weight.setInitialValue(
+                templateSyn.getInitialInstanceWeight()
+        );
+    }
+
+    public double getInitialInstanceWeight() {
+        return weight.getUpdatedValue();
     }
 
     public S setTemplateOnly(boolean templateOnly) {
@@ -256,11 +262,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return templateOnly;
     }
 
-    protected void setInitialWeight(Synapse templateSyn) {
-        weight.setInitialValue(
-                templateSyn.weight.getUpdatedValue()
-        );
-    }
 
     public S init(Neuron input, Neuron output) {
         synapseId = output.getNewSynapseId();

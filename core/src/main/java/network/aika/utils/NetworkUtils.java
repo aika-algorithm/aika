@@ -34,60 +34,64 @@ public class NetworkUtils {
 
     private static final Logger log = LoggerFactory.getLogger(NetworkUtils.class);
 
-    protected static double PASSIVE_SYNAPSE_WEIGHT = 0.0;
+    public static double PASSIVE_SYNAPSE_WEIGHT = 0.0;
 
     private static final String CATEGORY_LABEL = " Category";
 
-    public static BindingCategoryNeuron makeAbstract(BindingNeuron n) {
+    public static BindingCategoryInputSynapse makeAbstract(BindingNeuron n) {
         BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron()
                 .init(n.getModel(), n.getLabel() + CATEGORY_LABEL);
 
         bindingCategory.getProvider(true);
 
-        new BindingCategoryInputSynapse()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT)
+        BindingCategoryInputSynapse s = new BindingCategoryInputSynapse()
                 .init(bindingCategory, n);
 
-        return bindingCategory;
+        s.setInitialCategorySynapseWeight(1.0);
+
+        return s;
     }
 
 
-    public static PatternCategoryNeuron makeAbstract(PatternNeuron n) {
+    public static PatternCategoryInputSynapse makeAbstract(PatternNeuron n) {
         PatternCategoryNeuron patternCategory = new PatternCategoryNeuron()
                 .init(n.getModel(), n.getLabel() + CATEGORY_LABEL);
 
         patternCategory.getProvider(true);
 
-        new PatternCategoryInputSynapse()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT)
+        PatternCategoryInputSynapse s = new PatternCategoryInputSynapse()
                 .init(patternCategory, n);
 
-        return patternCategory;
+        s.setInitialCategorySynapseWeight(1.0);
+
+        return s;
     }
 
-    public static InhibitoryCategoryNeuron makeAbstract(OuterInhibitoryNeuron n) {
+    public static OuterInhibitoryCategoryInputSynapse makeAbstract(OuterInhibitoryNeuron n) {
         InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(Scope.INPUT)
                 .init(n.getModel(), n.getLabel() + CATEGORY_LABEL);
 
         inhibCategory.getProvider(true);
 
-        new OuterInhibitoryCategoryInputSynapse()
-                .setWeight(1.0)
+        OuterInhibitoryCategoryInputSynapse s = new OuterInhibitoryCategoryInputSynapse()
                 .init(inhibCategory, n);
 
-        return inhibCategory;
+        s.setInitialCategorySynapseWeight(1.0);
+
+        return s;
     }
 
-    public static InhibitoryCategoryNeuron makeAbstract(InnerInhibitoryNeuron n) {
+    public static InnerInhibitoryCategoryInputSynapse makeAbstract(InnerInhibitoryNeuron n) {
         InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(Scope.SAME)
                 .init(n.getModel(), n.getLabel() + CATEGORY_LABEL);
 
         inhibCategory.getProvider(true);
 
-        new InnerInhibitoryCategoryInputSynapse()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT)
+        InnerInhibitoryCategoryInputSynapse s = new InnerInhibitoryCategoryInputSynapse()
                 .init(inhibCategory, n);
 
-        return inhibCategory;
+        s.setInitialCategorySynapseWeight(1.0);
+
+        return s;
     }
 }

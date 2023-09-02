@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
+import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
@@ -57,11 +58,13 @@ public class Dictionary {
     public void initStaticNeurons() {
         TokenNeuron itN = new TokenNeuron()
                 .init(model, "Input Token");
+
         itN.setBias(INPUT_TOKEN_NET_TARGET);
         inputToken = itN.getProvider(true);
 
         makeAbstract(itN)
-                .getProvider(true);
+                .setWeight(1.0)
+                .adjustBias();
 
         log.info("Input Token: netTarget:" + INPUT_TOKEN_NET_TARGET);
     }

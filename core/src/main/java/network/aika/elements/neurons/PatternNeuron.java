@@ -34,6 +34,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.enums.sign.Sign.POS;
+import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
@@ -56,7 +57,8 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternActivation> {
                 .init(m, label);
 
         if(abstr)
-            makeAbstract(pn);
+            makeAbstract(pn)
+                    .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         return pn.getProvider(true);
     }

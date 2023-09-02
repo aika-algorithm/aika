@@ -33,6 +33,7 @@ import java.io.IOException;
 
 import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
+import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
@@ -105,7 +106,8 @@ public class TypedTextSectionModel extends TextSectionModel {
         headlineTargetInput = headlineEntity.targetInputPN()
                 .getProvider(true);
 
-        makeAbstract((PatternNeuron) headlineTargetInput.getNeuron());
+        makeAbstract((PatternNeuron) headlineTargetInput.getNeuron())
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addPositiveFeedbackLoop(
                 headlineBN.getNeuron(),

@@ -28,15 +28,15 @@ import network.aika.enums.Scope;
  *
  * @author Lukas Molzberger
  */
-public class BindingCategoryInputSynapse extends DisjunctiveSynapse<
+public class BindingCategoryInputSynapse extends BindingNeuronSynapse<
         BindingCategoryInputSynapse,
         CategoryNeuron,
-        BindingNeuron,
         BindingCategoryInputLink,
-        CategoryActivation,
-        BindingActivation
+        CategoryActivation
         > implements CategoryInputSynapse
 {
+
+    private double initialCategorySynapseWeight;
 
     @Override
     public Scope getScope() {
@@ -56,5 +56,15 @@ public class BindingCategoryInputSynapse extends DisjunctiveSynapse<
     @Override
     public boolean isTrainingAllowed() {
         return false;
+    }
+
+    @Override
+    public void setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
+        this.initialCategorySynapseWeight = initialCategorySynapseWeight;
+    }
+
+    @Override
+    public double getInitialInstanceWeight() {
+        return initialCategorySynapseWeight;
     }
 }

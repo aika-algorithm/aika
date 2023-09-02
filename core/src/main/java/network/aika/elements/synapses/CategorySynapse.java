@@ -42,10 +42,4 @@ public abstract class CategorySynapse<S extends CategorySynapse, I extends Neuro
         input.addOutputSynapse(this);
     }
 
-    @Override
-    protected void setInitialWeight(Synapse templateSyn) {
-        weight.setInitialValue(
-                getConfig().getInitialCategorySynapseWeight()
-        );
-    }
 }

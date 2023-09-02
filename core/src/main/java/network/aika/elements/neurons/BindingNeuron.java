@@ -27,6 +27,7 @@ import network.aika.visitor.binding.RelationBindingVisitor;
 
 import java.util.List;
 
+import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
@@ -43,7 +44,8 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingActivation> {
                 .init(m, label);
 
         if(abstr)
-            makeAbstract(bn);
+            makeAbstract(bn)
+                    .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         return bn.getProvider(true);
     }

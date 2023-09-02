@@ -26,7 +26,7 @@ import network.aika.visitor.pattern.PatternCategoryVisitor;
 /**
  * @author Lukas Molzberger
  */
-public class BindingCategoryInputLink extends DisjunctiveLink<BindingCategoryInputSynapse, CategoryActivation, BindingActivation> implements CategoryInputLink {
+public class BindingCategoryInputLink extends BindingNeuronLink<BindingCategoryInputSynapse, CategoryActivation> implements CategoryInputLink {
 
     public BindingCategoryInputLink(BindingCategoryInputSynapse s, CategoryActivation input, BindingActivation output) {
         super(s, input, output);

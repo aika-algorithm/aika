@@ -16,7 +16,6 @@
  */
 package network.aika.elements.links;
 
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.CategorySynapse;
@@ -27,7 +26,7 @@ import network.aika.elements.synapses.PatternCategorySynapse;
 /**
  * @author Lukas Molzberger
  */
-public class PatternCategoryInputLink extends DisjunctiveLink<PatternCategoryInputSynapse, CategoryActivation, PatternActivation>   implements CategoryInputLink {
+public class PatternCategoryInputLink extends ConjunctiveLink<PatternCategoryInputSynapse, CategoryActivation, PatternActivation> implements CategoryInputLink {
 
     public PatternCategoryInputLink(PatternCategoryInputSynapse s, CategoryActivation input, PatternActivation output) {
         super(s, input, output);
