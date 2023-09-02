@@ -77,10 +77,7 @@ public class TargetInput {
     }
 
     public TokenNeuron addTarget(String target) {
-        return model.lookupNeuronByLabel(target, targetInput.getNeuron(), n -> {
-            n.setTokenLabel(label);
-            n.setAllowTraining(false);
-        });
+        return model.lookupInputNeuron(target, targetInput.getNeuron());
     }
 
     public void addTarget(Document doc, String target) {

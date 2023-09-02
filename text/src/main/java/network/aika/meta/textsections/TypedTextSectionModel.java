@@ -197,10 +197,7 @@ public class TypedTextSectionModel extends TextSectionModel {
     }
 
     public TokenNeuron addHeadline(String headlineLabel) {
-        return model.lookupNeuronByLabel(headlineLabel, headlineTargetInput.getNeuron(), n -> {
-            n.setTokenLabel(headlineLabel);
-            n.setAllowTraining(false);
-        });
+        return model.lookupInputNeuron(headlineLabel, headlineTargetInput.getNeuron());
     }
 
     public void addHeadlineTarget(Document doc, Range posRange, Range charRange, String headlineLabel) {
@@ -211,7 +208,6 @@ public class TypedTextSectionModel extends TextSectionModel {
                 INPUT_TOKEN_NET_TARGET
         );
     }
-
 
     private void sectionHintRelations(BindingNeuron fromBN, LatentRelationNeuron relN) {
         addRelation(

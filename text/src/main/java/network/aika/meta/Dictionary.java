@@ -18,7 +18,6 @@ package network.aika.meta;
 
 import network.aika.Model;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.neurons.TokenNeuron;
 import network.aika.elements.synapses.PatternCategorySynapse;
 import network.aika.enums.sign.Sign;
@@ -29,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
-import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
@@ -87,7 +85,7 @@ public class Dictionary {
         if(tn.getSampleSpace().getN() == 0)
             return;
 
-        Range r = new Range(0, tn.getTokenLabel().length());
+        Range r = new Range(0, tn.getLabel().length());
         r = r.getAbsoluteRange(model.getN());
 
         double surprisal = s.getInput().getSurprisal(Sign.POS, r, false);
@@ -98,11 +96,12 @@ public class Dictionary {
         log.debug("Set category synapse weight for token: " + s.getInput().getLabel() + " (weight: " + weight + " surprisal: " + surprisal + ")");
     }
 
+    public TokenNeuron getTokenNeuron(String label) {
+        return model.getInputNeuron(label, inputToken.getNeuron());
+    }
+
     public TokenNeuron lookupInputToken(String label) {
-        return model.lookupNeuronByLabel(label, inputToken.getNeuron(), n -> {
-            n.setTokenLabel(label);
-            n.setAllowTraining(false);
-        });
+        return model.lookupInputNeuron(label, inputToken.getNeuron());
     }
 
     public void addToken(Document doc, String token, int pos, int begin, int end) {

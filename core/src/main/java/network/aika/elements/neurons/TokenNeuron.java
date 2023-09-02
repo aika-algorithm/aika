@@ -16,13 +16,8 @@
  */
 package network.aika.elements.neurons;
 
-import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.activations.TokenActivation;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 
 /**
  *
@@ -30,35 +25,9 @@ import java.io.IOException;
  */
 public class TokenNeuron extends PatternNeuron {
 
-    private String tokenLabel;
-
     @Override
     public TokenActivation createActivation(Thought t) {
         return new TokenActivation(t.createActivationId(), t, this);
     }
 
-    public void setTokenLabel(String tokenLabel) {
-        this.tokenLabel = tokenLabel;
-    }
-
-    public String getTokenLabel() {
-        return tokenLabel;
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        super.write(out);
-
-        out.writeBoolean(tokenLabel != null);
-        if(tokenLabel != null)
-            out.writeUTF(tokenLabel);
-    }
-
-    @Override
-    public void readFields(DataInput in, Model m) throws Exception {
-        super.readFields(in, m);
-
-        if(in.readBoolean())
-            tokenLabel = in.readUTF();
-    }
 }

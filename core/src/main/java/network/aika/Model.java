@@ -17,7 +17,6 @@
 package network.aika;
 
 
-import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.suspension.InMemorySuspensionCallback;
 import network.aika.suspension.SuspensionCallback;
@@ -29,7 +28,6 @@ import network.aika.utils.Writable;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -95,8 +93,8 @@ public class Model implements Writable {
         return new ArrayList<>(providers.values());
     }
 
-    public <N extends Neuron> N lookupNeuronByLabel(String tokenLabel, PatternNeuron template, Consumer<N> onNewCallback) {
-        N n = getNeuronByLabel(tokenLabel, template.getId());
+    public <N extends Neuron> N lookupInputNeuron(String tokenLabel, PatternNeuron template) {
+        N n = getInputNeuron(tokenLabel, template);
         if(n != null)
             return n;
 
@@ -104,16 +102,15 @@ public class Model implements Writable {
                 .init(this, tokenLabel);
 
         n.addProvider(this);
-
-        onNewCallback.accept(n);
+        n.setAllowTraining(false);
 
         suspensionCallback.putLabel(tokenLabel, template.getId(), n.getId());
         n.getProvider().save();
         return n;
     }
 
-    public <N extends Neuron> N getNeuronByLabel(String tokenLabel, Long templateId) {
-        Long id = suspensionCallback.getIdByLabel(tokenLabel, templateId);
+    public <N extends Neuron> N getInputNeuron(String tokenLabel, PatternNeuron template) {
+        Long id = suspensionCallback.getIdByLabel(tokenLabel, template.getId());
         return id != null ? (N) lookupNeuronProvider(id).getNeuron() : null;
     }
 

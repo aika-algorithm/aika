@@ -20,8 +20,6 @@ import network.aika.elements.neurons.PatternNeuron;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 
 /**
  *
@@ -78,13 +76,13 @@ public class GradientTest {
 
         processDoc(m, doc);
 
-        PatternNeuron nA = m.getNeuronByLabel("A", 0l);
+        PatternNeuron nA = m.getInputNeuron("A", null);
         setStatistic(nA, 53.0,299,899l);
 
-        PatternNeuron nB = m.getNeuronByLabel("B", 0l);
+        PatternNeuron nB = m.getInputNeuron("B", null);
         setStatistic(nB, 10.0, 121, 739l);
 
-        PatternNeuron nC = m.getNeuronByLabel("C", 0l);
+        PatternNeuron nC = m.getInputNeuron("C", null);
         setStatistic(nC, 30.0, 234, 867l);
 
         doc.postProcessing();
@@ -110,10 +108,10 @@ public class GradientTest {
 
         processDoc(m, doc1);
 
-        PatternNeuron nA = m.getNeuronByLabel("A", 0l);
+        PatternNeuron nA = m.getInputNeuron("A", null);
         setStatistic(nA, 53.0, 299, 899l);
 
-        PatternNeuron nB = m.getNeuronByLabel("B", 0l);
+        PatternNeuron nB = m.getInputNeuron("B", null);
         setStatistic(nB, 10.0, 121, 739l);
 
         doc1.postProcessing();
@@ -123,7 +121,7 @@ public class GradientTest {
         Document doc2 = new Document(m, "A C ");
         processDoc(m, doc2);
 
-        PatternNeuron nC = m.getNeuronByLabel("C", 0l);
+        PatternNeuron nC = m.getInputNeuron("C", null);
         setStatistic(nC, 30.0, 234, 867l);
 
         doc2.postProcessing();
