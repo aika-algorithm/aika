@@ -106,10 +106,12 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         headlineTargetInput = headlineEntity.targetInputPN()
                 .getProvider(true);
-        headlineTargetInput.getNeuron().setTargetNet(bindingNetTarget);
+        headlineTargetInput.getNeuron().setBias(patternNetTarget);
+        headlineTargetInput.getNeuron().setTargetNet(patternNetTarget);
 
         makeAbstract((PatternNeuron) headlineTargetInput.getNeuron())
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+                .setWeight(2.0)
+                .adjustBias();
 
         addPositiveFeedbackLoop(
                 headlineBN.getNeuron(),
