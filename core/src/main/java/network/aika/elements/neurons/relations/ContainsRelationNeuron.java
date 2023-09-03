@@ -18,11 +18,9 @@ package network.aika.elements.neurons.relations;
 
 import network.aika.Model;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.activations.TokenActivation;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Document;
 import network.aika.text.Range;
-import network.aika.text.Slot;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -30,7 +28,6 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 import static network.aika.text.Slot.BEGIN;
-import static network.aika.text.Slot.END;
 
 
 /**

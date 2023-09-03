@@ -17,8 +17,8 @@
 package network.aika;
 
 import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.InputObjectSynapse;
-import network.aika.elements.neurons.TokenNeuron;
 import network.aika.text.Document;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ public class PropagateTest {
         Model m = new Model();
         m.setConfig(new Config());
 
-        TokenNeuron in = new TokenNeuron().init(m, "IN");
+        PatternNeuron in = new PatternNeuron().init(m, "IN");
         BindingNeuron out = new BindingNeuron().init(m, "OUT");
 
         new InputObjectSynapse()

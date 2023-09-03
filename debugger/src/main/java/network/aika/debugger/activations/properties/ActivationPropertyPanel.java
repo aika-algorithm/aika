@@ -45,8 +45,6 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
     public void initIdentitySection(E act) {
         addConstant("Id: ", "" + act.getId());
         addConstant("Label: ", act.getLabel());
-        if(act.isInput())
-            addConstant("IsInput: ", "" + act.isInput());
 
         addConstant("Char Range: ", act.getCharRange() != null ? "" + act.getCharRange() : NOT_SET_STR);
         addConstant("Absolute Char Range: ", act.getAbsoluteCharRange() != null ? "" + act.getAbsoluteCharRange() : NOT_SET_STR);
@@ -79,9 +77,7 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
     }
 
     public static ActivationPropertyPanel create(Activation act) {
-        if(act instanceof TokenActivation) {
-            return new TokenActivationPropertyPanel((TokenActivation) act);
-        } else if(act instanceof PatternActivation) {
+        if(act instanceof PatternActivation) {
             return new PatternActivationPropertyPanel((PatternActivation) act);
         } else if(act instanceof BindingActivation) {
             return new BindingActivationPropertyPanel((BindingActivation) act);

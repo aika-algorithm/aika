@@ -69,7 +69,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         this.entityModel = entityModel;
     }
 
-    public TokenNeuron addTextSection(String headlineTarget) {
+    public PatternNeuron addTextSection(String headlineTarget) {
         return targetInput.addTarget(headlineTarget);
     }
 
@@ -196,7 +196,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         targetInput.setTemplateOnly(true);
     }
 
-    public TokenNeuron addHeadline(String headlineLabel) {
+    public PatternNeuron addHeadline(String headlineLabel) {
         return model.lookupInputNeuron(headlineLabel, headlineTargetInput.getNeuron());
     }
 

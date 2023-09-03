@@ -63,7 +63,7 @@ public class OuterInhibitionTest {
                 .setTrainingEnabled(true);
         m.setConfig(c);
 
-        TokenNeuron in = new TokenNeuron().init(m, "IN");
+        PatternNeuron in = new PatternNeuron().init(m, "IN");
         OuterInhibitoryNeuron inhib = new OuterInhibitoryNeuron().init(m, "I");
 
         BindingNeuron na = addBindingNeuronOuter(m,  "A", 1.0, in, inhib);
@@ -86,7 +86,7 @@ public class OuterInhibitionTest {
         doc.disconnect();
     }
 
-    private static BindingNeuron addBindingNeuronOuter(Model m, String label, double bias, TokenNeuron in, OuterInhibitoryNeuron inhib) {
+    private static BindingNeuron addBindingNeuronOuter(Model m, String label, double bias, PatternNeuron in, OuterInhibitoryNeuron inhib) {
         BindingNeuron bn = new BindingNeuron().init(m, label);
 
         new InputObjectSynapse()

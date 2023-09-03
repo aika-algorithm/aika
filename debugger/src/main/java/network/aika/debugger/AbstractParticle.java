@@ -66,7 +66,6 @@ public abstract class AbstractParticle<G extends AbstractGraphManager> extends S
         neuronTypeModifiers.put(BindingCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
         neuronTypeModifiers.put(InhibitoryCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
 
-        neuronTypeModifiers.put(TokenNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(175, 15, 192);"));
         neuronTypeModifiers.put(PatternNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(224, 34, 245);"));
     }
 

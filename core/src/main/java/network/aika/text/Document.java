@@ -21,8 +21,7 @@ import network.aika.Thought;
 import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.activations.TokenActivation;
-import network.aika.elements.neurons.TokenNeuron;
+import network.aika.elements.neurons.PatternNeuron;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -116,19 +115,19 @@ public class Document extends Thought {
         return ((Document)act.getThought()).getTextSegment(act.getCharRange());
     }
 
-    public TokenActivation addToken(TokenNeuron n, Range posRange, Range charRange, double inputNet) {
-        TokenActivation act = new TokenActivation(
+    public PatternActivation addToken(PatternNeuron n, Range posRange, Range charRange, double inputNet) {
+        PatternActivation act = new PatternActivation(
                 createActivationId(),
-                posRange,
-                charRange,
                 this,
                 n
         );
+
+        act.updateRanges(posRange, charRange);
         act.setNet(inputNet);
         return act;
     }
 
-    public TokenActivation addToken(TokenNeuron n, Integer pos, Integer begin, Integer end, double inputNet) {
+    public PatternActivation addToken(PatternNeuron n, Integer pos, Integer begin, Integer end, double inputNet) {
         return addToken(
                 n,
                 pos != null ? new Range(pos, pos) : null,

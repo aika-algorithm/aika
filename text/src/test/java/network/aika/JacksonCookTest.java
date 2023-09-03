@@ -55,8 +55,8 @@ public class JacksonCookTest {
 
         SimpleWordTokenizer tokenizer = new SimpleWordTokenizer(dict);
 
-        TokenNeuron jacksonIN = dict.lookupInputToken("Jackson");
-        TokenNeuron cookIN = dict.lookupInputToken("Cook");
+        PatternNeuron jacksonIN = dict.lookupInputToken("Jackson");
+        PatternNeuron cookIN = dict.lookupInputToken("Cook");
 
         LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -1, -1, "relPT");
 

@@ -17,8 +17,9 @@
 package network.aika.meta;
 
 import network.aika.Model;
+import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.TokenNeuron;
+import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternCategorySynapse;
 import network.aika.enums.sign.Sign;
 import network.aika.text.Document;
@@ -54,7 +55,7 @@ public class Dictionary {
     }
 
     public void initStaticNeurons() {
-        TokenNeuron itN = new TokenNeuron()
+        PatternNeuron itN = new PatternNeuron()
                 .init(model, "Input Token");
 
         itN.setBias(INPUT_TOKEN_NET_TARGET);
@@ -68,20 +69,17 @@ public class Dictionary {
     }
 
     public void initInputTokenWeights() {
-        model.getAllNeurons()
-                .map(NeuronProvider::getNeuron)
-                .filter(TokenNeuron.class::isInstance)
-                .map(TokenNeuron.class::cast)
+        CategoryNeuron itCat = inputToken.getNeuron().getCategoryInputSynapse().getInput();
+
+        model.getNeuronsByType(PatternNeuron.class)
                 .map(n -> n.getOutputSynapseByType(PatternCategorySynapse.class))
                 .filter(Objects::nonNull)
+                .filter(s -> s.getOutput() != itCat)
                 .forEach(this::mapSurprisalToWeight);
     }
 
     private void mapSurprisalToWeight(PatternCategorySynapse s) {
-        if(!(s.getInput() instanceof TokenNeuron))
-            return;
-
-        TokenNeuron tn = (TokenNeuron) s.getInput();
+        PatternNeuron tn = s.getInput();
         if(tn.getSampleSpace().getN() == 0)
             return;
 
@@ -93,19 +91,20 @@ public class Dictionary {
         double weight = 1.0 + (-0.1 * surprisal);
         s.setWeight(weight);
 
-        log.debug("Set category synapse weight for token: " + s.getInput().getLabel() + " (weight: " + weight + " surprisal: " + surprisal + ")");
+        if(log.isDebugEnabled())
+            log.debug("Set category synapse weight for token: " + s.getInput().getLabel() + " (weight: " + weight + " surprisal: " + surprisal + ")");
     }
 
-    public TokenNeuron getTokenNeuron(String label) {
+    public PatternNeuron getTokenNeuron(String label) {
         return model.getInputNeuron(label, inputToken.getNeuron());
     }
 
-    public TokenNeuron lookupInputToken(String label) {
+    public PatternNeuron lookupInputToken(String label) {
         return model.lookupInputNeuron(label, inputToken.getNeuron());
     }
 
     public void addToken(Document doc, String token, int pos, int begin, int end) {
-        TokenNeuron n = lookupInputToken(token);
+        PatternNeuron n = lookupInputToken(token);
         doc.addToken(n, pos, begin, end, INPUT_TOKEN_NET_TARGET);
     }
 }

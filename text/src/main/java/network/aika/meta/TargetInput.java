@@ -20,7 +20,6 @@ import network.aika.Model;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.neurons.TokenNeuron;
 import network.aika.enums.Scope;
 import network.aika.text.Document;
 
@@ -76,17 +75,17 @@ public class TargetInput {
         );
     }
 
-    public TokenNeuron addTarget(String target) {
+    public PatternNeuron addTarget(String target) {
         return model.lookupInputNeuron(target, targetInput.getNeuron());
     }
 
     public void addTarget(Document doc, String target) {
-        TokenNeuron n = addTarget(target);
+        PatternNeuron n = addTarget(target);
         doc.addToken(n, null, null, null, targetInputNetTarget);
     }
 
     public void initTargetInput() {
-        targetInput = new TokenNeuron()
+        targetInput = new PatternNeuron()
                         .init(model, label + " Target Input")
                 .getProvider(true);
 

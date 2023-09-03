@@ -19,7 +19,6 @@ package network.aika.debugger.activations.particles;
 import network.aika.debugger.activations.ActivationGraphManager;
 import network.aika.debugger.activations.LayoutState;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.activations.TokenActivation;
 import org.graphstream.graph.Node;
 
 /**
@@ -36,10 +35,6 @@ public class PatternActivationParticle<E extends PatternActivation> extends Acti
     }
 
     public static ActivationParticle create(PatternActivation act, Node n, ActivationGraphManager gm) {
-        if(act instanceof TokenActivation) {
-            return new TokenActivationParticle((TokenActivation) act, n, gm);
-        }
-
         return new PatternActivationParticle(act, n, gm);
     }
 }

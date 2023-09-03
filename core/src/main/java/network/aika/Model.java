@@ -120,6 +120,12 @@ public class Model implements Writable {
                 .map(this::lookupNeuronProvider);
     }
 
+    public <N extends Neuron> Stream<N> getNeuronsByType(Class<N> type) {
+        return getAllNeurons().map(NeuronProvider::getNeuron)
+                .filter(type::isInstance)
+                .map(type::cast);
+    }
+
     public void applyMovingAverage(Config trainingConfig) {
         if(trainingConfig.getAlpha() != null) {
             N *= trainingConfig.getAlpha();

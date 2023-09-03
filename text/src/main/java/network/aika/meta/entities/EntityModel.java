@@ -152,7 +152,7 @@ public class EntityModel implements Writable {
         return bn;
     }
 
-    public TokenNeuron addEntity(String entityLabel) {
+    public PatternNeuron addEntity(String entityLabel) {
         return targetInput.addTarget(entityLabel);
     }
 

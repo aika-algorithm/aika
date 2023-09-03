@@ -29,7 +29,7 @@ public class TestUtils {
 
     public static void processTokens(Dictionary dict, Document doc, String... tokens) {
         for(int i = 0; i < tokens.length; i++) {
-            TokenNeuron n = dict.lookupInputToken(tokens[i]);
+            PatternNeuron n = dict.lookupInputToken(tokens[i]);
             doc.addToken(n, i, 0, 1, 10.0);
         }
     }

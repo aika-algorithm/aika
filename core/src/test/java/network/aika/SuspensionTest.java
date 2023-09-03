@@ -18,13 +18,13 @@ package network.aika;
 
 
 
+import network.aika.elements.neurons.PatternNeuron;
 import network.aika.suspension.LabelKey;
 import network.aika.suspension.SuspensionCallback;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.TokenNeuron;
 import network.aika.text.Document;
 import network.aika.utils.Writable;
 import org.junit.jupiter.api.Assertions;
@@ -54,8 +54,8 @@ public class SuspensionTest {
                 .setTrainingEnabled(false);
         m.setConfig(c);
 
-        NeuronProvider inStrong = new TokenNeuron().init(m, "IN Strong").getProvider(true);
-        NeuronProvider inWeak = new TokenNeuron().init(m, "IN Weak").getProvider(true);
+        NeuronProvider inStrong = new PatternNeuron().init(m, "IN Strong").getProvider(true);
+        NeuronProvider inWeak = new PatternNeuron().init(m, "IN Weak").getProvider(true);
         NeuronProvider out = new BindingNeuron().init(m, "OUT").getProvider(true);
         out.getNeuron().setBias(1.0);
 

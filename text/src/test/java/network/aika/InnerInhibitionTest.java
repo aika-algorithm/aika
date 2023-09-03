@@ -70,8 +70,8 @@ public class InnerInhibitionTest {
                 .setTrainingEnabled(true);
         m.setConfig(c);
 
-        TokenNeuron inA = new TokenNeuron().init(m, "A");
-        TokenNeuron inX = new TokenNeuron().init(m, "X");
+        PatternNeuron inA = new PatternNeuron().init(m, "A");
+        PatternNeuron inX = new PatternNeuron().init(m, "X");
 
         InnerInhibitoryNeuron inhib = new InnerInhibitoryNeuron().init(m, "I");
 
@@ -121,10 +121,10 @@ public class InnerInhibitionTest {
                 .setTrainingEnabled(true);
         m.setConfig(c);
 
-        TokenNeuron inA = new TokenNeuron().init(m, "A");
-        TokenNeuron inB = new TokenNeuron().init(m, "B");
-        TokenNeuron inC = new TokenNeuron().init(m, "C");
-        TokenNeuron inX = new TokenNeuron().init(m, "X");
+        PatternNeuron inA = new PatternNeuron().init(m, "A");
+        PatternNeuron inB = new PatternNeuron().init(m, "B");
+        PatternNeuron inC = new PatternNeuron().init(m, "C");
+        PatternNeuron inX = new PatternNeuron().init(m, "X");
 
         InnerInhibitoryNeuron inhib = new InnerInhibitoryNeuron().init(m, "I");
 
@@ -169,7 +169,7 @@ public class InnerInhibitionTest {
         doc.disconnect();
     }
 
-    private BindingNeuron addBindingNeuronInner(Model m, String label, double bindingNetTarget, TokenNeuron in, InnerInhibitoryNeuron inhib, PatternNeuron patternN) {
+    private BindingNeuron addBindingNeuronInner(Model m, String label, double bindingNetTarget, PatternNeuron in, InnerInhibitoryNeuron inhib, PatternNeuron patternN) {
         BindingNeuron bn = new BindingNeuron().init(m, label);
 
         double inputValueTarget = in.getActivationFunction()

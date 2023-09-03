@@ -19,7 +19,6 @@ package network.aika.debugger.neurons.properties;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.text.Range;
-import network.aika.elements.neurons.TokenNeuron;
 import network.aika.enums.sign.Sign;
 
 import static network.aika.debugger.AbstractConsole.NOT_SET_STR;
@@ -48,10 +47,6 @@ public class PatternNeuronPropertyPanel<E extends PatternNeuron> extends Conjunc
     }
 
     public static PatternNeuronPropertyPanel create(PatternNeuron n, Activation ref) {
-        if(n instanceof TokenNeuron) {
-            return TokenNeuronPropertyPanel.create((TokenNeuron) n, ref);
-        }
-
         return new PatternNeuronPropertyPanel(n, ref);
     }
 
