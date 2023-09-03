@@ -184,7 +184,6 @@ public class SyllablesExperiment extends TrainingParser<Context> {
         doc.getActivations()
                 .stream()
                 .filter(act -> act instanceof PatternActivation)
-                .filter(act -> !(act instanceof TokenActivation))
                 .forEach(act ->
                         logPatternMatch((PatternActivation) act)
                 );

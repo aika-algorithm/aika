@@ -19,7 +19,6 @@ package experiment.logger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.activations.TokenActivation;
 import network.aika.elements.links.*;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
@@ -227,14 +226,14 @@ public class PatternLogger {
 
     private static String getAllDominantBindingAct(Document doc) {
         return doc.getActivations().stream()
-                .filter(TokenActivation.class::isInstance)
-                .map(TokenActivation.class::cast)
+                .filter(PatternActivation.class::isInstance)
+                .map(PatternActivation.class::cast)
                 .filter(act -> !act.isAbstract())
                 .map(PatternLogger::getDominantBindingActLabel)
                 .collect(Collectors.joining(", "));
     }
 
-    private static String getDominantBindingActLabel(TokenActivation tAct) {
+    private static String getDominantBindingActLabel(PatternActivation tAct) {
         return tAct.getOutputLinksByType(InputObjectLink.class).map(Link::getOutput)
                 .filter(act -> !act.isAbstract())
                 .filter(supprAct -> supprAct.getNet().getUpdatedValue() > 0.0)
