@@ -75,13 +75,20 @@ public class TextSectionModel implements Writable {
 
         relationPT = BeforeRelationNeuron.createBeforeRelationNeuron(model, -300, -1, "Prev. Token Rel.: -300, -1")
                 .getProvider(true);
+        relationPT.getNeuron().setTargetNet(bindingNetTarget);
 
         relationNT = BeforeRelationNeuron.createBeforeRelationNeuron(model, 1, 300, "Next. Token Rel.: 1, 300")
                 .getProvider(true);
+        relationNT.getNeuron().setTargetNet(bindingNetTarget);
 
         patternN = PatternNeuron.create(model, "Abstract Text-Section", true);
+        patternN.getNeuron().setTargetNet(patternNetTarget);
+
         beginBN = BindingNeuron.create(model, "Abstract Text-Section-Begin", true);
+        beginBN.getNeuron().setTargetNet(bindingNetTarget);
+
         endBN = BindingNeuron.create(model, "Abstract Text-Section-End", true);
+        endBN.getNeuron().setTargetNet(bindingNetTarget);
 
         addRelation(
                 beginBN.getNeuron(),
@@ -95,8 +102,6 @@ public class TextSectionModel implements Writable {
         addPositiveFeedbackLoop(
                 beginBN.getNeuron(),
                 patternN.getNeuron(),
-                patternNetTarget,
-                bindingNetTarget,
                 2.5,
                 0.0,
                 false
@@ -105,8 +110,6 @@ public class TextSectionModel implements Writable {
         addPositiveFeedbackLoop(
                 endBN.getNeuron(),
                 patternN.getNeuron(),
-                patternNetTarget,
-                bindingNetTarget,
                 2.5,
                 0.0,
                 false

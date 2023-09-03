@@ -91,6 +91,8 @@ public class TargetInput {
 
         targetInput.getNeuron()
                 .setBias(targetInputNetTarget);
+        targetInput.getNeuron()
+                .setTargetNet(targetInputNetTarget);
 
         targetInputCategory = makeAbstract((PatternNeuron) targetInput.getNeuron())
                 .setWeight(1.0)
@@ -101,10 +103,8 @@ public class TargetInput {
     public BindingNeuron createTargetInputBindingNeuron(PatternNeuron pn, double patternNetTarget) {
         BindingNeuron bn = addBindingNeuron(
                 targetInput.getNeuron(),
-                Scope.INPUT,
                 "Abstr. " + label + " Target Input",
                 10.0,
-                targetInputNetTarget,
                 bindingNetTarget
         );
         makeAbstract(bn)
@@ -113,8 +113,6 @@ public class TargetInput {
         addPositiveFeedbackLoop(
                 bn,
                 pn,
-                patternNetTarget,
-                bindingNetTarget,
                 2.5,
                 0.0,
                 false

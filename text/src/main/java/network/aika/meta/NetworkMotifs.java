@@ -34,19 +34,18 @@ public class NetworkMotifs {
 
     public static double SAME_OBJECT_MARGIN = 0.15;
 
-    public static BindingNeuron addBindingNeuron(PatternNeuron input, Scope primaryScope, String label, double weight, double inputNetTarget, double netTarget) {
+    public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double netTarget) {
         BindingNeuron bn = new BindingNeuron()
                 .init(input.getModel(), label);
-
-        double inputValueTarget = input.getActivationFunction()
-                .f(inputNetTarget);
 
         new InputObjectSynapse()
                 .setWeight(weight)
                 .init(input, bn)
-                .adjustBias(inputValueTarget);
+                .adjustBias();
 
         bn.setBias(netTarget);
+        bn.setTargetNet(netTarget);
+
         return bn;
     }
 
@@ -81,30 +80,22 @@ public class NetworkMotifs {
     public static void addPositiveFeedbackLoop(
             BindingNeuron bn,
             PatternNeuron pn,
-            double patternNetTarget,
-            double bindingNetTarget,
             double weight,
             double weakInputMargin,
             boolean isOptional
     ) {
-        double valueTarget = bn.getActivationFunction()
-                .f(bindingNetTarget);
-
         PatternSynapse pSyn = new PatternSynapse()
                 .setWeight(weight)
                 .setOptional(isOptional)
                 .init(bn, pn)
-                .adjustBias(valueTarget + weakInputMargin);
+                .adjustBias(bn.getTargetValue() + weakInputMargin);
 
         log.info("  " + pSyn + " targetNetContr:" + -pSyn.getSynapseBias().getValue());
 
-        double patternValueTarget = pn.getActivationFunction()
-                .f(patternNetTarget);
-
         PositiveFeedbackSynapse posFeedSyn = new PositiveFeedbackSynapse()
-                .setWeight(getPositiveFeedbackWeight(bindingNetTarget, patternValueTarget))
+                .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), pn.getTargetValue()))
                 .init(pn, bn)
-                .adjustBias(patternValueTarget);
+                .adjustBias();
 
         log.info("  " + posFeedSyn + " targetNetContr:" + -posFeedSyn.getSynapseBias().getValue());
     }

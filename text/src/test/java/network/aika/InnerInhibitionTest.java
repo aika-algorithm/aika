@@ -122,9 +122,13 @@ public class InnerInhibitionTest {
         m.setConfig(c);
 
         PatternNeuron inA = new PatternNeuron().init(m, "A");
+        inA.setTargetNet(inputPatternNetTarget);
         PatternNeuron inB = new PatternNeuron().init(m, "B");
+        inB.setTargetNet(inputPatternNetTarget);
         PatternNeuron inC = new PatternNeuron().init(m, "C");
+        inC.setTargetNet(inputPatternNetTarget);
         PatternNeuron inX = new PatternNeuron().init(m, "X");
+        inX.setTargetNet(inputPatternNetTarget);
 
         InnerInhibitoryNeuron inhib = new InnerInhibitoryNeuron().init(m, "I");
 
@@ -172,13 +176,10 @@ public class InnerInhibitionTest {
     private BindingNeuron addBindingNeuronInner(Model m, String label, double bindingNetTarget, PatternNeuron in, InnerInhibitoryNeuron inhib, PatternNeuron patternN) {
         BindingNeuron bn = new BindingNeuron().init(m, label);
 
-        double inputValueTarget = in.getActivationFunction()
-                .f(inputPatternNetTarget);
-
         new InputObjectSynapse()
                 .setWeight(10.0)
                 .init(in, bn)
-                .adjustBias(inputValueTarget);
+                .adjustBias();
 
         double patternValueTarget = patternN.getActivationFunction().f(patternNetTarget);
 
@@ -188,8 +189,6 @@ public class InnerInhibitionTest {
         addPositiveFeedbackLoop(
                 bn,
                 patternN,
-                patternNetTarget,
-                bindingNetTarget,
                 2.5,
                 0.0,
                 false

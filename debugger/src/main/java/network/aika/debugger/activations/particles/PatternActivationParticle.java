@@ -32,6 +32,15 @@ public class PatternActivationParticle<E extends PatternActivation> extends Acti
 
     @Override
     public void processLayout(LayoutState ls) {
+        if(!act.getNeuron().getInputSynapses().isEmpty())
+            return;
+
+        if(!act.getNeuron().isAbstract())
+            node.setAttribute("layout.frozen");
+
+        Double x = ls.getInitialXPos(act);
+
+        node.setAttribute("x", x);
     }
 
     public static ActivationParticle create(PatternActivation act, Node n, ActivationGraphManager gm) {

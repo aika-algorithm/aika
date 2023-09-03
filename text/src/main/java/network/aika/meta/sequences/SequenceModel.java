@@ -183,6 +183,7 @@ public abstract class SequenceModel implements Writable {
         log.info(getPatternType() + " Pattern: netTarget:" + PATTERN_NET_TARGET);
 
         patternN.getNeuron().setBias(PATTERN_NET_TARGET);
+        patternN.getNeuron().setTargetNet(PATTERN_NET_TARGET);
 
         initTemplateBindingNeurons();
     }
@@ -237,6 +238,8 @@ public abstract class SequenceModel implements Writable {
                 .setBias(5.0)
                 .getProvider(true);
 
+        relContains.getNeuron().setTargetNet(5.0);
+
         addRelation(
                 bn,
                 primaryBN.getNeuron(),
@@ -282,10 +285,8 @@ public abstract class SequenceModel implements Writable {
 
         BindingNeuron bn = addBindingNeuron(
                 dictionary.getInputToken().getNeuron(),
-                Scope.INPUT,
                 "Abstract (" + p.labelPrefix + ") Pos:" + pos,
                 10.0,
-                INPUT_TOKEN_NET_TARGET,
                 p.netTarget
         );
         makeAbstract(bn)
@@ -300,8 +301,6 @@ public abstract class SequenceModel implements Writable {
         addPositiveFeedbackLoop(
                 bn,
                 patternN.getNeuron(),
-                PATTERN_NET_TARGET,
-                p.netTarget,
                 p.pfWeight,
                 p.weakInputMargin,
                 isOptional

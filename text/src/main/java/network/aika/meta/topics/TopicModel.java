@@ -97,10 +97,8 @@ public class TopicModel implements Writable {
 
         topicBN = addBindingNeuron(
                 entityModel.getEntityPattern().getNeuron(),
-                Scope.SAME,
                 "Abstract Entity",
                 10.0,
-                ENTITY_NET_TARGET,
                 BINDING_NET_TARGET
         ).getProvider(true);
 
@@ -110,8 +108,6 @@ public class TopicModel implements Writable {
         addPositiveFeedbackLoop(
                 topicBN.getNeuron(),
                 topicPatternN.getNeuron(),
-                ENTITY_NET_TARGET,
-                BINDING_NET_TARGET,
                 2.5,
                 0.0,
                 false

@@ -82,6 +82,8 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
     private boolean templateOnly;
 
+    protected InitParams initParams;
+
     private final WeakHashMap<Long, WeakReference<PreActivation<A>>> activations = new WeakHashMap<>();
 
     public Long getId() {
@@ -500,6 +502,10 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
         out.writeBoolean(templateOnly);
         out.writeInt(synapseIdCounter);
+
+        out.writeBoolean(initParams != null);
+        if(initParams != null)
+            initParams.write(out);
     }
 
     public static Neuron read(DataInput in, Model m) throws Exception {
@@ -534,6 +540,9 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
         templateOnly = in.readBoolean();
         synapseIdCounter = in.readInt();
+
+        if(in.readBoolean())
+            initParams = InitParams.read(in, m);
     }
 
     @Override
@@ -565,6 +574,30 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
     public <N extends Neuron> N setBias(double bias) {
         getBias().setValue(bias);
         return (N) this;
+    }
+
+    public <N extends Neuron> N setTargetNet(double targetNet) {
+        if(initParams == null) {
+            initParams = new InitParams();
+        }
+        initParams.targetNet = targetNet;
+
+        return (N) this;
+    }
+
+    public double getTargetValue() {
+        Double tNet = getTargetNet();
+        if(tNet == null)
+            return 1.0;
+
+        return getActivationFunction().f(tNet);
+    }
+
+    public Double getTargetNet() {
+        if(initParams == null)
+            return null;
+
+        return initParams.targetNet;
     }
 
     public String toKeyString() {

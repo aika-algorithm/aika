@@ -142,9 +142,10 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         this.sumOfLowerWeights = sumOfLowerWeights;
     }
 
-
     public S adjustBias() {
-        return adjustBias(1.0);
+        return adjustBias(
+                getInput().getTargetValue()
+        );
     }
 
     public S adjustBias(double inputValueTarget) {

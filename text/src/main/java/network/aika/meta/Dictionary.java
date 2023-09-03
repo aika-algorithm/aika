@@ -59,6 +59,8 @@ public class Dictionary {
                 .init(model, "Input Token");
 
         itN.setBias(INPUT_TOKEN_NET_TARGET);
+        itN.setTargetNet(INPUT_TOKEN_NET_TARGET);
+
         inputToken = itN.getProvider(true);
 
         makeAbstract(itN)

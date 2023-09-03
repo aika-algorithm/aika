@@ -104,10 +104,8 @@ public class EntityModel implements Writable {
 
         entityBN = addBindingNeuron(
                 phraseModel.getPatternNeuron().getNeuron(),
-                Scope.SAME,
                 "Abstract Entity",
                 10.0,
-                phraseModel.PATTERN_NET_TARGET,
                 BINDING_NET_TARGET
         ).getProvider(true);
 
@@ -117,8 +115,6 @@ public class EntityModel implements Writable {
         addPositiveFeedbackLoop(
                 entityBN.getNeuron(),
                 entityPattern.getNeuron(),
-                ENTITY_NET_TARGET,
-                BINDING_NET_TARGET,
                 2.5,
                 0.0,
                 false

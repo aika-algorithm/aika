@@ -102,9 +102,11 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         headlineBN = headlineEntity.entityBN()
                 .getProvider(true);
+        headlineBN.getNeuron().setTargetNet(bindingNetTarget);
 
         headlineTargetInput = headlineEntity.targetInputPN()
                 .getProvider(true);
+        headlineTargetInput.getNeuron().setTargetNet(bindingNetTarget);
 
         makeAbstract((PatternNeuron) headlineTargetInput.getNeuron())
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
@@ -112,8 +114,6 @@ public class TypedTextSectionModel extends TextSectionModel {
         addPositiveFeedbackLoop(
                 headlineBN.getNeuron(),
                 patternN.getNeuron(),
-                patternNetTarget,
-                bindingNetTarget,
                 2.5,
                 0.0,
                 false
@@ -132,12 +132,12 @@ public class TypedTextSectionModel extends TextSectionModel {
                 .init(model, "Abstract Text-Section Hint")
                 .getProvider(true);
 
+        textSectionHintBN.getNeuron().setTargetNet(bindingNetTarget);
+
         addPositiveFeedbackLoop(
                 textSectionHintBN.getNeuron(),
                 patternN.getNeuron(),
                 2.5,
-                patternNetTarget,
-                bindingNetTarget,
                 0.0,
                 false
         );

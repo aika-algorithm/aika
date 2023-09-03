@@ -38,6 +38,11 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
 
         addField(n.getBias());
 
+        if(n.getTargetNet() != null) {
+            addConstant("Target Net: ", "" + n.getTargetNet());
+            addConstant("Target Value: ", "" + n.getTargetValue());
+        }
+
         addConstant("Is Abstract: ", "" + n.isAbstract());
         addConstant("Is Training Allowed: ", "" + n.isTrainingAllowed());
 
