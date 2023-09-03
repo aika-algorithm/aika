@@ -28,8 +28,6 @@ public class TokenNeuronPropertyPanel extends PatternNeuronPropertyPanel<Pattern
 
     public TokenNeuronPropertyPanel(TokenNeuron n, Activation ref) {
         super(n, ref);
-
-        addConstant("Token Label: ", n.getTokenLabel());
     }
 
     public static TokenNeuronPropertyPanel create(TokenNeuron n, Activation ref) {
