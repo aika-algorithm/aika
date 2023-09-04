@@ -164,6 +164,8 @@ public abstract class SequenceModel implements Writable {
     protected void initTemplates() {
         // Abstract
         patternN = PatternNeuron.create(model, getPatternType(), true);
+        patternN.getNeuron().setBias(PATTERN_NET_TARGET);
+        patternN.getNeuron().setTargetNet(PATTERN_NET_TARGET);
 
         outerInhibitoryN = new OuterInhibitoryNeuron()
                 .init(model, "I")
@@ -181,9 +183,6 @@ public abstract class SequenceModel implements Writable {
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         log.info(getPatternType() + " Pattern: netTarget:" + PATTERN_NET_TARGET);
-
-        patternN.getNeuron().setBias(PATTERN_NET_TARGET);
-        patternN.getNeuron().setTargetNet(PATTERN_NET_TARGET);
 
         initTemplateBindingNeurons();
     }
@@ -236,9 +235,8 @@ public abstract class SequenceModel implements Writable {
 
         relContains = ContainsRelationNeuron.createContainsRelationNeuron(model, "Contains Rel.: ", Direction.OUTPUT)
                 .setBias(5.0)
+                .setTargetNet(5.0)
                 .getProvider(true);
-
-        relContains.getNeuron().setTargetNet(5.0);
 
         addRelation(
                 bn,

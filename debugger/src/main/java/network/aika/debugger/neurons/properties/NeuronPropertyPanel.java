@@ -22,6 +22,7 @@ import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
+import network.aika.utils.Utils;
 
 
 /**
@@ -39,8 +40,8 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
         addField(n.getBias());
 
         if(n.getTargetNet() != null) {
-            addConstant("Target Net: ", "" + n.getTargetNet());
-            addConstant("Target Value: ", "" + n.getTargetValue());
+            addConstant("Target Net: ", "" + Utils.doubleToString(n.getTargetNet()));
+            addConstant("Target Value: ", "" + Utils.doubleToString(n.getTargetValue()));
         }
 
         addConstant("Is Abstract: ", "" + n.isAbstract());

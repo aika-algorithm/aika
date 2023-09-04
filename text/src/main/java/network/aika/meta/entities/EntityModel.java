@@ -93,10 +93,9 @@ public class EntityModel implements Writable {
 
         entityPattern = new PatternNeuron()
                 .init(model, "Abstract Entity")
+                .setTargetNet(ENTITY_NET_TARGET)
+                .setBias(ENTITY_NET_TARGET)
                 .getProvider(true);
-
-        entityPattern.getNeuron()
-                .setBias(ENTITY_NET_TARGET);
 
         entityCategory = makeAbstract((PatternNeuron) entityPattern.getNeuron())
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT)

@@ -43,7 +43,7 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addConstant("Output: ", s.getOutput().toString());
 
         addConstant("Is Template Only: ", "" + s.isTemplateOnly());
-        addConstant("Initial Instance Weight: ", "" + s.getInitialInstanceWeight());
+        addConstant("Initial Instance Weight: ", "" + Utils.doubleToString(s.getInitialInstanceWeight()));
         addConstant("Template: ",
                 s.getTemplate() != null ?
                         "" + s.getTemplate() :
