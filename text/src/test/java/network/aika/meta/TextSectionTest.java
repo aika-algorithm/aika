@@ -130,10 +130,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     public void testTextSections() {
         log.info("Start");
 
-        process(tasksHeadline, null, COUNTING);
+/*        process(tasksHeadline, null, COUNTING);
         process(requirementsHeadline, null, COUNTING);
         process(exampleTxt, null, COUNTING);
-
+*/
         dictionary.initInputTokenWeights();
 
         process(tasksHeadline, new TestContext(tasksHeadline, "Task-HL"), TRAINING);

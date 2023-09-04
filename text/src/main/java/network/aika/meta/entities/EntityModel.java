@@ -168,33 +168,33 @@ public class EntityModel implements Writable {
         n.setLabel(label);
         n.setAllowTraining(false);
 
-        BindingNeuron iEBN = instantiateBN(label, n, entityBN.getNeuron());
-        BindingNeuron iTIBN = instantiateBN(label, n, targetInputBN.getNeuron());
+
+        BindingNeuron eBN = entityBN.getNeuron();
+        PatternNeuron phrasePN = eBN.getInputSynapseByType(InputObjectSynapse.class).getInput();
 
         PatternNeuron targetInputPN = targetInput.instantiateTargetInput(label);
 
-        Synapse s = iTIBN.getInputSynapseByType(InputObjectSynapse.class);
-        if(s != null)
-            s.instantiateTemplate(targetInputPN, iTIBN);
+        BindingNeuron iEBN = instantiateBN(label, n, entityBN.getNeuron(), phrasePN);
+        BindingNeuron iTIBN = instantiateBN(label, n, targetInputBN.getNeuron(), targetInputPN);
 
         return new EntityInstance(n, iEBN, iTIBN, targetInputPN);
     }
 
-    private BindingNeuron instantiateBN(String label, PatternNeuron pn, BindingNeuron bn) {
-        BindingNeuron iEBN = bn.instantiateTemplate()
+    private BindingNeuron instantiateBN(String label, PatternNeuron pn, BindingNeuron bn, PatternNeuron io) {
+        BindingNeuron ieBN = bn.instantiateTemplate()
                 .init(model, label);
-
-        bn.getInputSynapseByType(PositiveFeedbackSynapse.class)
-                .instantiateTemplate(pn, iEBN);
 
         Synapse s = bn.getInputSynapseByType(InputObjectSynapse.class);
         if(s != null)
-            s.instantiateTemplate(pn, iEBN);
+            s.instantiateTemplate(io, ieBN);
+
+        bn.getInputSynapseByType(PositiveFeedbackSynapse.class)
+                .instantiateTemplate(pn, ieBN);
 
         entityPattern.getNeuron().getInputSynapseByType(PatternSynapse.class)
-                .instantiateTemplate(iEBN, pn);
+                .instantiateTemplate(ieBN, pn);
 
-        return iEBN;
+        return ieBN;
     }
 
     public Model getModel() {
