@@ -20,6 +20,7 @@ import network.aika.Model;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
+import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import network.aika.utils.Writable;
@@ -30,8 +31,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.meta.NetworkMotifs.addPositiveFeedbackLoop;
-import static network.aika.meta.NetworkMotifs.addRelation;
+import static network.aika.meta.NetworkMotifs.*;
+import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  *
@@ -46,6 +47,9 @@ public class TextSectionModel implements Writable {
 
     protected static double NEG_MARGIN_TS = 1.1;
 
+    public static final double INPUT_NET_TARGET = 5.0;
+
+
     protected PhraseModel phraseModel;
 
 
@@ -58,7 +62,11 @@ public class TextSectionModel implements Writable {
 
     protected NeuronProvider beginBN;
 
+    protected NeuronProvider beginInputPN;
+
     protected NeuronProvider endBN;
+
+    protected NeuronProvider endInputPN;
 
     protected double bindingNetTarget = 2.5;
 
@@ -84,11 +92,14 @@ public class TextSectionModel implements Writable {
         patternN = PatternNeuron.create(model, "Abstract Text-Section", true);
         patternN.getNeuron().setTargetNet(patternNetTarget);
 
-        beginBN = BindingNeuron.create(model, "Abstract Text-Section-Begin", true);
-        beginBN.getNeuron().setTargetNet(bindingNetTarget);
+        beginInputPN = createTextSectionInput("Begin");
+        beginBN = addBindingNeuron(beginInputPN.getNeuron(), "Abstract Text-Section-Begin", 10.0, bindingNetTarget)
+                .getProvider(true);
 
-        endBN = BindingNeuron.create(model, "Abstract Text-Section-End", true);
-        endBN.getNeuron().setTargetNet(bindingNetTarget);
+        endInputPN = createTextSectionInput("End");
+        endBN = addBindingNeuron(endInputPN.getNeuron(), "Abstract Text-Section-End", 10.0, bindingNetTarget)
+                .getProvider(true);
+
 
         addRelation(
                 beginBN.getNeuron(),
@@ -114,6 +125,20 @@ public class TextSectionModel implements Writable {
                 0.0,
                 false
         );
+    }
+
+    private NeuronProvider createTextSectionInput(String label) {
+        PatternNeuron inputPN = new PatternNeuron()
+                .init(model, label + " Input");
+
+        inputPN.setBias(INPUT_NET_TARGET);
+        inputPN.setTargetNet(INPUT_NET_TARGET);
+
+        makeAbstract(inputPN)
+                .setWeight(1.0)
+                .adjustBias();
+
+        return inputPN.getProvider(true);
     }
 
     public PatternActivation addTextSection(Document doc, int begin, int end) {
