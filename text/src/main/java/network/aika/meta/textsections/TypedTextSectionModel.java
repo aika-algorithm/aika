@@ -96,17 +96,17 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         textSectionHintBN = new BindingNeuron(model)
                 .setLabel("Abstr. Text-Section-Hint")
-                .getProvider(true);
+                .getProvider();
 
         double netTarget = 2.5;
 
         EntityModel.EntityInstance headlineEntity = entityModel.addEntityPattern("Abstr. Text-Section-Headline");
 
         headlineBN = headlineEntity.entityBN()
-                .getProvider(true);
+                .getProvider();
 
         headlineTargetInput = headlineEntity.targetInputPN()
-                .getProvider(true);
+                .getProvider();
 
         makeAbstract((PatternNeuron) headlineTargetInput.getNeuron())
                 .setWeight(2.0)
@@ -118,7 +118,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 10.0,
                 bindingNetTarget
         )
-                .getProvider(true);
+                .getProvider();
 
         addRelation(
                 tsHeadlineBN.getNeuron(),
@@ -140,7 +140,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         textSectionHintBN = new BindingNeuron(model)
                 .setLabel("Abstract Text-Section Hint")
                 .setTargetNet(bindingNetTarget)
-                .getProvider(true);
+                .getProvider();
 
         addPositiveFeedbackLoop(
                 textSectionHintBN.getNeuron(),
@@ -156,11 +156,11 @@ public class TypedTextSectionModel extends TextSectionModel {
         targetInputBN = targetInput.createTargetInputBindingNeuron(
                 patternN.getNeuron(),
                 patternNetTarget
-        ).getProvider(true);
+        ).getProvider();
 
         tsBeginInhibitoryN = new InnerInhibitoryNeuron(model)
                 .setLabel("I TS Begin")
-                .getProvider(true);
+                .getProvider();
 
 
         addInnerInhibitoryLoop(
@@ -171,7 +171,7 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         tsEndInhibitoryN = new InnerInhibitoryNeuron(model)
                 .setLabel("I TS End")
-                .getProvider(true);
+                .getProvider();
 
         addInnerInhibitoryLoop(
                 endBN.getNeuron(),
@@ -181,7 +181,7 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         tsInhibitoryN = new OuterInhibitoryNeuron(model)
                 .setLabel("I TS")
-                .getProvider(true);
+                .getProvider();
 
         addOuterInhibitoryLoop(
                 textSectionHintBN.getNeuron(),

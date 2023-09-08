@@ -48,7 +48,8 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
 
     protected final ReadWriteLock lock = new ReadWriteLock();
 
-    private boolean permanent;
+    private boolean persistent;
+    private long lastUsed;
     private boolean isRegistered;
 
     public NeuronProvider(long id) {
@@ -66,7 +67,8 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         this(model, model.createNeuronId());
         assert model != null && n != null;
 
-        this.neuron = n;
+        neuron = n;
+        checkRegister();
     }
 
     public <N extends Neuron> N getNeuron() {
@@ -112,14 +114,18 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return outputSynapses.values().stream();
     }
 
-    public boolean isPermanent() {
-        return permanent;
+    public boolean isPersistent() {
+        return persistent;
     }
 
-    public void setPermanent(boolean permanent) {
-        this.permanent = permanent;
+    public void updateLastUsed(long thoughtId) {
+        lastUsed = Math.max(lastUsed, thoughtId);
+    }
 
-        if(permanent)
+    public void setPersistent(boolean persistent) {
+        this.persistent = persistent;
+
+        if(persistent)
             checkRegister();
         else
             checkUnregister();
@@ -129,7 +135,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         if(neuron == null) return;
         assert model.getSuspensionCallback() != null;
 
-        if(permanent) {
+        if(persistent || !model.canBeSuspended(lastUsed)) {
             if(sm == SuspensionMode.SAVE)
                 save();
             return;
@@ -240,7 +246,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
     }
 
     private boolean isReferenced() {
-        return permanent ||
+        return persistent ||
                 neuron != null ||
                 !inputSynapses.isEmpty() ||
                 !outputSynapses.isEmpty();

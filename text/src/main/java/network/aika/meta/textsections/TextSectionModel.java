@@ -81,11 +81,11 @@ public class TextSectionModel implements Writable {
         log.info("Text-Section");
 
         relationPT = BeforeRelationNeuron.createBeforeRelationNeuron(model, -300, -1, "Prev. Token Rel.: -300, -1")
-                .getProvider(true);
+                .getProvider();
         relationPT.getNeuron().setTargetNet(bindingNetTarget);
 
         relationNT = BeforeRelationNeuron.createBeforeRelationNeuron(model, 1, 300, "Next. Token Rel.: 1, 300")
-                .getProvider(true);
+                .getProvider();
         relationNT.getNeuron().setTargetNet(bindingNetTarget);
 
         patternN = PatternNeuron.create(model, "Abstract Text-Section", true);
@@ -93,11 +93,11 @@ public class TextSectionModel implements Writable {
 
         beginInputPN = createTextSectionInput("Begin");
         beginBN = addBindingNeuron(beginInputPN.getNeuron(), "Abstract Text-Section-Begin", 10.0, bindingNetTarget)
-                .getProvider(true);
+                .getProvider();
 
         endInputPN = createTextSectionInput("End");
         endBN = addBindingNeuron(endInputPN.getNeuron(), "Abstract Text-Section-End", 10.0, bindingNetTarget)
-                .getProvider(true);
+                .getProvider();
 
 
         addRelation(
@@ -137,7 +137,7 @@ public class TextSectionModel implements Writable {
                 .setWeight(1.0)
                 .adjustBias();
 
-        return inputPN.getProvider(true);
+        return inputPN.getProvider();
     }
 
     public PatternActivation addTextSection(Document doc, int begin, int end) {

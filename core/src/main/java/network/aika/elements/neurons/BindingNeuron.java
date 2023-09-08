@@ -47,7 +47,7 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingActivation> {
             makeAbstract(bn)
                     .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
-        return bn.getProvider(true);
+        return bn.getProvider();
     }
 
     public BindingNeuron(Model m) {

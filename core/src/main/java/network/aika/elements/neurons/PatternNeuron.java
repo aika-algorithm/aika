@@ -59,7 +59,7 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternActivation> {
             makeAbstract(pn)
                     .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
-        return pn.getProvider(true);
+        return pn.getProvider();
     }
 
     public PatternNeuron(Model m) {

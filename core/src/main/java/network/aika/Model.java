@@ -42,7 +42,6 @@ public class Model implements Writable {
 
     private Config config;
 
-
     private SuspensionCallback suspensionCallback;
     private final AtomicLong retrievalCounter = new AtomicLong(0);
     private final AtomicLong thoughtIdCounter = new AtomicLong(0);
@@ -50,6 +49,10 @@ public class Model implements Writable {
     public final Map<Long, NeuronProvider> providers = new TreeMap<>();
 
     private Thought currentThought;
+
+    private SortedMap<Long, Thought> thoughts = new TreeMap<>();
+
+    private long lastProcessedThought;
 
     private Supplier<Writable> customDataInstanceSupplier;
 
@@ -85,8 +88,22 @@ public class Model implements Writable {
         return currentThought;
     }
 
-    public void setCurrentThought(Thought currentThought) {
-        this.currentThought = currentThought;
+    public Long getLowestThoughtId() {
+        return thoughts.firstKey();
+    }
+
+    public void registerThought(Thought t) {
+        this.currentThought = t;
+        thoughts.put(t.getId(), t);
+    }
+
+    public void deregisterThought(Thought t) {
+        if(currentThought == t)
+            currentThought = null;
+
+        thoughts.remove(t.getId());
+
+        lastProcessedThought = Math.max(lastProcessedThought, t.getId());
     }
 
     public Collection<NeuronProvider> getActiveNeurons() {
@@ -149,6 +166,14 @@ public class Model implements Writable {
 
     public void setN(long n) {
         N = n;
+    }
+
+    public boolean canBeSuspended(Long lastUsed) {
+        Long tId = getLowestThoughtId();
+        if(tId == null)
+            tId = lastProcessedThought;
+
+        return lastUsed < tId - config.getNeuronProviderRetention();
     }
 
     public NeuronProvider lookupNeuronProvider(Long id) {

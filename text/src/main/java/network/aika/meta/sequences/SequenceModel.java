@@ -147,11 +147,11 @@ public abstract class SequenceModel implements Writable {
     public void initStaticNeurons() {
         relPT = BeforeRelationNeuron.createBeforeRelationNeuron(model, -1, -1, "Prev. Token Rel.: -1,-1")
                 .setBias(5.0)
-                .getProvider(true);
+                .getProvider();
 
         relNT = BeforeRelationNeuron.createBeforeRelationNeuron(model, 1, 1, "Next. Token Rel.: 1,1")
                 .setBias(5.0)
-                .getProvider(true);
+                .getProvider();
 
         targetInput = new TargetInput(model, "Phrase");
         targetInput.initTargetInput();
@@ -167,7 +167,7 @@ public abstract class SequenceModel implements Writable {
 
         outerInhibitoryN = new OuterInhibitoryNeuron(model)
                 .setLabel("I")
-                .getProvider(true);
+                .getProvider();
 
         makeAbstract((OuterInhibitoryNeuron) outerInhibitoryN.getNeuron())
                 .setWeight(1.0);
@@ -175,7 +175,7 @@ public abstract class SequenceModel implements Writable {
 
         primaryBNInhibitoryN = new InnerInhibitoryNeuron(model)
                 .setLabel("I")
-                .getProvider(true);
+                .getProvider();
 
         makeAbstract((InnerInhibitoryNeuron) primaryBNInhibitoryN.getNeuron())
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
@@ -234,7 +234,7 @@ public abstract class SequenceModel implements Writable {
         relContains = ContainsRelationNeuron.createContainsRelationNeuron(model, "Contains Rel.: ", Direction.OUTPUT)
                 .setBias(5.0)
                 .setTargetNet(5.0)
-                .getProvider(true);
+                .getProvider();
 
         addRelation(
                 bn,

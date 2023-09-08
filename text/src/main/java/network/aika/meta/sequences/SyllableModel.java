@@ -45,7 +45,7 @@ public class SyllableModel extends SequenceModel {
     @Override
     protected void initTemplateBindingNeurons() {
         primaryBN = createPrimaryBindingNeuron()
-                .getProvider(true);
+                .getProvider();
 
         expandContinueBindingNeurons(
                 2,

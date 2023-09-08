@@ -22,7 +22,6 @@ import network.aika.debugger.EventType;
 import network.aika.callbacks.InstantiationCallback;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
-import network.aika.elements.Timestamp;
 import network.aika.exceptions.PreviousThoughtNotDisconnected;
 import network.aika.fields.*;
 import network.aika.elements.PreActivation;
@@ -38,7 +37,6 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static network.aika.debugger.EventType.*;
 import static network.aika.queue.Phase.*;
 import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
@@ -79,7 +77,7 @@ public abstract class Thought extends Queue implements Element {
         if(m.getCurrentThought() != null) {
             throw new PreviousThoughtNotDisconnected(m.getCurrentThought(), this);
         }
-        m.setCurrentThought(this);
+        m.registerThought(this);
     }
 
     public long getNewVisitorId() {
@@ -178,8 +176,7 @@ public abstract class Thought extends Queue implements Element {
     }
 
     public void disconnect() {
-        if(model.getCurrentThought() == this)
-            model.setCurrentThought(null);
+        model.deregisterThought(this);
 
         getActivations()
                 .forEach(act ->

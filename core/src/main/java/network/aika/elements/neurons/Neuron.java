@@ -117,6 +117,7 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         Thought t = act.getThought();
         PreActivation<A> npd = getOrCreatePreActivation(t);
         npd.addActivation(act);
+        provider.updateLastUsed(t.getId());
     }
 
     public PreActivation<A> getOrCreatePreActivation(Thought t) {
@@ -295,11 +296,6 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
 
     public NeuronProvider getProvider() {
-        return provider;
-    }
-
-    public NeuronProvider getProvider(boolean permanent) {
-        provider.setPermanent(permanent);
         return provider;
     }
 

@@ -61,7 +61,7 @@ public class Dictionary {
         itN.setBias(INPUT_TOKEN_NET_TARGET);
         itN.setTargetNet(INPUT_TOKEN_NET_TARGET);
 
-        inputToken = itN.getProvider(true);
+        inputToken = itN.getProvider();
 
         makeAbstract(itN)
                 .setWeight(1.0)

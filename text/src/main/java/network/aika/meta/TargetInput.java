@@ -86,7 +86,7 @@ public class TargetInput {
     public void initTargetInput() {
         targetInput = new PatternNeuron(model)
                         .setLabel(label + " Target Input")
-                .getProvider(true);
+                .getProvider();
 
         targetInput.getNeuron()
                 .setBias(targetInputNetTarget);
@@ -117,7 +117,7 @@ public class TargetInput {
                 false
         );
 
-        targetInputBN = bn.getProvider(true);
+        targetInputBN = bn.getProvider();
 
         return bn;
     }

@@ -35,6 +35,8 @@ public class Config {
     private boolean countingEnabled;
     private boolean metaInstantiationEnabled;
 
+    private long neuronProviderRetention = 50;
+
     public double getLearnRate(boolean isAbstract) {
         return isAbstract ? learnRateForAbstract : learnRate;
     }
@@ -101,6 +103,15 @@ public class Config {
 
     public Config setMetaInstantiationEnabled(boolean metaInstantiationEnabled) {
         this.metaInstantiationEnabled = metaInstantiationEnabled;
+        return this;
+    }
+
+    public long getNeuronProviderRetention() {
+        return neuronProviderRetention;
+    }
+
+    public Config setNeuronProviderRetention(long neuronProviderRetention) {
+        this.neuronProviderRetention = neuronProviderRetention;
         return this;
     }
 

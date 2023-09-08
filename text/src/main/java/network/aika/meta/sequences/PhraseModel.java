@@ -55,7 +55,7 @@ public class PhraseModel extends SequenceModel {
 
         upperCaseN = new PatternCategoryNeuron(model)
                 .setLabel("Upper Case")
-                .getProvider(true);
+                .getProvider();
     }
 
     public void addPhraseTarget(Document doc, int numTokens) {
@@ -70,7 +70,7 @@ public class PhraseModel extends SequenceModel {
     @Override
     protected void initTemplateBindingNeurons() {
         primaryBN = createPrimaryBindingNeuron()
-                .getProvider(true);
+                .getProvider();
 
         createTargetInputBindingNeuron();
 

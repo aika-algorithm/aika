@@ -42,8 +42,6 @@ public class NetworkUtils {
         BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron(n.getModel())
                 .setLabel(n.getLabel() + CATEGORY_LABEL);
 
-        bindingCategory.getProvider(true);
-
         BindingCategoryInputSynapse s = new BindingCategoryInputSynapse()
                 .init(bindingCategory, n);
 
@@ -57,8 +55,6 @@ public class NetworkUtils {
         PatternCategoryNeuron patternCategory = new PatternCategoryNeuron(n.getModel())
                 .setLabel(n.getLabel() + CATEGORY_LABEL);
 
-        patternCategory.getProvider(true);
-
         PatternCategoryInputSynapse s = new PatternCategoryInputSynapse()
                 .init(patternCategory, n);
 
@@ -71,8 +67,6 @@ public class NetworkUtils {
         InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(n.getModel(), Scope.INPUT)
                 .setLabel(n.getLabel() + CATEGORY_LABEL);
 
-        inhibCategory.getProvider(true);
-
         OuterInhibitoryCategoryInputSynapse s = new OuterInhibitoryCategoryInputSynapse()
                 .init(inhibCategory, n);
 
@@ -84,8 +78,6 @@ public class NetworkUtils {
     public static InnerInhibitoryCategoryInputSynapse makeAbstract(InnerInhibitoryNeuron n) {
         InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(n.getModel(), Scope.SAME)
                 .setLabel(n.getLabel() + CATEGORY_LABEL);
-
-        inhibCategory.getProvider(true);
 
         InnerInhibitoryCategoryInputSynapse s = new InnerInhibitoryCategoryInputSynapse()
                 .init(inhibCategory, n);

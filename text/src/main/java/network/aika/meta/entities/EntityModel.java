@@ -94,7 +94,7 @@ public class EntityModel implements Writable {
                 .setLabel("Abstract Entity")
                 .setTargetNet(ENTITY_NET_TARGET)
                 .setBias(ENTITY_NET_TARGET)
-                .getProvider(true);
+                .getProvider();
 
         entityCategory = makeAbstract((PatternNeuron) entityPattern.getNeuron())
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT)
@@ -105,7 +105,7 @@ public class EntityModel implements Writable {
                 "Abstract Entity",
                 10.0,
                 BINDING_NET_TARGET
-        ).getProvider(true);
+        ).getProvider();
 
         makeAbstract((BindingNeuron) entityBN.getNeuron())
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
@@ -119,7 +119,7 @@ public class EntityModel implements Writable {
         );
 
         targetInputBN = createTargetInputBindingNeuron()
-                .getProvider(true);
+                .getProvider();
 
         targetInput.setTemplateOnly(true);
     }
@@ -132,7 +132,7 @@ public class EntityModel implements Writable {
 
         relEquals = EqualsRelationNeuron.createEqualsRelationNeuron(model, "Equals Rel.: ")
                 .setBias(5.0)
-                .getProvider(true);
+                .getProvider();
 
         addRelation(
                 bn,

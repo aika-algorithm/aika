@@ -82,7 +82,7 @@ public class TopicModel implements Writable {
 
         topicPatternN = new PatternNeuron(model)
                 .setLabel("Abstract Topic")
-                .getProvider(true);
+                .getProvider();
 
         topicPatternN.getNeuron()
                 .setBias(TOPIC_NET_TARGET);
@@ -97,7 +97,7 @@ public class TopicModel implements Writable {
                 "Abstract Entity",
                 10.0,
                 BINDING_NET_TARGET
-        ).getProvider(true);
+        ).getProvider();
 
         makeAbstract((BindingNeuron) topicBN.getNeuron())
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
@@ -111,7 +111,7 @@ public class TopicModel implements Writable {
         );
 
         targetInputBN = createTargetInputBindingNeuron()
-                .getProvider(true);
+                .getProvider();
 
         targetInput.setTemplateOnly(true);
     }
@@ -124,7 +124,7 @@ public class TopicModel implements Writable {
 
         relEquals = EqualsRelationNeuron.createEqualsRelationNeuron(model, "Equals Rel.: ")
                 .setBias(5.0)
-                .getProvider(true);
+                .getProvider();
 
         addRelation(
                 bn,
