@@ -17,6 +17,7 @@
 package network.aika.elements.neurons;
 
 import network.aika.ActivationFunction;
+import network.aika.Model;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.CategorySynapse;
@@ -42,7 +43,9 @@ public abstract class ConjunctiveNeuron<A extends ConjunctiveActivation> extends
 
     private static final Logger log = LoggerFactory.getLogger(ConjunctiveNeuron.class);
 
-    public ConjunctiveNeuron() {
+    public ConjunctiveNeuron(Model m) {
+        super(m);
+
         bias.addListener(
                 "onBiasUpdate",
                 (fl, nr, u) ->

@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.SortedSet;
 
-import static network.aika.enums.Scope.INPUT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -63,8 +62,8 @@ public class OuterInhibitionTest {
                 .setTrainingEnabled(true);
         m.setConfig(c);
 
-        PatternNeuron in = new PatternNeuron().init(m, "IN");
-        OuterInhibitoryNeuron inhib = new OuterInhibitoryNeuron().init(m, "I");
+        PatternNeuron in = new PatternNeuron(m).setLabel("IN");
+        OuterInhibitoryNeuron inhib = new OuterInhibitoryNeuron(m).setLabel("I");
 
         BindingNeuron na = addBindingNeuronOuter(m,  "A", 1.0, in, inhib);
         BindingNeuron nb = addBindingNeuronOuter(m, "B", 1.5, in, inhib);
@@ -87,7 +86,7 @@ public class OuterInhibitionTest {
     }
 
     private static BindingNeuron addBindingNeuronOuter(Model m, String label, double bias, PatternNeuron in, OuterInhibitoryNeuron inhib) {
-        BindingNeuron bn = new BindingNeuron().init(m, label);
+        BindingNeuron bn = new BindingNeuron(m).setLabel(label);
 
         new InputObjectSynapse()
                 .setWeight(10.0)

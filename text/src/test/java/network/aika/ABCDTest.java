@@ -59,8 +59,8 @@ public class ABCDTest {
         PatternNeuron d_IN = dict.lookupInputToken("d");
 
         // Pattern ab
-        BindingNeuron a_abBN = new BindingNeuron().init(m, "a (ab)");
-        BindingNeuron b_abBN = new BindingNeuron().init(m, "b (ab)");
+        BindingNeuron a_abBN = new BindingNeuron(m).setLabel("a (ab)");
+        BindingNeuron b_abBN = new BindingNeuron(m).setLabel("b (ab)");
 
         LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -1, -1, "relPT");
 
@@ -88,8 +88,8 @@ public class ABCDTest {
         abPattern.setBias(3.0);
 
         // Pattern bc
-        BindingNeuron b_bcBN = new BindingNeuron().init(m, "b (bc)");
-        BindingNeuron c_bcBN = new BindingNeuron().init(m, "c (bc)");
+        BindingNeuron b_bcBN = new BindingNeuron(m).setLabel("b (bc)");
+        BindingNeuron c_bcBN = new BindingNeuron(m).setLabel("c (bc)");
 
         new RelationInputSynapse()
                 .setWeight(10.0)
@@ -104,7 +104,7 @@ public class ABCDTest {
                 .setWeight(10.0)
                 .init(b_IN, b_bcBN)
                 .adjustBias();
-        TestUtils.addOuterInhibitoryLoop(new OuterInhibitoryNeuron().init(m, "I-b"), false, b_abBN, b_bcBN);
+        TestUtils.addOuterInhibitoryLoop(new OuterInhibitoryNeuron(m).setLabel("I-b"), false, b_abBN, b_bcBN);
         b_abBN.setBias(3.0);
         b_bcBN.setBias(2.5);
 
@@ -118,8 +118,8 @@ public class ABCDTest {
         bcPattern.setBias(3.0);
 
         // Pattern bcd
-        BindingNeuron bc_bcdBN = new BindingNeuron().init(m, "bc (bcd)");
-        BindingNeuron d_bcdBN = new BindingNeuron().init(m, "d (bcd)");
+        BindingNeuron bc_bcdBN = new BindingNeuron(m).setLabel("bc (bcd)");
+        BindingNeuron d_bcdBN = new BindingNeuron(m).setLabel("d (bcd)");
         new RelationInputSynapse()
                 .setWeight(10.0)
                 .init(c_bcBN, bc_bcdBN)

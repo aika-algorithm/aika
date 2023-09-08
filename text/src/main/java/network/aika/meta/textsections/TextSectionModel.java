@@ -20,7 +20,6 @@ import network.aika.Model;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
-import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import network.aika.utils.Writable;
@@ -128,8 +127,8 @@ public class TextSectionModel implements Writable {
     }
 
     private NeuronProvider createTextSectionInput(String label) {
-        PatternNeuron inputPN = new PatternNeuron()
-                .init(model, label + " Input");
+        PatternNeuron inputPN = new PatternNeuron(model)
+                .setLabel(label + " Input");
 
         inputPN.setBias(INPUT_NET_TARGET);
         inputPN.setTargetNet(INPUT_NET_TARGET);

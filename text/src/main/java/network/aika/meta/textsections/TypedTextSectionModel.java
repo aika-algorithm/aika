@@ -33,7 +33,6 @@ import java.io.IOException;
 
 import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
-import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
@@ -95,8 +94,8 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         log.info("Typed Text-Section");
 
-        textSectionHintBN = new BindingNeuron()
-                .init(model, "Abstr. Text-Section-Hint")
+        textSectionHintBN = new BindingNeuron(model)
+                .setLabel("Abstr. Text-Section-Hint")
                 .getProvider(true);
 
         double netTarget = 2.5;
@@ -138,8 +137,8 @@ public class TypedTextSectionModel extends TextSectionModel {
                 false
         );
 
-        textSectionHintBN = new BindingNeuron()
-                .init(model, "Abstract Text-Section Hint")
+        textSectionHintBN = new BindingNeuron(model)
+                .setLabel("Abstract Text-Section Hint")
                 .setTargetNet(bindingNetTarget)
                 .getProvider(true);
 
@@ -159,8 +158,8 @@ public class TypedTextSectionModel extends TextSectionModel {
                 patternNetTarget
         ).getProvider(true);
 
-        tsBeginInhibitoryN = new InnerInhibitoryNeuron()
-                .init(model, "I TS Begin")
+        tsBeginInhibitoryN = new InnerInhibitoryNeuron(model)
+                .setLabel("I TS Begin")
                 .getProvider(true);
 
 
@@ -170,8 +169,8 @@ public class TypedTextSectionModel extends TextSectionModel {
                 NEG_MARGIN_TS_BEGIN * -netTarget
         );
 
-        tsEndInhibitoryN = new InnerInhibitoryNeuron()
-                .init(model, "I TS End")
+        tsEndInhibitoryN = new InnerInhibitoryNeuron(model)
+                .setLabel("I TS End")
                 .getProvider(true);
 
         addInnerInhibitoryLoop(
@@ -180,8 +179,8 @@ public class TypedTextSectionModel extends TextSectionModel {
                 NEG_MARGIN_TS_END * -netTarget
         );
 
-        tsInhibitoryN = new OuterInhibitoryNeuron()
-                .init(model, "I TS")
+        tsInhibitoryN = new OuterInhibitoryNeuron(model)
+                .setLabel("I TS")
                 .getProvider(true);
 
         addOuterInhibitoryLoop(

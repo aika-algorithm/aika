@@ -21,7 +21,6 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.ContainsRelationNeuron;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
-import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.meta.Dictionary;
 import network.aika.meta.TargetInput;
@@ -33,7 +32,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.utils.NetworkUtils.makeAbstract;
@@ -167,16 +165,16 @@ public abstract class SequenceModel implements Writable {
         patternN.getNeuron().setBias(PATTERN_NET_TARGET);
         patternN.getNeuron().setTargetNet(PATTERN_NET_TARGET);
 
-        outerInhibitoryN = new OuterInhibitoryNeuron()
-                .init(model, "I")
+        outerInhibitoryN = new OuterInhibitoryNeuron(model)
+                .setLabel("I")
                 .getProvider(true);
 
         makeAbstract((OuterInhibitoryNeuron) outerInhibitoryN.getNeuron())
                 .setWeight(1.0);
 
 
-        primaryBNInhibitoryN = new InnerInhibitoryNeuron()
-                .init(model, "I")
+        primaryBNInhibitoryN = new InnerInhibitoryNeuron(model)
+                .setLabel("I")
                 .getProvider(true);
 
         makeAbstract((InnerInhibitoryNeuron) primaryBNInhibitoryN.getNeuron())

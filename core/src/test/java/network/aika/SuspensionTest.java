@@ -54,9 +54,9 @@ public class SuspensionTest {
                 .setTrainingEnabled(false);
         m.setConfig(c);
 
-        NeuronProvider inStrong = new PatternNeuron().init(m, "IN Strong").getProvider(true);
-        NeuronProvider inWeak = new PatternNeuron().init(m, "IN Weak").getProvider(true);
-        NeuronProvider out = new BindingNeuron().init(m, "OUT").getProvider(true);
+        NeuronProvider inStrong = new PatternNeuron(m).setLabel("IN Strong").getProvider(true);
+        NeuronProvider inWeak = new PatternNeuron(m).setLabel("IN Weak").getProvider(true);
+        NeuronProvider out = new BindingNeuron(m).setLabel("OUT").getProvider(true);
         out.getNeuron().setBias(1.0);
 
         Synapse sStrong = new InputObjectSynapse()

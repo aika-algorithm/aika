@@ -38,8 +38,8 @@ public class PropagateTest {
         Model m = new Model();
         m.setConfig(new Config());
 
-        PatternNeuron in = new PatternNeuron().init(m, "IN");
-        BindingNeuron out = new BindingNeuron().init(m, "OUT");
+        PatternNeuron in = new PatternNeuron(m).setLabel("IN");
+        BindingNeuron out = new BindingNeuron(m).setLabel("OUT");
 
         new InputObjectSynapse()
                 .setWeight(10.0)

@@ -16,6 +16,7 @@
  */
 package network.aika.elements.neurons;
 
+import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.synapses.CategoryInputSynapse;
@@ -28,7 +29,9 @@ import network.aika.elements.synapses.CategorySynapse;
  */
 public abstract class CategoryNeuron extends DisjunctiveNeuron<CategoryActivation> {
 
-    public CategoryNeuron() {
+
+    public CategoryNeuron(Model m) {
+        super(m);
     }
 
     public CategoryInputSynapse getOutgoingCategoryInputSynapse() {

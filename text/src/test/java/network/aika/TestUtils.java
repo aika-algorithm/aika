@@ -55,8 +55,8 @@ public class TestUtils {
     }
 
     public static PatternNeuron initPatternLoop(Model m, String label, BindingNeuron... bns) {
-        PatternNeuron patternN = new PatternNeuron()
-                .init(m, "P-" + label);
+        PatternNeuron patternN = new PatternNeuron(m)
+                .setLabel("P-" + label);
 
         for(BindingNeuron bn: bns) {
             NetworkMotifs.addPositiveFeedbackLoop(

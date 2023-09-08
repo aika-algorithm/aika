@@ -17,6 +17,7 @@
 package network.aika.elements.neurons;
 
 import network.aika.ActivationFunction;
+import network.aika.Model;
 import network.aika.enums.Scope;
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
@@ -31,6 +32,10 @@ import network.aika.visitor.inhibitory.InhibitoryVisitor;
  */
 public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryActivation> {
 
+    public OuterInhibitoryNeuron(Model m) {
+        super(m);
+    }
+
     @Override
     public void startVisitor(LinkingOperator c, Activation act, Synapse targetSyn) {
         new InhibitoryVisitor(act.getThought(), c, Scope.INPUT)
@@ -39,7 +44,7 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryActi
 
     @Override
     public OuterInhibitoryNeuron instantiateTemplate() {
-        OuterInhibitoryNeuron n = new OuterInhibitoryNeuron();
+        OuterInhibitoryNeuron n = new OuterInhibitoryNeuron(getModel());
         n.initFromTemplate(this);
         return n;
     }

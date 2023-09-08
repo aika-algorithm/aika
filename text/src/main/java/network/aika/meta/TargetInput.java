@@ -20,7 +20,6 @@ import network.aika.Model;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.PatternNeuron;
-import network.aika.enums.Scope;
 import network.aika.text.Document;
 
 import static network.aika.meta.NetworkMotifs.addBindingNeuron;
@@ -85,8 +84,8 @@ public class TargetInput {
     }
 
     public void initTargetInput() {
-        targetInput = new PatternNeuron()
-                        .init(model, label + " Target Input")
+        targetInput = new PatternNeuron(model)
+                        .setLabel(label + " Target Input")
                 .getProvider(true);
 
         targetInput.getNeuron()

@@ -86,6 +86,11 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
     private final WeakHashMap<Long, WeakReference<PreActivation<A>>> activations = new WeakHashMap<>();
 
+    public Neuron(Model m) {
+        addProvider(m);
+        setBias(0.0);
+    }
+
     public Long getId() {
         return provider.getId();
     }
@@ -102,7 +107,7 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         return synapseIdCounter++;
     }
 
-    public void addProvider(Model m) {
+    private void addProvider(Model m) {
         if (provider == null)
             provider = new NeuronProvider(m, this);
         setModified();
@@ -206,7 +211,9 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
     public <N extends Neuron<A>> N instantiateTemplate() {
         N n;
         try {
-            n = (N) getClass().getConstructor().newInstance();
+            n = (N) getClass()
+                    .getConstructor(Model.class)
+                    .newInstance(getModel());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -566,13 +573,6 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
     public <N extends Neuron> N setLabel(String label) {
         this.label = label;
-        return (N) this;
-    }
-
-    public <N extends Neuron> N init(Model m, String label) {
-        addProvider(m);
-        this.label = label;
-        setBias(0.0);
         return (N) this;
     }
 

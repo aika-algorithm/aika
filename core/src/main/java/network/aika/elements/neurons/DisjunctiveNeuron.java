@@ -17,6 +17,7 @@
 package network.aika.elements.neurons;
 
 import network.aika.ActivationFunction;
+import network.aika.Model;
 import network.aika.elements.activations.Activation;
 
 
@@ -26,8 +27,8 @@ import network.aika.elements.activations.Activation;
  */
 public abstract class DisjunctiveNeuron<A extends Activation> extends Neuron<A> {
 
-    public DisjunctiveNeuron() {
-        super();
+    public DisjunctiveNeuron(Model m) {
+        super(m);
     }
 
     @Override

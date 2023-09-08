@@ -44,8 +44,8 @@ public class TheBlackCatTest {
         Dictionary dict = new Dictionary(m);
         dict.initStaticNeurons();
 
-        OuterInhibitoryNeuron inhibNThe = new OuterInhibitoryNeuron().init(m, "I-the");
-        OuterInhibitoryNeuron inhibNCat = new OuterInhibitoryNeuron().init(m, "I-cat");
+        OuterInhibitoryNeuron inhibNThe = new OuterInhibitoryNeuron(m).setLabel("I-the");
+        OuterInhibitoryNeuron inhibNCat = new OuterInhibitoryNeuron(m).setLabel("I-cat");
         initPatternTheCat(m, dict, inhibNThe, inhibNCat, 0);
         initPatternBlackCat(m, dict);
 

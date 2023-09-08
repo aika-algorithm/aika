@@ -40,14 +40,17 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
 
 
     public static ContainsRelationNeuron createContainsRelationNeuron(Model m, String l, Direction relDir) {
-        ContainsRelationNeuron n = new ContainsRelationNeuron();
-        n.addProvider(m);
+        ContainsRelationNeuron n = new ContainsRelationNeuron(m);
         n.setLabel(l);
         n.setAllowTraining(false);
 
         n.relationDir = relDir;
 
         return n;
+    }
+
+    public ContainsRelationNeuron(Model m) {
+        super(m);
     }
 
     @Override

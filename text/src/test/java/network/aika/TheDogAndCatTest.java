@@ -43,14 +43,14 @@ public class TheDogAndCatTest {
         Dictionary dict = new Dictionary(m);
         dict.initStaticNeurons();
 
-        OuterInhibitoryNeuron inhibNThe = new OuterInhibitoryNeuron()
-                .init(m, "I-the");
+        OuterInhibitoryNeuron inhibNThe = new OuterInhibitoryNeuron(m)
+                .setLabel("I-the");
 
-        OuterInhibitoryNeuron inhibNCat = new OuterInhibitoryNeuron()
-                .init(m, "I-cat");
+        OuterInhibitoryNeuron inhibNCat = new OuterInhibitoryNeuron(m)
+                .setLabel("I-cat");
 
-        OuterInhibitoryNeuron inhibNDog = new OuterInhibitoryNeuron()
-                .init(m, "I-dog");
+        OuterInhibitoryNeuron inhibNDog = new OuterInhibitoryNeuron(m)
+                .setLabel("I-dog");
 
         initPatternTheCat(m, dict, inhibNThe, inhibNCat, 3);
         initPatternTheDog(m, dict, inhibNThe, inhibNDog, 3);

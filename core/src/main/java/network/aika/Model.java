@@ -99,9 +99,8 @@ public class Model implements Writable {
             return n;
 
         n = template.instantiateTemplate()
-                .init(this, tokenLabel);
+                .setLabel(tokenLabel);
 
-        n.addProvider(this);
         n.setAllowTraining(false);
 
         suspensionCallback.putLabel(tokenLabel, template.getId(), n.getId());

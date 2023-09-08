@@ -70,13 +70,13 @@ public class InnerInhibitionTest {
                 .setTrainingEnabled(true);
         m.setConfig(c);
 
-        PatternNeuron inA = new PatternNeuron().init(m, "A");
-        PatternNeuron inX = new PatternNeuron().init(m, "X");
+        PatternNeuron inA = new PatternNeuron(m).setLabel("A");
+        PatternNeuron inX = new PatternNeuron(m).setLabel("X");
 
-        InnerInhibitoryNeuron inhib = new InnerInhibitoryNeuron().init(m, "I");
+        InnerInhibitoryNeuron inhib = new InnerInhibitoryNeuron(m).setLabel("I");
 
-        PatternNeuron patternN = new PatternNeuron()
-                .init(m, "P");
+        PatternNeuron patternN = new PatternNeuron(m)
+                .setLabel("P");
 
         patternN.setBias(patternNetTarget);
 
@@ -121,19 +121,19 @@ public class InnerInhibitionTest {
                 .setTrainingEnabled(true);
         m.setConfig(c);
 
-        PatternNeuron inA = new PatternNeuron().init(m, "A");
+        PatternNeuron inA = new PatternNeuron(m).setLabel("A");
         inA.setTargetNet(inputPatternNetTarget);
-        PatternNeuron inB = new PatternNeuron().init(m, "B");
+        PatternNeuron inB = new PatternNeuron(m).setLabel("B");
         inB.setTargetNet(inputPatternNetTarget);
-        PatternNeuron inC = new PatternNeuron().init(m, "C");
+        PatternNeuron inC = new PatternNeuron(m).setLabel("C");
         inC.setTargetNet(inputPatternNetTarget);
-        PatternNeuron inX = new PatternNeuron().init(m, "X");
+        PatternNeuron inX = new PatternNeuron(m).setLabel("X");
         inX.setTargetNet(inputPatternNetTarget);
 
-        InnerInhibitoryNeuron inhib = new InnerInhibitoryNeuron().init(m, "I");
+        InnerInhibitoryNeuron inhib = new InnerInhibitoryNeuron(m).setLabel("I");
 
-        PatternNeuron patternN = new PatternNeuron()
-                .init(m, "P");
+        PatternNeuron patternN = new PatternNeuron(m)
+                .setLabel("P");
 
         patternN.setBias(patternNetTarget);
 
@@ -174,7 +174,7 @@ public class InnerInhibitionTest {
     }
 
     private BindingNeuron addBindingNeuronInner(Model m, String label, double bindingNetTarget, PatternNeuron in, InnerInhibitoryNeuron inhib, PatternNeuron patternN) {
-        BindingNeuron bn = new BindingNeuron().init(m, label);
+        BindingNeuron bn = new BindingNeuron(m).setLabel(label);
 
         new InputObjectSynapse()
                 .setWeight(10.0)

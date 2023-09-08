@@ -34,12 +34,15 @@ import static network.aika.text.Slot.BEGIN;
 public class EqualsRelationNeuron extends LatentRelationNeuron {
 
     public static EqualsRelationNeuron createEqualsRelationNeuron(Model m, String l) {
-        EqualsRelationNeuron n = new EqualsRelationNeuron();
-        n.addProvider(m);
+        EqualsRelationNeuron n = new EqualsRelationNeuron(m);
         n.setLabel(l);
         n.setAllowTraining(false);
 
         return n;
+    }
+
+    public EqualsRelationNeuron(Model m) {
+        super(m);
     }
 
     @Override

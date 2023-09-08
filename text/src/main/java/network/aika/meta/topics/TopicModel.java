@@ -21,10 +21,8 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.neurons.relations.EqualsRelationNeuron;
-import network.aika.enums.Scope;
 import network.aika.meta.TargetInput;
 import network.aika.meta.entities.EntityModel;
-import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
@@ -37,7 +35,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static network.aika.meta.NetworkMotifs.*;
-import static network.aika.meta.entities.EntityModel.ENTITY_NET_TARGET;
 import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.utils.NetworkUtils.makeAbstract;
 
@@ -83,8 +80,8 @@ public class TopicModel implements Writable {
         targetInput = new TargetInput(model, "Topic");
         targetInput.initTargetInput();
 
-        topicPatternN = new PatternNeuron()
-                .init(model, "Abstract Topic")
+        topicPatternN = new PatternNeuron(model)
+                .setLabel("Abstract Topic")
                 .getProvider(true);
 
         topicPatternN.getNeuron()

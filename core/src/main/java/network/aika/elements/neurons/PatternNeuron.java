@@ -47,20 +47,23 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternActivation> {
 
     protected SampleSpace sampleSpace = new SampleSpace();
 
-
     public static NeuronProvider create(Model m, String label) {
         return create(m, label, false);
     }
 
     public static NeuronProvider create(Model m, String label, boolean abstr) {
-        PatternNeuron pn = new PatternNeuron()
-                .init(m, label);
+        PatternNeuron pn = new PatternNeuron(m)
+                .setLabel(label);
 
         if(abstr)
             makeAbstract(pn)
                     .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         return pn.getProvider(true);
+    }
+
+    public PatternNeuron(Model m) {
+        super(m);
     }
 
     @Override

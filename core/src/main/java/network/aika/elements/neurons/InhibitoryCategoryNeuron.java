@@ -16,6 +16,7 @@
  */
 package network.aika.elements.neurons;
 
+import network.aika.Model;
 import network.aika.elements.activations.Activation;
 import network.aika.enums.Scope;
 import network.aika.elements.synapses.Synapse;
@@ -30,7 +31,8 @@ public class InhibitoryCategoryNeuron extends CategoryNeuron {
 
     private Scope identityReference;
 
-    public InhibitoryCategoryNeuron(Scope identityReference) {
+    public InhibitoryCategoryNeuron(Model m, Scope identityReference) {
+        super(m);
         this.identityReference = identityReference;
     }
 

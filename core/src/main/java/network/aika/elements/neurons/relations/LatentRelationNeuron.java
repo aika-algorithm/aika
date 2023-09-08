@@ -16,6 +16,7 @@
  */
 package network.aika.elements.neurons.relations;
 
+import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.BindingNeuron;
@@ -36,6 +37,10 @@ public abstract class LatentRelationNeuron extends BindingNeuron {
 
 
     public abstract Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir);
+
+    public LatentRelationNeuron(Model m) {
+        super(m);
+    }
 
     @Override
     protected SumField initBias() {

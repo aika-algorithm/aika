@@ -20,7 +20,6 @@ import network.aika.Model;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.EqualsRelationNeuron;
 import network.aika.elements.synapses.*;
-import network.aika.enums.Scope;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
@@ -91,8 +90,8 @@ public class EntityModel implements Writable {
         targetInput = new TargetInput(model, "Entity");
         targetInput.initTargetInput();
 
-        entityPattern = new PatternNeuron()
-                .init(model, "Abstract Entity")
+        entityPattern = new PatternNeuron(model)
+                .setLabel("Abstract Entity")
                 .setTargetNet(ENTITY_NET_TARGET)
                 .setBias(ENTITY_NET_TARGET)
                 .getProvider(true);
@@ -163,7 +162,7 @@ public class EntityModel implements Writable {
     public EntityInstance addEntityPattern(String label) {
         PatternNeuron tEPN = entityPattern.getNeuron();
         PatternNeuron n = tEPN.instantiateTemplate()
-                .init(model, label);
+                .setLabel(label);
 
         n.setLabel(label);
         n.setAllowTraining(false);

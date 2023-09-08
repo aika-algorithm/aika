@@ -17,7 +17,6 @@
 package network.aika.meta;
 
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
-import network.aika.enums.Scope;
 import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.*;
 import org.slf4j.Logger;
@@ -35,8 +34,8 @@ public class NetworkMotifs {
     public static double SAME_OBJECT_MARGIN = 0.15;
 
     public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double netTarget) {
-        BindingNeuron bn = new BindingNeuron()
-                .init(input.getModel(), label);
+        BindingNeuron bn = new BindingNeuron(input.getModel())
+                .setLabel(label);
 
         new InputObjectSynapse()
                 .setWeight(weight)

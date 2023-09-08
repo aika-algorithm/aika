@@ -47,8 +47,7 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
     private int endOffset;
 
     public static BeforeRelationNeuron createBeforeRelationNeuron(Model m, int rangeBegin, int rangeEnd, String l) {
-        BeforeRelationNeuron n = new BeforeRelationNeuron();
-        n.addProvider(m);
+        BeforeRelationNeuron n = new BeforeRelationNeuron(m);
         n.setLabel(l);
 
         n.beginOffset = rangeBegin;
@@ -59,6 +58,10 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
 
         n.setAllowTraining(false);
         return n;
+    }
+
+    public BeforeRelationNeuron(Model m) {
+        super(m);
     }
 
     @Override
