@@ -126,7 +126,7 @@ public class TargetInput {
     public PatternNeuron instantiateTargetInput(String label) {
         PatternNeuron ttiPN = targetInput.getNeuron();
         PatternNeuron n = ttiPN.instantiateTemplate()
-                .init(model, label + " Target Input");
+                .setLabel(label + " Target Input");
 
         n.setAllowTraining(false);
 

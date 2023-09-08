@@ -34,4 +34,6 @@ public interface CategoryInputSynapse {
     Neuron getOutput();
 
     void setInitialCategorySynapseWeight(double initialCategorySynapseWeight);
+
+    double getInitialInstanceWeight();
 }

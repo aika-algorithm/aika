@@ -105,25 +105,13 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         headlineBN = headlineEntity.entityBN()
                 .getProvider(true);
-        headlineBN.getNeuron().setTargetNet(bindingNetTarget);
 
         headlineTargetInput = headlineEntity.targetInputPN()
                 .getProvider(true);
-        headlineTargetInput.getNeuron().setBias(patternNetTarget);
-        headlineTargetInput.getNeuron().setTargetNet(patternNetTarget);
 
         makeAbstract((PatternNeuron) headlineTargetInput.getNeuron())
                 .setWeight(2.0)
                 .adjustBias();
-
-        addRelation(
-                headlineBN.getNeuron(),
-                beginBN.getNeuron(),
-                phraseModel.relPT.getNeuron(),
-                5.0,
-                10.0,
-                false
-        );
 
         tsHeadlineBN = addBindingNeuron(
                 headlineEntity.entityPatternN(),
@@ -132,6 +120,15 @@ public class TypedTextSectionModel extends TextSectionModel {
                 bindingNetTarget
         )
                 .getProvider(true);
+
+        addRelation(
+                tsHeadlineBN.getNeuron(),
+                beginBN.getNeuron(),
+                phraseModel.relPT.getNeuron(),
+                5.0,
+                10.0,
+                false
+        );
 
         addPositiveFeedbackLoop(
                 tsHeadlineBN.getNeuron(),

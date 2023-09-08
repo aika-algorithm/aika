@@ -177,12 +177,27 @@ public class EntityModel implements Writable {
         BindingNeuron iEBN = instantiateBN(label, n, entityBN.getNeuron(), phrasePN);
         BindingNeuron iTIBN = instantiateBN(label, n, targetInputBN.getNeuron(), targetInputPN);
 
+        instantiateRelation(iTIBN, iEBN);
+
+        PatternCategorySynapse catSyn = n.getOutputSynapseByType(PatternCategorySynapse.class);
+        catSyn.setWeight(0.0);
+
         return new EntityInstance(n, iEBN, iTIBN, targetInputPN);
+    }
+
+    private void instantiateRelation(BindingNeuron iTIBN, BindingNeuron iEBN) {
+        SameObjectSynapse tSoSyn = (SameObjectSynapse) entityBN.getNeuron().getInputSynapseByType(SameObjectSynapse.class);
+        SameObjectSynapse soSyn = tSoSyn.instantiateTemplate(iTIBN, iEBN);
+
+        RelationInputSynapse tRelSyn = (RelationInputSynapse) entityBN.getSynapseBySynId(tSoSyn.getRelationSynId());
+        RelationInputSynapse relSyn = tRelSyn.instantiateTemplate(tRelSyn.getInput(), iEBN);
+
+        soSyn.setRelationSynId(relSyn.getSynapseId());
     }
 
     private BindingNeuron instantiateBN(String label, PatternNeuron pn, BindingNeuron bn, PatternNeuron io) {
         BindingNeuron ieBN = bn.instantiateTemplate()
-                .init(model, label);
+                .setLabel(label);
 
         Synapse s = bn.getInputSynapseByType(InputObjectSynapse.class);
         if(s != null)

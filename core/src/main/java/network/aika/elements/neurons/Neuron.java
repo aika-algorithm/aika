@@ -90,14 +90,6 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         return provider.getId();
     }
 
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
     @Override
     public void disconnect() {
     }
@@ -230,12 +222,16 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
                 templateN.getBias().getUpdatedValue()
         );
 
+        if(templateN.getTargetNet() != null) {
+            setTargetNet(templateN.getTargetNet());
+        }
+
         CategoryInputSynapse cis = templateN.getCategoryInputSynapse();
         if(cis == null)
             throw new MissingInputCategoryNeuron(templateN);
 
         createCategorySynapse()
-                .setWeight(10.0)
+                .setWeight(cis.getInitialInstanceWeight())
                 .init(this, cis.getInput());
 
         this.template = templateN;
@@ -564,9 +560,18 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         return m.getCurrentThought();
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public <N extends Neuron> N setLabel(String label) {
+        this.label = label;
+        return (N) this;
+    }
+
     public <N extends Neuron> N init(Model m, String label) {
         addProvider(m);
-        setLabel(label);
+        this.label = label;
         setBias(0.0);
         return (N) this;
     }
