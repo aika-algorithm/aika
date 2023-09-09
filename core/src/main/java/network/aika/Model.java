@@ -89,7 +89,9 @@ public class Model implements Writable {
     }
 
     public Long getLowestThoughtId() {
-        return thoughts.firstKey();
+        return thoughts.isEmpty() ?
+                null :
+                thoughts.firstKey();
     }
 
     public void registerThought(Thought t) {
