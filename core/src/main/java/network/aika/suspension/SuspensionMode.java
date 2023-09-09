@@ -1,6 +1,7 @@
 package network.aika.suspension;
 
 public enum SuspensionMode {
-    SAVE,
+    SAVE_ALL,
+    SAVE_SUSPENDED,
     DISCARD
 }

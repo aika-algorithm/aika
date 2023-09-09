@@ -26,6 +26,9 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.stream.Stream;
 
+import static network.aika.suspension.SuspensionMode.SAVE_ALL;
+import static network.aika.suspension.SuspensionMode.SAVE_SUSPENDED;
+
 /**
  * The {@code NeuronProvider} class is a proxy implementation for the real neuron implementation in the class {@code Neuron}.
  * Aika uses the provider pattern to store and reload rarely used neurons or logic nodes.
@@ -136,12 +139,13 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         assert model.getSuspensionCallback() != null;
 
         if(persistent || !model.canBeSuspended(lastUsed)) {
-            if(sm == SuspensionMode.SAVE)
+            if(sm == SAVE_ALL)
                 save();
+
             return;
         }
 
-        if(sm == SuspensionMode.SAVE)
+        if(sm == SAVE_SUSPENDED || sm == SAVE_ALL)
             save();
 
         neuron.suspend();
