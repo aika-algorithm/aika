@@ -60,7 +60,7 @@ public class SynapsesPropertyPanel extends AbstractPropertyPanel {
             Activation act = (Activation) element;
             t = act.getThought();
             n = act.getNeuron();
-        } else if(element instanceof Neuron<?>) {
+        } else if(element instanceof Neuron<?, ?>) {
             n = (Neuron) element;
         }
 

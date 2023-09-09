@@ -78,7 +78,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return (N) neuron;
     }
 
-    public void setNeuron(Neuron<?> n) {
+    public void setNeuron(Neuron<?, ?> n) {
         this.neuron = n;
     }
 

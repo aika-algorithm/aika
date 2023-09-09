@@ -92,7 +92,7 @@ public class NeuronViewManager extends AbstractViewManager<Neuron, NeuronGraphMa
     }
 
 
-    public void expandNeuron(Neuron<?> n, boolean synapsesOnly) {
+    public void expandNeuron(Neuron<?, ?> n, boolean synapsesOnly) {
         List<? extends Synapse> outputSyns = n.getOutputSynapsesAsStream()
                 .limit(20)
                 .toList();
@@ -135,9 +135,9 @@ public class NeuronViewManager extends AbstractViewManager<Neuron, NeuronGraphMa
         return (pos * stepSize) - (((count - 1) * stepSize) / 2.0);
     }
 
-    private void drawExpandedSynapse(Neuron<?> n, Synapse s, Direction dir, double relX, double relY, boolean synapsesOnly) {
+    private void drawExpandedSynapse(Neuron<?, ?> n, Synapse s, Direction dir, double relX, double relY, boolean synapsesOnly) {
         Node currentNode = graphManager.getNode(n);
-        Neuron<?> relN = dir.getNeuron(s);
+        Neuron<?, ?> relN = dir.getNeuron(s);
         Node relNode = graphManager.getNode(relN);
         if(relNode == null) {
             if(synapsesOnly)
@@ -219,7 +219,7 @@ public class NeuronViewManager extends AbstractViewManager<Neuron, NeuronGraphMa
 
     @Override
     public void moveNodeGroup(Node node, int x, int y) {
-        Neuron<?> n = getGraphManager().getAikaNode(node);
+        Neuron<?, ?> n = getGraphManager().getAikaNode(node);
         if(!(n instanceof PatternNeuron))
             return;
 
@@ -248,7 +248,7 @@ public class NeuronViewManager extends AbstractViewManager<Neuron, NeuronGraphMa
         return consoleManager;
     }
 
-    protected void drawNeuron(Neuron<?> n, double x, double y) {
+    protected void drawNeuron(Neuron<?, ?> n, double x, double y) {
         Node node = graphManager.getNode(n);
         if(node != null)
             return;
@@ -257,14 +257,14 @@ public class NeuronViewManager extends AbstractViewManager<Neuron, NeuronGraphMa
         np.updateNode(x, y);
     }
 
-    protected void drawInputSynapses(Neuron<?> n) {
+    protected void drawInputSynapses(Neuron<?, ?> n) {
         n.getInputSynapses()
                 .forEach(s ->
                         drawSynapse(s)
                 );
     }
 
-    protected void drawOutputSynapses(Neuron<?> n) {
+    protected void drawOutputSynapses(Neuron<?, ?> n) {
         n.getOutputSynapses()
                 .forEach(s ->
                         drawSynapse(s)

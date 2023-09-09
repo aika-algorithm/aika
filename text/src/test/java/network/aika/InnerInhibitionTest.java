@@ -178,7 +178,7 @@ public class InnerInhibitionTest {
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(in, bn)
+                .link(in, bn)
                 .adjustBias();
 
         double patternValueTarget = patternN.getActivationFunction().f(patternNetTarget);

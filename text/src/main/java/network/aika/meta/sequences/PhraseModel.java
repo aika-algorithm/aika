@@ -38,7 +38,7 @@ public class PhraseModel extends SequenceModel {
 
     private static final Logger log = LoggerFactory.getLogger(PhraseModel.class);
 
-    NeuronProvider upperCaseN;
+    PatternCategoryNeuron upperCaseN;
 
     public PhraseModel(Model m, Dictionary dict) {
         super(m, dict);
@@ -55,12 +55,12 @@ public class PhraseModel extends SequenceModel {
 
         upperCaseN = new PatternCategoryNeuron(model)
                 .setLabel("Upper Case")
-                .getProvider();
+                .setPersistent(true);
     }
 
     public void addPhraseTarget(Document doc, int numTokens) {
         doc.addToken(
-                targetInput.getTargetInput().getNeuron(),
+                targetInput.getTargetInput(),
                 new Range(0, numTokens),
                 new Range(0, doc.length()),
                 INPUT_TOKEN_NET_TARGET
@@ -69,21 +69,20 @@ public class PhraseModel extends SequenceModel {
 
     @Override
     protected void initTemplateBindingNeurons() {
-        primaryBN = createPrimaryBindingNeuron()
-                .getProvider();
+        primaryBN = createPrimaryBindingNeuron();
 
         createTargetInputBindingNeuron();
 
         expandContinueBindingNeurons(
                 1,
-                primaryBN.getNeuron(),
+                primaryBN,
                 5,
                 1
         );
 
         expandContinueBindingNeurons(
                 1,
-                primaryBN.getNeuron(),
+                primaryBN,
                 5,
                 -1
         );
@@ -100,6 +99,6 @@ public class PhraseModel extends SequenceModel {
     public void readFields(DataInput in, Model m) throws Exception {
         super.readFields(in, m);
 
-        upperCaseN = m.lookupNeuronProvider(in.readLong());
+        upperCaseN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

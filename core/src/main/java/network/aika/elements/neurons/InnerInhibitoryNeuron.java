@@ -30,7 +30,7 @@ import network.aika.visitor.operator.LinkingOperator;
  *
  * @author Lukas Molzberger
  */
-public class InnerInhibitoryNeuron extends DisjunctiveNeuron<InnerInhibitoryActivation> {
+public class InnerInhibitoryNeuron extends DisjunctiveNeuron<InnerInhibitoryNeuron, InnerInhibitoryActivation> {
 
     public InnerInhibitoryNeuron(Model m) {
         super(m);

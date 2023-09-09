@@ -35,11 +35,12 @@ public class NetworkMotifs {
 
     public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double netTarget) {
         BindingNeuron bn = new BindingNeuron(input.getModel())
-                .setLabel(label);
+                .setLabel(label)
+                .setPersistent(true);
 
         new InputObjectSynapse()
                 .setWeight(weight)
-                .init(input, bn)
+                .link(input, bn)
                 .adjustBias();
 
         bn.setBias(netTarget);
@@ -51,11 +52,11 @@ public class NetworkMotifs {
     public static void addOuterInhibitoryLoop(BindingNeuron bn, OuterInhibitoryNeuron in, double weight) {
         new OuterInhibitorySynapse()
                 .setWeight(1.0)
-                .init(bn, in);
+                .link(bn, in);
 
         new OuterNegativeFeedbackSynapse()
                 .setWeight(weight)
-                .init(in, bn)
+                .link(in, bn)
                 .adjustBias();
     }
 
@@ -68,11 +69,11 @@ public class NetworkMotifs {
     public static void addInnerInhibitoryLoop(BindingNeuron bn, InnerInhibitoryNeuron in, double weight) {
         new InnerInhibitorySynapse()
                 .setWeight(1.0)
-                .init(bn, in);
+                .link(bn, in);
 
         new InnerNegativeFeedbackSynapse()
                 .setWeight(-weight)
-                .init(in, bn)
+                .link(in, bn)
                 .setSynapseBias(weight);
     }
 
@@ -86,14 +87,14 @@ public class NetworkMotifs {
         PatternSynapse pSyn = new PatternSynapse()
                 .setWeight(weight)
                 .setOptional(isOptional)
-                .init(bn, pn)
+                .link(bn, pn)
                 .adjustBias(bn.getTargetValue() + weakInputMargin);
 
         log.info("  " + pSyn + " targetNetContr:" + -pSyn.getSynapseBias().getValue());
 
         PositiveFeedbackSynapse posFeedSyn = new PositiveFeedbackSynapse()
                 .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), pn.getTargetValue()))
-                .init(pn, bn)
+                .link(pn, bn)
                 .adjustBias();
 
         log.info("  " + posFeedSyn + " targetNetContr:" + -posFeedSyn.getSynapseBias().getValue());
@@ -118,7 +119,7 @@ public class NetworkMotifs {
         RelationInputSynapse relSyn = new RelationInputSynapse()
                 .setWeight(relWeight)
                 .setTemplateOnly(templateOnly)
-                .init(rel, bn)
+                .link(rel, bn)
                 .adjustBias();
 
         double prevNetTarget = lastBN.getBias().getValue();
@@ -128,7 +129,7 @@ public class NetworkMotifs {
         SameObjectSynapse spSyn = new SameObjectSynapse()
                 .setWeight(spsWeight)
                 .setTemplateOnly(templateOnly)
-                .init(lastBN, bn)
+                .link(lastBN, bn)
                 .adjustBias(prevValueTarget);
 
         spSyn.setRelationSynId(relSyn.getSynapseId());

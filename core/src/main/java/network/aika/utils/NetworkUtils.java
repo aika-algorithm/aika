@@ -43,7 +43,7 @@ public class NetworkUtils {
                 .setLabel(n.getLabel() + CATEGORY_LABEL);
 
         BindingCategoryInputSynapse s = new BindingCategoryInputSynapse()
-                .init(bindingCategory, n);
+                .link(bindingCategory, n);
 
         s.setInitialCategorySynapseWeight(1.0);
 
@@ -56,7 +56,7 @@ public class NetworkUtils {
                 .setLabel(n.getLabel() + CATEGORY_LABEL);
 
         PatternCategoryInputSynapse s = new PatternCategoryInputSynapse()
-                .init(patternCategory, n);
+                .link(patternCategory, n);
 
         s.setInitialCategorySynapseWeight(1.0);
 
@@ -68,7 +68,7 @@ public class NetworkUtils {
                 .setLabel(n.getLabel() + CATEGORY_LABEL);
 
         OuterInhibitoryCategoryInputSynapse s = new OuterInhibitoryCategoryInputSynapse()
-                .init(inhibCategory, n);
+                .link(inhibCategory, n);
 
         s.setInitialCategorySynapseWeight(1.0);
 
@@ -80,7 +80,7 @@ public class NetworkUtils {
                 .setLabel(n.getLabel() + CATEGORY_LABEL);
 
         InnerInhibitoryCategoryInputSynapse s = new InnerInhibitoryCategoryInputSynapse()
-                .init(inhibCategory, n);
+                .link(inhibCategory, n);
 
         s.setInitialCategorySynapseWeight(1.0);
 

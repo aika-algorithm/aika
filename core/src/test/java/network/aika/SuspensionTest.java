@@ -61,12 +61,12 @@ public class SuspensionTest {
 
         Synapse sStrong = new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(inStrong.getNeuron(), out.getNeuron())
+                .link(inStrong.getNeuron(), out.getNeuron())
                 .adjustBias();
 
         Synapse sWeak = new InputObjectSynapse()
                 .setWeight(0.5)
-                .init(inWeak.getNeuron(), out.getNeuron())
+                .link(inWeak.getNeuron(), out.getNeuron())
                 .adjustBias();
 
         Assertions.assertEquals(INPUT, sStrong.getStoredAt());

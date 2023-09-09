@@ -23,6 +23,7 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.exceptions.MissingInputCategoryNeuron;
+import network.aika.exceptions.NeuronExistsTwiceException;
 import network.aika.fields.*;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
@@ -58,7 +59,7 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public abstract class Neuron<A extends Activation> implements Element, Writable {
+public abstract class Neuron<N extends Neuron, A extends Activation> implements Element, Writable {
 
     protected static final Logger log = LoggerFactory.getLogger(Neuron.class);
 
@@ -78,7 +79,7 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
     protected boolean allowTraining = true;
 
-    protected Neuron<?> template;
+    protected Neuron<?, ?> template;
 
     private boolean templateOnly;
 
@@ -209,10 +210,10 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         return acts.getActivations();
     }
 
-    public <N extends Neuron<A>> N instantiateTemplate() {
-        N n;
+    public <R extends N> R instantiateTemplate() {
+        R n;
         try {
-            n = (N) getClass()
+            n = (R) getClass()
                     .getConstructor(Model.class)
                     .newInstance(getModel());
         } catch (Exception e) {
@@ -240,12 +241,12 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
 
         createCategorySynapse()
                 .setWeight(cis.getInitialInstanceWeight())
-                .init(this, cis.getInput());
+                .link(this, cis.getInput());
 
         this.template = templateN;
     }
 
-    public <N extends Neuron<A>> N setTemplateOnly(boolean templateOnly) {
+    public N setTemplateOnly(boolean templateOnly) {
         this.templateOnly = templateOnly;
 
         return (N) this;
@@ -567,23 +568,33 @@ public abstract class Neuron<A extends Activation> implements Element, Writable 
         return label;
     }
 
-    public <N extends Neuron> N setLabel(String label) {
+    public <R extends N> R  setLabel(String label) {
         this.label = label;
-        return (N) this;
+        return (R) this;
     }
 
-    public <N extends Neuron> N setBias(double bias) {
+    public <R extends N> R setBias(double bias) {
         getBias().setValue(bias);
-        return (N) this;
+        return (R) this;
     }
 
-    public <N extends Neuron> N setTargetNet(double targetNet) {
+    public <R extends N> R  setTargetNet(double targetNet) {
         if(initParams == null) {
             initParams = new InitParams();
         }
         initParams.targetNet = targetNet;
 
-        return (N) this;
+        return (R) this;
+    }
+
+    public <R extends N> R setPersistent(boolean persistent) {
+        getProvider().setPersistent(persistent);
+        return (R) this;
+    }
+
+    public void verifyNeuronExistsOnlyOnce() {
+        if(getProvider().getNeuron() != this)
+            throw new NeuronExistsTwiceException(getId());
     }
 
     public double getTargetValue() {

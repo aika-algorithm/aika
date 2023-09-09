@@ -30,7 +30,7 @@ import network.aika.visitor.inhibitory.InhibitoryVisitor;
  *
  * @author Lukas Molzberger
  */
-public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryActivation> {
+public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryNeuron, OuterInhibitoryActivation> {
 
     public OuterInhibitoryNeuron(Model m) {
         super(m);

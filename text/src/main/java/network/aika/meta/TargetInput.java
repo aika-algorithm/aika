@@ -17,9 +17,7 @@
 package network.aika.meta;
 
 import network.aika.Model;
-import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.neurons.*;
 import network.aika.text.Document;
 
 import static network.aika.meta.NetworkMotifs.addBindingNeuron;
@@ -35,11 +33,11 @@ public class TargetInput {
 
     Model model;
 
-    protected NeuronProvider targetInput;
+    protected PatternNeuron targetInput;
 
-    protected NeuronProvider targetInputCategory;
+    protected CategoryNeuron targetInputCategory;
 
-    protected NeuronProvider targetInputBN;
+    protected BindingNeuron targetInputBN;
 
     protected double targetInputNetTarget = 5.0;
 
@@ -53,18 +51,18 @@ public class TargetInput {
     }
 
     public double getBindingValueTarget() {
-        return targetInputBN.getNeuron().getActivationFunction()
+        return targetInputBN.getActivationFunction()
                 .f(bindingNetTarget);
     }
 
-    public NeuronProvider getTargetInput() {
+    public PatternNeuron getTargetInput() {
         return targetInput;
     }
 
     public void setTemplateOnly(boolean templateOnly) {
-        targetInput.getNeuron().setTemplateOnly(templateOnly);
-        targetInputCategory.getNeuron().setTemplateOnly(templateOnly);
-        targetInputBN.getNeuron().setTemplateOnly(templateOnly);
+        targetInput.setTemplateOnly(templateOnly);
+        targetInputCategory.setTemplateOnly(templateOnly);
+        targetInputBN.setTemplateOnly(templateOnly);
 
         targetInput.getInputSynapses().forEach(s ->
                 s.setTemplateOnly(templateOnly)
@@ -75,7 +73,7 @@ public class TargetInput {
     }
 
     public PatternNeuron addTarget(String target) {
-        return model.lookupInputNeuron(target, targetInput.getNeuron());
+        return model.lookupInputNeuron(target, targetInput);
     }
 
     public void addTarget(Document doc, String target) {
@@ -85,23 +83,19 @@ public class TargetInput {
 
     public void initTargetInput() {
         targetInput = new PatternNeuron(model)
-                        .setLabel(label + " Target Input")
-                .getProvider();
-
-        targetInput.getNeuron()
-                .setBias(targetInputNetTarget);
-        targetInput.getNeuron()
+                .setLabel(label + " Target Input")
+                .setBias(targetInputNetTarget)
                 .setTargetNet(targetInputNetTarget);
 
-        targetInputCategory = makeAbstract((PatternNeuron) targetInput.getNeuron())
+        targetInputCategory = makeAbstract(targetInput)
                 .setWeight(1.0)
                 .adjustBias()
-                .getPInput();
+                .getInput();
     }
 
     public BindingNeuron createTargetInputBindingNeuron(PatternNeuron pn, double patternNetTarget) {
         BindingNeuron bn = addBindingNeuron(
-                targetInput.getNeuron(),
+                targetInput,
                 "Abstr. " + label + " Target Input",
                 10.0,
                 bindingNetTarget
@@ -117,14 +111,13 @@ public class TargetInput {
                 false
         );
 
-        targetInputBN = bn.getProvider();
+        targetInputBN = bn;
 
         return bn;
     }
 
     public PatternNeuron instantiateTargetInput(String label) {
-        PatternNeuron ttiPN = targetInput.getNeuron();
-        PatternNeuron n = ttiPN.instantiateTemplate()
+        PatternNeuron n = targetInput.instantiateTemplate()
                 .setLabel(label + " Target Input");
 
         n.setAllowTraining(false);

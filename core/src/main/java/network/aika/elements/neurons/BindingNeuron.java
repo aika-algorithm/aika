@@ -33,21 +33,22 @@ import static network.aika.utils.NetworkUtils.makeAbstract;
 /**
  * @author Lukas Molzberger
  */
-public class BindingNeuron extends ConjunctiveNeuron<BindingActivation> {
+public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActivation> {
 
-    public static NeuronProvider create(Model m, String label) {
+    public static BindingNeuron create(Model m, String label) {
         return create(m, label, false);
     }
 
-    public static NeuronProvider create(Model m, String label, boolean abstr) {
+    public static BindingNeuron create(Model m, String label, boolean abstr) {
         BindingNeuron bn = new BindingNeuron(m)
-                .setLabel(label);
+                .setLabel(label)
+                .setPersistent(true);
 
         if(abstr)
             makeAbstract(bn)
                     .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
-        return bn.getProvider();
+        return bn;
     }
 
     public BindingNeuron(Model m) {

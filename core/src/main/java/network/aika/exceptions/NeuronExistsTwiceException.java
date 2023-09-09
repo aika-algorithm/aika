@@ -14,29 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.exceptions;
 
-import network.aika.enums.Scope;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.links.Link;
-import network.aika.elements.neurons.Neuron;
+import static java.lang.String.format;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class DisjunctiveSynapse<
-        S extends DisjunctiveSynapse,
-        I extends Neuron,
-        O extends Neuron<O, OA>,
-        L extends Link<S, IA, OA>,
-        IA extends Activation<?>,
-        OA extends Activation
-        > extends Synapse<S,I,O,L,IA,OA>
-{
+public class NeuronExistsTwiceException extends RuntimeException {
 
-    @Override
-    public double getSumOfLowerWeights() {
-        return 0.0;
+    public NeuronExistsTwiceException(Long id) {
+        super(format("Two instances representing the neuron with id [%s] exist.", id));
     }
 }

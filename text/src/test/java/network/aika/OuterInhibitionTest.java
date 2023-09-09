@@ -90,15 +90,15 @@ public class OuterInhibitionTest {
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(in, bn)
+                .link(in, bn)
                 .adjustBias();
         new OuterNegativeFeedbackSynapse()
                 .setWeight(-20.0)
-                .init(inhib, bn);
+                .link(inhib, bn);
 
         new OuterInhibitorySynapse()
                 .setWeight(1.0)
-                .init(bn, inhib);
+                .link(bn, inhib);
 
         bn.setBias(bias);
 

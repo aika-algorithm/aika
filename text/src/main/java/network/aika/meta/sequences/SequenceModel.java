@@ -57,20 +57,20 @@ public abstract class SequenceModel implements Writable {
 
     protected TargetInput targetInput;
 
-    public NeuronProvider relPT;
-    public NeuronProvider relNT;
+    public BeforeRelationNeuron relPT;
+    public BeforeRelationNeuron relNT;
 
-    protected NeuronProvider relContains;
+    protected ContainsRelationNeuron relContains;
 
-    public NeuronProvider outerInhibitoryN;
+    public OuterInhibitoryNeuron outerInhibitoryN;
 
-    public NeuronProvider primaryBNInhibitoryN;
+    public InnerInhibitoryNeuron primaryBNInhibitoryN;
 
-    protected NeuronProvider inhibCat;
+    protected InhibitoryCategoryNeuron inhibCat;
 
-    public NeuronProvider patternN;
+    public PatternNeuron patternN;
 
-    public NeuronProvider primaryBN;
+    public BindingNeuron primaryBN;
 
 
     record BindingNeuronParameters (
@@ -122,23 +122,23 @@ public abstract class SequenceModel implements Writable {
         return targetInput;
     }
 
-    public NeuronProvider getRelationPreviousToken() {
+    public BeforeRelationNeuron getRelationPreviousToken() {
         return relPT;
     }
 
-    public NeuronProvider getRelationNextToken() {
+    public BeforeRelationNeuron getRelationNextToken() {
         return relNT;
     }
 
-    public NeuronProvider getOuterInhibitoryNeuron() {
+    public OuterInhibitoryNeuron getOuterInhibitoryNeuron() {
         return outerInhibitoryN;
     }
 
-    public NeuronProvider getInhibitoryCategory() {
+    public InhibitoryCategoryNeuron getInhibitoryCategory() {
         return inhibCat;
     }
 
-    public NeuronProvider getPatternNeuron() {
+    public PatternNeuron getPatternNeuron() {
         return patternN;
     }
 
@@ -146,12 +146,10 @@ public abstract class SequenceModel implements Writable {
 
     public void initStaticNeurons() {
         relPT = BeforeRelationNeuron.createBeforeRelationNeuron(model, -1, -1, "Prev. Token Rel.: -1,-1")
-                .setBias(5.0)
-                .getProvider();
+                .setBias(5.0);
 
         relNT = BeforeRelationNeuron.createBeforeRelationNeuron(model, 1, 1, "Next. Token Rel.: 1,1")
-                .setBias(5.0)
-                .getProvider();
+                .setBias(5.0);
 
         targetInput = new TargetInput(model, "Phrase");
         targetInput.initTargetInput();
@@ -162,22 +160,22 @@ public abstract class SequenceModel implements Writable {
     protected void initTemplates() {
         // Abstract
         patternN = PatternNeuron.create(model, getPatternType(), true);
-        patternN.getNeuron().setBias(PATTERN_NET_TARGET);
-        patternN.getNeuron().setTargetNet(PATTERN_NET_TARGET);
+        patternN.setBias(PATTERN_NET_TARGET);
+        patternN.setTargetNet(PATTERN_NET_TARGET);
 
         outerInhibitoryN = new OuterInhibitoryNeuron(model)
                 .setLabel("I")
-                .getProvider();
+                .setPersistent(true);
 
-        makeAbstract((OuterInhibitoryNeuron) outerInhibitoryN.getNeuron())
+        makeAbstract(outerInhibitoryN)
                 .setWeight(1.0);
 
 
         primaryBNInhibitoryN = new InnerInhibitoryNeuron(model)
                 .setLabel("I")
-                .getProvider();
+                .setPersistent(true);
 
-        makeAbstract((InnerInhibitoryNeuron) primaryBNInhibitoryN.getNeuron())
+        makeAbstract(primaryBNInhibitoryN)
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         log.info(getPatternType() + " Pattern: netTarget:" + PATTERN_NET_TARGET);
@@ -190,12 +188,12 @@ public abstract class SequenceModel implements Writable {
     protected BindingNeuron createPrimaryBindingNeuron() {
         BindingNeuron bn = createBindingNeuron(PRIMARY_BN_PARAMS, 0, false);
 
-        double patternValueTarget = patternN.getNeuron().getActivationFunction()
+        double patternValueTarget = patternN.getActivationFunction()
                 .f(PRIMARY_BN_PARAMS.patternNetTarget);
 
         addInnerInhibitoryLoop(
                 bn,
-                primaryBNInhibitoryN.getNeuron(),
+                primaryBNInhibitoryN,
                 -getMaxBindingNetTarget(PRIMARY_BN_PARAMS.netTarget, patternValueTarget)
         );
 
@@ -227,19 +225,18 @@ public abstract class SequenceModel implements Writable {
 
     protected BindingNeuron createTargetInputBindingNeuron() {
         BindingNeuron bn = targetInput.createTargetInputBindingNeuron(
-                patternN.getNeuron(),
+                patternN,
                 PATTERN_NET_TARGET
         );
 
         relContains = ContainsRelationNeuron.createContainsRelationNeuron(model, "Contains Rel.: ", Direction.OUTPUT)
                 .setBias(5.0)
-                .setTargetNet(5.0)
-                .getProvider();
+                .setTargetNet(5.0);
 
         addRelation(
                 bn,
-                primaryBN.getNeuron(),
-                relContains.getNeuron(),
+                primaryBN,
+                relContains,
                 5.0,
                 10.0,
                 true
@@ -257,8 +254,8 @@ public abstract class SequenceModel implements Writable {
         BindingNeuron bn = createBindingNeuron(p, pos, isOptional);
 
         LatentRelationNeuron rel = pos > 0 ?
-                relPT.getNeuron() :
-                relNT.getNeuron();
+                relPT :
+                relNT;
 
         addRelation(
                 lastBN,
@@ -280,7 +277,7 @@ public abstract class SequenceModel implements Writable {
         log.info(p.labelPrefix + " Binding-Neuron: netTarget:" + p.netTarget);
 
         BindingNeuron bn = addBindingNeuron(
-                dictionary.getInputToken().getNeuron(),
+                dictionary.getInputToken(),
                 "Abstract (" + p.labelPrefix + ") Pos:" + pos,
                 10.0,
                 p.netTarget
@@ -290,13 +287,13 @@ public abstract class SequenceModel implements Writable {
 
         addOuterInhibitoryLoop(
                 bn,
-                outerInhibitoryN.getNeuron(),
+                outerInhibitoryN,
                 getNegMargin(pos) * -p.netTarget
         );
 
         addPositiveFeedbackLoop(
                 bn,
-                patternN.getNeuron(),
+                patternN,
                 p.pfWeight,
                 p.weakInputMargin,
                 isOptional
@@ -325,13 +322,13 @@ public abstract class SequenceModel implements Writable {
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
-        relPT = m.lookupNeuronProvider(in.readLong());
-        relNT = m.lookupNeuronProvider(in.readLong());
-        relContains = m.lookupNeuronProvider(in.readLong());
-        outerInhibitoryN = m.lookupNeuronProvider(in.readLong());
-        primaryBNInhibitoryN = m.lookupNeuronProvider(in.readLong());
-        inhibCat = m.lookupNeuronProvider(in.readLong());
-        patternN = m.lookupNeuronProvider(in.readLong());
-        primaryBN = m.lookupNeuronProvider(in.readLong());
+        relPT = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        relNT = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        relContains = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        outerInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        primaryBNInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        inhibCat = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        patternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        primaryBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

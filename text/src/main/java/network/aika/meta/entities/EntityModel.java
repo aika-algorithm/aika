@@ -55,15 +55,15 @@ public class EntityModel implements Writable {
 
     protected TargetInput targetInput;
 
-    protected NeuronProvider entityCategory;
+    protected CategoryNeuron entityCategory;
 
-    protected NeuronProvider entityPattern;
+    protected PatternNeuron entityPattern;
 
-    protected NeuronProvider entityBN;
+    protected BindingNeuron entityBN;
 
-    protected NeuronProvider targetInputBN;
+    protected BindingNeuron targetInputBN;
 
-    protected NeuronProvider relEquals;
+    protected EqualsRelationNeuron relEquals;
 
     public record EntityInstance (
             PatternNeuron entityPatternN,
@@ -78,7 +78,7 @@ public class EntityModel implements Writable {
         this.phraseModel = pm;
     }
 
-    public NeuronProvider getEntityPattern() {
+    public PatternNeuron getEntityPattern() {
         return entityPattern;
     }
 
@@ -94,50 +94,50 @@ public class EntityModel implements Writable {
                 .setLabel("Abstract Entity")
                 .setTargetNet(ENTITY_NET_TARGET)
                 .setBias(ENTITY_NET_TARGET)
-                .getProvider();
+                .setPersistent(true);
 
-        entityCategory = makeAbstract((PatternNeuron) entityPattern.getNeuron())
+        entityCategory = makeAbstract(entityPattern)
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT)
-                .getPInput();
+                .getInput()
+                .setPersistent(true);
 
         entityBN = addBindingNeuron(
-                phraseModel.getPatternNeuron().getNeuron(),
+                phraseModel.getPatternNeuron(),
                 "Abstract Entity",
                 10.0,
                 BINDING_NET_TARGET
-        ).getProvider();
+        );
 
-        makeAbstract((BindingNeuron) entityBN.getNeuron())
+        makeAbstract(entityBN)
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addPositiveFeedbackLoop(
-                entityBN.getNeuron(),
-                entityPattern.getNeuron(),
+                entityBN,
+                entityPattern,
                 2.5,
                 0.0,
                 false
         );
 
-        targetInputBN = createTargetInputBindingNeuron()
-                .getProvider();
+        targetInputBN = createTargetInputBindingNeuron();
 
         targetInput.setTemplateOnly(true);
     }
 
     protected BindingNeuron createTargetInputBindingNeuron() {
         BindingNeuron bn = targetInput.createTargetInputBindingNeuron(
-                entityPattern.getNeuron(),
+                entityPattern,
                 ENTITY_NET_TARGET
         );
 
         relEquals = EqualsRelationNeuron.createEqualsRelationNeuron(model, "Equals Rel.: ")
                 .setBias(5.0)
-                .getProvider();
+                .setPersistent(true);
 
         addRelation(
                 bn,
-                entityBN.getNeuron(),
-                relEquals.getNeuron(),
+                entityBN,
+                relEquals,
                 5.0,
                 10.0,
                 true
@@ -160,7 +160,7 @@ public class EntityModel implements Writable {
     }
 
     public EntityInstance addEntityPattern(String label) {
-        PatternNeuron tEPN = entityPattern.getNeuron();
+        PatternNeuron tEPN = entityPattern;
         PatternNeuron n = tEPN.instantiateTemplate()
                 .setLabel(label);
 
@@ -168,13 +168,13 @@ public class EntityModel implements Writable {
         n.setAllowTraining(false);
 
 
-        BindingNeuron eBN = entityBN.getNeuron();
+        BindingNeuron eBN = entityBN;
         PatternNeuron phrasePN = eBN.getInputSynapseByType(InputObjectSynapse.class).getInput();
 
         PatternNeuron targetInputPN = targetInput.instantiateTargetInput(label);
 
-        BindingNeuron iEBN = instantiateBN(label, n, entityBN.getNeuron(), phrasePN);
-        BindingNeuron iTIBN = instantiateBN(label, n, targetInputBN.getNeuron(), targetInputPN);
+        BindingNeuron iEBN = instantiateBN(label, n, entityBN, phrasePN);
+        BindingNeuron iTIBN = instantiateBN(label, n, targetInputBN, targetInputPN);
 
         instantiateRelation(iTIBN, iEBN);
 
@@ -185,10 +185,10 @@ public class EntityModel implements Writable {
     }
 
     private void instantiateRelation(BindingNeuron iTIBN, BindingNeuron iEBN) {
-        SameObjectSynapse tSoSyn = (SameObjectSynapse) entityBN.getNeuron().getInputSynapseByType(SameObjectSynapse.class);
+        SameObjectSynapse tSoSyn = entityBN.getInputSynapseByType(SameObjectSynapse.class);
         SameObjectSynapse soSyn = tSoSyn.instantiateTemplate(iTIBN, iEBN);
 
-        RelationInputSynapse tRelSyn = (RelationInputSynapse) entityBN.getSynapseBySynId(tSoSyn.getRelationSynId());
+        RelationInputSynapse tRelSyn = (RelationInputSynapse) entityBN.getProvider().getSynapseBySynId(tSoSyn.getRelationSynId());
         RelationInputSynapse relSyn = tRelSyn.instantiateTemplate(tRelSyn.getInput(), iEBN);
 
         soSyn.setRelationSynId(relSyn.getSynapseId());
@@ -205,7 +205,7 @@ public class EntityModel implements Writable {
         bn.getInputSynapseByType(PositiveFeedbackSynapse.class)
                 .instantiateTemplate(pn, ieBN);
 
-        entityPattern.getNeuron().getInputSynapseByType(PatternSynapse.class)
+        entityPattern.getInputSynapseByType(PatternSynapse.class)
                 .instantiateTemplate(ieBN, pn);
 
         return ieBN;
@@ -226,10 +226,10 @@ public class EntityModel implements Writable {
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
-        entityCategory = m.lookupNeuronProvider(in.readLong());
-        entityPattern = m.lookupNeuronProvider(in.readLong());
-        entityBN = m.lookupNeuronProvider(in.readLong());
-        targetInputBN = m.lookupNeuronProvider(in.readLong());
-        relEquals = m.lookupNeuronProvider(in.readLong());
+        entityCategory = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        entityPattern = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        relEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

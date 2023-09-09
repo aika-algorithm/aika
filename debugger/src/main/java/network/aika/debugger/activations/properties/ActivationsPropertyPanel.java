@@ -27,7 +27,7 @@ import network.aika.elements.neurons.Neuron;
  */
 public class ActivationsPropertyPanel extends AbstractPropertyPanel {
 
-    public ActivationsPropertyPanel(Neuron<Activation> n) {
+    public ActivationsPropertyPanel(Neuron<?, ?> n) {
         n.getPreActivations()
                 .flatMap(preAct -> preAct.getActivations().stream())
                 .limit(10)

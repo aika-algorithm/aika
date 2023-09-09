@@ -44,19 +44,18 @@ public class WordModel extends SequenceModel {
 
     @Override
     protected void initTemplateBindingNeurons() {
-        primaryBN = createPrimaryBindingNeuron()
-                .getProvider();
+        primaryBN = createPrimaryBindingNeuron();
 
         expandContinueBindingNeurons(
                 1,
-                primaryBN.getNeuron(),
+                primaryBN,
                 5,
                 1
         );
 
         expandContinueBindingNeurons(
                 1,
-                primaryBN.getNeuron(),
+                primaryBN,
                 5,
                 -1
         );

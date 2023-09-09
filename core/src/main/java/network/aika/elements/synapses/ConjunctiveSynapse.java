@@ -44,7 +44,7 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends Neuron, O extends ConjunctiveNeuron<OA>, L extends Link<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation> extends
+public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends Link<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation> extends
         Synapse<S, I, O, L, IA, OA>
 {
 
@@ -62,10 +62,8 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
     private double sumOfLowerWeights;
     protected Direction currentStoredAt = INPUT;
 
-    @Override
-    public S init(Neuron input, Neuron output) {
+    public ConjunctiveSynapse() {
         synapseBias.setValue(0.0);
-        return super.init(input, output);
     }
 
     public void initBiasInput(OA act) {

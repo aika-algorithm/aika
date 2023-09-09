@@ -71,14 +71,14 @@ public class JacksonCookTest {
 
         new BindingCategoryInputSynapse()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT)
-                .init(forenameBNCat, forenameBN);
+                .link(forenameBNCat, forenameBN);
 
         BindingCategoryNeuron surnameBNCat = new BindingCategoryNeuron(m)
                 .setLabel("Forename Category");
 
         new BindingCategoryInputSynapse()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT)
-                .init(surnameBNCat, surnameBN);
+                .link(surnameBNCat, surnameBN);
 
 
         BindingNeuron jacksonForenameBN = forenameBN.instantiateTemplate()
@@ -89,22 +89,22 @@ public class JacksonCookTest {
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(jacksonIN, jacksonJCBN)
+                .link(jacksonIN, jacksonJCBN)
                 .adjustBias();
 
         CategoryNeuron jacksonForenameCN = new BindingCategoryNeuron(m)
                 .setLabel("jackson (forename)");
         new BindingCategorySynapse()
                 .setWeight(10.0)
-                .init(jacksonJCBN, jacksonForenameCN);
+                .link(jacksonJCBN, jacksonForenameCN);
 
         new BindingCategoryInputSynapse()
                 .setWeight(10.0)
-                .init(jacksonForenameCN, jacksonForenameBN);
+                .link(jacksonForenameCN, jacksonForenameBN);
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(jacksonIN, jacksonForenameBN)
+                .link(jacksonIN, jacksonForenameBN)
                 .adjustBias();
 
         CategoryNeuron forenameCN = new BindingCategoryNeuron(m)
@@ -112,13 +112,13 @@ public class JacksonCookTest {
 
         new BindingCategorySynapse()
                 .setWeight(10.0)
-                .init(jacksonForenameBN, forenameCN);
+                .link(jacksonForenameBN, forenameCN);
 
         BindingNeuron jacksonCityBN = new BindingNeuron(m)
                 .setLabel("jackson (city)");
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(jacksonIN, jacksonCityBN)
+                .link(jacksonIN, jacksonCityBN)
                 .adjustBias();
 
         CategoryNeuron cityCN = new BindingCategoryNeuron(m)
@@ -126,48 +126,48 @@ public class JacksonCookTest {
 
         new BindingCategorySynapse()
                 .setWeight(10.0)
-                .init(jacksonCityBN, cityCN);
+                .link(jacksonCityBN, cityCN);
 
         BindingNeuron cookSurnameBN =  surnameBN.setLabel("cook (surname)");
         BindingNeuron cookJCBN =  cookSurnameBN.setLabel("cook (jackson cook)");
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(cookIN, cookJCBN)
+                .link(cookIN, cookJCBN)
                 .adjustBias();
 
         CategoryNeuron cookSurnameCN = new BindingCategoryNeuron(m)
                 .setLabel("cook (surname)");
         new BindingCategorySynapse()
                 .setWeight(10.0)
-                .init(cookJCBN, cookSurnameCN);
+                .link(cookJCBN, cookSurnameCN);
 
         new BindingCategoryInputSynapse()
                 .setWeight(10.0)
-                .init(cookSurnameCN, cookSurnameBN);
+                .link(cookSurnameCN, cookSurnameBN);
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(cookIN, cookSurnameBN)
+                .link(cookIN, cookSurnameBN)
                 .adjustBias();
 
         CategoryNeuron surnameCN =  new BindingCategoryNeuron(m)
                 .setLabel("surname");
         new BindingCategorySynapse()
                 .setWeight(10.0)
-                .init(cookSurnameBN, surnameCN);
+                .link(cookSurnameBN, surnameCN);
 
         BindingNeuron cookProfessionBN =  new BindingNeuron(m)
                 .setLabel("cook (profession)");
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(cookIN, cookProfessionBN)
+                .link(cookIN, cookProfessionBN)
                 .adjustBias();
 
         CategoryNeuron professionCN = new BindingCategoryNeuron(m)
                 .setLabel("profession");
         new BindingCategorySynapse()
                 .setWeight(10.0)
-                .init(cookProfessionBN, professionCN);
+                .link(cookProfessionBN, professionCN);
 
         addOuterInhibitoryLoop(
                 new OuterInhibitoryNeuron(m)
@@ -193,20 +193,20 @@ public class JacksonCookTest {
 
         new BindingCategoryInputSynapse()
                 .setWeight(10.0)
-                .init(forenameCN, forenameBN);
+                .link(forenameCN, forenameBN);
 
         new BindingCategoryInputSynapse()
                 .setWeight(10.0)
-                .init(surnameCN, surnameBN);
+                .link(surnameCN, surnameBN);
 
         new RelationInputSynapse()
                 .setWeight(5.0)
-                .init(relPT, surnameBN)
+                .link(relPT, surnameBN)
                 .adjustBias();
 
         new SameObjectSynapse()
                 .setWeight(10.0)
-                .init(forenameBN, surnameBN)
+                .link(forenameBN, surnameBN)
                 .adjustBias();
 
         forenameBN.setBias(2.0);

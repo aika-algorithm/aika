@@ -41,25 +41,26 @@ import static network.aika.utils.NetworkUtils.makeAbstract;
  *
  * @author Lukas Molzberger
  */
-public class PatternNeuron extends ConjunctiveNeuron<PatternActivation> {
+public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActivation> {
 
     protected double frequency;
 
     protected SampleSpace sampleSpace = new SampleSpace();
 
-    public static NeuronProvider create(Model m, String label) {
+    public static PatternNeuron create(Model m, String label) {
         return create(m, label, false);
     }
 
-    public static NeuronProvider create(Model m, String label, boolean abstr) {
+    public static PatternNeuron create(Model m, String label, boolean abstr) {
         PatternNeuron pn = new PatternNeuron(m)
-                .setLabel(label);
+                .setLabel(label)
+                .setPersistent(true);
 
         if(abstr)
             makeAbstract(pn)
                     .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
-        return pn.getProvider();
+        return pn;
     }
 
     public PatternNeuron(Model m) {

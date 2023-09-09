@@ -110,8 +110,8 @@ public class Model implements Writable {
         return new ArrayList<>(providers.values());
     }
 
-    public <N extends Neuron> N lookupInputNeuron(String tokenLabel, PatternNeuron template) {
-        N n = getInputNeuron(tokenLabel, template);
+    public PatternNeuron lookupInputNeuron(String tokenLabel, PatternNeuron template) {
+        PatternNeuron n = getInputNeuron(tokenLabel, template);
         if(n != null)
             return n;
 

@@ -43,7 +43,7 @@ public class PropagateTest {
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(in, out);
+                .link(in, out);
 
         out.setBias(1.0);
 

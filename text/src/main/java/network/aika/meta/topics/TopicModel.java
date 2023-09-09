@@ -18,6 +18,7 @@ package network.aika.meta.topics;
 
 import network.aika.Model;
 import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.neurons.relations.EqualsRelationNeuron;
@@ -56,15 +57,15 @@ public class TopicModel implements Writable {
 
     protected Model model;
 
-    protected NeuronProvider topicPatternN;
+    protected PatternNeuron topicPatternN;
 
-    protected NeuronProvider topicPatternCategory;
+    protected CategoryNeuron topicPatternCategory;
 
-    protected NeuronProvider relEquals;
+    protected EqualsRelationNeuron relEquals;
 
-    protected NeuronProvider topicBN;
+    protected BindingNeuron topicBN;
 
-    protected NeuronProvider targetInputBN;
+    protected BindingNeuron targetInputBN;
 
 
     public TopicModel(EntityModel entityModel) {
@@ -82,54 +83,50 @@ public class TopicModel implements Writable {
 
         topicPatternN = new PatternNeuron(model)
                 .setLabel("Abstract Topic")
-                .getProvider();
+                .setBias(TOPIC_NET_TARGET)
+                .setPersistent(true);
 
-        topicPatternN.getNeuron()
-                .setBias(TOPIC_NET_TARGET);
-
-        topicPatternCategory = makeAbstract((PatternNeuron) topicPatternN.getNeuron())
+        topicPatternCategory = makeAbstract(topicPatternN)
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT)
-                .getPInput();
-
+                .getInput()
+                .setPersistent(true);
 
         topicBN = addBindingNeuron(
-                entityModel.getEntityPattern().getNeuron(),
+                entityModel.getEntityPattern(),
                 "Abstract Entity",
                 10.0,
                 BINDING_NET_TARGET
-        ).getProvider();
+        );
 
-        makeAbstract((BindingNeuron) topicBN.getNeuron())
+        makeAbstract(topicBN)
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addPositiveFeedbackLoop(
-                topicBN.getNeuron(),
-                topicPatternN.getNeuron(),
+                topicBN,
+                topicPatternN,
                 2.5,
                 0.0,
                 false
         );
 
-        targetInputBN = createTargetInputBindingNeuron()
-                .getProvider();
+        targetInputBN = createTargetInputBindingNeuron();
 
         targetInput.setTemplateOnly(true);
     }
 
     protected BindingNeuron createTargetInputBindingNeuron() {
         BindingNeuron bn = targetInput.createTargetInputBindingNeuron(
-                topicPatternN.getNeuron(),
+                topicPatternN,
                 TOPIC_NET_TARGET
         );
 
         relEquals = EqualsRelationNeuron.createEqualsRelationNeuron(model, "Equals Rel.: ")
-                .setBias(5.0)
-                .getProvider();
+                .setBias(5.0);
 
         addRelation(
                 bn,
-                topicBN.getNeuron(),
-                relEquals.getNeuron(),
+                topicBN,
+                relEquals,
                 5.0,
                 10.0,
                 true
@@ -149,10 +146,10 @@ public class TopicModel implements Writable {
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
-        topicPatternN = m.lookupNeuronProvider(in.readLong());
-        topicPatternCategory = m.lookupNeuronProvider(in.readLong());
-        relEquals = m.lookupNeuronProvider(in.readLong());
-        topicBN = m.lookupNeuronProvider(in.readLong());
-        targetInputBN = m.lookupNeuronProvider(in.readLong());
+        topicPatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        topicPatternCategory = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        relEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        topicBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

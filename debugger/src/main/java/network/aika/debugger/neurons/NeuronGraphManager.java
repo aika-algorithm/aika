@@ -74,10 +74,10 @@ public class NeuronGraphManager extends AbstractGraphManager<Neuron, Synapse, Ne
 
     @Override
     public Synapse getLink(Edge e) {
-        Neuron<?> in = getAikaNode(e.getSourceNode());
-        Neuron<?> on = getAikaNode(e.getTargetNode());
+        Neuron<?, ?> in = getAikaNode(e.getSourceNode());
+        Neuron<?, ?> on = getAikaNode(e.getTargetNode());
 
-        if(on instanceof ConjunctiveNeuron<?>) {
+        if(on instanceof ConjunctiveNeuron<?, ?>) {
             return on.getInputSynapsesAsStream()
                     .filter(s -> s.getInput() == in)
                     .findAny()

@@ -46,32 +46,32 @@ public class TestHelper {
         BindingNeuron theBN = new BindingNeuron(m).setLabel("the (the cat)");
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(theIN, theBN)
+                .link(theIN, theBN)
                 .adjustBias();
 
         BindingNeuron catBN = new BindingNeuron(m).setLabel("cat (the cat)");
         new InputObjectSynapse()
                 .setWeight(variant == 0  || variant == 2 ? 10.0 : 5.0)
-                .init(catIN, catBN)
+                .link(catIN, catBN)
                 .adjustBias();
 
         if(variant < 2) {
             new RelationInputSynapse()
                     .setWeight(5.0)
-                    .init(relPT, catBN)
+                    .link(relPT, catBN)
                     .adjustBias();
             new SameObjectSynapse()
                     .setWeight(variant == 1 || variant == 3 ? 10.0 : 5.0)
-                    .init(theBN, catBN)
+                    .link(theBN, catBN)
                     .adjustBias();
         } else {
             new RelationInputSynapse()
                     .setWeight(5.0)
-                    .init(relPT, theBN)
+                    .link(relPT, theBN)
                     .adjustBias();
             new SameObjectSynapse()
                     .setWeight(variant == 1 || variant == 3 ? 10.0 : 5.0)
-                    .init(catBN, theBN)
+                    .link(catBN, theBN)
                     .adjustBias();
         }
 
@@ -95,23 +95,23 @@ public class TestHelper {
         BindingNeuron blackBN = new BindingNeuron(m).setLabel("black (black cat)");
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(blackIN, blackBN)
+                .link(blackIN, blackBN)
                 .adjustBias();
 
         BindingNeuron catBN = new BindingNeuron(m).setLabel("cat (black cat)");
         new InputObjectSynapse()
                 .setWeight(20.0)
-                .init(catIN, catBN)
+                .link(catIN, catBN)
                 .adjustBias();
 
         new RelationInputSynapse()
                 .setWeight(5.0)
-                .init(relPT, catBN)
+                .link(relPT, catBN)
                 .adjustBias();
 
         new SameObjectSynapse()
                 .setWeight(5.0)
-                .init(blackBN, catBN)
+                .link(blackBN, catBN)
                 .adjustBias();
 
         PatternNeuron blackCat = initPatternLoop(m, "black cat", blackBN, catBN);
@@ -133,32 +133,32 @@ public class TestHelper {
         BindingNeuron theBN = new BindingNeuron(m).setLabel("the (the dog)");
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(theIN, theBN)
+                .link(theIN, theBN)
                 .adjustBias();
 
         BindingNeuron dogBN = new BindingNeuron(m).setLabel("dog (the dog)");
         new InputObjectSynapse()
                 .setWeight(variant == 0  || variant == 2 ? 10.0 : 5.0)
-                .init(dogIN, dogBN)
+                .link(dogIN, dogBN)
                 .adjustBias();
 
         if(variant < 2) {
             new RelationInputSynapse()
                     .setWeight(5.0)
-                    .init(relPT, dogBN)
+                    .link(relPT, dogBN)
                     .adjustBias();
             new SameObjectSynapse()
                     .setWeight(variant == 1 || variant == 3 ? 10.0 : 5.0)
-                    .init(theBN, dogBN)
+                    .link(theBN, dogBN)
                     .adjustBias();
         } else {
             new RelationInputSynapse()
                     .setWeight(5.0)
-                    .init(relPT, theBN)
+                    .link(relPT, theBN)
                     .adjustBias();
             new SameObjectSynapse()
                     .setWeight(variant == 1 || variant == 3 ? 10.0 : 5.0)
-                    .init(dogBN, theBN)
+                    .link(dogBN, theBN)
                     .adjustBias();
         }
 

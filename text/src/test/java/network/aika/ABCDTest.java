@@ -66,22 +66,22 @@ public class ABCDTest {
 
         new RelationInputSynapse()
                 .setWeight(10.0)
-                .init(relPT, b_abBN)
+                .link(relPT, b_abBN)
                 .adjustBias();
         new SameObjectSynapse()
                 .setWeight(11.0)
-                .init(a_abBN, b_abBN)
+                .link(a_abBN, b_abBN)
                 .adjustBias();
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(a_IN, a_abBN)
+                .link(a_IN, a_abBN)
                 .adjustBias();
         a_abBN.setBias(2.5);
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(b_IN, b_abBN)
+                .link(b_IN, b_abBN)
                 .adjustBias();
 
         PatternNeuron abPattern = initPatternLoop(m, "ab", a_abBN, b_abBN);
@@ -93,16 +93,16 @@ public class ABCDTest {
 
         new RelationInputSynapse()
                 .setWeight(10.0)
-                .init(relPT, c_bcBN)
+                .link(relPT, c_bcBN)
                 .adjustBias();
         new SameObjectSynapse()
                 .setWeight(11.0)
-                .init(b_bcBN, c_bcBN)
+                .link(b_bcBN, c_bcBN)
                 .adjustBias();
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(b_IN, b_bcBN)
+                .link(b_IN, b_bcBN)
                 .adjustBias();
         TestUtils.addOuterInhibitoryLoop(new OuterInhibitoryNeuron(m).setLabel("I-b"), false, b_abBN, b_bcBN);
         b_abBN.setBias(3.0);
@@ -110,7 +110,7 @@ public class ABCDTest {
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(c_IN, c_bcBN)
+                .link(c_IN, c_bcBN)
                 .adjustBias();
         c_bcBN.setBias(3.0);
 
@@ -122,28 +122,28 @@ public class ABCDTest {
         BindingNeuron d_bcdBN = new BindingNeuron(m).setLabel("d (bcd)");
         new RelationInputSynapse()
                 .setWeight(10.0)
-                .init(c_bcBN, bc_bcdBN)
+                .link(c_bcBN, bc_bcdBN)
                 .adjustBias();
 
         new RelationInputSynapse()
                 .setWeight(10.0)
-                .init(relPT, d_bcdBN)
+                .link(relPT, d_bcdBN)
                 .adjustBias();
 
         new SameObjectSynapse()
                 .setWeight(11.0)
-                .init(bc_bcdBN, d_bcdBN)
+                .link(bc_bcdBN, d_bcdBN)
                 .adjustBias();
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(bcPattern, bc_bcdBN)
+                .link(bcPattern, bc_bcdBN)
                 .adjustBias();
         bc_bcdBN.setBias(2.5);
 
         new InputObjectSynapse()
                 .setWeight(10.0)
-                .init(d_IN, d_bcdBN)
+                .link(d_IN, d_bcdBN)
                 .adjustBias();
         d_bcdBN.setBias(3.0);
 

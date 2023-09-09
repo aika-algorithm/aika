@@ -55,7 +55,7 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
     }
 
     public static NeuronPropertyPanel create(Neuron n, Activation ref) {
-        if(n instanceof ConjunctiveNeuron<?>) {
+        if(n instanceof ConjunctiveNeuron<?, ?>) {
             return ConjunctiveNeuronPropertyPanel.create((ConjunctiveNeuron) n, ref);
         } else if(n instanceof OuterInhibitoryNeuron) {
             return InputInhibitoryNeuronPropertyPanel.create((OuterInhibitoryNeuron) n, ref);

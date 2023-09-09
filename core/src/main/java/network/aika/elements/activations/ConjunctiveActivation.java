@@ -32,7 +32,7 @@ import static network.aika.fields.Fields.scale;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<?>> extends Activation<N> {
+public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> extends Activation<N> {
 
     protected NavigableMap<Long, SynapseSlot> slots;
 

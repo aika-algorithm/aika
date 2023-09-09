@@ -45,7 +45,7 @@ public class LinkingOut extends ElementStep<Activation> {
     @Override
     public void process() {
         Activation<?> act = getElement();
-        Neuron<?> n = act.getNeuron();
+        Neuron<?, ?> n = act.getNeuron();
 
         n.getOutputSynapsesAsStream(act.getThought())
                 .filter(s ->

@@ -39,7 +39,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveNeuron<A extends ConjunctiveActivation> extends Neuron<A> {
+public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends ConjunctiveActivation> extends Neuron<N, A> {
 
     private static final Logger log = LoggerFactory.getLogger(ConjunctiveNeuron.class);
 
