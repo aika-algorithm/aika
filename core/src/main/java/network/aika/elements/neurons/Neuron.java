@@ -63,8 +63,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected static final Logger log = LoggerFactory.getLogger(Neuron.class);
 
-    volatile long retrievalCount = 0;
-
     private int synapseIdCounter = 0;
 
     private volatile boolean modified;
@@ -420,11 +418,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return provider.getModel();
     }
 
-    public long getRetrievalCount() {
-        return retrievalCount;
-    }
-
-
     public void setModified() {
         if (!modified)
             Save.add(this);
@@ -466,8 +459,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public void reactivate(Model m) {
-        m.incrementRetrievalCounter();
-        retrievalCount = m.getCurrentRetrievalCount();
     }
 
     @Override

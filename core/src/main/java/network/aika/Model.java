@@ -72,14 +72,6 @@ public class Model implements Writable {
         this.customDataInstanceSupplier = customDataInstanceSupplier;
     }
 
-    public long getCurrentRetrievalCount() {
-        return retrievalCounter.longValue();
-    }
-
-    public void incrementRetrievalCounter() {
-        retrievalCounter.addAndGet(1);
-    }
-
     public long createNeuronId() {
         return suspensionCallback.createId();
     }
@@ -188,26 +180,21 @@ public class Model implements Writable {
         }
     }
 
-    public void suspendUnusedNeurons(long retrievalCount, SuspensionMode sm) {
+    public void suspend(SuspensionMode sm) {
         synchronized (providers) {
             providers
                     .values()
                     .stream()
                     .filter(n -> !n.isSuspended())
                     .toList()
-                    .forEach(n -> suspend(retrievalCount, n, sm));
+                    .forEach(n -> suspend(n, sm));
         }
     }
 
-    public void suspendAll(SuspensionMode sm) {
-        suspendUnusedNeurons(Integer.MAX_VALUE, sm);
-    }
-
-    private void suspend(long retrievalCount, NeuronProvider p, SuspensionMode sm) {
-        Neuron an = p.getIfNotSuspended();
-        if (an != null && an.getRetrievalCount() < retrievalCount) {
+    private void suspend(NeuronProvider p, SuspensionMode sm) {
+        Neuron n = p.getIfNotSuspended();
+        if (n != null)
             p.suspend(sm);
-        }
     }
 
     public void register(NeuronProvider p) {
@@ -233,7 +220,6 @@ public class Model implements Writable {
 
     public void close() throws IOException {
         suspensionCallback.saveIndex(this);
-
         suspensionCallback.close();
     }
 

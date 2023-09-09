@@ -49,7 +49,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
     protected final ReadWriteLock lock = new ReadWriteLock();
 
     private boolean persistent;
-    private long lastUsed;
+    private volatile long lastUsed;
     private boolean isRegistered;
 
     public NeuronProvider(long id) {
