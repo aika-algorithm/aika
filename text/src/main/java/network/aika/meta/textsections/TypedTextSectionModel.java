@@ -100,17 +100,13 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         double netTarget = 2.5;
 
-        EntityModel.EntityInstance headlineEntity = entityModel.addEntityPattern("Abstr. Text-Section-Headline");
+        EntityModel.EntityInstance headlineEntity = entityModel.addEntityPattern("Abstr. Text-Section-Headline", true);
 
         headlineBN = headlineEntity.entityBN()
                 .setPersistent(true);
 
         headlineTargetInput = headlineEntity.targetInputPN()
                 .setPersistent(true);
-
-        makeAbstract(headlineTargetInput)
-                .setWeight(2.0)
-                .adjustBias();
 
         tsHeadlineBN = addBindingNeuron(
                 headlineEntity.entityPatternN(),

@@ -159,27 +159,38 @@ public class EntityModel implements Writable {
         );
     }
 
-    public EntityInstance addEntityPattern(String label) {
-        PatternNeuron tEPN = entityPattern;
-        PatternNeuron n = tEPN.instantiateTemplate()
+    public EntityInstance addEntityPattern(String label, boolean makeAbstract) {
+        PatternNeuron n = entityPattern.instantiateTemplate()
                 .setLabel(label);
 
         n.setLabel(label);
         n.setAllowTraining(false);
 
-
-        BindingNeuron eBN = entityBN;
-        PatternNeuron phrasePN = eBN.getInputSynapseByType(InputObjectSynapse.class).getInput();
+        PatternNeuron phrasePN = entityBN.getInputSynapseByType(InputObjectSynapse.class).getInput();
 
         PatternNeuron targetInputPN = targetInput.instantiateTargetInput(label);
+        PatternCategorySynapse catSyn = targetInputPN.getOutputSynapseByType(PatternCategorySynapse.class);
+        catSyn.setWeight(0.0);
 
         BindingNeuron iEBN = instantiateBN(label, n, entityBN, phrasePN);
         BindingNeuron iTIBN = instantiateBN(label, n, targetInputBN, targetInputPN);
 
         instantiateRelation(iTIBN, iEBN);
 
-        PatternCategorySynapse catSyn = n.getOutputSynapseByType(PatternCategorySynapse.class);
-        catSyn.setWeight(0.0);
+        if(makeAbstract) {
+            makeAbstract(targetInputPN)
+                    .setWeight(2.0)
+                    .adjustBias();
+
+            makeAbstract(n)
+                    .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+
+            makeAbstract(iEBN)
+                    .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+
+            makeAbstract(iTIBN)
+                    .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+        }
 
         return new EntityInstance(n, iEBN, iTIBN, targetInputPN);
     }

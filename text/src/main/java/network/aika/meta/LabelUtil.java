@@ -43,16 +43,7 @@ public class LabelUtil {
         String actTxt = doc.getTextSegment(act.getCharRange());
         if(act instanceof BindingActivation) {
             if(act.getNeuron().getLabel() == null) {
-                Activation<?> tAct = act.getTemplate();
-                PositiveFeedbackLink pfl = tAct.getInputLinkByType(PositiveFeedbackLink.class)
-                        .orElse(null);
-                String context = "...";
-                if(pfl != null && pfl.getInput() != null) {
-                    PatternActivation pAct = pfl.getInput();
-                    context = doc.getTextSegment(pAct.getCharRange());
-                }
-
-                act.getNeuron().setLabel(actTxt + " (" + context + ")");
+                act.getNeuron().setLabel(actTxt + " (" + extractContext(act) + ")");
             }
         } else if(act instanceof PatternActivation) {
             if(act.getNeuron().getLabel() == null) {
@@ -71,6 +62,23 @@ public class LabelUtil {
                 act.getNeuron().setLabel(actTxt);
             }
         }
+    }
+
+    private static String extractContext(Activation<?> act) {
+        Document doc = (Document) act.getThought();
+
+        Activation<?> tAct = act.getTemplate();
+        if(tAct == null)
+            return "...";
+
+        PositiveFeedbackLink pfl = tAct.getInputLinkByType(PositiveFeedbackLink.class)
+                .orElse(null);
+
+        if(pfl == null || pfl.getInput() == null)
+            return "...";
+
+        PatternActivation pAct = pfl.getInput();
+        return doc.getTextSegment(pAct.getCharRange());
     }
 
     public static String generateLabel(PatternActivation pAct, boolean fired, boolean netPreAnneal) {
