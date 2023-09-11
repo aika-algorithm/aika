@@ -35,9 +35,8 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.NetworkMotifs.*;
-import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
-import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  *
@@ -86,7 +85,7 @@ public class TopicModel implements Writable {
                 .setBias(TOPIC_NET_TARGET)
                 .setPersistent(true);
 
-        topicPatternCategory = makeAbstract(topicPatternN)
+        topicPatternCategory = topicPatternN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT)
                 .getInput()
                 .setPersistent(true);
@@ -98,7 +97,7 @@ public class TopicModel implements Writable {
                 BINDING_NET_TARGET
         );
 
-        makeAbstract(topicBN)
+        topicBN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addPositiveFeedbackLoop(

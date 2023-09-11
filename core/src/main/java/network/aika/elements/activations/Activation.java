@@ -98,6 +98,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         outputLinks = new TreeMap<>();
 
         initNet();
+        net.setQueued(thought, INFERENCE);
+        netPreAnneal.setQueued(thought, PRE_ANNEAL);
 
         initOnFiredListener();
 
@@ -137,14 +139,12 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void initNet() {
-        net = new SumField(this, "net", null)
-                .setQueued(thought, INFERENCE);
+        net = new SumField(this, "net", null);
 
         linkAndConnect(getNeuron().getBias(), getDefaultNet())
                 .setPropagateUpdates(false);
 
-        netPreAnneal = new SumField(this, "netPreAnneal", TOLERANCE)
-                .setQueued(thought, PRE_ANNEAL);
+        netPreAnneal = new SumField(this, "netPreAnneal", TOLERANCE);
         linkAndConnect(net, netPreAnneal);
 
         netPreAnneal.addListener(
@@ -487,7 +487,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Activation<N> resolveAbstractInputActivation() {
-        return neuron.isAbstract() ?
+        return !neuron.isTemplateOnly() && neuron.isAbstract() ?
                 getActiveTemplateInstance() :
                 this;
     }

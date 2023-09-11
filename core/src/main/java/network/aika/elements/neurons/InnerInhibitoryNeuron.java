@@ -37,6 +37,19 @@ public class InnerInhibitoryNeuron extends DisjunctiveNeuron<InnerInhibitoryNeur
     }
 
     @Override
+    public InnerInhibitoryCategoryInputSynapse makeAbstract() {
+        InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(getModel(), Scope.SAME)
+                .setLabel(getLabel() + CATEGORY_LABEL);
+
+        InnerInhibitoryCategoryInputSynapse s = new InnerInhibitoryCategoryInputSynapse()
+                .link(inhibCategory, this);
+
+        s.setInitialCategorySynapseWeight(1.0);
+
+        return s;
+    }
+
+    @Override
     public void startVisitor(LinkingOperator c, Activation act, Synapse targetSyn) {
         new InhibitoryVisitor(act.getThought(), c, Scope.SAME)
                 .start(act);

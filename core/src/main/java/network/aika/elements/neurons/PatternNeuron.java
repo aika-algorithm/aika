@@ -34,8 +34,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.enums.sign.Sign.POS;
-import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
-import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  *
@@ -47,6 +45,11 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
 
     protected SampleSpace sampleSpace = new SampleSpace();
 
+
+    public PatternNeuron(Model m) {
+        super(m);
+    }
+
     public static PatternNeuron create(Model m, String label) {
         return create(m, label, false);
     }
@@ -57,14 +60,23 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
                 .setPersistent(true);
 
         if(abstr)
-            makeAbstract(pn)
+            pn.makeAbstract()
                     .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         return pn;
     }
 
-    public PatternNeuron(Model m) {
-        super(m);
+    @Override
+    public PatternCategoryInputSynapse makeAbstract() {
+        PatternCategoryNeuron patternCategory = new PatternCategoryNeuron(getModel())
+                .setLabel(getLabel() + CATEGORY_LABEL);
+
+        PatternCategoryInputSynapse s = new PatternCategoryInputSynapse()
+                .link(patternCategory, this);
+
+        s.setInitialCategorySynapseWeight(1.0);
+
+        return s;
     }
 
     @Override

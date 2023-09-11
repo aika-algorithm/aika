@@ -17,9 +17,10 @@
 package network.aika.meta.entities;
 
 import network.aika.Model;
+import network.aika.debugger.AIKADebugger;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.EqualsRelationNeuron;
-import network.aika.elements.synapses.*;
+import network.aika.elements.synapses.Synapse;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
@@ -32,10 +33,12 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
+import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
+import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
 import static network.aika.meta.NetworkMotifs.*;
-import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
-import static network.aika.utils.NetworkUtils.makeAbstract;
+import static network.aika.queue.Phase.ANNEAL;
+import static network.aika.queue.Phase.INFERENCE;
+import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
  *
@@ -96,7 +99,7 @@ public class EntityModel implements Writable {
                 .setBias(ENTITY_NET_TARGET)
                 .setPersistent(true);
 
-        entityCategory = makeAbstract(entityPattern)
+        entityCategory = entityPattern.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT)
                 .getInput()
                 .setPersistent(true);
@@ -108,7 +111,7 @@ public class EntityModel implements Writable {
                 BINDING_NET_TARGET
         );
 
-        makeAbstract(entityBN)
+        entityBN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addPositiveFeedbackLoop(
@@ -146,80 +149,51 @@ public class EntityModel implements Writable {
         return bn;
     }
 
-    public PatternNeuron addEntity(String entityLabel) {
-        return targetInput.addTarget(entityLabel);
-    }
-
-    public void addEntityTarget(Document doc, Range posRange, Range charRange, String entityLabel) {
-        doc.addToken(
-                addEntity(entityLabel),
-                posRange,
-                charRange,
-                INPUT_TOKEN_NET_TARGET
-        );
-    }
-
     public EntityInstance addEntityPattern(String label, boolean makeAbstract) {
-        PatternNeuron n = entityPattern.instantiateTemplate()
-                .setLabel(label);
+        targetInput.setTemplateOnly(false);
+        phraseModel.getPatternNeuron().setTemplateOnly(true);
 
-        n.setLabel(label);
-        n.setAllowTraining(false);
+        getModel()
+                .getConfig()
+                .setTrainingEnabled(true)
+                .setMetaInstantiationEnabled(true);
 
-        PatternNeuron phrasePN = entityBN.getInputSynapseByType(InputObjectSynapse.class).getInput();
+        Document doc = new Document(getPhraseModel().getModel(), label);
 
-        PatternNeuron targetInputPN = targetInput.instantiateTargetInput(label);
-        PatternCategorySynapse catSyn = targetInputPN.getOutputSynapseByType(PatternCategorySynapse.class);
-        catSyn.setWeight(0.0);
+        AIKADebugger.createAndShowGUI(doc);
+        doc.setInstantiationCallback(act -> {
+            generateTemplateInstanceLabels(act);
+            if (makeAbstract)
+                ((Synapse) act.getNeuron().makeAbstract())
+                        .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+        });
 
-        BindingNeuron iEBN = instantiateBN(label, n, entityBN, phrasePN);
-        BindingNeuron iTIBN = instantiateBN(label, n, targetInputBN, targetInputPN);
+        try {
+            doc.setFeedbackTriggerRound();
 
-        instantiateRelation(iTIBN, iEBN);
+            doc.addToken(phraseModel.getPatternNeuron(), new Range(0, 1), new Range(0, doc.length()));
 
-        if(makeAbstract) {
-            makeAbstract(targetInputPN)
-                    .setWeight(2.0)
-                    .adjustBias();
+            doc.addToken(
+                    targetInput.getTargetInput(),
+                    new Range(0, 1),
+                    new Range(0, doc.length())
+            );
 
-            makeAbstract(n)
-                    .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+            doc.process(MAX_ROUND, INFERENCE);
+            doc.anneal();
+            doc.process(MAX_ROUND, ANNEAL);
+            doc.instantiateTemplates();
 
-            makeAbstract(iEBN)
-                    .setWeight(PASSIVE_SYNAPSE_WEIGHT);
-
-            makeAbstract(iTIBN)
-                    .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+        } catch(Exception e) {
+            log.warn("Error while training:", e);
+        } finally {
+            doc.disconnect();
         }
 
-        return new EntityInstance(n, iEBN, iTIBN, targetInputPN);
-    }
+        targetInput.setTemplateOnly(true);
+        phraseModel.getPatternNeuron().setTemplateOnly(false);
 
-    private void instantiateRelation(BindingNeuron iTIBN, BindingNeuron iEBN) {
-        SameObjectSynapse tSoSyn = entityBN.getInputSynapseByType(SameObjectSynapse.class);
-        SameObjectSynapse soSyn = tSoSyn.instantiateTemplate(iTIBN, iEBN);
-
-        RelationInputSynapse tRelSyn = (RelationInputSynapse) entityBN.getProvider().getSynapseBySynId(tSoSyn.getRelationSynId());
-        RelationInputSynapse relSyn = tRelSyn.instantiateTemplate(tRelSyn.getInput(), iEBN);
-
-        soSyn.setRelationSynId(relSyn.getSynapseId());
-    }
-
-    private BindingNeuron instantiateBN(String label, PatternNeuron pn, BindingNeuron bn, PatternNeuron io) {
-        BindingNeuron ieBN = bn.instantiateTemplate()
-                .setLabel(label);
-
-        Synapse s = bn.getInputSynapseByType(InputObjectSynapse.class);
-        if(s != null)
-            s.instantiateTemplate(io, ieBN);
-
-        bn.getInputSynapseByType(PositiveFeedbackSynapse.class)
-                .instantiateTemplate(pn, ieBN);
-
-        entityPattern.getInputSynapseByType(PatternSynapse.class)
-                .instantiateTemplate(ieBN, pn);
-
-        return ieBN;
+        return null; //new EntityInstance(n, iEBN, iTIBN, targetInputPN);
     }
 
     public Model getModel() {

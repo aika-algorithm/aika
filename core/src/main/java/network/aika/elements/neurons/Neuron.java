@@ -63,6 +63,9 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected static final Logger log = LoggerFactory.getLogger(Neuron.class);
 
+    protected static final String CATEGORY_LABEL = " Category";
+    public static double PASSIVE_SYNAPSE_WEIGHT = 0.0;
+
     private int synapseIdCounter = 0;
 
     private volatile boolean modified;
@@ -259,6 +262,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     public boolean isAbstract() {
         return getCategoryInputSynapse() != null;
     }
+
+    public abstract CategoryInputSynapse makeAbstract();
 
     public abstract CategoryInputSynapse getCategoryInputSynapse();
 

@@ -20,10 +20,9 @@ import network.aika.Model;
 import network.aika.elements.neurons.*;
 import network.aika.text.Document;
 
+import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.NetworkMotifs.addBindingNeuron;
 import static network.aika.meta.NetworkMotifs.addPositiveFeedbackLoop;
-import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
-import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  *
@@ -78,16 +77,15 @@ public class TargetInput {
 
     public void addTarget(Document doc, String target) {
         PatternNeuron n = addTarget(target);
-        doc.addToken(n, null, null, null, targetInputNetTarget);
+        doc.addToken(n, null, null);
     }
 
     public void initTargetInput() {
         targetInput = new PatternNeuron(model)
                 .setLabel(label + " Target Input")
-                .setBias(targetInputNetTarget)
                 .setTargetNet(targetInputNetTarget);
 
-        targetInputCategory = makeAbstract(targetInput)
+        targetInputCategory = targetInput.makeAbstract()
                 .setWeight(1.0)
                 .adjustBias()
                 .getInput();
@@ -100,7 +98,7 @@ public class TargetInput {
                 10.0,
                 bindingNetTarget
         );
-        makeAbstract(bn)
+        bn.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addPositiveFeedbackLoop(

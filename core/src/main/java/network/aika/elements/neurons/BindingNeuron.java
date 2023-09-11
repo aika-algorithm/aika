@@ -27,13 +27,16 @@ import network.aika.visitor.binding.RelationBindingVisitor;
 
 import java.util.List;
 
-import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
-import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  * @author Lukas Molzberger
  */
 public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActivation> {
+
+
+    public BindingNeuron(Model m) {
+        super(m);
+    }
 
     public static BindingNeuron create(Model m, String label) {
         return create(m, label, false);
@@ -45,14 +48,23 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
                 .setPersistent(true);
 
         if(abstr)
-            makeAbstract(bn)
+            bn.makeAbstract()
                     .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         return bn;
     }
 
-    public BindingNeuron(Model m) {
-        super(m);
+    @Override
+    public BindingCategoryInputSynapse makeAbstract() {
+        BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron(getModel())
+                .setLabel(getLabel() + CATEGORY_LABEL);
+
+        BindingCategoryInputSynapse s = new BindingCategoryInputSynapse()
+                .link(bindingCategory, this);
+
+        s.setInitialCategorySynapseWeight(1.0);
+
+        return s;
     }
 
     @Override

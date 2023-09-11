@@ -31,7 +31,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.meta.NetworkMotifs.*;
-import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  *
@@ -132,7 +131,7 @@ public class TextSectionModel implements Writable {
                 .setBias(INPUT_NET_TARGET)
                 .setTargetNet(INPUT_NET_TARGET);
 
-        makeAbstract(inputPN)
+        inputPN.makeAbstract()
                 .setWeight(1.0)
                 .adjustBias();
 

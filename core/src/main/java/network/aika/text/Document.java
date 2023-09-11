@@ -115,6 +115,10 @@ public class Document extends Thought {
         return ((Document)act.getThought()).getTextSegment(act.getCharRange());
     }
 
+    public PatternActivation addToken(PatternNeuron n, Range posRange, Range charRange) {
+        return addToken(n, posRange, charRange, n.getTargetNet());
+    }
+
     public PatternActivation addToken(PatternNeuron n, Range posRange, Range charRange, double inputNet) {
         PatternActivation act = new PatternActivation(
                 createActivationId(),

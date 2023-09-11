@@ -33,7 +33,6 @@ import java.io.IOException;
 
 import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
-import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  *

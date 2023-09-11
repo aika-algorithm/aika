@@ -29,8 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
-import static network.aika.utils.NetworkUtils.makeAbstract;
-
 /**
  *
  * @author Lukas Molzberger
@@ -60,7 +58,7 @@ public class Dictionary {
                 .setBias(INPUT_TOKEN_NET_TARGET)
                 .setTargetNet(INPUT_TOKEN_NET_TARGET);
 
-        makeAbstract(inputToken)
+        inputToken.makeAbstract()
                 .setWeight(1.0)
                 .adjustBias();
 
@@ -104,6 +102,10 @@ public class Dictionary {
 
     public void addToken(Document doc, String token, int pos, int begin, int end) {
         PatternNeuron n = lookupInputToken(token);
-        doc.addToken(n, pos, begin, end, INPUT_TOKEN_NET_TARGET);
+        doc.addToken(
+                n,
+                new Range(pos, pos),
+                new Range(begin, end)
+        );
     }
 }

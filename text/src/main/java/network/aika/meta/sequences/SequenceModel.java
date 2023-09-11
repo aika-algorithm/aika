@@ -32,9 +32,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.NetworkMotifs.*;
-import static network.aika.utils.NetworkUtils.PASSIVE_SYNAPSE_WEIGHT;
-import static network.aika.utils.NetworkUtils.makeAbstract;
 
 /**
  *
@@ -167,7 +166,7 @@ public abstract class SequenceModel implements Writable {
                 .setLabel("I")
                 .setPersistent(true);
 
-        makeAbstract(outerInhibitoryN)
+        outerInhibitoryN.makeAbstract()
                 .setWeight(1.0);
 
 
@@ -175,7 +174,7 @@ public abstract class SequenceModel implements Writable {
                 .setLabel("I")
                 .setPersistent(true);
 
-        makeAbstract(primaryBNInhibitoryN)
+        primaryBNInhibitoryN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         log.info(getPatternType() + " Pattern: netTarget:" + PATTERN_NET_TARGET);
@@ -282,7 +281,7 @@ public abstract class SequenceModel implements Writable {
                 10.0,
                 p.netTarget
         );
-        makeAbstract(bn)
+        bn.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addOuterInhibitoryLoop(

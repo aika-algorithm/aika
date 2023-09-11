@@ -49,7 +49,8 @@ public abstract class TrainingParser<C extends Context> extends Parser<C> implem
 
     @Override
     public Document process(String txt, C context, ParserPhase phase) {
-        getPhraseModel().getModel().getConfig()
+        getPhraseModel().getModel()
+                .getConfig()
                 .setTrainingEnabled(phase == TRAINING)
                 .setMetaInstantiationEnabled(phase == TRAINING);
 
