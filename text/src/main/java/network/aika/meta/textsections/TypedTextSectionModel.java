@@ -99,7 +99,7 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         double netTarget = 2.5;
 
-        EntityModel.EntityInstance headlineEntity = entityModel.addEntityPattern("Abstr. Text-Section-Headline", true);
+        EntityModel.EntityInstance headlineEntity = entityModel.addEntityPattern("Headline", true);
 
         headlineBN = headlineEntity.entityBN()
                 .setPersistent(true);

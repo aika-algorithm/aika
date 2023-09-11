@@ -18,9 +18,10 @@ package network.aika.meta.entities;
 
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.EqualsRelationNeuron;
-import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
@@ -33,8 +34,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.InstantiationUtil.lookupInstance;
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
-import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.queue.Phase.ANNEAL;
 import static network.aika.queue.Phase.INFERENCE;
@@ -162,10 +163,16 @@ public class EntityModel implements Writable {
 
         AIKADebugger.createAndShowGUI(doc);
         doc.setInstantiationCallback(act -> {
-            generateTemplateInstanceLabels(act);
-            if (makeAbstract)
-                ((Synapse) act.getNeuron().makeAbstract())
-                        .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+            generateLabel(act, label);
+            if (makeAbstract) {
+                ConjunctiveSynapse s = (ConjunctiveSynapse) act.getNeuron().makeAbstract();
+
+                if(targetInput.getTargetInput() == act.getNeuron().getTemplate()) {
+                    s.setWeight(2.0);
+                    s.adjustBias();
+                } else
+                    s.setWeight(PASSIVE_SYNAPSE_WEIGHT);
+            }
         });
 
         try {
@@ -184,16 +191,25 @@ public class EntityModel implements Writable {
             doc.process(MAX_ROUND, ANNEAL);
             doc.instantiateTemplates();
 
+            targetInput.setTemplateOnly(true);
+            phraseModel.getPatternNeuron().setTemplateOnly(false);
+
+            return new EntityInstance(
+                    lookupInstance(doc, entityPattern),
+                    lookupInstance(doc, entityBN),
+                    lookupInstance(doc, targetInputBN),
+                    lookupInstance(doc, targetInput.getTargetInput())
+            );
         } catch(Exception e) {
             log.warn("Error while training:", e);
         } finally {
             doc.disconnect();
         }
+        return null;
+    }
 
-        targetInput.setTemplateOnly(true);
-        phraseModel.getPatternNeuron().setTemplateOnly(false);
-
-        return null; //new EntityInstance(n, iEBN, iTIBN, targetInputPN);
+    private void generateLabel(Activation act, String label) {
+        act.getNeuron().setLabel(act.getTemplate().getLabel().replace("Entity", label));
     }
 
     public Model getModel() {
