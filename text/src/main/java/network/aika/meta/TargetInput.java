@@ -18,11 +18,11 @@ package network.aika.meta;
 
 import network.aika.Model;
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.text.Document;
 
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
-import static network.aika.meta.NetworkMotifs.addBindingNeuron;
-import static network.aika.meta.NetworkMotifs.addPositiveFeedbackLoop;
+import static network.aika.meta.NetworkMotifs.*;
 
 /**
  *
@@ -91,7 +91,22 @@ public class TargetInput {
                 .getInput();
     }
 
-    public BindingNeuron createTargetInputBindingNeuron(PatternNeuron pn, double patternNetTarget) {
+    public BindingNeuron createTargetInputBindingNeuron(BindingNeuron bn, PatternNeuron pn, LatentRelationNeuron rel) {
+        BindingNeuron tibn = createTargetInputBindingNeuron(pn);
+
+        addRelation(
+                tibn,
+                bn,
+                rel,
+                5.0,
+                10.0,
+                true
+        );
+
+        return bn;
+    }
+
+    public BindingNeuron createTargetInputBindingNeuron(PatternNeuron pn) {
         BindingNeuron bn = addBindingNeuron(
                 targetInput,
                 "Abstr. " + label + " Target Input",

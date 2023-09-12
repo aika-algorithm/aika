@@ -32,9 +32,10 @@ public class ConjunctiveSynapsePropertyPanel<E extends ConjunctiveSynapse> exten
     }
 
     public void initSynapseProperties(E s) {
+        addField(s.getSynapseBias());
+
         super.initSynapseProperties(s);
 
-        addField(s.getSynapseBias());
         addConstant("isOptional", "" + s.isOptional());
 
         addConstant("Sum of Lower Weights:", doubleToString(s.getSumOfLowerWeights(), "#.######"));

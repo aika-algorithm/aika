@@ -17,12 +17,12 @@
 package network.aika.meta.entities;
 
 import network.aika.Model;
-import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.EqualsRelationNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.meta.TargetInput;
+import network.aika.meta.exceptions.FailedInstantiationException;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import network.aika.text.Range;
@@ -123,34 +123,27 @@ public class EntityModel implements Writable {
                 false
         );
 
-        targetInputBN = createTargetInputBindingNeuron();
-
-        targetInput.setTemplateOnly(true);
-    }
-
-    protected BindingNeuron createTargetInputBindingNeuron() {
-        BindingNeuron bn = targetInput.createTargetInputBindingNeuron(
-                entityPattern,
-                ENTITY_NET_TARGET
-        );
-
         relEquals = EqualsRelationNeuron.createEqualsRelationNeuron(model, "Equals Rel.: ")
                 .setBias(5.0)
                 .setPersistent(true);
 
-        addRelation(
-                bn,
-                entityBN,
-                relEquals,
-                5.0,
-                10.0,
-                true
-        );
+        targetInputBN = targetInput.createTargetInputBindingNeuron(entityBN, entityPattern, relEquals);
 
-        return bn;
+        targetInput.setTemplateOnly(true);
+    }
+
+    public void setTemplateOnly(boolean templateOnly) {
+        entityPattern.setTemplateOnly(templateOnly);
+        entityBN.setTemplateOnly(templateOnly);
+        targetInputBN.setTemplateOnly(templateOnly);
+
+        entityBN.getInputSynapses().forEach(s ->
+                s.setTemplateOnly(templateOnly)
+        );
     }
 
     public EntityInstance addEntityPattern(String label, boolean makeAbstract) {
+        setTemplateOnly(false);
         targetInput.setTemplateOnly(false);
         phraseModel.getPatternNeuron().setTemplateOnly(true);
 
@@ -159,9 +152,9 @@ public class EntityModel implements Writable {
                 .setTrainingEnabled(true)
                 .setMetaInstantiationEnabled(true);
 
-        Document doc = new Document(getPhraseModel().getModel(), label);
+        Document doc = new Document(getModel(), label);
 
-        AIKADebugger.createAndShowGUI(doc);
+ //       AIKADebugger.createAndShowGUI(doc);
         doc.setInstantiationCallback(act -> {
             generateLabel(act, label);
             if (makeAbstract) {
@@ -178,13 +171,11 @@ public class EntityModel implements Writable {
         try {
             doc.setFeedbackTriggerRound();
 
-            doc.addToken(phraseModel.getPatternNeuron(), new Range(0, 1), new Range(0, doc.length()));
+            Range entityPosRange = new Range(0, 1);
+            Range entityCharRange = new Range(0, doc.length());
 
-            doc.addToken(
-                    targetInput.getTargetInput(),
-                    new Range(0, 1),
-                    new Range(0, doc.length())
-            );
+            doc.addToken(phraseModel.getPatternNeuron(), entityPosRange, entityCharRange);
+            doc.addToken(targetInput.getTargetInput(), entityPosRange, entityCharRange);
 
             doc.process(MAX_ROUND, INFERENCE);
             doc.anneal();
@@ -201,15 +192,16 @@ public class EntityModel implements Writable {
                     lookupInstance(doc, targetInput.getTargetInput())
             );
         } catch(Exception e) {
-            log.warn("Error while training:", e);
+            throw new FailedInstantiationException("entity", e);
         } finally {
             doc.disconnect();
         }
-        return null;
     }
 
     private void generateLabel(Activation act, String label) {
-        act.getNeuron().setLabel(act.getTemplate().getLabel().replace("Entity", label));
+        act.getNeuron().setLabel(
+                act.getTemplate().getLabel().replace("Entity", label)
+        );
     }
 
     public Model getModel() {

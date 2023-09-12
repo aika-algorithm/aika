@@ -33,14 +33,13 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
 
     public SynapsePropertyPanel(E s, Link ref) {
         addTitle(s.getClass().getSimpleName());
-
-        addField(s.getWeight());
-        initSynapseProperties(s);
-
         addConstant("Synapse Id: ", "" + s.getSynapseId());
 
         addConstant("Input: ", s.getInput().toString());
         addConstant("Output: ", s.getOutput().toString());
+
+        addField(s.getWeight());
+        initSynapseProperties(s);
 
         addConstant("Is Template Only: ", "" + s.isTemplateOnly());
         addConstant("Initial Instance Weight: ", "" + Utils.doubleToString(s.getInitialInstanceWeight()));

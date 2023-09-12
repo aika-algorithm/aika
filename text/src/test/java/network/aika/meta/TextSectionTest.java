@@ -91,6 +91,9 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         textSectionModel = new TypedTextSectionModel(entityModel);
         textSectionModel.initStaticNeurons();
 
+        textSectionModel.addTextSectionType("Profile");
+        textSectionModel.addTextSectionType("Tasks");
+
         model.setN(0);
     }
 

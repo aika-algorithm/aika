@@ -33,7 +33,7 @@ public class Range {
     public long getPosition(Slot s) {
         return s == Slot.BEGIN ?
                 begin :
-                end;
+                end - 1;
     }
 
     public static Range join(Range a, Range b) {

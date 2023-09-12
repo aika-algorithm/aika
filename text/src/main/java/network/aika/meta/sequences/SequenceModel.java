@@ -223,25 +223,15 @@ public abstract class SequenceModel implements Writable {
     }
 
     protected BindingNeuron createTargetInputBindingNeuron() {
-        BindingNeuron bn = targetInput.createTargetInputBindingNeuron(
-                patternN,
-                PATTERN_NET_TARGET
-        );
-
         relContains = ContainsRelationNeuron.createContainsRelationNeuron(model, "Contains Rel.: ", Direction.OUTPUT)
                 .setBias(5.0)
                 .setTargetNet(5.0);
 
-        addRelation(
-                bn,
+        return targetInput.createTargetInputBindingNeuron(
                 primaryBN,
-                relContains,
-                5.0,
-                10.0,
-                true
+                patternN,
+                relContains
         );
-
-        return bn;
     }
 
     protected BindingNeuron createSecondaryBindingNeuron(

@@ -33,7 +33,7 @@ public class TestUtils {
             PatternNeuron n = dict.lookupInputToken(tokens[i]);
             doc.addToken(
                     n,
-                    new Range(i, i),
+                    new Range(i, i + 1),
                     new Range(0, 1)
             );
         }

@@ -68,8 +68,6 @@ public class TextSectionModel implements Writable {
 
     protected double bindingNetTarget = 2.5;
 
-    protected double patternNetTarget = 0.7;
-
 
     public TextSectionModel(PhraseModel phraseModel) {
         this.phraseModel = phraseModel;
@@ -88,7 +86,7 @@ public class TextSectionModel implements Writable {
                 .setPersistent(true);
 
         patternN = PatternNeuron.create(model, "Abstract Text-Section", true)
-                .setTargetNet(patternNetTarget)
+                .setTargetNet(0.7)
                 .setPersistent(true);
 
         beginInputPN = createTextSectionInput("Begin");

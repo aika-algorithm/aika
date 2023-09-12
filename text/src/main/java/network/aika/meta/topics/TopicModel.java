@@ -108,30 +108,11 @@ public class TopicModel implements Writable {
                 false
         );
 
-        targetInputBN = createTargetInputBindingNeuron();
-
-        targetInput.setTemplateOnly(true);
-    }
-
-    protected BindingNeuron createTargetInputBindingNeuron() {
-        BindingNeuron bn = targetInput.createTargetInputBindingNeuron(
-                topicPatternN,
-                TOPIC_NET_TARGET
-        );
-
         relEquals = EqualsRelationNeuron.createEqualsRelationNeuron(model, "Equals Rel.: ")
                 .setBias(5.0);
+        targetInputBN = targetInput.createTargetInputBindingNeuron(topicBN, topicPatternN, relEquals);
 
-        addRelation(
-                bn,
-                topicBN,
-                relEquals,
-                5.0,
-                10.0,
-                true
-        );
-
-        return bn;
+        targetInput.setTemplateOnly(true);
     }
 
     @Override

@@ -101,7 +101,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
         charTokenizer.tokenize(doc, context, (n, pos, begin, end) ->
                 doc.addToken(
                         n,
-                        new Range(pos, pos),
+                        new Range(pos, pos + 1),
                         new Range(begin, end)
                 )
         );
