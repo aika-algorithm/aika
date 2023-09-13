@@ -76,6 +76,10 @@ public class RelationBindingVisitor extends BindingVisitor {
 
     @Override
     public void expandRelations(PatternActivation downBindingSource, int depth) {
+        Direction opDir = operator.getDirection();
+        if(opDir == null)
+            return;
+
         BindingNeuron bn = (BindingNeuron) startSyn.getOutput();
         Stream<RelationInputSynapse> relations = bn.findLatentRelationNeurons().stream();
 
@@ -87,7 +91,7 @@ public class RelationBindingVisitor extends BindingVisitor {
 
         relations.forEach(rel ->
                 rel.getInput()
-                        .evaluateLatentRelation(downBindingSource, relationDir.invert())
+                        .evaluateLatentRelation(downBindingSource, opDir.combine(relationDir).invert())
                         .forEach(relTokenAct ->
                                 up(downBindingSource, relTokenAct, rel, relationDir, depth)
                         )

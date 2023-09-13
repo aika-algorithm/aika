@@ -19,6 +19,7 @@ package network.aika.visitor.operator;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.enums.direction.Direction;
 import network.aika.visitor.LinkingVisitor;
 
 /**
@@ -32,6 +33,11 @@ public class SelfRefOperator implements Operator {
 
     public SelfRefOperator(Activation target) {
         this.target = target;
+    }
+
+    @Override
+    public Direction getDirection() {
+        return null;
     }
 
     @Override

@@ -41,6 +41,8 @@ public abstract class LinkingOperator implements Operator {
         this.targetSyn = targetSyn;
     }
 
+    public abstract Direction getDirection();
+
     public boolean verifySamePatternSynapse(NeuronProvider candidateSPSInput) {
         return candidateSPSInput == null ||
                 targetSyn.getPInput() == candidateSPSInput;

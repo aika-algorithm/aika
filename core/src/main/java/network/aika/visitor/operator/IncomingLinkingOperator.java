@@ -20,6 +20,7 @@ import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.enums.direction.Direction;
 import network.aika.visitor.LinkingVisitor;
 
 
@@ -35,6 +36,10 @@ public class IncomingLinkingOperator extends LinkingOperator {
         super(fromAct, targetSyn);
         this.sourceSyn = sourceSyn;
         this.sourceLink = sourceLink;
+    }
+
+    public Direction getDirection() {
+        return Direction.INPUT;
     }
 
     @Override

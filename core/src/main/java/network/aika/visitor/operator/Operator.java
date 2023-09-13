@@ -19,6 +19,7 @@ package network.aika.visitor.operator;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.enums.direction.Direction;
 import network.aika.visitor.LinkingVisitor;
 
 /**
@@ -26,6 +27,7 @@ import network.aika.visitor.LinkingVisitor;
  */
 public interface Operator {
 
+    Direction getDirection();
 
     void check(LinkingVisitor v, Link lastLink, Activation act);
 
