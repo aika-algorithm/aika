@@ -144,6 +144,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         linkAndConnect(getNeuron().getBias(), getDefaultNet())
                 .setPropagateUpdates(false);
 
+        initNetPreAnneal();
+    }
+
+    protected void initNetPreAnneal() {
         netPreAnneal = new SumField(this, "netPreAnneal", TOLERANCE);
         linkAndConnect(net, netPreAnneal);
 

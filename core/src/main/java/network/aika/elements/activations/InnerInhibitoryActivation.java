@@ -43,6 +43,8 @@ public class InnerInhibitoryActivation extends DisjunctiveActivation<InnerInhibi
     protected void initNet() {
         net = new MaxField(this, "net", this::onSelectionChanged)
                 .setQueued(thought, INFERENCE);
+
+        initNetPreAnneal();
     }
 
     protected void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput) {
