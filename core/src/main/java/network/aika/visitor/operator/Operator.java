@@ -19,6 +19,7 @@ package network.aika.visitor.operator;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.LinkingVisitor;
 
@@ -27,12 +28,9 @@ import network.aika.visitor.LinkingVisitor;
  */
 public interface Operator {
 
+    Synapse getStartSynapse();
+
     Direction getDirection();
 
     void check(LinkingVisitor v, Link lastLink, Activation act);
-
-    /**
-     * Checks whether the SamePatternSynapse corresponds to the RelationInputSynapse
-     */
-    boolean verifySamePatternSynapse(NeuronProvider candidateSPSInput);
 }

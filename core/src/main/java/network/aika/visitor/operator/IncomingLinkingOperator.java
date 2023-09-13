@@ -38,14 +38,14 @@ public class IncomingLinkingOperator extends LinkingOperator {
         this.sourceLink = sourceLink;
     }
 
-    public Direction getDirection() {
-        return Direction.INPUT;
+    @Override
+    public Synapse getStartSynapse() {
+        return sourceSyn;
     }
 
     @Override
-    public boolean verifySamePatternSynapse(NeuronProvider candidateSPSInput) {
-        return super.verifySamePatternSynapse(candidateSPSInput) ||
-                sourceSyn.getPInput() == candidateSPSInput;
+    public Direction getDirection() {
+        return Direction.INPUT;
     }
 
     @Override

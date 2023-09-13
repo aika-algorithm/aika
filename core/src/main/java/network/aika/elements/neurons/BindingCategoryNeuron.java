@@ -32,8 +32,8 @@ public class BindingCategoryNeuron extends CategoryNeuron {
     }
 
     @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse targetSyn) {
-        new BindingVisitor(act.getThought(), c)
+    public void startVisitor(LinkingOperator op, Activation act) {
+        new BindingVisitor(act.getThought(), op)
                 .start(act);
     }
 }

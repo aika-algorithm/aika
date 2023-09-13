@@ -41,13 +41,6 @@ public abstract class LinkingOperator implements Operator {
         this.targetSyn = targetSyn;
     }
 
-    public abstract Direction getDirection();
-
-    public boolean verifySamePatternSynapse(NeuronProvider candidateSPSInput) {
-        return candidateSPSInput == null ||
-                targetSyn.getPInput() == candidateSPSInput;
-    }
-
     public static Link link(Activation actA, Synapse synA, Link linkA, Activation actB, Synapse synB) {
         if (linkA == null)
             linkA = latentLink(actA, synA, actB, synB);

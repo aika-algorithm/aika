@@ -92,14 +92,14 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
 
     private int getRelBegin(Direction dir) {
         return dir == INPUT ?
-                -beginOffset :
-                endOffset;
+                -endOffset :
+                beginOffset;
     }
 
     private int getRelEnd(Direction dir) {
         return dir == INPUT ?
-                -endOffset :
-                beginOffset;
+                -beginOffset :
+                endOffset;
     }
 
     public Direction getDirection() {

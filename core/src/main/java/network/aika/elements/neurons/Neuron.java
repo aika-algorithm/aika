@@ -159,13 +159,12 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public abstract void startVisitor(LinkingOperator c, Activation act, Synapse syn);
+    public abstract void startVisitor(LinkingOperator c, Activation act);
 
     public void linkOutgoing(Synapse targetSyn, Activation iAct) {
         targetSyn.getOutput().startVisitor(
                 new OutgoingLinkingOperator(iAct, targetSyn),
-                iAct,
-                targetSyn
+                iAct
         );
     }
 
@@ -177,8 +176,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                 .forEach(targetSyn ->
                         targetSyn.getOutput().startVisitor(
                                 new IncomingLinkingOperator(iActA, sourceSyn, null, targetSyn),
-                                iActA,
-                                sourceSyn
+                                iActA
                         )
                 );
     }
@@ -190,8 +188,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                 .forEach(targetSyn ->
                         startVisitor(
                                 new IncomingLinkingOperator(l.getInput(), l.getSynapse(), l, targetSyn),
-                                l.getInput(),
-                                l.getSynapse()
+                                l.getInput()
                         )
                 );
     }

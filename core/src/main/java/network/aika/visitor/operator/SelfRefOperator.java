@@ -19,6 +19,7 @@ package network.aika.visitor.operator;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.LinkingVisitor;
 
@@ -36,6 +37,11 @@ public class SelfRefOperator implements Operator {
     }
 
     @Override
+    public Synapse getStartSynapse() {
+        return null;
+    }
+
+    @Override
     public Direction getDirection() {
         return null;
     }
@@ -44,11 +50,6 @@ public class SelfRefOperator implements Operator {
     public void check(LinkingVisitor v, Link lastLink, Activation act) {
         if(act == target)
             isSelfRef = true;
-    }
-
-    @Override
-    public boolean verifySamePatternSynapse(NeuronProvider candidateSPSInput) {
-        return false;
     }
 
     public boolean isSelfRef() {

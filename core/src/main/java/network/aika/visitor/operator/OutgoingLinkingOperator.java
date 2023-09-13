@@ -31,6 +31,12 @@ public class OutgoingLinkingOperator extends LinkingOperator {
         super(sourceAct, targetSyn);
     }
 
+    @Override
+    public Synapse getStartSynapse() {
+        return targetSyn;
+    }
+
+    @Override
     public Direction getDirection() {
         return Direction.OUTPUT;
     }

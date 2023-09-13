@@ -68,8 +68,8 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     }
 
     @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse startSyn) {
-        BindingVisitor v = new RelationBindingVisitor(act.getThought(), c, startSyn);
+    public void startVisitor(LinkingOperator c, Activation act) {
+        BindingVisitor v = new RelationBindingVisitor(act.getThought(), c);
         v.start(act);
     }
 

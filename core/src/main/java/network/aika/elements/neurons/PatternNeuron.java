@@ -80,8 +80,8 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
     }
 
     @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse targetSyn) {
-        new PatternVisitor(act.getThought(), c)
+    public void startVisitor(LinkingOperator op, Activation act) {
+        new PatternVisitor(act.getThought(), op)
                 .start(act);
     }
 

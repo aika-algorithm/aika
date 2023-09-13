@@ -32,8 +32,8 @@ public class PatternCategoryNeuron extends CategoryNeuron {
     }
 
     @Override
-    public void startVisitor(LinkingOperator c, Activation act, Synapse targetSyn) {
-        new PatternCategoryVisitor(act.getThought(), c)
+    public void startVisitor(LinkingOperator op, Activation act) {
+        new PatternCategoryVisitor(act.getThought(), op)
                 .start(act);
     }
 }
