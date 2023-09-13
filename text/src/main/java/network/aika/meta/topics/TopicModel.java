@@ -108,7 +108,7 @@ public class TopicModel implements Writable {
                 false
         );
 
-        relEquals = EqualsRelationNeuron.createEqualsRelationNeuron(model, "Equals Rel.: ")
+        relEquals = new EqualsRelationNeuron(model, true, true, "Equals Rel.: ")
                 .setBias(5.0);
         targetInputBN = targetInput.createTargetInputBindingNeuron(topicBN, topicPatternN, relEquals);
 

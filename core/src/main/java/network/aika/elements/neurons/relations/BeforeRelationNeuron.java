@@ -21,7 +21,6 @@ import network.aika.elements.activations.PatternActivation;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Document;
 import network.aika.text.Range;
-import network.aika.text.Slot;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -30,8 +29,6 @@ import java.util.stream.Stream;
 
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.text.Slot.BEGIN;
-import static network.aika.text.Slot.END;
 
 
 /**
@@ -40,102 +37,73 @@ import static network.aika.text.Slot.END;
  */
 public class BeforeRelationNeuron extends LatentRelationNeuron {
 
-    private Slot fromSlot;
-    private Slot toSlot;
+    private Direction relDirection;
 
-    private int beginOffset;
-    private int endOffset;
+    private Range offsetRange;
 
-    public static BeforeRelationNeuron createBeforeRelationNeuron(Model m, int rangeBegin, int rangeEnd, String l) {
-        BeforeRelationNeuron n = new BeforeRelationNeuron(m);
-        n.setLabel(l);
-
-        n.beginOffset = rangeBegin;
-        n.endOffset = rangeEnd;
-
-        n.fromSlot = n.beginOffset < 0 ? BEGIN : END;
-        n.toSlot = n.endOffset < 0 ? END : BEGIN;
-
-        n.setAllowTraining(false);
-        return n;
-    }
 
     public BeforeRelationNeuron(Model m) {
         super(m);
+    }
+
+    public BeforeRelationNeuron(Model m, Direction relDirection, Range offsetRange, String l) {
+        super(m);
+
+        setLabel(l);
+
+        this.offsetRange = offsetRange;
+        this.relDirection = relDirection;
+
+        setAllowTraining(false);
     }
 
     @Override
     public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir) {
         Document doc = (Document) fromAct.getThought();
 
-        Slot fromSlot = getFromSlot(dir);
+        Direction toSlot = dir.combine(relDirection);
+        Direction fromSlot = toSlot.invert();
+
         Range inputRange = fromAct.getTokenPosRange();
+        long fromPos = inputRange.getPosition(fromSlot);
+
         Range targetRange = new Range(
-                inputRange.getPosition(fromSlot) + getRelBegin(dir),
-                inputRange.getPosition(fromSlot) + getRelEnd(dir)
+                fromPos + getRelBegin(dir),
+                fromPos + getRelEnd(dir)
         );
 
-        return doc.getRelatedTokensByTokenPosition(getToSlot(dir), targetRange);
+        return doc.getRelatedTokensByTokenPosition(toSlot, targetRange);
     }
 
-    private Slot getFromSlot(Direction dir) {
-        return dir == OUTPUT ?
-                fromSlot :
-                toSlot;
-    }
-
-    private Slot getToSlot(Direction dir) {
-        return dir == OUTPUT ?
-                toSlot :
-                fromSlot;
-    }
-
-    private int getRelBegin(Direction dir) {
+    private long getRelBegin(Direction dir) {
         return dir == INPUT ?
-                -endOffset :
-                beginOffset;
+                -offsetRange.getEnd() :
+                offsetRange.getBegin();
     }
 
-    private int getRelEnd(Direction dir) {
+    private long getRelEnd(Direction dir) {
         return dir == INPUT ?
-                -beginOffset :
-                endOffset;
+                -offsetRange.getBegin() :
+                offsetRange.getEnd();
     }
 
-    public Direction getDirection() {
-        return beginOffset > 0 ?
-                INPUT :
-                OUTPUT;
+    public Range getOffsetRange() {
+        return offsetRange;
     }
-
-    public int getBeginOffset() {
-        return beginOffset;
-    }
-
-    public int getEndOffset() {
-        return endOffset;
-    }
-
 
     @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
 
-        out.writeInt(fromSlot.ordinal());
-        out.writeInt(toSlot.ordinal());
-
-        out.writeInt(beginOffset);
-        out.writeInt(endOffset);
+        out.writeBoolean(relDirection == INPUT);
+        offsetRange.write(out);
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         super.readFields(in, m);
 
-        fromSlot = Slot.values()[in.readInt()];
-        toSlot = Slot.values()[in.readInt()];
-
-        beginOffset = in.readInt();
-        endOffset = in.readInt();
+        relDirection = in.readBoolean() ? INPUT : OUTPUT;
+        offsetRange.readFields(in, m);
     }
 }

@@ -23,8 +23,11 @@ import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SameObjectSynapse;
 import network.aika.meta.Dictionary;
+import network.aika.text.Range;
 
 import static network.aika.TestUtils.initPatternLoop;
+import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.meta.NetworkMotifs.addOuterInhibitoryLoop;
 
 
@@ -38,10 +41,15 @@ public class TestHelper {
         PatternNeuron theIN = dict.lookupInputToken("the");
         PatternNeuron catIN = dict.lookupInputToken("cat");
 
-        int relFrom = variant < 2 ? -5 : 1;
-        int relTo = variant < 2 ? -1 : 5;
+        int relFrom = variant < 2 ? -5 : 0;
+        int relTo = variant < 2 ? 0 : 5;
 
-        LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, relFrom, relTo, "relPT");
+        LatentRelationNeuron relPT = new BeforeRelationNeuron(
+                m,
+                relFrom < 0 ? INPUT : OUTPUT,
+                new Range(relFrom, relTo),
+                "relPT"
+        );
 
         BindingNeuron theBN = new BindingNeuron(m).setLabel("the (the cat)");
         new InputObjectSynapse()
@@ -90,7 +98,12 @@ public class TestHelper {
         PatternNeuron blackIN = dict.lookupInputToken("black");
         PatternNeuron catIN = dict.lookupInputToken("cat");
 
-        LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -1, -1, "relPT");
+        LatentRelationNeuron relPT = new BeforeRelationNeuron(
+                m,
+                INPUT,
+                new Range(0, 0),
+                "relPT"
+        );
 
         BindingNeuron blackBN = new BindingNeuron(m).setLabel("black (black cat)");
         new InputObjectSynapse()
@@ -125,10 +138,15 @@ public class TestHelper {
         PatternNeuron theIN = dict.lookupInputToken("the");
         PatternNeuron dogIN = dict.lookupInputToken("dog");
 
-        int relFrom = variant < 2 ? -5 : 1;
-        int relTo = variant < 2 ? -1 : 5;
+        int relFrom = variant < 2 ? -5 : 0;
+        int relTo = variant < 2 ? 0 : 5;
 
-        LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, relFrom, relTo, "relPT");
+        LatentRelationNeuron relPT = new BeforeRelationNeuron(
+                m,
+                relFrom < 0 ? INPUT : OUTPUT,
+                new Range(relFrom, relTo),
+                "relPT"
+        );
 
         BindingNeuron theBN = new BindingNeuron(m).setLabel("the (the dog)");
         new InputObjectSynapse()

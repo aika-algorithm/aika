@@ -24,10 +24,12 @@ import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SameObjectSynapse;
 import network.aika.meta.Dictionary;
 import network.aika.text.Document;
+import network.aika.text.Range;
 import org.junit.jupiter.api.Test;
 
 import static network.aika.TestUtils.initPatternLoop;
 import static network.aika.TestUtils.processTokens;
+import static network.aika.enums.direction.Direction.INPUT;
 
 
 /**
@@ -62,7 +64,12 @@ public class ABCDTest {
         BindingNeuron a_abBN = new BindingNeuron(m).setLabel("a (ab)");
         BindingNeuron b_abBN = new BindingNeuron(m).setLabel("b (ab)");
 
-        LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -1, -1, "relPT");
+        LatentRelationNeuron relPT = new BeforeRelationNeuron(
+                m,
+                INPUT,
+                new Range(0, 0),
+                "relPT"
+        );
 
         new RelationInputSynapse()
                 .setWeight(10.0)

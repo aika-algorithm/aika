@@ -21,9 +21,9 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.ContainsRelationNeuron;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
-import network.aika.enums.direction.Direction;
 import network.aika.meta.Dictionary;
 import network.aika.meta.TargetInput;
+import network.aika.text.Range;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +33,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
+import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.meta.NetworkMotifs.*;
 
 /**
@@ -144,10 +146,20 @@ public abstract class SequenceModel implements Writable {
     public abstract String getPatternType();
 
     public void initStaticNeurons() {
-        relPT = BeforeRelationNeuron.createBeforeRelationNeuron(model, -1, -1, "Prev. Token Rel.: -1,-1")
+        relPT = new BeforeRelationNeuron(
+                model,
+                        INPUT,
+                        new Range(0, 0),
+                        "Prev. Token Rel.: -1,-1"
+                )
                 .setBias(5.0);
 
-        relNT = BeforeRelationNeuron.createBeforeRelationNeuron(model, 1, 1, "Next. Token Rel.: 1,1")
+        relNT = new BeforeRelationNeuron(
+                model,
+                        OUTPUT,
+                        new Range(0, 0),
+                        "Next. Token Rel.: 1,1"
+                )
                 .setBias(5.0);
 
         targetInput = new TargetInput(model, "Phrase");
@@ -223,7 +235,7 @@ public abstract class SequenceModel implements Writable {
     }
 
     protected BindingNeuron createTargetInputBindingNeuron() {
-        relContains = ContainsRelationNeuron.createContainsRelationNeuron(model, "Contains Rel.: ", Direction.OUTPUT)
+        relContains = new ContainsRelationNeuron(model, "Contains Rel.: ", OUTPUT)
                 .setBias(5.0)
                 .setTargetNet(5.0);
 

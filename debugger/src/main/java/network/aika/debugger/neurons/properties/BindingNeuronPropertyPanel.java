@@ -20,6 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.neurons.relations.ContainsRelationNeuron;
+import network.aika.elements.neurons.relations.EqualsRelationNeuron;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 
 import static network.aika.utils.Utils.doubleToString;
@@ -40,6 +41,8 @@ public class BindingNeuronPropertyPanel<E extends BindingNeuron> extends Conjunc
     public static BindingNeuronPropertyPanel create(BindingNeuron n, Activation ref) {
         if(n instanceof BeforeRelationNeuron) {
             return BeforeRelationNeuronPropertyPanel.create((BeforeRelationNeuron) n, ref);
+        } else if(n instanceof EqualsRelationNeuron) {
+            return EqualsRelationNeuronPropertyPanel.create((EqualsRelationNeuron) n, ref);
         } else if(n instanceof ContainsRelationNeuron) {
             return ContainsRelationNeuronPropertyPanel.create((ContainsRelationNeuron) n, ref);
         }

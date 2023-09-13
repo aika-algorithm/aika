@@ -123,7 +123,7 @@ public class EntityModel implements Writable {
                 false
         );
 
-        relEquals = EqualsRelationNeuron.createEqualsRelationNeuron(model, "Equals Rel.: ")
+        relEquals = new EqualsRelationNeuron(model, true, true, "Equals Rel.: ")
                 .setBias(5.0)
                 .setPersistent(true);
 

@@ -17,23 +17,34 @@
 package network.aika.text;
 
 
+import network.aika.Model;
+import network.aika.enums.direction.Direction;
+import network.aika.utils.Writable;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 /**
  *
  * @author Lukas Molzberger
  */
-public class Range {
+public class Range implements Writable {
     private long begin;
     private long end;
+
+    private Range() {
+    }
 
     public Range(long begin, long end) {
         this.begin = begin;
         this.end = end;
     }
 
-    public long getPosition(Slot s) {
-        return s == Slot.BEGIN ?
+    public long getPosition(Direction dir) {
+        return dir == Direction.INPUT ?
                 begin :
-                end - 1;
+                end;
     }
 
     public static Range join(Range a, Range b) {
@@ -96,5 +107,23 @@ public class Range {
 
     public String toString() {
         return "[" + begin + "," + end + "]";
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeLong(begin);
+        out.writeLong(end);
+    }
+
+    public static Range read(DataInput in, Model m) throws Exception {
+        Range r = new Range();
+        r.readFields(in, m);
+        return r;
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        begin = in.readLong();
+        end = in.readLong();
     }
 }

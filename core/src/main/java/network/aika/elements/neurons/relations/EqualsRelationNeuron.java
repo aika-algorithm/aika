@@ -22,9 +22,13 @@ import network.aika.enums.direction.Direction;
 import network.aika.text.Document;
 import network.aika.text.Range;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.stream.Stream;
 
-import static network.aika.text.Slot.BEGIN;
+import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 
 
 /**
@@ -33,32 +37,72 @@ import static network.aika.text.Slot.BEGIN;
  */
 public class EqualsRelationNeuron extends LatentRelationNeuron {
 
-    public static EqualsRelationNeuron createEqualsRelationNeuron(Model m, String l) {
-        EqualsRelationNeuron n = new EqualsRelationNeuron(m);
-        n.setLabel(l);
-        n.setAllowTraining(false);
-
-        return n;
-    }
+    boolean compareBegin;
+    boolean compareEnd;
 
     public EqualsRelationNeuron(Model m) {
         super(m);
     }
 
-    @Override
-    public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction vDir) {
-        Document doc = (Document) fromAct.getThought();
-        Range r = fromAct.getTokenPosRange();
+    public EqualsRelationNeuron(Model m, boolean compareBegin, boolean compareEnd, String l) {
+        super(m);
 
-        return doc.getRelatedTokensByTokenPosition(BEGIN, r)
-                .filter(act -> fromAct != act)
-                .filter(act ->
-                        r.equals(act.getTokenPosRange())
-                );
+        setLabel(l);
+        setAllowTraining(false);
+
+        this.compareBegin = compareBegin;
+        this.compareEnd = compareEnd;
+
+        assert compareBegin || compareEnd;
+    }
+
+    public boolean isCompareBegin() {
+        return compareBegin;
+    }
+
+    public boolean isCompareEnd() {
+        return compareEnd;
     }
 
     @Override
-    public Direction getDirection() {
-        return null;
+    public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir) {
+        Document doc = (Document) fromAct.getThought();
+        Range r = fromAct.getTokenPosRange();
+
+        return doc.getRelatedTokensByTokenPosition(compareBegin ? INPUT : OUTPUT, r)
+                .filter(act -> fromAct != act)
+                .filter(act ->
+                        compare(r, act.getTokenPosRange(), dir)
+                );
+    }
+
+    public boolean compare(Range ra, Range rb, Direction dir) {
+        if(compareBegin) {
+            if(ra.getBegin() != rb.getBegin())
+                return false;
+        }
+
+        if(compareEnd) {
+            if(ra.getEnd() != rb.getEnd())
+                return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+
+        out.writeBoolean(compareBegin);
+        out.writeBoolean(compareEnd);
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        super.readFields(in, m);
+
+        compareBegin = in.readBoolean();
+        compareEnd = in.readBoolean();
     }
 }

@@ -75,7 +75,8 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     protected BindingNeuron targetInputBN;
 
-    protected EqualsRelationNeuron relEquals;
+    protected EqualsRelationNeuron relBeginEquals;
+    protected EqualsRelationNeuron relEndEquals;
 
     public TypedTextSectionModel(EntityModel entityModel) {
         super(entityModel.getPhraseModel());
@@ -244,7 +245,7 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         addInnerInhibitoryLoop(
                 endBN,
-                tsBeginInhibitoryN,
+                tsEndInhibitoryN,
                 NEG_MARGIN_TS_END * -netTarget
         );
 
@@ -285,29 +286,31 @@ public class TypedTextSectionModel extends TextSectionModel {
                 true
         );
 
-        relEquals = EqualsRelationNeuron.createEqualsRelationNeuron(model, "Equals Rel.: ")
+        relBeginEquals = new EqualsRelationNeuron(model, true, true, "Equals Rel.: ")
                 .setBias(5.0)
                 .setPersistent(true);
 
         addRelation(
                 targetInputBN,
                 beginBN,
-                relEquals,
-                5.0,
-                10.0,
-                true
-        );
-/*
-        addRelation(
-                targetInputBN,
-                endBN,
-                relEquals,
+                relBeginEquals,
                 5.0,
                 10.0,
                 true
         );
 
- */
+        relEndEquals = new EqualsRelationNeuron(model, true, true, "Equals Rel.: ")
+                .setBias(5.0)
+                .setPersistent(true);
+
+        addRelation(
+                targetInputBN,
+                endBN,
+                relEndEquals,
+                5.0,
+                10.0,
+                true
+        );
     }
 
     public PatternNeuron addHeadline(String headlineLabel) {
@@ -345,7 +348,8 @@ public class TypedTextSectionModel extends TextSectionModel {
         out.writeLong(tsEndInhibitoryN.getId());
         out.writeLong(tsInhibitoryN.getId());
         out.writeLong(targetInputBN.getId());
-        out.writeLong(relEquals.getId());
+        out.writeLong(relBeginEquals.getId());
+        out.writeLong(relEndEquals.getId());
     }
 
     @Override
@@ -359,6 +363,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         tsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         tsInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        relEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        relBeginEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        relEndEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

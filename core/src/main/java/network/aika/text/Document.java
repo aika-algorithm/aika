@@ -22,13 +22,13 @@ import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.PatternNeuron;
+import network.aika.enums.direction.Direction;
 
 import java.util.*;
 import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.elements.Timestamp.NOT_SET;
-import static network.aika.text.Slot.END;
 
 
 /**
@@ -70,7 +70,7 @@ public class Document extends Thought {
             index.put(new TokenPositionKey(newPos, tokenAct.getId()), tokenAct);
     }
 
-    public Stream<PatternActivation> getRelatedTokensByTokenPosition(Slot slot, Range r) {
+    public Stream<PatternActivation> getRelatedTokensByTokenPosition(Direction slot, Range r) {
         return getPositionIndex(slot)
                 .subMap(
                         new TokenPositionKey(r.getBegin(), Integer.MIN_VALUE),
@@ -80,11 +80,10 @@ public class Document extends Thought {
                 .stream();
     }
 
-    private NavigableMap<TokenPositionKey, PatternActivation> getPositionIndex(Slot slot) {
-        NavigableMap<TokenPositionKey, PatternActivation> tokenPosIndex = slot == END ?
+    private NavigableMap<TokenPositionKey, PatternActivation> getPositionIndex(Direction slot) {
+        return slot == Direction.OUTPUT ?
                 tokenPosEndIndex :
                 tokenPosBeginIndex;
-        return tokenPosIndex;
     }
 
     public void append(String txt) {

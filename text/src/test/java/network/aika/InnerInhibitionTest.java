@@ -39,12 +39,14 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.text.Document;
+import network.aika.text.Range;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.SortedSet;
 
+import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.queue.Phase.INFERENCE;
 import static network.aika.queue.keys.QueueKey.MAX_ROUND;
@@ -83,7 +85,12 @@ public class InnerInhibitionTest {
         BindingNeuron na = addBindingNeuronInner(m,  "A", 2.5, inA, inhib, patternN);
         BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
-        BeforeRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -300, -1, "relPT");
+        BeforeRelationNeuron relPT = new BeforeRelationNeuron(
+                m,
+                INPUT,
+                new Range(-300, 0),
+                "relPT"
+        );
 
         addRelation(na, nx, relPT, 5.0, 10.0, false);
 
@@ -142,7 +149,12 @@ public class InnerInhibitionTest {
         BindingNeuron nc = addBindingNeuronInner(m, "C", 2.7, inC, inhib, patternN);
         BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
-        BeforeRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -300, -1, "relPT");
+        BeforeRelationNeuron relPT = new BeforeRelationNeuron(
+                m,
+                INPUT,
+                new Range(-300, 0),
+                "relPT"
+        );
 
         addRelation(na, nx, relPT, 5.0, 10.0, false);
         addRelation(nb, nx, relPT, 5.0, 10.0, false);

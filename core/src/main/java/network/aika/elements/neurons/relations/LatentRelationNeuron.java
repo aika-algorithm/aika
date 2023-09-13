@@ -52,6 +52,4 @@ public abstract class LatentRelationNeuron extends BindingNeuron {
     public LatentRelationActivation createActivation(Thought t) {
         return new LatentRelationActivation(t.createActivationId(), t, this);
     }
-
-    public abstract Direction getDirection();
 }

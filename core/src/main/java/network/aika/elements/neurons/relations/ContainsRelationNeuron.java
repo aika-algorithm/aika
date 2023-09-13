@@ -27,7 +27,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-import static network.aika.text.Slot.BEGIN;
+import static network.aika.enums.direction.Direction.INPUT;
 
 
 /**
@@ -38,19 +38,17 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
 
     private Direction relationDir;
 
-
-    public static ContainsRelationNeuron createContainsRelationNeuron(Model m, String l, Direction relDir) {
-        ContainsRelationNeuron n = new ContainsRelationNeuron(m);
-        n.setLabel(l);
-        n.setAllowTraining(false);
-
-        n.relationDir = relDir;
-
-        return n;
-    }
-
     public ContainsRelationNeuron(Model m) {
         super(m);
+    }
+
+    public ContainsRelationNeuron(Model m, String l, Direction relDir) {
+       super(m);
+
+        setLabel(l);
+        setAllowTraining(false);
+
+        relationDir = relDir;
     }
 
     @Override
@@ -61,8 +59,8 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
 
         return (
                 dir == Direction.OUTPUT ?
-                        doc.getRelatedTokensByTokenPosition(BEGIN, r) :
-                        doc.getRelatedTokensByTokenPosition(BEGIN, new Range(0, r.getBegin()))
+                        doc.getRelatedTokensByTokenPosition(INPUT, r) :
+                        doc.getRelatedTokensByTokenPosition(INPUT, new Range(0, r.getBegin()))
         )
                 .filter(act -> fromAct != act)
                 .filter(act ->
@@ -74,11 +72,6 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
         return dir == Direction.OUTPUT ?
                 a.contains(b) :
                 b.contains(a);
-    }
-
-    @Override
-    public Direction getDirection() {
-        return Direction.INPUT;
     }
 
     @Override

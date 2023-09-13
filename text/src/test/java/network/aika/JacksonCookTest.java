@@ -22,10 +22,12 @@ import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.elements.synapses.*;
 import network.aika.meta.Dictionary;
 import network.aika.text.Document;
+import network.aika.text.Range;
 import network.aika.tokenizer.SimpleWordTokenizer;
 import org.junit.jupiter.api.Test;
 
 import static network.aika.TestUtils.*;
+import static network.aika.enums.direction.Direction.INPUT;
 
 /**
  *
@@ -58,7 +60,12 @@ public class JacksonCookTest {
         PatternNeuron jacksonIN = dict.lookupInputToken("Jackson");
         PatternNeuron cookIN = dict.lookupInputToken("Cook");
 
-        LatentRelationNeuron relPT = BeforeRelationNeuron.createBeforeRelationNeuron(m, -1, -1, "relPT");
+        LatentRelationNeuron relPT = new BeforeRelationNeuron(
+                m,
+                INPUT,
+                new Range(0, 0),
+                "relPT"
+        );
 
         BindingNeuron forenameBN = new BindingNeuron(m)
                 .setLabel("forename (person name)");

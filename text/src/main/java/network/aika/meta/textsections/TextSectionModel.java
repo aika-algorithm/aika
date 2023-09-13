@@ -22,6 +22,7 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
+import network.aika.text.Range;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.meta.NetworkMotifs.*;
 
 /**
@@ -52,6 +55,9 @@ public class TextSectionModel implements Writable {
 
 
     protected Model model;
+
+
+    protected BeforeRelationNeuron beginEndRelation;
 
     protected BeforeRelationNeuron relationPT;
     protected BeforeRelationNeuron relationNT;
@@ -77,12 +83,34 @@ public class TextSectionModel implements Writable {
     public void initStaticNeurons() {
         log.info("Text-Section");
 
-        relationPT = BeforeRelationNeuron.createBeforeRelationNeuron(model, -300, -1, "Prev. Token Rel.: -300, -1")
-                .setTargetNet(bindingNetTarget)
+        beginEndRelation = new BeforeRelationNeuron(
+                model,
+                OUTPUT,
+                new Range(-300, 0),
+                "Begin-End Relation"
+        )
+                .setBias(5.0)
+                .setTargetNet(5.0)
                 .setPersistent(true);
 
-        relationNT = BeforeRelationNeuron.createBeforeRelationNeuron(model, 1, 300, "Next. Token Rel.: 1, 300")
-                .setTargetNet(bindingNetTarget)
+        relationPT = new BeforeRelationNeuron(
+                        model,
+                        INPUT,
+                        new Range(-300, 0),
+                        "Prev. Token Rel.: -300, -0"
+                )
+                .setBias(5.0)
+                .setTargetNet(5.0)
+                .setPersistent(true);
+
+        relationNT = new BeforeRelationNeuron(
+                        model,
+                        OUTPUT,
+                        new Range(0, 300),
+                        "Next. Token Rel.: 0, 300"
+                )
+                .setBias(5.0)
+                .setTargetNet(5.0)
                 .setPersistent(true);
 
         patternN = PatternNeuron.create(model, "Abstract Text-Section", true)
@@ -99,7 +127,7 @@ public class TextSectionModel implements Writable {
         addRelation(
                 beginBN,
                 endBN,
-                relationPT,
+                beginEndRelation,
                 5.0,
                 10.0,
                 false
@@ -142,15 +170,17 @@ public class TextSectionModel implements Writable {
 
     @Override
     public void write(DataOutput out) throws IOException {
+        out.writeLong(beginEndRelation.getId());
         out.writeLong(relationPT.getId());
-        out.writeLong(relationNT.getId());;
-        out.writeLong(patternN.getId());;
-        out.writeLong(beginBN.getId());;
-        out.writeLong(endBN.getId());;
+        out.writeLong(relationNT.getId());
+        out.writeLong(patternN.getId());
+        out.writeLong(beginBN.getId());
+        out.writeLong(endBN.getId());
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
+        beginEndRelation = m.lookupNeuronProvider(in.readLong()).getNeuron();
         relationPT = m.lookupNeuronProvider(in.readLong()).getNeuron();
         relationNT = m.lookupNeuronProvider(in.readLong()).getNeuron();
         patternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
