@@ -25,21 +25,17 @@ import network.aika.parser.Context;
 public class TestContext implements Context {
 
 
-    String headlineTargetString;
+    String textSectionType;
 
     String headlineTargetLabel;
 
-    public TestContext(String headlineTargetString, String headlineTargetLabel) {
-        this.headlineTargetString = headlineTargetString;
+    public TestContext(String textSectionType, String headlineTargetLabel) {
+        this.textSectionType = textSectionType;
         this.headlineTargetLabel = headlineTargetLabel;
     }
 
-    public String getHeadlineTargetString() {
-        return headlineTargetString;
-    }
-
-    public String getHeadlineTargetLabel() {
-        return headlineTargetLabel;
+    public String getTextSectionType() {
+        return textSectionType;
     }
 
     public boolean isHeadlineTarget() {

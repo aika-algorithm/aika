@@ -82,6 +82,11 @@ public class TypedTextSectionModel extends TextSectionModel {
     protected EqualsRelationNeuron relBeginEquals;
     protected EqualsRelationNeuron relEndEquals;
 
+    public record TextSectionInstance (
+            PatternNeuron headlineTargetInputPN,
+            PatternNeuron targetInputPN
+    ) {}
+
     public TypedTextSectionModel(EntityModel entityModel) {
         super(entityModel.getPhraseModel());
         this.entityModel = entityModel;
@@ -109,7 +114,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         targetInputBN.setTemplateOnly(templateOnly, true);
     }
 
-    public PatternNeuron addTextSectionType(String label) {
+    public TextSectionInstance addTextSectionType(String label) {
         setTemplateOnly(false);
         targetInput.setTemplateOnly(false);
         phraseModel.getPatternNeuron().setTemplateOnly(true);
@@ -165,7 +170,10 @@ public class TypedTextSectionModel extends TextSectionModel {
             targetInput.setTemplateOnly(true);
             phraseModel.getPatternNeuron().setTemplateOnly(false);
 
-            return lookupInstance(doc, targetInput.getTargetInput());
+            return new TextSectionInstance(
+                    lookupInstance(doc, headlineTargetInput),
+                    lookupInstance(doc, targetInput.getTargetInput())
+            );
         } catch(Exception e) {
             throw new FailedInstantiationException("entity", e);
         } finally {
@@ -336,13 +344,13 @@ public class TypedTextSectionModel extends TextSectionModel {
         );
     }
 
-    public PatternNeuron addHeadline(String headlineLabel) {
-        return model.lookupInputNeuron(headlineLabel, headlineTargetInput);
+    public PatternNeuron addHeadline(String textSectionType) {
+        return model.lookupInputNeuron(textSectionType, headlineTargetInput);
     }
 
-    public void addHeadlineTarget(Document doc, Range posRange, Range charRange, String headlineLabel) {
+    public void addHeadlineTarget(Document doc, Range posRange, Range charRange, String textSectionType) {
         doc.addToken(
-                addHeadline(headlineLabel),
+                addHeadline(textSectionType),
                 posRange,
                 charRange,
                 INPUT_TOKEN_NET_TARGET

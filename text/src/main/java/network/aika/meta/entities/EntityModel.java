@@ -36,6 +36,7 @@ import java.io.IOException;
 
 import static network.aika.InstantiationUtil.lookupInstance;
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
+import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.queue.Phase.ANNEAL;
 import static network.aika.queue.Phase.INFERENCE;
@@ -138,6 +139,19 @@ public class EntityModel implements Writable {
         entityPattern.setTemplateOnly(templateOnly, true);
         entityBN.setTemplateOnly(templateOnly, true);
         targetInputBN.setTemplateOnly(templateOnly, true);
+    }
+
+    public PatternNeuron addEntity(String entityLabel) {
+        return model.lookupInputNeuron(entityLabel, targetInput.getTargetInput());
+    }
+
+    public void addEntityTarget(Document doc, Range posRange, Range charRange, String entityLabel) {
+        doc.addToken(
+                addEntity(entityLabel),
+                posRange,
+                charRange,
+                INPUT_TOKEN_NET_TARGET
+        );
     }
 
     public EntityInstance addEntityPattern(String label, boolean makeAbstract) {

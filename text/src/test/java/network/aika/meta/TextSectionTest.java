@@ -52,6 +52,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     private EntityModel entityModel;
     private TypedTextSectionModel textSectionModel;
 
+    private TypedTextSectionModel.TextSectionInstance profileTS;
+
+    private TypedTextSectionModel.TextSectionInstance tasksTS;
+
 /*    private String exampleTxt = "Java Softwaredeveloper\n" +
             " \n" +
             "Bla bla \n" +
@@ -91,8 +95,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         textSectionModel = new TypedTextSectionModel(entityModel);
         textSectionModel.initStaticNeurons();
 
-        textSectionModel.addTextSectionType("Profile");
-        textSectionModel.addTextSectionType("Tasks");
+        profileTS = textSectionModel.addTextSectionType("Profile");
+        tasksTS = textSectionModel.addTextSectionType("Tasks");
 
         model.setN(0);
     }
@@ -118,13 +122,13 @@ public class TextSectionTest extends TrainingParser<TestContext> {
 
         phraseModel.addPhraseTarget(doc, tokenCounter[0]);
 
-        if(context != null && context.getHeadlineTargetLabel() != null) {
+        if(context != null && context.getTextSectionType() != null) {
             textSectionModel
                     .addHeadlineTarget(
                             doc,
                             new Range(0, tokenCounter[0]),
                             new Range(0, doc.length()),
-                            context.getHeadlineTargetLabel()
+                            context.getTextSectionType()
                     );
         }
     }
