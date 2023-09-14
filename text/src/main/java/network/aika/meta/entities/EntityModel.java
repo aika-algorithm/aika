@@ -155,12 +155,12 @@ public class EntityModel implements Writable {
         Document doc = new Document(getModel(), label);
 
  //       AIKADebugger.createAndShowGUI(doc);
-        doc.setInstantiationCallback(act -> {
-            generateLabel(act, label);
+        doc.setInstantiationCallback((tAct, iAct) -> {
+            generateLabel(iAct, label);
             if (makeAbstract) {
-                ConjunctiveSynapse s = (ConjunctiveSynapse) act.getNeuron().makeAbstract();
+                ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
 
-                if(targetInput.getTargetInput() == act.getNeuron().getTemplate()) {
+                if(targetInput.getTargetInput() == tAct.getNeuron()) {
                     s.setWeight(2.0);
                     s.adjustBias();
                 } else

@@ -67,11 +67,13 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     protected BindingNeuron textSectionHintBN;
 
-    protected InnerInhibitoryNeuron tsBeginInhibitoryN;
+    protected InnerInhibitoryNeuron innerTsBeginInhibitoryN;
 
-    protected InnerInhibitoryNeuron tsEndInhibitoryN;
+    protected InnerInhibitoryNeuron innerTsEndInhibitoryN;
 
-    protected OuterInhibitoryNeuron tsInhibitoryN;
+    protected OuterInhibitoryNeuron outerTsBeginInhibitoryN;
+
+    protected OuterInhibitoryNeuron outerTsEndInhibitoryN;
 
     protected BindingNeuron targetInputBN;
 
@@ -87,9 +89,9 @@ public class TypedTextSectionModel extends TextSectionModel {
         return phraseModel.getModel();
     }
 
-    private void generateLabel(Activation act, String label) {
-        act.getNeuron().setLabel(
-                act.getTemplate().getLabel().replace("Headline", label)
+    private void generateLabel(Activation tAct, Activation iAct, String label) {
+        iAct.getNeuron().setLabel(
+                tAct.getLabel().replace("Headline", label)
         );
     }
 
@@ -110,13 +112,13 @@ public class TypedTextSectionModel extends TextSectionModel {
         Document doc = new Document(getModel(), headline + textSection);
 
         AIKADebugger.createAndShowGUI(doc);
-        doc.setInstantiationCallback(act -> {
-            generateLabel(act, label);
+        doc.setInstantiationCallback((tAct, iAct) -> {
+            generateLabel(tAct, iAct, label);
 
-            if(isPartOfHeadline(act) || isHint(act)) {
-                ConjunctiveSynapse s = (ConjunctiveSynapse) act.getNeuron().makeAbstract();
+            if(isPartOfHeadline(tAct) || isHint(tAct)) {
+                ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
 
-                if (targetInput.getTargetInput() == act.getNeuron().getTemplate()) {
+                if (targetInput.getTargetInput() == tAct.getNeuron()) {
                     s.setWeight(2.0);
                     s.adjustBias();
                 } else
@@ -156,13 +158,13 @@ public class TypedTextSectionModel extends TextSectionModel {
         }
     }
 
-    private boolean isPartOfHeadline(Activation act) {
-        String l = act.getTemplate().getLabel();
+    private boolean isPartOfHeadline(Activation tAct) {
+        String l = tAct.getLabel();
         return l.contains("Headline") && !l.contains("Text-Section");
     }
 
-    private boolean isHint(Activation act) {
-        return act.getTemplate().getLabel().contains("Hint");
+    private boolean isHint(Activation tAct) {
+        return tAct.getLabel().contains("Hint");
     }
 
     public void initStaticNeurons() {
@@ -172,10 +174,6 @@ public class TypedTextSectionModel extends TextSectionModel {
         targetInput.initTargetInput();
 
         log.info("Typed Text-Section");
-
-        textSectionHintBN = new BindingNeuron(model)
-                .setLabel("Abstr. Text-Section-Hint")
-                .setPersistent(true);
 
         double netTarget = 2.5;
 
@@ -221,7 +219,7 @@ public class TypedTextSectionModel extends TextSectionModel {
                 patternN,
                 2.5,
                 0.0,
-                false
+                true
         );
 
         sectionHintRelations(beginBN, relationPT);
@@ -229,45 +227,44 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         createTargetInputBindingNeuron();
 
-        tsBeginInhibitoryN = new InnerInhibitoryNeuron(model)
+        innerTsBeginInhibitoryN = new InnerInhibitoryNeuron(model)
                 .setLabel("I TS Begin")
                 .setPersistent(true);
 
         addInnerInhibitoryLoop(
                 beginBN,
-                tsBeginInhibitoryN,
+                innerTsBeginInhibitoryN,
                 NEG_MARGIN_TS_BEGIN * -netTarget
         );
 
-        tsEndInhibitoryN = new InnerInhibitoryNeuron(model)
+        innerTsEndInhibitoryN = new InnerInhibitoryNeuron(model)
                 .setLabel("I TS End")
                 .setPersistent(true);
 
         addInnerInhibitoryLoop(
                 endBN,
-                tsEndInhibitoryN,
+                innerTsEndInhibitoryN,
                 NEG_MARGIN_TS_END * -netTarget
         );
 
-        tsInhibitoryN = new OuterInhibitoryNeuron(model)
-                .setLabel("I TS")
+        outerTsBeginInhibitoryN = new OuterInhibitoryNeuron(model)
+                .setLabel("Outer Inhib Begin TS")
                 .setPersistent(true);
 
         addOuterInhibitoryLoop(
-                textSectionHintBN,
-                tsInhibitoryN,
+                beginBN,
+                outerTsBeginInhibitoryN,
                 NEG_MARGIN_TS * -netTarget
         );
 
-        addOuterInhibitoryLoop(
-                beginBN,
-                tsInhibitoryN,
-                NEG_MARGIN_TS * -netTarget
-        );
+        outerTsEndInhibitoryN = new OuterInhibitoryNeuron(model)
+                .setLabel("Outer Inhib End TS")
+                .setPersistent(true);
+
 
         addOuterInhibitoryLoop(
                 endBN,
-                tsInhibitoryN,
+                outerTsEndInhibitoryN,
                 NEG_MARGIN_TS * -netTarget
         );
 
@@ -344,9 +341,10 @@ public class TypedTextSectionModel extends TextSectionModel {
         out.writeLong(headlineBN.getId());
         out.writeLong(headlineTargetInput.getId());
         out.writeLong(textSectionHintBN.getId());
-        out.writeLong(tsBeginInhibitoryN.getId());
-        out.writeLong(tsEndInhibitoryN.getId());
-        out.writeLong(tsInhibitoryN.getId());
+        out.writeLong(innerTsBeginInhibitoryN.getId());
+        out.writeLong(innerTsEndInhibitoryN.getId());
+        out.writeLong(outerTsBeginInhibitoryN.getId());
+        out.writeLong(outerTsEndInhibitoryN.getId());
         out.writeLong(targetInputBN.getId());
         out.writeLong(relBeginEquals.getId());
         out.writeLong(relEndEquals.getId());
@@ -359,9 +357,10 @@ public class TypedTextSectionModel extends TextSectionModel {
         headlineBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         headlineTargetInput = m.lookupNeuronProvider(in.readLong()).getNeuron();
         textSectionHintBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        tsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        tsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        tsInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        innerTsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        innerTsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        outerTsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        outerTsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         relBeginEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();
         relEndEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();

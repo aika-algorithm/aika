@@ -114,6 +114,7 @@ public class TextSectionModel implements Writable {
                 .setPersistent(true);
 
         patternN = PatternNeuron.create(model, "Abstract Text-Section", true)
+                .setBias(0.7)
                 .setTargetNet(0.7)
                 .setPersistent(true);
 

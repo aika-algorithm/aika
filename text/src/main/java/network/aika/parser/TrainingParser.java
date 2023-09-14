@@ -43,8 +43,8 @@ public abstract class TrainingParser<C extends Context> extends Parser<C> implem
         return doc;
     }
 
-    public void onInstantiation(Activation act) {
-        generateTemplateInstanceLabels(act);
+    public void onInstantiation(Activation tAct, Activation iAct) {
+        generateTemplateInstanceLabels(iAct);
     }
 
     @Override

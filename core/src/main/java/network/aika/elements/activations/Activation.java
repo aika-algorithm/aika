@@ -518,7 +518,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         instantiateTemplateEdges(ti);
 
         if(thought.getInstantiationCallback() != null)
-            thought.getInstantiationCallback().onInstantiation(ti);
+            thought.getInstantiationCallback().onInstantiation(this, ti);
     }
 
     private void linkTemplateAndInstance(Activation<N> ti) {

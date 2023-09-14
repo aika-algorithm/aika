@@ -88,9 +88,9 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     protected Document initDocument(String txt, Context context, ParserPhase phase) {
         Document doc = super.initDocument(txt, context, phase);
 
-        doc.setInstantiationCallback(act -> {
-            generateTemplateInstanceLabels(act);
-            logInstantiation(act, act.getLabel());
+        doc.setInstantiationCallback((tAct, iAct) -> {
+            generateTemplateInstanceLabels(iAct);
+            logInstantiation(iAct, iAct.getLabel());
         });
 
         return doc;

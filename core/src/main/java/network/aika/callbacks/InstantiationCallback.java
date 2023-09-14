@@ -25,5 +25,5 @@ import network.aika.elements.activations.Activation;
  */
 public interface InstantiationCallback {
 
-    void onInstantiation(Activation act);
+    void onInstantiation(Activation tAct, Activation iAct);
 }
