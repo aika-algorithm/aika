@@ -67,7 +67,7 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     protected BindingNeuron tsHeadlineBN;
 
-    protected BindingNeuron textSectionHintBN;
+    protected BindingNeuron hintBN;
 
     protected InnerInhibitoryNeuron innerTsBeginInhibitoryN;
 
@@ -99,7 +99,18 @@ public class TypedTextSectionModel extends TextSectionModel {
         );
     }
 
+    public void setTemplateOnly(boolean templateOnly) {
+        patternN.setTemplateOnly(templateOnly, true);
+        headlineBN.setTemplateOnly(templateOnly, true);
+        tsHeadlineBN.setTemplateOnly(templateOnly, true);
+        beginBN.setTemplateOnly(templateOnly, true);
+        endBN.setTemplateOnly(templateOnly, true);
+        hintBN.setTemplateOnly(templateOnly, true);
+        targetInputBN.setTemplateOnly(templateOnly, true);
+    }
+
     public PatternNeuron addTextSectionType(String label) {
+        setTemplateOnly(false);
         targetInput.setTemplateOnly(false);
         phraseModel.getPatternNeuron().setTemplateOnly(true);
         beginInputPN.setTemplateOnly(true);
@@ -215,16 +226,16 @@ public class TypedTextSectionModel extends TextSectionModel {
                 false
         );
 
-        textSectionHintBN = new BindingNeuron(model)
+        hintBN = new BindingNeuron(model)
                 .setLabel("Abstract " + TEXT_SECTION_LABEL + " Hint")
                 .setTargetNet(bindingNetTarget)
                 .setPersistent(true);
 
-        textSectionHintBN.makeAbstract()
+        hintBN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addPositiveFeedbackLoop(
-                textSectionHintBN,
+                hintBN,
                 patternN,
                 2.5,
                 0.0,
@@ -341,7 +352,7 @@ public class TypedTextSectionModel extends TextSectionModel {
     private void sectionHintRelations(BindingNeuron fromBN, LatentRelationNeuron relN) {
         addRelation(
                 fromBN,
-                textSectionHintBN,
+                hintBN,
                 relN,
                 5.0,
                 10.0,
@@ -355,7 +366,7 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         out.writeLong(headlineBN.getId());
         out.writeLong(headlineTargetInput.getId());
-        out.writeLong(textSectionHintBN.getId());
+        out.writeLong(hintBN.getId());
         out.writeLong(innerTsBeginInhibitoryN.getId());
         out.writeLong(innerTsEndInhibitoryN.getId());
         out.writeLong(outerTsBeginInhibitoryN.getId());
@@ -371,7 +382,7 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         headlineBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         headlineTargetInput = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        textSectionHintBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        hintBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         innerTsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         innerTsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         outerTsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();

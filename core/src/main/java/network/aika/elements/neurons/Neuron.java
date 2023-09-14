@@ -250,6 +250,14 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return (N) this;
     }
 
+    public N setTemplateOnly(boolean templateOnly, boolean includeSyns) {
+        getInputSynapses().forEach(s ->
+                s.setTemplateOnly(templateOnly)
+        );
+
+        return setTemplateOnly(templateOnly);
+    }
+
     public boolean isTemplateOnly() {
         return templateOnly;
     }

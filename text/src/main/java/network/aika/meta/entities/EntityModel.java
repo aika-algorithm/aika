@@ -135,13 +135,9 @@ public class EntityModel implements Writable {
     }
 
     public void setTemplateOnly(boolean templateOnly) {
-        entityPattern.setTemplateOnly(templateOnly);
-        entityBN.setTemplateOnly(templateOnly);
-        targetInputBN.setTemplateOnly(templateOnly);
-
-        entityBN.getInputSynapses().forEach(s ->
-                s.setTemplateOnly(templateOnly)
-        );
+        entityPattern.setTemplateOnly(templateOnly, true);
+        entityBN.setTemplateOnly(templateOnly, true);
+        targetInputBN.setTemplateOnly(templateOnly, true);
     }
 
     public EntityInstance addEntityPattern(String label, boolean makeAbstract) {
