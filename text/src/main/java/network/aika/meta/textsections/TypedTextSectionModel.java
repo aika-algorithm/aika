@@ -131,7 +131,7 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         Document doc = new Document(getModel(), headline + textSection);
 
-        AIKADebugger.createAndShowGUI(doc);
+ //       AIKADebugger.createAndShowGUI(doc);
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(tAct, iAct, label);
 
