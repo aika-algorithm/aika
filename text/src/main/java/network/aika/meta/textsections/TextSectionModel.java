@@ -31,6 +31,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.meta.NetworkMotifs.*;
@@ -49,6 +50,8 @@ public class TextSectionModel implements Writable {
     protected static double NEG_MARGIN_TS = 1.1;
 
     public static final double INPUT_NET_TARGET = 5.0;
+
+    public static final String TEXT_SECTION_LABEL = "Text-Section";
 
 
     protected PhraseModel phraseModel;
@@ -81,7 +84,7 @@ public class TextSectionModel implements Writable {
     }
 
     public void initStaticNeurons() {
-        log.info("Text-Section");
+        log.info(TEXT_SECTION_LABEL);
 
         beginEndRelation = new BeforeRelationNeuron(
                 model,
@@ -113,17 +116,20 @@ public class TextSectionModel implements Writable {
                 .setTargetNet(5.0)
                 .setPersistent(true);
 
-        patternN = PatternNeuron.create(model, "Abstract Text-Section", true)
+        patternN = PatternNeuron.create(model, "Abstract " + TEXT_SECTION_LABEL, true)
                 .setBias(0.7)
                 .setTargetNet(0.7)
                 .setPersistent(true);
 
         beginInputPN = createTextSectionInput("Begin");
-        beginBN = addBindingNeuron(beginInputPN, "Abstract Text-Section-Begin", 10.0, bindingNetTarget);
+        beginBN = addBindingNeuron(beginInputPN, "Abstract " + TEXT_SECTION_LABEL + "-Begin", 10.0, bindingNetTarget);
+        beginBN.makeAbstract()
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         endInputPN = createTextSectionInput("End");
-        endBN = addBindingNeuron(endInputPN, "Abstract Text-Section-End", 10.0, bindingNetTarget);
-
+        endBN = addBindingNeuron(endInputPN, "Abstract " + TEXT_SECTION_LABEL + "-End", 10.0, bindingNetTarget);
+        endBN.makeAbstract()
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addRelation(
                 beginBN,

@@ -53,6 +53,8 @@ public class EntityModel implements Writable {
 
     protected static final double BINDING_NET_TARGET = 2.5;
 
+    public static final String ENTITY_LABEL = "Entity";
+
 
     protected Model model;
     protected PhraseModel phraseModel;
@@ -91,11 +93,11 @@ public class EntityModel implements Writable {
     }
 
     public void initStaticNeurons() {
-        targetInput = new TargetInput(model, "Entity");
+        targetInput = new TargetInput(model, ENTITY_LABEL);
         targetInput.initTargetInput();
 
         entityPattern = new PatternNeuron(model)
-                .setLabel("Abstract Entity")
+                .setLabel("Abstract " + ENTITY_LABEL)
                 .setTargetNet(ENTITY_NET_TARGET)
                 .setBias(ENTITY_NET_TARGET)
                 .setPersistent(true);
@@ -107,7 +109,7 @@ public class EntityModel implements Writable {
 
         entityBN = addBindingNeuron(
                 phraseModel.getPatternNeuron(),
-                "Abstract Entity",
+                "Abstract " + ENTITY_LABEL,
                 10.0,
                 BINDING_NET_TARGET
         );
@@ -200,7 +202,7 @@ public class EntityModel implements Writable {
 
     private void generateLabel(Activation act, String label) {
         act.getNeuron().setLabel(
-                act.getTemplate().getLabel().replace("Entity", label)
+                act.getTemplate().getLabel().replace(ENTITY_LABEL, label)
         );
     }
 

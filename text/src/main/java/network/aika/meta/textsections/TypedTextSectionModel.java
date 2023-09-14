@@ -52,6 +52,8 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     private static final Logger log = LoggerFactory.getLogger(TypedTextSectionModel.class);
 
+    public static final String HEADLINE_LABEL = "Headline";
+
 
     protected EntityModel entityModel;
 
@@ -91,7 +93,9 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     private void generateLabel(Activation tAct, Activation iAct, String label) {
         iAct.getNeuron().setLabel(
-                tAct.getLabel().replace("Headline", label)
+                tAct.getLabel()
+                        .replace(HEADLINE_LABEL, label + "-HL")
+                        .replace(TEXT_SECTION_LABEL, label + "-TS")
         );
     }
 
@@ -106,8 +110,8 @@ public class TypedTextSectionModel extends TextSectionModel {
                 .setTrainingEnabled(true)
                 .setMetaInstantiationEnabled(true);
 
-        String headline = label + " Headline";
-        String textSection = label + " Text-Section";
+        String headline = label + " " + HEADLINE_LABEL;
+        String textSection = label + " " + TEXT_SECTION_LABEL;
 
         Document doc = new Document(getModel(), headline + textSection);
 
@@ -160,7 +164,7 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     private boolean isPartOfHeadline(Activation tAct) {
         String l = tAct.getLabel();
-        return l.contains("Headline") && !l.contains("Text-Section");
+        return l.contains(HEADLINE_LABEL) && !l.contains(TEXT_SECTION_LABEL);
     }
 
     private boolean isHint(Activation tAct) {
@@ -170,14 +174,14 @@ public class TypedTextSectionModel extends TextSectionModel {
     public void initStaticNeurons() {
         super.initStaticNeurons();
 
-        targetInput = new TargetInput(model, "Text Section");
+        targetInput = new TargetInput(model, TEXT_SECTION_LABEL);
         targetInput.initTargetInput();
 
-        log.info("Typed Text-Section");
+        log.info("Typed " + TEXT_SECTION_LABEL);
 
         double netTarget = 2.5;
 
-        EntityModel.EntityInstance headlineEntity = entityModel.addEntityPattern("Headline", true);
+        EntityModel.EntityInstance headlineEntity = entityModel.addEntityPattern(HEADLINE_LABEL, true);
 
         headlineBN = headlineEntity.entityBN()
                 .setPersistent(true);
@@ -187,10 +191,12 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         tsHeadlineBN = addBindingNeuron(
                 headlineEntity.entityPatternN(),
-                "Abstr. Text-Section Headline",
+                "Abstr. " + TEXT_SECTION_LABEL + " " + HEADLINE_LABEL,
                 10.0,
                 bindingNetTarget
         );
+        tsHeadlineBN.makeAbstract()
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addRelation(
                 tsHeadlineBN,
@@ -210,9 +216,12 @@ public class TypedTextSectionModel extends TextSectionModel {
         );
 
         textSectionHintBN = new BindingNeuron(model)
-                .setLabel("Abstract Text-Section Hint")
+                .setLabel("Abstract " + TEXT_SECTION_LABEL + " Hint")
                 .setTargetNet(bindingNetTarget)
                 .setPersistent(true);
+
+        textSectionHintBN.makeAbstract()
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addPositiveFeedbackLoop(
                 textSectionHintBN,
@@ -228,8 +237,11 @@ public class TypedTextSectionModel extends TextSectionModel {
         createTargetInputBindingNeuron();
 
         innerTsBeginInhibitoryN = new InnerInhibitoryNeuron(model)
-                .setLabel("I TS Begin")
+                .setLabel("Inner " + TEXT_SECTION_LABEL + " Begin")
                 .setPersistent(true);
+
+        innerTsBeginInhibitoryN.makeAbstract()
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addInnerInhibitoryLoop(
                 beginBN,
@@ -238,8 +250,11 @@ public class TypedTextSectionModel extends TextSectionModel {
         );
 
         innerTsEndInhibitoryN = new InnerInhibitoryNeuron(model)
-                .setLabel("I TS End")
+                .setLabel("Inner " + TEXT_SECTION_LABEL + " End")
                 .setPersistent(true);
+
+        innerTsEndInhibitoryN.makeAbstract()
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         addInnerInhibitoryLoop(
                 endBN,
@@ -248,7 +263,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         );
 
         outerTsBeginInhibitoryN = new OuterInhibitoryNeuron(model)
-                .setLabel("Outer Inhib Begin TS")
+                .setLabel("Outer Begin " + TEXT_SECTION_LABEL)
                 .setPersistent(true);
 
         addOuterInhibitoryLoop(
@@ -258,7 +273,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         );
 
         outerTsEndInhibitoryN = new OuterInhibitoryNeuron(model)
-                .setLabel("Outer Inhib End TS")
+                .setLabel("Outer End " + TEXT_SECTION_LABEL)
                 .setPersistent(true);
 
 
