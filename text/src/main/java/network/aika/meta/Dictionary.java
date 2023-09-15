@@ -55,7 +55,6 @@ public class Dictionary {
     public void initStaticNeurons() {
         inputToken = new PatternNeuron(model)
                 .setLabel("Input Token")
-                .setBias(INPUT_TOKEN_NET_TARGET)
                 .setTargetNet(INPUT_TOKEN_NET_TARGET);
 
         inputToken.makeAbstract()
@@ -71,7 +70,7 @@ public class Dictionary {
         model.getNeuronsByType(PatternNeuron.class)
                 .map(n -> n.getOutputSynapseByType(PatternCategorySynapse.class))
                 .filter(Objects::nonNull)
-                .filter(s -> s.getOutput() != itCat)
+                .filter(s -> s.getOutput() == itCat)
                 .forEach(this::mapSurprisalToWeight);
     }
 
