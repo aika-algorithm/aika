@@ -25,6 +25,6 @@ import static java.lang.String.format;
 public class MissingNeuronException extends RuntimeException {
 
     public MissingNeuronException(Long id, String modelLabel) {
-        super(format("Neuron with id [%s] is missing in model label %s.", id, modelLabel));
+        super(format("Neuron with id [%d] is missing in model label %s.", id, modelLabel));
     }
 }

@@ -27,6 +27,6 @@ import static java.lang.String.format;
 public class PreviousThoughtNotDisconnected extends RuntimeException {
 
     public PreviousThoughtNotDisconnected(Thought oldThought, Thought newThought) {
-        super(format("The new thought [%s] can not be processed until the old thought [%s] is disconnected.", newThought.getId(), oldThought.getId()));
+        super(format("The new thought [%d] can not be processed until the old thought [%d] is disconnected.", newThought.getId(), oldThought.getId()));
     }
 }

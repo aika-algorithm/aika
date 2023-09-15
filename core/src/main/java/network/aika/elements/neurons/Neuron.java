@@ -511,7 +511,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     public static Neuron read(DataInput in, Model m) throws Exception {
         String neuronClazz = in.readUTF();
-        Neuron n = (Neuron) m.modelClass(neuronClazz);
+        Neuron n = m.createNeuronByClass(neuronClazz);
 
         n.readFields(in, m);
         return n;

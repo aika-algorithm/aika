@@ -133,7 +133,7 @@ public class Document extends Thought {
     public PatternActivation addToken(PatternNeuron n, Integer pos, Integer begin, Integer end, double inputNet) {
         return addToken(
                 n,
-                pos != null ? new Range(pos, pos) : null,
+                pos != null ? new Range(pos, pos + 1) : null,
                 begin != null && end != null ? new Range(begin, end) : null,
                 inputNet
         );

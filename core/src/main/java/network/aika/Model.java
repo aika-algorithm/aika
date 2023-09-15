@@ -16,8 +16,8 @@
  */
 package network.aika;
 
-
 import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.synapses.Synapse;
 import network.aika.suspension.InMemorySuspensionCallback;
 import network.aika.suspension.SuspensionCallback;
 import network.aika.elements.neurons.Neuron;
@@ -31,7 +31,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-
 /**
  *
  * @author Lukas Molzberger
@@ -43,7 +42,7 @@ public class Model implements Writable {
     private Config config;
 
     private SuspensionCallback suspensionCallback;
-    private final AtomicLong retrievalCounter = new AtomicLong(0);
+
     private final AtomicLong thoughtIdCounter = new AtomicLong(0);
 
     public final Map<Long, NeuronProvider> providers = new TreeMap<>();
@@ -223,14 +222,25 @@ public class Model implements Writable {
         suspensionCallback.close();
     }
 
-    public Object modelClass(String clazzName) {
+    public <N extends Neuron> N createNeuronByClass(String clazzName) {
         try {
             Class clazz = getClass().getClassLoader().loadClass(clazzName);
-            return clazz.getConstructor().newInstance();
+            return (N) clazz.getConstructor(Model.class)
+                    .newInstance(this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    public <S extends Synapse> S createSynapseByClass(String clazzName) {
+        try {
+            Class clazz = getClass().getClassLoader().loadClass(clazzName);
+            return (S) clazz.getConstructor().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public long createThoughtId() {
         return thoughtIdCounter.addAndGet(1);

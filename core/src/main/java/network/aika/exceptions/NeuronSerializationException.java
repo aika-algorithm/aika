@@ -16,7 +16,6 @@
  */
 package network.aika.exceptions;
 
-import network.aika.elements.neurons.NeuronProvider;
 
 import static java.lang.String.format;
 
@@ -28,6 +27,6 @@ public class NeuronSerializationException extends RuntimeException {
 
 
     public NeuronSerializationException(Long neuronId, Throwable cause) {
-        super(format("Failed to serialize or deserialize the neuron [%s]" + neuronId), cause);
+        super(format("Failed to serialize or deserialize the neuron [%d]", neuronId), cause);
     }
 }

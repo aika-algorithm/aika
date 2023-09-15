@@ -400,7 +400,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     public static Synapse read(DataInput in, Model m) throws IOException {
         String synClazz = in.readUTF();
 
-        Synapse s = (Synapse) m.modelClass(synClazz);
+        Synapse s = m.createSynapseByClass(synClazz);
         s.readFields(in, m);
         return s;
     }

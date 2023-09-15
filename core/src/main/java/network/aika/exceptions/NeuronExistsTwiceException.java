@@ -25,6 +25,6 @@ import static java.lang.String.format;
 public class NeuronExistsTwiceException extends RuntimeException {
 
     public NeuronExistsTwiceException(Long id) {
-        super(format("Two instances representing the neuron with id [%s] exist.", id));
+        super(format("Two instances representing the neuron with id [%d] exist.", id));
     }
 }
