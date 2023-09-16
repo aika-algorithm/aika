@@ -17,6 +17,7 @@
 package network.aika.elements.activations;
 
 import network.aika.Thought;
+import network.aika.elements.Timestamp;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.elements.links.InputObjectLink;
@@ -33,6 +34,7 @@ import network.aika.visitor.pattern.PatternVisitor;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.func;
 import static network.aika.fields.Fields.isTrue;
@@ -44,6 +46,8 @@ import static network.aika.utils.Utils.TOLERANCE;
 public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     private boolean isInput;
+
+    protected Timestamp firedUnsuppressed = NOT_SET;
 
     protected SumField netUnsuppressed;
 
@@ -81,8 +85,10 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         super.initOnFiredListener();
 
         netUnsuppressed.addListener("onFiredUnsuppressed", (fl, nr, u) -> {
-                    if (fl.getInput().exceedsThreshold())
+                    if (fl.getInput().exceedsThreshold() && firedUnsuppressed == NOT_SET) {
+                        firedUnsuppressed = thought.getCurrentTimestamp();
                         LinkingOut.add(this, true);
+                    }
                 }
         );
     }

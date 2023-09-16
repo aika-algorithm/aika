@@ -166,7 +166,7 @@ public class EntityModel implements Writable {
 
         Document doc = new Document(getModel(), label);
 
- //       AIKADebugger.createAndShowGUI(doc);
+//        AIKADebugger.createAndShowGUI(doc);
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(iAct, label);
             if (makeAbstract) {

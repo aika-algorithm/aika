@@ -54,6 +54,6 @@ public interface FieldOutput {
     }
 
     default boolean exceedsThreshold() {
-        return getValue() <= 0.0 && getUpdatedValue() > 0.0;
+        return getUpdatedValue() > 0.0;
     }
 }

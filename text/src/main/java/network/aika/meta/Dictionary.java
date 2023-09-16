@@ -55,6 +55,7 @@ public class Dictionary {
     public void initStaticNeurons() {
         inputToken = new PatternNeuron(model)
                 .setLabel("Input Token")
+                .setBias(INPUT_TOKEN_NET_TARGET)
                 .setTargetNet(INPUT_TOKEN_NET_TARGET);
 
         inputToken.makeAbstract()
