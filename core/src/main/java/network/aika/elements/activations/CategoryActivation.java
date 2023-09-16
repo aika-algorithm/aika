@@ -18,6 +18,7 @@ package network.aika.elements.activations;
 
 import network.aika.Thought;
 import network.aika.elements.links.*;
+import network.aika.text.GroundRef;
 import network.aika.text.Range;
 import network.aika.elements.neurons.CategoryNeuron;
 
@@ -66,14 +67,8 @@ public class CategoryActivation extends DisjunctiveActivation<CategoryNeuron> {
     }
 
     @Override
-    public Range getCharRange() {
+    public GroundRef getGroundRef() {
         Activation iAct = getCategoryInput();
-        return iAct != null ? iAct.getCharRange() : null;
-    }
-
-    @Override
-    public Range getTokenPosRange() {
-        Activation iAct = getCategoryInput();
-        return iAct != null ? iAct.getTokenPosRange() : null;
+        return iAct != null ? iAct.getGroundRef() : null;
     }
 }

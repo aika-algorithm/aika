@@ -20,6 +20,7 @@ import network.aika.elements.neurons.*;
 import network.aika.meta.Dictionary;
 import network.aika.meta.NetworkMotifs;
 import network.aika.text.Document;
+import network.aika.text.GroundRef;
 import network.aika.text.Range;
 
 /**
@@ -33,8 +34,10 @@ public class TestUtils {
             PatternNeuron n = dict.lookupInputToken(tokens[i]);
             doc.addToken(
                     n,
-                    new Range(i, i + 1),
-                    new Range(0, 1)
+                    new GroundRef(
+                            new Range(i, i + 1),
+                            new Range(0, 1)
+                    )
             );
         }
     }

@@ -25,6 +25,7 @@ import network.aika.meta.TargetInput;
 import network.aika.meta.exceptions.FailedInstantiationException;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
+import network.aika.text.GroundRef;
 import network.aika.text.Range;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
@@ -148,9 +149,10 @@ public class EntityModel implements Writable {
     public void addEntityTarget(Document doc, Range posRange, Range charRange, String entityLabel) {
         doc.addToken(
                 addEntity(entityLabel),
-                posRange,
-                charRange,
-                INPUT_TOKEN_NET_TARGET
+                new GroundRef(
+                        posRange,
+                        charRange
+                )
         );
     }
 
@@ -186,8 +188,8 @@ public class EntityModel implements Writable {
             Range entityPosRange = new Range(0, 1);
             Range entityCharRange = new Range(0, doc.length());
 
-            doc.addToken(phraseModel.getPatternNeuron(), entityPosRange, entityCharRange);
-            doc.addToken(targetInput.getTargetInput(), entityPosRange, entityCharRange);
+            doc.addToken(phraseModel.getPatternNeuron(), new GroundRef(entityPosRange, entityCharRange));
+            doc.addToken(targetInput.getTargetInput(), new GroundRef(entityPosRange, entityCharRange));
 
             doc.process(MAX_ROUND, INFERENCE);
             doc.anneal();

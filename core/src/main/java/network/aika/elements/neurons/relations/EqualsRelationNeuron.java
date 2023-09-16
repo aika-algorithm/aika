@@ -67,12 +67,12 @@ public class EqualsRelationNeuron extends LatentRelationNeuron {
     @Override
     public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir) {
         Document doc = (Document) fromAct.getThought();
-        Range r = fromAct.getTokenPosRange();
+        Range r = fromAct.getGroundRef().getTokenPosRange();
 
         return doc.getRelatedTokensByTokenPosition(compareBegin ? INPUT : OUTPUT, r)
                 .filter(act -> fromAct != act)
                 .filter(act ->
-                        compare(r, act.getTokenPosRange(), dir)
+                        compare(r, act.getGroundRef().getTokenPosRange(), dir)
                 );
     }
 

@@ -27,6 +27,7 @@ import network.aika.meta.TargetInput;
 import network.aika.meta.entities.EntityModel;
 import network.aika.meta.exceptions.FailedInstantiationException;
 import network.aika.text.Document;
+import network.aika.text.GroundRef;
 import network.aika.text.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -149,18 +150,22 @@ public class TypedTextSectionModel extends TextSectionModel {
         try {
             doc.setFeedbackTriggerRound();
 
-            Range headlinePosRange = new Range(0, 2);
-            Range headlineCharRange = new Range(0, headline.length());
+            GroundRef headlineGR = new GroundRef(
+                    new Range(0, 2),
+                    new Range(0, headline.length())
+            );
 
-            doc.addToken(phraseModel.getPatternNeuron(), headlinePosRange, headlineCharRange);
-            doc.addToken(headlineTargetInput, headlinePosRange, headlineCharRange);
+            doc.addToken(phraseModel.getPatternNeuron(), headlineGR);
+            doc.addToken(headlineTargetInput, headlineGR);
 
-            Range textSectionPosRange = new Range(2, 4);
-            Range textSectionCharRange = new Range(headline.length(), doc.length());
+            GroundRef textSectionGR = new GroundRef(
+                    new Range(2, 4),
+                    new Range(headline.length(), doc.length())
+            );
 
-            doc.addToken(beginInputPN, textSectionPosRange, textSectionCharRange);
-            doc.addToken(endInputPN, textSectionPosRange, textSectionCharRange);
-            doc.addToken(targetInput.getTargetInput(), textSectionPosRange, textSectionCharRange);
+            doc.addToken(beginInputPN, textSectionGR);
+            doc.addToken(endInputPN, textSectionGR);
+            doc.addToken(targetInput.getTargetInput(), textSectionGR);
 
             doc.process(MAX_ROUND, INFERENCE);
             doc.anneal();
@@ -348,12 +353,10 @@ public class TypedTextSectionModel extends TextSectionModel {
         return model.lookupInputNeuron(textSectionType, headlineTargetInput);
     }
 
-    public void addHeadlineTarget(Document doc, Range posRange, Range charRange, String textSectionType) {
+    public void addHeadlineTarget(Document doc, GroundRef groundRef, String textSectionType) {
         doc.addToken(
                 addHeadline(textSectionType),
-                posRange,
-                charRange,
-                INPUT_TOKEN_NET_TARGET
+                groundRef
         );
     }
 

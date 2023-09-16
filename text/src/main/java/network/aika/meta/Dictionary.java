@@ -17,12 +17,14 @@
 package network.aika.meta;
 
 import network.aika.Model;
+import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternCategorySynapse;
 import network.aika.enums.sign.Sign;
 import network.aika.text.Document;
+import network.aika.text.GroundRef;
 import network.aika.text.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,10 +104,16 @@ public class Dictionary {
 
     public void addToken(Document doc, String token, int pos, int begin, int end) {
         PatternNeuron n = lookupInputToken(token);
-        doc.addToken(
+        addToken(doc, n, pos, begin, end);
+    }
+
+    public static PatternActivation addToken(Document doc, PatternNeuron n, int pos, int begin, int end) {
+        return doc.addToken(
                 n,
-                new Range(pos, pos + 1),
-                new Range(begin, end)
+                new GroundRef(
+                        new Range(pos, pos + 1),
+                        new Range(begin, end)
+                )
         );
     }
 }

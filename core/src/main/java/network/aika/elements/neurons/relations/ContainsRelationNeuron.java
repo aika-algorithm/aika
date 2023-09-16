@@ -54,7 +54,7 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
     @Override
     public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction vDir) {
         Document doc = (Document) fromAct.getThought();
-        Range r = fromAct.getTokenPosRange();
+        Range r = fromAct.getGroundRef().getTokenPosRange();
         Direction dir = relationDir.combine(vDir);
 
         return (
@@ -64,7 +64,7 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
         )
                 .filter(act -> fromAct != act)
                 .filter(act ->
-                        contains(r, act.getTokenPosRange(), dir)
+                        contains(r, act.getGroundRef().getTokenPosRange(), dir)
                 );
     }
 

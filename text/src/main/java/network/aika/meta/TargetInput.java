@@ -77,7 +77,7 @@ public class TargetInput {
 
     public void addTarget(Document doc, String target) {
         PatternNeuron n = addTarget(target);
-        doc.addToken(n, null, null);
+        doc.addToken(n, null);
     }
 
     public void initTargetInput() {

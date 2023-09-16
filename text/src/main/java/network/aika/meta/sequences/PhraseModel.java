@@ -20,6 +20,7 @@ import network.aika.Model;
 import network.aika.elements.neurons.*;
 import network.aika.meta.Dictionary;
 import network.aika.text.Document;
+import network.aika.text.GroundRef;
 import network.aika.text.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +62,10 @@ public class PhraseModel extends SequenceModel {
     public void addPhraseTarget(Document doc, int numTokens) {
         doc.addToken(
                 targetInput.getTargetInput(),
-                new Range(0, numTokens),
-                new Range(0, doc.length()),
-                INPUT_TOKEN_NET_TARGET
+                new GroundRef(
+                        new Range(0, numTokens),
+                        new Range(0, doc.length())
+                )
         );
     }
 

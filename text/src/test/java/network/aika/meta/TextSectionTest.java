@@ -26,6 +26,7 @@ import network.aika.meta.textsections.TypedTextSectionModel;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;
 import network.aika.text.Document;
+import network.aika.text.GroundRef;
 import network.aika.text.Range;
 import network.aika.tokenizer.SimpleWordTokenizer;
 import network.aika.tokenizer.Tokenizer;
@@ -126,8 +127,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
             textSectionModel
                     .addHeadlineTarget(
                             doc,
-                            new Range(0, tokenCounter[0]),
-                            new Range(0, doc.length()),
+                            new GroundRef(
+                                    new Range(0, tokenCounter[0]),
+                                    new Range(0, doc.length())
+                            ),
                             context.getTextSectionType()
                     );
         }

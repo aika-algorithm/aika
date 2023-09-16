@@ -64,7 +64,7 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
         Direction toSlot = dir.combine(relDirection);
         Direction fromSlot = toSlot.invert();
 
-        Range inputRange = fromAct.getTokenPosRange();
+        Range inputRange = fromAct.getGroundRef().getTokenPosRange();
         long fromPos = inputRange.getPosition(fromSlot);
 
         Range targetRange = new Range(

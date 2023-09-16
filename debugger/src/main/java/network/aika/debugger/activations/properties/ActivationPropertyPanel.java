@@ -19,6 +19,7 @@ package network.aika.debugger.activations.properties;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.*;
 import network.aika.text.Document;
+import network.aika.text.GroundRef;
 
 import static network.aika.debugger.AbstractConsole.NOT_SET_STR;
 
@@ -46,12 +47,15 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
         addConstant("Id: ", "" + act.getId());
         addConstant("Label: ", act.getLabel());
 
-        addConstant("Char Range: ", act.getCharRange() != null ? "" + act.getCharRange() : NOT_SET_STR);
-        addConstant("Absolute Char Range: ", act.getAbsoluteCharRange() != null ? "" + act.getAbsoluteCharRange() : NOT_SET_STR);
-        addConstant("Token Position Range: ", "" + act.getTokenPosRange());
+        GroundRef gr = act.getGroundRef();
+        if(gr != null) {
+            addConstant("Char Range: ", gr.getCharRange() != null ? "" + gr.getCharRange() : NOT_SET_STR);
+            addConstant("Absolute Char Range: ", act.getAbsoluteCharRange() != null ? "" + act.getAbsoluteCharRange() : NOT_SET_STR);
+            addConstant("Token Position Range: ", "" + gr.getTokenPosRange());
 
-        Document doc = (Document) act.getThought();
-        addConstant("Covered Text: ", act.getCharRange() != null ? "" + doc.getTextSegment(act.getCharRange()) : NOT_SET_STR);
+            Document doc = (Document) act.getThought();
+            addConstant("Covered Text: ", gr.getCharRange() != null ? "" + doc.getTextSegment(gr.getCharRange()) : NOT_SET_STR);
+        }
     }
 
     public void initInferenceSection(E act) {

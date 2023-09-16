@@ -111,21 +111,21 @@ public class Document extends Thought {
     }
 
     public static String getText(Activation<?> act) {
-        return ((Document)act.getThought()).getTextSegment(act.getCharRange());
+        return ((Document)act.getThought()).getTextSegment(act.getGroundRef().getCharRange());
     }
 
-    public PatternActivation addToken(PatternNeuron n, Range posRange, Range charRange) {
-        return addToken(n, posRange, charRange, n.getTargetNet());
+    public PatternActivation addToken(PatternNeuron n, GroundRef groundRef) {
+        return addToken(n, groundRef, n.getTargetNet());
     }
 
-    public PatternActivation addToken(PatternNeuron n, Range posRange, Range charRange, double inputNet) {
+    public PatternActivation addToken(PatternNeuron n, GroundRef groundRef, double inputNet) {
         PatternActivation act = new PatternActivation(
                 createActivationId(),
                 this,
                 n
         );
 
-        act.updateRanges(posRange, charRange);
+        act.updateRanges(groundRef);
         act.setNet(inputNet);
         return act;
     }
@@ -133,8 +133,10 @@ public class Document extends Thought {
     public PatternActivation addToken(PatternNeuron n, Integer pos, Integer begin, Integer end, double inputNet) {
         return addToken(
                 n,
-                pos != null ? new Range(pos, pos + 1) : null,
-                begin != null && end != null ? new Range(begin, end) : null,
+                new GroundRef(
+                        pos != null ? new Range(pos, pos + 1) : null,
+                        begin != null && end != null ? new Range(begin, end) : null)
+                ,
                 inputNet
         );
     }
