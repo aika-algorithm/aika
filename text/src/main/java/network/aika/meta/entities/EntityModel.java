@@ -146,13 +146,10 @@ public class EntityModel implements Writable {
         return model.lookupInputNeuron(entityLabel, targetInput.getTargetInput());
     }
 
-    public void addEntityTarget(Document doc, Range posRange, Range charRange, String entityLabel) {
+    public void addEntityTarget(Document doc, GroundRef groundRef, String entityLabel) {
         doc.addToken(
                 addEntity(entityLabel),
-                new GroundRef(
-                        posRange,
-                        charRange
-                )
+                groundRef
         );
     }
 
