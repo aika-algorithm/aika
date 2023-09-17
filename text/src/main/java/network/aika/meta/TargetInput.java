@@ -30,6 +30,8 @@ import static network.aika.meta.NetworkMotifs.*;
  */
 public class TargetInput {
 
+    public static String TARGET_INPUT_LABEL = "Target Input";
+
     Model model;
 
     protected PatternNeuron targetInput;
@@ -82,7 +84,7 @@ public class TargetInput {
 
     public void initTargetInput() {
         targetInput = new PatternNeuron(model)
-                .setLabel(label + " Target Input")
+                .setLabel(label + " " + TARGET_INPUT_LABEL)
                 .setTargetNet(targetInputNetTarget);
 
         targetInputCategory = targetInput.makeAbstract()
@@ -109,7 +111,7 @@ public class TargetInput {
     public BindingNeuron createTargetInputBindingNeuron(PatternNeuron pn) {
         BindingNeuron bn = addBindingNeuron(
                 targetInput,
-                "Abstr. " + label + " Target Input",
+                "Abstr. " + label + " " + TARGET_INPUT_LABEL,
                 10.0,
                 bindingNetTarget
         );
@@ -131,9 +133,11 @@ public class TargetInput {
 
     public PatternNeuron instantiateTargetInput(String label) {
         PatternNeuron n = targetInput.instantiateTemplate()
-                .setLabel(label + " Target Input");
+                .setLabel(label + " " + TARGET_INPUT_LABEL);
 
         n.setAllowTraining(false);
+
+        model.registerLabel(n);
 
         return n;
     }

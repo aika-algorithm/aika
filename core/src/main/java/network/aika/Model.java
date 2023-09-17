@@ -113,9 +113,13 @@ public class Model implements Writable {
 
         n.setAllowTraining(false);
 
-        suspensionCallback.putLabel(tokenLabel, template.getId(), n.getId());
-        n.getProvider().save();
+        registerLabel(n);
         return n;
+    }
+
+    public void registerLabel(PatternNeuron n) {
+        suspensionCallback.putLabel(n.getLabel(), n.getTemplate().getId(), n.getId());
+        n.getProvider().save();
     }
 
     public <N extends Neuron> N getInputNeuron(String tokenLabel, PatternNeuron template) {

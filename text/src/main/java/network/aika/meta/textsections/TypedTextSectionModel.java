@@ -41,6 +41,7 @@ import static network.aika.InstantiationUtil.lookupInstance;
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
+import static network.aika.meta.TargetInput.TARGET_INPUT_LABEL;
 import static network.aika.queue.Phase.ANNEAL;
 import static network.aika.queue.Phase.INFERENCE;
 import static network.aika.queue.keys.QueueKey.MAX_ROUND;
@@ -100,9 +101,17 @@ public class TypedTextSectionModel extends TextSectionModel {
     private void generateLabel(Activation tAct, Activation iAct, String label) {
         iAct.getNeuron().setLabel(
                 tAct.getLabel()
-                        .replace(HEADLINE_LABEL, label + "-HL")
-                        .replace(TEXT_SECTION_LABEL, label + "-TS")
+                        .replace(HEADLINE_LABEL, getHeadlineLabel(label))
+                        .replace(TEXT_SECTION_LABEL, getTextSectionLabel(label))
         );
+    }
+
+    private static String getHeadlineLabel(String label) {
+        return label + "-HL";
+    }
+
+    private static String getTextSectionLabel(String label) {
+        return label + "-TS";
     }
 
     public void setTemplateOnly(boolean templateOnly) {
@@ -349,13 +358,16 @@ public class TypedTextSectionModel extends TextSectionModel {
         );
     }
 
-    public PatternNeuron addHeadline(String textSectionType) {
-        return model.lookupInputNeuron(textSectionType, headlineTargetInput);
+    public PatternNeuron addHeadline(String label) {
+        return model.lookupInputNeuron(
+                getHeadlineLabel(label) + " " + TARGET_INPUT_LABEL,
+                headlineTargetInput
+        );
     }
 
-    public void addHeadlineTarget(Document doc, GroundRef groundRef, String textSectionType) {
+    public void addHeadlineTarget(Document doc, GroundRef groundRef, String label) {
         doc.addToken(
-                addHeadline(textSectionType),
+                addHeadline(label),
                 groundRef
         );
     }

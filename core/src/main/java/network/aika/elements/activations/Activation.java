@@ -27,6 +27,7 @@ import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.elements.neurons.PatternNeuron;
 import network.aika.text.GroundRef;
 import network.aika.text.Range;
 import network.aika.elements.synapses.CategoryInputSynapse;
@@ -489,9 +490,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 this;
     }
 
-    public void instantiateTemplateNode() {
+    public Activation<N> instantiateTemplateNode() {
         if(neuron.isTemplateOnly())
-            return;
+            return null;
 
         N n = (N) neuron.instantiateTemplate();
 
@@ -511,6 +512,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         if(thought.getInstantiationCallback() != null)
             thought.getInstantiationCallback().onInstantiation(this, ti);
+
+        return ti;
     }
 
     private void linkTemplateAndInstance(Activation<N> ti) {
