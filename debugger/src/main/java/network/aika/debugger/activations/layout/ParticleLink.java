@@ -21,6 +21,7 @@ import network.aika.debugger.activations.ActivationGraphManager;
 import network.aika.debugger.activations.particles.ActivationParticle;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.links.*;
+import network.aika.text.GroundRef;
 import network.aika.text.Range;
 import org.graphstream.graph.Edge;
 import org.graphstream.ui.geom.Vector3;
@@ -117,12 +118,14 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
     }
 
     private Long getTokenPos() {
-        Range tp = link.getInput().getGroundRef().getTokenPosRange();
-        if(tp != null)
-            return tp.getEnd();
+        GroundRef grInput = link.getInput().getGroundRef();
 
-        if(link.getOutput().getGroundRef().getTokenPosRange() != null)
-            return link.getOutput().getGroundRef().getTokenPosRange().getEnd();
+        if (grInput != null && grInput.getTokenPosRange() != null)
+                return grInput.getTokenPosRange().getEnd();
+
+        GroundRef grOutput = link.getOutput().getGroundRef();
+        if(grOutput != null && grOutput.getTokenPosRange() != null)
+            return grOutput.getTokenPosRange().getEnd();
 
         return null;
     }
