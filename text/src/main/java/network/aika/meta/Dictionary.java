@@ -102,16 +102,16 @@ public class Dictionary {
         return model.lookupInputNeuron(label, inputToken);
     }
 
-    public void addToken(Document doc, String token, int pos, int begin, int end) {
+    public void addToken(Document doc, String token, Integer pos, int begin, int end) {
         PatternNeuron n = lookupInputToken(token);
         addToken(doc, n, pos, begin, end);
     }
 
-    public static PatternActivation addToken(Document doc, PatternNeuron n, int pos, int begin, int end) {
+    public static PatternActivation addToken(Document doc, PatternNeuron n, Integer pos, int begin, int end) {
         return doc.addToken(
                 n,
                 new GroundRef(
-                        new Range(pos, pos + 1),
+                        pos != null ? new Range(pos, pos + 1) : null,
                         new Range(begin, end)
                 )
         );
