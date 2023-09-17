@@ -37,7 +37,6 @@ import java.io.IOException;
 
 import static network.aika.InstantiationUtil.lookupInstance;
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
-import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.queue.Phase.ANNEAL;
 import static network.aika.queue.Phase.INFERENCE;
