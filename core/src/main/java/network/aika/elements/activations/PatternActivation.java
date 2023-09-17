@@ -24,6 +24,7 @@ import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.text.Document;
+import network.aika.text.GroundRef;
 import network.aika.text.Range;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.inhibitory.InhibitoryVisitor;
@@ -60,11 +61,15 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
         return toRelations;
     }
 
-
-    protected void registerPosRange(Range oldTokenPosRange, Range newTokenPosRange) {
+    @Override
+    protected void registerPosRange(GroundRef oldGroundRef, GroundRef newGroundRef) {
         Document doc = (Document) thought;
 
-        doc.updateTokenPosition(this, oldTokenPosRange, newTokenPosRange);
+        doc.updateTokenPosition(
+                this,
+                oldGroundRef.getTokenPosRange(),
+                newGroundRef.getTokenPosRange()
+        );
     }
 
     @Override
