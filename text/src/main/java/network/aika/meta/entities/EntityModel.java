@@ -17,7 +17,6 @@
 package network.aika.meta.entities;
 
 import network.aika.Model;
-import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.EqualsRelationNeuron;
@@ -166,7 +165,7 @@ public class EntityModel implements Writable {
 
         Document doc = new Document(getModel(), label);
 
-        AIKADebugger.createAndShowGUI(doc);
+//       AIKADebugger.createAndShowGUI(doc);
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(iAct, label);
             if (makeAbstract) {
