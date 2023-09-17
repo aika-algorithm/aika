@@ -297,8 +297,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Range getAbsoluteCharRange() {
+        if(groundRef == null)
+            return null;
         Range r = groundRef.getCharRange();
-        if(r == null) return null;
         return r.getAbsoluteRange(thought.getCharRange());
     }
 
