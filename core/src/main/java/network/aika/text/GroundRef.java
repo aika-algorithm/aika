@@ -16,6 +16,9 @@
  */
 package network.aika.text;
 
+import static network.aika.text.Range.getBegin;
+import static network.aika.text.Range.getEnd;
+
 /**
  *
  * @author Lukas Molzberger
@@ -37,6 +40,14 @@ public class GroundRef {
 
     public Range getCharRange() {
         return charRange;
+    }
+
+    public static Long getTPBegin(GroundRef gr) {
+        return gr != null ? getBegin(gr.tokenPosRange) : null;
+    }
+
+    public static Long getTPEnd(GroundRef gr) {
+        return gr != null ? getEnd(gr.tokenPosRange) : null;
     }
 
     public boolean equals(GroundRef gr) {

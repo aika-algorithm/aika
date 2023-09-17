@@ -29,6 +29,8 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.elements.Timestamp.NOT_SET;
+import static network.aika.text.GroundRef.getTPBegin;
+import static network.aika.text.GroundRef.getTPEnd;
 
 
 /**
@@ -53,12 +55,12 @@ public class Document extends Thought {
         }
     }
 
-    public void updateTokenPosition(PatternActivation tokenAct, Range oldTR, Range newTR) {
-        updateTokenPosition(tokenPosBeginIndex, tokenAct, Range.getBegin(oldTR), Range.getBegin(newTR));
-        updateTokenPosition(tokenPosEndIndex, tokenAct, Range.getEnd(oldTR), Range.getEnd(newTR));
+    public void updateGroundRef(PatternActivation tokenAct, GroundRef oldGroundRef, GroundRef newGroundRef) {
+        updateGroundRef(tokenPosBeginIndex, tokenAct, getTPBegin(oldGroundRef), getTPBegin(newGroundRef));
+        updateGroundRef(tokenPosEndIndex, tokenAct, getTPEnd(oldGroundRef), getTPEnd(newGroundRef));
     }
 
-    private void updateTokenPosition(NavigableMap<TokenPositionKey, PatternActivation> index, PatternActivation tokenAct, Long oldPos, Long newPos) {
+    private void updateGroundRef(NavigableMap<TokenPositionKey, PatternActivation> index, PatternActivation tokenAct, Long oldPos, Long newPos) {
         if(oldPos != null) {
             if (oldPos == newPos)
                 return;
