@@ -16,10 +16,16 @@
  */
 package network.aika.elements.synapses;
 
+import network.aika.Model;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.SameObjectLink;
 import network.aika.elements.neurons.BindingNeuron;
+import network.aika.statistic.SampleSpace;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 /**
  * The Same Pattern Binding Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
@@ -32,7 +38,8 @@ public class SameObjectSynapse extends BindingNeuronSynapse<
         SameObjectLink,
         BindingActivation
         >
-{    private Integer relationSynId;
+{
+    private Integer relationSynId;
 
     @Override
     public Integer getRelationSynId() {
@@ -51,5 +58,22 @@ public class SameObjectSynapse extends BindingNeuronSynapse<
     @Override
     public SameObjectLink createLink(BindingActivation input, BindingActivation output) {
         return new SameObjectLink(this, input, output);
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+
+        out.writeBoolean(relationSynId != null);
+        if(relationSynId != null)
+            out.writeInt(relationSynId);
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws IOException {
+        super.readFields(in, m);
+
+        if(in.readBoolean())
+            relationSynId = in.readInt();
     }
 }
