@@ -123,7 +123,8 @@ public class TargetInput {
                 pn,
                 2.5,
                 0.0,
-                false
+                false,
+                true
         );
 
         targetInputBN = bn;

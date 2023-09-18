@@ -84,10 +84,22 @@ public class NetworkMotifs {
             double weakInputMargin,
             boolean isOptional
     ) {
+        addPositiveFeedbackLoop(bn, pn, weight, weakInputMargin, isOptional, false);
+    }
+
+    public static void addPositiveFeedbackLoop(
+            BindingNeuron bn,
+            PatternNeuron pn,
+            double weight,
+            double weakInputMargin,
+            boolean isOptional,
+            boolean isTemplateOnly
+    ) {
         PatternSynapse pSyn = new PatternSynapse()
                 .setWeight(weight)
                 .setOptional(isOptional)
                 .link(bn, pn)
+                .setTemplateOnly(isTemplateOnly)
                 .adjustBias(bn.getTargetValue() + weakInputMargin);
 
         log.info("  " + pSyn + " targetNetContr:" + -pSyn.getSynapseBias().getValue());
@@ -95,6 +107,7 @@ public class NetworkMotifs {
         PositiveFeedbackSynapse posFeedSyn = new PositiveFeedbackSynapse()
                 .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), pn.getTargetValue()))
                 .link(pn, bn)
+                .setTemplateOnly(isTemplateOnly)
                 .adjustBias();
 
         log.info("  " + posFeedSyn + " targetNetContr:" + -posFeedSyn.getSynapseBias().getValue());
