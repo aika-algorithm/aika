@@ -16,6 +16,13 @@
  */
 package network.aika.text;
 
+import network.aika.Model;
+import network.aika.utils.Writable;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import static network.aika.text.Range.getBegin;
 import static network.aika.text.Range.getEnd;
 
@@ -23,8 +30,7 @@ import static network.aika.text.Range.getEnd;
  *
  * @author Lukas Molzberger
  */
-public class GroundRef {
-
+public class GroundRef implements Writable {
 
     private Range tokenPosRange;
     private Range charRange;
@@ -32,6 +38,9 @@ public class GroundRef {
     public GroundRef(Range tokenPosRange, Range charRange) {
         this.tokenPosRange = tokenPosRange;
         this.charRange = charRange;
+    }
+
+    private GroundRef() {
     }
 
     public Range getTokenPosRange() {
@@ -65,5 +74,35 @@ public class GroundRef {
                 Range.join(a.tokenPosRange, b.tokenPosRange),
                 Range.join(a.charRange, b.charRange)
         );
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeBoolean(tokenPosRange != null);
+        if(tokenPosRange != null)
+            tokenPosRange.write(out);
+
+        out.writeBoolean(charRange != null);
+        if(charRange != null)
+            charRange.write(out);
+    }
+
+    public static GroundRef read(DataInput in, Model m) throws Exception {
+        GroundRef gr = new GroundRef();
+        gr.readFields(in, m);
+        return gr;
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        if(in.readBoolean())
+            tokenPosRange = Range.read(in, m);
+
+        if(in.readBoolean())
+            charRange = Range.read(in, m);
+    }
+
+    public String toString() {
+        return "TPR:" + tokenPosRange + " CR:" + charRange;
     }
 }
