@@ -66,6 +66,8 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     protected PatternNeuron headlineTargetInput;
 
+    protected BindingNeuron headlineTargetInputBN;
+
 
     protected BindingNeuron tsHeadlineBN;
 
@@ -127,6 +129,7 @@ public class TypedTextSectionModel extends TextSectionModel {
     public TextSectionInstance addTextSectionType(String label) {
         setTemplateOnly(false);
         targetInput.setTemplateOnly(false);
+        TargetInput.setTemplateOnly(headlineTargetInput, headlineTargetInputBN, false);
         phraseModel.getPatternNeuron().setTemplateOnly(true);
         beginInputPN.setTemplateOnly(true);
         endInputPN.setTemplateOnly(true);
@@ -220,6 +223,9 @@ public class TypedTextSectionModel extends TextSectionModel {
                 .setPersistent(true);
 
         headlineTargetInput = headlineEntity.targetInputPN()
+                .setPersistent(true);
+
+        headlineTargetInputBN = headlineEntity.targetInputBN()
                 .setPersistent(true);
 
         tsHeadlineBN = addBindingNeuron(

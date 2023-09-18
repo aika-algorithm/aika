@@ -36,8 +36,6 @@ public class TargetInput {
 
     protected PatternNeuron targetInput;
 
-    protected CategoryNeuron targetInputCategory;
-
     protected BindingNeuron targetInputBN;
 
     protected double targetInputNetTarget = 5.0;
@@ -61,14 +59,23 @@ public class TargetInput {
     }
 
     public void setTemplateOnly(boolean templateOnly) {
-        targetInput.setTemplateOnly(templateOnly);
-        targetInputCategory.setTemplateOnly(templateOnly);
-        targetInputBN.setTemplateOnly(templateOnly);
+        setTemplateOnly(targetInput, templateOnly);
+    }
 
-        targetInput.getInputSynapses().forEach(s ->
+    public static void setTemplateOnly(PatternNeuron ip, BindingNeuron bn, boolean templateOnly) {
+        setTemplateOnly(ip, templateOnly);
+        ip.getCategoryInputSynapse().getInput()
+                .setTemplateOnly(templateOnly);
+        setTemplateOnly(bn, templateOnly);
+    }
+
+    private static void setTemplateOnly(Neuron<?, ?> n, boolean templateOnly) {
+        n.setTemplateOnly(templateOnly);
+
+        n.getInputSynapses().forEach(s ->
                 s.setTemplateOnly(templateOnly)
         );
-        targetInput.getOutputSynapses().forEach(s ->
+        n.getOutputSynapses().forEach(s ->
                 s.setTemplateOnly(templateOnly)
         );
     }
@@ -87,7 +94,7 @@ public class TargetInput {
                 .setLabel(label + " " + TARGET_INPUT_LABEL)
                 .setTargetNet(targetInputNetTarget);
 
-        targetInputCategory = targetInput.makeAbstract()
+        targetInput.makeAbstract()
                 .setWeight(1.0)
                 .adjustBias()
                 .getInput();
@@ -123,8 +130,7 @@ public class TargetInput {
                 pn,
                 2.5,
                 0.0,
-                false,
-                true
+                false
         );
 
         targetInputBN = bn;
