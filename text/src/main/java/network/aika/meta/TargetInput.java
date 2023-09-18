@@ -144,7 +144,7 @@ public class TargetInput {
 
         n.setAllowTraining(false);
 
-        model.registerLabel(n);
+        model.registerLabel(n, targetInput);
 
         return n;
     }

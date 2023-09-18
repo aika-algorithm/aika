@@ -48,9 +48,6 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
         addConstant("Is Training Allowed: ", "" + n.isTrainingAllowed());
 
         addConstant("Is Template Only: ", "" + n.isTemplateOnly());
-        if(n.getTemplate() != null)
-            addConstant("Template Neuron: ", n.getTemplate().getId() + ":" + n.getTemplate().getLabel());
-
         addConstant("Is Modified: ", "" + n.isModified());
     }
 

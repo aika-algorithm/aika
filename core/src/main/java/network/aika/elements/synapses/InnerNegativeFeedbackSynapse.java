@@ -21,6 +21,7 @@ import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.InnerNegativeFeedbackLink;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
 import network.aika.enums.Scope;
+import network.aika.enums.direction.Direction;
 
 /**
  *
@@ -33,6 +34,19 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
         InnerInhibitoryActivation
         >
 {
+
+    public InnerNegativeFeedbackSynapse() {
+        currentStoredAt = Direction.OUTPUT;
+    }
+
+    @Override
+    public void setStoredAt(Direction newStoredAt) {
+    }
+
+    @Override
+    public double getPreNetDummyWeight() {
+        return weight.getValue();
+    }
 
     @Override
     public Scope getScope() {

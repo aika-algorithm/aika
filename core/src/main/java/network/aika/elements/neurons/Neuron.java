@@ -80,8 +80,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected boolean allowTraining = true;
 
-    protected Neuron<?, ?> template;
-
     private boolean templateOnly;
 
     protected InitParams initParams;
@@ -240,8 +238,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         createCategorySynapse()
                 .setWeight(cis.getInitialInstanceWeight())
                 .link(this, cis.getInput());
-
-        this.template = templateN;
     }
 
     public N setTemplateOnly(boolean templateOnly) {
@@ -298,11 +294,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     public void setAllowTraining(boolean allowTraining) {
         this.allowTraining = allowTraining;
     }
-
-    public Neuron getTemplate() {
-        return template;
-    }
-
 
     public NeuronProvider getProvider() {
         return provider;

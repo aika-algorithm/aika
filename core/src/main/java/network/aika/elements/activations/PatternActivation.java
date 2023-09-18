@@ -75,7 +75,7 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
     public PatternActivation instantiateTemplateNode() {
         PatternActivation ti = (PatternActivation) super.instantiateTemplateNode();
         if(ti != null)
-            getModel().registerLabel(ti.getNeuron());
+            getModel().registerLabel(ti.getNeuron(), neuron);
         return ti;
     }
 
