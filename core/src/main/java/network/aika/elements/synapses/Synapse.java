@@ -56,7 +56,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     protected NeuronProvider input;
     protected NeuronProvider output;
 
-    protected S template;
     private boolean templateOnly;
 
     protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
@@ -320,20 +319,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public void setTrainingAllowed(boolean trainingAllowed) {
         this.trainingAllowed = trainingAllowed;
-    }
-
-    public S getTemplate() {
-        return template;
-    }
-
-    public boolean isOfTemplate(Synapse templateSynapse) {
-        if(template == templateSynapse)
-            return true;
-
-        if(template == null)
-            return false;
-
-        return template.isOfTemplate(templateSynapse);
     }
 
     public double getSortingWeight() {
