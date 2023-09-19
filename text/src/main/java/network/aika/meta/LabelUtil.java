@@ -38,6 +38,14 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  */
 public class LabelUtil {
 
+    public static String getAbstractPatternLabel(String placeholder) {
+        return "Abstract " + placeholder;
+    }
+
+    public static String getAbstractBindingNeuronLabel(String placeholder) {
+        return "Abstract " + placeholder;
+    }
+
     public static void generateTemplateInstanceLabels(Activation<?> act) {
         Document doc = (Document) act.getThought();
         String actTxt = doc.getTextSegment(act.getGroundRef().getCharRange());

@@ -34,6 +34,8 @@ import java.io.IOException;
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
+import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
+import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
 import static network.aika.meta.NetworkMotifs.*;
 
 /**
@@ -116,18 +118,18 @@ public class TextSectionModel implements Writable {
                 .setTargetNet(5.0)
                 .setPersistent(true);
 
-        patternN = PatternNeuron.create(model, "Abstract " + TEXT_SECTION_LABEL, true)
+        patternN = PatternNeuron.create(model, getAbstractPatternLabel(TEXT_SECTION_LABEL), true)
                 .setBias(0.7)
                 .setTargetNet(0.7)
                 .setPersistent(true);
 
         beginInputPN = createTextSectionInput("Begin");
-        beginBN = addBindingNeuron(beginInputPN, "Abstract " + TEXT_SECTION_LABEL + "-Begin", 10.0, bindingNetTarget);
+        beginBN = addBindingNeuron(beginInputPN, getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + "-Begin"), 10.0, bindingNetTarget);
         beginBN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         endInputPN = createTextSectionInput("End");
-        endBN = addBindingNeuron(endInputPN, "Abstract " + TEXT_SECTION_LABEL + "-End", 10.0, bindingNetTarget);
+        endBN = addBindingNeuron(endInputPN, getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + "-End"), 10.0, bindingNetTarget);
         endBN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 

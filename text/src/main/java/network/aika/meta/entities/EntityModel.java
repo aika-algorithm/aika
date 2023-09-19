@@ -37,6 +37,8 @@ import java.io.IOException;
 
 import static network.aika.InstantiationUtil.lookupInstance;
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
+import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
+import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.queue.Phase.ANNEAL;
 import static network.aika.queue.Phase.INFERENCE;
@@ -98,7 +100,7 @@ public class EntityModel implements Writable {
         targetInput.initTargetInput();
 
         entityPattern = new PatternNeuron(model)
-                .setLabel("Abstract " + ENTITY_LABEL)
+                .setLabel(getAbstractPatternLabel(ENTITY_LABEL))
                 .setTargetNet(ENTITY_NET_TARGET)
                 .setBias(ENTITY_NET_TARGET)
                 .setPersistent(true);
@@ -110,7 +112,7 @@ public class EntityModel implements Writable {
 
         entityBN = addBindingNeuron(
                 phraseModel.getPatternNeuron(),
-                "Abstract " + ENTITY_LABEL,
+                getAbstractBindingNeuronLabel(ENTITY_LABEL),
                 10.0,
                 BINDING_NET_TARGET
         );
@@ -133,6 +135,10 @@ public class EntityModel implements Writable {
         targetInputBN = targetInput.createTargetInputBindingNeuron(entityBN, entityPattern, relEquals);
 
         targetInput.setTemplateOnly(true);
+    }
+
+    public PatternNeuron getInstancePattern(String entityType) {
+        return getModel().getInputNeuron(entityType, entityPattern);
     }
 
     public void setTemplateOnly(boolean templateOnly) {

@@ -17,7 +17,6 @@
 package network.aika.meta.textsections;
 
 import network.aika.Model;
-import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.EqualsRelationNeuron;
@@ -39,9 +38,10 @@ import java.io.IOException;
 
 import static network.aika.InstantiationUtil.lookupInstance;
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
-import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
+import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.meta.TargetInput.TARGET_INPUT_LABEL;
+import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
 import static network.aika.queue.Phase.ANNEAL;
 import static network.aika.queue.Phase.INFERENCE;
 import static network.aika.queue.keys.QueueKey.MAX_ROUND;
@@ -61,6 +61,8 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     protected TargetInput targetInput;
 
+
+    protected PatternNeuron headlinePattern;
 
     protected BindingNeuron headlineBN;
 
@@ -105,6 +107,24 @@ public class TypedTextSectionModel extends TextSectionModel {
                 tAct.getLabel()
                         .replace(HEADLINE_LABEL, getHeadlineLabel(label))
                         .replace(TEXT_SECTION_LABEL, getTextSectionLabel(label))
+        );
+    }
+
+    public PatternNeuron getHeadlinePattern(String tsType) {
+        return getModel().getInputNeuron(
+                getAbstractPatternLabel(
+                        getHeadlineLabel(tsType)
+                ),
+                headlinePattern
+        );
+    }
+
+    public PatternNeuron getTextSectionPattern(String tsType) {
+        return getModel().getInputNeuron(
+                getAbstractPatternLabel(
+                        getTextSectionLabel(tsType)
+                ),
+                patternN
         );
     }
 
@@ -230,6 +250,8 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         EntityModel.EntityInstance headlineEntity = entityModel.addEntityPattern(HEADLINE_LABEL, true);
 
+        headlinePattern = headlineEntity.entityPatternN();
+
         headlineBN = headlineEntity.entityBN()
                 .setPersistent(true);
 
@@ -266,7 +288,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         );
 
         hintBN = new BindingNeuron(model)
-                .setLabel("Abstract " + TEXT_SECTION_LABEL + " Hint")
+                .setLabel(getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + " Hint"))
                 .setTargetNet(bindingNetTarget)
                 .setPersistent(true);
 
