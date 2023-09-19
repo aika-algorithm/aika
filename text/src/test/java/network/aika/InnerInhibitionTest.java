@@ -95,7 +95,9 @@ public class InnerInhibitionTest {
         addRelation(na, nx, relPT, 5.0, 10.0, false);
 
         Document doc = new Document(m, "test");
-        AIKADebugger.createAndShowGUI(doc, false);
+        AIKADebugger.createAndShowGUI()
+                .setDocument(doc)
+                .setTemplatesOnly(false);
 
         doc.setFeedbackTriggerRound();
 
@@ -161,7 +163,9 @@ public class InnerInhibitionTest {
         addRelation(nc, nx, relPT, 5.0, 10.0, false);
 
         Document doc = new Document(m, "test");
-        AIKADebugger.createAndShowGUI(doc, false);
+        AIKADebugger.createAndShowGUI()
+                .setDocument(doc)
+                .setTemplatesOnly(false);
 
         doc.setFeedbackTriggerRound();
 

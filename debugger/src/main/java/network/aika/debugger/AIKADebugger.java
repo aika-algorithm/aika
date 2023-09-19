@@ -25,6 +25,7 @@ import network.aika.debugger.stepmanager.DebugStepManager;
 import network.aika.debugger.stepmanager.StepManager;
 import network.aika.debugger.stepmanager.TestCaseRestartException;
 import network.aika.text.Document;
+import network.aika.text.Range;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,8 +53,9 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
     private Map<Integer, Runnable> testCaseListeners = new TreeMap<>();
 
     private NavigableSet<Long> breakpoints = new TreeSet<>();
+    private boolean templatesOnly;
 
-    public AIKADebugger(boolean templatesOnly) {
+    public AIKADebugger() {
         super(new GridLayout(1, 1));
 
         tabbedPane = new JTabbedPane();
@@ -119,12 +121,15 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
         addTab(NEURON_TAB_INDEX, "Neurons", KeyEvent.VK_N, neuronViewManager.getView());
     }
 
-    public void setDocument(Document doc) {
+    public AIKADebugger setDocument(Document doc) {
         actViewManager = new ActivationViewManager(doc, new ActivationConsoleManager(doc), this);
         actViewManager.setStepManager(new DebugStepManager(doc));
         addTab(ACTIVATION_TAB_INDEX, "Activations", KeyEvent.VK_A, actViewManager.getView());
         actViewManager.enableAutoLayout();
         actViewManager.getCamera().setViewCenter(0.678, 0.563, 0);
+
+        setModel(doc.getModel());
+        return this;
     }
 
     public Runnable getCurrentTestCase() {
@@ -173,46 +178,23 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
         tabbedPane.setSelectedIndex(tabIndex);
     }
 
-    public static AIKADebugger createAndShowGUI(Document doc) {
-        AIKADebugger debugger = createAndShowGUI();
-        debugger.setDocument(doc);
-        debugger.setModel(doc.getModel());
-
-        return debugger;
+    public AIKADebugger setTemplatesOnly(boolean templatesOnly) {
+        this.templatesOnly = templatesOnly;
+        return this;
     }
 
-    public static AIKADebugger createAndShowGUI(Document doc, boolean templatesOnly) {
-        AIKADebugger debugger = createAndShowGUI(templatesOnly);
-        debugger.setDocument(doc);
-        debugger.setModel(doc.getModel());
-
-        return debugger;
-    }
-
-    public static AIKADebugger createAndShowGUI(Document doc, int fromTokenPos, int toTokenPos) {
-        AIKADebugger debugger = createAndShowGUI();
-        debugger.setDocument(doc);
-        debugger.setModel(doc.getModel());
-        debugger.setTokenRange(fromTokenPos, toTokenPos);
-
-        return debugger;
-    }
-
-    private void setTokenRange(int beginTokenPos, int toTokenPos) {
-        actViewManager.setTokenRange(new TokenRange(beginTokenPos, toTokenPos));
+    public AIKADebugger setTokenRange(Range r) {
+        actViewManager.setTokenRange(r);
+        return this;
     }
 
     public static AIKADebugger createAndShowGUI() {
-        return createAndShowGUI(true);
-    }
-
-    public static AIKADebugger createAndShowGUI(boolean templatesOnly) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        AIKADebugger d = new AIKADebugger(templatesOnly);
+        AIKADebugger d = new AIKADebugger();
 
         EventQueue.invokeLater(() -> {
             // Create and set up the window.

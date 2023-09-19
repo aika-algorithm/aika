@@ -56,7 +56,8 @@ public class TheCatTest {
 
         Document doc = new Document(m, "the cat");
 
-        AIKADebugger.createAndShowGUI(doc);
+        AIKADebugger.createAndShowGUI()
+                .setDocument(doc);
 
         processTokens(dict, doc, "the", "cat");
 

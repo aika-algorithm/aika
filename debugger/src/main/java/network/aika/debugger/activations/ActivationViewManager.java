@@ -27,6 +27,8 @@ import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.queue.Step;
 import network.aika.text.Document;
+import network.aika.text.GroundRef;
+import network.aika.text.Range;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;
@@ -39,7 +41,6 @@ import org.slf4j.LoggerFactory;
 
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_X;
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
-import static network.aika.debugger.TokenRange.within;
 import static network.aika.debugger.stepmanager.StepManager.When.*;
 import static network.aika.utils.Utils.doubleToString;
 
@@ -52,7 +53,7 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
 
     private Document doc;
 
-    private TokenRange tokenRange;
+    private Range tokenRange;
 
     private ActivationConsoleManager consoleManager;
 
@@ -93,11 +94,11 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
         doc.removeEventListener(this);
     }
 
-    public TokenRange getTokenRange() {
+    public Range getTokenRange() {
         return tokenRange;
     }
 
-    public void setTokenRange(TokenRange tokenRange) {
+    public void setTokenRange(Range tokenRange) {
         this.tokenRange = tokenRange;
     }
 
@@ -172,12 +173,6 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
     }
 
     public void onActivationEvent(EventType et, Activation act) {
-//        if(et == EventType.CREATE) // Token Pos is unknown at that time.
-//            return; // The Same Pattern Link does not propagate the token position on initialisation.
-        if(et == EventType.TOKEN_POSITION) // TMP fix
-            return;
-
-
         if(!within(tokenRange, act))
             return;
 
@@ -218,6 +213,22 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
                 afterProcessedEvent(s);
                 break;
         }
+    }
+
+    public static boolean within(Range tokenRange, Activation act) {
+        if(tokenRange == null)
+            return true;
+
+        GroundRef gr = act.getGroundRef();
+        if(gr == null)
+            return false;
+
+        return tokenRange.contains(gr.getTokenPosRange());
+    }
+
+    public static boolean within(Range tokenRange, Link l) {
+        return (l.getInput() == null || within(tokenRange, l.getInput())) &&
+                within(tokenRange, l.getOutput());
     }
 
     public void queueEntryAddedEvent(Step s) {
@@ -272,6 +283,9 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
 
     private Edge onLinkEvent(Link l) {
         if(l.getInput() == null || l.getOutput() == null)
+            return null;
+
+        if(!within(tokenRange, l))
             return null;
 
         ParticleLink pl = graphManager.lookupParticleLink(l);

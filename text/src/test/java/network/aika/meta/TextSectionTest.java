@@ -108,8 +108,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     @Override
     protected Document initDocument(String txt, TestContext context, ParserPhase phase) {
         Document doc = super.initDocument(txt, context, phase);
-        if(phase == TRAINING) { //  && txt.equalsIgnoreCase(exampleTxt)
-            AIKADebugger.createAndShowGUI(doc);
+        if(phase == TRAINING && doc.getId() == 9) { //  && txt.equalsIgnoreCase(exampleTxt)
+            AIKADebugger.createAndShowGUI()
+                    .setDocument(doc)
+                    .setTokenRange(new Range(3, 8));
         }
 
         return doc;

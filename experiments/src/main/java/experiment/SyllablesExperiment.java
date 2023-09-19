@@ -156,7 +156,8 @@ public class SyllablesExperiment extends TrainingParser<Context> {
         Document doc = initDocument(txt, context, phase);
 
         if(counter[0] >= 0) {// 3, 6, 11, 18, 100, 39, 49
-            debugger = AIKADebugger.createAndShowGUI(doc);
+            debugger = AIKADebugger.createAndShowGUI()
+                    .setDocument(doc);
         }
 
         LoggingListener logger = null;

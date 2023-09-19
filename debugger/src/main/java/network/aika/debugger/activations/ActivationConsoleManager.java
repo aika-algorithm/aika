@@ -30,7 +30,7 @@ import network.aika.text.Document;
 import javax.swing.*;
 import java.awt.*;
 
-import static network.aika.debugger.TokenRange.within;
+import static network.aika.debugger.activations.ActivationViewManager.within;
 
 
 /**
@@ -204,9 +204,6 @@ public class ActivationConsoleManager extends JSplitPane implements AbstractCons
     }
 
     public void onActivationEvent(EventType et, Activation act) {
-        if(et == EventType.CREATE) // Token Pos is unknown at that time.
-            return;
-
         if(!within(activationViewManager.getTokenRange(), act))
             return;
 
