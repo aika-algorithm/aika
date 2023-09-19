@@ -75,10 +75,6 @@ public class TypedTextSectionModel extends TextSectionModel {
 
     protected BindingNeuron hintBN;
 
-    protected InnerInhibitoryNeuron innerTsBeginInhibitoryN;
-
-    protected InnerInhibitoryNeuron innerTsEndInhibitoryN;
-
     protected OuterInhibitoryNeuron outerTsBeginInhibitoryN;
 
     protected OuterInhibitoryNeuron outerTsEndInhibitoryN;
@@ -307,32 +303,6 @@ public class TypedTextSectionModel extends TextSectionModel {
         sectionHintRelations(endBN, relationNT);
 
         createTargetInputBindingNeuron();
-
-        innerTsBeginInhibitoryN = new InnerInhibitoryNeuron(model)
-                .setLabel("Inner " + TEXT_SECTION_LABEL + " Begin")
-                .setPersistent(true);
-
-        innerTsBeginInhibitoryN.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
-
-        addInnerInhibitoryLoop(
-                beginBN,
-                innerTsBeginInhibitoryN,
-                NEG_MARGIN_TS_BEGIN * -netTarget
-        );
-
-        innerTsEndInhibitoryN = new InnerInhibitoryNeuron(model)
-                .setLabel("Inner " + TEXT_SECTION_LABEL + " End")
-                .setPersistent(true);
-
-        innerTsEndInhibitoryN.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
-
-        addInnerInhibitoryLoop(
-                endBN,
-                innerTsEndInhibitoryN,
-                NEG_MARGIN_TS_END * -netTarget
-        );
 
         outerTsBeginInhibitoryN = new OuterInhibitoryNeuron(model)
                 .setLabel("Outer Begin " + TEXT_SECTION_LABEL)

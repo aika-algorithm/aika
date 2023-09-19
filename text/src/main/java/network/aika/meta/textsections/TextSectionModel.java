@@ -77,12 +77,34 @@ public class TextSectionModel implements Writable {
 
     protected PatternNeuron endInputPN;
 
+    protected BindingNeuron beginEndBN;
+
+    protected PatternNeuron beginEndInputPN;
+
+
+    protected InnerInhibitoryNeuron innerTsBeginInhibitoryN;
+
+    protected InnerInhibitoryNeuron innerTsEndInhibitoryN;
+
+
     protected double bindingNetTarget = 2.5;
 
 
     public TextSectionModel(PhraseModel phraseModel) {
         this.phraseModel = phraseModel;
         model = phraseModel.getModel();
+    }
+
+    public PatternNeuron getBeginInputPN() {
+        return beginInputPN;
+    }
+
+    public PatternNeuron getEndInputPN() {
+        return endInputPN;
+    }
+
+    public PatternNeuron getBeginEndInputPN() {
+        return beginEndInputPN;
     }
 
     public void initStaticNeurons() {
@@ -133,6 +155,11 @@ public class TextSectionModel implements Writable {
         endBN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
+        beginEndInputPN = createTextSectionInput("Begin/End");
+        beginEndBN = addBindingNeuron(beginEndInputPN, getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + "-BeginEnd"), 10.0, bindingNetTarget);
+        beginEndBN.makeAbstract()
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+
         addRelation(
                 beginBN,
                 endBN,
@@ -156,6 +183,52 @@ public class TextSectionModel implements Writable {
                 2.5,
                 0.0,
                 false
+        );
+
+        addPositiveFeedbackLoop(
+                beginEndBN,
+                patternN,
+                2.5,
+                0.0,
+                false
+        );
+
+        innerTsBeginInhibitoryN = new InnerInhibitoryNeuron(model)
+                .setLabel("Inner " + TEXT_SECTION_LABEL + " Begin")
+                .setPersistent(true);
+
+        innerTsBeginInhibitoryN.makeAbstract()
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+
+        addInnerInhibitoryLoop(
+                beginBN,
+                innerTsBeginInhibitoryN,
+                NEG_MARGIN_TS_BEGIN * -beginBN.getTargetNet()
+        );
+
+        addInnerInhibitoryLoop(
+                beginEndBN,
+                innerTsBeginInhibitoryN,
+                NEG_MARGIN_TS_BEGIN * -beginEndBN.getTargetNet()
+        );
+
+        innerTsEndInhibitoryN = new InnerInhibitoryNeuron(model)
+                .setLabel("Inner " + TEXT_SECTION_LABEL + " End")
+                .setPersistent(true);
+
+        innerTsEndInhibitoryN.makeAbstract()
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+
+        addInnerInhibitoryLoop(
+                endBN,
+                innerTsEndInhibitoryN,
+                NEG_MARGIN_TS_END * -endBN.getTargetNet()
+        );
+
+        addInnerInhibitoryLoop(
+                beginEndBN,
+                innerTsEndInhibitoryN,
+                NEG_MARGIN_TS_END * -beginEndBN.getTargetNet()
         );
     }
 
@@ -185,6 +258,7 @@ public class TextSectionModel implements Writable {
         out.writeLong(patternN.getId());
         out.writeLong(beginBN.getId());
         out.writeLong(endBN.getId());
+        out.writeLong(beginEndBN.getId());
     }
 
     @Override
@@ -195,5 +269,6 @@ public class TextSectionModel implements Writable {
         patternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         beginBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         endBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        beginEndBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

@@ -33,6 +33,8 @@ import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.parser.ParserPhase.TRAINING;
@@ -128,16 +130,24 @@ public class TextSectionTest extends TrainingParser<TestContext> {
 
         phraseModel.addPhraseTarget(doc, tokenCounter[0]);
 
-        if(context != null && context.getTextSectionType() != null) {
-            textSectionModel
-                    .addHeadlineTarget(
-                            doc,
-                            new GroundRef(
-                                    new Range(0, tokenCounter[0]),
-                                    new Range(0, doc.length())
-                            ),
-                            context.getTextSectionType()
-                    );
+        if(context != null) {
+            if(context.getTextSectionType() != null) {
+                textSectionModel
+                        .addHeadlineTarget(
+                                doc,
+                                new GroundRef(
+                                        new Range(0, tokenCounter[0]),
+                                        new Range(0, doc.length())
+                                ),
+                                context.getTextSectionType()
+                        );
+            }
+            if(context.getCandidateRanges() != null) {
+                context.getCandidateRanges()
+                        .forEach(gr ->
+                                doc.addToken(textSectionModel.getBeginEndInputPN(), gr)
+                        );
+            }
         }
     }
 
@@ -151,9 +161,17 @@ public class TextSectionTest extends TrainingParser<TestContext> {
 
         dictionary.initInputTokenWeights();
 
-        process(tasksHeadline, new TestContext(TASKS_LABEL), TRAINING);
-        process(requirementsHeadline, new TestContext(PROFILE_LABEL), TRAINING);
-        process(exampleTxt, null, TRAINING);
+        process(tasksHeadline, new TestContext(TASKS_LABEL, null), TRAINING);
+        process(requirementsHeadline, new TestContext(PROFILE_LABEL, null), TRAINING);
+        process(exampleTxt,
+                new TestContext(
+                        null,
+                        List.of(
+                                new GroundRef(new Range(0, 1), new Range(0, 1))
+                        )
+                ),
+                TRAINING
+        );
     }
 
     @Override
