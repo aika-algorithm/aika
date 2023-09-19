@@ -58,14 +58,16 @@ public class TargetInput {
         return targetInput;
     }
 
+    public BindingNeuron getTargetInputBN() {
+        return targetInputBN;
+    }
+
     public void setTemplateOnly(boolean templateOnly) {
         setTemplateOnly(targetInput, templateOnly);
     }
 
     public static void setTemplateOnly(PatternNeuron ip, BindingNeuron bn, boolean templateOnly) {
         setTemplateOnly(ip, templateOnly);
-        ip.getCategoryInputSynapse().getInput()
-                .setTemplateOnly(templateOnly);
         setTemplateOnly(bn, templateOnly);
     }
 

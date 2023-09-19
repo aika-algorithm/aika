@@ -21,7 +21,6 @@ import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.SameObjectLink;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.statistic.SampleSpace;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -48,6 +47,17 @@ public class SameObjectSynapse extends BindingNeuronSynapse<
 
     public void setRelationSynId(Integer relationSynId) {
         this.relationSynId = relationSynId;
+    }
+
+    @Override
+    public SameObjectSynapse setTemplateOnly(boolean templateOnly) {
+        super.setTemplateOnly(templateOnly);
+
+        if(relationSynId != null)
+            output.getSynapseBySynId(relationSynId)
+                    .setTemplateOnly(templateOnly);
+
+        return this;
     }
 
     @Override

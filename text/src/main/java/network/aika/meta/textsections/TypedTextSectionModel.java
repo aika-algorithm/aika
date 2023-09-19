@@ -184,7 +184,12 @@ public class TypedTextSectionModel extends TextSectionModel {
             doc.process(MAX_ROUND, ANNEAL);
             doc.instantiateTemplates();
 
-            targetInput.setTemplateOnly(true);
+            TargetInput.setTemplateOnly(
+                    lookupInstance(doc, targetInput.getTargetInput()),
+                    lookupInstance(doc, targetInput.getTargetInputBN()),
+                    true
+            );
+
             phraseModel.getPatternNeuron().setTemplateOnly(false);
 
             return new TextSectionInstance(
