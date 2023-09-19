@@ -24,21 +24,13 @@ import network.aika.parser.Context;
  */
 public class TestContext implements Context {
 
-
     String textSectionType;
 
-    String headlineTargetLabel;
-
-    public TestContext(String textSectionType, String headlineTargetLabel) {
+    public TestContext(String textSectionType) {
         this.textSectionType = textSectionType;
-        this.headlineTargetLabel = headlineTargetLabel;
     }
 
     public String getTextSectionType() {
         return textSectionType;
-    }
-
-    public boolean isHeadlineTarget() {
-        return headlineTargetLabel != null;
     }
 }

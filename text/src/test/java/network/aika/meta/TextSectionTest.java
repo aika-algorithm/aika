@@ -43,6 +43,9 @@ import static network.aika.parser.ParserPhase.TRAINING;
  */
 public class TextSectionTest extends TrainingParser<TestContext> {
 
+    public static final String PROFILE_LABEL = "Profile";
+    public static final String TASKS_LABEL = "Tasks";
+
     String tasksHeadline = "Your Tasks";
     String requirementsHeadline = "Your Profile";
 
@@ -96,8 +99,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         textSectionModel = new TypedTextSectionModel(entityModel);
         textSectionModel.initStaticNeurons();
 
-        profileTS = textSectionModel.addTextSectionType("Profile");
-        tasksTS = textSectionModel.addTextSectionType("Tasks");
+        profileTS = textSectionModel.addTextSectionType(PROFILE_LABEL);
+        tasksTS = textSectionModel.addTextSectionType(TASKS_LABEL);
 
         model.setN(0);
     }
@@ -146,8 +149,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
 
         dictionary.initInputTokenWeights();
 
-        process(tasksHeadline, new TestContext(tasksHeadline, "Task-HL"), TRAINING);
-        process(requirementsHeadline, new TestContext(requirementsHeadline, "Requi.-HL"), TRAINING);
+        process(tasksHeadline, new TestContext(TASKS_LABEL), TRAINING);
+        process(requirementsHeadline, new TestContext(PROFILE_LABEL), TRAINING);
         process(exampleTxt, null, TRAINING);
     }
 

@@ -155,6 +155,7 @@ public class EntityModel implements Writable {
     public EntityInstance addEntityPattern(String label, boolean makeAbstract) {
         setTemplateOnly(false);
         targetInput.setTemplateOnly(false);
+        phraseModel.getTargetInput().setTemplateOnly(false);
         phraseModel.getPatternNeuron().setTemplateOnly(true);
 
         getModel()
@@ -193,6 +194,7 @@ public class EntityModel implements Writable {
             doc.instantiateTemplates();
 
             targetInput.setTemplateOnly(true);
+            phraseModel.getTargetInput().setTemplateOnly(true);
             phraseModel.getPatternNeuron().setTemplateOnly(false);
 
             return new EntityInstance(

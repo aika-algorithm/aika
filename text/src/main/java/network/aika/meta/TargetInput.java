@@ -114,7 +114,7 @@ public class TargetInput {
                 true
         );
 
-        return bn;
+        return tibn;
     }
 
     public BindingNeuron createTargetInputBindingNeuron(PatternNeuron pn) {

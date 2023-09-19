@@ -62,10 +62,6 @@ public abstract class Parser<C extends Context> {
     }
 
     protected void infer(Document doc, C context, ParserPhase phase) {
-        if(phase == ParserPhase.TRAINING) {
-    //        debugger = AIKADebugger.createAndShowGUI(doc);
-        }
-
         doc.setFeedbackTriggerRound();
 
         prepareInputs(doc, context);

@@ -142,7 +142,7 @@ public class TypedTextSectionModel extends TextSectionModel {
         String headline = label + " " + HEADLINE_LABEL;
         String textSection = label + " " + TEXT_SECTION_LABEL;
 
-        Document doc = new Document(getModel(), headline + textSection);
+        Document doc = new Document(getModel(), headline + " " + textSection);
 
  //       AIKADebugger.createAndShowGUI(doc);
         doc.setInstantiationCallback((tAct, iAct) -> {
@@ -187,6 +187,12 @@ public class TypedTextSectionModel extends TextSectionModel {
             TargetInput.setTemplateOnly(
                     lookupInstance(doc, targetInput.getTargetInput()),
                     lookupInstance(doc, targetInput.getTargetInputBN()),
+                    true
+            );
+
+            TargetInput.setTemplateOnly(
+                    lookupInstance(doc, headlineTargetInput),
+                    lookupInstance(doc, headlineTargetInputBN),
                     true
             );
 
