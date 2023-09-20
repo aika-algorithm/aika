@@ -19,16 +19,13 @@ package network.aika.meta.entities;
 import network.aika.InstantiationUtil;
 import network.aika.Model;
 import network.aika.TemplateModel;
+import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.meta.TargetInput;
-import network.aika.meta.exceptions.FailedInstantiationException;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
-import network.aika.text.GroundRef;
-import network.aika.text.Range;
 import network.aika.utils.Writable;
 
 import java.io.DataInput;
@@ -37,15 +34,12 @@ import java.io.IOException;
 
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.entities.EntityModel.ENTITY_LABEL;
-import static network.aika.queue.Phase.ANNEAL;
-import static network.aika.queue.Phase.INFERENCE;
-import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class EntityInstance extends InstantiationUtil implements Writable {
+public class EntityInstance extends InstantiationUtil<EntityInstance> implements Writable {
 
     public PatternNeuron entityPatternN;
     public BindingNeuron entityBN;
@@ -66,66 +60,35 @@ public class EntityInstance extends InstantiationUtil implements Writable {
         return entityModel.getPhraseModel();
     }
 
-    public TargetInput getTargetInput() {
-        return entityModel.targetInput;
-    }
 
-    public EntityInstance instantiate(String label, boolean makeAbstract) {
-        getTemplateModel().prepareInstantiation();
-
-        getModel()
-                .getConfig()
-                .setTrainingEnabled(true)
-                .setMetaInstantiationEnabled(true);
-
+    @Override
+    protected Document createDocument(String label) {
         Document doc = new Document(getModel(), label);
 
-//       AIKADebugger.createAndShowGUI(doc);
+        //       AIKADebugger.createAndShowGUI()
+//               .setDocument(doc);
+
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(iAct, label);
-            if (makeAbstract) {
-                ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
-
-                if(getTargetInput().getTargetInput() == tAct.getNeuron()) {
-                    s.setWeight(2.0);
-                    s.adjustBias();
-                } else
-                    s.setWeight(PASSIVE_SYNAPSE_WEIGHT);
-            }
+            ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
+            s.setWeight(PASSIVE_SYNAPSE_WEIGHT);
         });
 
-        try {
-            doc.setFeedbackTriggerRound();
-
-            getTemplateModel().prepareExampleDoc(doc, label);
-
-            doc.process(MAX_ROUND, INFERENCE);
-            doc.anneal();
-            doc.process(MAX_ROUND, ANNEAL);
-            doc.instantiateTemplates();
-
-            getTargetInput().setTemplateOnly(true);
-            getPhraseModel().getTargetInput().setTemplateOnly(true);
-            getPhraseModel().getPatternNeuron().setTemplateOnly(false);
-
-            entityPatternN = lookupInstance(doc, entityModel.entityPattern);
-            entityBN = lookupInstance(doc, entityModel.entityBN);
-            targetInputBN = lookupInstance(doc, entityModel.targetInputBN);
-            targetInputPN = lookupInstance(doc, entityModel.targetInput.getTargetInput());
-
-        } catch(Exception e) {
-            throw new FailedInstantiationException("entity", e);
-        } finally {
-            doc.disconnect();
-        }
-
-        return this;
+        return doc;
     }
 
     private void generateLabel(Activation act, String label) {
         act.getNeuron().setLabel(
                 act.getTemplate().getLabel().replace(ENTITY_LABEL, label)
         );
+    }
+
+    @Override
+    protected void mapResults(Document doc) {
+        getPhraseModel().getPatternNeuron().setTemplateOnly(false);
+
+        entityPatternN = lookupInstance(doc, entityModel.entityPattern);
+        entityBN = lookupInstance(doc, entityModel.entityBN);
     }
 
     @Override

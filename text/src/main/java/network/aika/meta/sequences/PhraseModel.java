@@ -18,6 +18,7 @@ package network.aika.meta.sequences;
 
 import network.aika.Model;
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.ContainsRelationNeuron;
 import network.aika.meta.Dictionary;
 import network.aika.text.Document;
 import network.aika.text.GroundRef;
@@ -29,6 +30,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 
 /**
@@ -59,21 +61,9 @@ public class PhraseModel extends SequenceModel {
                 .setPersistent(true);
     }
 
-    public void addPhraseTarget(Document doc, int numTokens) {
-        doc.addToken(
-                targetInput.getTargetInput(),
-                new GroundRef(
-                        new Range(0, numTokens),
-                        new Range(0, doc.length())
-                )
-        );
-    }
-
     @Override
     protected void initTemplateBindingNeurons() {
         primaryBN = createPrimaryBindingNeuron();
-
-        createTargetInputBindingNeuron();
 
         expandContinueBindingNeurons(
                 1,

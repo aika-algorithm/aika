@@ -22,7 +22,6 @@ import network.aika.elements.neurons.relations.ContainsRelationNeuron;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelationNeuron;
 import network.aika.meta.Dictionary;
-import network.aika.meta.TargetInput;
 import network.aika.text.Range;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
@@ -55,8 +54,6 @@ public abstract class SequenceModel implements Writable {
     protected Model model;
 
     protected Dictionary dictionary;
-
-    protected TargetInput targetInput;
 
     public BeforeRelationNeuron relPT;
     public BeforeRelationNeuron relNT;
@@ -119,10 +116,6 @@ public abstract class SequenceModel implements Writable {
         return model;
     }
 
-    public TargetInput getTargetInput() {
-        return targetInput;
-    }
-
     public BeforeRelationNeuron getRelationPreviousToken() {
         return relPT;
     }
@@ -162,10 +155,7 @@ public abstract class SequenceModel implements Writable {
                 )
                 .setBias(5.0);
 
-        targetInput = new TargetInput(model, "Phrase");
-        targetInput.initTargetInput();
         initTemplates();
-        targetInput.setTemplateOnly(true);
     }
 
     protected void initTemplates() {
@@ -190,6 +180,10 @@ public abstract class SequenceModel implements Writable {
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         log.info(getPatternType() + " Pattern: netTarget:" + PATTERN_NET_TARGET);
+
+        relContains = new ContainsRelationNeuron(model, "Contains Rel.: ", OUTPUT)
+                .setBias(5.0)
+                .setTargetNet(5.0);
 
         initTemplateBindingNeurons();
     }
@@ -232,18 +226,6 @@ public abstract class SequenceModel implements Writable {
                     lastSylBN
             );
         }
-    }
-
-    protected BindingNeuron createTargetInputBindingNeuron() {
-        relContains = new ContainsRelationNeuron(model, "Contains Rel.: ", OUTPUT)
-                .setBias(5.0)
-                .setTargetNet(5.0);
-
-        return targetInput.createTargetInputBindingNeuron(
-                primaryBN,
-                patternN,
-                relContains
-        );
     }
 
     protected BindingNeuron createSecondaryBindingNeuron(
@@ -289,7 +271,7 @@ public abstract class SequenceModel implements Writable {
         addOuterInhibitoryLoop(
                 bn,
                 outerInhibitoryN,
-                getNegMargin(pos) * -p.netTarget
+                getNegMargin(pos) * -bn.getTargetNet()
         );
 
         addPositiveFeedbackLoop(

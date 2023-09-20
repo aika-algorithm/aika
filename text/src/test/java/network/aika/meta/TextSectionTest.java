@@ -116,8 +116,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         Document doc = super.initDocument(txt, context, phase);
         if(phase == TRAINING && doc.getId() == 9) { //  && txt.equalsIgnoreCase(exampleTxt)
             AIKADebugger.createAndShowGUI()
-                    .setDocument(doc)
-                    .setTokenRange(new Range(3, 8));
+                    .setDocument(doc);
         }
 
         return doc;
@@ -132,19 +131,9 @@ public class TextSectionTest extends TrainingParser<TestContext> {
                 }
         );
 
-        phraseModel.addPhraseTarget(doc, tokenCounter[0]);
-
         if(context != null) {
             if(context.getTextSectionType() != null) {
-                textSectionModel
-                        .addHeadlineTarget(
-                                doc,
-                                new GroundRef(
-                                        new Range(0, tokenCounter[0]),
-                                        new Range(0, doc.length())
-                                ),
-                                context.getTextSectionType()
-                        );
+
             }
             if(context.getCandidateRanges() != null) {
                 context.getCandidateRanges()

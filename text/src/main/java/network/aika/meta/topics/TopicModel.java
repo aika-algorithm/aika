@@ -19,10 +19,8 @@ package network.aika.meta.topics;
 import network.aika.Model;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.neurons.relations.EqualsRelationNeuron;
-import network.aika.meta.TargetInput;
 import network.aika.meta.entities.EntityModel;
 import network.aika.text.Document;
 import network.aika.utils.Writable;
@@ -52,15 +50,11 @@ public class TopicModel implements Writable {
 
     protected EntityModel entityModel;
 
-    protected TargetInput targetInput;
-
     protected Model model;
 
     protected PatternNeuron topicPatternN;
 
     protected CategoryNeuron topicPatternCategory;
-
-    protected EqualsRelationNeuron relEquals;
 
     protected BindingNeuron topicBN;
 
@@ -77,9 +71,6 @@ public class TopicModel implements Writable {
     }
 
     public void initStaticNeurons() {
-        targetInput = new TargetInput(model, "Topic");
-        targetInput.initTargetInput();
-
         topicPatternN = new PatternNeuron(model)
                 .setLabel("Abstract Topic")
                 .setBias(TOPIC_NET_TARGET)
@@ -107,19 +98,12 @@ public class TopicModel implements Writable {
                 0.0,
                 false
         );
-
-        relEquals = new EqualsRelationNeuron(model, true, true, "Equals Rel.: ")
-                .setBias(5.0);
-        targetInputBN = targetInput.createTargetInputBindingNeuron(topicBN, topicPatternN, relEquals);
-
-        targetInput.setTemplateOnly(true);
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeLong(topicPatternN.getId());
         out.writeLong(topicPatternCategory.getId());
-        out.writeLong(relEquals.getId());
         out.writeLong(topicBN.getId());
         out.writeLong(targetInputBN.getId());
     }
@@ -128,7 +112,6 @@ public class TopicModel implements Writable {
     public void readFields(DataInput in, Model m) throws Exception {
         topicPatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         topicPatternCategory = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        relEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();
         topicBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }

@@ -19,9 +19,7 @@ package network.aika.meta.textsections;
 import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.EqualsRelationNeuron;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
-import network.aika.meta.TargetInput;
 import network.aika.meta.entities.EntityInstance;
 import network.aika.meta.entities.EntityModel;
 import network.aika.text.Document;
@@ -39,7 +37,6 @@ import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
 import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
 import static network.aika.meta.NetworkMotifs.*;
-import static network.aika.meta.TargetInput.TARGET_INPUT_LABEL;
 
 /**
  *
@@ -54,17 +51,9 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     protected EntityModel entityModel;
 
-    protected TargetInput targetInput;
-
-
     protected PatternNeuron headlinePattern;
 
     protected BindingNeuron headlineBN;
-
-    protected PatternNeuron headlineTargetInput;
-
-    protected BindingNeuron headlineTargetInputBN;
-
 
     protected BindingNeuron tsHeadlineBN;
 
@@ -73,13 +62,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
     protected OuterInhibitoryNeuron outerTsBeginInhibitoryN;
 
     protected OuterInhibitoryNeuron outerTsEndInhibitoryN;
-
-    protected BindingNeuron targetInputBN;
-
-    protected EqualsRelationNeuron relBeginEquals;
-    protected EqualsRelationNeuron relEndEquals;
-
-    protected EqualsRelationNeuron relBeginEndEquals;
 
 
     public TypedTextSectionModel(EntityModel entityModel) {
@@ -108,14 +90,10 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         endBN.setTemplateOnly(templateOnly, true);
         beginEndBN.setTemplateOnly(templateOnly, true);
         hintBN.setTemplateOnly(templateOnly, true);
-        targetInputBN.setTemplateOnly(templateOnly, true);
     }
 
     public void initStaticNeurons() {
         super.initStaticNeurons();
-
-        targetInput = new TargetInput(model, TEXT_SECTION_LABEL);
-        targetInput.initTargetInput();
 
         log.info("Typed " + TEXT_SECTION_LABEL);
 
@@ -127,12 +105,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         headlinePattern = headlineEntity.entityPatternN;
 
         headlineBN = headlineEntity.entityBN
-                .setPersistent(true);
-
-        headlineTargetInput = headlineEntity.targetInputPN
-                .setPersistent(true);
-
-        headlineTargetInputBN = headlineEntity.targetInputBN
                 .setPersistent(true);
 
         tsHeadlineBN = addBindingNeuron(
@@ -181,8 +153,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         sectionHintRelations(beginEndBN, relationPT);
         sectionHintRelations(endBN, relationNT);
 
-        createTargetInputBindingNeuron();
-
         outerTsBeginInhibitoryN = new OuterInhibitoryNeuron(model)
                 .setLabel("Outer Begin " + TEXT_SECTION_LABEL)
                 .setPersistent(true);
@@ -202,8 +172,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 outerTsEndInhibitoryN,
                 NEG_MARGIN_TS * -netTarget
         );
-
-        targetInput.setTemplateOnly(true);
     }
 
     public PatternNeuron getHeadlinePattern(String tsType) {
@@ -226,8 +194,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     public void prepareInstantiation() {
         setTemplateOnly(false);
-        targetInput.setTemplateOnly(false);
-        TargetInput.setTemplateOnly(headlineTargetInput, headlineTargetInputBN, false);
         phraseModel.getPatternNeuron().setTemplateOnly(true);
         beginInputPN.setTemplateOnly(true);
         endInputPN.setTemplateOnly(true);
@@ -243,7 +209,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         );
 
         doc.addToken(phraseModel.getPatternNeuron(), headlineGR);
-        doc.addToken(headlineTargetInput, headlineGR);
 
         GroundRef textSectionGR = new GroundRef(
                 new Range(2, 4),
@@ -253,57 +218,8 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         doc.addToken(beginInputPN, textSectionGR);
         doc.addToken(endInputPN, textSectionGR);
         doc.addToken(beginEndInputPN, textSectionGR);
-
-        doc.addToken(targetInput.getTargetInput(), textSectionGR);
     }
 
-
-    private void createTargetInputBindingNeuron() {
-        targetInputBN = targetInput.createTargetInputBindingNeuron(patternN);
-
-        addRelation(
-                targetInputBN,
-                tsHeadlineBN,
-                phraseModel.relNT,
-                5.0,
-                10.0,
-                true
-        );
-
-        relBeginEquals = createTargetInputRelation(targetInputBN, beginBN, true, false, "Begin Equals Rel.: ");
-        relEndEquals = createTargetInputRelation(targetInputBN, endBN, false, true, "End Equals Rel.: ");
-        relBeginEndEquals = createTargetInputRelation(targetInputBN, beginEndBN, true, true, "Equals Rel.: ");
-    }
-
-    private EqualsRelationNeuron createTargetInputRelation(BindingNeuron tiBN, BindingNeuron bn, boolean compareBegin, boolean compareEnd, String label) {
-        EqualsRelationNeuron rel = new EqualsRelationNeuron(model, compareBegin, compareEnd, label)
-                .setBias(5.0)
-                .setPersistent(true);
-
-        addRelation(
-                tiBN,
-                bn,
-                rel,
-                5.0,
-                10.0,
-                true
-        );
-        return rel;
-    }
-
-    public PatternNeuron addHeadline(String label) {
-        return model.lookupInputNeuron(
-                getHeadlineLabel(label) + " " + TARGET_INPUT_LABEL,
-                headlineTargetInput
-        );
-    }
-
-    public void addHeadlineTarget(Document doc, GroundRef groundRef, String label) {
-        doc.addToken(
-                addHeadline(label),
-                groundRef
-        );
-    }
 
     private void sectionHintRelations(BindingNeuron fromBN, LatentRelationNeuron relN) {
         addRelation(
@@ -321,15 +237,11 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         super.write(out);
 
         out.writeLong(headlineBN.getId());
-        out.writeLong(headlineTargetInput.getId());
         out.writeLong(hintBN.getId());
         out.writeLong(innerTsBeginInhibitoryN.getId());
         out.writeLong(innerTsEndInhibitoryN.getId());
         out.writeLong(outerTsBeginInhibitoryN.getId());
         out.writeLong(outerTsEndInhibitoryN.getId());
-        out.writeLong(targetInputBN.getId());
-        out.writeLong(relBeginEquals.getId());
-        out.writeLong(relEndEquals.getId());
     }
 
     @Override
@@ -337,14 +249,10 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         super.readFields(in, m);
 
         headlineBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        headlineTargetInput = m.lookupNeuronProvider(in.readLong()).getNeuron();
         hintBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         innerTsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         innerTsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         outerTsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         outerTsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        relBeginEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        relEndEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

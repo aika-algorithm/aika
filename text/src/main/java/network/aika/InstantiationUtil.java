@@ -17,13 +17,20 @@
 package network.aika;
 
 import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.meta.entities.EntityInstance;
+import network.aika.meta.exceptions.FailedInstantiationException;
+import network.aika.meta.textsections.TextSectionInstance;
 import network.aika.text.Document;
+
+import static network.aika.queue.Phase.ANNEAL;
+import static network.aika.queue.Phase.INFERENCE;
+import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class InstantiationUtil {
+public abstract class InstantiationUtil<I extends InstantiationUtil> {
 
     public static <N extends ConjunctiveNeuron<?, ?>> N lookupInstance(Document doc, N templateN) {
         return (N) templateN.getActivations(doc)
@@ -40,5 +47,37 @@ public abstract class InstantiationUtil {
         return getTemplateModel().getModel();
     }
 
-    public abstract InstantiationUtil instantiate(String label, boolean makeAbstract);
+    public I instantiate(String label, boolean makeAbstract) {
+        getTemplateModel().prepareInstantiation();
+
+        getModel()
+                .getConfig()
+                .setTrainingEnabled(true)
+                .setMetaInstantiationEnabled(true);
+
+        Document doc = createDocument(label);
+
+        try {
+            doc.setFeedbackTriggerRound();
+
+            getTemplateModel().prepareExampleDoc(doc, label);
+
+            doc.process(MAX_ROUND, INFERENCE);
+            doc.anneal();
+            doc.process(MAX_ROUND, ANNEAL);
+            doc.instantiateTemplates();
+
+            mapResults(doc);
+        } catch(Exception e) {
+            throw new FailedInstantiationException(label, e);
+        } finally {
+            doc.disconnect();
+        }
+
+        return (I) this;
+    }
+
+    protected abstract Document createDocument(String label);
+
+    protected abstract void mapResults(Document doc);
 }
