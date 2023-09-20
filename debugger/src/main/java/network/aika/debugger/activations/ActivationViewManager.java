@@ -220,7 +220,7 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
             return true;
 
         GroundRef gr = act.getGroundRef();
-        if(gr == null)
+        if(gr == null || gr.getTokenPosRange() == null)
             return false;
 
         return tokenRange.contains(gr.getTokenPosRange());
