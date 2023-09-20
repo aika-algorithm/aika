@@ -17,6 +17,7 @@
 package network.aika.meta.entities;
 
 import network.aika.Model;
+import network.aika.TemplateModel;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.EqualsRelationNeuron;
@@ -48,7 +49,7 @@ import static network.aika.queue.keys.QueueKey.MAX_ROUND;
  *
  * @author Lukas Molzberger
  */
-public class EntityModel implements Writable {
+public class EntityModel implements TemplateModel, Writable {
 
     private static final Logger log = LoggerFactory.getLogger(EntityModel.class);
 
@@ -73,13 +74,6 @@ public class EntityModel implements Writable {
     protected BindingNeuron targetInputBN;
 
     protected EqualsRelationNeuron relEquals;
-
-    public record EntityInstance (
-            PatternNeuron entityPatternN,
-            BindingNeuron entityBN,
-            BindingNeuron targetInputBN,
-            PatternNeuron targetInputPN
-    ) {}
 
 
     public EntityModel(PhraseModel pm) {
@@ -137,6 +131,21 @@ public class EntityModel implements Writable {
         targetInput.setTemplateOnly(true);
     }
 
+    public void prepareInstantiation() {
+        setTemplateOnly(false);
+        targetInput.setTemplateOnly(false);
+        phraseModel.getTargetInput().setTemplateOnly(false);
+        phraseModel.getPatternNeuron().setTemplateOnly(true);
+    }
+
+    public void prepareExampleDoc(Document doc, String label) {
+        Range entityPosRange = new Range(0, 1);
+        Range entityCharRange = new Range(0, doc.length());
+
+        doc.addToken(phraseModel.getPatternNeuron(), new GroundRef(entityPosRange, entityCharRange));
+        doc.addToken(targetInput.getTargetInput(), new GroundRef(entityPosRange, entityCharRange));
+    }
+
     public PatternNeuron getInstancePattern(String entityType) {
         return getModel().getInputNeuron(entityType, entityPattern);
     }
@@ -155,70 +164,6 @@ public class EntityModel implements Writable {
         doc.addToken(
                 addEntity(entityLabel),
                 groundRef
-        );
-    }
-
-    public EntityInstance addEntityPattern(String label, boolean makeAbstract) {
-        setTemplateOnly(false);
-        targetInput.setTemplateOnly(false);
-        phraseModel.getTargetInput().setTemplateOnly(false);
-        phraseModel.getPatternNeuron().setTemplateOnly(true);
-
-        getModel()
-                .getConfig()
-                .setTrainingEnabled(true)
-                .setMetaInstantiationEnabled(true);
-
-        Document doc = new Document(getModel(), label);
-
-//       AIKADebugger.createAndShowGUI(doc);
-        doc.setInstantiationCallback((tAct, iAct) -> {
-            generateLabel(iAct, label);
-            if (makeAbstract) {
-                ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
-
-                if(targetInput.getTargetInput() == tAct.getNeuron()) {
-                    s.setWeight(2.0);
-                    s.adjustBias();
-                } else
-                    s.setWeight(PASSIVE_SYNAPSE_WEIGHT);
-            }
-        });
-
-        try {
-            doc.setFeedbackTriggerRound();
-
-            Range entityPosRange = new Range(0, 1);
-            Range entityCharRange = new Range(0, doc.length());
-
-            doc.addToken(phraseModel.getPatternNeuron(), new GroundRef(entityPosRange, entityCharRange));
-            doc.addToken(targetInput.getTargetInput(), new GroundRef(entityPosRange, entityCharRange));
-
-            doc.process(MAX_ROUND, INFERENCE);
-            doc.anneal();
-            doc.process(MAX_ROUND, ANNEAL);
-            doc.instantiateTemplates();
-
-            targetInput.setTemplateOnly(true);
-            phraseModel.getTargetInput().setTemplateOnly(true);
-            phraseModel.getPatternNeuron().setTemplateOnly(false);
-
-            return new EntityInstance(
-                    lookupInstance(doc, entityPattern),
-                    lookupInstance(doc, entityBN),
-                    lookupInstance(doc, targetInputBN),
-                    lookupInstance(doc, targetInput.getTargetInput())
-            );
-        } catch(Exception e) {
-            throw new FailedInstantiationException("entity", e);
-        } finally {
-            doc.disconnect();
-        }
-    }
-
-    private void generateLabel(Activation act, String label) {
-        act.getNeuron().setLabel(
-                act.getTemplate().getLabel().replace(ENTITY_LABEL, label)
         );
     }
 

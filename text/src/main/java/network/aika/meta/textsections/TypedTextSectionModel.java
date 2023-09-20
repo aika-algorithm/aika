@@ -17,14 +17,13 @@
 package network.aika.meta.textsections;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
+import network.aika.TemplateModel;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.EqualsRelationNeuron;
 import network.aika.elements.neurons.relations.LatentRelationNeuron;
-import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.meta.TargetInput;
+import network.aika.meta.entities.EntityInstance;
 import network.aika.meta.entities.EntityModel;
-import network.aika.meta.exceptions.FailedInstantiationException;
 import network.aika.text.Document;
 import network.aika.text.GroundRef;
 import network.aika.text.Range;
@@ -36,21 +35,16 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.InstantiationUtil.lookupInstance;
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.meta.TargetInput.TARGET_INPUT_LABEL;
-import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
-import static network.aika.queue.Phase.ANNEAL;
-import static network.aika.queue.Phase.INFERENCE;
-import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class TypedTextSectionModel extends TextSectionModel {
+public class TypedTextSectionModel extends TextSectionModel implements TemplateModel {
 
     private static final Logger log = LoggerFactory.getLogger(TypedTextSectionModel.class);
 
@@ -84,11 +78,6 @@ public class TypedTextSectionModel extends TextSectionModel {
     protected EqualsRelationNeuron relBeginEquals;
     protected EqualsRelationNeuron relEndEquals;
 
-    public record TextSectionInstance (
-            PatternNeuron headlineTargetInputPN,
-            PatternNeuron targetInputPN
-    ) {}
-
     public TypedTextSectionModel(EntityModel entityModel) {
         super(entityModel.getPhraseModel());
         this.entityModel = entityModel;
@@ -98,37 +87,12 @@ public class TypedTextSectionModel extends TextSectionModel {
         return phraseModel.getModel();
     }
 
-    private void generateLabel(Activation tAct, Activation iAct, String label) {
-        iAct.getNeuron().setLabel(
-                tAct.getLabel()
-                        .replace(HEADLINE_LABEL, getHeadlineLabel(label))
-                        .replace(TEXT_SECTION_LABEL, getTextSectionLabel(label))
-        );
-    }
 
-    public PatternNeuron getHeadlinePattern(String tsType) {
-        return getModel().getInputNeuron(
-                getAbstractPatternLabel(
-                        getHeadlineLabel(tsType)
-                ),
-                headlinePattern
-        );
-    }
-
-    public PatternNeuron getTextSectionPattern(String tsType) {
-        return getModel().getInputNeuron(
-                getAbstractPatternLabel(
-                        getTextSectionLabel(tsType)
-                ),
-                patternN
-        );
-    }
-
-    private static String getHeadlineLabel(String label) {
+    public static String getHeadlineLabel(String label) {
         return label + "-HL";
     }
 
-    private static String getTextSectionLabel(String label) {
+    public static String getTextSectionLabel(String label) {
         return label + "-TS";
     }
 
@@ -142,98 +106,6 @@ public class TypedTextSectionModel extends TextSectionModel {
         targetInputBN.setTemplateOnly(templateOnly, true);
     }
 
-    public TextSectionInstance addTextSectionType(String label) {
-        setTemplateOnly(false);
-        targetInput.setTemplateOnly(false);
-        TargetInput.setTemplateOnly(headlineTargetInput, headlineTargetInputBN, false);
-        phraseModel.getPatternNeuron().setTemplateOnly(true);
-        beginInputPN.setTemplateOnly(true);
-        endInputPN.setTemplateOnly(true);
-
-        getModel()
-                .getConfig()
-                .setTrainingEnabled(true)
-                .setMetaInstantiationEnabled(true);
-
-        String headline = label + " " + HEADLINE_LABEL;
-        String textSection = label + " " + TEXT_SECTION_LABEL;
-
-        Document doc = new Document(getModel(), headline + " " + textSection);
-
- //       AIKADebugger.createAndShowGUI(doc);
-        doc.setInstantiationCallback((tAct, iAct) -> {
-            generateLabel(tAct, iAct, label);
-
-            if(isPartOfHeadline(tAct) || isHint(tAct)) {
-                ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
-
-                if (targetInput.getTargetInput() == tAct.getNeuron()) {
-                    s.setWeight(2.0);
-                    s.adjustBias();
-                } else
-                    s.setWeight(PASSIVE_SYNAPSE_WEIGHT);
-            }
-        });
-
-        try {
-            doc.setFeedbackTriggerRound();
-
-            GroundRef headlineGR = new GroundRef(
-                    new Range(0, 2),
-                    new Range(0, headline.length())
-            );
-
-            doc.addToken(phraseModel.getPatternNeuron(), headlineGR);
-            doc.addToken(headlineTargetInput, headlineGR);
-
-            GroundRef textSectionGR = new GroundRef(
-                    new Range(2, 4),
-                    new Range(headline.length(), doc.length())
-            );
-
-            doc.addToken(beginInputPN, textSectionGR);
-            doc.addToken(endInputPN, textSectionGR);
-            doc.addToken(targetInput.getTargetInput(), textSectionGR);
-
-            doc.process(MAX_ROUND, INFERENCE);
-            doc.anneal();
-            doc.process(MAX_ROUND, ANNEAL);
-            doc.instantiateTemplates();
-
-            TargetInput.setTemplateOnly(
-                    lookupInstance(doc, targetInput.getTargetInput()),
-                    lookupInstance(doc, targetInput.getTargetInputBN()),
-                    true
-            );
-
-            TargetInput.setTemplateOnly(
-                    lookupInstance(doc, headlineTargetInput),
-                    lookupInstance(doc, headlineTargetInputBN),
-                    true
-            );
-
-            phraseModel.getPatternNeuron().setTemplateOnly(false);
-
-            return new TextSectionInstance(
-                    lookupInstance(doc, headlineTargetInput),
-                    lookupInstance(doc, targetInput.getTargetInput())
-            );
-        } catch(Exception e) {
-            throw new FailedInstantiationException("entity", e);
-        } finally {
-            doc.disconnect();
-        }
-    }
-
-    private boolean isPartOfHeadline(Activation tAct) {
-        String l = tAct.getLabel();
-        return l.contains(HEADLINE_LABEL) && !l.contains(TEXT_SECTION_LABEL);
-    }
-
-    private boolean isHint(Activation tAct) {
-        return tAct.getLabel().contains("Hint");
-    }
-
     public void initStaticNeurons() {
         super.initStaticNeurons();
 
@@ -244,21 +116,22 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         double netTarget = 2.5;
 
-        EntityModel.EntityInstance headlineEntity = entityModel.addEntityPattern(HEADLINE_LABEL, true);
+        EntityInstance headlineEntity = new EntityInstance(entityModel)
+                .instantiate(HEADLINE_LABEL, true);
 
-        headlinePattern = headlineEntity.entityPatternN();
+        headlinePattern = headlineEntity.entityPatternN;
 
-        headlineBN = headlineEntity.entityBN()
+        headlineBN = headlineEntity.entityBN
                 .setPersistent(true);
 
-        headlineTargetInput = headlineEntity.targetInputPN()
+        headlineTargetInput = headlineEntity.targetInputPN
                 .setPersistent(true);
 
-        headlineTargetInputBN = headlineEntity.targetInputBN()
+        headlineTargetInputBN = headlineEntity.targetInputBN
                 .setPersistent(true);
 
         tsHeadlineBN = addBindingNeuron(
-                headlineEntity.entityPatternN(),
+                headlineEntity.entityPatternN,
                 "Abstr. " + TEXT_SECTION_LABEL + " " + HEADLINE_LABEL,
                 10.0,
                 bindingNetTarget
@@ -327,6 +200,40 @@ public class TypedTextSectionModel extends TextSectionModel {
 
         targetInput.setTemplateOnly(true);
     }
+
+    public void prepareInstantiation() {
+        setTemplateOnly(false);
+        targetInput.setTemplateOnly(false);
+        TargetInput.setTemplateOnly(headlineTargetInput, headlineTargetInputBN, false);
+        phraseModel.getPatternNeuron().setTemplateOnly(true);
+        beginInputPN.setTemplateOnly(true);
+        endInputPN.setTemplateOnly(true);
+    }
+
+    public void prepareExampleDoc(Document doc, String label) {
+        String headline = label + " " + HEADLINE_LABEL;
+        String textSection = label + " " + TEXT_SECTION_LABEL;
+
+        GroundRef headlineGR = new GroundRef(
+                new Range(0, 2),
+                new Range(0, headline.length())
+        );
+
+        doc.addToken(phraseModel.getPatternNeuron(), headlineGR);
+        doc.addToken(headlineTargetInput, headlineGR);
+
+        GroundRef textSectionGR = new GroundRef(
+                new Range(2, 4),
+                new Range(headline.length(), doc.length())
+        );
+
+        doc.addToken(beginInputPN, textSectionGR);
+        doc.addToken(endInputPN, textSectionGR);
+        doc.addToken(beginEndInputPN, textSectionGR);
+
+        doc.addToken(targetInput.getTargetInput(), textSectionGR);
+    }
+
 
     private void createTargetInputBindingNeuron() {
         targetInputBN = targetInput.createTargetInputBindingNeuron(patternN);

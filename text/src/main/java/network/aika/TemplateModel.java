@@ -16,29 +16,17 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.text.Document;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class InstantiationUtil {
+public interface TemplateModel {
 
-    public static <N extends ConjunctiveNeuron<?, ?>> N lookupInstance(Document doc, N templateN) {
-        return (N) templateN.getActivations(doc)
-                .stream()
-                .findFirst()
-                .orElse(null)
-                .getActiveTemplateInstance()
-                .getNeuron();
-    }
+    Model getModel();
 
-    public abstract TemplateModel getTemplateModel();
+    void prepareInstantiation();
 
-    public Model getModel() {
-        return getTemplateModel().getModel();
-    }
-
-    public abstract InstantiationUtil instantiate(String label, boolean makeAbstract);
+    void prepareExampleDoc(Document doc, String label);
 }
