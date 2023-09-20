@@ -174,6 +174,9 @@ public class ActivationConsoleManager extends JSplitPane implements AbstractCons
 
     @Override
     public void onQueueEvent(EventType et, Step s) {
+        if(!within(activationViewManager.getTokenRange(), s.getElement()))
+            return;
+
         switch (et) {
             case ADDED:
                 queueEntryAddedEvent(s);

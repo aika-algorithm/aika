@@ -202,6 +202,9 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
 
     @Override
     public void onQueueEvent(EventType et, Step s) {
+        if(!within(tokenRange, s.getElement()))
+            return;
+
         switch (et) {
             case ADDED:
                 queueEntryAddedEvent(s);
@@ -213,6 +216,16 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
                 afterProcessedEvent(s);
                 break;
         }
+    }
+
+    public static boolean within(Range tokenRange, network.aika.elements.Element e) {
+        if(e instanceof Activation<?>)
+            return within(tokenRange, (Activation) e);
+
+        if(e instanceof Link)
+            return within(tokenRange, (Link) e);
+
+        return true;
     }
 
     public static boolean within(Range tokenRange, Activation act) {
