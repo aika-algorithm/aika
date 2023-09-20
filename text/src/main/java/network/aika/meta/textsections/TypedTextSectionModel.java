@@ -78,6 +78,9 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
     protected EqualsRelationNeuron relBeginEquals;
     protected EqualsRelationNeuron relEndEquals;
 
+    protected EqualsRelationNeuron relBeginEndEquals;
+
+
     public TypedTextSectionModel(EntityModel entityModel) {
         super(entityModel.getPhraseModel());
         this.entityModel = entityModel;
@@ -102,6 +105,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         tsHeadlineBN.setTemplateOnly(templateOnly, true);
         beginBN.setTemplateOnly(templateOnly, true);
         endBN.setTemplateOnly(templateOnly, true);
+        beginEndBN.setTemplateOnly(templateOnly, true);
         hintBN.setTemplateOnly(templateOnly, true);
         targetInputBN.setTemplateOnly(templateOnly, true);
     }
@@ -173,6 +177,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         );
 
         sectionHintRelations(beginBN, relationPT);
+        sectionHintRelations(beginEndBN, relationPT);
         sectionHintRelations(endBN, relationNT);
 
         createTargetInputBindingNeuron();
@@ -190,7 +195,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         outerTsEndInhibitoryN = new OuterInhibitoryNeuron(model)
                 .setLabel("Outer End " + TEXT_SECTION_LABEL)
                 .setPersistent(true);
-
 
         addOuterInhibitoryLoop(
                 endBN,
@@ -247,31 +251,25 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 true
         );
 
-        relBeginEquals = new EqualsRelationNeuron(model, true, true, "Equals Rel.: ")
+        relBeginEquals = createTargetInputRelation(targetInputBN, beginBN, true, false, "Begin Equals Rel.: ");
+        relEndEquals = createTargetInputRelation(targetInputBN, endBN, false, true, "End Equals Rel.: ");
+        relBeginEndEquals = createTargetInputRelation(targetInputBN, beginEndBN, true, true, "Equals Rel.: ");
+    }
+
+    private EqualsRelationNeuron createTargetInputRelation(BindingNeuron tiBN, BindingNeuron bn, boolean compareBegin, boolean compareEnd, String label) {
+        EqualsRelationNeuron rel = new EqualsRelationNeuron(model, compareBegin, compareEnd, label)
                 .setBias(5.0)
                 .setPersistent(true);
 
         addRelation(
-                targetInputBN,
-                beginBN,
-                relBeginEquals,
+                tiBN,
+                bn,
+                rel,
                 5.0,
                 10.0,
                 true
         );
-
-        relEndEquals = new EqualsRelationNeuron(model, true, true, "Equals Rel.: ")
-                .setBias(5.0)
-                .setPersistent(true);
-
-        addRelation(
-                targetInputBN,
-                endBN,
-                relEndEquals,
-                5.0,
-                10.0,
-                true
-        );
+        return rel;
     }
 
     public PatternNeuron addHeadline(String label) {

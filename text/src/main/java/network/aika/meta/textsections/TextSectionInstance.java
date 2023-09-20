@@ -3,6 +3,7 @@ package network.aika.meta.textsections;
 import network.aika.InstantiationUtil;
 import network.aika.Model;
 import network.aika.TemplateModel;
+import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
@@ -10,8 +11,6 @@ import network.aika.meta.TargetInput;
 import network.aika.meta.exceptions.FailedInstantiationException;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
-import network.aika.text.GroundRef;
-import network.aika.text.Range;
 import network.aika.utils.Writable;
 
 import java.io.DataInput;

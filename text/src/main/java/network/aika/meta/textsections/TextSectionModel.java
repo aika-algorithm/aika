@@ -203,13 +203,13 @@ public class TextSectionModel implements Writable {
         addInnerInhibitoryLoop(
                 beginBN,
                 innerTsBeginInhibitoryN,
-                NEG_MARGIN_TS_BEGIN * -beginBN.getTargetNet()
+                0.0 // NEG_MARGIN_TS_BEGIN * -beginBN.getTargetNet()
         );
 
         addInnerInhibitoryLoop(
                 beginEndBN,
                 innerTsBeginInhibitoryN,
-                NEG_MARGIN_TS_BEGIN * -beginEndBN.getTargetNet()
+                0.0 // NEG_MARGIN_TS_BEGIN * -beginEndBN.getTargetNet()
         );
 
         innerTsEndInhibitoryN = new InnerInhibitoryNeuron(model)
@@ -222,15 +222,17 @@ public class TextSectionModel implements Writable {
         addInnerInhibitoryLoop(
                 endBN,
                 innerTsEndInhibitoryN,
-                NEG_MARGIN_TS_END * -endBN.getTargetNet()
+                0.0 // NEG_MARGIN_TS_END * -endBN.getTargetNet()
         );
 
         addInnerInhibitoryLoop(
                 beginEndBN,
                 innerTsEndInhibitoryN,
-                NEG_MARGIN_TS_END * -beginEndBN.getTargetNet()
+                0.0 // NEG_MARGIN_TS_END * -beginEndBN.getTargetNet()
         );
     }
+
+
 
     private PatternNeuron createTextSectionInput(String label) {
         PatternNeuron inputPN = new PatternNeuron(model)
