@@ -37,6 +37,7 @@ import java.io.IOException;
 
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
+import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.meta.TargetInput.TARGET_INPUT_LABEL;
 
@@ -203,6 +204,24 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         );
 
         targetInput.setTemplateOnly(true);
+    }
+
+    public PatternNeuron getHeadlinePattern(String tsType) {
+        return getModel().getInputNeuron(
+                getAbstractPatternLabel(
+                        getHeadlineLabel(tsType)
+                ),
+                headlinePattern
+        );
+    }
+
+    public PatternNeuron getTextSectionPattern(String tsType) {
+        return getModel().getInputNeuron(
+                getAbstractPatternLabel(
+                        getTextSectionLabel(tsType)
+                ),
+                patternN
+        );
     }
 
     public void prepareInstantiation() {

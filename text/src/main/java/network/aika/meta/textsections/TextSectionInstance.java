@@ -127,24 +127,6 @@ public class TextSectionInstance extends InstantiationUtil implements Writable {
         );
     }
 
-    public PatternNeuron getHeadlinePattern(String tsType) {
-        return getModel().getInputNeuron(
-                getAbstractPatternLabel(
-                        getHeadlineLabel(tsType)
-                ),
-                tsModel.headlinePattern
-        );
-    }
-
-    public PatternNeuron getTextSectionPattern(String tsType) {
-        return getModel().getInputNeuron(
-                getAbstractPatternLabel(
-                        getTextSectionLabel(tsType)
-                ),
-                tsModel.patternN
-        );
-    }
-
 
     private boolean isPartOfHeadline(Activation tAct) {
         String l = tAct.getLabel();
