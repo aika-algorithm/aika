@@ -23,7 +23,7 @@ import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.elements.synapses.Synapse;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import network.aika.utils.Writable;
@@ -43,8 +43,6 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
 
     public PatternNeuron entityPatternN;
     public BindingNeuron entityBN;
-    public BindingNeuron targetInputBN;
-    public PatternNeuron targetInputPN;
 
     EntityModel entityModel;
 
@@ -70,7 +68,7 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
 
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(iAct, label);
-            ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
+            Synapse s = (Synapse) iAct.getNeuron().makeAbstract();
             s.setWeight(PASSIVE_SYNAPSE_WEIGHT);
         });
 
@@ -83,27 +81,28 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
         );
     }
 
+    public void setTemplateOnly(boolean templateOnly) {
+        entityBN.setTemplateOnly(templateOnly, true);
+    }
+
     @Override
     protected void mapResults(Document doc) {
         getPhraseModel().getPatternNeuron().setTemplateOnly(false);
 
         entityPatternN = lookupInstance(doc, entityModel.entityPattern);
         entityBN = lookupInstance(doc, entityModel.entityBN);
+        entityBN.setPersistent(true);
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeLong(entityPatternN.getId());
         out.writeLong(entityBN.getId());
-        out.writeLong(targetInputBN.getId());
-        out.writeLong(targetInputPN.getId());
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         entityPatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        targetInputPN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

@@ -72,7 +72,11 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(tAct, iAct, label);
 
-            if(isPartOfHeadline(tAct) || isHint(tAct)) {
+            if(isPartOfHeadline(tAct)) {
+                ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
+                s.setWeight(2.0);
+            }
+            if(isHint(tAct)) {
                 ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
                 s.setWeight(PASSIVE_SYNAPSE_WEIGHT);
             }
@@ -93,7 +97,6 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
                         .replace(TEXT_SECTION_LABEL, getTextSectionLabel(label))
         );
     }
-
 
     private boolean isPartOfHeadline(Activation tAct) {
         String l = tAct.getLabel();

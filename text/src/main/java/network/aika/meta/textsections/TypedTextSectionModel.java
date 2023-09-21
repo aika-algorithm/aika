@@ -51,11 +51,11 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     protected EntityModel entityModel;
 
-    protected PatternNeuron headlinePattern;
-
-    protected BindingNeuron headlineBN;
+    protected EntityInstance headlineEntity;
 
     protected BindingNeuron tsHeadlineBN;
+
+    protected BindingNeuron tsTypeBN;
 
     protected BindingNeuron hintBN;
 
@@ -83,8 +83,8 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
     }
 
     public void setTemplateOnly(boolean templateOnly) {
+        headlineEntity.setTemplateOnly(templateOnly);
         patternN.setTemplateOnly(templateOnly, true);
-        headlineBN.setTemplateOnly(templateOnly, true);
         tsHeadlineBN.setTemplateOnly(templateOnly, true);
         beginBN.setTemplateOnly(templateOnly, true);
         endBN.setTemplateOnly(templateOnly, true);
@@ -97,15 +97,14 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
         log.info("Typed " + TEXT_SECTION_LABEL);
 
-        double netTarget = 2.5;
+        initHeadline();
+        initHint();
+        initTextSection();
+    }
 
-        EntityInstance headlineEntity = new EntityInstance(entityModel)
+    private void initHeadline() {
+        headlineEntity = new EntityInstance(entityModel)
                 .instantiate(HEADLINE_LABEL, true);
-
-        headlinePattern = headlineEntity.entityPatternN;
-
-        headlineBN = headlineEntity.entityBN
-                .setPersistent(true);
 
         tsHeadlineBN = addBindingNeuron(
                 headlineEntity.entityPatternN,
@@ -125,6 +124,15 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 false
         );
 
+        addRelation(
+                tsHeadlineBN,
+                beginEndBN,
+                phraseModel.relPT,
+                5.0,
+                10.0,
+                false
+        );
+
         addPositiveFeedbackLoop(
                 tsHeadlineBN,
                 patternN,
@@ -133,6 +141,25 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 false
         );
 
+        tsTypeBN = addBindingNeuron(
+                patternN,
+                "Abstr. " + TEXT_SECTION_LABEL + " Type",
+                10.0,
+                bindingNetTarget
+        );
+        tsTypeBN.makeAbstract()
+                .setWeight(2.0);
+
+        addPositiveFeedbackLoop(
+                tsTypeBN,
+                headlineEntity.entityPatternN,
+                2.5,
+                0.0,
+                false
+        );
+    }
+
+    private void initHint() {
         hintBN = new BindingNeuron(model)
                 .setLabel(getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + " Hint"))
                 .setTargetNet(bindingNetTarget)
@@ -152,7 +179,20 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         sectionHintRelations(beginBN, relationPT);
         sectionHintRelations(beginEndBN, relationPT);
         sectionHintRelations(endBN, relationNT);
+    }
 
+    private void sectionHintRelations(BindingNeuron fromBN, LatentRelationNeuron relN) {
+        addRelation(
+                fromBN,
+                hintBN,
+                relN,
+                5.0,
+                10.0,
+                false
+        );
+    }
+
+    private void initTextSection() {
         outerTsBeginInhibitoryN = new OuterInhibitoryNeuron(model)
                 .setLabel("Outer Begin " + TEXT_SECTION_LABEL)
                 .setPersistent(true);
@@ -160,7 +200,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         addOuterInhibitoryLoop(
                 beginBN,
                 outerTsBeginInhibitoryN,
-                NEG_MARGIN_TS * -netTarget
+                NEG_MARGIN_TS * -beginBN.getTargetNet()
         );
 
         outerTsEndInhibitoryN = new OuterInhibitoryNeuron(model)
@@ -170,7 +210,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         addOuterInhibitoryLoop(
                 endBN,
                 outerTsEndInhibitoryN,
-                NEG_MARGIN_TS * -netTarget
+                NEG_MARGIN_TS * -endBN.getTargetNet()
         );
     }
 
@@ -179,7 +219,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 getAbstractPatternLabel(
                         getHeadlineLabel(tsType)
                 ),
-                headlinePattern
+                headlineEntity.entityPatternN
         );
     }
 
@@ -196,12 +236,12 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         setTemplateOnly(false);
         phraseModel.getPatternNeuron().setTemplateOnly(true);
         beginInputPN.setTemplateOnly(true);
+        beginEndInputPN.setTemplateOnly(true);
         endInputPN.setTemplateOnly(true);
     }
 
     public void prepareExampleDoc(Document doc, String label) {
         String headline = label + " " + HEADLINE_LABEL;
-        String textSection = label + " " + TEXT_SECTION_LABEL;
 
         GroundRef headlineGR = new GroundRef(
                 new Range(0, 2),
@@ -220,23 +260,11 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         doc.addToken(beginEndInputPN, textSectionGR);
     }
 
-
-    private void sectionHintRelations(BindingNeuron fromBN, LatentRelationNeuron relN) {
-        addRelation(
-                fromBN,
-                hintBN,
-                relN,
-                5.0,
-                10.0,
-                false
-        );
-    }
-
     @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
 
-        out.writeLong(headlineBN.getId());
+        headlineEntity.write(out);
         out.writeLong(hintBN.getId());
         out.writeLong(innerTsBeginInhibitoryN.getId());
         out.writeLong(innerTsEndInhibitoryN.getId());
@@ -248,7 +276,9 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
     public void readFields(DataInput in, Model m) throws Exception {
         super.readFields(in, m);
 
-        headlineBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        headlineEntity = new EntityInstance(entityModel);
+        headlineEntity.readFields(in, m);
+
         hintBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         innerTsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         innerTsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
