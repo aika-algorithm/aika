@@ -36,11 +36,6 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
 {
 
     public InnerNegativeFeedbackSynapse() {
-        currentStoredAt = Direction.OUTPUT;
-    }
-
-    @Override
-    public void setStoredAt(Direction newStoredAt) {
     }
 
     @Override

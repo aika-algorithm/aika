@@ -92,7 +92,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         }
 
         {
-            AbstractPropertyPanel synapsesPropertyPanel = SynapsesPropertyPanel.create(act, Direction.INPUT, false);
+            AbstractPropertyPanel synapsesPropertyPanel = SynapsesPropertyPanel.create(act, Direction.INPUT);
             if (synapsesPropertyPanel != null)
                 addTab(
                         "Input-Synapses",
@@ -101,20 +101,11 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
                 );
         }
         {
-            AbstractPropertyPanel synapsesPropertyPanel = SynapsesPropertyPanel.create(act, Direction.OUTPUT, false);
+            AbstractPropertyPanel synapsesPropertyPanel = SynapsesPropertyPanel.create(act, Direction.OUTPUT);
             if (synapsesPropertyPanel != null)
                 addTab(
                         "Output-Synapses",
                         "Shows the Output-Synapses",
-                        synapsesPropertyPanel
-                );
-        }
-        {
-            AbstractPropertyPanel synapsesPropertyPanel = SynapsesPropertyPanel.create(act, Direction.OUTPUT, true);
-            if (synapsesPropertyPanel != null)
-                addTab(
-                        "PreAct Output-Synapses",
-                        "Shows the PreAct Output-Synapses",
                         synapsesPropertyPanel
                 );
         }

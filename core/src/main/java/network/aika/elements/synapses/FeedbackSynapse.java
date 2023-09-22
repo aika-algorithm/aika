@@ -50,10 +50,6 @@ public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuro
     }
 
     @Override
-    protected void warmUpInputNeuron(Thought t) {
-    }
-
-    @Override
     public boolean isLatentLinkingAllowed() {
         return false;
     }

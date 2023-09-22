@@ -32,9 +32,6 @@ import java.util.stream.Stream;
 public class PreActivation<A extends Activation> {
 
     private SortedSet<A> activations = new TreeSet<>();
-    private Set<Synapse> outputSynapses = new TreeSet<>(
-            Comparator.comparingLong(s -> s.getPOutput().getId())
-    );
 
     public PreActivation(Thought t, NeuronProvider provider) {
         t.register(provider, this);
@@ -46,17 +43,5 @@ public class PreActivation<A extends Activation> {
 
     public void addActivation(A act) {
         activations.add(act);
-    }
-
-    public void addOutputSynapse(Synapse s) {
-        outputSynapses.add(s);
-    }
-
-    public void removeOutputSynapse(Synapse s) {
-        outputSynapses.remove(s);
-    }
-
-    public Stream<Synapse> getOutputSynapses() {
-        return outputSynapses.stream();
     }
 }

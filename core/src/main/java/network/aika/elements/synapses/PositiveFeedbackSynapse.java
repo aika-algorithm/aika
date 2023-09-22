@@ -51,10 +51,6 @@ public class PositiveFeedbackSynapse extends FeedbackSynapse<
         return new PositiveFeedbackLink(this, input, output);
     }
 
-    public Direction getStoredAt() {
-        return OUTPUT;
-    }
-
     @Override
     public void linkAndPropagateOut(PatternActivation act) {
     }

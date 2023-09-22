@@ -53,7 +53,7 @@ public class SynapsesPropertyPanel extends AbstractPropertyPanel {
         addFinal();
     }
 
-    public static SynapsesPropertyPanel create(Element element, Direction dir, boolean preActSyns) {
+    public static SynapsesPropertyPanel create(Element element, Direction dir) {
         Thought t = null;
         Neuron n = null;
         if(element instanceof Activation<?>) {
@@ -69,14 +69,7 @@ public class SynapsesPropertyPanel extends AbstractPropertyPanel {
 
         if(dir == Direction.INPUT)
             return new SynapsesPropertyPanel(n.getInputSynapsesAsStream());
-        else if(!preActSyns)
+        else
             return new SynapsesPropertyPanel(n.getOutputSynapsesAsStream());
-        else {
-            PreActivation<?> preAct = n.getPreActivation(t);
-            if(preAct == null)
-                return null;
-
-            return new SynapsesPropertyPanel(preAct.getOutputSynapses());
-        }
     }
 }

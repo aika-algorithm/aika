@@ -32,8 +32,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
-import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.enums.direction.Direction.OUTPUT;
 
 /**
  *
@@ -105,11 +103,7 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
             s.setSumOfLowerWeights(sum);
             sum += w;
 
-            s.setStoredAt(
-                    sum < 0 ?
-                            OUTPUT :
-                            INPUT
-            );
+            s.setPropagable(sum >= 0);
         }
     }
 

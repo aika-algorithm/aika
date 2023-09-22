@@ -40,20 +40,11 @@ public class RelationInputSynapse extends BindingNeuronSynapse<
         >
 {
     public RelationInputSynapse() {
-        currentStoredAt = Direction.OUTPUT;
     }
 
     @Override
     public Scope getScope() {
         return Scope.INPUT;
-    }
-
-    @Override
-    public void setStoredAt(Direction storedAt) {
-    }
-
-    @Override
-    protected void warmUpInputNeuron(Thought t) {
     }
 
     @Override

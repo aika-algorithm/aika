@@ -123,8 +123,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         createAndInitLink(iAct, oAct);
     }
 
-    protected void warmUpRelatedInputNeurons(IA bs) {
-    }
 
     public double getPropagatePreNet(IA iAct) {
         return getOutput().getCurrentCompleteBias() +
@@ -193,8 +191,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
         if (getPropagatePreNet(act) > 0.0) {
             propagate(act);
-        } else if(getStoredAt() == INPUT) {
-            warmUpRelatedInputNeurons(act);
         }
     }
 
@@ -206,11 +202,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return createAndInitLink(iAct, oAct);
     }
 
-    public void setModified() {
-        Neuron n = getStoredAt().getNeuron(this);
-        if(n != null)
-            n.setModified();
-    }
+    public abstract void setModified();
 
     public void count(L l) {
     }
@@ -325,9 +317,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return getWeight().getUpdatedValue();
     }
 
-    public Direction getStoredAt() {
-        return INPUT;
-    }
+    public abstract Direction getStoredAt();
 
     public NeuronProvider getPInput() {
         return input;

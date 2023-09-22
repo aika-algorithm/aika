@@ -181,7 +181,6 @@ public class PatternSynapse extends ConjunctiveSynapse<
         sampleSpace.updateLastPosition(absoluteRange);
     }
 
-
     public double getSurprisal(Sign inputSign, Sign outputSign, Range range, boolean addCurrentInstance) {
         double n = sampleSpace.getN(range);
         double probability = getProbability(inputSign, outputSign, n, addCurrentInstance);

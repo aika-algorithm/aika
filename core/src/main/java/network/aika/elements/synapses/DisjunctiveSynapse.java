@@ -16,10 +16,12 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.enums.Scope;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
+import network.aika.enums.direction.Direction;
+
+import static network.aika.enums.direction.Direction.INPUT;
 
 /**
  *
@@ -38,5 +40,17 @@ public abstract class DisjunctiveSynapse<
     @Override
     public double getSumOfLowerWeights() {
         return 0.0;
+    }
+
+    @Override
+    public void setModified() {
+        I in = getInput();
+        if(in != null)
+            in.setModified();
+    }
+
+    @Override
+    public Direction getStoredAt() {
+        return INPUT;
     }
 }

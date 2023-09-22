@@ -17,8 +17,6 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
-import network.aika.enums.Scope;
-import network.aika.Thought;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.ConjunctiveNeuron;
@@ -31,9 +29,7 @@ import network.aika.utils.Utils;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.stream.Stream;
 
-import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.queue.Phase.TRAINING;
@@ -60,7 +56,7 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
     private boolean optional;
 
     private double sumOfLowerWeights;
-    protected Direction currentStoredAt = INPUT;
+    protected boolean propagable;
 
     public ConjunctiveSynapse() {
         synapseBias.setValue(0.0);
@@ -99,33 +95,28 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         super.initFromTemplate(input, output, templateSyn);
     }
 
-    @Override
-    protected void warmUpRelatedInputNeurons(IA bs) {
-        Stream<ConjunctiveSynapse> iSyns = output.getNeuron().getInputSynapsesByType(ConjunctiveSynapse.class);
-        iSyns.filter(s -> s.getStoredAt() == OUTPUT)
-                .forEach(s ->
-                        s.warmUpInputNeuron(bs.getThought())
-                );
+    public void setPropagable(boolean propagable) {
+        if(this.propagable != propagable)
+            input.getNeuron().setModified();
+
+        getInput().updatePropagable(output, propagable);
+        this.propagable = propagable;
     }
 
-    protected void warmUpInputNeuron(Thought t) {
-        input.getNeuron()
-                .getOrCreatePreActivation(t)
-                .addOutputSynapse(this);
+    public boolean isPropagable() {
+        return propagable;
+    }
+
+    @Override
+    public void setModified() {
+        O no = getOutput();
+        if(no != null)
+            no.setModified();
     }
 
     @Override
     public Direction getStoredAt() {
-        return currentStoredAt;
-    }
-
-    public void setStoredAt(Direction newStoredAt) {
-        if(currentStoredAt != newStoredAt) {
-            input.getNeuron().setModified();
-            output.getNeuron().setModified();
-        }
-
-        currentStoredAt = newStoredAt;
+        return OUTPUT;
     }
 
     @Override
@@ -159,7 +150,7 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
 
         synapseBias.write(out);
         out.writeDouble(sumOfLowerWeights);
-        out.writeBoolean(currentStoredAt == OUTPUT);
+        out.writeBoolean(propagable);
         out.writeBoolean(optional);
     }
 
@@ -169,7 +160,7 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
 
         synapseBias.readFields(in, m);
         sumOfLowerWeights = in.readDouble();
-        currentStoredAt = in.readBoolean() ? OUTPUT : INPUT;
+        propagable = in.readBoolean();
         optional = in.readBoolean();
     }
 }

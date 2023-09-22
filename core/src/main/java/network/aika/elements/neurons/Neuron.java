@@ -84,6 +84,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected InitParams initParams;
 
+    private Set<NeuronProvider> propagable = new HashSet<>();
+
     private final WeakHashMap<Long, WeakReference<PreActivation<A>>> activations = new WeakHashMap<>();
 
     public Neuron(Model m) {
@@ -97,6 +99,24 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     @Override
     public void disconnect() {
+    }
+
+    public void updatePropagable(NeuronProvider np, boolean isPropagable) {
+        if(isPropagable)
+            propagable.add(np);
+        else
+            propagable.remove(np);
+    }
+
+    public void wakeupPropagable() {
+        propagable
+                .forEach(np ->
+                        np.getNeuron()
+                );
+    }
+
+    public Collection<NeuronProvider> getPropagable() {
+        return propagable;
     }
 
     public void setSynapseIdCounter(int synapseIdCounter) {
@@ -320,18 +340,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public Stream<? extends Synapse> getOutputSynapsesAsStream(Thought t) {
-        WeakReference<PreActivation<A>> wRefNpd = activations.get(t.getId());
-        if(wRefNpd == null)
             return getOutputSynapsesAsStream();
-
-        PreActivation<A> npd = wRefNpd.get();
-        if(npd == null)
-            return getOutputSynapsesAsStream();
-
-        return Stream.concat(
-                npd.getOutputSynapses(),
-                getOutputSynapsesAsStream()
-        );
     }
 
     public Synapse getOutputSynapse(NeuronProvider n) {
@@ -472,6 +481,12 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
         bias.write(out);
 
+        for (NeuronProvider np: propagable) {
+            out.writeBoolean(true);
+            out.writeLong(np.getId());
+        }
+        out.writeBoolean(false);
+
         for (Synapse s : getInputSynapses()) {
             if (s.getStoredAt() == OUTPUT) {
                 out.writeBoolean(true);
@@ -514,6 +529,12 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
             label = in.readUTF();
 
         bias.readFields(in, m);
+
+        while (in.readBoolean()) {
+            propagable.add(
+                    m.lookupNeuronProvider(in.readLong())
+            );
+        }
 
         while (in.readBoolean()) {
             Synapse syn = Synapse.read(in, m);

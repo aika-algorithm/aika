@@ -35,9 +35,8 @@ public class ConjunctiveSynapsePropertyPanel<E extends ConjunctiveSynapse> exten
         addField(s.getSynapseBias());
 
         super.initSynapseProperties(s);
-
+        addConstant("Propagatable: ", "" + s.isPropagable());
         addConstant("isOptional", "" + s.isOptional());
-
         addConstant("Sum of Lower Weights:", doubleToString(s.getSumOfLowerWeights(), "#.######"));
         addConstant("Sorting Weight:", "" + s.getSortingWeight());
     }

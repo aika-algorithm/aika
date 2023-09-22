@@ -47,6 +47,8 @@ public class LinkingOut extends ElementStep<Activation> {
         Activation<?> act = getElement();
         Neuron<?, ?> n = act.getNeuron();
 
+        n.wakeupPropagable();
+
         n.getOutputSynapsesAsStream(act.getThought())
                 .filter(s ->
                         s.linkOnUnsuppressed() == unsuppressed
