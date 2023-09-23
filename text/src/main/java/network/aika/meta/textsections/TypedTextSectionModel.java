@@ -37,6 +37,7 @@ import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
 import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
 import static network.aika.meta.NetworkMotifs.*;
+import static network.aika.meta.TargetInput.TARGET_INPUT_LABEL;
 
 /**
  *
@@ -55,7 +56,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     protected BindingNeuron tsHeadlineBN;
 
-    protected BindingNeuron tsTypeBN;
+//    protected BindingNeuron tsTypeBN;
 
     protected BindingNeuron hintBN;
 
@@ -140,7 +141,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 0.0,
                 false
         );
-
+/*
         tsTypeBN = addBindingNeuron(
                 patternN,
                 "Abstr. " + TEXT_SECTION_LABEL + " Type",
@@ -157,6 +158,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 0.0,
                 false
         );
+ */
     }
 
     private void initHint() {
@@ -223,6 +225,20 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         );
     }
 
+    public PatternNeuron addHeadline(String label) {
+        return model.lookupInputNeuron(
+                getHeadlineLabel(label) + " " + TARGET_INPUT_LABEL,
+                headlineEntity.targetInputPN
+        );
+    }
+
+    public void addHeadlineTarget(Document doc, GroundRef groundRef, String label) {
+        doc.addToken(
+                addHeadline(label),
+                groundRef
+        );
+    }
+
     public PatternNeuron getTextSectionPattern(String tsType) {
         return getModel().getInputNeuron(
                 getAbstractPatternLabel(
@@ -249,6 +265,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         );
 
         doc.addToken(phraseModel.getPatternNeuron(), headlineGR);
+        doc.addToken(headlineEntity.targetInputPN, headlineGR);
 
         GroundRef textSectionGR = new GroundRef(
                 new Range(2, 4),

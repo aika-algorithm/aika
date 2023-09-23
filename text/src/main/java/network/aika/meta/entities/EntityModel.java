@@ -19,6 +19,8 @@ package network.aika.meta.entities;
 import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.EqualsRelationNeuron;
+import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import network.aika.text.GroundRef;
@@ -56,6 +58,8 @@ public class EntityModel implements TemplateModel, Writable {
     protected Model model;
     protected PhraseModel phraseModel;
 
+    protected TargetInput targetInput;
+
     protected CategoryNeuron entityCategory;
 
     protected PatternNeuron entityPattern;
@@ -63,6 +67,10 @@ public class EntityModel implements TemplateModel, Writable {
     protected BindingNeuron entityBN;
 
     protected OuterInhibitoryNeuron outerInhibitoryN;
+
+    protected BindingNeuron targetInputBN;
+
+    protected EqualsRelationNeuron relEquals;
 
 
     public EntityModel(PhraseModel pm) {
@@ -79,6 +87,9 @@ public class EntityModel implements TemplateModel, Writable {
     }
 
     public void initStaticNeurons() {
+        targetInput = new TargetInput(model, ENTITY_LABEL);
+        targetInput.initTargetInput();
+
         entityPattern = new PatternNeuron(model)
                 .setLabel(getAbstractPatternLabel(ENTITY_LABEL))
                 .setTargetNet(ENTITY_NET_TARGET)
@@ -120,10 +131,19 @@ public class EntityModel implements TemplateModel, Writable {
                 outerInhibitoryN,
                 NEG_MARGIN * -entityBN.getTargetNet()
         );
+
+        relEquals = new EqualsRelationNeuron(model, true, true, "Equals Rel.: ")
+                .setBias(5.0)
+                .setPersistent(true);
+
+        targetInputBN = targetInput.createTargetInputBindingNeuron(entityBN, entityPattern, relEquals);
+
+        targetInput.setTemplateOnly(true);
     }
 
     public void prepareInstantiation() {
         setTemplateOnly(false);
+        targetInput.setTemplateOnly(false);
         phraseModel.getPatternNeuron().setTemplateOnly(true);
     }
 
@@ -132,6 +152,7 @@ public class EntityModel implements TemplateModel, Writable {
         Range entityCharRange = new Range(0, doc.length());
 
         doc.addToken(phraseModel.getPatternNeuron(), new GroundRef(entityPosRange, entityCharRange));
+        doc.addToken(targetInput.getTargetInput(), new GroundRef(entityPosRange, entityCharRange));
     }
 
     public PatternNeuron getInstancePattern(String entityType) {
@@ -141,6 +162,18 @@ public class EntityModel implements TemplateModel, Writable {
     public void setTemplateOnly(boolean templateOnly) {
         entityPattern.setTemplateOnly(templateOnly, true);
         entityBN.setTemplateOnly(templateOnly, true);
+        targetInputBN.setTemplateOnly(templateOnly, true);
+    }
+
+    public PatternNeuron addEntity(String entityLabel) {
+        return model.lookupInputNeuron(entityLabel, targetInput.getTargetInput());
+    }
+
+    public void addEntityTarget(Document doc, GroundRef groundRef, String entityLabel) {
+        doc.addToken(
+                addEntity(entityLabel),
+                groundRef
+        );
     }
 
     public Model getModel() {
@@ -152,6 +185,8 @@ public class EntityModel implements TemplateModel, Writable {
         out.writeLong(entityCategory.getId());
         out.writeLong(entityPattern.getId());
         out.writeLong(entityBN.getId());
+        out.writeLong(targetInputBN.getId());
+        out.writeLong(relEquals.getId());
     }
 
     @Override
@@ -159,5 +194,7 @@ public class EntityModel implements TemplateModel, Writable {
         entityCategory = m.lookupNeuronProvider(in.readLong()).getNeuron();
         entityPattern = m.lookupNeuronProvider(in.readLong()).getNeuron();
         entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        relEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

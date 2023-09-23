@@ -21,7 +21,9 @@ import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import network.aika.utils.Writable;
@@ -41,6 +43,8 @@ import static network.aika.meta.textsections.TypedTextSectionModel.*;
 public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> implements Writable {
 
     TypedTextSectionModel tsModel;
+
+    PatternNeuron headlineTargetInputPN;
 
     public TextSectionInstance(TypedTextSectionModel tsModel) {
         this.tsModel = tsModel;
@@ -88,6 +92,14 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
     @Override
     protected void mapResults(Document doc) {
         getPhraseModel().getPatternNeuron().setTemplateOnly(false);
+
+        TargetInput.setTemplateOnly(
+                lookupInstance(doc, tsModel.headlineEntity.targetInputPN),
+                lookupInstance(doc, tsModel.headlineEntity.targetInputBN),
+                true
+        );
+
+        headlineTargetInputPN = lookupInstance(doc, tsModel.headlineEntity.targetInputPN);
     }
 
     private void generateLabel(Activation tAct, Activation iAct, String label) {

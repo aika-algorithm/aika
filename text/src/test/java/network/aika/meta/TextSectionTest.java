@@ -133,7 +133,15 @@ public class TextSectionTest extends TrainingParser<TestContext> {
 
         if(context != null) {
             if(context.getTextSectionType() != null) {
-
+                textSectionModel
+                        .addHeadlineTarget(
+                                doc,
+                                new GroundRef(
+                                        new Range(0, tokenCounter[0]),
+                                        new Range(0, doc.length())
+                                ),
+                                context.getTextSectionType()
+                        );
             }
             if(context.getCandidateRanges() != null) {
                 context.getCandidateRanges()
@@ -148,10 +156,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     public void testTextSections() {
         log.info("Start");
 
-        process(tasksHeadline, null, COUNTING);
+     /*   process(tasksHeadline, null, COUNTING);
         process(requirementsHeadline, null, COUNTING);
         process(exampleTxt, null, COUNTING);
-
+*/
         dictionary.initInputTokenWeights();
 
         process(tasksHeadline, new TestContext(TASKS_LABEL, null), TRAINING);
