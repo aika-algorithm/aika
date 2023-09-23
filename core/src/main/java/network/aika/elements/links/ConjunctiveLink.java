@@ -42,26 +42,6 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         super(s, input, output);
     }
 
-    @Override
-    public void bindingVisit(BindingVisitor v, int depth) {
-        next(v, depth);
-    }
-
-    @Override
-    public void patternVisit(PatternVisitor v, int depth) {
-        next(v, depth);
-    }
-
-    @Override
-    public void inhibVisit(InhibitoryVisitor v, int depth) {
-        next(v, depth);
-    }
-
-    @Override
-    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
-        next(v, depth);
-    }
-
     private void next(Visitor v, int depth) {
         if(input == null)
             return;

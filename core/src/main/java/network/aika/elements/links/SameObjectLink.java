@@ -49,11 +49,6 @@ public class SameObjectLink extends BindingNeuronLink<SameObjectSynapse, Binding
     }
 
     @Override
-    public void patternVisit(PatternVisitor v, int depth) {
-        v.next(this, depth);
-    }
-
-    @Override
     public void patternCatVisit(PatternCategoryVisitor v, int depth) {
     }
 }
