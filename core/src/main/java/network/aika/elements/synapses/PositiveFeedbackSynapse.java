@@ -52,6 +52,10 @@ public class PositiveFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
+    public void setPropagable(boolean propagable) {
+    }
+
+    @Override
     public void linkAndPropagateOut(PatternActivation act) {
     }
 

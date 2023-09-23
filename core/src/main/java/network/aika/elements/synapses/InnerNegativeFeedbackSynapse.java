@@ -39,6 +39,10 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
+    public void setPropagable(boolean propagable) {
+    }
+
+    @Override
     public double getPreNetDummyWeight() {
         return weight.getValue();
     }

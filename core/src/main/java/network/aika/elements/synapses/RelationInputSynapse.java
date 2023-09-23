@@ -48,6 +48,10 @@ public class RelationInputSynapse extends BindingNeuronSynapse<
     }
 
     @Override
+    public void setPropagable(boolean propagable) {
+    }
+
+    @Override
     public void linkAndPropagateOut(LatentRelationActivation act) {
     }
 
