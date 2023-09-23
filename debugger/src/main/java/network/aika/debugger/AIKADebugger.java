@@ -29,6 +29,7 @@ import network.aika.text.Range;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.*;
@@ -74,6 +75,45 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
                 neuronViewManager.updateGraphNeurons(templatesOnly);
             }
         });
+    }
+
+    private void createMenu(JFrame frame) {
+        JMenuBar menuBar;
+        JMenu menu;
+        JMenuItem menuItem;
+
+        menuBar = new JMenuBar();
+
+        menu = new JMenu("File");
+        menu.setMnemonic(KeyEvent.VK_A);
+        menuBar.add(menu);
+
+        menuItem = new JMenuItem("Open",
+                KeyEvent.VK_O);
+
+        menuItem.addActionListener(e -> {
+            final JFileChooser fc = new JFileChooser();
+            int returnVal = fc.showOpenDialog(this);
+
+            if(returnVal == JFileChooser.APPROVE_OPTION)
+                System.out.println(fc.getSelectedFile());
+        });
+
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Save",
+                KeyEvent.VK_S);
+        menuItem.addActionListener(e -> {
+            final JFileChooser fc = new JFileChooser();
+            int returnVal = fc.showSaveDialog(this);
+
+            if(returnVal == JFileChooser.APPROVE_OPTION)
+                System.out.println(fc.getSelectedFile());
+        });
+
+        menu.add(menuItem);
+
+        frame.setJMenuBar(menuBar);
     }
 
     private void registerGlobalKeyListener() {
@@ -218,5 +258,6 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
         f.setLocationByPlatform(true);
         f.setVisible(true);
         f.setExtendedState(f.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        createMenu(f);
     }
 }
