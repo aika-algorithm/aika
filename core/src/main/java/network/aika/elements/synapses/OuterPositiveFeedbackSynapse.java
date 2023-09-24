@@ -19,10 +19,8 @@ package network.aika.elements.synapses;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.links.FeedbackLink;
 import network.aika.elements.links.InnerPositiveFeedbackLink;
-import network.aika.elements.links.PositiveFeedbackLink;
-import network.aika.elements.neurons.Neuron;
+import network.aika.elements.links.OuterPositiveFeedbackLink;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.enums.Scope;
 
@@ -30,30 +28,47 @@ import network.aika.enums.Scope;
  *
  * @author Lukas Molzberger
  */
-public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse, I extends Neuron, L extends PositiveFeedbackLink<S, IA>, IA extends Activation<?>> extends FeedbackSynapse<
-        S,
-        I,
-        L,
-        IA
+public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
+        OuterPositiveFeedbackSynapse,
+        PatternNeuron,
+        OuterPositiveFeedbackLink,
+        PatternActivation
         >
 {
     @Override
     public Scope getScope() {
-        return Scope.INPUT;
+        return Scope.SAME;
     }
 
     @Override
     public boolean checkSingularLinkDoesNotExist(BindingActivation oAct) {
-        return !linkExists(oAct, true);
+        return !linkExists(oAct, false);
+    }
+
+    public OuterPositiveFeedbackLink createLink(PatternActivation input, BindingActivation output) {
+        return new OuterPositiveFeedbackLink(this, input, output);
     }
 
     @Override
-    public double getPreNetDummyWeight() {
-        return weight.getValue();
+    public void setPropagable(boolean propagable) {
+    }
+
+    @Override
+    public void linkAndPropagateOut(PatternActivation act) {
+    }
+
+    @Override
+    public double getSortingWeight() {
+        return 0.0;
     }
 
     @Override
     public boolean checkLinkingEvent(Activation act) {
         return true;
+    }
+
+    @Override
+    public double getPropagatePreNet(PatternActivation iAct) {
+        return 0.0;
     }
 }

@@ -114,10 +114,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     @Override
     protected Document initDocument(String txt, TestContext context, ParserPhase phase) {
         Document doc = super.initDocument(txt, context, phase);
-        //if(phase == TRAINING && doc.getId() == 9) { //  && txt.equalsIgnoreCase(exampleTxt)
+        if(phase == TRAINING) { // && doc.getId() == 9) { //  && txt.equalsIgnoreCase(exampleTxt)
             AIKADebugger.createAndShowGUI()
                     .setDocument(doc);
-        //}
+        }
 
         return doc;
     }
@@ -156,10 +156,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     public void testTextSections() {
         log.info("Start");
 
-     /*   process(tasksHeadline, null, COUNTING);
+        process(tasksHeadline, null, COUNTING);
         process(requirementsHeadline, null, COUNTING);
         process(exampleTxt, null, COUNTING);
-*/
+
         dictionary.initInputTokenWeights();
 
         process(tasksHeadline, new TestContext(TASKS_LABEL, null), TRAINING);

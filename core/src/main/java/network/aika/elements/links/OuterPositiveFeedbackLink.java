@@ -16,12 +16,10 @@
  */
 package network.aika.elements.links;
 
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.elements.synapses.InnerPositiveFeedbackSynapse;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
+import network.aika.elements.synapses.OuterPositiveFeedbackSynapse;
 import network.aika.fields.AbstractFunction;
 import network.aika.fields.IdentityFunction;
 import network.aika.visitor.binding.BindingVisitor;
@@ -35,11 +33,11 @@ import static network.aika.fields.Fields.scale;
  *
  * @author Lukas Molzberger
  */
-public class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends Activation<?>> extends FeedbackLink<S, IA> {
+public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiveFeedbackSynapse, PatternActivation> {
 
     protected AbstractFunction inputGradient;
 
-    public PositiveFeedbackLink(S s, IA input, BindingActivation output) {
+    public OuterPositiveFeedbackLink(OuterPositiveFeedbackSynapse s, PatternActivation input, BindingActivation output) {
         super(s, input, output);
     }
 

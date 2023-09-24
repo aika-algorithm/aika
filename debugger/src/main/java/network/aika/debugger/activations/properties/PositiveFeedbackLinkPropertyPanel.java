@@ -16,29 +16,29 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.elements.links.PositiveFeedbackLink;
+import network.aika.elements.links.InnerPositiveFeedbackLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class PositiveFeedbackLinkPropertyPanel extends FeedbackLinkPropertyPanel<PositiveFeedbackLink> {
+public class PositiveFeedbackLinkPropertyPanel extends FeedbackLinkPropertyPanel<InnerPositiveFeedbackLink> {
 
-    public PositiveFeedbackLinkPropertyPanel(PositiveFeedbackLink l) {
+    public PositiveFeedbackLinkPropertyPanel(InnerPositiveFeedbackLink l) {
         super(l);
     }
 
     @Override
-    public void initIdentitySection(PositiveFeedbackLink l) {
+    public void initIdentitySection(InnerPositiveFeedbackLink l) {
         super.initIdentitySection(l);
     }
 
     @Override
-    public void initInferenceSection(PositiveFeedbackLink l) {
+    public void initInferenceSection(InnerPositiveFeedbackLink l) {
         super.initInferenceSection(l);
     }
 
     @Override
-    public void initTrainingSection(PositiveFeedbackLink l) {
+    public void initTrainingSection(InnerPositiveFeedbackLink l) {
         super.initTrainingSection(l);
     }
 }

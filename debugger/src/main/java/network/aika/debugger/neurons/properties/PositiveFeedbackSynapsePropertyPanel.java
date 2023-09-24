@@ -17,13 +17,13 @@
 package network.aika.debugger.neurons.properties;
 
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
+import network.aika.elements.synapses.InnerPositiveFeedbackSynapse;
 /**
  * @author Lukas Molzberger
  */
-public class PositiveFeedbackSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel<PositiveFeedbackSynapse> {
+public class PositiveFeedbackSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel<InnerPositiveFeedbackSynapse> {
 
-    public PositiveFeedbackSynapsePropertyPanel(PositiveFeedbackSynapse s, Link ref) {
+    public PositiveFeedbackSynapsePropertyPanel(InnerPositiveFeedbackSynapse s, Link ref) {
         super(s, ref);
     }
 }

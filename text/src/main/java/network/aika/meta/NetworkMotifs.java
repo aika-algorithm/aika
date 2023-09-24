@@ -104,7 +104,7 @@ public class NetworkMotifs {
 
         log.info("  " + pSyn + " targetNetContr:" + -pSyn.getSynapseBias().getValue());
 
-        PositiveFeedbackSynapse posFeedSyn = new PositiveFeedbackSynapse()
+        InnerPositiveFeedbackSynapse posFeedSyn = new InnerPositiveFeedbackSynapse()
                 .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), pn.getTargetValue()))
                 .link(pn, bn)
                 .setTemplateOnly(isTemplateOnly)

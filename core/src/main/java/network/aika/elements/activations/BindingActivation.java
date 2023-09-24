@@ -19,7 +19,7 @@ package network.aika.elements.activations;
 import network.aika.Thought;
 import network.aika.elements.Timestamp;
 import network.aika.elements.links.Link;
-import network.aika.elements.links.PositiveFeedbackLink;
+import network.aika.elements.links.InnerPositiveFeedbackLink;
 import network.aika.elements.links.InputObjectLink;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.enums.Scope;
@@ -112,7 +112,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     }
 
     public Stream<PatternActivation> getOutputPatternActivations() {
-        return getInputLinksByType(PositiveFeedbackLink.class)
+        return getInputLinksByType(InnerPositiveFeedbackLink.class)
                 .map(Link::getInput)
                 .filter(Objects::nonNull);
     }

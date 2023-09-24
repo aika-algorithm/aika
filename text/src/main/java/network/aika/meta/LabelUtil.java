@@ -19,7 +19,7 @@ package network.aika.meta;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.activations.*;
 import network.aika.elements.links.Link;
-import network.aika.elements.links.PositiveFeedbackLink;
+import network.aika.elements.links.InnerPositiveFeedbackLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternSynapse;
@@ -30,7 +30,6 @@ import network.aika.text.Document;
 import java.util.function.Predicate;
 
 import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.enums.direction.Direction.OUTPUT;
 
 
 /**
@@ -79,7 +78,7 @@ public class LabelUtil {
         if(tAct == null)
             return "...";
 
-        PositiveFeedbackLink pfl = tAct.getInputLinkByType(PositiveFeedbackLink.class)
+        InnerPositiveFeedbackLink pfl = tAct.getInputLinkByType(InnerPositiveFeedbackLink.class)
                 .orElse(null);
 
         if(pfl == null || pfl.getInput() == null)
