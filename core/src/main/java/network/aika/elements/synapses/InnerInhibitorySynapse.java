@@ -22,6 +22,7 @@ import network.aika.elements.links.InnerInhibitoryLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
 import network.aika.enums.Scope;
+import network.aika.fields.FieldOutput;
 
 /**
  *
@@ -39,6 +40,11 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
     @Override
     public Scope getScope() {
         return Scope.SAME;
+    }
+
+    @Override
+    public FieldOutput getInputValue(BindingActivation input) {
+        return input.getValueUnsuppressed();
     }
 
     @Override

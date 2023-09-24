@@ -25,6 +25,7 @@ import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.Field;
+import network.aika.fields.FieldOutput;
 import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
@@ -97,6 +98,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return act.isFired();
     }
 
+    public FieldOutput getInputValue(IA input) {
+        return input.getValue();
+    }
+
     protected void checkWeight() {
         if(isNegative())
             delete();
@@ -139,7 +144,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public double getNetUB(IA iAct) {
-        return (iAct.getValue().getUpdatedValue() * getWeight().getUpdatedValue()) +
+        return (getInputValue(iAct).getUpdatedValue() * getWeight().getUpdatedValue()) +
                 getSumOfLowerWeights()[isLatentLinkingAllowed() ? 1 : 0];
     }
 

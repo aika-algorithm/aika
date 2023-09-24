@@ -164,7 +164,11 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     protected void connectInputValue() {
-        linkAndConnect(input.getValue(), 0, inputValue);
+        linkAndConnect(
+                synapse.getInputValue(input),
+                0,
+                inputValue
+        );
     }
 
     protected Multiplication initWeightedInput() {
