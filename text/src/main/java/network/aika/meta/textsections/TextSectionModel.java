@@ -86,9 +86,7 @@ public class TextSectionModel implements Writable {
 
     protected InnerInhibitoryNeuron innerTsEndInhibitoryN;
 
-
     protected double bindingNetTarget = 2.5;
-
 
     public TextSectionModel(PhraseModel phraseModel) {
         this.phraseModel = phraseModel;
@@ -232,9 +230,7 @@ public class TextSectionModel implements Writable {
         );
     }
 
-
-
-    private PatternNeuron createTextSectionInput(String label) {
+    protected PatternNeuron createTextSectionInput(String label) {
         PatternNeuron inputPN = new PatternNeuron(model)
                 .setLabel(label + " Input")
                 .setPersistent(true)

@@ -60,6 +60,8 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     protected BindingNeuron hintBN;
 
+    protected PatternNeuron hintInputPN;
+
     protected OuterInhibitoryNeuron outerTsBeginInhibitoryN;
 
     protected OuterInhibitoryNeuron outerTsEndInhibitoryN;
@@ -162,10 +164,14 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
     }
 
     private void initHint() {
-        hintBN = new BindingNeuron(model)
-                .setLabel(getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + " Hint"))
-                .setTargetNet(bindingNetTarget)
-                .setPersistent(true);
+        hintInputPN = createTextSectionInput(TEXT_SECTION_LABEL + " Hint");
+
+        hintBN = addBindingNeuron(
+                hintInputPN,
+                getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + " Hint"),
+                10.0,
+                bindingNetTarget
+        );
 
         hintBN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);

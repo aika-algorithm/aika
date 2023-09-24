@@ -42,9 +42,10 @@ import static network.aika.meta.textsections.TypedTextSectionModel.*;
  */
 public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> implements Writable {
 
-    TypedTextSectionModel tsModel;
+    private TypedTextSectionModel tsModel;
 
-    PatternNeuron headlineTargetInputPN;
+    private PatternNeuron headlineTargetInputPN;
+    private PatternNeuron hintInputPN;
 
     public TextSectionInstance(TypedTextSectionModel tsModel) {
         this.tsModel = tsModel;
@@ -92,14 +93,15 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
     @Override
     protected void mapResults(Document doc) {
         getPhraseModel().getPatternNeuron().setTemplateOnly(false);
-
+/*
         TargetInput.setTemplateOnly(
                 lookupInstance(doc, tsModel.headlineEntity.targetInputPN),
                 lookupInstance(doc, tsModel.headlineEntity.targetInputBN),
                 true
         );
-
+*/
         headlineTargetInputPN = lookupInstance(doc, tsModel.headlineEntity.targetInputPN);
+        hintInputPN = lookupInstance(doc, tsModel.hintInputPN);
     }
 
     private void generateLabel(Activation tAct, Activation iAct, String label) {
@@ -119,11 +121,23 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
         return tAct.getLabel().contains("Hint");
     }
 
+    public PatternNeuron getHeadlineTargetInputPN() {
+        return headlineTargetInputPN;
+    }
+
+    public PatternNeuron getHintInputPN() {
+        return hintInputPN;
+    }
+
     @Override
     public void write(DataOutput out) throws IOException {
+        out.writeLong(headlineTargetInputPN.getId());
+        out.writeLong(hintInputPN.getId());
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
+        headlineTargetInputPN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        hintInputPN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }
