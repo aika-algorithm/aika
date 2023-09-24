@@ -55,7 +55,7 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
 
     private boolean optional;
 
-    private double sumOfLowerWeights;
+    private double[] sumOfLowerWeights = SULW_ZERO;
     protected boolean propagable;
 
     public ConjunctiveSynapse() {
@@ -120,12 +120,12 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
     }
 
     @Override
-    public double getSumOfLowerWeights() {
+    public double[] getSumOfLowerWeights() {
         return sumOfLowerWeights;
     }
 
-    public void setSumOfLowerWeights(double sumOfLowerWeights) {
-        if(!Utils.belowTolerance(TOLERANCE, this.sumOfLowerWeights - sumOfLowerWeights))
+    public void setSumOfLowerWeights(double[] sumOfLowerWeights) {
+        if(!Utils.belowTolerance(TOLERANCE, this.sumOfLowerWeights[0] - sumOfLowerWeights[0]))
             setModified();
 
         this.sumOfLowerWeights = sumOfLowerWeights;
@@ -149,7 +149,8 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         super.write(out);
 
         synapseBias.write(out);
-        out.writeDouble(sumOfLowerWeights);
+        out.writeDouble(sumOfLowerWeights[0]);
+        out.writeDouble(sumOfLowerWeights[1]);
         out.writeBoolean(propagable);
         out.writeBoolean(optional);
     }
@@ -159,7 +160,10 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         super.readFields(in, m);
 
         synapseBias.readFields(in, m);
-        sumOfLowerWeights = in.readDouble();
+        sumOfLowerWeights = new double[] {
+                in.readDouble(),
+                in.readDouble()
+        };
         propagable = in.readBoolean();
         optional = in.readBoolean();
     }

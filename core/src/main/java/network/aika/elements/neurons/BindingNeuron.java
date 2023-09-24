@@ -99,10 +99,4 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     public BindingCategorySynapse getCategoryOutputSynapse() {
         return getOutputSynapseByType(BindingCategorySynapse.class);
     }
-
-    public double getPreNetFeedbackUpperBoundWeightSum() {
-        return getInputSynapsesByType(BindingNeuronSynapse.class)
-                .mapToDouble(BindingNeuronSynapse::getPreNetDummyWeight)
-                .sum();
-    }
 }

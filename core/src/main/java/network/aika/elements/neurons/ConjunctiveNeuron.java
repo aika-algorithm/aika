@@ -94,14 +94,20 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
     public void updateSumOfLowerWeights() {
         ConjunctiveSynapse[] inputSynapses = sortInputSynapses();
 
-        double sum = bias.getUpdatedValue();
+        double sum = getCurrentCompleteBias();
+        double lastSum = sum;
         for(ConjunctiveSynapse s: inputSynapses) {
             double w = s.getWeight().getUpdatedValue();
             if(w <= 0.0)
                 continue;
 
-            s.setSumOfLowerWeights(sum);
+            s.setSumOfLowerWeights(new double[] {sum, lastSum});
+
+            lastSum = sum;
             sum += w;
+
+            if(!s.isLatentLinkingAllowed())
+                lastSum = sum;
 
             s.setPropagable(sum >= 0);
         }
@@ -128,12 +134,5 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
                 Comparator.comparingDouble(s -> s.getSortingWeight())
         );
         return inputsSynapses;
-    }
-
-    public double getDeltaBetweenTargetAndMax() {
-        return getInputSynapsesByType(ConjunctiveSynapse.class)
-                .filter(s -> !s.isNegative())
-                .mapToDouble(s -> s.getWeight().getValue() + s.getSynapseBias().getValue())
-                .sum();
     }
 }

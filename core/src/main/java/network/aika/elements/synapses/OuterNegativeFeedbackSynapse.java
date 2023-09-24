@@ -64,9 +64,4 @@ public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
     public boolean checkLinkingEvent(Activation act) {
         return true;
     }
-
-    @Override
-    public double getPropagatePreNet(OuterInhibitoryActivation iAct) {
-        return weight.getValue();
-    }
 }

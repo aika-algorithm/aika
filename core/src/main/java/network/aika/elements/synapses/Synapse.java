@@ -38,7 +38,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.queue.Phase.TRAINING;
@@ -51,6 +50,8 @@ import static network.aika.utils.Utils.TOLERANCE;
 public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neuron<O, OA>, L extends Link<S, IA, OA>, IA extends Activation<?>, OA extends Activation> implements Element, Writable {
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
+
+    protected static final double[] SULW_ZERO = new double[] {0.0, 0.0};
 
     protected int synapseId;
     protected NeuronProvider input;
@@ -82,7 +83,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return null;
     }
 
-    public abstract double getSumOfLowerWeights();
+    public abstract double[] getSumOfLowerWeights();
 
     public Field getOutputNetForBias(OA act) {
         return act.getDefaultNet();
@@ -122,26 +123,24 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
         createAndInitLink(iAct, oAct);
     }
-
-
-    public double getPropagatePreNet(IA iAct) {
-        return getOutput().getCurrentCompleteBias() +
-                getWeight().getUpdatedValue();
+    public static double getNetUB(Synapse synA, Synapse synB) {
+        if(synB != null)
+            return synA.getWeight().getUpdatedValue() + synB.getWeight().getUpdatedValue() +
+                    Math.min(
+                            synA.getSumOfLowerWeights()[0],
+                            synB.getSumOfLowerWeights()[0]
+                    );
+         else
+            return synA.getNetUB();
     }
 
-    public static double getLatentLinkingPreNet(Synapse synA, Synapse synB) {
-        double preUB = synA.getWeight().getUpdatedValue();
+    public double getNetUB() {
+        return getWeight().getUpdatedValue() + getSumOfLowerWeights()[isLatentLinkingAllowed() ? 1 : 0];
+    }
 
-        if(synB != null) {
-            preUB += synB.getWeight().getUpdatedValue() +
-                    Math.min(
-                            synA.getSumOfLowerWeights(),
-                            synB.getSumOfLowerWeights()
-                    );
-        } else
-            preUB += synA.getSumOfLowerWeights();
-
-        return preUB;
+    public double getNetUB(IA iAct) {
+        return (iAct.getValue().getUpdatedValue() * getWeight().getUpdatedValue()) +
+                getSumOfLowerWeights()[isLatentLinkingAllowed() ? 1 : 0];
     }
 
     public static Link getLatentLink(Synapse synA, Synapse synB, Activation iActA, Activation iActB) {
@@ -189,7 +188,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             getOutput()
                     .latentLinkOutgoing(this, act);
 
-        if (getPropagatePreNet(act) > 0.0) {
+        if (getNetUB(act) > 0.0) {
             propagate(act);
         }
     }

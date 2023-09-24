@@ -65,9 +65,4 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
     public boolean checkLinkingEvent(Activation act) {
         return true;
     }
-
-    @Override
-    public double getPropagatePreNet(PatternActivation iAct) {
-        return 0.0;
-    }
 }

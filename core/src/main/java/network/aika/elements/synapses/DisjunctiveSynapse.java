@@ -38,8 +38,8 @@ public abstract class DisjunctiveSynapse<
 {
 
     @Override
-    public double getSumOfLowerWeights() {
-        return 0.0;
+    public double[] getSumOfLowerWeights() {
+        return SULW_ZERO;
     }
 
     @Override

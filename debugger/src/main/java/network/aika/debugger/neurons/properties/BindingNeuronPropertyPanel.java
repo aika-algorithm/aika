@@ -33,8 +33,6 @@ public class BindingNeuronPropertyPanel<E extends BindingNeuron> extends Conjunc
 
     public BindingNeuronPropertyPanel(E n, Activation ref) {
         super(n, ref);
-
-        addConstant("PreNetUBDummyWeightSum: ", doubleToString(n.getPreNetFeedbackUpperBoundWeightSum()));
     }
 
     public static BindingNeuronPropertyPanel create(BindingNeuron n, Activation ref) {

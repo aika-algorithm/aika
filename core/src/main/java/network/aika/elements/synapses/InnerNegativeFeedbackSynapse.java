@@ -43,11 +43,6 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public double getPreNetDummyWeight() {
-        return weight.getValue();
-    }
-
-    @Override
     public Scope getScope() {
         return Scope.INPUT;
     }
@@ -71,10 +66,5 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
     public void linkAndPropagateOut(InnerInhibitoryActivation act) {
         getOutput()
                 .linkOutgoing(this, act);
-    }
-
-    @Override
-    public double getPropagatePreNet(InnerInhibitoryActivation iAct) {
-        return weight.getValue();
     }
 }

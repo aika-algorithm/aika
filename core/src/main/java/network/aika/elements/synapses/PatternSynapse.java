@@ -93,13 +93,6 @@ public class PatternSynapse extends ConjunctiveSynapse<
         getInput().delete();
     }
 
-    @Override
-    public double getPropagatePreNet(BindingActivation iAct) {
-        return getOutput().getBias().getValue() +
-                weight.getValue() +
-                getSumOfLowerWeights();
-    }
-
     public SampleSpace getSampleSpace() {
         return sampleSpace;
     }

@@ -109,10 +109,6 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
         return getOutputSynapseByType(PatternCategorySynapse.class);
     }
 
-    @Override
-    public void updateSumOfLowerWeights() {
-    }
-
     public SampleSpace getSampleSpace() {
         return sampleSpace;
     }
@@ -142,7 +138,6 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
         frequency *= alpha;
         setModified();
     }
-
 
     public double getFrequency() {
         return frequency;

@@ -48,11 +48,6 @@ public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse,
     }
 
     @Override
-    public double getPreNetDummyWeight() {
-        return weight.getValue();
-    }
-
-    @Override
     public boolean checkLinkingEvent(Activation act) {
         return true;
     }

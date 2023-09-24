@@ -49,7 +49,7 @@ import java.util.stream.Stream;
 
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.elements.synapses.Synapse.getLatentLinkingPreNet;
+import static network.aika.elements.synapses.Synapse.getNetUB;
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.queue.Phase.TRAINING;
@@ -190,7 +190,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         getInputSynapsesAsStream()
                 .filter(targetSyn -> sourceSyn != targetSyn)
                 .filter(Synapse::isLatentLinkingAllowed)
-                .filter(targetSyn -> getLatentLinkingPreNet(sourceSyn, targetSyn) > 0.0)
+                .filter(targetSyn -> getNetUB(sourceSyn, targetSyn) > 0.0)
                 .forEach(targetSyn ->
                         targetSyn.getOutput().startVisitor(
                                 new IncomingLinkingOperator(iActA, sourceSyn, null, targetSyn),
