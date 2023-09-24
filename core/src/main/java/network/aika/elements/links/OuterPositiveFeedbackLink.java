@@ -18,16 +18,12 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.synapses.InnerPositiveFeedbackSynapse;
 import network.aika.elements.synapses.OuterPositiveFeedbackSynapse;
 import network.aika.fields.AbstractFunction;
-import network.aika.fields.IdentityFunction;
+import network.aika.fields.Fields;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.pattern.PatternVisitor;
 
-import static network.aika.fields.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.mul;
-import static network.aika.fields.Fields.scale;
 
 /**
  *
@@ -35,18 +31,10 @@ import static network.aika.fields.Fields.scale;
  */
 public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiveFeedbackSynapse, PatternActivation> {
 
-    protected AbstractFunction inputGradient;
+    private AbstractFunction inputEntropy;
 
     public OuterPositiveFeedbackLink(OuterPositiveFeedbackSynapse s, PatternActivation input, BindingActivation output) {
         super(s, input, output);
-    }
-
-    @Override
-    protected void initInputValue() {
-        super.initInputValue();
-
-        if(input == null)
-            linkAndConnect(getThought().getFeedbackTrigger(), 0, inputValue);
     }
 
     @Override
@@ -55,27 +43,19 @@ public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiv
         synapse.initDummyLink(output);
     }
 
+    public AbstractFunction getInputEntropy() {
+        return inputEntropy;
+    }
+
     @Override
     protected void connectGradientFields() {
-        super.connectGradientFields();
+        if(input == null)
+            return;
 
-        inputGradient = new IdentityFunction(this, "input gradient");
-
-        scale(
-                this,
-                "updateValue = lr * in.grad * f'(out.net)",
-                getConfig().getLearnRate(output.getNeuron().isAbstract()),
-                mul(
-                        this,
-                        "in.gradient * f'(out.net)",
-                        inputGradient,
-                        output.getNetOuterGradient()
-                ),
-                output.getUpdateValue()
+        inputEntropy = Fields.scale(this, "-Entropy", -1,
+                input.getEntropy(),
+                output.getGradient()
         );
-
-        if(input != null)
-            linkAndConnect(input.getGradient(), 0, inputGradient);
     }
 
     @Override

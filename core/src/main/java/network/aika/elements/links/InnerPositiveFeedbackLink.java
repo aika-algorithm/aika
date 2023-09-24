@@ -40,14 +40,6 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     }
 
     @Override
-    protected void initInputValue() {
-        super.initInputValue();
-
-        if(input == null)
-            linkAndConnect(getThought().getFeedbackTrigger(), 0, inputValue);
-    }
-
-    @Override
     public void initFromTemplate(Link template) {
         super.initFromTemplate(template);
         synapse.initDummyLink(output);
