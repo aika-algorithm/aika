@@ -264,6 +264,8 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     public void prepareExampleDoc(Document doc, String label) {
         String headline = label + " " + HEADLINE_LABEL;
+        int offset = headline.length() + 1;
+        String txt = doc.getContent().substring(offset);
 
         GroundRef headlineGR = new GroundRef(
                 new Range(0, 2),
@@ -275,7 +277,14 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
         GroundRef textSectionGR = new GroundRef(
                 new Range(2, 4),
-                new Range(headline.length(), doc.length())
+                new Range(offset, doc.length())
+        );
+
+        doc.addToken(hintInputPN,
+                new GroundRef(
+                        new Range(2, 3),
+                        new Range(offset, offset + txt.indexOf(" "))
+                )
         );
 
         doc.addToken(beginInputPN, textSectionGR);

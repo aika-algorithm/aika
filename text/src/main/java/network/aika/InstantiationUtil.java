@@ -66,6 +66,7 @@ public abstract class InstantiationUtil<I extends InstantiationUtil> {
             doc.anneal();
             doc.process(MAX_ROUND, ANNEAL);
             doc.instantiateTemplates();
+            doc.process(MAX_ROUND, null);
 
             mapResults(doc);
         } catch(Exception e) {
