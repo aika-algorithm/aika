@@ -189,7 +189,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     public void latentLinkOutgoing(Synapse sourceSyn, Activation iActA) {
         getInputSynapsesAsStream()
                 .filter(targetSyn -> sourceSyn != targetSyn)
-                .filter(Synapse::isLatentLinkingAllowed)
+                .filter(targetSyn -> targetSyn.isLinkingAllowed(true))
                 .filter(targetSyn -> getNetUB(sourceSyn, targetSyn) > 0.0)
                 .forEach(targetSyn ->
                         targetSyn.getOutput().startVisitor(

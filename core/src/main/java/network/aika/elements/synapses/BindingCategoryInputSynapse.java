@@ -49,8 +49,8 @@ public class BindingCategoryInputSynapse extends BindingNeuronSynapse<
     }
 
     @Override
-    public boolean isLatentLinkingAllowed() {
-        return false;
+    public boolean isLinkingAllowed(boolean latent) {
+        return !latent;
     }
 
     @Override

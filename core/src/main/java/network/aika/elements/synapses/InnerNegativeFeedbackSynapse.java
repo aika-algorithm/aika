@@ -54,6 +54,11 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
+    public boolean isLinkingAllowed(boolean latent) {
+        return false;
+    }
+
+    @Override
     public InnerNegativeFeedbackLink createLink(InnerInhibitoryActivation input, BindingActivation output) {
         return new InnerNegativeFeedbackLink(this, input, output);
     }

@@ -111,7 +111,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return false;
     }
 
-    public boolean isLatentLinkingAllowed() {
+    public boolean isLinkingAllowed(boolean latent) {
         return true;
     }
 
@@ -140,12 +140,12 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public double getNetUB() {
-        return getWeight().getUpdatedValue() + getSumOfLowerWeights()[isLatentLinkingAllowed() ? 1 : 0];
+        return getWeight().getUpdatedValue() + getSumOfLowerWeights()[isLinkingAllowed(true) ? 1 : 0];
     }
 
     public double getNetUB(IA iAct) {
         return (getInputValue(iAct).getUpdatedValue() * getWeight().getUpdatedValue()) +
-                getSumOfLowerWeights()[isLatentLinkingAllowed() ? 1 : 0];
+                getSumOfLowerWeights()[isLinkingAllowed(true) ? 1 : 0];
     }
 
     public static Link getLatentLink(Synapse synA, Synapse synB, Activation iActA, Activation iActB) {
@@ -189,7 +189,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         getOutput()
                 .linkOutgoing(this, act);
 
-        if (isLatentLinkingAllowed())
+        if (isLinkingAllowed(true))
             getOutput()
                     .latentLinkOutgoing(this, act);
 

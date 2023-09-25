@@ -50,6 +50,11 @@ public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
+    public boolean isLinkingAllowed(boolean latent) {
+        return false;
+    }
+
+    @Override
     public OuterNegativeFeedbackLink createLink(OuterInhibitoryActivation input, BindingActivation output) {
         return new OuterNegativeFeedbackLink(this, input, output);
     }

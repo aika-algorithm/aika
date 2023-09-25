@@ -106,7 +106,7 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
             lastSum = sum;
             sum += w;
 
-            if(!s.isLatentLinkingAllowed())
+            if(!s.isLinkingAllowed(true))
                 lastSum = sum;
 
             s.setPropagable(sum >= 0);

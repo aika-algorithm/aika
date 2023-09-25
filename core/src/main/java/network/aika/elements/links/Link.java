@@ -184,7 +184,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void init() {
-        if(input != null)
+        if(input != null && synapse.isLinkingAllowed(false))
             addInputLinkingStep();
     }
 

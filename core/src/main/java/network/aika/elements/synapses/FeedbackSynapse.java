@@ -50,7 +50,7 @@ public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuro
     }
 
     @Override
-    public boolean isLatentLinkingAllowed() {
-        return false;
+    public boolean isLinkingAllowed(boolean latent) {
+        return !latent;
     }
 }
