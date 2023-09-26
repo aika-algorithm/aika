@@ -33,6 +33,8 @@ import org.graphstream.ui.graphicGraph.GraphicGraph;
 import org.graphstream.ui.view.camera.DefaultCamera2D;
 
 import java.awt.*;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -201,7 +203,11 @@ public class NeuronViewManager extends AbstractViewManager<Neuron, NeuronGraphMa
                 .map(NeuronProvider::getNeuron);
     }
 
-    public void dumpNetworkCoordinates() {
+    public void importNetworkLayout(DataInput in) {
+
+    }
+
+    public void exportNetworkLayout(DataOutput out) {
         System.out.println("Neurons: ");
 
         System.out.println("camera.setViewPercent(" + doubleToString(getCamera().getViewPercent()) + ");");

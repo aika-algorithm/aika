@@ -42,7 +42,6 @@ public class DebuggerKeyListener implements KeyListener {
         actions.put('r', new RAction());
         actions.put('b', new BAction());
         actions.put('l', new LAction());
-        actions.put('o', new OAction());
     }
 
     @Override
@@ -133,14 +132,6 @@ public class DebuggerKeyListener implements KeyListener {
             sm.setStepMode(true);
 //            debugger.getActivationViewManager().getConsoleManager().register();
             sm.click();
-        }
-    }
-
-    private class OAction implements KeyEventAction {
-        @Override
-        public void execute(ActivationViewManager avm) {
-            debugger.getActivationViewManager().dumpNetworkCoordinates();
-            debugger.getNeuronViewManager().dumpNetworkCoordinates();
         }
     }
 }

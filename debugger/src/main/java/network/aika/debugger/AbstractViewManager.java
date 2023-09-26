@@ -33,6 +33,8 @@ import org.graphstream.ui.view.camera.Camera;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -240,7 +242,9 @@ public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
         //     loop = false;
     }
 
-    public abstract void dumpNetworkCoordinates();
+    public abstract void importNetworkLayout(DataInput in);
+
+    public abstract void exportNetworkLayout(DataOutput out);
 
     public abstract void moveNodeGroup(Node n, int x, int y);
 }

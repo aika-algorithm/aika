@@ -39,6 +39,9 @@ import org.graphstream.ui.view.camera.DefaultCamera2D;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_X;
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
 import static network.aika.debugger.stepmanager.StepManager.When.*;
@@ -318,18 +321,23 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
         return doc;
     }
 
-    public void dumpNetworkCoordinates() {
+    public void importNetworkLayout(DataInput in) {
+
+    }
+
+
+    public void exportNetworkLayout(DataOutput out) {
         System.out.println("Activations: ");
 
         System.out.println("camera.setViewPercent(" + doubleToString(getCamera().getViewPercent()) + ");");
         System.out.println("camera.setViewCenter(" + doubleToString(getCamera().getViewCenter().x) + ", " + doubleToString(getCamera().getViewCenter().y) + ", 0);");
 
         doc.getActivations().forEach(act ->
-                dumpActivation(act)
+                exportActivationCoordinates(out, act)
         );
     }
 
-    private void dumpActivation(Activation act) {
+    private void exportActivationCoordinates(DataOutput out, Activation act) {
         ActivationParticle p = graphManager.getParticle(act);
         if(p != null && p.getPosition() != null) {
             System.out.println("coords.put(" + act.getId() + ", new double[]{" + doubleToString(p.getPosition().x) + ", " + doubleToString(p.getPosition().y) + "});");

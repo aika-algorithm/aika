@@ -31,6 +31,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -95,8 +96,14 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
             final JFileChooser fc = new JFileChooser();
             int returnVal = fc.showOpenDialog(this);
 
-            if(returnVal == JFileChooser.APPROVE_OPTION)
-                System.out.println(fc.getSelectedFile());
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                try(DataInputStream in = new DataInputStream(new FileInputStream(fc.getSelectedFile()))) {
+                    getActivationViewManager().importNetworkLayout(in);
+                    getNeuronViewManager().importNetworkLayout(in);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         });
 
         menu.add(menuItem);
@@ -107,8 +114,14 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
             final JFileChooser fc = new JFileChooser();
             int returnVal = fc.showSaveDialog(this);
 
-            if(returnVal == JFileChooser.APPROVE_OPTION)
-                System.out.println(fc.getSelectedFile());
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                try(DataOutputStream out = new DataOutputStream(new FileOutputStream(fc.getSelectedFile()))) {
+                    getActivationViewManager().exportNetworkLayout(out);
+                    getNeuronViewManager().exportNetworkLayout(out);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         });
 
         menu.add(menuItem);
