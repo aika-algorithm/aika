@@ -35,6 +35,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.DataInput;
 import java.io.DataOutput;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -242,9 +243,9 @@ public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
         //     loop = false;
     }
 
-    public abstract void importNetworkLayout(DataInput in);
+    public abstract void importNetworkLayout(DataInput in) throws IOException;
 
-    public abstract void exportNetworkLayout(DataOutput out);
+    public abstract void exportNetworkLayout(DataOutput out) throws IOException;
 
     public abstract void moveNodeGroup(Node n, int x, int y);
 }

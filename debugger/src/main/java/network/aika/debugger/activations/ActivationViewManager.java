@@ -41,6 +41,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.DataInput;
 import java.io.DataOutput;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_X;
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
@@ -321,29 +324,50 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
         return doc;
     }
 
-    public void importNetworkLayout(DataInput in) {
-
-    }
-
-
-    public void exportNetworkLayout(DataOutput out) {
-        System.out.println("Activations: ");
-
-        System.out.println("camera.setViewPercent(" + doubleToString(getCamera().getViewPercent()) + ");");
-        System.out.println("camera.setViewCenter(" + doubleToString(getCamera().getViewCenter().x) + ", " + doubleToString(getCamera().getViewCenter().y) + ", 0);");
-
-        doc.getActivations().forEach(act ->
-                exportActivationCoordinates(out, act)
+    public void importNetworkLayout(DataInput in) throws IOException {
+        getCamera().setViewPercent(in.readDouble());
+        getCamera().setViewCenter(
+                in.readDouble(),
+                in.readDouble(),
+                0.0
         );
+
+        HashMap<String, Activation> actMap = new HashMap<>();
+        doc.getActivations().stream().forEach(act ->
+                actMap.put(act.getClass().getSimpleName() + ":" + act.getLabel(), act)
+        );
+        while(in.readBoolean()) {
+            String label = in.readUTF();
+            String type = in.readUTF();
+            double x = in.readDouble();
+            double y = in.readDouble();
+
+            Activation act = actMap.get(type + ":" + label);
+            if(act != null) {
+                ActivationParticle p = graphManager.getParticle(act);
+                p.x = x;
+                p.y = y;
+            }
+        }
     }
 
-    private void exportActivationCoordinates(DataOutput out, Activation act) {
-        ActivationParticle p = graphManager.getParticle(act);
-        if(p != null && p.getPosition() != null) {
-            System.out.println("coords.put(" + act.getId() + ", new double[]{" + doubleToString(p.getPosition().x) + ", " + doubleToString(p.getPosition().y) + "});");
-        } else {
-            System.out.println("//coords.put(" + act.getId() + ", new double[]{ });");
+    public void exportNetworkLayout(DataOutput out) throws IOException {
+        out.writeDouble(getCamera().getViewPercent());
+        out.writeDouble(getCamera().getViewCenter().x);
+        out.writeDouble(getCamera().getViewCenter().y);
+
+        List<Activation> acts = doc.getActivations().stream().toList();
+        for(Activation act: acts) {
+            ActivationParticle p = graphManager.getParticle(act);
+            if(p != null && p.getPosition() != null) {
+                out.writeBoolean(true);
+                out.writeUTF(act.getLabel());
+                out.writeUTF(act.getClass().getSimpleName());
+                out.writeDouble(p.getPosition().x);
+                out.writeDouble(p.getPosition().y);
+             }
         }
+        out.writeBoolean(false);
     }
 
     @Override

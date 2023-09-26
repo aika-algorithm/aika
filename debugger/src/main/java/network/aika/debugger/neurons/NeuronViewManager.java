@@ -20,6 +20,8 @@ import network.aika.Model;
 import network.aika.debugger.AbstractGraphMouseManager;
 import network.aika.debugger.AbstractParticleLink;
 import network.aika.debugger.AbstractViewManager;
+import network.aika.debugger.activations.particles.ActivationParticle;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.neurons.Neuron;
@@ -35,7 +37,9 @@ import org.graphstream.ui.view.camera.DefaultCamera2D;
 import java.awt.*;
 import java.io.DataInput;
 import java.io.DataOutput;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -203,24 +207,50 @@ public class NeuronViewManager extends AbstractViewManager<Neuron, NeuronGraphMa
                 .map(NeuronProvider::getNeuron);
     }
 
-    public void importNetworkLayout(DataInput in) {
+    public void importNetworkLayout(DataInput in) throws IOException {
+        getCamera().setViewPercent(in.readDouble());
+        getCamera().setViewCenter(
+                in.readDouble(),
+                in.readDouble(),
+                0.0
+        );
 
+        HashMap<String, Neuron> neuronMap = new HashMap<>();
+        getNeurons().forEach(n ->
+                neuronMap.put(n.getClass().getSimpleName() + ":" + n.getLabel(), n)
+        );
+        while(in.readBoolean()) {
+            String label = in.readUTF();
+            String type = in.readUTF();
+            double x = in.readDouble();
+            double y = in.readDouble();
+
+            Neuron act = neuronMap.get(type + ":" + label);
+            if(act != null) {
+                NeuronParticle p = graphManager.getParticle(act);
+                p.x = x;
+                p.y = y;
+            }
+        }
     }
 
-    public void exportNetworkLayout(DataOutput out) {
-        System.out.println("Neurons: ");
+    public void exportNetworkLayout(DataOutput out) throws IOException {
+        out.writeDouble(getCamera().getViewPercent());
+        out.writeDouble(getCamera().getViewCenter().x);
+        out.writeDouble(getCamera().getViewCenter().y);
 
-        System.out.println("camera.setViewPercent(" + doubleToString(getCamera().getViewPercent()) + ");");
-        System.out.println("camera.setViewCenter(" + doubleToString(getCamera().getViewCenter().x) + ", " + doubleToString(getCamera().getViewCenter().y) + ", 0);");
-
-        getNeurons()
-                .forEach(n -> {
-                    NeuronParticle p = graphManager.getParticle(n);
-                    if(p != null) {
-                        System.out.println("coords.put(" + n.getId() + "l, new double[]{" + doubleToString(p.getPosition().x) + ", " + doubleToString(p.getPosition().y) + "});");
-                    }
-                }
-        );
+        List<Neuron> neurons = getNeurons().toList();
+        for(Neuron n: neurons) {
+            NeuronParticle p = graphManager.getParticle(n);
+            if(p != null && p.getPosition() != null) {
+                out.writeBoolean(true);
+                out.writeUTF(n.getLabel());
+                out.writeUTF(n.getClass().getSimpleName());
+                out.writeDouble(p.getPosition().x);
+                out.writeDouble(p.getPosition().y);
+            }
+        }
+        out.writeBoolean(false);
     }
 
     @Override
