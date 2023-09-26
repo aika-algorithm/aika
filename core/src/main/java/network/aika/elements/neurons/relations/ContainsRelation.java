@@ -34,21 +34,20 @@ import static network.aika.enums.direction.Direction.INPUT;
  *
  * @author Lukas Molzberger
  */
-public class ContainsRelationNeuron extends LatentRelationNeuron {
+public class ContainsRelation extends Relation {
 
     private Direction relationDir;
 
-    public ContainsRelationNeuron(Model m) {
-        super(m);
+    public ContainsRelation() {
     }
 
-    public ContainsRelationNeuron(Model m, String l, Direction relDir) {
-       super(m);
-
-        setLabel(l);
-        setAllowTraining(false);
-
+    public ContainsRelation(Direction relDir) {
         relationDir = relDir;
+    }
+
+    @Override
+    public int getRelationType() {
+        return 2;
     }
 
     @Override
@@ -77,14 +76,17 @@ public class ContainsRelationNeuron extends LatentRelationNeuron {
     @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
-
         relationDir.write(out);
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         super.readFields(in, m);
-
         relationDir = Direction.read(in);
+    }
+
+    @Override
+    public String toString() {
+        return "ContainsRelation: " + " " + relationDir;
     }
 }

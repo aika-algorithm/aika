@@ -17,25 +17,21 @@
 package network.aika.debugger.neurons.properties;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.relations.BeforeRelationNeuron;
-import network.aika.elements.neurons.relations.LatentRelationNeuron;
-
+import network.aika.elements.neurons.LatentRelationNeuron;
 
 /**
  * @author Lukas Molzberger
  */
-public class BeforeRelationNeuronPropertyPanel extends BindingNeuronPropertyPanel<BeforeRelationNeuron> {
+public class LatentRelationNeuronPropertyPanel extends BindingNeuronPropertyPanel<LatentRelationNeuron> {
 
-
-    public BeforeRelationNeuronPropertyPanel(BeforeRelationNeuron n, Activation ref) {
+    public LatentRelationNeuronPropertyPanel(LatentRelationNeuron n, Activation ref) {
         super(n, ref);
 
-        addConstant("Begin Offset: ", "" + n.getOffsetRange().getBegin());
-        addConstant("End Offset: ", "" + n.getOffsetRange().getEnd());
+        addConstant("Relation: ", "" + n.getRelation());
     }
 
-    public static BeforeRelationNeuronPropertyPanel create(BeforeRelationNeuron n, Activation ref) {
+    public static LatentRelationNeuronPropertyPanel create(LatentRelationNeuron n, Activation ref) {
 
-        return new BeforeRelationNeuronPropertyPanel(n, ref);
+        return new LatentRelationNeuronPropertyPanel(n, ref);
     }
 }

@@ -19,7 +19,7 @@ package network.aika.meta.entities;
 import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.EqualsRelationNeuron;
+import network.aika.elements.neurons.relations.EqualsRelation;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
@@ -70,7 +70,7 @@ public class EntityModel implements TemplateModel, Writable {
 
     protected BindingNeuron targetInputBN;
 
-    protected EqualsRelationNeuron relEquals;
+    protected LatentRelationNeuron relEquals;
 
 
     public EntityModel(PhraseModel pm) {
@@ -132,8 +132,12 @@ public class EntityModel implements TemplateModel, Writable {
                 NEG_MARGIN * -entityBN.getTargetNet()
         );
 
-        relEquals = new EqualsRelationNeuron(model, true, true, "Equals Rel.: ")
+        relEquals = new LatentRelationNeuron(
+                model,
+                new EqualsRelation(true, true)
+        )
                 .setBias(5.0)
+                .setLabel("Equals Rel.: ")
                 .setPersistent(true);
 
         targetInputBN = targetInput.createTargetInputBindingNeuron(entityBN, entityPattern, relEquals);

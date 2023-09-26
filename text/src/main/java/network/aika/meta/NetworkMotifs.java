@@ -16,7 +16,7 @@
  */
 package network.aika.meta;
 
-import network.aika.elements.neurons.relations.LatentRelationNeuron;
+import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.*;
 import org.slf4j.Logger;

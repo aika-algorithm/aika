@@ -19,7 +19,7 @@ package network.aika.meta.textsections;
 import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.LatentRelationNeuron;
+import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.meta.entities.EntityInstance;
 import network.aika.meta.entities.EntityModel;
 import network.aika.text.Document;

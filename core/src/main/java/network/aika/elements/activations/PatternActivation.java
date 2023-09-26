@@ -19,7 +19,7 @@ package network.aika.elements.activations;
 import network.aika.Thought;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.relations.LatentRelationNeuron;
+import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.PatternNeuron;

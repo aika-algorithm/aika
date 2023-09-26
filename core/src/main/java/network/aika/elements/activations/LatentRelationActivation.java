@@ -17,7 +17,7 @@
 package network.aika.elements.activations;
 
 import network.aika.Thought;
-import network.aika.elements.neurons.relations.LatentRelationNeuron;
+import network.aika.elements.neurons.LatentRelationNeuron;
 
 
 /**

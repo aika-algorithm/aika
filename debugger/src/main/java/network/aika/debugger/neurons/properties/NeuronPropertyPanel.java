@@ -44,6 +44,8 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
             addConstant("Target Value: ", "" + Utils.doubleToString(n.getTargetValue()));
         }
 
+        addConstant("Activation Function: ", "" + n.getActivationFunction().name());
+
         addConstant("Is Abstract: ", "" + n.isAbstract());
         addConstant("Is Training Allowed: ", "" + n.isTrainingAllowed());
 

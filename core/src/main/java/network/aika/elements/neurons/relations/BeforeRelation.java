@@ -35,26 +35,23 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  *
  * @author Lukas Molzberger
  */
-public class BeforeRelationNeuron extends LatentRelationNeuron {
+public class BeforeRelation extends Relation {
 
     private Direction relDirection;
 
     private Range offsetRange;
 
-
-    public BeforeRelationNeuron(Model m) {
-        super(m);
+    public BeforeRelation() {
     }
 
-    public BeforeRelationNeuron(Model m, Direction relDirection, Range offsetRange, String l) {
-        super(m);
-
-        setLabel(l);
-
+    public BeforeRelation(Direction relDirection, Range offsetRange) {
         this.offsetRange = offsetRange;
         this.relDirection = relDirection;
+    }
 
-        setAllowTraining(false);
+    @Override
+    public int getRelationType() {
+        return 1;
     }
 
     @Override
@@ -94,7 +91,6 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
     @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
-
         out.writeBoolean(relDirection == INPUT);
         offsetRange.write(out);
     }
@@ -102,8 +98,12 @@ public class BeforeRelationNeuron extends LatentRelationNeuron {
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         super.readFields(in, m);
-
         relDirection = in.readBoolean() ? INPUT : OUTPUT;
         offsetRange.readFields(in, m);
+    }
+
+    @Override
+    public String toString() {
+        return "BeforeRelation: " + offsetRange + " " + relDirection;
     }
 }

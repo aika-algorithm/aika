@@ -18,9 +18,10 @@ package network.aika.debugger.neurons.properties;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.relations.BeforeRelationNeuron;
-import network.aika.elements.neurons.relations.ContainsRelationNeuron;
-import network.aika.elements.neurons.relations.EqualsRelationNeuron;
+import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.neurons.relations.BeforeRelation;
+import network.aika.elements.neurons.relations.ContainsRelation;
+import network.aika.elements.neurons.relations.EqualsRelation;
 
 import static network.aika.utils.Utils.doubleToString;
 
@@ -30,18 +31,13 @@ import static network.aika.utils.Utils.doubleToString;
  */
 public class BindingNeuronPropertyPanel<E extends BindingNeuron> extends ConjunctiveNeuronPropertyPanel<E> {
 
-
     public BindingNeuronPropertyPanel(E n, Activation ref) {
         super(n, ref);
     }
 
     public static BindingNeuronPropertyPanel create(BindingNeuron n, Activation ref) {
-        if(n instanceof BeforeRelationNeuron) {
-            return BeforeRelationNeuronPropertyPanel.create((BeforeRelationNeuron) n, ref);
-        } else if(n instanceof EqualsRelationNeuron) {
-            return EqualsRelationNeuronPropertyPanel.create((EqualsRelationNeuron) n, ref);
-        } else if(n instanceof ContainsRelationNeuron) {
-            return ContainsRelationNeuronPropertyPanel.create((ContainsRelationNeuron) n, ref);
+        if(n instanceof LatentRelationNeuron) {
+            return LatentRelationNeuronPropertyPanel.create((LatentRelationNeuron) n, ref);
         }
 
         return new BindingNeuronPropertyPanel(n, ref);

@@ -18,9 +18,9 @@ package network.aika.meta.sequences;
 
 import network.aika.Model;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.ContainsRelationNeuron;
-import network.aika.elements.neurons.relations.LatentRelationNeuron;
-import network.aika.elements.neurons.relations.BeforeRelationNeuron;
+import network.aika.elements.neurons.relations.ContainsRelation;
+import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.neurons.relations.BeforeRelation;
 import network.aika.meta.Dictionary;
 import network.aika.text.Range;
 import network.aika.utils.Writable;
@@ -55,10 +55,10 @@ public abstract class SequenceModel implements Writable {
 
     protected Dictionary dictionary;
 
-    public BeforeRelationNeuron relPT;
-    public BeforeRelationNeuron relNT;
+    public LatentRelationNeuron relPT;
+    public LatentRelationNeuron relNT;
 
-    protected ContainsRelationNeuron relContains;
+    protected LatentRelationNeuron relContains;
 
     public OuterInhibitoryNeuron outerInhibitoryN;
 
@@ -116,11 +116,11 @@ public abstract class SequenceModel implements Writable {
         return model;
     }
 
-    public BeforeRelationNeuron getRelationPreviousToken() {
+    public LatentRelationNeuron getRelationPreviousToken() {
         return relPT;
     }
 
-    public BeforeRelationNeuron getRelationNextToken() {
+    public LatentRelationNeuron getRelationNextToken() {
         return relNT;
     }
 
@@ -139,20 +139,24 @@ public abstract class SequenceModel implements Writable {
     public abstract String getPatternType();
 
     public void initStaticNeurons() {
-        relPT = new BeforeRelationNeuron(
+        relPT = new LatentRelationNeuron(
                 model,
+                new BeforeRelation(
                         INPUT,
-                        new Range(0, 0),
-                        "Prev. Token Rel.: -1,-1"
+                        new Range(0, 0)
                 )
+        )
+                .setLabel("Prev. Token Rel.: -1,-1")
                 .setBias(5.0);
 
-        relNT = new BeforeRelationNeuron(
+        relNT = new LatentRelationNeuron(
                 model,
+                new BeforeRelation(
                         OUTPUT,
-                        new Range(0, 0),
-                        "Next. Token Rel.: 1,1"
+                        new Range(0, 0)
                 )
+        )
+                .setLabel("Next. Token Rel.: 1,1")
                 .setBias(5.0);
 
         initTemplates();
@@ -181,7 +185,11 @@ public abstract class SequenceModel implements Writable {
 
         log.info(getPatternType() + " Pattern: netTarget:" + PATTERN_NET_TARGET);
 
-        relContains = new ContainsRelationNeuron(model, "Contains Rel.: ", OUTPUT)
+        relContains = new LatentRelationNeuron(
+                model,
+                new ContainsRelation(OUTPUT)
+        )
+                .setLabel("Contains Rel.: ")
                 .setBias(5.0)
                 .setTargetNet(5.0);
 

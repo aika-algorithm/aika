@@ -75,11 +75,11 @@ public class RelationBindingVisitor extends BindingVisitor {
         if(operator.getStartSynapse().getRelationSynId() != null)
             relations = relations.filter(s -> s.getSynapseId() == operator.getStartSynapse().getRelationSynId());
 
-        relations.forEach(rel ->
-                rel.getInput()
+        relations.forEach(relSyn ->
+                relSyn.getInput().getRelation()
                         .evaluateLatentRelation(downBindingSource, getRelationDir().invert())
                         .forEach(relTokenAct ->
-                                up(downBindingSource, relTokenAct, rel, depth)
+                                up(downBindingSource, relTokenAct, relSyn, depth)
                         )
         );
     }

@@ -20,7 +20,6 @@ import network.aika.Model;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.neurons.relations.EqualsRelationNeuron;
 import network.aika.meta.entities.EntityModel;
 import network.aika.text.Document;
 import network.aika.utils.Writable;

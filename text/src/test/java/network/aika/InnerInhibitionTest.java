@@ -36,7 +36,7 @@ import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.BeforeRelationNeuron;
+import network.aika.elements.neurons.relations.BeforeRelation;
 import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.text.Document;
 import network.aika.text.Range;
@@ -85,12 +85,14 @@ public class InnerInhibitionTest {
         BindingNeuron na = addBindingNeuronInner(m,  "A", 2.5, inA, inhib, patternN);
         BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
-        BeforeRelationNeuron relPT = new BeforeRelationNeuron(
+        LatentRelationNeuron relPT = new LatentRelationNeuron(
                 m,
-                INPUT,
-                new Range(-300, 0),
-                "relPT"
-        );
+                new BeforeRelation(
+                        INPUT,
+                        new Range(-300, 0)
+                )
+        )
+                .setLabel("relPT");
 
         addRelation(na, nx, relPT, 5.0, 10.0, false);
 
@@ -151,12 +153,14 @@ public class InnerInhibitionTest {
         BindingNeuron nc = addBindingNeuronInner(m, "C", 2.7, inC, inhib, patternN);
         BindingNeuron nx = addBindingNeuronInner(m,  "X", 2.5, inX, null, patternN);
 
-        BeforeRelationNeuron relPT = new BeforeRelationNeuron(
+        LatentRelationNeuron relPT = new LatentRelationNeuron(
                 m,
+                new BeforeRelation(
                 INPUT,
-                new Range(-300, 0),
-                "relPT"
-        );
+                new Range(-300, 0)
+        )
+        )
+                .setLabel("relPT");
 
         addRelation(na, nx, relPT, 5.0, 10.0, false);
         addRelation(nb, nx, relPT, 5.0, 10.0, false);

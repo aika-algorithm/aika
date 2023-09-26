@@ -17,8 +17,8 @@
 package network.aika;
 
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.LatentRelationNeuron;
-import network.aika.elements.neurons.relations.BeforeRelationNeuron;
+import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.neurons.relations.BeforeRelation;
 import network.aika.elements.synapses.*;
 import network.aika.meta.Dictionary;
 import network.aika.text.Document;
@@ -60,12 +60,13 @@ public class JacksonCookTest {
         PatternNeuron jacksonIN = dict.lookupInputToken("Jackson");
         PatternNeuron cookIN = dict.lookupInputToken("Cook");
 
-        LatentRelationNeuron relPT = new BeforeRelationNeuron(
-                m,
-                INPUT,
-                new Range(0, 0),
-                "relPT"
-        );
+        LatentRelationNeuron relPT = new LatentRelationNeuron(m,
+                new BeforeRelation(
+                        INPUT,
+                        new Range(0, 0)
+                )
+        )
+                .setLabel("relPT");
 
         BindingNeuron forenameBN = new BindingNeuron(m)
                 .setLabel("forename (person name)");

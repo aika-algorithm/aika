@@ -17,8 +17,8 @@
 package network.aika;
 
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.LatentRelationNeuron;
-import network.aika.elements.neurons.relations.BeforeRelationNeuron;
+import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.neurons.relations.BeforeRelation;
 import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SameObjectSynapse;
@@ -64,12 +64,14 @@ public class ABCDTest {
         BindingNeuron a_abBN = new BindingNeuron(m).setLabel("a (ab)");
         BindingNeuron b_abBN = new BindingNeuron(m).setLabel("b (ab)");
 
-        LatentRelationNeuron relPT = new BeforeRelationNeuron(
+        LatentRelationNeuron relPT = new LatentRelationNeuron(
                 m,
-                INPUT,
-                new Range(0, 0),
-                "relPT"
-        );
+                new BeforeRelation(
+                        INPUT,
+                        new Range(0, 0)
+                )
+        )
+                .setLabel("relPT");
 
         new RelationInputSynapse()
                 .setWeight(10.0)

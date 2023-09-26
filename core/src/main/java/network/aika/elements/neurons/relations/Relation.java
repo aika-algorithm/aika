@@ -17,39 +17,48 @@
 package network.aika.elements.neurons.relations;
 
 import network.aika.Model;
-import network.aika.Thought;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.neurons.BindingNeuron;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.SumField;
-import network.aika.elements.activations.LatentRelationActivation;
+import network.aika.utils.Writable;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.stream.Stream;
-
-import static network.aika.queue.Phase.TRAINING;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class LatentRelationNeuron extends BindingNeuron {
-
+public abstract class Relation implements Writable {
 
     public abstract Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir);
 
-    public LatentRelationNeuron(Model m) {
-        super(m);
+    public abstract int getRelationType();
+
+    public static Relation read(DataInput in, Model m) throws Exception {
+        Relation rel = null;
+        switch (in.readInt()) {
+            case 1:
+                rel = new BeforeRelation();
+                break;
+            case 2:
+                rel = new ContainsRelation();
+                break;
+            case 3:
+                rel = new EqualsRelation();
+                break;
+        }
+        rel.readFields(in, m);
+        return rel;
     }
 
     @Override
-    protected SumField initBias() {
-        return new SumField(this, "bias", TOLERANCE)
-                .setQueued(getThought(), TRAINING);
+    public void write(DataOutput out) throws IOException {
+        out.writeInt(getRelationType());
     }
 
     @Override
-    public LatentRelationActivation createActivation(Thought t) {
-        return new LatentRelationActivation(t.createActivationId(), t, this);
+    public void readFields(DataInput in, Model m) throws Exception {
     }
 }

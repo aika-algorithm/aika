@@ -34,9 +34,9 @@ public class ConjunctiveNeuronPropertyPanel<E extends ConjunctiveNeuron> extends
 
     public static ConjunctiveNeuronPropertyPanel create(ConjunctiveNeuron n, Activation ref) {
         if(n instanceof BindingNeuron) {
-            return new BindingNeuronPropertyPanel((BindingNeuron) n, ref);
+            return BindingNeuronPropertyPanel.create((BindingNeuron) n, ref);
         } else if(n instanceof PatternNeuron) {
-            return new PatternNeuronPropertyPanel((PatternNeuron) n, ref);
+            return PatternNeuronPropertyPanel.create((PatternNeuron) n, ref);
         }
 
         return new ConjunctiveNeuronPropertyPanel(n, ref);

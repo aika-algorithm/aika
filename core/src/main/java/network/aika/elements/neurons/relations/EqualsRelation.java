@@ -35,25 +35,24 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  *
  * @author Lukas Molzberger
  */
-public class EqualsRelationNeuron extends LatentRelationNeuron {
+public class EqualsRelation extends Relation {
 
     boolean compareBegin;
     boolean compareEnd;
 
-    public EqualsRelationNeuron(Model m) {
-        super(m);
+    public EqualsRelation() {
     }
 
-    public EqualsRelationNeuron(Model m, boolean compareBegin, boolean compareEnd, String l) {
-        super(m);
-
-        setLabel(l);
-        setAllowTraining(false);
-
+    public EqualsRelation(boolean compareBegin, boolean compareEnd) {
         this.compareBegin = compareBegin;
         this.compareEnd = compareEnd;
 
         assert compareBegin || compareEnd;
+    }
+
+    @Override
+    public int getRelationType() {
+        return 3;
     }
 
     public boolean isCompareBegin() {
@@ -93,7 +92,6 @@ public class EqualsRelationNeuron extends LatentRelationNeuron {
     @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
-
         out.writeBoolean(compareBegin);
         out.writeBoolean(compareEnd);
     }
@@ -101,8 +99,12 @@ public class EqualsRelationNeuron extends LatentRelationNeuron {
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         super.readFields(in, m);
-
         compareBegin = in.readBoolean();
         compareEnd = in.readBoolean();
+    }
+
+    @Override
+    public String toString() {
+        return "EqualsRelation: " + " compareBegin:" + compareBegin + " compareEnd:" + compareEnd;
     }
 }

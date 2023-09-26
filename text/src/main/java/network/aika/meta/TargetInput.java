@@ -18,7 +18,7 @@ package network.aika.meta;
 
 import network.aika.Model;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.LatentRelationNeuron;
+import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.text.Document;
 
 import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;

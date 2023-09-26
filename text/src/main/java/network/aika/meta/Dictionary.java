@@ -39,7 +39,7 @@ public class Dictionary {
 
     private static final Logger log = LoggerFactory.getLogger(Dictionary.class);
 
-    public static final double INPUT_TOKEN_NET_TARGET = 5.0;
+    public static final double INPUT_TOKEN_NET_TARGET = 1.0;
 
     protected Model model;
 
@@ -87,7 +87,7 @@ public class Dictionary {
 
         double surprisal = s.getInput().getSurprisal(Sign.POS, r, false);
 
-        double weight = 1.0 + (-0.1 * surprisal);
+        double weight = 0.8 + (-0.1 * surprisal);
         s.setWeight(weight);
 
         if(log.isDebugEnabled())

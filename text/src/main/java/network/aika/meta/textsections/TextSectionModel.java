@@ -19,7 +19,7 @@ package network.aika.meta.textsections;
 import network.aika.Model;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.BeforeRelationNeuron;
+import network.aika.elements.neurons.relations.BeforeRelation;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
 import network.aika.text.Range;
@@ -62,10 +62,10 @@ public class TextSectionModel implements Writable {
     protected Model model;
 
 
-    protected BeforeRelationNeuron beginEndRelation;
+    protected LatentRelationNeuron beginEndRelation;
 
-    protected BeforeRelationNeuron relationPT;
-    protected BeforeRelationNeuron relationNT;
+    protected LatentRelationNeuron relationPT;
+    protected LatentRelationNeuron relationNT;
 
     protected PatternNeuron patternN;
 
@@ -108,32 +108,38 @@ public class TextSectionModel implements Writable {
     public void initStaticNeurons() {
         log.info(TEXT_SECTION_LABEL);
 
-        beginEndRelation = new BeforeRelationNeuron(
+        beginEndRelation = new LatentRelationNeuron(
                 model,
+                new BeforeRelation(
                 OUTPUT,
-                new Range(-300, 0),
-                "Begin-End Relation"
+                new Range(-300, 0)
+                )
         )
+                .setLabel("Begin-End Relation")
                 .setBias(5.0)
                 .setTargetNet(5.0)
                 .setPersistent(true);
 
-        relationPT = new BeforeRelationNeuron(
-                        model,
+        relationPT = new LatentRelationNeuron(
+                model,
+                new BeforeRelation(
                         INPUT,
-                        new Range(-300, 0),
-                        "Prev. Token Rel.: -300, -0"
+                        new Range(-300, 0)
                 )
+        )
+                .setLabel("Prev. Token Rel.: -300, -0")
                 .setBias(5.0)
                 .setTargetNet(5.0)
                 .setPersistent(true);
 
-        relationNT = new BeforeRelationNeuron(
-                        model,
+        relationNT = new LatentRelationNeuron(
+                model,
+                new BeforeRelation(
                         OUTPUT,
-                        new Range(0, 300),
-                        "Next. Token Rel.: 0, 300"
+                        new Range(0, 300)
                 )
+        )
+                .setLabel("Next. Token Rel.: 0, 300")
                 .setBias(5.0)
                 .setTargetNet(5.0)
                 .setPersistent(true);
