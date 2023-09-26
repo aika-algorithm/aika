@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
+import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
+
 /**
  *
  * @author Lukas Molzberger
@@ -39,7 +41,7 @@ public class Dictionary {
 
     private static final Logger log = LoggerFactory.getLogger(Dictionary.class);
 
-    public static final double INPUT_TOKEN_NET_TARGET = 1.0;
+    public static final double INPUT_TOKEN_NET_TARGET = 2.0;
 
     protected Model model;
 
@@ -58,7 +60,7 @@ public class Dictionary {
         inputToken = new PatternNeuron(model)
                 .setLabel("Input Token")
                 .setBias(INPUT_TOKEN_NET_TARGET)
-                .setTargetNet(INPUT_TOKEN_NET_TARGET);
+                .setTargetNet(1.0 + RECTIFIED_HYPERBOLIC_TANGENT.f(INPUT_TOKEN_NET_TARGET));
 
         inputToken.makeAbstract()
                 .setWeight(1.0)
