@@ -20,8 +20,6 @@ import network.aika.Model;
 import network.aika.debugger.AbstractGraphMouseManager;
 import network.aika.debugger.AbstractParticleLink;
 import network.aika.debugger.AbstractViewManager;
-import network.aika.debugger.activations.particles.ActivationParticle;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.neurons.Neuron;

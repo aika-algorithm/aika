@@ -48,7 +48,6 @@ import java.util.List;
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_X;
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
 import static network.aika.debugger.stepmanager.StepManager.When.*;
-import static network.aika.utils.Utils.doubleToString;
 
 /**
  * @author Lukas Molzberger
