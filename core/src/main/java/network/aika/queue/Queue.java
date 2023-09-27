@@ -87,7 +87,7 @@ public class Queue {
 
     public void process(int maxRound, Phase maxPhase) {
         while (!queue.isEmpty()) {
-            if(checkMaxPhaseReached(maxRound, maxPhase))
+            if(checkMaxPhaseReached(maxRound, maxPhase, true))
                 break;
 
             currentStep = queue.pollFirstEntry().getValue();
@@ -105,6 +105,16 @@ public class Queue {
         }
     }
 
+    public void skip(int maxRound, Phase maxPhase) {
+        while (!queue.isEmpty()) {
+            if(checkMaxPhaseReached(maxRound, maxPhase, false))
+                break;
+
+            currentStep = queue.pollFirstEntry().getValue();
+            currentStep.removeQueueKey();
+        }
+    }
+
     public void queueEvent(EventType et, Step s) {
 
     }
@@ -117,7 +127,7 @@ public class Queue {
     }
 
 
-    private boolean checkMaxPhaseReached(int maxRound, Phase maxPhase) {
+    private boolean checkMaxPhaseReached(int maxRound, Phase maxPhase, boolean incl) {
         QueueKey fe = queue.firstEntry().getKey();
         if(fe.getRound() > maxRound)
             return true;
@@ -125,6 +135,9 @@ public class Queue {
         if(maxPhase == null)
             return false;
 
-        return maxPhase.compareTo(fe.getPhase()) < 0;
+        int r = maxPhase.compareTo(fe.getPhase());
+        return incl ?
+                r < 0 :
+                r <= 0;
     }
 }

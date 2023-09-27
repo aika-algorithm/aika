@@ -16,10 +16,8 @@
  */
 package network.aika.parser;
 
-import network.aika.Config;
 import network.aika.callbacks.InstantiationCallback;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.synapses.Synapse;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +56,12 @@ public abstract class TrainingParser<C extends Context> extends Parser<C> implem
 
         try {
             infer(doc, context, phase);
-            anneal(doc);
-            train(doc);
+
+            if(phase == TRAINING)
+                train(doc);
+
+            doc.postProcessing();
+            doc.updateModel();
         } catch(Exception e) {
             log.warn("Error while training:", e);
         } finally {
@@ -71,16 +73,11 @@ public abstract class TrainingParser<C extends Context> extends Parser<C> implem
 
     protected void train(Document doc) {
         waitForClick(debugger);
-
         doc.instantiateTemplates();
 
         waitForClick(debugger);
-
         doc.train();
 
         waitForClick(debugger);
-
-        doc.postProcessing();
-        doc.updateModel();
     }
 }

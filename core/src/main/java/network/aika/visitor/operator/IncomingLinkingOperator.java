@@ -16,7 +16,6 @@
  */
 package network.aika.visitor.operator;
 
-import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
@@ -64,6 +63,6 @@ public class IncomingLinkingOperator extends LinkingOperator {
 
         Link l = link(sourceAct, sourceSyn, sourceLink, act, targetSyn);
         if (l != null)
-            v.createRelation(l);
+            v.createLatentRelation(l);
     }
 }

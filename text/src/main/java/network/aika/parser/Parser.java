@@ -17,15 +17,15 @@
 package network.aika.parser;
 
 
-import network.aika.Config;
 import network.aika.debugger.AIKADebugger;
 import network.aika.meta.sequences.SequenceModel;
+import network.aika.queue.Phase;
 import network.aika.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import static network.aika.parser.ParserPhase.TRAINING;
+import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.queue.Phase.ANNEAL;
 import static network.aika.queue.Phase.INFERENCE;
 import static network.aika.queue.keys.QueueKey.MAX_ROUND;
@@ -51,7 +51,6 @@ public abstract class Parser<C extends Context> {
 
         try {
             infer(doc, context, phase);
-            anneal(doc);
         } catch(Exception e) {
             log.warn("Error while training:", e);
         } finally {
@@ -66,7 +65,13 @@ public abstract class Parser<C extends Context> {
 
         prepareInputs(doc, context);
 
+        if(phase == COUNTING) {
+            doc.skip(Integer.MAX_VALUE, Phase.COUNTING);
+            return;
+        }
+
         doc.process(MAX_ROUND, INFERENCE);
+        anneal(doc);
     }
 
     protected abstract void prepareInputs(Document doc, C context);

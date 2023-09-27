@@ -45,6 +45,6 @@ public abstract class LinkingVisitor<T extends Activation> extends Visitor<T> {
         return bindingSource != null;
     }
 
-    public void createRelation(Link l) {
+    public void createLatentRelation(Link l) {
     }
 }
