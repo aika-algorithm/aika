@@ -78,10 +78,10 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
         return new BindingCategorySynapse();
     }
 
-    public List<RelationInputSynapse> findLatentRelationNeurons() {
+    public List<BindingNeuronSynapse> getSynapsesWithRelations() {
         return getInputSynapsesAsStream()
-                .filter(s -> s instanceof RelationInputSynapse)
-                .map(s -> (RelationInputSynapse) s)
+                .map(BindingNeuronSynapse.class::cast)
+                .filter(s -> s.getRelation() != null)
                 .toList();
     }
 

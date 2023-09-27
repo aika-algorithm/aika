@@ -21,6 +21,7 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.BindingNeuronLink;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.relations.Relation;
 
 /**
  *
@@ -36,4 +37,11 @@ public abstract class BindingNeuronSynapse<S extends BindingNeuronSynapse, I ext
                 BindingActivation
                 >
 {
+    public Relation getRelation() {
+        return null;
+    }
+
+    public RelationInputSynapse getRelationInputSynapse() {
+        return null;
+    }
 }

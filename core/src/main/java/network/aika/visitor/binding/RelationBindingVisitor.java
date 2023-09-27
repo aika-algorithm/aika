@@ -18,6 +18,7 @@ package network.aika.visitor.binding;
 
 import network.aika.Thought;
 import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.synapses.BindingNeuronSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.activations.BindingActivation;
@@ -70,16 +71,16 @@ public class RelationBindingVisitor extends BindingVisitor {
     @Override
     public void expandRelations(PatternActivation downBindingSource, int depth) {
         BindingNeuron bn = (BindingNeuron) operator.getStartSynapse().getOutput();
-        Stream<RelationInputSynapse> relations = bn.findLatentRelationNeurons().stream();
+        Stream<BindingNeuronSynapse> relationSyns = bn.getSynapsesWithRelations().stream();
 
         if(operator.getStartSynapse().getRelationSynId() != null)
-            relations = relations.filter(s -> s.getSynapseId() == operator.getStartSynapse().getRelationSynId());
+            relationSyns = relationSyns.filter(s -> s == operator.getStartSynapse());
 
-        relations.forEach(relSyn ->
-                relSyn.getInput().getRelation()
+        relationSyns.forEach(relSyn ->
+                relSyn.getRelation()
                         .evaluateLatentRelation(downBindingSource, getRelationDir().invert())
                         .forEach(relTokenAct ->
-                                up(downBindingSource, relTokenAct, relSyn, depth)
+                                up(downBindingSource, relTokenAct, relSyn.getRelationInputSynapse(), depth)
                         )
         );
     }

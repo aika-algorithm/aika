@@ -105,7 +105,10 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return neuron;
     }
 
-    public Synapse getSynapseBySynId(int synId) {
+    public Synapse getSynapseBySynId(Integer synId) {
+        if(synId == null)
+            return null;
+
         return inputSynapsesBySynId.get(synId);
     }
 

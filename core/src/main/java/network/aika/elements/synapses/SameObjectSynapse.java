@@ -17,6 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.neurons.relations.Relation;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.SameObjectLink;
@@ -27,7 +28,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * The Same Pattern Binding Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
+ * The Same Object Binding Neuron Synapse is an inner synapse between two binding neurons of the same object.
  *
  * @author Lukas Molzberger
  */
@@ -47,6 +48,20 @@ public class SameObjectSynapse extends BindingNeuronSynapse<
 
     public void setRelationSynId(Integer relationSynId) {
         this.relationSynId = relationSynId;
+    }
+
+    @Override
+    public Relation getRelation() {
+        RelationInputSynapse ris = getRelationInputSynapse();
+        if(ris == null)
+            return null;
+
+        return ris.getInput().getRelation();
+    }
+
+    @Override
+    public RelationInputSynapse getRelationInputSynapse() {
+        return (RelationInputSynapse) output.getSynapseBySynId(relationSynId);
     }
 
     @Override
