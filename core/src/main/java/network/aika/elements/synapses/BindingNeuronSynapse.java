@@ -37,10 +37,6 @@ public abstract class BindingNeuronSynapse<S extends BindingNeuronSynapse, I ext
                 BindingActivation
                 >
 {
-    public Relation getRelation() {
-        return null;
-    }
-
     public RelationInputSynapse getRelationInputSynapse() {
         return null;
     }

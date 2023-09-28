@@ -41,7 +41,6 @@ public class SameObjectSynapse extends BindingNeuronSynapse<
 {
     private Integer relationSynId;
 
-    @Override
     public Integer getRelationSynId() {
         return relationSynId;
     }

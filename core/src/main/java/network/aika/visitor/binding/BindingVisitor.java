@@ -47,7 +47,7 @@ public class BindingVisitor extends LinkingVisitor<PatternActivation> {
     }
 
     public boolean compatible(Synapse from, Synapse to) {
-        return to.getRelationSynId() == null;
+        return to.getRelation() == null;
     }
 
     public void visit(Link l, int depth) {

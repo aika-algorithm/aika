@@ -73,7 +73,7 @@ public class RelationBindingVisitor extends BindingVisitor {
         BindingNeuron bn = (BindingNeuron) operator.getStartSynapse().getOutput();
         Stream<BindingNeuronSynapse> relationSyns = bn.getSynapsesWithRelations().stream();
 
-        if(operator.getStartSynapse().getRelationSynId() != null)
+        if(operator.getStartSynapse().getRelation() != null)
             relationSyns = relationSyns.filter(s -> s == operator.getStartSynapse());
 
         relationSyns.forEach(relSyn ->
@@ -102,13 +102,19 @@ public class RelationBindingVisitor extends BindingVisitor {
                 .visit(upBindingSource, null, depth);
     }
 
+    @Override
+    public void upIntern(PatternActivation origin, int depth) {
+        new RelationBindingVisitor(this, origin, origin, null)
+                .visit(origin, null, depth);
+    }
+
     public void up(PatternActivation origin, int depth) {
-        if(!direction.isUp())
+        if(!direction.isUp() && operator.getStartSynapse().getRelation() == null)
             super.up(origin, depth);
     }
 
     private Direction getRelationDir() {
-        return ((BindingNeuronSynapse)operator.getStartSynapse()).getRelation() != null ?
+        return operator.getStartSynapse().getRelation() != null ?
                 OUTPUT :
                 INPUT;
     }
@@ -118,6 +124,9 @@ public class RelationBindingVisitor extends BindingVisitor {
         if(downBindingSource == null)
             return false;
 
+        if(relation == null && to.getRelation() == null)
+            return true;
+
         if(getRelationDir() == OUTPUT)
             return true;
 
@@ -126,6 +135,9 @@ public class RelationBindingVisitor extends BindingVisitor {
 
     @Override
     public void createLatentRelation(Link l) {
+        if(relation != null)
+            return;
+
         RelationInputSynapse ris = relation.getRelationInputSynapse();
         if(ris.linkExists((BindingActivation) l.getOutput(), true))
             return;

@@ -17,6 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.neurons.relations.Relation;
 import network.aika.enums.Scope;
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
@@ -345,7 +346,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return output.getNeuron();
     }
 
-    public Integer getRelationSynId() {
+    public Relation getRelation() {
         return null;
     }
 
