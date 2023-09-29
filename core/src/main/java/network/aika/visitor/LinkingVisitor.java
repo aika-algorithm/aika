@@ -32,8 +32,8 @@ public abstract class LinkingVisitor<T extends Activation> extends Visitor<T> {
         super(t, operator);
     }
 
-    protected LinkingVisitor(LinkingVisitor<T> parent, T origin) {
-        super(parent, origin);
+    protected LinkingVisitor(LinkingVisitor<T> downVisitor, T origin) {
+        super(downVisitor, origin);
     }
 
     public void check(Link lastLink, Activation act) {

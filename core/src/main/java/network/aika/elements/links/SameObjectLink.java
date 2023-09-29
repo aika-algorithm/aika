@@ -16,8 +16,13 @@
  */
 package network.aika.elements.links;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.LatentRelationActivation;
+import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SameObjectSynapse;
+import network.aika.elements.synapses.Synapse;
+import network.aika.enums.direction.Direction;
 import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
 import network.aika.visitor.pattern.PatternVisitor;

@@ -17,11 +17,15 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.LatentRelationActivation;
+import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.relations.Relation;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.SameObjectLink;
 import network.aika.elements.neurons.BindingNeuron;
+import network.aika.enums.direction.Direction;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -56,6 +60,20 @@ public class SameObjectSynapse extends BindingNeuronSynapse<
             return null;
 
         return ris.getInput().getRelation();
+    }
+
+    @Override
+    public void createLatentRelation(BindingActivation oAct, PatternActivation fromOriginAct, PatternActivation toOriginAct) {
+        RelationInputSynapse ris = getRelationInputSynapse();
+        if(ris.linkExists((BindingActivation) oAct, true))
+            return;
+
+        LatentRelationActivation latentRelAct = ris.createOrLookupLatentActivation(
+                fromOriginAct,
+                toOriginAct
+        );
+
+        ris.createAndInitLink(latentRelAct, (BindingActivation) oAct);
     }
 
     @Override

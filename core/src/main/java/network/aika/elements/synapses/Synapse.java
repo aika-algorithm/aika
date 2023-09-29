@@ -17,6 +17,9 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.LatentRelationActivation;
+import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.relations.Relation;
 import network.aika.enums.Scope;
 import network.aika.Thought;
@@ -348,6 +351,9 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public Relation getRelation() {
         return null;
+    }
+
+    public void createLatentRelation(OA oAct, PatternActivation fromOriginAct, PatternActivation toOriginAct) {
     }
 
     @Override

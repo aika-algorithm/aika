@@ -29,7 +29,7 @@ import network.aika.visitor.LinkingVisitor;
 public class IncomingLinkingOperator extends LinkingOperator {
 
     private Synapse sourceSyn;
-    private Link sourceLink;
+    private Link sourceLink; // null if latent
 
     public IncomingLinkingOperator(Activation fromAct, Synapse sourceSyn, Link sourceLink, Synapse targetSyn) {
         super(fromAct, targetSyn);

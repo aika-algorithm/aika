@@ -56,10 +56,10 @@ public abstract class Visitor<T extends Activation> {
         direction = new Down();
     }
 
-    protected Visitor(Visitor<T> parent, T bindingSource) {
-        this.v = parent.v;
+    protected Visitor(Visitor<T> downVisitor, T bindingSource) {
+        this.v = downVisitor.v;
         this.bindingSource = bindingSource;
-        this.operator = parent.operator;
+        this.operator = downVisitor.operator;
 
         direction = new Up();
     }

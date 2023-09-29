@@ -42,8 +42,8 @@ public class OutgoingLinkingOperator extends LinkingOperator {
     }
 
     @Override
-    public void check(LinkingVisitor v, Link l, Activation act) {
-        if(l == null)
+    public void check(LinkingVisitor v, Link lastLink, Activation act) {
+        if(lastLink == null)
             return;
 
         if(act.getNeuron() != targetSyn.getOutput())
@@ -52,12 +52,14 @@ public class OutgoingLinkingOperator extends LinkingOperator {
         if(act == sourceAct)
             return;
 
-        if(!v.compatible(l.getSynapse(), targetSyn))
+        if(!v.compatible(lastLink.getSynapse(), targetSyn))
             return;
 
-        if(!targetSyn.checkSingularLinkDoesNotExist(l.getOutput()))
+        if(!targetSyn.checkSingularLinkDoesNotExist(lastLink.getOutput()))
             return;
 
-        targetSyn.link(sourceAct, l.getOutput());
+        Link l = targetSyn.link(sourceAct, lastLink.getOutput());
+        if (l != null)
+            v.createLatentRelation(l);
     }
 }

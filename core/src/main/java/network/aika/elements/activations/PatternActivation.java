@@ -119,9 +119,6 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
         super.bindingVisit(v, lastLink, depth);
 
         v.up(this, depth);
-
-        if(v.getDirection().isDown())
-            v.expandRelations(this, depth);
     }
 
 

@@ -33,17 +33,14 @@ public class BindingVisitor extends LinkingVisitor<PatternActivation> {
         super(t, operator);
     }
 
-    public BindingVisitor(BindingVisitor parent, PatternActivation origin) {
-        super(parent, origin);
+    public BindingVisitor(BindingVisitor downVisitor, PatternActivation origin) {
+        super(downVisitor, origin);
     }
 
     @Override
     public void upIntern(PatternActivation origin, int depth) {
         new BindingVisitor(this, origin)
                 .visit(origin, null, depth);
-    }
-
-    public void expandRelations(PatternActivation origin, int depth) {
     }
 
     public boolean compatible(Synapse from, Synapse to) {
