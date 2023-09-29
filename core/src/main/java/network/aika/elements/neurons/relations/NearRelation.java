@@ -19,49 +19,69 @@ package network.aika.elements.neurons.relations;
 import network.aika.Model;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.enums.direction.Direction;
-import network.aika.utils.Writable;
+import network.aika.text.Document;
+import network.aika.text.Range;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static network.aika.enums.direction.Direction.INPUT;
+
+
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class Relation implements Writable {
+public class NearRelation extends Relation {
 
-    public abstract Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir);
+    private int distance;
 
-    public abstract int getRelationType();
+    public NearRelation() {
+    }
 
-    public static Relation read(DataInput in, Model m) throws Exception {
-        Relation rel = null;
-        switch (in.readInt()) {
-            case 1:
-                rel = new BeforeRelation();
-                break;
-            case 2:
-                rel = new ContainsRelation();
-                break;
-            case 3:
-                rel = new EqualsRelation();
-                break;
-            case 4:
-                rel = new NearRelation();
-                break;
-        }
-        rel.readFields(in, m);
-        return rel;
+    public NearRelation(Direction relDirection, int distance) {
+        this.distance = distance;
+    }
+
+    @Override
+    public int getRelationType() {
+        return 4;
+    }
+
+    @Override
+    public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir) {
+        Document doc = (Document) fromAct.getThought();
+
+        Range inputRange = fromAct.getGroundRef().getTokenPosRange();
+
+        Range targetRange = new Range(
+                inputRange.getBegin() - distance,
+                inputRange.getEnd() + distance
+        );
+
+        return doc.getRelatedTokensByTokenPosition(INPUT, targetRange);
+    }
+
+    public int getDistance() {
+        return distance;
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
-        out.writeInt(getRelationType());
+        super.write(out);
+        out.writeInt(distance);
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
+        super.readFields(in, m);
+        distance = in.readInt();
+    }
+
+    @Override
+    public String toString() {
+        return "NearRelation: dist:" + distance;
     }
 }

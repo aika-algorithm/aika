@@ -16,32 +16,26 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.elements.activations.*;
+import network.aika.elements.activations.LatentRelationActivation;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class BindingActivationPropertyPanel<E extends BindingActivation> extends ConjunctiveActivationPropertyPanel<E> {
+public class LatentRelationActivationPropertyPanel extends BindingActivationPropertyPanel<LatentRelationActivation> {
 
-    public BindingActivationPropertyPanel(E act) {
+    public LatentRelationActivationPropertyPanel(LatentRelationActivation act) {
         super(act);
     }
 
     @Override
-    public void initInferenceSection(E act) {
-        addField(act.getThought().getAnnealing());
-        addField(act.getThought().getFeedbackTrigger());
+    public void initInferenceSection(LatentRelationActivation act) {
         super.initInferenceSection(act);
-        addField(act.getNetUnsuppressed());
-        addField(act.getValueUnsuppressed());
+        addConstant("Rel-From: ", "" + act.getFromAct());
+        addConstant("Rel-To: ", "" + act.getToAct());
     }
 
-    public static BindingActivationPropertyPanel create(BindingActivation act) {
-        if(act instanceof LatentRelationActivation) {
-            return LatentRelationActivationPropertyPanel.create((LatentRelationActivation) act);
-        }
-
-        return new BindingActivationPropertyPanel(act);
+    public static LatentRelationActivationPropertyPanel create(LatentRelationActivation act) {
+        return new LatentRelationActivationPropertyPanel(act);
     }
 }
