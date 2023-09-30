@@ -38,7 +38,7 @@ public class ContainsRelation extends Relation {
 
     private Direction relationDir;
 
-    public ContainsRelation() {
+    ContainsRelation() {
     }
 
     public ContainsRelation(Direction relDir) {
@@ -80,7 +80,7 @@ public class ContainsRelation extends Relation {
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws Exception {
+    public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
         relationDir = Direction.read(in);
     }

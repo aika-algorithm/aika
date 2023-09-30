@@ -17,6 +17,7 @@
 package network.aika.debugger.activations.properties;
 
 import network.aika.elements.links.FeedbackLink;
+import network.aika.elements.links.InnerNegativeFeedbackLink;
 import network.aika.elements.links.OuterNegativeFeedbackLink;
 import network.aika.elements.links.InnerPositiveFeedbackLink;
 
@@ -48,8 +49,10 @@ public class FeedbackLinkPropertyPanel<L extends FeedbackLink> extends Conjuncti
     public static FeedbackLinkPropertyPanel create(FeedbackLink l) {
         if(l instanceof InnerPositiveFeedbackLink) {
             return new PositiveFeedbackLinkPropertyPanel((InnerPositiveFeedbackLink) l);
+        } else if(l instanceof InnerNegativeFeedbackLink) {
+            return new InnerNegativeFeedbackLinkPropertyPanel((InnerNegativeFeedbackLink) l);
         } else if(l instanceof OuterNegativeFeedbackLink) {
-            return new NegativeFeedbackLinkPropertyPanel((OuterNegativeFeedbackLink) l);
+            return new OuterNegativeFeedbackLinkPropertyPanel((OuterNegativeFeedbackLink) l);
         }
 
         return new FeedbackLinkPropertyPanel(l);

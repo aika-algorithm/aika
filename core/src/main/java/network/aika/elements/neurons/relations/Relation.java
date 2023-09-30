@@ -36,7 +36,7 @@ public abstract class Relation implements Writable {
 
     public abstract int getRelationType();
 
-    public static Relation read(DataInput in, Model m) throws Exception {
+    public static Relation read(DataInput in, Model m) throws IOException {
         Relation rel = null;
         switch (in.readInt()) {
             case 1:
@@ -62,6 +62,6 @@ public abstract class Relation implements Writable {
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws Exception {
+    public void readFields(DataInput in, Model m) throws IOException {
     }
 }

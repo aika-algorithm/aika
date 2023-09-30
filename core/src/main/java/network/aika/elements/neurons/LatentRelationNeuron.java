@@ -69,11 +69,15 @@ public class LatentRelationNeuron extends BindingNeuron {
 
     @Override
     public void write(DataOutput out) throws IOException {
+        super.write(out);
+
         relation.write(out);
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
+        super.readFields(in, m);
+
         relation = Relation.read(in, m);
     }
 }

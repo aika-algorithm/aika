@@ -21,12 +21,17 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.LinkingVisitor;
+import network.aika.visitor.Visitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * @author Lukas Molzberger
  */
 public class IncomingLinkingOperator extends LinkingOperator {
+
+    protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
 
     private Synapse sourceSyn;
     private Link sourceLink; // null if latent
@@ -49,6 +54,9 @@ public class IncomingLinkingOperator extends LinkingOperator {
 
     @Override
     public void check(LinkingVisitor v, Link lastLink, Activation act) {
+        if(log.isDebugEnabled())
+            log.debug("IncomingLinkingOperator.check() startSynapse:" + getStartSynapse() + " sourceLink:" + sourceLink + " lastLink:" + lastLink + " act:" + act);
+
         if (act.getNeuron() != targetSyn.getInput())
             return;
 

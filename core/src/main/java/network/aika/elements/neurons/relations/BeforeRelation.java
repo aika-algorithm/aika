@@ -41,7 +41,7 @@ public class BeforeRelation extends Relation {
 
     private Range offsetRange;
 
-    public BeforeRelation() {
+    BeforeRelation() {
     }
 
     public BeforeRelation(Direction relDirection, Range offsetRange) {
@@ -96,7 +96,7 @@ public class BeforeRelation extends Relation {
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws Exception {
+    public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
         relDirection = in.readBoolean() ? INPUT : OUTPUT;
         offsetRange.readFields(in, m);

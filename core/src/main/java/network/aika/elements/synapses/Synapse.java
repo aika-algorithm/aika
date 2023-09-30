@@ -204,9 +204,12 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public L link(IA iAct, OA oAct) {
         L l = getLink(iAct, oAct);
-        if (l != null)
-            return l;
+        if (l != null) {
+            if(log.isDebugEnabled())
+                log.debug("existing link: " + l);
 
+            return l;
+        }
         return createAndInitLink(iAct, oAct);
     }
 
@@ -292,6 +295,9 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     public abstract L createLink(IA input, OA output);
 
     public L createAndInitLink(IA input, OA output) {
+        if(log.isDebugEnabled())
+            log.debug("createAndInitLink: synapse:" + this + " input:" + input + " output:" + output);
+
         L l = createLink(input, output);
         l.init();
         return l;

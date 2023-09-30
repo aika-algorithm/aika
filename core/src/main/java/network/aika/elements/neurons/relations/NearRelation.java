@@ -38,10 +38,10 @@ public class NearRelation extends Relation {
 
     private int distance;
 
-    public NearRelation() {
+    NearRelation() {
     }
 
-    public NearRelation(Direction relDirection, int distance) {
+    public NearRelation(int distance) {
         this.distance = distance;
     }
 
@@ -75,7 +75,7 @@ public class NearRelation extends Relation {
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws Exception {
+    public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
         distance = in.readInt();
     }

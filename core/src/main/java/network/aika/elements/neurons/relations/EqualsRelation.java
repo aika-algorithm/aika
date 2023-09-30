@@ -40,7 +40,7 @@ public class EqualsRelation extends Relation {
     boolean compareBegin;
     boolean compareEnd;
 
-    public EqualsRelation() {
+    EqualsRelation() {
     }
 
     public EqualsRelation(boolean compareBegin, boolean compareEnd) {
@@ -97,7 +97,7 @@ public class EqualsRelation extends Relation {
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws Exception {
+    public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
         compareBegin = in.readBoolean();
         compareEnd = in.readBoolean();

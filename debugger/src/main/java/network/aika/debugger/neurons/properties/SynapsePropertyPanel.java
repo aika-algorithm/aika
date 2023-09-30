@@ -41,6 +41,9 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addField(s.getWeight());
         initSynapseProperties(s);
 
+        if(s.getRelation() != null)
+            addConstant("Relation: ", "" + s.getRelation());
+
         addConstant("Is Template Only: ", "" + s.isTemplateOnly());
         addConstant("Initial Instance Weight: ", "" + Utils.doubleToString(s.getInitialInstanceWeight()));
     }

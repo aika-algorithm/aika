@@ -18,6 +18,7 @@ package network.aika.meta;
 
 import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.NearRelation;
 import network.aika.elements.synapses.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +72,9 @@ public class NetworkMotifs {
                 .setWeight(1.0)
                 .link(bn, in);
 
-        new InnerNegativeFeedbackSynapse()
+        new InnerNegativeFeedbackSynapse(
+                new NearRelation(5)
+        )
                 .setWeight(-weight)
                 .link(in, bn)
                 .setSynapseBias(weight);

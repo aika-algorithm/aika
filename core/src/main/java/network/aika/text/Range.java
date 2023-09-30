@@ -115,14 +115,14 @@ public class Range implements Writable {
         out.writeLong(end);
     }
 
-    public static Range read(DataInput in, Model m) throws Exception {
+    public static Range read(DataInput in, Model m) throws IOException {
         Range r = new Range();
         r.readFields(in, m);
         return r;
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws Exception {
+    public void readFields(DataInput in, Model m) throws IOException {
         begin = in.readLong();
         end = in.readLong();
     }

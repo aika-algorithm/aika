@@ -14,22 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.operator;
+package network.aika.debugger.activations.properties;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.links.Link;
-import network.aika.elements.synapses.Synapse;
-import network.aika.enums.direction.Direction;
-import network.aika.visitor.LinkingVisitor;
+import network.aika.elements.links.OuterNegativeFeedbackLink;
 
 /**
  * @author Lukas Molzberger
  */
-public interface Operator {
+public class OuterNegativeFeedbackLinkPropertyPanel extends FeedbackLinkPropertyPanel<OuterNegativeFeedbackLink> {
 
-    Synapse getStartSynapse();
 
-    Direction getDirection();
+    public OuterNegativeFeedbackLinkPropertyPanel(OuterNegativeFeedbackLink l) {
+        super(l);
+    }
 
-    void check(LinkingVisitor v, Link lastLink, Activation act);
+    @Override
+    public void initIdentitySection(OuterNegativeFeedbackLink l) {
+        super.initIdentitySection(l);
+    }
+
+    @Override
+    public void initInferenceSection(OuterNegativeFeedbackLink l) {
+        super.initInferenceSection(l);
+    }
+
+    @Override
+    public void initTrainingSection(OuterNegativeFeedbackLink l) {
+        super.initTrainingSection(l);
+    }
 }

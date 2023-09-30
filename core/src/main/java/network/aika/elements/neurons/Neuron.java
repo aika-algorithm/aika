@@ -180,35 +180,44 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     public abstract void startVisitor(LinkingOperator c, Activation act);
 
     public void linkOutgoing(Synapse targetSyn, Activation iAct) {
+        if(log.isDebugEnabled())
+            log.debug("linkOutgoing: targetSyn:" + targetSyn + " iAct:" + iAct);
+
         targetSyn.getOutput().startVisitor(
                 new OutgoingLinkingOperator(iAct, targetSyn),
                 iAct
         );
     }
 
-    public void latentLinkOutgoing(Synapse sourceSyn, Activation iActA) {
+    public void latentLinkOutgoing(Synapse sourceSyn, Activation iAct) {
         getInputSynapsesAsStream()
                 .filter(targetSyn -> sourceSyn != targetSyn)
                 .filter(targetSyn -> targetSyn.isLinkingAllowed(true))
                 .filter(targetSyn -> getNetUB(sourceSyn, targetSyn) > 0.0)
-                .forEach(targetSyn ->
-                        targetSyn.getOutput().startVisitor(
-                                new IncomingLinkingOperator(iActA, sourceSyn, null, targetSyn),
-                                iActA
-                        )
-                );
+                .forEach(targetSyn -> {
+                    if(log.isDebugEnabled())
+                        log.debug("latentLinkOutgoing: sourceSyn:" + sourceSyn + " targetSyn:" + targetSyn + " iAct:" + iAct);
+
+                    targetSyn.getOutput().startVisitor(
+                            new IncomingLinkingOperator(iAct, sourceSyn, null, targetSyn),
+                            iAct
+                    );
+                });
     }
 
     public void linkAndPropagateIn(Link l) {
         getInputSynapsesAsStream()
                 .filter(targetSyn -> targetSyn != l.getSynapse())
                 .filter(targetSyn -> targetSyn.checkSingularLinkDoesNotExist(l.getOutput()))
-                .forEach(targetSyn ->
-                        startVisitor(
-                                new IncomingLinkingOperator(l.getInput(), l.getSynapse(), l, targetSyn),
-                                l.getInput()
-                        )
-                );
+                .forEach(targetSyn -> {
+                    if(log.isDebugEnabled())
+                        log.debug("linkAndPropagateIn: link:" + l + " targetSyn:" + targetSyn);
+
+                    startVisitor(
+                            new IncomingLinkingOperator(l.getInput(), l.getSynapse(), l, targetSyn),
+                            l.getInput()
+                    );
+                });
     }
 
     public SortedSet<A> getActivations(Thought t) {
