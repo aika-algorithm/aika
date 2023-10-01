@@ -19,7 +19,9 @@ package network.aika.meta.entities;
 import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.relations.ContainsRelation;
 import network.aika.elements.neurons.relations.EqualsRelation;
+import network.aika.enums.direction.Direction;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
@@ -70,7 +72,7 @@ public class EntityModel implements TemplateModel, Writable {
 
     protected BindingNeuron targetInputBN;
 
-    protected LatentRelationNeuron relEquals;
+    protected LatentRelationNeuron targetInputRelation;
 
 
     public EntityModel(PhraseModel pm) {
@@ -132,15 +134,15 @@ public class EntityModel implements TemplateModel, Writable {
                 NEG_MARGIN * -entityBN.getTargetNet()
         );
 
-        relEquals = new LatentRelationNeuron(
+        targetInputRelation = new LatentRelationNeuron(
                 model,
-                new EqualsRelation(true, true)
+                new ContainsRelation(Direction.OUTPUT)
         )
                 .setBias(5.0)
-                .setLabel("Equals Rel.: ")
+                .setLabel("Contains Rel.: ")
                 .setPersistent(true);
 
-        targetInputBN = targetInput.createTargetInputBindingNeuron(entityBN, entityPattern, relEquals);
+        targetInputBN = targetInput.createTargetInputBindingNeuron(entityBN, entityPattern, targetInputRelation);
 
         targetInput.setTemplateOnly(true);
     }
@@ -190,7 +192,7 @@ public class EntityModel implements TemplateModel, Writable {
         out.writeLong(entityPattern.getId());
         out.writeLong(entityBN.getId());
         out.writeLong(targetInputBN.getId());
-        out.writeLong(relEquals.getId());
+        out.writeLong(targetInputRelation.getId());
     }
 
     @Override
@@ -199,6 +201,6 @@ public class EntityModel implements TemplateModel, Writable {
         entityPattern = m.lookupNeuronProvider(in.readLong()).getNeuron();
         entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        relEquals = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        targetInputRelation = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }
