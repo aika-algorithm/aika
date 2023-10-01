@@ -45,6 +45,10 @@ public class Down implements Step {
         return false;
     }
 
+    public int getIndex() {
+        return 0;
+    }
+
     public String toString() {
         return "DOWN";
     }
