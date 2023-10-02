@@ -20,6 +20,8 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.text.Document;
+import network.aika.text.Range;
+import network.aika.text.TextReference;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +50,14 @@ public class PropagateTest {
         out.setBias(1.0);
 
         Document doc = new Document(m, "test");
-        doc.addToken(in, 0, 0, 4, 5.0);
+        doc.addToken(
+                in,
+                new TextReference(
+                        new Range(0, 1),
+                        new Range(0, 4)
+                ),
+                5.0
+        );
         log.info("" + doc);
 
         doc.disconnect();

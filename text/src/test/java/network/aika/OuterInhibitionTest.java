@@ -37,6 +37,8 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.*;
 import network.aika.text.Document;
+import network.aika.text.Range;
+import network.aika.text.TextReference;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +72,7 @@ public class OuterInhibitionTest {
         BindingNeuron nc = addBindingNeuronOuter(m, "C", 1.2, in, inhib);
 
         Document doc = new Document(m, "test");
-        doc.addToken(in, 0, 0, 4, 5.0);
+        doc.addToken(in, new TextReference(new Range(0, 1), new Range(0, 4)), 5.0);
 
         doc.postProcessing();
         doc.updateModel();

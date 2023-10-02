@@ -40,6 +40,7 @@ import network.aika.elements.neurons.relations.BeforeRelation;
 import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.text.Document;
 import network.aika.text.Range;
+import network.aika.text.TextReference;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,10 +104,10 @@ public class InnerInhibitionTest {
 
         doc.setFeedbackTriggerRound();
 
-        doc.addToken(inA, 0, 0, 1, inputPatternNetTarget - 2);
-        doc.addToken(inA, 1, 1, 2, inputPatternNetTarget);
-        doc.addToken(inA, 2, 2, 3, inputPatternNetTarget - 1);
-        doc.addToken(inX, 3, 3, 4, inputPatternNetTarget);
+        doc.addToken(inA, new TextReference(new Range(0, 1), new Range(0, 1)), inputPatternNetTarget - 2);
+        doc.addToken(inA, new TextReference(new Range(1, 2), new Range(1, 2)), inputPatternNetTarget);
+        doc.addToken(inA, new TextReference(new Range(2, 3), new Range(2, 3)), inputPatternNetTarget - 1);
+        doc.addToken(inX, new TextReference(new Range(3, 4), new Range(3, 4)), inputPatternNetTarget);
 
         doc.process(MAX_ROUND, INFERENCE);
 
@@ -173,10 +174,10 @@ public class InnerInhibitionTest {
 
         doc.setFeedbackTriggerRound();
 
-        doc.addToken(inA, 0, 0, 1, inputPatternNetTarget);
-        doc.addToken(inB, 1, 1, 2, inputPatternNetTarget);
-        doc.addToken(inC, 2, 2, 3, inputPatternNetTarget);
-        doc.addToken(inX, 3, 3, 4, inputPatternNetTarget);
+        doc.addToken(inA, new TextReference(new Range(0, 1), new Range(0, 1)), inputPatternNetTarget);
+        doc.addToken(inB, new TextReference(new Range(1, 2), new Range(1, 2)), inputPatternNetTarget);
+        doc.addToken(inC, new TextReference(new Range(2, 3), new Range(2, 3)), inputPatternNetTarget);
+        doc.addToken(inX, new TextReference(new Range(3, 4), new Range(3, 4)), inputPatternNetTarget);
 
         doc.process(MAX_ROUND, INFERENCE);
 

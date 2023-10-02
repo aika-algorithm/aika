@@ -21,8 +21,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.PatternLink;
-import network.aika.text.GroundRef;
-import network.aika.text.Range;
+import network.aika.text.TextReference;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
@@ -54,7 +53,7 @@ public class PatternParticleLink<L extends PatternLink> extends ParticleLink<L> 
                 .map(Link::getInput)
                 .filter(Objects::nonNull)
                 .map(Activation::getGroundRef)
-                .map(GroundRef::getTokenPosRange)
+                .map(TextReference::getTokenPosRange)
                 .filter(Objects::nonNull)
                 .mapToDouble(r -> r.getEnd())
                 .average();

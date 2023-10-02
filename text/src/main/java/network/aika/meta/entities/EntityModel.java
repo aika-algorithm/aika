@@ -20,12 +20,11 @@ import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.ContainsRelation;
-import network.aika.elements.neurons.relations.EqualsRelation;
 import network.aika.enums.direction.Direction;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
-import network.aika.text.GroundRef;
+import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
@@ -157,8 +156,8 @@ public class EntityModel implements TemplateModel, Writable {
         Range entityPosRange = new Range(0, 1);
         Range entityCharRange = new Range(0, doc.length());
 
-        doc.addToken(phraseModel.getPatternNeuron(), new GroundRef(entityPosRange, entityCharRange));
-        doc.addToken(targetInput.getTargetInput(), new GroundRef(entityPosRange, entityCharRange));
+        doc.addToken(phraseModel.getPatternNeuron(), new TextReference(entityPosRange, entityCharRange));
+        doc.addToken(targetInput.getTargetInput(), new TextReference(entityPosRange, entityCharRange));
     }
 
     public PatternNeuron getInstancePattern(String entityType) {
@@ -175,10 +174,10 @@ public class EntityModel implements TemplateModel, Writable {
         return model.lookupInputNeuron(entityLabel, targetInput.getTargetInput());
     }
 
-    public void addEntityTarget(Document doc, GroundRef groundRef, String entityLabel) {
+    public void addEntityTarget(Document doc, TextReference textReference, String entityLabel) {
         doc.addToken(
                 addEntity(entityLabel),
-                groundRef
+                textReference
         );
     }
 

@@ -57,8 +57,8 @@ public class AnnealingTest extends TrainingParser {
 
     @Override
     protected void prepareInputs(Document doc, Context context) {
-        tokenizer.tokenize(doc, context, (n, pos, begin, end) ->
-            doc.addToken(n, pos, begin, end, INPUT_TOKEN_NET_TARGET)
+        tokenizer.tokenize(doc, context, (n, ref) ->
+            doc.addToken(n, ref)
         );
     }
 

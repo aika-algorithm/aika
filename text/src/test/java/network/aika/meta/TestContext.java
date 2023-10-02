@@ -17,7 +17,7 @@
 package network.aika.meta;
 
 import network.aika.parser.Context;
-import network.aika.text.GroundRef;
+import network.aika.text.TextReference;
 
 import java.util.List;
 
@@ -28,9 +28,9 @@ import java.util.List;
 public class TestContext implements Context {
 
     String textSectionType;
-    List<GroundRef> candidateRanges;
+    List<TextReference> candidateRanges;
 
-    public TestContext(String textSectionType, List<GroundRef> candidateRanges) {
+    public TestContext(String textSectionType, List<TextReference> candidateRanges) {
         this.textSectionType = textSectionType;
         this.candidateRanges = candidateRanges;
     }
@@ -39,7 +39,7 @@ public class TestContext implements Context {
         return textSectionType;
     }
 
-    public List<GroundRef> getCandidateRanges() {
+    public List<TextReference> getCandidateRanges() {
         return candidateRanges;
     }
 }

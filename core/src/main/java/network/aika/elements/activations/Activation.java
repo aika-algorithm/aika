@@ -27,8 +27,7 @@ import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.PatternNeuron;
-import network.aika.text.GroundRef;
+import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.fields.*;
@@ -51,7 +50,7 @@ import static network.aika.queue.Phase.PRE_ANNEAL;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.queue.Phase.*;
-import static network.aika.text.GroundRef.join;
+import static network.aika.text.TextReference.join;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -87,7 +86,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     public boolean instantiationIsQueued;
     protected boolean isNewInstance;
 
-    protected GroundRef groundRef;
+    protected TextReference textReference;
 
     public Activation(int id, Thought t, N n) {
         this.id = id;
@@ -273,23 +272,23 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return thought;
     }
 
-    public GroundRef getGroundRef() {
-        return groundRef;
+    public TextReference getGroundRef() {
+        return textReference;
     }
 
-    public void updateRanges(GroundRef gr) {
-        GroundRef newGroundRef = join(groundRef, gr);
+    public void updateRanges(TextReference gr) {
+        TextReference newTextReference = join(textReference, gr);
 
-        if (groundRef == null || !groundRef.equals(newGroundRef)) {
-            registerPosRange(groundRef, newGroundRef);
-            this.groundRef = newGroundRef;
+        if (textReference == null || !textReference.equals(newTextReference)) {
+            registerPosRange(textReference, newTextReference);
+            this.textReference = newTextReference;
 
             propagateRanges();
         }
         thought.onElementEvent(TOKEN_POSITION, this);
     }
 
-    protected void registerPosRange(GroundRef oldGroundRef, GroundRef newGroundRef) {
+    protected void registerPosRange(TextReference oldTextReference, TextReference newTextReference) {
     }
 
     protected void propagateRanges() {
@@ -298,9 +297,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Range getAbsoluteCharRange() {
-        if(groundRef == null)
+        if(textReference == null)
             return null;
-        Range r = groundRef.getCharRange();
+        Range r = textReference.getCharRange();
         return r.getAbsoluteRange(thought.getCharRange());
     }
 
@@ -498,7 +497,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         Activation<N> ti = n.createActivation(getThought());
 
-        ti.groundRef = groundRef;
+        ti.textReference = textReference;
         ti.isNewInstance = true;
         ti.fired = fired;
 

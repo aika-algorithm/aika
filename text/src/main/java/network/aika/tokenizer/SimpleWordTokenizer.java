@@ -20,6 +20,8 @@ package network.aika.tokenizer;
 import network.aika.meta.Dictionary;
 import network.aika.parser.Context;
 import network.aika.text.Document;
+import network.aika.text.TextReference;
+import network.aika.text.Range;
 
 /**
  *
@@ -43,9 +45,10 @@ public class SimpleWordTokenizer implements Tokenizer {
 
             tokenConsumer.processToken(
                     dict.lookupInputToken(w),
-                    pos,
-                    i,
-                    j
+                    new TextReference(
+                            new Range(pos, pos + 1),
+                            new Range(i, j)
+                    )
             );
 
             pos++;

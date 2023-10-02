@@ -27,7 +27,7 @@ import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.queue.Step;
 import network.aika.text.Document;
-import network.aika.text.GroundRef;
+import network.aika.text.TextReference;
 import network.aika.text.Range;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
@@ -237,7 +237,7 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
         if(tokenRange == null)
             return true;
 
-        GroundRef gr = act.getGroundRef();
+        TextReference gr = act.getGroundRef();
         if(gr == null || gr.getTokenPosRange() == null)
             return false;
 

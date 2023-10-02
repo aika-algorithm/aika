@@ -19,7 +19,7 @@ package network.aika.debugger.activations.properties;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.*;
 import network.aika.text.Document;
-import network.aika.text.GroundRef;
+import network.aika.text.TextReference;
 
 import static network.aika.debugger.AbstractConsole.NOT_SET_STR;
 
@@ -47,7 +47,7 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
         addConstant("Id: ", "" + act.getId());
         addConstant("Label: ", act.getLabel());
 
-        GroundRef gr = act.getGroundRef();
+        TextReference gr = act.getGroundRef();
         if(gr != null) {
             addConstant("Char Range: ", gr.getCharRange() != null ? "" + gr.getCharRange() : NOT_SET_STR);
             addConstant("Absolute Char Range: ", act.getAbsoluteCharRange() != null ? "" + act.getAbsoluteCharRange() : NOT_SET_STR);

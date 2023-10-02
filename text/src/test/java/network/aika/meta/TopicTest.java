@@ -22,6 +22,8 @@ import network.aika.meta.sequences.PhraseModel;
 import network.aika.parser.Context;
 import network.aika.parser.TrainingParser;
 import network.aika.text.Document;
+import network.aika.text.Range;
+import network.aika.text.TextReference;
 import network.aika.tokenizer.SimpleWordTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,8 +59,8 @@ public class TopicTest extends TrainingParser {
 
     @Override
     protected void prepareInputs(Document doc, Context context) {
-        tokenizer.tokenize(doc, context, (n, pos, begin, end) ->
-                doc.addToken(n, pos, begin, end, INPUT_TOKEN_NET_TARGET)
+        tokenizer.tokenize(doc, context, (n, ref) ->
+                doc.addToken(n, ref)
         );
     }
 

@@ -19,12 +19,11 @@ package network.aika.meta;
 import network.aika.Model;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternCategorySynapse;
 import network.aika.enums.sign.Sign;
 import network.aika.text.Document;
-import network.aika.text.GroundRef;
+import network.aika.text.TextReference;
 import network.aika.text.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +59,8 @@ public class Dictionary {
         inputToken = new PatternNeuron(model)
                 .setLabel("Input Token")
                 .setBias(INPUT_TOKEN_NET_TARGET)
-                .setTargetNet(1.0 + RECTIFIED_HYPERBOLIC_TANGENT.f(INPUT_TOKEN_NET_TARGET));
+                .setTargetNet(1.0 + RECTIFIED_HYPERBOLIC_TANGENT.f(INPUT_TOKEN_NET_TARGET))
+                .setInstanceTargetNet(3.0 + INPUT_TOKEN_NET_TARGET);
 
         inputToken.makeAbstract()
                 .setWeight(1.0)
@@ -112,7 +112,7 @@ public class Dictionary {
     public static PatternActivation addToken(Document doc, PatternNeuron n, Integer pos, int begin, int end) {
         return doc.addToken(
                 n,
-                new GroundRef(
+                new TextReference(
                         pos != null ? new Range(pos, pos + 1) : null,
                         new Range(begin, end)
                 )

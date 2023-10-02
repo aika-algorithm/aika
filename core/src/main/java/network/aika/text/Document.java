@@ -29,8 +29,8 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.elements.Timestamp.NOT_SET;
-import static network.aika.text.GroundRef.getTPBegin;
-import static network.aika.text.GroundRef.getTPEnd;
+import static network.aika.text.TextReference.getTPBegin;
+import static network.aika.text.TextReference.getTPEnd;
 
 
 /**
@@ -55,9 +55,9 @@ public class Document extends Thought {
         }
     }
 
-    public void updateGroundRef(PatternActivation tokenAct, GroundRef oldGroundRef, GroundRef newGroundRef) {
-        updateGroundRef(tokenPosBeginIndex, tokenAct, getTPBegin(oldGroundRef), getTPBegin(newGroundRef));
-        updateGroundRef(tokenPosEndIndex, tokenAct, getTPEnd(oldGroundRef), getTPEnd(newGroundRef));
+    public void updateGroundRef(PatternActivation tokenAct, TextReference oldTextReference, TextReference newTextReference) {
+        updateGroundRef(tokenPosBeginIndex, tokenAct, getTPBegin(oldTextReference), getTPBegin(newTextReference));
+        updateGroundRef(tokenPosEndIndex, tokenAct, getTPEnd(oldTextReference), getTPEnd(newTextReference));
     }
 
     private void updateGroundRef(NavigableMap<TokenPositionKey, PatternActivation> index, PatternActivation tokenAct, Long oldPos, Long newPos) {
@@ -116,31 +116,20 @@ public class Document extends Thought {
         return ((Document)act.getThought()).getTextSegment(act.getGroundRef().getCharRange());
     }
 
-    public PatternActivation addToken(PatternNeuron n, GroundRef groundRef) {
-        return addToken(n, groundRef, n.getTargetNet());
+    public PatternActivation addToken(PatternNeuron n, TextReference textReference) {
+        return addToken(n, textReference, n.getTargetNet());
     }
 
-    public PatternActivation addToken(PatternNeuron n, GroundRef groundRef, double inputNet) {
+    public PatternActivation addToken(PatternNeuron n, TextReference textReference, double inputNet) {
         PatternActivation act = new PatternActivation(
                 createActivationId(),
                 this,
                 n
         );
 
-        act.updateRanges(groundRef);
+        act.updateRanges(textReference);
         act.setNet(inputNet);
         return act;
-    }
-
-    public PatternActivation addToken(PatternNeuron n, Integer pos, Integer begin, Integer end, double inputNet) {
-        return addToken(
-                n,
-                new GroundRef(
-                        pos != null ? new Range(pos, pos + 1) : null,
-                        begin != null && end != null ? new Range(begin, end) : null)
-                ,
-                inputNet
-        );
     }
 
     @Override

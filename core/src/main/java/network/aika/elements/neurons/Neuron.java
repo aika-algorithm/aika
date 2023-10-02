@@ -256,8 +256,12 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                 templateN.getBias().getUpdatedValue()
         );
 
-        if(templateN.getTargetNet() != null) {
-            setTargetNet(templateN.getTargetNet());
+        if(templateN.initParams != null) {
+            InitParams ip = templateN.initParams;
+            setTargetNet(ip.instanceTargetNet != null ?
+                    ip.instanceTargetNet :
+                    ip.targetNet
+            );
         }
 
         CategoryInputSynapse cis = templateN.getCategoryInputSynapse();
@@ -605,6 +609,15 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
             initParams = new InitParams();
         }
         initParams.targetNet = targetNet;
+
+        return (R) this;
+    }
+
+    public <R extends N> R  setInstanceTargetNet(double instanceTargetNet) {
+        if(initParams == null) {
+            initParams = new InitParams();
+        }
+        initParams.instanceTargetNet = instanceTargetNet;
 
         return (R) this;
     }

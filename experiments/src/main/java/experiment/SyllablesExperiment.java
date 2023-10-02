@@ -28,7 +28,7 @@ import network.aika.parser.Context;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;
 import network.aika.text.Document;
-import network.aika.text.GroundRef;
+import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.tokenizer.SimpleCharTokenizer;
 import network.aika.tokenizer.Tokenizer;
@@ -99,14 +99,8 @@ public class SyllablesExperiment extends TrainingParser<Context> {
 
     @Override
     protected void prepareInputs(Document doc, Context context) {
-        charTokenizer.tokenize(doc, context, (n, pos, begin, end) ->
-                doc.addToken(
-                        n,
-                        new GroundRef(
-                                new Range(pos, pos + 1),
-                                new Range(begin, end)
-                        )
-                )
+        charTokenizer.tokenize(doc, context, (n, ref) ->
+                doc.addToken(n, ref)
         );
     }
 

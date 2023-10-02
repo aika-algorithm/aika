@@ -30,17 +30,17 @@ import static network.aika.text.Range.getEnd;
  *
  * @author Lukas Molzberger
  */
-public class GroundRef implements Writable {
+public class TextReference implements Writable {
 
     private Range tokenPosRange;
     private Range charRange;
 
-    public GroundRef(Range tokenPosRange, Range charRange) {
+    public TextReference(Range tokenPosRange, Range charRange) {
         this.tokenPosRange = tokenPosRange;
         this.charRange = charRange;
     }
 
-    private GroundRef() {
+    private TextReference() {
     }
 
     public Range getTokenPosRange() {
@@ -51,26 +51,26 @@ public class GroundRef implements Writable {
         return charRange;
     }
 
-    public static Long getTPBegin(GroundRef gr) {
+    public static Long getTPBegin(TextReference gr) {
         return gr != null ? getBegin(gr.tokenPosRange) : null;
     }
 
-    public static Long getTPEnd(GroundRef gr) {
+    public static Long getTPEnd(TextReference gr) {
         return gr != null ? getEnd(gr.tokenPosRange) : null;
     }
 
-    public boolean equals(GroundRef gr) {
+    public boolean equals(TextReference gr) {
         return tokenPosRange.equals(gr.tokenPosRange) &&
                 charRange.equals(gr.charRange);
     }
 
-    public static GroundRef join(GroundRef a, GroundRef b) {
+    public static TextReference join(TextReference a, TextReference b) {
         if(a == null)
             return b;
         if(b == null)
             return a;
 
-        return new GroundRef(
+        return new TextReference(
                 Range.join(a.tokenPosRange, b.tokenPosRange),
                 Range.join(a.charRange, b.charRange)
         );
@@ -87,8 +87,8 @@ public class GroundRef implements Writable {
             charRange.write(out);
     }
 
-    public static GroundRef read(DataInput in, Model m) throws Exception {
-        GroundRef gr = new GroundRef();
+    public static TextReference read(DataInput in, Model m) throws Exception {
+        TextReference gr = new TextReference();
         gr.readFields(in, m);
         return gr;
     }

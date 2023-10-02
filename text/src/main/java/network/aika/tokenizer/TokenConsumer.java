@@ -17,6 +17,7 @@
 package network.aika.tokenizer;
 
 import network.aika.elements.neurons.PatternNeuron;
+import network.aika.text.TextReference;
 
 /**
  *
@@ -24,6 +25,6 @@ import network.aika.elements.neurons.PatternNeuron;
  */
 public interface TokenConsumer {
 
-    void processToken(PatternNeuron n, Integer pos, int begin, int end);
+    void processToken(PatternNeuron n, TextReference ref);
 
 }

@@ -26,6 +26,8 @@ import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.text.Document;
+import network.aika.text.Range;
+import network.aika.text.TextReference;
 import network.aika.utils.Writable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -80,7 +82,14 @@ public class SuspensionTest {
         inStrong = m.lookupNeuronProvider(inStrong.getId());
 
         Document doc = new Document(m, "test");
-        doc.addToken(inStrong.getNeuron(), 0, 0, 4, 5.0);
+        doc.addToken(
+                inStrong.getNeuron(),
+                new TextReference(
+                        new Range(0, 1),
+                        new Range(0, 4)
+                ),
+                5.0
+        );
     }
 
 

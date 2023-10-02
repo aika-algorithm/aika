@@ -23,7 +23,7 @@ import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.meta.entities.EntityInstance;
 import network.aika.meta.entities.EntityModel;
 import network.aika.text.Document;
-import network.aika.text.GroundRef;
+import network.aika.text.TextReference;
 import network.aika.text.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -238,10 +238,10 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         );
     }
 
-    public void addHeadlineTarget(Document doc, GroundRef groundRef, String label) {
+    public void addHeadlineTarget(Document doc, TextReference textReference, String label) {
         doc.addToken(
                 addHeadline(label),
-                groundRef
+                textReference
         );
     }
 
@@ -267,7 +267,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         int offset = headline.length() + 1;
         String txt = doc.getContent().substring(offset);
 
-        GroundRef headlineGR = new GroundRef(
+        TextReference headlineGR = new TextReference(
                 new Range(0, 2),
                 new Range(0, headline.length())
         );
@@ -275,13 +275,13 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         doc.addToken(phraseModel.getPatternNeuron(), headlineGR);
         doc.addToken(headlineEntity.targetInputPN, headlineGR);
 
-        GroundRef textSectionGR = new GroundRef(
+        TextReference textSectionGR = new TextReference(
                 new Range(2, 4),
                 new Range(offset, doc.length())
         );
 
         doc.addToken(hintInputPN,
-                new GroundRef(
+                new TextReference(
                         new Range(2, 3),
                         new Range(offset, offset + txt.indexOf(" "))
                 )

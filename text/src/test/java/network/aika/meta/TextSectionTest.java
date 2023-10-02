@@ -27,7 +27,7 @@ import network.aika.meta.textsections.TypedTextSectionModel;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;
 import network.aika.text.Document;
-import network.aika.text.GroundRef;
+import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.tokenizer.SimpleWordTokenizer;
 import network.aika.tokenizer.Tokenizer;
@@ -36,7 +36,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static network.aika.meta.Dictionary.INPUT_TOKEN_NET_TARGET;
 import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.parser.ParserPhase.TRAINING;
 
@@ -125,8 +124,8 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     @Override
     protected void prepareInputs(Document doc, TestContext context) {
         int[] tokenCounter = new int[1];
-        tokenizer.tokenize(doc, context, (n, pos, begin, end) -> {
-                    doc.addToken(n, pos, begin, end, INPUT_TOKEN_NET_TARGET);
+        tokenizer.tokenize(doc, context, (n, ref) -> {
+                    doc.addToken(n, ref);
                     tokenCounter[0]++;
                 }
         );
@@ -136,7 +135,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
                 textSectionModel
                         .addHeadlineTarget(
                                 doc,
-                                new GroundRef(
+                                new TextReference(
                                         new Range(0, tokenCounter[0]),
                                         new Range(0, doc.length())
                                 ),
@@ -168,7 +167,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
                 new TestContext(
                         null,
                         List.of(
-                                new GroundRef(new Range(0, 1), new Range(0, 1))
+                                new TextReference(new Range(0, 1), new Range(0, 1))
                         )
                 ),
                 TRAINING
