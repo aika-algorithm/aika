@@ -92,13 +92,16 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
     public void write(DataOutput out) throws IOException {
         super.write(out);
 
-        relation.write(out);
+        out.writeBoolean(relation != null);
+        if(relation != null)
+            relation.write(out);
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
 
-        relation = Relation.read(in, m);
+        if(in.readBoolean())
+            relation = Relation.read(in, m);
     }
 }
