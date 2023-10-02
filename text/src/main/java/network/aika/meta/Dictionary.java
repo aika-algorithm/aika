@@ -104,18 +104,15 @@ public class Dictionary {
         return model.lookupInputNeuron(label, inputToken);
     }
 
-    public void addToken(Document doc, String token, Integer pos, int begin, int end) {
+    public void addToken(Document doc, String token, TextReference ref) {
         PatternNeuron n = lookupInputToken(token);
-        addToken(doc, n, pos, begin, end);
+        addToken(doc, n, ref);
     }
 
-    public static PatternActivation addToken(Document doc, PatternNeuron n, Integer pos, int begin, int end) {
+    public static PatternActivation addToken(Document doc, PatternNeuron n, TextReference ref) {
         return doc.addToken(
                 n,
-                new TextReference(
-                        pos != null ? new Range(pos, pos + 1) : null,
-                        new Range(begin, end)
-                )
+                ref
         );
     }
 }

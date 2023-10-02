@@ -104,10 +104,10 @@ public class InnerInhibitionTest {
 
         doc.setFeedbackTriggerRound();
 
-        doc.addToken(inA, new TextReference(new Range(0, 1), new Range(0, 1)), inputPatternNetTarget - 2);
-        doc.addToken(inA, new TextReference(new Range(1, 2), new Range(1, 2)), inputPatternNetTarget);
-        doc.addToken(inA, new TextReference(new Range(2, 3), new Range(2, 3)), inputPatternNetTarget - 1);
-        doc.addToken(inX, new TextReference(new Range(3, 4), new Range(3, 4)), inputPatternNetTarget);
+        doc.addToken(inA, new TextReference(0, 0, 1), inputPatternNetTarget - 2);
+        doc.addToken(inA, new TextReference(1, 1, 2), inputPatternNetTarget);
+        doc.addToken(inA, new TextReference(2, 2, 3), inputPatternNetTarget - 1);
+        doc.addToken(inX, new TextReference(3, 3, 4), inputPatternNetTarget);
 
         doc.process(MAX_ROUND, INFERENCE);
 
@@ -174,10 +174,10 @@ public class InnerInhibitionTest {
 
         doc.setFeedbackTriggerRound();
 
-        doc.addToken(inA, new TextReference(new Range(0, 1), new Range(0, 1)), inputPatternNetTarget);
-        doc.addToken(inB, new TextReference(new Range(1, 2), new Range(1, 2)), inputPatternNetTarget);
-        doc.addToken(inC, new TextReference(new Range(2, 3), new Range(2, 3)), inputPatternNetTarget);
-        doc.addToken(inX, new TextReference(new Range(3, 4), new Range(3, 4)), inputPatternNetTarget);
+        doc.addToken(inA, new TextReference(0, 0, 1), inputPatternNetTarget);
+        doc.addToken(inB, new TextReference(1, 1, 2), inputPatternNetTarget);
+        doc.addToken(inC, new TextReference(2, 2, 3), inputPatternNetTarget);
+        doc.addToken(inX, new TextReference(3, 3, 4), inputPatternNetTarget);
 
         doc.process(MAX_ROUND, INFERENCE);
 

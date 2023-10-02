@@ -18,6 +18,7 @@ package network.aika;
 
 import network.aika.meta.Dictionary;
 import network.aika.text.Document;
+import network.aika.text.TextReference;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +75,11 @@ public class SimplePhraseTest {
             int pos = 0;
             for(String t: doc.getContent().split(" ")) {
                 int j = i + t.length();
-                dict.addToken(doc, t, pos++, i, j);
+                dict.addToken(
+                        doc,
+                        t,
+                        new TextReference(pos++, i, j)
+                );
 
                 i = j + 1;
             }

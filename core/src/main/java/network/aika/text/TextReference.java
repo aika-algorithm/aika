@@ -35,6 +35,16 @@ public class TextReference implements Writable {
     private Range tokenPosRange;
     private Range charRange;
 
+    public TextReference(int charBegin, int charEnd) {
+        this.tokenPosRange = null;
+        this.charRange = new Range(charBegin, charEnd);
+    }
+
+    public TextReference(int pos, int charBegin, int charEnd) {
+        this.tokenPosRange = new Range(pos, pos + 1);
+        this.charRange = new Range(charBegin, charEnd);
+    }
+
     public TextReference(Range tokenPosRange, Range charRange) {
         this.tokenPosRange = tokenPosRange;
         this.charRange = charRange;
