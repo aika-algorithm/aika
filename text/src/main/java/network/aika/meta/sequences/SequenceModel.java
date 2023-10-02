@@ -74,7 +74,8 @@ public abstract class SequenceModel implements Writable {
     record BindingNeuronParameters (
             double patternNetTarget,
             double netTarget,
-            double spsRelWeight,
+            double iosWeight,
+            double sosRelWeight,
             double pfWeight,
             double weakInputMargin,
             String labelPrefix
@@ -83,6 +84,7 @@ public abstract class SequenceModel implements Writable {
     public static BindingNeuronParameters PRIMARY_BN_PARAMS = new BindingNeuronParameters(
             PATTERN_NET_TARGET,
             2.5,
+            11.0,
             0.0,
             2.5,
             0.0,
@@ -92,6 +94,7 @@ public abstract class SequenceModel implements Writable {
     public static BindingNeuronParameters STRONG_BN_PARAMS = new BindingNeuronParameters(
             PATTERN_NET_TARGET,
             2.5,
+            9.0,
             10.0,
             2.5,
             0.0,
@@ -101,6 +104,7 @@ public abstract class SequenceModel implements Writable {
     public static BindingNeuronParameters WEAK_BN_PARAMS = new BindingNeuronParameters(
             PATTERN_NET_TARGET,
             0.5,
+            9.0,
             5.0,
             0.5,
             -0.05,
@@ -253,7 +257,7 @@ public abstract class SequenceModel implements Writable {
                 bn,
                 rel,
                 5.0,
-                p.spsRelWeight,
+                p.sosRelWeight,
                 false
         );
 
@@ -270,7 +274,7 @@ public abstract class SequenceModel implements Writable {
         BindingNeuron bn = addBindingNeuron(
                 dictionary.getInputToken(),
                 "Abstract (" + p.labelPrefix + ") Pos:" + pos,
-                10.0,
+                p.iosWeight,
                 p.netTarget
         );
         bn.makeAbstract()
