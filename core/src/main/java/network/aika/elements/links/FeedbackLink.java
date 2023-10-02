@@ -31,7 +31,7 @@ import network.aika.visitor.pattern.PatternVisitor;
  */
 public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activation<?>> extends BindingNeuronLink<S, IA> {
 
-    protected long visited;
+    protected long[] visited;
 
     public FeedbackLink(S s, IA input, BindingActivation output) {
         super(s, input, output);
@@ -70,9 +70,14 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     private boolean checkVisited(Visitor v) {
-        if(visited == v.getV())
+        if(visited == null)
+            visited = new long[2];
+
+        int dir = v.getDirection().getIndex();
+        if(visited[dir] == v.getV())
             return true;
-        visited = v.getV();
+
+        visited[dir] = v.getV();
         return false;
     }
 }

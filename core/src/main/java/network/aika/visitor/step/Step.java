@@ -32,4 +32,6 @@ public interface Step {
     boolean isDown();
 
     boolean isUp();
+
+    int getIndex();
 }

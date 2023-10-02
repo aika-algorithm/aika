@@ -44,6 +44,10 @@ public class Up implements Step {
         return true;
     }
 
+    public int getIndex() {
+        return 1;
+    }
+
     public String toString() {
         return "UP";
     }

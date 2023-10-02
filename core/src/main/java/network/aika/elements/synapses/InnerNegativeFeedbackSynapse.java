@@ -59,7 +59,7 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
 
     @Override
     public Scope getScope() {
-        return Scope.INPUT;
+        return Scope.SAME;
     }
 
     @Override
