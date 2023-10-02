@@ -72,7 +72,7 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
         Document doc = new Document(getModel(), headline + " " + textSection);
 
 //        AIKADebugger.createAndShowGUI()
-//                .setDocument(doc);
+//               .setDocument(doc);
 
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(tAct, iAct, label);
@@ -93,13 +93,13 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
     @Override
     protected void mapResults(Document doc) {
         getPhraseModel().getPatternNeuron().setTemplateOnly(false);
-/*
+
         TargetInput.setTemplateOnly(
                 lookupInstance(doc, tsModel.headlineEntity.targetInputPN),
                 lookupInstance(doc, tsModel.headlineEntity.targetInputBN),
                 true
         );
-*/
+
         headlineTargetInputPN = lookupInstance(doc, tsModel.headlineEntity.targetInputPN);
         hintInputPN = lookupInstance(doc, tsModel.hintInputPN);
     }
