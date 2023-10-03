@@ -237,9 +237,9 @@ public class PatternLogger {
         return tAct.getOutputLinksByType(InputObjectLink.class).map(Link::getOutput)
                 .filter(act -> !act.isAbstract())
                 .filter(supprAct -> supprAct.getNet().getUpdatedValue() > 0.0)
-                .map(act -> act.getGroundRef().getTokenPosRange() + "-" + act.getLabel())
+                .map(act -> act.getTextReference().getTokenPosRange() + "-" + act.getLabel())
                 .findFirst()
-                .orElse(tAct.getGroundRef().getTokenPosRange() + "-BLANK");
+                .orElse(tAct.getTextReference().getTokenPosRange() + "-BLANK");
     }
 
     private static String print(FieldOutput f) {

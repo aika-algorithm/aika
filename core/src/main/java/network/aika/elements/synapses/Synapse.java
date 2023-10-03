@@ -245,7 +245,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
         link();
 
-        weight.setInitialValue(
+        weight.setValue(
                 templateSyn.getInitialInstanceWeight()
         );
     }

@@ -27,14 +27,14 @@ import org.miv.pherd.geom.Point3;
 /**
  * @author Lukas Molzberger
  */
-public class SamePatternParticleLink<L extends SameObjectLink> extends ParticleLink<L> {
+public class SameObjectParticleLink<L extends SameObjectLink> extends BindingParticleLink<L> {
 
-    public SamePatternParticleLink(L l, Edge e, ActivationGraphManager gm) {
+    public SameObjectParticleLink(L l, Edge e, ActivationGraphManager gm) {
         super(l, e, gm);
     }
 
     public static ParticleLink create(SameObjectLink l, Edge e, ActivationGraphManager gm) {
-        return new SamePatternParticleLink(l, e, gm);
+        return new SameObjectParticleLink(l, e, gm);
     }
 
     @Override

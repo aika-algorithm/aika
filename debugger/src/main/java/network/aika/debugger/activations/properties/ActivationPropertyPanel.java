@@ -47,7 +47,7 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
         addConstant("Id: ", "" + act.getId());
         addConstant("Label: ", act.getLabel());
 
-        TextReference gr = act.getGroundRef();
+        TextReference gr = act.getTextReference();
         if(gr != null) {
             addConstant("Char Range: ", gr.getCharRange() != null ? "" + gr.getCharRange() : NOT_SET_STR);
             addConstant("Absolute Char Range: ", act.getAbsoluteCharRange() != null ? "" + act.getAbsoluteCharRange() : NOT_SET_STR);

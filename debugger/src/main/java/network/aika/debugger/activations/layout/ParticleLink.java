@@ -46,7 +46,7 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
         outputNode = graphManager.getNode(l.getOutput());
 
         inputParticle = graphManager.getParticle(inputNode);
-        outputParticle= graphManager.getParticle(outputNode);
+        outputParticle = graphManager.getParticle(outputNode);
 
         inputParticle.addOutputParticleLink(this);
         outputParticle.addInputParticleLink(this);
@@ -102,30 +102,13 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
 
     @Override
     public void processLayout() {
-        Long tp = getTokenPos();
-        if(tp == null)
-            return;
-
         if (initialized)
             return;
         initialized = true;
 
         outputNode.setAttribute(
                 "x",
-                STANDARD_DISTANCE_X * tp
+                inputParticle.x
         );
-    }
-
-    private Long getTokenPos() {
-        TextReference grInput = link.getInput().getGroundRef();
-
-        if (grInput != null && grInput.getTokenPosRange() != null)
-                return grInput.getTokenPosRange().getEnd();
-
-        TextReference grOutput = link.getOutput().getGroundRef();
-        if(grOutput != null && grOutput.getTokenPosRange() != null)
-            return grOutput.getTokenPosRange().getEnd();
-
-        return null;
     }
 }

@@ -28,8 +28,6 @@ import network.aika.parser.Context;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;
 import network.aika.text.Document;
-import network.aika.text.TextReference;
-import network.aika.text.Range;
 import network.aika.tokenizer.SimpleCharTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.apache.commons.io.IOUtils;
@@ -202,7 +200,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
                 " '" + act.getLabel() + "'" +
                 (!act.isAbstract() ? " '" + LabelUtil.generateLabel(act.getNeuron()) + "'" : "") +
                 " nId:" + act.getNeuron().getId() +
-                " r:" + act.getGroundRef().getCharRange() +
+                " r:" + act.getTextReference().getCharRange() +
                 " grad:" + doubleToString(act.getGradient().getValue(), "#.######")
         );
     }
@@ -215,7 +213,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
                 instanceAct.getClass().getSimpleName() +
                 " '" + label + "'" +
                 " nId:" + instanceAct.getNeuron().getId() +
-                " r:" + instanceAct.getGroundRef().getCharRange()
+                " r:" + instanceAct.getTextReference().getCharRange()
         );
     }
 

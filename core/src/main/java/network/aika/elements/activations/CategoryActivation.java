@@ -66,8 +66,8 @@ public class CategoryActivation extends DisjunctiveActivation<CategoryNeuron> {
     }
 
     @Override
-    public TextReference getGroundRef() {
+    public TextReference getTextReference() {
         Activation iAct = getCategoryInput();
-        return iAct != null ? iAct.getGroundRef() : null;
+        return iAct != null ? iAct.getTextReference() : null;
     }
 }

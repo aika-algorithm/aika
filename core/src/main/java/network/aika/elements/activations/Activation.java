@@ -272,12 +272,12 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return thought;
     }
 
-    public TextReference getGroundRef() {
+    public TextReference getTextReference() {
         return textReference;
     }
 
-    public void updateRanges(TextReference gr) {
-        TextReference newTextReference = join(textReference, gr);
+    public void updateRanges(TextReference tr) {
+        TextReference newTextReference = join(textReference, tr);
 
         if (textReference == null || !textReference.equals(newTextReference)) {
             registerPosRange(textReference, newTextReference);
@@ -484,9 +484,13 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Activation<N> resolveAbstractInputActivation() {
-        return !neuron.isTemplateOnly() && neuron.isAbstract() ?
+        return isInstantiable() ?
                 getActiveTemplateInstance() :
                 this;
+    }
+
+    public boolean isInstantiable() {
+        return !neuron.isTemplateOnly() && neuron.isAbstract();
     }
 
     public Activation<N> instantiateTemplateNode() {
@@ -504,8 +508,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         thought.onElementEvent(TOKEN_POSITION, ti);
 
         linkTemplateAndInstance(ti);
-
-        instantiateBias(ti);
 
         instantiateTemplateEdges(ti);
 
@@ -534,9 +536,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return (CategoryInputLink) s.createAndInitLink(catAct, this);
     }
 
-    protected void instantiateBias(Activation<N> ti) {
-    }
-
     public void instantiateTemplateEdges(Activation<N> instanceAct) {
         getInputLinks()
                 .filter(l -> l.getInput() != null)
@@ -550,6 +549,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         instanceAct.initFromTemplate();
 
         getOutputLinks()
+                .filter(l -> !l.getOutput().isInstantiable())
                 .forEach(l ->
                         l.instantiateTemplate(
                                 instanceAct,

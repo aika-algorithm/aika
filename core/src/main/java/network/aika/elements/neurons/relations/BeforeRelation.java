@@ -61,7 +61,7 @@ public class BeforeRelation extends Relation {
         Direction toSlot = dir.combine(relDirection);
         Direction fromSlot = toSlot.invert();
 
-        Range inputRange = fromAct.getGroundRef().getTokenPosRange();
+        Range inputRange = fromAct.getTextReference().getTokenPosRange();
         long fromPos = inputRange.getPosition(fromSlot);
 
         Range targetRange = new Range(

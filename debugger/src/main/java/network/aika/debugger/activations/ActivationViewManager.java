@@ -237,11 +237,11 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
         if(tokenRange == null)
             return true;
 
-        TextReference gr = act.getGroundRef();
-        if(gr == null || gr.getTokenPosRange() == null)
+        TextReference tr = act.getTextReference();
+        if(tr == null || tr.getTokenPosRange() == null)
             return false;
 
-        return tokenRange.contains(gr.getTokenPosRange());
+        return tokenRange.contains(tr.getTokenPosRange());
     }
 
     public static boolean within(Range tokenRange, Link l) {

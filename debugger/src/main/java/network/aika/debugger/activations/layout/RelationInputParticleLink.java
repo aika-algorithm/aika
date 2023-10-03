@@ -20,6 +20,8 @@ import network.aika.debugger.activations.ActivationGraphManager;
 import network.aika.elements.links.RelationInputLink;
 import org.graphstream.graph.Edge;
 
+import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_X;
+
 
 /**
  * @author Lukas Molzberger
@@ -36,5 +38,13 @@ public class RelationInputParticleLink<L extends RelationInputLink> extends Part
 
     @Override
     public void processLayout() {
+        if (initialized)
+            return;
+        initialized = true;
+
+        outputNode.setAttribute(
+                "x",
+                inputParticle.x - (STANDARD_DISTANCE_X / 2.0)
+        );
     }
 }

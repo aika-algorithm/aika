@@ -66,12 +66,12 @@ public class EqualsRelation extends Relation {
     @Override
     public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir) {
         Document doc = (Document) fromAct.getThought();
-        Range r = fromAct.getGroundRef().getTokenPosRange();
+        Range r = fromAct.getTextReference().getTokenPosRange();
 
         return doc.getRelatedTokensByTokenPosition(compareBegin ? INPUT : OUTPUT, r)
                 .filter(act -> fromAct != act)
                 .filter(act ->
-                        compare(r, act.getGroundRef().getTokenPosRange(), dir)
+                        compare(r, act.getTextReference().getTokenPosRange(), dir)
                 );
     }
 

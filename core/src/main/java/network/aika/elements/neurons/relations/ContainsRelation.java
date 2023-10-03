@@ -53,7 +53,7 @@ public class ContainsRelation extends Relation {
     @Override
     public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction vDir) {
         Document doc = (Document) fromAct.getThought();
-        Range r = fromAct.getGroundRef().getTokenPosRange();
+        Range r = fromAct.getTextReference().getTokenPosRange();
         Direction dir = relationDir.combine(vDir);
 
         return (
@@ -63,7 +63,7 @@ public class ContainsRelation extends Relation {
         )
                 .filter(act -> fromAct != act)
                 .filter(act ->
-                        contains(r, act.getGroundRef().getTokenPosRange(), dir)
+                        contains(r, act.getTextReference().getTokenPosRange(), dir)
                 );
     }
 

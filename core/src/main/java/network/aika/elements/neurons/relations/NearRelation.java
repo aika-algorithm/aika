@@ -54,7 +54,7 @@ public class NearRelation extends Relation {
     public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir) {
         Document doc = (Document) fromAct.getThought();
 
-        Range inputRange = fromAct.getGroundRef().getTokenPosRange();
+        Range inputRange = fromAct.getTextReference().getTokenPosRange();
 
         Range targetRange = new Range(
                 inputRange.getBegin() - distance,

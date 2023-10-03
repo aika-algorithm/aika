@@ -52,10 +52,9 @@ public class PatternParticleLink<L extends PatternLink> extends ParticleLink<L> 
         OptionalDouble avgXPos = oAct.getInputLinks()
                 .map(Link::getInput)
                 .filter(Objects::nonNull)
-                .map(Activation::getGroundRef)
-                .map(TextReference::getTokenPosRange)
+                .map(act -> graphManager.getParticle(act))
                 .filter(Objects::nonNull)
-                .mapToDouble(r -> r.getEnd())
+                .mapToDouble(p -> p.x)
                 .average();
 
         if(!avgXPos.isPresent())
@@ -68,7 +67,7 @@ public class PatternParticleLink<L extends PatternLink> extends ParticleLink<L> 
 
         node.setAttribute(
                 "x",
-                STANDARD_DISTANCE_X * avgXPos.getAsDouble()
+                avgXPos.getAsDouble()
         );
     }
 }

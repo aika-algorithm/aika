@@ -113,7 +113,7 @@ public class Document extends Thought {
     }
 
     public static String getText(Activation<?> act) {
-        return ((Document)act.getThought()).getTextSegment(act.getGroundRef().getCharRange());
+        return ((Document)act.getThought()).getTextSegment(act.getTextReference().getCharRange());
     }
 
     public PatternActivation addToken(PatternNeuron n, TextReference textReference) {

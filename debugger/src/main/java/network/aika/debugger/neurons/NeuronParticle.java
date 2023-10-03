@@ -105,8 +105,6 @@ public class NeuronParticle extends AbstractParticle<NeuronGraphManager> {
             if (!edge.ignored) {
                 Synapse s = lookupSynapse(edge);
 
-//                System.out.println("Layout synapse " + s.toString());
-
                // edgeAttraction(delta, edge, energies);
             }
         }

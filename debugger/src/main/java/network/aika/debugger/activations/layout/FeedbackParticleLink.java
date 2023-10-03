@@ -27,7 +27,7 @@ import org.miv.pherd.geom.Point3;
 /**
  * @author Lukas Molzberger
  */
-public class FeedbackParticleLink<L extends FeedbackLink> extends ParticleLink<L> {
+public class FeedbackParticleLink<L extends FeedbackLink> extends BindingParticleLink<L> {
 
     public FeedbackParticleLink(L l, Edge e, ActivationGraphManager gm) {
         super(l, e, gm);
