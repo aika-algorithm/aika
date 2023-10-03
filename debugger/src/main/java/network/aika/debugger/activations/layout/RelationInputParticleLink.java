@@ -38,9 +38,8 @@ public class RelationInputParticleLink<L extends RelationInputLink> extends Part
 
     @Override
     public void processLayout() {
-        if (initialized)
+        if(outputParticle.isManuallyMoved())
             return;
-        initialized = true;
 
         outputNode.setAttribute(
                 "x",

@@ -36,8 +36,6 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  */
 public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
 
-    boolean initialized;
-
     public ParticleLink(L l, Edge e, ActivationGraphManager gm) {
         super(l, e, gm);
         this.link = l;
@@ -102,9 +100,8 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
 
     @Override
     public void processLayout() {
-        if (initialized)
+        if(outputParticle.isManuallyMoved())
             return;
-        initialized = true;
 
         outputNode.setAttribute(
                 "x",

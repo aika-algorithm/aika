@@ -63,9 +63,6 @@ public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
 
     private Model model;
 
-    private Set<String> movedManually = new HashSet<>();
-
-
     public AbstractViewManager(Model model){
         this.model = model;
         initModifiers();
@@ -101,17 +98,6 @@ public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
 
     public ViewPanel getGraphView() {
         return graphView;
-    }
-
-    public boolean hasBeenMovedManually(String key) {
-        return movedManually.contains(key);
-    }
-
-    public void setMovedManually(String key, boolean v) {
-        if(v)
-            this.movedManually.add(key);
-        else
-            this.movedManually.remove(key);
     }
 
     public abstract Component getConsoleManager();

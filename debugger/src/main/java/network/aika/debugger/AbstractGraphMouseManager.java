@@ -95,11 +95,15 @@ public abstract class AbstractGraphMouseManager implements MouseInputListener, o
     }
 
     protected void elementMoving(GraphicElement element, MouseEvent event) {
-        viewManager.setMovedManually(element.getLabel(), true);
+        if(element instanceof Node) {
+            this.viewManager.graphManager
+                    .getParticle((Node) element)
+                    .setManuallyMoved(true);
 
-        if(event.isControlDown() && element instanceof Node) {
-            Node n = (Node) element;
-            viewManager.moveNodeGroup(n, event.getX(), event.getY());
+            if (event.isControlDown()) {
+                Node n = (Node) element;
+                viewManager.moveNodeGroup(n, event.getX(), event.getY());
+            }
         }
 
         this.view.moveElementAtPx(element, event.getX(), event.getY());

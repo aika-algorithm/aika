@@ -48,6 +48,8 @@ public abstract class AbstractParticle<G extends AbstractGraphManager> extends S
     public double x;
     public double y;
 
+    protected boolean manuallyMoved;
+
     protected Map<Long, AbstractParticleLink> inputParticleLinks = new TreeMap<>();
     protected Map<Long, AbstractParticleLink> outputParticleLinks = new TreeMap<>();
 
@@ -82,6 +84,14 @@ public abstract class AbstractParticle<G extends AbstractGraphManager> extends S
         this.node = n;
     }
 
+    public void setManuallyMoved(boolean mm) {
+        manuallyMoved = mm;
+    }
+
+    public boolean isManuallyMoved() {
+        return manuallyMoved;
+    }
+
     public void addInputParticleLink(AbstractParticleLink pl) {
         inputParticleLinks.put(
                 pl.getInputId(),
@@ -114,45 +124,10 @@ public abstract class AbstractParticle<G extends AbstractGraphManager> extends S
 
     @Override
     protected void repulsionN2(Vector3 delta) {
-        /*
-        AbstractLayout box = (AbstractLayout) this.box;
-        boolean is3D = box.is3D();
-        ParticleBox nodes = box.getSpatialIndex();
-        Energies energies = box.getEnergies();
-        Iterator<Object> i = nodes.getParticleIdIterator();
-
-        while (i.hasNext()) {
-            AbstractParticle node = (AbstractParticle) nodes.getParticle(i.next());
-
-            if (node != this) {
-                delta.set(node.pos.x - pos.x, 0.0, 0.0);
-//                delta.set(node.pos.x - pos.x, node.pos.y - pos.y, is3D ? node.pos.z - pos.z : 0);
-
-                double len = delta.normalize();
-
-                if (len > 0) {
-                    if (len < box.k)
-                        len = box.k; // XXX NEW To prevent infinite
-                    // repulsion.
-
-                    double factor = ((K2 / (len * len)) * node.weight);
-
-                    energies.accumulateEnergy(factor); // TODO check this
-                    delta.scalarMult(-factor);
-                    disp.add(delta);
-                }
-            }
-        }
-         */
     }
 
     @Override
     protected void repulsionNLogN(Vector3 delta) {
-        // Explore the n-tree from the root cell and consider the contents
-        // of one cell only if it does intersect an area around the current
-        // node. Else take its (weighted) barycenter into account.
-
-  //      recurseRepulsion(box.getSpatialIndex().getNTree().getRootCell(), delta);
     }
 
     protected void recurseRepulsion(Cell cell, Vector3 delta) {
