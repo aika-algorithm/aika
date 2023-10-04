@@ -14,13 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.binding;
+package network.aika.visitor.relations;
 
 import network.aika.Thought;
+import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
-import network.aika.elements.activations.PatternActivation;
+import network.aika.visitor.binding.BindingVisitor;
 import network.aika.visitor.operator.LinkingOperator;
 
 import static network.aika.enums.direction.Direction.INPUT;
@@ -30,21 +31,18 @@ import static network.aika.utils.Utils.depthToSpace;
 /**
  * @author Lukas Molzberger
  */
-public class RelationBindingVisitor extends BindingVisitor {
+public class RelationVisitor {
 
-    public RelationBindingVisitor(Thought t, LinkingOperator operator) {
+    public RelationVisitor(Thought t, LinkingOperator operator) {
         super(t, operator);
     }
 
-    public RelationBindingVisitor(BindingVisitor downVisitor, PatternActivation origin) {
+    public RelationVisitor(BindingVisitor downVisitor, PatternActivation origin) {
         super(downVisitor, origin);
     }
 
     @Override
     public void up(PatternActivation origin, int depth) {
-        if(direction.isUp())
-            return;
-
         Synapse startSyn = operator.getStartSynapse();
 
         if (startSyn.getRelation() != null) {
@@ -76,7 +74,7 @@ public class RelationBindingVisitor extends BindingVisitor {
                                                 "upBS:" + relTokenAct.getClass().getSimpleName() + " " + relTokenAct.getId() + " " + relTokenAct.getLabel());
                             }
 
-                            new RelationUpBindingVisitor(
+                            new RelationUpVisitor(
                                     this,
                                     downBindingSource,
                                     relTokenAct,

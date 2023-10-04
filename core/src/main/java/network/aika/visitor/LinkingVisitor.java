@@ -21,6 +21,8 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.visitor.operator.Operator;
+import network.aika.visitor.relations.RelationUpVisitor;
+import network.aika.visitor.relations.RelationVisitor;
 
 
 /**
@@ -28,12 +30,18 @@ import network.aika.visitor.operator.Operator;
  */
 public abstract class LinkingVisitor<T extends Activation> extends Visitor<T> {
 
-    public LinkingVisitor(Thought t, Operator operator) {
+    protected RelationVisitor relationVisitor;
+
+    public LinkingVisitor(Thought t, RelationVisitor relDownVisit, Operator operator) {
         super(t, operator);
+
+        this.relationVisitor = relDownVisit;
     }
 
-    protected LinkingVisitor(LinkingVisitor<T> downVisitor, T origin) {
+    protected LinkingVisitor(LinkingVisitor<T> downVisitor, RelationUpVisitor relUpVisit, T origin) {
         super(downVisitor, origin);
+
+        this.relationVisitor = relUpVisit;
     }
 
     public void check(Link lastLink, Activation act) {
@@ -43,8 +51,5 @@ public abstract class LinkingVisitor<T extends Activation> extends Visitor<T> {
 
     public boolean compatible(Synapse from, Synapse to) {
         return bindingSource != null;
-    }
-
-    public void createLatentRelation(Link l) {
     }
 }

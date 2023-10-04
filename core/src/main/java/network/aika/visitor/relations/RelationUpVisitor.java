@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.binding;
+package network.aika.visitor.relations;
 
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
@@ -26,7 +26,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
 /**
  * @author Lukas Molzberger
  */
-public class RelationUpBindingVisitor extends RelationBindingVisitor {
+public class RelationUpVisitor extends RelationVisitor {
 
     private PatternActivation downBindingSource;
     private PatternActivation upBindingSource;
@@ -35,8 +35,8 @@ public class RelationUpBindingVisitor extends RelationBindingVisitor {
 
     private Direction relationDir;
 
-    protected RelationUpBindingVisitor(
-            RelationBindingVisitor downVisitor,
+    protected RelationUpVisitor(
+            RelationVisitor downVisitor,
             PatternActivation downBindingSource,
             PatternActivation upBindingSource,
             Synapse relation,
