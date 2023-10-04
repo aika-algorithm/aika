@@ -18,14 +18,12 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.synapses.FeedbackSynapse;
-import network.aika.elements.synapses.InnerPositiveFeedbackSynapse;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.fields.AbstractFunction;
 import network.aika.fields.IdentityFunction;
-import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.pattern.PatternVisitor;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.types.BindingVisitor;
+import network.aika.visitor.types.PatternVisitor;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
@@ -85,12 +83,12 @@ public class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends 
     }
 
     @Override
-    public void bindingVisit(BindingVisitor v, int depth) {
-        if(v.getDirection().isDown())
+    public void bindingVisit(Visitor v, int depth) {
+        if(v.isDown())
             super.bindingVisit(v, depth);
     }
 
     @Override
-    public void patternVisit(PatternVisitor v, int depth) {
+    public void patternVisit(Visitor v, int depth) {
     }
 }

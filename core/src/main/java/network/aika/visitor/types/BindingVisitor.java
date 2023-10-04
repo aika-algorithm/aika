@@ -14,41 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.step;
+package network.aika.visitor.types;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.enums.Scope;
 import network.aika.visitor.Visitor;
 
 /**
  * @author Lukas Molzberger
  */
-public class Up implements Step {
+public class BindingVisitor implements VisitorType {
 
-    public void next(Visitor v, Activation<?> act, int depth) {
-        act.getOutputLinks()
-                .forEach(l ->
-                        v.visit(l, depth)
-                );
+    public void visit(Visitor v, Link l, int depth) {
+        l.bindingVisit(v, depth);
     }
 
-    public void next(Visitor v, Link<?, ?, ?> l, int depth) {
-        v.visit(l.getOutput(), l, depth);
+    public void visit(Visitor v, Activation act, Link l, int depth) {
+        act.bindingVisit(v, l, depth);
     }
 
-    public boolean isDown() {
-        return false;
-    }
-
-    public boolean isUp() {
-        return true;
-    }
-
-    public int getIndex() {
-        return 1;
-    }
-
-    public String toString() {
-        return "UP";
+    @Override
+    public Scope getIdentityRef() {
+        return null;
     }
 }

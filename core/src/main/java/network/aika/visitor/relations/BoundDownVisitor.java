@@ -14,44 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.binding;
+package network.aika.visitor.relations;
 
 import network.aika.Thought;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.links.Link;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.synapses.Synapse;
+import network.aika.visitor.DownVisitor;
+import network.aika.visitor.types.VisitorType;
 import network.aika.visitor.operator.Operator;
-import network.aika.visitor.LinkingVisitor;
+
+import static network.aika.enums.direction.Direction.OUTPUT;
 
 /**
  * @author Lukas Molzberger
  */
-public class BindingVisitor extends LinkingVisitor<PatternActivation> {
+public class BoundDownVisitor extends DownVisitor<PatternActivation> {
 
-    public BindingVisitor(Thought t, Operator operator) {
-        super(t, operator);
-    }
-
-    public BindingVisitor(BindingVisitor downVisitor, PatternActivation origin) {
-        super(downVisitor, origin);
+    public BoundDownVisitor(Thought t, VisitorType type, Operator operator) {
+        super(t, type, operator);
     }
 
     @Override
-    public void upIntern(PatternActivation origin, int depth) {
-        new BindingVisitor(this, origin)
-                .visit(origin, null, depth);
-    }
-
-    public boolean compatible(Synapse from, Synapse to) {
-        return to.getRelation() == null;
-    }
-
-    public void visit(Link l, int depth) {
-        l.bindingVisit(this, depth);
-    }
-
-    public void visit(Activation act, Link l, int depth) {
-        act.bindingVisit(this, l, depth);
+    public void up(PatternActivation origin, int depth) {
+        checkRelation(
+                origin,
+                getOperator().getStartSynapse(),
+                OUTPUT,
+                depth
+        );
     }
 }

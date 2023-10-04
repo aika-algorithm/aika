@@ -20,7 +20,8 @@ import network.aika.elements.activations.*;
 import network.aika.elements.synapses.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.BindingCategorySynapse;
 import network.aika.elements.synapses.CategorySynapse;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.types.PatternCategoryVisitor;
 
 
 /**
@@ -38,7 +39,7 @@ public class BindingCategoryInputLink extends BindingNeuronLink<BindingCategoryI
     }
 
     @Override
-    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
+    public void patternCatVisit(Visitor v, int depth) {
     }
 
     @Override

@@ -20,13 +20,15 @@ import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
+import network.aika.visitor.DownVisitor;
+import network.aika.visitor.UpVisitor;
 
 import static network.aika.enums.direction.Direction.OUTPUT;
 
 /**
  * @author Lukas Molzberger
  */
-public class RelationUpVisitor extends RelationVisitor {
+public class BoundUpVisitor extends UpVisitor<PatternActivation> {
 
     private PatternActivation downBindingSource;
     private PatternActivation upBindingSource;
@@ -35,8 +37,8 @@ public class RelationUpVisitor extends RelationVisitor {
 
     private Direction relationDir;
 
-    protected RelationUpVisitor(
-            RelationVisitor downVisitor,
+    public BoundUpVisitor(
+            DownVisitor downVisitor,
             PatternActivation downBindingSource,
             PatternActivation upBindingSource,
             Synapse relation,
@@ -53,20 +55,10 @@ public class RelationUpVisitor extends RelationVisitor {
         assert relation != null;
     }
 
-    public PatternActivation getDownBindingSource() {
-        return downBindingSource;
-    }
-
-    public PatternActivation getUpBindingSource() {
-        return upBindingSource;
-    }
-
-    @Override
     public boolean compatible(Synapse from, Synapse to) {
         return relationDir == OUTPUT || relation == to;
     }
 
-    @Override
     public void createLatentRelation(Link l) {
         relation.createLatentRelation(
                 l.getOutput(),

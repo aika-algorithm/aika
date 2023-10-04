@@ -35,6 +35,9 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
+import network.aika.visitor.DownVisitor;
+import network.aika.visitor.relations.BoundDownVisitor;
+import network.aika.visitor.relations.UnboundDownVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

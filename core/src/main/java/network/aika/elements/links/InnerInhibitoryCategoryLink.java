@@ -19,7 +19,8 @@ package network.aika.elements.links;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.synapses.InnerInhibitoryCategorySynapse;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.types.PatternCategoryVisitor;
 
 
 /**
@@ -32,6 +33,6 @@ public class InnerInhibitoryCategoryLink extends CategoryLink<InnerInhibitoryCat
     }
 
     @Override
-    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
+    public void patternCatVisit(Visitor v, int depth) {
     }
 }

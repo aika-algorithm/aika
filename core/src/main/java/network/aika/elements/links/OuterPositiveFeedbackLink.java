@@ -21,8 +21,9 @@ import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.OuterPositiveFeedbackSynapse;
 import network.aika.fields.AbstractFunction;
 import network.aika.fields.Fields;
-import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.pattern.PatternVisitor;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.types.BindingVisitor;
+import network.aika.visitor.types.PatternVisitor;
 
 
 /**
@@ -63,12 +64,12 @@ public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiv
     }
 
     @Override
-    public void bindingVisit(BindingVisitor v, int depth) {
-        if(v.getDirection().isDown())
+    public void bindingVisit(Visitor v, int depth) {
+        if(v.isDown())
             super.bindingVisit(v, depth);
     }
 
     @Override
-    public void patternVisit(PatternVisitor v, int depth) {
+    public void patternVisit(Visitor v, int depth) {
     }
 }

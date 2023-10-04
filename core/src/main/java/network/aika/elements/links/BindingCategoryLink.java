@@ -19,7 +19,8 @@ package network.aika.elements.links;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.synapses.BindingCategorySynapse;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.types.PatternCategoryVisitor;
 
 /**
  * @author Lukas Molzberger
@@ -31,6 +32,6 @@ public class BindingCategoryLink extends CategoryLink<BindingCategorySynapse, Bi
     }
 
     @Override
-    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
+    public void patternCatVisit(Visitor v, int depth) {
     }
 }

@@ -34,10 +34,7 @@ import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.queue.activation.Counting;
 import network.aika.queue.activation.LinkingOut;
-import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
-import network.aika.visitor.pattern.PatternVisitor;
+import network.aika.visitor.Visitor;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -189,19 +186,19 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         net.setValue(v);
     }
 
-    public void bindingVisit(BindingVisitor v, Link lastLink, int depth) {
+    public void bindingVisit(Visitor v, Link lastLink, int depth) {
         v.next(this, lastLink, depth);
     }
 
-    public void patternVisit(PatternVisitor v, Link lastLink, int depth) {
+    public void patternVisit(Visitor v, Link lastLink, int depth) {
         v.next(this, lastLink, depth);
     }
 
-    public void inhibVisit(InhibitoryVisitor v, Link lastLink, int depth) {
+    public void inhibVisit(Visitor v, Link lastLink, int depth) {
         v.next(this, lastLink, depth);
     }
 
-    public void patternCatVisit(PatternCategoryVisitor v, Link lastLink, int depth) {
+    public void patternCatVisit(Visitor v, Link lastLink, int depth) {
         v.next(this, lastLink, depth);
     }
 

@@ -16,13 +16,12 @@
  */
 package network.aika.visitor;
 
-import network.aika.Thought;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 import network.aika.visitor.operator.Operator;
-import network.aika.visitor.step.Down;
-import network.aika.visitor.step.Step;
-import network.aika.visitor.step.Up;
+import network.aika.visitor.types.VisitorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,80 +31,66 @@ import static network.aika.utils.Utils.idToString;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Visitor<T extends Activation> {
+public abstract class Visitor<T extends ConjunctiveActivation> {
 
     protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
 
-    private long v;
+    protected long v;
 
-    protected T bindingSource;
-
-    protected Step direction;
+    protected VisitorType type;
 
     protected Operator operator;
 
-    public Visitor(Thought t, Operator operator) {
-        this.v = t.getNewVisitorId();
+    private BindingActivation referenceAct; // TODO: remove
 
-        if(log.isDebugEnabled()) {
-            log.debug("");
-            log.debug(depthToSpace(0) + "Start:" + getClass().getSimpleName() + " " + operator.getClass().getSimpleName());
-        }
-
-        this.operator = operator;
-        direction = new Down();
-    }
-
-    protected Visitor(Visitor<T> downVisitor, T bindingSource) {
-        this.v = downVisitor.v;
-        this.bindingSource = bindingSource;
-        this.operator = downVisitor.operator;
-
-        direction = new Up();
+    public Operator getOperator() {
+        return operator;
     }
 
     public void start(Activation<?> act) {
-        visit(act, null, 0);
+        type.visit(this, act, null, 0);
     }
 
-    public abstract void upIntern(T origin, int depth);
+    public abstract void next(Visitor v, Activation<?> act, int depth);
 
-    public void up(T origin, int depth) {
-        if(direction.isUp())
-            return;
+    public abstract void next(Visitor v, Link<?, ?, ?> l, int depth);
 
-        if(log.isDebugEnabled()) {
-            log.debug(depthToSpace(depth) + "U-TURN " + origin.getClass().getSimpleName() + " " + origin.getId() + " " + origin.getLabel());
-        }
-        upIntern(origin, depth);
+    public void up(T bindingSource, int depth) {
     }
 
-    public Step getDirection() {
-        return direction;
-    }
+    public abstract int getIndex();
 
     public long getV() {
         return v;
     }
 
-    public abstract void check(Link lastLink, Activation act);
-
-    public abstract void visit(Link l, int depth);
-
-    public abstract void visit(Activation act, Link l, int depth);
-
     public void next(Activation<?> act, Link lastLink, int depth) {
         if(log.isDebugEnabled())
-            log.debug(depthToSpace(depth) + direction + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
+            log.debug(depthToSpace(depth) + getDir() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
 
-        check(lastLink, act);
-        direction.next(this, act, depth + 1);
+        next(this, act, depth + 1);
     }
 
     public void next(Link<?, ?, ?> l, int depth) {
         if(log.isDebugEnabled())
-            log.debug(depthToSpace(depth) + direction + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
+            log.debug(depthToSpace(depth) + getDir() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 
-        direction.next(this, l, depth + 1);
+        next(this, l, depth + 1);
+    }
+
+    protected abstract String getDir();
+
+    public VisitorType getType() {
+        return type;
+    }
+
+    public abstract boolean isDown();
+
+    public void setReferenceAct(BindingActivation refAct) {
+        this.referenceAct = refAct;
+    }
+
+    public Activation getReferenceAct() {
+        return referenceAct;
     }
 }

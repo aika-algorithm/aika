@@ -17,10 +17,9 @@
 package network.aika.elements.neurons;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.synapses.Synapse;
-import network.aika.visitor.operator.LinkingOperator;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
+import network.aika.visitor.types.VisitorType;
+
+import static network.aika.visitor.types.VisitorType.PATTERN_CAT_VISITOR_TYPE;
 
 /**
  * @author Lukas Molzberger
@@ -32,8 +31,7 @@ public class PatternCategoryNeuron extends CategoryNeuron {
     }
 
     @Override
-    public void startVisitor(LinkingOperator op, Activation act) {
-        new PatternCategoryVisitor(act.getThought(), op)
-                .start(act);
+    public VisitorType getVisitorType() {
+        return PATTERN_CAT_VISITOR_TYPE;
     }
 }

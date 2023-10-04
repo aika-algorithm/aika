@@ -25,10 +25,7 @@ import network.aika.elements.Timestamp;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.queue.link.LinkingIn;
-import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
-import network.aika.visitor.pattern.PatternVisitor;
+import network.aika.visitor.Visitor;
 
 import static network.aika.debugger.EventType.CREATE;
 import static network.aika.fields.FieldLink.linkAndConnect;
@@ -78,19 +75,19 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         LinkingIn.add(this);
     }
 
-    public void bindingVisit(BindingVisitor v, int depth) {
+    public void bindingVisit(Visitor v, int depth) {
         v.next(this, depth);
     }
 
-    public void patternVisit(PatternVisitor v, int depth) {
+    public void patternVisit(Visitor v, int depth) {
         v.next(this, depth);
     }
 
-    public void inhibVisit(InhibitoryVisitor v, int depth) {
+    public void inhibVisit(Visitor v, int depth) {
          v.next(this, depth);
     }
 
-    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
+    public void patternCatVisit(Visitor v, int depth) {
         v.next(this, depth);
     }
 

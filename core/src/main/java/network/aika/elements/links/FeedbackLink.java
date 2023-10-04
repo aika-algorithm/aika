@@ -20,10 +20,6 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
-import network.aika.visitor.pattern.PatternVisitor;
 
 /**
  * @author Lukas Molzberger
@@ -42,7 +38,7 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     @Override
-    public void bindingVisit(BindingVisitor v, int depth) {
+    public void bindingVisit(Visitor v, int depth) {
         if(checkVisited(v))
             return;
 
@@ -50,7 +46,7 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     @Override
-    public void patternVisit(PatternVisitor v, int depth) {
+    public void patternVisit(Visitor v, int depth) {
         if(checkVisited(v))
             return;
 
@@ -58,7 +54,7 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     @Override
-    public void inhibVisit(InhibitoryVisitor v, int depth) {
+    public void inhibVisit(Visitor v, int depth) {
         if(checkVisited(v))
             return;
 
@@ -66,14 +62,14 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     @Override
-    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
+    public void patternCatVisit(Visitor v, int depth) {
     }
 
     private boolean checkVisited(Visitor v) {
         if(visited == null)
             visited = new long[2];
 
-        int dir = v.getDirection().getIndex();
+        int dir = v.getIndex();
         if(visited[dir] == v.getV())
             return true;
 

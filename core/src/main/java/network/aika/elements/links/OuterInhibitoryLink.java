@@ -21,8 +21,9 @@ import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.synapses.OuterInhibitorySynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
-import network.aika.visitor.pattern.PatternVisitor;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.types.PatternCategoryVisitor;
+import network.aika.visitor.types.PatternVisitor;
 
 import java.util.stream.Stream;
 
@@ -64,11 +65,11 @@ public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse,
     }
 
     @Override
-    public void patternVisit(PatternVisitor v, int depth) {
+    public void patternVisit(Visitor v, int depth) {
     }
 
     @Override
-    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
+    public void patternCatVisit(Visitor v, int depth) {
     }
 
     public void connectFields(OuterNegativeFeedbackLink out) {

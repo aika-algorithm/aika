@@ -14,32 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.inhibitory;
+package network.aika.visitor.types;
 
-import network.aika.Thought;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.elements.activations.PatternActivation;
 import network.aika.enums.Scope;
-import network.aika.visitor.operator.Operator;
-import network.aika.visitor.LinkingVisitor;
+import network.aika.visitor.Visitor;
 
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryVisitor extends LinkingVisitor<PatternActivation> {
+public class InhibitoryVisitor implements VisitorType {
 
     private Scope identityRef;
 
-    public InhibitoryVisitor(Thought t, Operator operator, Scope identityRef) {
-        super(t, operator);
-
-        this.identityRef = identityRef;
-    }
-
-    protected InhibitoryVisitor(InhibitoryVisitor parent, PatternActivation origin, Scope identityRef) {
-        super(parent, origin);
-
+    public InhibitoryVisitor(Scope identityRef) {
         this.identityRef = identityRef;
     }
 
@@ -47,17 +36,12 @@ public class InhibitoryVisitor extends LinkingVisitor<PatternActivation> {
         return identityRef;
     }
 
-    @Override
-    public void upIntern(PatternActivation origin, int depth) {
-        new InhibitoryVisitor(this, origin, identityRef)
-                .visit(origin, null, depth);
+    public void visit(Visitor v, Link l, int depth) {
+        l.inhibVisit(v, depth);
     }
 
-    public void visit(Link l, int depth) {
-        l.inhibVisit(this, depth);
+    public void visit(Visitor v, Activation act, Link l, int depth) {
+        act.inhibVisit(v, l, depth);
     }
 
-    public void visit(Activation act, Link l, int depth) {
-        act.inhibVisit(this, l, depth);
-    }
 }

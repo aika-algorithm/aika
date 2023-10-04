@@ -26,10 +26,11 @@ import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.queue.activation.LinkingOut;
+import network.aika.visitor.Visitor;
 import network.aika.visitor.operator.SelfRefOperator;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
-import network.aika.visitor.pattern.PatternVisitor;
+import network.aika.visitor.types.PatternCategoryVisitor;
+import network.aika.visitor.relations.UnboundDownVisitor;
+import network.aika.visitor.types.VisitorType;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -148,20 +149,24 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
             return true;
 
         SelfRefOperator op = new SelfRefOperator(out);
-        new InhibitoryVisitor(thought, op, identityRef)
-                .start(this);
+        new UnboundDownVisitor(
+                thought,
+                VisitorType.getInhibitoryVisitorType(identityRef),
+                op
+        ).start(this);
+
         return op.isSelfRef();
     }
 
     @Override
-    public void patternVisit(PatternVisitor v, Link lastLink, int depth) {
+    public void patternVisit(Visitor v, Link lastLink, int depth) {
         super.patternVisit(v, lastLink, depth);
         v.up(this, depth);
     }
 
     @Override
-    public void patternCatVisit(PatternCategoryVisitor v, Link lastLink, int depth) {
-        if(v.getDirection().isDown()) {
+    public void patternCatVisit(Visitor v, Link lastLink, int depth) {
+        if(v.isDown()) {
             v.setReferenceAct(this);
             super.patternCatVisit(v, lastLink, depth);
         } else {

@@ -18,10 +18,9 @@ package network.aika.visitor.operator;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
-import network.aika.visitor.LinkingVisitor;
+import network.aika.visitor.UpVisitor;
 
 /**
  * @author Lukas Molzberger
@@ -47,7 +46,7 @@ public class SelfRefOperator implements Operator {
     }
 
     @Override
-    public void check(LinkingVisitor v, Link lastLink, Activation act) {
+    public void check(UpVisitor v, Link lastLink, Activation act) {
         if(act == target)
             isSelfRef = true;
     }

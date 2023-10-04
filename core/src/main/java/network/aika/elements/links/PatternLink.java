@@ -26,7 +26,8 @@ import network.aika.fields.FieldOutput;
 import network.aika.fields.SumField;
 import network.aika.enums.sign.Sign;
 import network.aika.queue.link.LinkCounting;
-import network.aika.visitor.binding.BindingVisitor;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.types.BindingVisitor;
 
 import static network.aika.fields.ConstantField.ZERO;
 import static network.aika.fields.FieldLink.linkAndConnect;
@@ -124,6 +125,6 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
     }
 
     @Override
-    public void bindingVisit(BindingVisitor v, int depth) {
+    public void bindingVisit(Visitor v, int depth) {
     }
 }

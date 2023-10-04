@@ -30,11 +30,15 @@ import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;
 import network.aika.elements.synapses.Synapse;
+import network.aika.visitor.DownVisitor;
+import network.aika.visitor.types.VisitorType;
 import network.aika.visitor.operator.IncomingLinkingOperator;
 import network.aika.queue.activation.Save;
 import network.aika.utils.Writable;
 import network.aika.visitor.operator.OutgoingLinkingOperator;
 import network.aika.visitor.operator.LinkingOperator;
+import network.aika.visitor.relations.BoundDownVisitor;
+import network.aika.visitor.relations.UnboundDownVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -177,7 +181,18 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public abstract void startVisitor(LinkingOperator c, Activation act);
+    public abstract VisitorType getVisitorType();
+
+    public void startVisitor(LinkingOperator c, Activation act) {
+        Thought t = act.getThought();
+        VisitorType type = getVisitorType();
+
+        DownVisitor v = c.getStartSynapse().getRelation() != null ?
+                new BoundDownVisitor(t, type, c) :
+                new UnboundDownVisitor(t, type, c);
+
+        v.start(act);
+    }
 
     public void linkOutgoing(Synapse targetSyn, Activation iAct) {
         if(log.isDebugEnabled())

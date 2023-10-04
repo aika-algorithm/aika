@@ -19,7 +19,8 @@ package network.aika.elements.links;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.synapses.OuterInhibitoryCategorySynapse;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.types.PatternCategoryVisitor;
 
 import static network.aika.elements.activations.OuterInhibitoryActivation.crossConnectFields;
 
@@ -35,6 +36,6 @@ public class OuterInhibitoryCategoryLink extends CategoryLink<OuterInhibitoryCat
     }
 
     @Override
-    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
+    public void patternCatVisit(Visitor v, int depth) {
     }
 }

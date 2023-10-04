@@ -25,10 +25,11 @@ import network.aika.fields.*;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.text.Document;
 import network.aika.text.TextReference;
-import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.types.BindingVisitor;
+import network.aika.visitor.types.InhibitoryVisitor;
 import network.aika.enums.sign.Sign;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
+import network.aika.visitor.types.PatternCategoryVisitor;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -115,7 +116,7 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
     }
 
     @Override
-    public void bindingVisit(BindingVisitor v, Link lastLink, int depth) {
+    public void bindingVisit(Visitor v, Link lastLink, int depth) {
         super.bindingVisit(v, lastLink, depth);
 
         v.up(this, depth);
@@ -123,15 +124,15 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
 
     @Override
-    public void inhibVisit(InhibitoryVisitor v, Link lastLink, int depth) {
+    public void inhibVisit(Visitor v, Link lastLink, int depth) {
         super.inhibVisit(v, lastLink, depth);
 
         v.up(this, depth);
     }
 
     @Override
-    public void patternCatVisit(PatternCategoryVisitor v, Link lastLink, int depth) {
-        if(v.getDirection().isDown() && lastLink != null && lastLink.getSynapse().getScope() == Scope.INPUT)
+    public void patternCatVisit(Visitor v, Link lastLink, int depth) {
+        if(v.isDown() && lastLink != null && lastLink.getSynapse().getScope() == Scope.INPUT)
             v.up(this, depth);
         else
             super.patternCatVisit(v, lastLink, depth);

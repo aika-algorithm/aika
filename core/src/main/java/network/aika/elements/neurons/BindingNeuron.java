@@ -18,14 +18,13 @@ package network.aika.elements.neurons;
 
 import network.aika.Model;
 import network.aika.Thought;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.synapses.*;
-import network.aika.visitor.operator.LinkingOperator;
-import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.binding.RelationBindingVisitor;
+import network.aika.visitor.types.VisitorType;
 
 import java.util.List;
+
+import static network.aika.visitor.types.VisitorType.BINDING_VISITOR_TYPE;
 
 
 /**
@@ -68,9 +67,8 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     }
 
     @Override
-    public void startVisitor(LinkingOperator c, Activation act) {
-        BindingVisitor v = new RelationBindingVisitor(act.getThought(), c);
-        v.start(act);
+    public VisitorType getVisitorType() {
+        return BINDING_VISITOR_TYPE;
     }
 
     @Override

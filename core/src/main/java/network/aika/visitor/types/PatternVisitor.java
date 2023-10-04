@@ -14,39 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.pattern;
+package network.aika.visitor.types;
 
-import network.aika.Thought;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.Link;
-import network.aika.visitor.operator.Operator;
-import network.aika.visitor.LinkingVisitor;
+import network.aika.enums.Scope;
+import network.aika.visitor.Visitor;
 
 /**
  * @author Lukas Molzberger
  */
-public class PatternVisitor extends LinkingVisitor<BindingActivation> {
+public class PatternVisitor implements VisitorType {
 
-    public PatternVisitor(Thought t, Operator operator) {
-        super(t, operator);
+    public void visit(Visitor v, Link l, int depth) {
+        l.patternVisit(v, depth);
     }
 
-    protected PatternVisitor(PatternVisitor parent, BindingActivation origin) {
-        super(parent, origin);
+    public void visit(Visitor v, Activation act, Link l, int depth) {
+        act.patternVisit(v, l, depth);
     }
 
     @Override
-    public void upIntern(BindingActivation origin, int depth) {
-        new PatternVisitor(this, origin)
-                .visit(origin, null, depth);
-    }
-
-    public void visit(Link l, int depth) {
-        l.patternVisit(this, depth);
-    }
-
-    public void visit(Activation act, Link l, int depth) {
-        act.patternVisit(this, l, depth);
+    public Scope getIdentityRef() {
+        return null;
     }
 }

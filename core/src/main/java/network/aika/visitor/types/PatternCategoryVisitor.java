@@ -14,52 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.pattern;
+package network.aika.visitor.types;
 
-import network.aika.Thought;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
-import network.aika.visitor.operator.Operator;
-import network.aika.visitor.LinkingVisitor;
+import network.aika.enums.Scope;
+import network.aika.visitor.Visitor;
 
 /**
  * @author Lukas Molzberger
  */
-public class PatternCategoryVisitor extends LinkingVisitor<PatternActivation> {
+public class PatternCategoryVisitor implements VisitorType {
 
-    private BindingActivation refAct;
-
-    public PatternCategoryVisitor(Thought t, Operator operator) {
-        super(t, operator);
-    }
-
-
-    protected PatternCategoryVisitor(PatternCategoryVisitor parent, PatternActivation origin) {
-        super(parent, origin);
-        this.refAct = parent.refAct;
-    }
+/*    private BindingActivation refAct;
 
     public void setReferenceAct(BindingActivation refAct) {
         this.refAct = refAct;
     }
 
-    @Override
-    public void upIntern(PatternActivation origin, int depth) {
-        new PatternCategoryVisitor(this, origin)
-                .visit(origin, null, depth);
-    }
-
     public BindingActivation getReferenceAct() {
         return refAct;
     }
-
-    public void visit(Link l, int depth) {
-        l.patternCatVisit(this, depth);
+*/
+    public void visit(Visitor v, Link l, int depth) {
+        l.patternCatVisit(v, depth);
     }
 
-    public void visit(Activation act, Link l, int depth) {
-        act.patternCatVisit(this, l, depth);
+    public void visit(Visitor v, Activation act, Link l, int depth) {
+        act.patternCatVisit(v, l, depth);
+    }
+
+    @Override
+    public Scope getIdentityRef() {
+        return null;
     }
 }

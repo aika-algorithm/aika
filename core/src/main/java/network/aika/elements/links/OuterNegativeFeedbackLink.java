@@ -20,10 +20,11 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.fields.*;
 import network.aika.elements.synapses.OuterNegativeFeedbackSynapse;
-import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
-import network.aika.visitor.pattern.PatternVisitor;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.types.BindingVisitor;
+import network.aika.visitor.types.InhibitoryVisitor;
+import network.aika.visitor.types.PatternCategoryVisitor;
+import network.aika.visitor.types.PatternVisitor;
 
 import java.util.stream.Stream;
 
@@ -74,19 +75,19 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
     }
 
     @Override
-    public void bindingVisit(BindingVisitor v, int depth) {
+    public void bindingVisit(Visitor v, int depth) {
     }
 
     @Override
-    public void patternVisit(PatternVisitor v, int depth) {
+    public void patternVisit(Visitor v, int depth) {
     }
 
     @Override
-    public void inhibVisit(InhibitoryVisitor v, int depth) {
+    public void inhibVisit(Visitor v, int depth) {
     }
 
     @Override
-    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
+    public void patternCatVisit(Visitor v, int depth) {
     }
 
     @Override

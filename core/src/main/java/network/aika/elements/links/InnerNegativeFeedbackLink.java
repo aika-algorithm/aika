@@ -22,10 +22,10 @@ import network.aika.elements.synapses.InnerNegativeFeedbackSynapse;
 import network.aika.fields.Field;
 import network.aika.fields.FieldLink;
 import network.aika.fields.MaxField;
-import network.aika.visitor.binding.BindingVisitor;
-import network.aika.visitor.inhibitory.InhibitoryVisitor;
-import network.aika.visitor.pattern.PatternCategoryVisitor;
-import network.aika.visitor.pattern.PatternVisitor;
+import network.aika.visitor.Visitor;
+import network.aika.visitor.types.BindingVisitor;
+import network.aika.visitor.types.PatternCategoryVisitor;
+import network.aika.visitor.types.PatternVisitor;
 
 import static network.aika.elements.activations.InnerInhibitoryActivation.getBindingActivation;
 import static network.aika.elements.activations.InnerInhibitoryActivation.updateConnected;
@@ -64,18 +64,18 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
     }
 
     @Override
-    public void bindingVisit(BindingVisitor v, int depth) {
+    public void bindingVisit(Visitor v, int depth) {
     }
 
     @Override
-    public void patternVisit(PatternVisitor v, int depth) {
+    public void patternVisit(Visitor v, int depth) {
     }
 /*
     @Override
-    public void inhibVisit(InhibitoryVisitor v, int depth) {
+    public void inhibVisit(Visitor v, int depth) {
     }
 */
     @Override
-    public void patternCatVisit(PatternCategoryVisitor v, int depth) {
+    public void patternCatVisit(Visitor v, int depth) {
     }
 }

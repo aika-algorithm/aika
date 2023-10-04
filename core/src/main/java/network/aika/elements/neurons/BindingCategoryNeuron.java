@@ -17,10 +17,9 @@
 package network.aika.elements.neurons;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.synapses.Synapse;
-import network.aika.visitor.operator.LinkingOperator;
-import network.aika.visitor.binding.BindingVisitor;
+import network.aika.visitor.types.VisitorType;
+
+import static network.aika.visitor.types.VisitorType.BINDING_VISITOR_TYPE;
 
 /**
  * @author Lukas Molzberger
@@ -32,8 +31,7 @@ public class BindingCategoryNeuron extends CategoryNeuron {
     }
 
     @Override
-    public void startVisitor(LinkingOperator op, Activation act) {
-        new BindingVisitor(act.getThought(), op)
-                .start(act);
+    public VisitorType getVisitorType() {
+        return BINDING_VISITOR_TYPE;
     }
 }
