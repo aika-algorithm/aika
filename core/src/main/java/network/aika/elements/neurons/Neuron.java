@@ -181,6 +181,12 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
+    public List<Synapse> getSynapsesWithRelations() {
+        return getInputSynapsesAsStream()
+                .filter(s -> s.getRelation() != null)
+                .toList();
+    }
+
     public abstract VisitorType getVisitorType();
 
     public void startVisitor(LinkingOperator c, Activation act) {

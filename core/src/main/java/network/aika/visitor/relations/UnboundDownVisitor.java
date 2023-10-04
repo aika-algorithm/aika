@@ -31,8 +31,8 @@ public class UnboundDownVisitor extends DownVisitor<ConjunctiveActivation> {
                     getOperator().getStartSynapse());
     }
 
-    public void expandRelation(ConjunctiveActivation origin, int depth, Synapse startSyn) {
-        ((BindingNeuron) startSyn.getOutput())
+    public void expandRelation(ConjunctiveActivation<?> origin, int depth, Synapse<?, ?, ?, ?, ?, ?> startSyn) {
+        startSyn.getOutput()
                 .getSynapsesWithRelations()
                 .forEach(relSyn ->
                         checkRelation(origin, relSyn, INPUT, depth)
