@@ -42,6 +42,11 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
     }
 
     @Override
+    public boolean isLinkingAllowed(boolean latent) {
+        return !latent;
+    }
+
+    @Override
     public OuterInhibitoryLink createLink(BindingActivation input, OuterInhibitoryActivation output) {
         return new OuterInhibitoryLink(this, input, output);
     }

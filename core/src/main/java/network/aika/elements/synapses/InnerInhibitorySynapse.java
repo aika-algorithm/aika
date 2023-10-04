@@ -43,6 +43,11 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
     }
 
     @Override
+    public boolean isLinkingAllowed(boolean latent) {
+        return !latent;
+    }
+
+    @Override
     public FieldOutput getInputValue(BindingActivation input) {
         return input.getValueUnsuppressed();
     }

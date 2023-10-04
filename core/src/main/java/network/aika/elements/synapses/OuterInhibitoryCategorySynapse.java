@@ -34,6 +34,11 @@ public class OuterInhibitoryCategorySynapse extends CategorySynapse<OuterInhibit
     }
 
     @Override
+    public boolean isLinkingAllowed(boolean latent) {
+        return !latent;
+    }
+
+    @Override
     public OuterInhibitoryCategoryLink createLink(OuterInhibitoryActivation input, CategoryActivation output) {
         return new OuterInhibitoryCategoryLink(this, input, output);
     }

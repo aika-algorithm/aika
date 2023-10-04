@@ -19,6 +19,7 @@ package network.aika.elements.links;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.synapses.SameObjectSynapse;
 import network.aika.visitor.binding.BindingVisitor;
+import network.aika.visitor.inhibitory.InhibitoryVisitor;
 import network.aika.visitor.pattern.PatternCategoryVisitor;
 
 /**
@@ -49,5 +50,9 @@ public class SameObjectLink extends BindingNeuronLink<SameObjectSynapse, Binding
 
     @Override
     public void patternCatVisit(PatternCategoryVisitor v, int depth) {
+    }
+
+    @Override
+    public void inhibVisit(InhibitoryVisitor v, int depth) {
     }
 }
