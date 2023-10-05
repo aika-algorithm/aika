@@ -21,6 +21,9 @@ import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 
+import static network.aika.utils.Utils.depthToSpace;
+import static network.aika.utils.Utils.idToString;
+
 /**
  * @author Lukas Molzberger
  */
@@ -36,11 +39,6 @@ public abstract class UpVisitor<T extends ConjunctiveActivation> extends Visitor
         this.referenceAct = downVisitor.referenceAct;
     }
 
-    public void next(Activation<?> act, Link lastLink, int depth) {
-        check(lastLink, act);
-        super.next(act, lastLink, depth);
-    }
-
     public void check(Link lastLink, Activation act) {
         operator.check(this, lastLink, act);
     }
@@ -49,15 +47,24 @@ public abstract class UpVisitor<T extends ConjunctiveActivation> extends Visitor
         return bindingSource != null;
     }
 
-    public void next(Visitor v, Activation<?> act, int depth) {
+    public void next(Activation<?> act, Link lastLink, int depth) {
+        check(lastLink, act);
+
+        if(log.isDebugEnabled())
+            log.debug(depthToSpace(depth) + dirToString() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
+
         act.getOutputLinks()
                 .forEach(l ->
-                        v.type.visit(v, l, depth)
+                        type.visit(this, l, depth + 1)
                 );
     }
 
-    public void next(Visitor v, Link<?, ?, ?> l, int depth) {
-        v.type.visit(v, l.getOutput(), l, depth);
+    public void next(Link<?, ?, ?> l, int depth) {
+        if(log.isDebugEnabled())
+            log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
+
+        next(this, l, depth + 1);
+        type.visit(this, l.getOutput(), l, depth + 1);
     }
 
     public boolean isDown() {
@@ -68,7 +75,7 @@ public abstract class UpVisitor<T extends ConjunctiveActivation> extends Visitor
         return 1;
     }
 
-    protected String getDir() {
+    protected String dirToString() {
         return "up";
     }
 

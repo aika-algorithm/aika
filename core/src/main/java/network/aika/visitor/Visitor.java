@@ -25,9 +25,6 @@ import network.aika.visitor.types.VisitorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static network.aika.utils.Utils.depthToSpace;
-import static network.aika.utils.Utils.idToString;
-
 /**
  * @author Lukas Molzberger
  */
@@ -65,21 +62,11 @@ public abstract class Visitor<T extends ConjunctiveActivation> {
         return v;
     }
 
-    public void next(Activation<?> act, Link lastLink, int depth) {
-        if(log.isDebugEnabled())
-            log.debug(depthToSpace(depth) + getDir() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
+    public abstract void next(Activation<?> act, Link lastLink, int depth);
 
-        next(this, act, depth + 1);
-    }
+    public abstract void next(Link<?, ?, ?> l, int depth);
 
-    public void next(Link<?, ?, ?> l, int depth) {
-        if(log.isDebugEnabled())
-            log.debug(depthToSpace(depth) + getDir() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
-
-        next(this, l, depth + 1);
-    }
-
-    protected abstract String getDir();
+    protected abstract String dirToString();
 
     public VisitorType getType() {
         return type;

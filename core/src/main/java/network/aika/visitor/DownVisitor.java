@@ -28,6 +28,7 @@ import network.aika.visitor.relations.BoundUpVisitor;
 import network.aika.visitor.types.VisitorType;
 
 import static network.aika.utils.Utils.depthToSpace;
+import static network.aika.utils.Utils.idToString;
 
 /**
  * @author Lukas Molzberger
@@ -70,16 +71,24 @@ public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visit
                 );
     }
 
-    public void next(Visitor v, Activation<?> act, int depth) {
+    public void next(Activation<?> act, Link lastLink, int depth) {
+        if(log.isDebugEnabled())
+            log.debug(depthToSpace(depth) + dirToString() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
+
         act.getInputLinks()
                 .forEach(l ->
-                        v.type.visit(v, l, depth)
+                        type.visit(this, l, depth + 1)
                 );
     }
 
-    public void next(Visitor v, Link<?, ?, ?> l, int depth) {
+    public void next(Link<?, ?, ?> l, int depth) {
+        if(log.isDebugEnabled())
+            log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
+
+        next(this, l, depth + 1);
+
         if(l.getInput() != null)
-            v.type.visit(v, l.getInput(), l, depth);
+            type.visit(this, l.getInput(), l, depth + 1);
     }
 
     public boolean isDown() {
@@ -90,7 +99,7 @@ public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visit
         return 0;
     }
 
-    protected String getDir() {
+    protected String dirToString() {
         return "down";
     }
 }
