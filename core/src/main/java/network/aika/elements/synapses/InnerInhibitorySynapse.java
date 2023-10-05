@@ -16,13 +16,19 @@
  */
 package network.aika.elements.synapses;
 
+import network.aika.Model;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.InnerInhibitoryLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
+import network.aika.elements.neurons.relations.Relation;
 import network.aika.enums.Scope;
 import network.aika.fields.FieldOutput;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 /**
  *
@@ -36,6 +42,20 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
         BindingActivation,
         InnerInhibitoryActivation
         > {
+
+    private Relation relation;
+
+    public InnerInhibitorySynapse() {
+    }
+
+    public InnerInhibitorySynapse(Relation rel) {
+        this.relation = rel;
+    }
+
+    @Override
+    public Relation getRelation() {
+        return relation;
+    }
 
     @Override
     public Scope getScope() {
@@ -67,5 +87,22 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
     @Override
     public boolean linkOnUnsuppressed() {
         return true;
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+
+        out.writeBoolean(relation != null);
+        if(relation != null)
+            relation.write(out);
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws IOException {
+        super.readFields(in, m);
+
+        if(in.readBoolean())
+            relation = Relation.read(in, m);
     }
 }
