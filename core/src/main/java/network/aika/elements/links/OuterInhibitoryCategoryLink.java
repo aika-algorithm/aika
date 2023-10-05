@@ -37,4 +37,16 @@ public class OuterInhibitoryCategoryLink extends CategoryLink<OuterInhibitoryCat
     @Override
     public void patternCatVisit(Visitor v, int depth) {
     }
+
+    @Override
+    public void innerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void innerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
+    }
 }

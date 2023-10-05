@@ -134,6 +134,19 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
         v.up(this, depth);
     }
 
+    @Override
+    public void innerSelfRefVisit(Visitor v, Link lastLink, int depth) {
+        super.innerSelfRefVisit(v, lastLink, depth);
+
+        v.up(this, depth);
+    }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, Link lastLink, int depth) {
+        super.outerSelfRefVisit(v, lastLink, depth);
+
+        v.up(this, depth);
+    }
 
     @Override
     public void patternCatVisit(Visitor v, Link lastLink, int depth) {

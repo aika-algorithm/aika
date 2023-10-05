@@ -54,6 +54,12 @@ public class InputObjectLink extends BindingNeuronLink<InputObjectSynapse, Patte
     }
 
     @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    /*
+    @Override
     public void innerInhibVisit(Visitor v, int depth) {
     }
+     */
 }

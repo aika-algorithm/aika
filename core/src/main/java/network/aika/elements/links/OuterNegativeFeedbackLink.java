@@ -91,6 +91,14 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
     }
 
     @Override
+    public void innerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
     public void disconnect() {
         super.disconnect();
 

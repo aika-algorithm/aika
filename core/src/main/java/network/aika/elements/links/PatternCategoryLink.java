@@ -19,6 +19,7 @@ package network.aika.elements.links;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.PatternCategorySynapse;
+import network.aika.visitor.Visitor;
 
 /**
  * @author Lukas Molzberger
@@ -31,5 +32,13 @@ public class PatternCategoryLink extends CategoryLink<PatternCategorySynapse, Pa
 
     @Override
     protected void connectGradientFields() {
+    }
+
+    @Override
+    public void innerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerInhibVisit(Visitor v, int depth) {
     }
 }

@@ -41,6 +41,18 @@ public class InnerInhibitoryCategoryInputLink extends DisjunctiveLink<InnerInhib
     }
 
     @Override
+    public void outerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void innerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
     public void instantiateTemplate(CategoryActivation iAct, InnerInhibitoryActivation oAct) {
         instantiateTemplate(iAct, oAct, this);
     }

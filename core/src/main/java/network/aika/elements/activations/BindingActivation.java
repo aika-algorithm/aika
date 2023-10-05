@@ -30,6 +30,8 @@ import network.aika.visitor.Visitor;
 import network.aika.visitor.operator.SelfRefOperator;
 import network.aika.visitor.relations.UnboundDownVisitor;
 import network.aika.visitor.types.VisitorType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -44,6 +46,8 @@ import static network.aika.utils.Utils.TOLERANCE;
  * @author Lukas Molzberger
  */
 public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
+
+    protected static final Logger log = LoggerFactory.getLogger(BindingActivation.class);
 
     private boolean isInput;
 
@@ -147,12 +151,18 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         if(this == out)
             return true;
 
+        if(log.isDebugEnabled())
+            log.debug("Start checking SelfRef for (" + toKeyString() + ", " + out.toKeyString() + ")");
+
         SelfRefOperator op = new SelfRefOperator(out);
         new UnboundDownVisitor(
                 thought,
-                VisitorType.getInhibitoryVisitorType(identityRef),
+                VisitorType.getSelfRefVisitorType(identityRef),
                 op
         ).start(this);
+
+        if(log.isDebugEnabled())
+            log.debug("Finished checking SelfRef for (" + toKeyString() + ", " + out.toKeyString() + ") : " + op.isSelfRef());
 
         return op.isSelfRef();
     }
@@ -160,12 +170,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     @Override
     public void patternVisit(Visitor v, Link lastLink, int depth) {
         super.patternVisit(v, lastLink, depth);
-        v.up(this, depth);
-    }
-
-    @Override
-    public void innerInhibVisit(Visitor v, Link lastLink, int depth) {
-        super.innerInhibVisit(v, lastLink, depth);
         v.up(this, depth);
     }
 

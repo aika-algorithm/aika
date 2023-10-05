@@ -21,6 +21,7 @@ import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.PatternCategoryInputSynapse;
 import network.aika.elements.synapses.PatternCategorySynapse;
+import network.aika.visitor.Visitor;
 
 
 /**
@@ -44,5 +45,13 @@ public class PatternCategoryInputLink extends ConjunctiveLink<PatternCategoryInp
     @Override
     public void instantiateTemplate(CategoryActivation iAct, PatternActivation oAct) {
         instantiateTemplate(iAct, oAct, this);
+    }
+
+    @Override
+    public void innerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerInhibVisit(Visitor v, int depth) {
     }
 }

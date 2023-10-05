@@ -198,7 +198,15 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         v.next(this, lastLink, depth);
     }
 
+    public void innerSelfRefVisit(Visitor v, Link lastLink, int depth) {
+        v.next(this, lastLink, depth);
+    }
+
     public void outerInhibVisit(Visitor v, Link lastLink, int depth) {
+        v.next(this, lastLink, depth);
+    }
+
+    public void outerSelfRefVisit(Visitor v, Link lastLink, int depth) {
         v.next(this, lastLink, depth);
     }
 
@@ -550,7 +558,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         instanceAct.initFromTemplate();
 
         getOutputLinks()
-                .filter(l -> !l.getOutput().isInstantiable())
                 .forEach(l ->
                         l.instantiateTemplate(
                                 instanceAct,

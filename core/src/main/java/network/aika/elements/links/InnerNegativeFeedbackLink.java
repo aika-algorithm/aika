@@ -67,12 +67,20 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
     @Override
     public void patternVisit(Visitor v, int depth) {
     }
-/*
-    @Override
-    public void inhibVisit(Visitor v, int depth) {
-    }
-*/
+
     @Override
     public void patternCatVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void innerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
     }
 }

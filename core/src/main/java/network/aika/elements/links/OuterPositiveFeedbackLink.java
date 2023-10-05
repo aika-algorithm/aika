@@ -70,4 +70,8 @@ public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiv
     @Override
     public void patternVisit(Visitor v, int depth) {
     }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
+    }
 }

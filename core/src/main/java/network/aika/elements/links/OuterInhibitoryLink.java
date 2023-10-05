@@ -70,6 +70,18 @@ public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse,
     public void patternCatVisit(Visitor v, int depth) {
     }
 
+    @Override
+    public void innerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void innerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
+    }
+
     public void connectFields(OuterNegativeFeedbackLink out) {
         if(isSelfRef(getInput(), out.getOutput(), Scope.SAME))
             return;

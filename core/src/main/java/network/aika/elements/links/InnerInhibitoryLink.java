@@ -39,4 +39,16 @@ public class InnerInhibitoryLink extends DisjunctiveLink<InnerInhibitorySynapse,
     @Override
     public void patternCatVisit(Visitor v, int depth) {
     }
+
+    @Override
+    public void outerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void innerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
+    }
 }

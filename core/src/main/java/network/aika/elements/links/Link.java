@@ -87,7 +87,15 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
          v.next(this, depth);
     }
 
+    public void innerSelfRefVisit(Visitor v, int depth) {
+        v.next(this, depth);
+    }
+
     public void outerInhibVisit(Visitor v, int depth) {
+        v.next(this, depth);
+    }
+
+    public void outerSelfRefVisit(Visitor v, int depth) {
         v.next(this, depth);
     }
 

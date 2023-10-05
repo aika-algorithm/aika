@@ -70,6 +70,22 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     @Override
+    public void innerSelfRefVisit(Visitor v, int depth) {
+        if(checkVisited(v))
+            return;
+
+        super.innerInhibVisit(v, depth);
+    }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
+        if(checkVisited(v))
+            return;
+
+        super.outerInhibVisit(v, depth);
+    }
+
+    @Override
     public void patternCatVisit(Visitor v, int depth) {
     }
 

@@ -8,7 +8,7 @@
         </layout>
     </appender>
 
-    <logger name="network.aika.visitor.Visitor" level="OFF"/>
+  <!--  <logger name="network.aika.visitor.Visitor" level="OFF"/>-->
 
     <root level="debug">
         <appender-ref ref="CONSOLE"/>

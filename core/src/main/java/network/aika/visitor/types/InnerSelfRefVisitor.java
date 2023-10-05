@@ -18,34 +18,18 @@ package network.aika.visitor.types;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.enums.Scope;
 import network.aika.visitor.Visitor;
-
-import static network.aika.enums.Scope.SAME;
 
 /**
  * @author Lukas Molzberger
  */
-public interface VisitorType {
+public class InnerSelfRefVisitor implements VisitorType {
 
-    VisitorType PATTERN_VISITOR_TYPE = new PatternVisitor();
-    VisitorType PATTERN_CAT_VISITOR_TYPE = new PatternCategoryVisitor();
-    VisitorType BINDING_VISITOR_TYPE = new BindingVisitor();
-    VisitorType INNER_INHIB_VISITOR_TYPE = new InnerInhibitoryVisitor();
-    VisitorType OUTER_INHIB_VISITOR_TYPE = new OuterInhibitoryVisitor();
-    VisitorType INNER_SELF_REF_VISITOR_TYPE = new InnerSelfRefVisitor();
-    VisitorType OUTER_SELF_REF_VISITOR_TYPE = new OuterSelfRefVisitor();
-
-
-    static VisitorType getInhibitoryVisitorType(Scope s) {
-        return s == SAME ? INNER_INHIB_VISITOR_TYPE : OUTER_INHIB_VISITOR_TYPE;
+    public void visit(Visitor v, Link l, int depth) {
+        l.innerSelfRefVisit(v, depth);
     }
 
-    static VisitorType getSelfRefVisitorType(Scope s) {
-        return s == SAME ? OUTER_SELF_REF_VISITOR_TYPE : INNER_SELF_REF_VISITOR_TYPE;
+    public void visit(Visitor v, Activation act, Link l, int depth) {
+        act.innerSelfRefVisit(v, l, depth);
     }
-
-    void visit(Visitor v, Link l, int depth);
-
-    void visit(Visitor v, Activation act, Link l, int depth);
 }

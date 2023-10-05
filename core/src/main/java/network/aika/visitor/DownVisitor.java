@@ -41,7 +41,7 @@ public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visit
 
         if(log.isDebugEnabled()) {
             log.debug("");
-            log.debug(depthToSpace(0) + "Start:" + getClass().getSimpleName() + " " + operator.getClass().getSimpleName());
+            log.debug(depthToSpace(0) + "Start: Visitor:" + getClass().getSimpleName() + " Operator:" + operator.getClass().getSimpleName() + " Type:" + type.getClass().getSimpleName());
         }
 
         this.operator = operator;

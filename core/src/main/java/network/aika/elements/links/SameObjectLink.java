@@ -57,4 +57,12 @@ public class SameObjectLink extends BindingNeuronLink<SameObjectSynapse, Binding
     @Override
     public void outerInhibVisit(Visitor v, int depth) {
     }
+
+    @Override
+    public void innerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
+    }
 }

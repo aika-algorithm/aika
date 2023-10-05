@@ -49,16 +49,6 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
-    public void innerInhibVisit(Visitor v, int depth) {
-        next(v, depth);
-    }
-
-    @Override
-    public void outerInhibVisit(Visitor v, int depth) {
-        next(v, depth);
-    }
-
-    @Override
     public void patternCatVisit(Visitor v, int depth) {
         next(v, depth);
     }
