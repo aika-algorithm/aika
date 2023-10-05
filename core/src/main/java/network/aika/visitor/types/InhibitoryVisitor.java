@@ -43,5 +43,4 @@ public class InhibitoryVisitor implements VisitorType {
     public void visit(Visitor v, Activation act, Link l, int depth) {
         act.inhibVisit(v, l, depth);
     }
-
 }

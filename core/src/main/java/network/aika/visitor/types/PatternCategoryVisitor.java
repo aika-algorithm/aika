@@ -26,16 +26,6 @@ import network.aika.visitor.Visitor;
  */
 public class PatternCategoryVisitor implements VisitorType {
 
-/*    private BindingActivation refAct;
-
-    public void setReferenceAct(BindingActivation refAct) {
-        this.refAct = refAct;
-    }
-
-    public BindingActivation getReferenceAct() {
-        return refAct;
-    }
-*/
     public void visit(Visitor v, Link l, int depth) {
         l.patternCatVisit(v, depth);
     }

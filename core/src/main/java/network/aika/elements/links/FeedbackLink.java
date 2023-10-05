@@ -69,7 +69,7 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
         if(visited == null)
             visited = new long[2];
 
-        int dir = v.getIndex();
+        int dir = v.getDirectionIndex();
         if(visited[dir] == v.getV())
             return true;
 

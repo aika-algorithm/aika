@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package network.aika.visitor;
 
 import network.aika.Thought;
@@ -8,13 +24,14 @@ import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.operator.Operator;
-import network.aika.visitor.relations.BoundDownVisitor;
 import network.aika.visitor.relations.BoundUpVisitor;
-import network.aika.visitor.relations.UnboundUpVisitor;
 import network.aika.visitor.types.VisitorType;
 
 import static network.aika.utils.Utils.depthToSpace;
 
+/**
+ * @author Lukas Molzberger
+ */
 public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visitor<T> {
 
     public DownVisitor(Thought t, VisitorType type, Operator operator) {
@@ -33,25 +50,22 @@ public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visit
         relSyn.getRelation()
                 .evaluateLatentRelation((PatternActivation) downBindingSource, relDir.invert())
                 .forEach(relTokenAct -> {
-                            if (log.isDebugEnabled()) {
+                            if (log.isDebugEnabled())
                                 log.debug(
                                         depthToSpace(depth) + "U-TURN (rel) " +
                                                 "downBS:" + downBindingSource.getClass().getSimpleName() + " " + downBindingSource.getId() + " " + downBindingSource.getLabel() + "  " +
-                                                "upBS:" + relTokenAct.getClass().getSimpleName() + " " + relTokenAct.getId() + " " + relTokenAct.getLabel());
-                            }
+                                                "upBS:" + relTokenAct.getClass().getSimpleName() + " " + relTokenAct.getId() + " " + relTokenAct.getLabel()
+                                );
 
-                            type.visit(
-                                    new BoundUpVisitor(
-                                            this,
-                                            (PatternActivation) downBindingSource,
-                                            relTokenAct,
-                                            relSyn,
-                                            relDir
-                                    ),
+                            UpVisitor<PatternActivation> v = new BoundUpVisitor(
+                                    this,
+                                    (PatternActivation) downBindingSource,
                                     relTokenAct,
-                                    null,
-                                    depth
+                                    relSyn,
+                                    relDir
                             );
+
+                            type.visit(v, relTokenAct, null, depth);
                         }
                 );
     }
@@ -72,11 +86,7 @@ public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visit
         return true;
     }
 
-    public boolean isUp() {
-        return false;
-    }
-
-    public int getIndex() {
+    public int getDirectionIndex() {
         return 0;
     }
 

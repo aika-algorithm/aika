@@ -41,7 +41,7 @@ public abstract class Visitor<T extends ConjunctiveActivation> {
 
     protected Operator operator;
 
-    private BindingActivation referenceAct; // TODO: remove
+    protected BindingActivation referenceAct;
 
     public Operator getOperator() {
         return operator;
@@ -56,9 +56,10 @@ public abstract class Visitor<T extends ConjunctiveActivation> {
     public abstract void next(Visitor v, Link<?, ?, ?> l, int depth);
 
     public void up(T bindingSource, int depth) {
+        // Nothing to do
     }
 
-    public abstract int getIndex();
+    public abstract int getDirectionIndex();
 
     public long getV() {
         return v;

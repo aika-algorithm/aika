@@ -59,6 +59,7 @@ public class BoundUpVisitor extends UpVisitor<PatternActivation> {
         return relationDir == OUTPUT || relation == to;
     }
 
+    @Override
     public void createLatentRelation(Link l) {
         relation.createLatentRelation(
                 l.getOutput(),
