@@ -79,7 +79,11 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
     }
 
     @Override
-    public void inhibVisit(Visitor v, int depth) {
+    public void innerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerInhibVisit(Visitor v, int depth) {
     }
 
     @Override

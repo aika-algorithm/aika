@@ -54,11 +54,19 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     @Override
-    public void inhibVisit(Visitor v, int depth) {
+    public void innerInhibVisit(Visitor v, int depth) {
         if(checkVisited(v))
             return;
 
-        super.inhibVisit(v, depth);
+        super.innerInhibVisit(v, depth);
+    }
+
+    @Override
+    public void outerInhibVisit(Visitor v, int depth) {
+        if(checkVisited(v))
+            return;
+
+        super.outerInhibVisit(v, depth);
     }
 
     @Override

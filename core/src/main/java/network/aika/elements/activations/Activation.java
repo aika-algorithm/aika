@@ -194,7 +194,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         v.next(this, lastLink, depth);
     }
 
-    public void inhibVisit(Visitor v, Link lastLink, int depth) {
+    public void innerInhibVisit(Visitor v, Link lastLink, int depth) {
+        v.next(this, lastLink, depth);
+    }
+
+    public void outerInhibVisit(Visitor v, Link lastLink, int depth) {
         v.next(this, lastLink, depth);
     }
 

@@ -41,4 +41,12 @@ public class RelationInputLink extends BindingNeuronLink<RelationInputSynapse, L
     @Override
     public void patternCatVisit(Visitor v, int depth) {
     }
+
+    @Override
+    public void innerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerInhibVisit(Visitor v, int depth) {
+    }
 }

@@ -49,7 +49,12 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
-    public void inhibVisit(Visitor v, int depth) {
+    public void innerInhibVisit(Visitor v, int depth) {
+        next(v, depth);
+    }
+
+    @Override
+    public void outerInhibVisit(Visitor v, int depth) {
         next(v, depth);
     }
 

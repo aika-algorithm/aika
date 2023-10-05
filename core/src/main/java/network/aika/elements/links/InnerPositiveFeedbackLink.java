@@ -80,4 +80,8 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     @Override
     public void patternVisit(Visitor v, int depth) {
     }
+
+    @Override
+    public void outerInhibVisit(Visitor v, int depth) {
+    }
 }

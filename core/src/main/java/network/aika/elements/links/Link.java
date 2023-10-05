@@ -83,8 +83,12 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         v.next(this, depth);
     }
 
-    public void inhibVisit(Visitor v, int depth) {
+    public void innerInhibVisit(Visitor v, int depth) {
          v.next(this, depth);
+    }
+
+    public void outerInhibVisit(Visitor v, int depth) {
+        v.next(this, depth);
     }
 
     public void patternCatVisit(Visitor v, int depth) {

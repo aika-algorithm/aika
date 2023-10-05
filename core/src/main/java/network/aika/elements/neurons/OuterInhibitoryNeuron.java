@@ -50,7 +50,7 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryNeur
 
     @Override
     public VisitorType getVisitorType() {
-        return VisitorType.INHIB_VISITOR_TYPE_INPUT;
+        return VisitorType.OUTER_INHIB_VISITOR_TYPE;
     }
 
     @Override

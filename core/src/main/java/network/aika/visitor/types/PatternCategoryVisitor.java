@@ -33,9 +33,4 @@ public class PatternCategoryVisitor implements VisitorType {
     public void visit(Visitor v, Activation act, Link l, int depth) {
         act.patternCatVisit(v, l, depth);
     }
-
-    @Override
-    public Scope getIdentityRef() {
-        return null;
-    }
 }

@@ -17,13 +17,10 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
-import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.LatentRelationActivation;
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.activations.*;
 import network.aika.elements.neurons.relations.Relation;
 import network.aika.enums.Scope;
 import network.aika.Thought;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;

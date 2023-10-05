@@ -18,28 +18,18 @@ package network.aika.visitor.types;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.enums.Scope;
 import network.aika.visitor.Visitor;
-
-import static network.aika.enums.Scope.SAME;
 
 /**
  * @author Lukas Molzberger
  */
-public interface VisitorType {
+public class InnerInhibitoryVisitor implements VisitorType {
 
-    VisitorType PATTERN_VISITOR_TYPE = new PatternVisitor();
-    VisitorType PATTERN_CAT_VISITOR_TYPE = new PatternCategoryVisitor();
-    VisitorType BINDING_VISITOR_TYPE = new BindingVisitor();
-    VisitorType INNER_INHIB_VISITOR_TYPE = new InnerInhibitoryVisitor();
-    VisitorType OUTER_INHIB_VISITOR_TYPE = new OuterInhibitoryVisitor();
-
-
-    static VisitorType getInhibitoryVisitorType(Scope s) {
-        return s == SAME ? INNER_INHIB_VISITOR_TYPE : OUTER_INHIB_VISITOR_TYPE;
+    public void visit(Visitor v, Link l, int depth) {
+        l.innerInhibVisit(v, depth);
     }
 
-    void visit(Visitor v, Link l, int depth);
-
-    void visit(Visitor v, Activation act, Link l, int depth);
+    public void visit(Visitor v, Activation act, Link l, int depth) {
+        act.innerInhibVisit(v, l, depth);
+    }
 }

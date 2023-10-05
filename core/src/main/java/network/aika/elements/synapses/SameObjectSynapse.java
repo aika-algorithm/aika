@@ -17,12 +17,9 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.LatentRelationActivation;
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.activations.*;
 import network.aika.elements.neurons.relations.Relation;
 import network.aika.enums.Scope;
-import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.SameObjectLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.enums.direction.Direction;
@@ -65,7 +62,7 @@ public class SameObjectSynapse extends BindingNeuronSynapse<
     @Override
     public void createLatentRelation(BindingActivation oAct, PatternActivation fromOriginAct, PatternActivation toOriginAct) {
         RelationInputSynapse ris = getRelationInputSynapse();
-        if(ris.linkExists((BindingActivation) oAct, true))
+        if(ris.linkExists(oAct, true))
             return;
 
         LatentRelationActivation latentRelAct = ris.createOrLookupLatentActivation(
@@ -73,7 +70,7 @@ public class SameObjectSynapse extends BindingNeuronSynapse<
                 toOriginAct
         );
 
-        ris.createAndInitLink(latentRelAct, (BindingActivation) oAct);
+        ris.createAndInitLink(latentRelAct, oAct);
     }
 
     @Override

@@ -33,9 +33,4 @@ public class BindingVisitor implements VisitorType {
     public void visit(Visitor v, Activation act, Link l, int depth) {
         act.bindingVisit(v, l, depth);
     }
-
-    @Override
-    public Scope getIdentityRef() {
-        return null;
-    }
 }

@@ -164,6 +164,12 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     }
 
     @Override
+    public void innerInhibVisit(Visitor v, Link lastLink, int depth) {
+        super.innerInhibVisit(v, lastLink, depth);
+        v.up(this, depth);
+    }
+
+    @Override
     public void patternCatVisit(Visitor v, Link lastLink, int depth) {
         if(v.isDown()) {
             v.setReferenceAct(this);

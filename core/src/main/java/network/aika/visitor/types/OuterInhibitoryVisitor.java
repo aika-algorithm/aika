@@ -18,29 +18,18 @@ package network.aika.visitor.types;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.enums.Scope;
 import network.aika.visitor.Visitor;
 
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryVisitor implements VisitorType {
-
-    private Scope identityRef;
-
-    public InhibitoryVisitor(Scope identityRef) {
-        this.identityRef = identityRef;
-    }
-
-    public Scope getIdentityRef() {
-        return identityRef;
-    }
+public class OuterInhibitoryVisitor implements VisitorType {
 
     public void visit(Visitor v, Link l, int depth) {
-        l.inhibVisit(v, depth);
+        l.outerInhibVisit(v, depth);
     }
 
     public void visit(Visitor v, Activation act, Link l, int depth) {
-        act.inhibVisit(v, l, depth);
+        act.outerInhibVisit(v, l, depth);
     }
 }
