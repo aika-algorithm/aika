@@ -27,7 +27,6 @@ import network.aika.fields.SumField;
 import network.aika.enums.sign.Sign;
 import network.aika.queue.link.LinkCounting;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.BindingVisitor;
 
 import static network.aika.fields.ConstantField.ZERO;
 import static network.aika.fields.FieldLink.linkAndConnect;

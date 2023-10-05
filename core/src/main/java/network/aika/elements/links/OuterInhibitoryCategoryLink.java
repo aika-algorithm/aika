@@ -20,7 +20,6 @@ import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.synapses.OuterInhibitoryCategorySynapse;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.PatternCategoryVisitor;
 
 import static network.aika.elements.activations.OuterInhibitoryActivation.crossConnectFields;
 

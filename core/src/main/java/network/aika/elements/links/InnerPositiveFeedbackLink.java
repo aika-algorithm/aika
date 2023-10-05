@@ -21,8 +21,6 @@ import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.InnerPositiveFeedbackSynapse;
 import network.aika.fields.*;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.BindingVisitor;
-import network.aika.visitor.types.PatternVisitor;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;

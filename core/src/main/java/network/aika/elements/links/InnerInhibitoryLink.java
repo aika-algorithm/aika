@@ -20,8 +20,6 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.synapses.InnerInhibitorySynapse;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.PatternCategoryVisitor;
-import network.aika.visitor.types.PatternVisitor;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 

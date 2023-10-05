@@ -20,8 +20,6 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.LatentRelationActivation;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.PatternCategoryVisitor;
-import network.aika.visitor.types.PatternVisitor;
 
 /**
  * @author Lukas Molzberger

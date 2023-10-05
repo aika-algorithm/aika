@@ -26,10 +26,7 @@ import network.aika.elements.neurons.PatternNeuron;
 import network.aika.text.Document;
 import network.aika.text.TextReference;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.BindingVisitor;
-import network.aika.visitor.types.InhibitoryVisitor;
 import network.aika.enums.sign.Sign;
-import network.aika.visitor.types.PatternCategoryVisitor;
 
 import java.util.Comparator;
 import java.util.Map;

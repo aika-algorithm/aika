@@ -19,7 +19,6 @@ package network.aika.elements.links;
 import network.aika.elements.activations.*;
 import network.aika.elements.synapses.*;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.PatternCategoryVisitor;
 
 import static network.aika.elements.activations.OuterInhibitoryActivation.crossConnectFields;
 

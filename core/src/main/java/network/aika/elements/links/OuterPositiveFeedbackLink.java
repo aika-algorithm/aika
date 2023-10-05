@@ -22,8 +22,6 @@ import network.aika.elements.synapses.OuterPositiveFeedbackSynapse;
 import network.aika.fields.AbstractFunction;
 import network.aika.fields.Fields;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.BindingVisitor;
-import network.aika.visitor.types.PatternVisitor;
 
 
 /**

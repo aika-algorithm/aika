@@ -23,9 +23,6 @@ import network.aika.fields.Field;
 import network.aika.fields.FieldLink;
 import network.aika.fields.MaxField;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.BindingVisitor;
-import network.aika.visitor.types.PatternCategoryVisitor;
-import network.aika.visitor.types.PatternVisitor;
 
 import static network.aika.elements.activations.InnerInhibitoryActivation.getBindingActivation;
 import static network.aika.elements.activations.InnerInhibitoryActivation.updateConnected;

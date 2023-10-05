@@ -28,7 +28,6 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.queue.activation.LinkingOut;
 import network.aika.visitor.Visitor;
 import network.aika.visitor.operator.SelfRefOperator;
-import network.aika.visitor.types.PatternCategoryVisitor;
 import network.aika.visitor.relations.UnboundDownVisitor;
 import network.aika.visitor.types.VisitorType;
 

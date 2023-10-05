@@ -21,7 +21,6 @@ import network.aika.elements.synapses.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.BindingCategorySynapse;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.PatternCategoryVisitor;
 
 
 /**

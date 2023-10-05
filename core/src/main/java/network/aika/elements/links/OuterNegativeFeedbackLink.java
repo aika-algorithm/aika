@@ -21,10 +21,6 @@ import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.fields.*;
 import network.aika.elements.synapses.OuterNegativeFeedbackSynapse;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.BindingVisitor;
-import network.aika.visitor.types.InhibitoryVisitor;
-import network.aika.visitor.types.PatternCategoryVisitor;
-import network.aika.visitor.types.PatternVisitor;
 
 import java.util.stream.Stream;
 

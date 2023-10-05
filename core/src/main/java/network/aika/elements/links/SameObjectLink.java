@@ -19,9 +19,6 @@ package network.aika.elements.links;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.synapses.SameObjectSynapse;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.types.BindingVisitor;
-import network.aika.visitor.types.InhibitoryVisitor;
-import network.aika.visitor.types.PatternCategoryVisitor;
 
 /**
  * @author Lukas Molzberger
