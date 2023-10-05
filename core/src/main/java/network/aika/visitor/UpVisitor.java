@@ -47,6 +47,7 @@ public abstract class UpVisitor<T extends ConjunctiveActivation> extends Visitor
         return bindingSource != null;
     }
 
+    @Override
     public void next(Activation<?> act, Link lastLink, int depth) {
         check(lastLink, act);
 
@@ -59,11 +60,11 @@ public abstract class UpVisitor<T extends ConjunctiveActivation> extends Visitor
                 );
     }
 
+    @Override
     public void next(Link<?, ?, ?> l, int depth) {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 
-        next(this, l, depth + 1);
         type.visit(this, l.getOutput(), l, depth + 1);
     }
 

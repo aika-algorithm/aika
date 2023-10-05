@@ -71,6 +71,7 @@ public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visit
                 );
     }
 
+    @Override
     public void next(Activation<?> act, Link lastLink, int depth) {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
@@ -81,11 +82,10 @@ public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visit
                 );
     }
 
+    @Override
     public void next(Link<?, ?, ?> l, int depth) {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
-
-        next(this, l, depth + 1);
 
         if(l.getInput() != null)
             type.visit(this, l.getInput(), l, depth + 1);

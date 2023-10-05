@@ -48,10 +48,6 @@ public abstract class Visitor<T extends ConjunctiveActivation> {
         type.visit(this, act, null, 0);
     }
 
-    public abstract void next(Visitor v, Activation<?> act, int depth);
-
-    public abstract void next(Visitor v, Link<?, ?, ?> l, int depth);
-
     public void up(T bindingSource, int depth) {
         // Nothing to do
     }
