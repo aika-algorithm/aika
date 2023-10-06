@@ -37,8 +37,4 @@ public class PatternCategoryLink extends CategoryLink<PatternCategorySynapse, Pa
     @Override
     public void innerInhibVisit(Visitor v, int depth) {
     }
-
-    @Override
-    public void outerInhibVisit(Visitor v, int depth) {
-    }
 }

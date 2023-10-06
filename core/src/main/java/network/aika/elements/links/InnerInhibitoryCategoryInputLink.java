@@ -41,6 +41,10 @@ public class InnerInhibitoryCategoryInputLink extends DisjunctiveLink<InnerInhib
     }
 
     @Override
+    public void innerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
     public void outerInhibVisit(Visitor v, int depth) {
     }
 

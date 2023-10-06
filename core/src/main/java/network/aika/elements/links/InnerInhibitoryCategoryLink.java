@@ -36,6 +36,10 @@ public class InnerInhibitoryCategoryLink extends CategoryLink<InnerInhibitoryCat
     }
 
     @Override
+    public void innerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
     public void outerInhibVisit(Visitor v, int depth) {
     }
 
