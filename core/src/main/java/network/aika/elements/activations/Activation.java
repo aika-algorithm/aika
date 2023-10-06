@@ -562,7 +562,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                         )
                 );
 
-        instanceAct.initFromTemplate();
+        instanceAct.initFromTemplate(this);
 
         getOutputLinks()
                 .forEach(l ->
@@ -573,8 +573,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 );
     }
 
-    public void initFromTemplate() {
-        fired = getTemplate().fired;
+    public void initFromTemplate(Activation templateAct) {
+        fired = templateAct.fired;
         thought.onElementEvent(UPDATE, this);
     }
 
