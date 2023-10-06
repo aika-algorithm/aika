@@ -45,7 +45,6 @@ public abstract class SequenceModel implements Writable {
     private static final Logger log = LoggerFactory.getLogger(SequenceModel.class);
 
     public static final double PATTERN_NET_TARGET = 0.7;
-
     public static final double POS_MARGIN = 1.0;
     public static final double NEG_MARGIN_LEFT = 1.2;
     public static final double NEG_MARGIN_RIGHT = 1.1;
@@ -69,6 +68,8 @@ public abstract class SequenceModel implements Writable {
     public PatternNeuron patternN;
 
     public BindingNeuron primaryBN;
+
+    public BindingNeuron subPhraseBN;
 
 
     record BindingNeuronParameters (
@@ -163,10 +164,6 @@ public abstract class SequenceModel implements Writable {
                 .setLabel("Next. Token Rel.: 1,1")
                 .setBias(5.0);
 
-        initTemplates();
-    }
-
-    protected void initTemplates() {
         // Abstract
         patternN = PatternNeuron.create(model, getPatternType(), true);
         patternN.setBias(PATTERN_NET_TARGET);
@@ -201,6 +198,27 @@ public abstract class SequenceModel implements Writable {
     }
 
     protected abstract void initTemplateBindingNeurons();
+
+    protected BindingNeuron createSubPhraseBindingNeuron() {
+        BindingNeuron bn = addBindingNeuron(
+                patternN,
+                "Abstract SubPhrase",
+                5.0,
+                2.5
+        );
+        bn.makeAbstract()
+                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+
+        addPositiveFeedbackLoop(
+                bn,
+                patternN,
+                2.5,
+                0.0,
+                true
+        );
+
+        return bn;
+    }
 
     protected BindingNeuron createPrimaryBindingNeuron() {
         BindingNeuron bn = createBindingNeuron(PRIMARY_BN_PARAMS, 0, false);

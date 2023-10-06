@@ -56,6 +56,7 @@ public class PhraseModel extends SequenceModel {
 
     @Override
     protected void initTemplateBindingNeurons() {
+        subPhraseBN = createSubPhraseBindingNeuron();
         primaryBN = createPrimaryBindingNeuron();
 
         expandContinueBindingNeurons(
