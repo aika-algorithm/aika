@@ -19,6 +19,15 @@ package network.aika.debugger;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.*;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategorySynapse;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitorySynapse;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerNegativeFeedbackSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterNegativeFeedbackSynapse;
+import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 

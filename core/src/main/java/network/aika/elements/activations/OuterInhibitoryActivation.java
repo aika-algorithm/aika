@@ -18,6 +18,10 @@ package network.aika.elements.activations;
 
 import network.aika.Thought;
 import network.aika.elements.links.*;
+import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryCategoryInputLink;
+import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryCategoryLink;
+import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryLink;
+import network.aika.elements.links.outerinhibitoryloop.OuterNegativeFeedbackLink;
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
 
 import java.util.List;

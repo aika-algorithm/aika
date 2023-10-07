@@ -17,8 +17,8 @@
 package network.aika.elements.activations;
 
 import network.aika.Thought;
-import network.aika.elements.links.InnerInhibitoryLink;
-import network.aika.elements.links.InnerNegativeFeedbackLink;
+import network.aika.elements.links.innerinhibitoryloop.InnerInhibitoryLink;
+import network.aika.elements.links.innerinhibitoryloop.InnerNegativeFeedbackLink;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
 import network.aika.enums.Scope;
 import network.aika.fields.FieldLink;

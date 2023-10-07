@@ -14,26 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links;
+package network.aika.elements.links.outerinhibitoryloop;
 
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.activations.*;
+import network.aika.elements.links.CategoryInputLink;
+import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.*;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
 import network.aika.visitor.Visitor;
+
+import static network.aika.elements.activations.OuterInhibitoryActivation.crossConnectFields;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class InnerInhibitoryCategoryInputLink extends DisjunctiveLink<InnerInhibitoryCategoryInputSynapse, CategoryActivation, InnerInhibitoryActivation> implements CategoryInputLink {
+public class OuterInhibitoryCategoryInputLink extends DisjunctiveLink<OuterInhibitoryCategoryInputSynapse, CategoryActivation, OuterInhibitoryActivation> implements CategoryInputLink {
 
-    public InnerInhibitoryCategoryInputLink(InnerInhibitoryCategoryInputSynapse s, CategoryActivation input, InnerInhibitoryActivation output) {
+    public OuterInhibitoryCategoryInputLink(OuterInhibitoryCategoryInputSynapse s, CategoryActivation input, OuterInhibitoryActivation output) {
         super(s, input, output);
+
+        input.getCategoryInputs()
+                .forEach(act ->
+                        crossConnectFields((OuterInhibitoryActivation) act, output)
+                );
     }
 
     @Override
     public CategorySynapse createCategorySynapse() {
-        return new InnerInhibitoryCategorySynapse();
+        return new OuterInhibitoryCategorySynapse();
     }
 
     @Override
@@ -45,10 +55,6 @@ public class InnerInhibitoryCategoryInputLink extends DisjunctiveLink<InnerInhib
     }
 
     @Override
-    public void outerInhibVisit(Visitor v, int depth) {
-    }
-
-    @Override
     public void innerSelfRefVisit(Visitor v, int depth) {
     }
 
@@ -57,7 +63,7 @@ public class InnerInhibitoryCategoryInputLink extends DisjunctiveLink<InnerInhib
     }
 
     @Override
-    public void instantiateTemplate(CategoryActivation iAct, InnerInhibitoryActivation oAct) {
+    public void instantiateTemplate(CategoryActivation iAct, OuterInhibitoryActivation oAct) {
         instantiateTemplate(iAct, oAct, this);
     }
 }

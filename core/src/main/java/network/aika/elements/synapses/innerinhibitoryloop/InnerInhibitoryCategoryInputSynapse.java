@@ -14,13 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.synapses.innerinhibitoryloop;
 
 import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.OuterInhibitoryActivation;
-import network.aika.elements.links.OuterInhibitoryCategoryInputLink;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.links.innerinhibitoryloop.InnerInhibitoryCategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.OuterInhibitoryNeuron;
+import network.aika.elements.neurons.InnerInhibitoryNeuron;
+import network.aika.elements.synapses.CategoryInputSynapse;
+import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.enums.Scope;
 
 /**
@@ -28,16 +30,15 @@ import network.aika.enums.Scope;
  *
  * @author Lukas Molzberger
  */
-public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
-        OuterInhibitoryCategoryInputSynapse,
+public class InnerInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
+        InnerInhibitoryCategoryInputSynapse,
         CategoryNeuron,
-        OuterInhibitoryNeuron,
-        OuterInhibitoryCategoryInputLink,
+        InnerInhibitoryNeuron,
+        InnerInhibitoryCategoryInputLink,
         CategoryActivation,
-        OuterInhibitoryActivation
+        InnerInhibitoryActivation
         > implements CategoryInputSynapse
 {
-
     private double initialCategorySynapseWeight;
 
     @Override
@@ -51,8 +52,8 @@ public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
     }
 
     @Override
-    public OuterInhibitoryCategoryInputLink createLink(CategoryActivation input, OuterInhibitoryActivation output) {
-        return new OuterInhibitoryCategoryInputLink(this, input, output);
+    public InnerInhibitoryCategoryInputLink createLink(CategoryActivation input, InnerInhibitoryActivation output) {
+        return new InnerInhibitoryCategoryInputLink(this, input, output);
     }
 
     @Override

@@ -14,32 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.links.outerinhibitoryloop;
 
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
-import network.aika.elements.links.OuterInhibitoryCategoryLink;
-import network.aika.elements.neurons.Neuron;
-import network.aika.enums.Scope;
+import network.aika.elements.links.CategoryLink;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
+import network.aika.visitor.Visitor;
+
+import static network.aika.elements.activations.OuterInhibitoryActivation.crossConnectFields;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class OuterInhibitoryCategorySynapse extends CategorySynapse<OuterInhibitoryCategorySynapse, Neuron, OuterInhibitoryActivation> {
+public class OuterInhibitoryCategoryLink extends CategoryLink<OuterInhibitoryCategorySynapse, OuterInhibitoryActivation> {
 
-    @Override
-    public Scope getScope() {
-        return Scope.SAME;
+    public OuterInhibitoryCategoryLink(OuterInhibitoryCategorySynapse s, OuterInhibitoryActivation input, CategoryActivation output) {
+        super(s, input, output);
+
+        crossConnectFields(input, (OuterInhibitoryActivation) output.getTemplate());
     }
 
     @Override
-    public boolean isLinkingAllowed(boolean latent) {
-        return !latent;
+    public void patternCatVisit(Visitor v, int depth) {
     }
 
     @Override
-    public OuterInhibitoryCategoryLink createLink(OuterInhibitoryActivation input, CategoryActivation output) {
-        return new OuterInhibitoryCategoryLink(this, input, output);
+    public void innerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void innerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
     }
 }

@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links;
+package network.aika.elements.links.positivefeedbackloop;
 
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.synapses.OuterPositiveFeedbackSynapse;
+import network.aika.elements.links.Link;
+import network.aika.elements.synapses.positivefeedbackloop.OuterPositiveFeedbackSynapse;
 import network.aika.fields.AbstractFunction;
 import network.aika.fields.Fields;
 import network.aika.visitor.Visitor;

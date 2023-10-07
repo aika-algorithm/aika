@@ -14,13 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.synapses.positivefeedbackloop;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
-import network.aika.elements.links.InnerPositiveFeedbackLink;
-import network.aika.elements.links.OuterPositiveFeedbackLink;
+import network.aika.elements.links.positivefeedbackloop.OuterPositiveFeedbackLink;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.enums.Scope;
 
@@ -37,7 +36,7 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
 {
     @Override
     public Scope getScope() {
-        return Scope.SAME;
+        return Scope.INPUT;
     }
 
     @Override

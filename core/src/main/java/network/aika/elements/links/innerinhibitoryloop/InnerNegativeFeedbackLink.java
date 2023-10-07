@@ -14,40 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links;
+package network.aika.elements.links.innerinhibitoryloop;
 
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.OuterInhibitoryActivation;
-import network.aika.fields.*;
-import network.aika.elements.synapses.OuterNegativeFeedbackSynapse;
+import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.links.FeedbackLink;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerNegativeFeedbackSynapse;
+import network.aika.fields.Field;
+import network.aika.fields.FieldLink;
+import network.aika.fields.MaxField;
 import network.aika.visitor.Visitor;
 
-import java.util.stream.Stream;
+import static network.aika.elements.activations.InnerInhibitoryActivation.getBindingActivation;
+import static network.aika.elements.activations.InnerInhibitoryActivation.updateConnected;
 
-import static network.aika.fields.Fields.mul;
 
 /**
  * @author Lukas Molzberger
  */
-public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbackSynapse, OuterInhibitoryActivation> {
+public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbackSynapse, InnerInhibitoryActivation> {
 
-    private Multiplication innerWeightedInput;
-
-    public OuterNegativeFeedbackLink(OuterNegativeFeedbackSynapse s, OuterInhibitoryActivation input, BindingActivation output) {
+    public InnerNegativeFeedbackLink(InnerNegativeFeedbackSynapse s, InnerInhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
-
-        if(input == null)
-            return;
-
-        OuterInhibitoryActivation.connectFields(
-                input.getAllInhibitoryLinks(),
-                Stream.of(this)
-        );
     }
 
     @Override
     protected void initInputValue() {
-        inputValue = new MaxField(this, "max-input-value");
+        super.initInputValue();
+        inputValue.setInitialValue(1.0);
     }
 
     @Override
@@ -57,17 +51,14 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
 
     @Override
     protected void connectInputValue() {
-    }
+        if(inputValue.getInputs().get(0) == null)
+            inputValue.setValue(0.0);
 
-    @Override
-    protected Multiplication initWeightedInput() {
-        innerWeightedInput = super.initWeightedInput();
-        return mul(
-                this,
-                "annealing * iAct(" + getInputKeyString() + ").value * weight",
-                getThought().getAnnealing(),
-                innerWeightedInput
-        );
+        FieldLink fl = FieldLink.link(input.getValue(), 0, inputValue);
+        MaxField inhibNet = (MaxField) input.getNet();
+        BindingActivation selectBindingAct = getBindingActivation(inhibNet.getSelectedInput());
+
+        updateConnected(fl, selectBindingAct, output, true);
     }
 
     @Override
@@ -79,15 +70,11 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
     }
 
     @Override
-    public void innerInhibVisit(Visitor v, int depth) {
+    public void patternCatVisit(Visitor v, int depth) {
     }
 
     @Override
     public void outerInhibVisit(Visitor v, int depth) {
-    }
-
-    @Override
-    public void patternCatVisit(Visitor v, int depth) {
     }
 
     @Override
@@ -96,12 +83,5 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
 
     @Override
     public void outerSelfRefVisit(Visitor v, int depth) {
-    }
-
-    @Override
-    public void disconnect() {
-        super.disconnect();
-
-        innerWeightedInput.disconnectAndUnlinkInputs(false);
     }
 }

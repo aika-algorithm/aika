@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links;
+package network.aika.elements.links.positivefeedbackloop;
 
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
-import network.aika.fields.AbstractFunction;
-import network.aika.fields.IdentityFunction;
+import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.links.Link;
+import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
+import network.aika.fields.*;
 import network.aika.visitor.Visitor;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
@@ -31,20 +31,12 @@ import static network.aika.fields.Fields.scale;
  *
  * @author Lukas Molzberger
  */
-public class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends Activation<?>> extends FeedbackLink<S, IA> {
+public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiveFeedbackSynapse, PatternActivation> {
 
     protected AbstractFunction inputGradient;
 
-    public PositiveFeedbackLink(S s, IA input, BindingActivation output) {
+    public InnerPositiveFeedbackLink(InnerPositiveFeedbackSynapse s, PatternActivation input, BindingActivation output) {
         super(s, input, output);
-    }
-
-    @Override
-    protected void initInputValue() {
-        super.initInputValue();
-
-        if(input == null)
-            linkAndConnect(getThought().getFeedbackTrigger(), 0, inputValue);
     }
 
     @Override
@@ -88,5 +80,13 @@ public class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends 
 
     @Override
     public void patternVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void innerSelfRefVisit(Visitor v, int depth) {
     }
 }

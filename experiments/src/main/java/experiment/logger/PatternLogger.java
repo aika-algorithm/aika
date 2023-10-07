@@ -20,6 +20,8 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.*;
+import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryLink;
+import network.aika.elements.links.outerinhibitoryloop.OuterNegativeFeedbackLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternSynapse;

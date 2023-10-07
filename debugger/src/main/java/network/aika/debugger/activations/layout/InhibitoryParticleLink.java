@@ -17,7 +17,7 @@
 package network.aika.debugger.activations.layout;
 
 import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.elements.links.OuterInhibitoryLink;
+import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryLink;
 import org.graphstream.graph.Edge;
 
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;

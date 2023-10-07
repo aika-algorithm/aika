@@ -20,6 +20,11 @@ import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.NearRelation;
 import network.aika.elements.synapses.*;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitorySynapse;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerNegativeFeedbackSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterNegativeFeedbackSynapse;
+import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

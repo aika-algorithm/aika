@@ -14,41 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links;
+package network.aika.elements.synapses.innerinhibitoryloop;
 
-import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
-import network.aika.elements.synapses.InnerInhibitorySynapse;
-import network.aika.visitor.Visitor;
-
-import static network.aika.fields.FieldLink.linkAndConnect;
+import network.aika.elements.links.innerinhibitoryloop.InnerInhibitoryCategoryLink;
+import network.aika.elements.neurons.Neuron;
+import network.aika.elements.synapses.CategorySynapse;
+import network.aika.enums.Scope;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class InnerInhibitoryLink extends DisjunctiveLink<InnerInhibitorySynapse, BindingActivation, InnerInhibitoryActivation> {
+public class InnerInhibitoryCategorySynapse extends CategorySynapse<InnerInhibitoryCategorySynapse, Neuron, InnerInhibitoryActivation> {
 
-    public InnerInhibitoryLink(InnerInhibitorySynapse inhibitorySynapse, BindingActivation input, InnerInhibitoryActivation output) {
-        super(inhibitorySynapse, input, output);
+    @Override
+    public Scope getScope() {
+        return Scope.SAME;
     }
 
     @Override
-    public void patternVisit(Visitor v, int depth) {
+    public boolean isLinkingAllowed(boolean latent) {
+        return !latent;
     }
 
     @Override
-    public void patternCatVisit(Visitor v, int depth) {
-    }
-
-    @Override
-    public void outerInhibVisit(Visitor v, int depth) {
-    }
-
-    @Override
-    public void innerSelfRefVisit(Visitor v, int depth) {
-    }
-
-    @Override
-    public void outerSelfRefVisit(Visitor v, int depth) {
+    public InnerInhibitoryCategoryLink createLink(InnerInhibitoryActivation input, CategoryActivation output) {
+        return new InnerInhibitoryCategoryLink(this, input, output);
     }
 }

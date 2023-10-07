@@ -17,7 +17,7 @@
 package network.aika.debugger.neurons.properties;
 
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.InnerPositiveFeedbackSynapse;
+import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 /**
  * @author Lukas Molzberger
  */

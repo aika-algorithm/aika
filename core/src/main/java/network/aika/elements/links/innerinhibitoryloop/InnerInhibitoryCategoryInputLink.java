@@ -14,21 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links;
+package network.aika.elements.links.innerinhibitoryloop;
 
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
-import network.aika.elements.synapses.InnerInhibitoryCategorySynapse;
+import network.aika.elements.links.CategoryInputLink;
+import network.aika.elements.links.DisjunctiveLink;
+import network.aika.elements.synapses.*;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategorySynapse;
 import network.aika.visitor.Visitor;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class InnerInhibitoryCategoryLink extends CategoryLink<InnerInhibitoryCategorySynapse, InnerInhibitoryActivation> {
+public class InnerInhibitoryCategoryInputLink extends DisjunctiveLink<InnerInhibitoryCategoryInputSynapse, CategoryActivation, InnerInhibitoryActivation> implements CategoryInputLink {
 
-    public InnerInhibitoryCategoryLink(InnerInhibitoryCategorySynapse s, InnerInhibitoryActivation input, CategoryActivation output) {
+    public InnerInhibitoryCategoryInputLink(InnerInhibitoryCategoryInputSynapse s, CategoryActivation input, InnerInhibitoryActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    public CategorySynapse createCategorySynapse() {
+        return new InnerInhibitoryCategorySynapse();
     }
 
     @Override
@@ -49,5 +58,10 @@ public class InnerInhibitoryCategoryLink extends CategoryLink<InnerInhibitoryCat
 
     @Override
     public void outerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void instantiateTemplate(CategoryActivation iAct, InnerInhibitoryActivation oAct) {
+        instantiateTemplate(iAct, oAct, this);
     }
 }

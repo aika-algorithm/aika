@@ -14,47 +14,60 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.synapses.outerinhibitoryloop;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
-import network.aika.elements.links.OuterInhibitoryLink;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.links.outerinhibitoryloop.OuterNegativeFeedbackLink;
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
+import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.enums.Scope;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class OuterInhibitorySynapse extends DisjunctiveSynapse<
-        OuterInhibitorySynapse,
-        BindingNeuron,
+public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
+        OuterNegativeFeedbackSynapse,
         OuterInhibitoryNeuron,
-        OuterInhibitoryLink,
-        BindingActivation,
+        OuterNegativeFeedbackLink,
         OuterInhibitoryActivation
-        > {
-
+        >
+{
     @Override
     public Scope getScope() {
-        return Scope.SAME;
+        return Scope.INPUT;
+    }
+
+    @Override
+    public void initDummyLink(BindingActivation oAct) {
+    }
+
+    @Override
+    protected void checkWeight() {
+        if(!isNegative())
+            delete();
     }
 
     @Override
     public boolean isLinkingAllowed(boolean latent) {
-        return !latent;
+        return false;
     }
 
     @Override
-    public OuterInhibitoryLink createLink(BindingActivation input, OuterInhibitoryActivation output) {
-        return new OuterInhibitoryLink(this, input, output);
+    public OuterNegativeFeedbackLink createLink(OuterInhibitoryActivation input, BindingActivation output) {
+        return new OuterNegativeFeedbackLink(this, input, output);
     }
 
     @Override
-    public OuterInhibitorySynapse instantiateTemplate(BindingNeuron input, OuterInhibitoryNeuron output) {
-        OuterInhibitorySynapse s = new OuterInhibitorySynapse();
-        s.initFromTemplate(input, output, this);
-        return s;
+    public void linkAndPropagateOut(OuterInhibitoryActivation act) {
+        getOutput()
+                .linkOutgoing(this, act);
+    }
+
+    @Override
+    public boolean checkLinkingEvent(Activation act) {
+        return true;
     }
 }

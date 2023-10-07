@@ -16,7 +16,7 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.elements.links.OuterInhibitoryLink;
+import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryLink;
 
 /**
  * @author Lukas Molzberger

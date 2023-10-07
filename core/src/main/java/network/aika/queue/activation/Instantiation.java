@@ -19,7 +19,6 @@ package network.aika.queue.activation;
 import network.aika.elements.activations.Activation;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
-import network.aika.queue.Step;
 
 import static network.aika.queue.Phase.INSTANTIATION;
 

@@ -14,32 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.links.innerinhibitoryloop;
 
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
-import network.aika.elements.links.InnerInhibitoryCategoryLink;
-import network.aika.elements.neurons.Neuron;
-import network.aika.enums.Scope;
+import network.aika.elements.links.CategoryLink;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategorySynapse;
+import network.aika.visitor.Visitor;
+
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class InnerInhibitoryCategorySynapse extends CategorySynapse<InnerInhibitoryCategorySynapse, Neuron, InnerInhibitoryActivation> {
+public class InnerInhibitoryCategoryLink extends CategoryLink<InnerInhibitoryCategorySynapse, InnerInhibitoryActivation> {
 
-    @Override
-    public Scope getScope() {
-        return Scope.SAME;
+    public InnerInhibitoryCategoryLink(InnerInhibitoryCategorySynapse s, InnerInhibitoryActivation input, CategoryActivation output) {
+        super(s, input, output);
     }
 
     @Override
-    public boolean isLinkingAllowed(boolean latent) {
-        return !latent;
+    public void patternCatVisit(Visitor v, int depth) {
     }
 
     @Override
-    public InnerInhibitoryCategoryLink createLink(InnerInhibitoryActivation input, CategoryActivation output) {
-        return new InnerInhibitoryCategoryLink(this, input, output);
+    public void innerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerInhibVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void innerSelfRefVisit(Visitor v, int depth) {
+    }
+
+    @Override
+    public void outerSelfRefVisit(Visitor v, int depth) {
     }
 }

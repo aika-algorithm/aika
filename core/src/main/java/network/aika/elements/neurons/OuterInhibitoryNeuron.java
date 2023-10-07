@@ -21,6 +21,8 @@ import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.synapses.*;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
 import network.aika.visitor.types.VisitorType;
 
 import static network.aika.enums.Scope.INPUT;
