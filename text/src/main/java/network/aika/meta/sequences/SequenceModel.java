@@ -63,7 +63,7 @@ public abstract class SequenceModel implements Writable {
 
     public InnerInhibitoryNeuron primaryBNInhibitoryN;
 
-    protected InhibitoryCategoryNeuron inhibCat;
+    protected OuterInhibitoryCategoryNeuron inhibCat;
 
     public PatternNeuron patternN;
 
@@ -133,7 +133,7 @@ public abstract class SequenceModel implements Writable {
         return outerInhibitoryN;
     }
 
-    public InhibitoryCategoryNeuron getInhibitoryCategory() {
+    public OuterInhibitoryCategoryNeuron getInhibitoryCategory() {
         return inhibCat;
     }
 

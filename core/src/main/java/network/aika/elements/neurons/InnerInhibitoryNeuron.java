@@ -19,6 +19,7 @@ package network.aika.elements.neurons;
 import network.aika.ActivationFunction;
 import network.aika.Model;
 import network.aika.Thought;
+import network.aika.elements.Type;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategoryInputSynapse;
@@ -26,6 +27,7 @@ import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategor
 import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
 import network.aika.visitor.types.VisitorType;
 
+import static network.aika.elements.Type.INNER_INHIBITORY;
 import static network.aika.enums.Scope.SAME;
 
 /**
@@ -39,8 +41,13 @@ public class InnerInhibitoryNeuron extends DisjunctiveNeuron<InnerInhibitoryNeur
     }
 
     @Override
+    public Type getType() {
+        return INNER_INHIBITORY;
+    }
+
+    @Override
     public InnerInhibitoryCategoryInputSynapse makeAbstract() {
-        InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(getModel(), SAME)
+        InnerInhibitoryCategoryNeuron inhibCategory = new InnerInhibitoryCategoryNeuron(getModel())
                 .setLabel(getLabel() + CATEGORY_LABEL);
 
         InnerInhibitoryCategoryInputSynapse s = new InnerInhibitoryCategoryInputSynapse()

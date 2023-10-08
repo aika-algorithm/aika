@@ -16,11 +16,14 @@
  */
 package network.aika.elements.links;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.*;
 import network.aika.elements.synapses.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.BindingCategorySynapse;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.visitor.Visitor;
+
+import static network.aika.elements.Type.BINDING;
 
 
 /**
@@ -30,6 +33,11 @@ public class BindingCategoryInputLink extends ConjunctiveLink<BindingCategoryInp
 
     public BindingCategoryInputLink(BindingCategoryInputSynapse s, CategoryActivation input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    public Type getType() {
+        return BINDING;
     }
 
     @Override

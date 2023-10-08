@@ -18,9 +18,6 @@ package network.aika.debugger;
 
 import network.aika.debugger.activations.LayoutState;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.BeforeRelation;
-import network.aika.elements.neurons.relations.ContainsRelation;
-import network.aika.elements.neurons.relations.EqualsRelation;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Vector3;
 import org.graphstream.ui.layout.springbox.EdgeSpring;
@@ -64,7 +61,7 @@ public abstract class AbstractParticle<G extends AbstractGraphManager> extends S
 
         neuronTypeModifiers.put(PatternCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
         neuronTypeModifiers.put(BindingCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-        neuronTypeModifiers.put(InhibitoryCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
+        neuronTypeModifiers.put(OuterInhibitoryCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
 
         neuronTypeModifiers.put(PatternNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(224, 34, 245);"));
     }

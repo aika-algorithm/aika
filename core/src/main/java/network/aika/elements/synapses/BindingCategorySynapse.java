@@ -16,17 +16,26 @@
  */
 package network.aika.elements.synapses;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.links.BindingCategoryLink;
 import network.aika.elements.neurons.Neuron;
 import network.aika.enums.Scope;
 
+import static network.aika.elements.Type.BINDING;
+
 /**
  *
  * @author Lukas Molzberger
  */
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
+
+
+    @Override
+    public Type getType() {
+        return BINDING;
+    }
 
     @Override
     public Scope getScope() {

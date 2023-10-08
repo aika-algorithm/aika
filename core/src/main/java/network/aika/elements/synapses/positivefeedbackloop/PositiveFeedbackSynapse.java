@@ -16,12 +16,15 @@
  */
 package network.aika.elements.synapses.positivefeedbackloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.positivefeedbackloop.PositiveFeedbackLink;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.FeedbackSynapse;
+
+import static network.aika.elements.Type.BINDING;
 
 /**
  *
@@ -36,6 +39,11 @@ public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse,
         OA
         >
 {
+
+    @Override
+    public Type getType() {
+        return BINDING;
+    }
 
     @Override
     public double getSortingWeight() {

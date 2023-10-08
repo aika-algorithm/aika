@@ -16,11 +16,14 @@
  */
 package network.aika.elements.links.innerinhibitoryloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.CategoryLink;
 import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategorySynapse;
 import network.aika.visitor.Visitor;
+
+import static network.aika.elements.Type.INNER_INHIBITORY;
 
 
 /**
@@ -30,6 +33,11 @@ public class InnerInhibitoryCategoryLink extends CategoryLink<InnerInhibitoryCat
 
     public InnerInhibitoryCategoryLink(InnerInhibitoryCategorySynapse s, InnerInhibitoryActivation input, CategoryActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    public Type getType() {
+        return INNER_INHIBITORY;
     }
 
     @Override

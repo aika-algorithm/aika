@@ -19,12 +19,14 @@ package network.aika.elements.neurons;
 import network.aika.ActivationFunction;
 import network.aika.Model;
 import network.aika.Thought;
+import network.aika.elements.Type;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
 import network.aika.visitor.types.VisitorType;
 
+import static network.aika.elements.Type.OUTER_INHIBITORY;
 import static network.aika.enums.Scope.INPUT;
 
 /**
@@ -38,8 +40,13 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryNeur
     }
 
     @Override
+    public Type getType() {
+        return OUTER_INHIBITORY;
+    }
+
+    @Override
     public OuterInhibitoryCategoryInputSynapse makeAbstract() {
-        InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(getModel(), INPUT)
+        OuterInhibitoryCategoryNeuron inhibCategory = new OuterInhibitoryCategoryNeuron(getModel())
                 .setLabel(getLabel() + CATEGORY_LABEL);
 
         OuterInhibitoryCategoryInputSynapse s = new OuterInhibitoryCategoryInputSynapse()

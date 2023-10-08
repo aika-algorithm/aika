@@ -14,27 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links.outerinhibitoryloop;
+package network.aika.elements.neurons;
 
+import network.aika.Model;
+import network.aika.Thought;
 import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.OuterInhibitoryActivation;
-import network.aika.elements.links.CategoryLink;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
-import network.aika.visitor.Visitor;
+import network.aika.elements.activations.OuterInhibitoryCategoryActivation;
+import network.aika.visitor.types.VisitorType;
 
 import static network.aika.elements.Type.OUTER_INHIBITORY;
-import static network.aika.elements.activations.OuterInhibitoryActivation.crossConnectFields;
+import static network.aika.visitor.types.VisitorType.OUTER_INHIB_VISITOR_TYPE;
 
 /**
  * @author Lukas Molzberger
  */
-public class OuterInhibitoryCategoryLink extends CategoryLink<OuterInhibitoryCategorySynapse, OuterInhibitoryActivation> {
+public class OuterInhibitoryCategoryNeuron extends CategoryNeuron {
 
-    public OuterInhibitoryCategoryLink(OuterInhibitoryCategorySynapse s, OuterInhibitoryActivation input, CategoryActivation output) {
-        super(s, input, output);
-
-        crossConnectFields(input, (OuterInhibitoryActivation) output.getTemplate());
+    public OuterInhibitoryCategoryNeuron(Model m) {
+        super(m);
     }
 
     @Override
@@ -43,18 +41,12 @@ public class OuterInhibitoryCategoryLink extends CategoryLink<OuterInhibitoryCat
     }
 
     @Override
-    public void patternCatVisit(Visitor v, int depth) {
+    public VisitorType getVisitorType() {
+        return OUTER_INHIB_VISITOR_TYPE;
     }
 
     @Override
-    public void innerInhibVisit(Visitor v, int depth) {
-    }
-
-    @Override
-    public void innerSelfRefVisit(Visitor v, int depth) {
-    }
-
-    @Override
-    public void outerSelfRefVisit(Visitor v, int depth) {
+    public CategoryActivation createActivation(Thought t) {
+        return new OuterInhibitoryCategoryActivation(t.createActivationId(), t, this);
     }
 }

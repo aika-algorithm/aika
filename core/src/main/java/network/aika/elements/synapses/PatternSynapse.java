@@ -17,6 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
@@ -36,6 +37,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+import static network.aika.elements.Type.PATTERN;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.enums.sign.Sign.NEG;
 import static network.aika.enums.sign.Sign.POS;
@@ -60,6 +62,11 @@ public class PatternSynapse extends ConjunctiveSynapse<
     protected double frequencyINegOPos;
 
     protected SampleSpace sampleSpace = new SampleSpace();
+
+    @Override
+    public Type getType() {
+        return PATTERN;
+    }
 
     @Override
     public Scope getScope() {

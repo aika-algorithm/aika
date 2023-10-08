@@ -16,12 +16,15 @@
  */
 package network.aika.elements.links;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.fields.AbstractFunction;
 import network.aika.fields.Fields;
 import network.aika.visitor.Visitor;
+
+import static network.aika.elements.Type.BINDING;
 
 /**
  * @author Lukas Molzberger
@@ -32,6 +35,11 @@ public class InputObjectLink extends ConjunctiveLink<InputObjectSynapse, Pattern
 
     public InputObjectLink(InputObjectSynapse s, PatternActivation input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    public Type getType() {
+        return BINDING;
     }
 
     public AbstractFunction getInputEntropy() {

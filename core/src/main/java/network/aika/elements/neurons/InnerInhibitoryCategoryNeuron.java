@@ -14,45 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.activations;
+package network.aika.elements.neurons;
 
+import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.Type;
-import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.activations.CategoryActivation;
+import network.aika.elements.activations.InnerInhibitoryCategoryActivation;
+import network.aika.visitor.types.VisitorType;
 
-import static network.aika.elements.Type.BINDING;
-
+import static network.aika.elements.Type.INNER_INHIBITORY;
+import static network.aika.visitor.types.VisitorType.INNER_INHIB_VISITOR_TYPE;
 
 /**
  * @author Lukas Molzberger
  */
-public class LatentRelationActivation extends BindingActivation {
+public class InnerInhibitoryCategoryNeuron extends CategoryNeuron {
 
-    private PatternActivation fromAct;
-    private PatternActivation toAct;
 
-    public LatentRelationActivation(int id, Thought t, LatentRelationNeuron n) {
-        super(id, t, n);
+    public InnerInhibitoryCategoryNeuron(Model m) {
+        super(m);
     }
 
     @Override
     public Type getType() {
-        return BINDING;
+        return INNER_INHIBITORY;
     }
 
-    public PatternActivation getFromAct() {
-        return fromAct;
+    @Override
+    public VisitorType getVisitorType() {
+        return INNER_INHIB_VISITOR_TYPE;
     }
 
-    public void setFromAct(PatternActivation fromAct) {
-        this.fromAct = fromAct;
-    }
-
-    public PatternActivation getToAct() {
-        return toAct;
-    }
-
-    public void setToAct(PatternActivation toAct) {
-        this.toAct = toAct;
+    @Override
+    public CategoryActivation createActivation(Thought t) {
+        return new InnerInhibitoryCategoryActivation(t.createActivationId(), t, this);
     }
 }

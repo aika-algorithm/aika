@@ -17,8 +17,13 @@
 package network.aika.elements.neurons;
 
 import network.aika.Model;
+import network.aika.Thought;
+import network.aika.elements.Type;
+import network.aika.elements.activations.BindingCategoryActivation;
+import network.aika.elements.activations.CategoryActivation;
 import network.aika.visitor.types.VisitorType;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.visitor.types.VisitorType.BINDING_VISITOR_TYPE;
 
 /**
@@ -31,7 +36,17 @@ public class BindingCategoryNeuron extends CategoryNeuron {
     }
 
     @Override
+    public Type getType() {
+        return BINDING;
+    }
+
+    @Override
     public VisitorType getVisitorType() {
         return BINDING_VISITOR_TYPE;
+    }
+
+    @Override
+    public CategoryActivation createActivation(Thought t) {
+        return new BindingCategoryActivation(t.createActivationId(), t, this);
     }
 }

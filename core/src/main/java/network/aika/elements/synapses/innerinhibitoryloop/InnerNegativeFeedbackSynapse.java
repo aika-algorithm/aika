@@ -16,6 +16,7 @@
  */
 package network.aika.elements.synapses.innerinhibitoryloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.innerinhibitoryloop.InnerNegativeFeedbackLink;
@@ -23,6 +24,8 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.enums.Scope;
+
+import static network.aika.elements.Type.BINDING;
 
 /**
  *
@@ -38,6 +41,11 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
         >
 {
     public InnerNegativeFeedbackSynapse() {
+    }
+
+    @Override
+    public Type getType() {
+        return BINDING;
     }
 
     @Override

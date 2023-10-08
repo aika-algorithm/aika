@@ -16,6 +16,7 @@
  */
 package network.aika.elements.links.positivefeedbackloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.ConjunctiveActivation;
@@ -26,6 +27,7 @@ import network.aika.fields.AbstractFunction;
 import network.aika.fields.IdentityFunction;
 import network.aika.visitor.Visitor;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
 import static network.aika.fields.Fields.scale;
@@ -40,6 +42,11 @@ public class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends 
 
     public PositiveFeedbackLink(S s, IA input, OA output) {
         super(s, input, output);
+    }
+
+    @Override
+    public Type getType() {
+        return BINDING;
     }
 
     @Override

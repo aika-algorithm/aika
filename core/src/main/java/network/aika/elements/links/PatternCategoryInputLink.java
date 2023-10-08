@@ -16,12 +16,16 @@
  */
 package network.aika.elements.links;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.PatternCategoryInputSynapse;
 import network.aika.elements.synapses.PatternCategorySynapse;
 import network.aika.visitor.Visitor;
+
+import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
 
 
 /**
@@ -31,6 +35,11 @@ public class PatternCategoryInputLink extends ConjunctiveLink<PatternCategoryInp
 
     public PatternCategoryInputLink(PatternCategoryInputSynapse s, CategoryActivation input, PatternActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    public Type getType() {
+        return PATTERN;
     }
 
     @Override

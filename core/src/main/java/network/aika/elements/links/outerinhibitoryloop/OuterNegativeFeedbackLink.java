@@ -16,6 +16,7 @@
  */
 package network.aika.elements.links.outerinhibitoryloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.links.FeedbackLink;
@@ -25,6 +26,7 @@ import network.aika.visitor.Visitor;
 
 import java.util.stream.Stream;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.fields.Fields.mul;
 
 /**
@@ -44,6 +46,11 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
                 input.getAllInhibitoryLinks(),
                 Stream.of(this)
         );
+    }
+
+    @Override
+    public Type getType() {
+        return BINDING;
     }
 
     @Override

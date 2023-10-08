@@ -17,6 +17,7 @@
 package network.aika.elements.activations;
 
 import network.aika.Thought;
+import network.aika.elements.Type;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.LatentRelationNeuron;
@@ -32,6 +33,8 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
 import static network.aika.fields.Fields.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -53,6 +56,10 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
         super(id, t, patternNeuron);
     }
 
+    @Override
+    public Type getType() {
+        return PATTERN;
+    }
 
     public Map<LatentRelationNeuron, LatentRelationActivation> getToRelations() {
         return toRelations;

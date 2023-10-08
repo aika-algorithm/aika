@@ -16,6 +16,7 @@
  */
 package network.aika.elements.synapses.innerinhibitoryloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.innerinhibitoryloop.InnerInhibitoryCategoryLink;
@@ -23,11 +24,20 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.enums.Scope;
 
+import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.INNER_INHIBITORY;
+
 /**
  *
  * @author Lukas Molzberger
  */
 public class InnerInhibitoryCategorySynapse extends CategorySynapse<InnerInhibitoryCategorySynapse, Neuron, InnerInhibitoryActivation> {
+
+
+    @Override
+    public Type getType() {
+        return INNER_INHIBITORY;
+    }
 
     @Override
     public Scope getScope() {

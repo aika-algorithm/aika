@@ -18,6 +18,7 @@ package network.aika.elements.activations;
 
 import network.aika.Thought;
 import network.aika.elements.Timestamp;
+import network.aika.elements.Type;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
 import network.aika.elements.links.InputObjectLink;
@@ -37,6 +38,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.NOT_SET;
+import static network.aika.elements.Type.BINDING;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.func;
 import static network.aika.fields.Fields.isTrue;
@@ -68,6 +70,11 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
                 netUnsuppressed,
                 x -> getActivationFunction().f(x)
         );
+    }
+
+    @Override
+    public Type getType() {
+        return BINDING;
     }
 
     @Override

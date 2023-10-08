@@ -16,12 +16,16 @@
  */
 package network.aika.elements.synapses;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.links.PatternCategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.enums.Scope;
+
+import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
 
 /**
  * The Same Pattern Binding Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
@@ -38,6 +42,12 @@ public class PatternCategoryInputSynapse extends ConjunctiveSynapse<
         > implements CategoryInputSynapse {
 
     private double initialCategorySynapseWeight;
+
+
+    @Override
+    public Type getType() {
+        return PATTERN;
+    }
 
     @Override
     public Scope getScope() {

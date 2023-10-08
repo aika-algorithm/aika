@@ -16,12 +16,15 @@
  */
 package network.aika.elements.synapses;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.InputObjectLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.enums.Scope;
+
+import static network.aika.elements.Type.BINDING;
 
 /**
  *
@@ -36,6 +39,11 @@ public class InputObjectSynapse extends ConjunctiveSynapse<
         BindingActivation
         >
 {
+
+    @Override
+    public Type getType() {
+        return BINDING;
+    }
 
     @Override
     public Scope getScope() {

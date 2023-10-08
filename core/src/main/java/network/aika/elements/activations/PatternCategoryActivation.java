@@ -14,33 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links;
+package network.aika.elements.activations;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.synapses.DisjunctiveSynapse;
+import network.aika.Thought;
+import network.aika.elements.Type;
+import network.aika.elements.neurons.CategoryNeuron;
 
-import static network.aika.fields.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.mul;
+import static network.aika.elements.Type.PATTERN;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public abstract class DisjunctiveLink<S extends DisjunctiveSynapse, IA extends Activation<?>, OA extends Activation> extends Link<S, IA, OA> {
+public class PatternCategoryActivation extends CategoryActivation {
 
-    public DisjunctiveLink(S s, IA input, OA output) {
-        super(s, input, output);
+    public PatternCategoryActivation(int id, Thought t, CategoryNeuron neuron) {
+        super(id, t, neuron);
     }
 
     @Override
-    public void connectWeightUpdate() {
-        linkAndConnect(
-                mul(
-                        this,
-                        "weight update",
-                        inputIsFired,
-                        getOutput().getUpdateValue()
-                ),
-                synapse.getWeight()
-        );
+    public Type getType() {
+        return PATTERN;
     }
 }

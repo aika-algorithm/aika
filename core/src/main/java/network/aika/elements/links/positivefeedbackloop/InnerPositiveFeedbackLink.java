@@ -16,6 +16,7 @@
  */
 package network.aika.elements.links.positivefeedbackloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
@@ -23,6 +24,7 @@ import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedback
 import network.aika.fields.*;
 import network.aika.visitor.Visitor;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
 import static network.aika.fields.Fields.scale;
@@ -37,6 +39,11 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
 
     public InnerPositiveFeedbackLink(InnerPositiveFeedbackSynapse s, PatternActivation input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    public Type getType() {
+        return BINDING;
     }
 
     @Override

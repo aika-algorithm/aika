@@ -16,6 +16,7 @@
  */
 package network.aika.elements.synapses.outerinhibitoryloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryCategoryLink;
@@ -23,11 +24,18 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.enums.Scope;
 
+import static network.aika.elements.Type.OUTER_INHIBITORY;
+
 /**
  *
  * @author Lukas Molzberger
  */
 public class OuterInhibitoryCategorySynapse extends CategorySynapse<OuterInhibitoryCategorySynapse, Neuron, OuterInhibitoryActivation> {
+
+    @Override
+    public Type getType() {
+        return OUTER_INHIBITORY;
+    }
 
     @Override
     public Scope getScope() {

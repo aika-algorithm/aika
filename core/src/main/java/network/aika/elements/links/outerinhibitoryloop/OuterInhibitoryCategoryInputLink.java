@@ -16,6 +16,7 @@
  */
 package network.aika.elements.links.outerinhibitoryloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.*;
 import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.links.DisjunctiveLink;
@@ -24,6 +25,7 @@ import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategor
 import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
 import network.aika.visitor.Visitor;
 
+import static network.aika.elements.Type.*;
 import static network.aika.elements.activations.OuterInhibitoryActivation.crossConnectFields;
 
 
@@ -39,6 +41,11 @@ public class OuterInhibitoryCategoryInputLink extends DisjunctiveLink<OuterInhib
                 .forEach(act ->
                         crossConnectFields((OuterInhibitoryActivation) act, output)
                 );
+    }
+
+    @Override
+    public Type getType() {
+        return BINDING;
     }
 
     @Override

@@ -17,6 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.Type;
 import network.aika.elements.activations.*;
 import network.aika.elements.links.BindingCategoryInputLink;
 import network.aika.elements.neurons.relations.Relation;
@@ -28,6 +29,8 @@ import network.aika.enums.direction.Direction;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+
+import static network.aika.elements.Type.BINDING;
 
 /**
  * The Same Object Binding Neuron Synapse is an inner synapse between two binding neurons of the same object.
@@ -44,6 +47,11 @@ public class SameObjectSynapse extends ConjunctiveSynapse<
         >
 {
     private Integer relationSynId;
+
+    @Override
+    public Type getType() {
+        return BINDING;
+    }
 
     public Integer getRelationSynId() {
         return relationSynId;

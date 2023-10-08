@@ -16,6 +16,7 @@
  */
 package network.aika.elements.links.outerinhibitoryloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.links.DisjunctiveLink;
@@ -26,6 +27,7 @@ import network.aika.visitor.Visitor;
 
 import java.util.stream.Stream;
 
+import static network.aika.elements.Type.OUTER_INHIBITORY;
 import static network.aika.elements.activations.BindingActivation.isSelfRef;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.queue.Phase.NEGATIVE_FEEDBACK;
@@ -61,6 +63,11 @@ public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse,
                 Stream.of(this),
                 output.getAllNegativeFeedbackLinks()
         );
+    }
+
+    @Override
+    public Type getType() {
+        return OUTER_INHIBITORY;
     }
 
     @Override

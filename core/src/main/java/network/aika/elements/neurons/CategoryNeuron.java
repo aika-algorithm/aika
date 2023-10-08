@@ -22,7 +22,6 @@ import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
 
-
 /**
  *
  * @author Lukas Molzberger
@@ -46,11 +45,6 @@ public abstract class CategoryNeuron extends DisjunctiveNeuron<CategoryNeuron, C
     @Override
     public boolean isTrainingAllowed() {
         return false;
-    }
-
-    @Override
-    public CategoryActivation createActivation(Thought t) {
-        return new CategoryActivation(t.createActivationId(), t, this);
     }
 
     @Override

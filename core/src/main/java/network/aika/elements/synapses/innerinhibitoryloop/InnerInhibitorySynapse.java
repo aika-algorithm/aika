@@ -17,6 +17,7 @@
 package network.aika.elements.synapses.innerinhibitoryloop;
 
 import network.aika.Model;
+import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.innerinhibitoryloop.InnerInhibitoryLink;
@@ -30,6 +31,8 @@ import network.aika.fields.FieldOutput;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+
+import static network.aika.elements.Type.INNER_INHIBITORY;
 
 /**
  *
@@ -51,6 +54,11 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
 
     public InnerInhibitorySynapse(Relation rel) {
         this.relation = rel;
+    }
+
+    @Override
+    public Type getType() {
+        return INNER_INHIBITORY;
     }
 
     @Override

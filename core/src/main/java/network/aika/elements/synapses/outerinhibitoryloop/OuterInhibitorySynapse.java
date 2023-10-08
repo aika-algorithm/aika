@@ -16,6 +16,7 @@
  */
 package network.aika.elements.synapses.outerinhibitoryloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryLink;
@@ -23,6 +24,9 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.enums.Scope;
+
+import static network.aika.elements.Type.INNER_INHIBITORY;
+import static network.aika.elements.Type.OUTER_INHIBITORY;
 
 /**
  *
@@ -36,6 +40,11 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
         BindingActivation,
         OuterInhibitoryActivation
         > {
+
+    @Override
+    public Type getType() {
+        return OUTER_INHIBITORY;
+    }
 
     @Override
     public Scope getScope() {

@@ -18,6 +18,7 @@ package network.aika.elements.neurons;
 
 import network.aika.Model;
 import network.aika.Thought;
+import network.aika.elements.Type;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.*;
 import network.aika.enums.sign.Sign;
@@ -31,6 +32,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.sign.Sign.POS;
 import static network.aika.visitor.types.VisitorType.PATTERN_VISITOR_TYPE;
 
@@ -47,6 +49,11 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
 
     public PatternNeuron(Model m) {
         super(m);
+    }
+
+    @Override
+    public Type getType() {
+        return PATTERN;
     }
 
     public static PatternNeuron create(Model m, String label) {

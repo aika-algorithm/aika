@@ -16,6 +16,7 @@
  */
 package network.aika.elements.links.innerinhibitoryloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.FeedbackLink;
@@ -25,6 +26,7 @@ import network.aika.fields.FieldLink;
 import network.aika.fields.MaxField;
 import network.aika.visitor.Visitor;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.activations.InnerInhibitoryActivation.getBindingActivation;
 import static network.aika.elements.activations.InnerInhibitoryActivation.updateConnected;
 
@@ -36,6 +38,11 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
 
     public InnerNegativeFeedbackLink(InnerNegativeFeedbackSynapse s, InnerInhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    public Type getType() {
+        return BINDING;
     }
 
     @Override

@@ -1,3 +1,4 @@
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -14,27 +15,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.neurons;
+package network.aika.elements.activations;
 
-import network.aika.Model;
-import network.aika.enums.Scope;
-import network.aika.visitor.types.VisitorType;
+import network.aika.Thought;
+import network.aika.elements.Type;
+import network.aika.elements.neurons.CategoryNeuron;
+
+import static network.aika.elements.Type.INNER_INHIBITORY;
+import static network.aika.elements.Type.PATTERN;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class InhibitoryCategoryNeuron extends CategoryNeuron {
+public class InnerInhibitoryCategoryActivation extends CategoryActivation {
 
-
-    private Scope identityReference;
-
-    public InhibitoryCategoryNeuron(Model m, Scope identityReference) {
-        super(m);
-        this.identityReference = identityReference;
+    public InnerInhibitoryCategoryActivation(int id, Thought t, CategoryNeuron neuron) {
+        super(id, t, neuron);
     }
 
     @Override
-    public VisitorType getVisitorType() {
-        return VisitorType.getInhibitoryVisitorType(identityReference);
+    public Type getType() {
+        return INNER_INHIBITORY;
     }
 }

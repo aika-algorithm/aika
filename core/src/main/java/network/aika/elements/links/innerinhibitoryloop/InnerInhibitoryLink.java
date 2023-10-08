@@ -16,12 +16,14 @@
  */
 package network.aika.elements.links.innerinhibitoryloop;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitorySynapse;
 import network.aika.visitor.Visitor;
 
+import static network.aika.elements.Type.INNER_INHIBITORY;
 import static network.aika.fields.FieldLink.linkAndConnect;
 
 /**
@@ -31,6 +33,11 @@ public class InnerInhibitoryLink extends DisjunctiveLink<InnerInhibitorySynapse,
 
     public InnerInhibitoryLink(InnerInhibitorySynapse inhibitorySynapse, BindingActivation input, InnerInhibitoryActivation output) {
         super(inhibitorySynapse, input, output);
+    }
+
+    @Override
+    public Type getType() {
+        return INNER_INHIBITORY;
     }
 
     @Override

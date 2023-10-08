@@ -17,8 +17,13 @@
 package network.aika.elements.neurons;
 
 import network.aika.Model;
+import network.aika.Thought;
+import network.aika.elements.Type;
+import network.aika.elements.activations.CategoryActivation;
+import network.aika.elements.activations.PatternCategoryActivation;
 import network.aika.visitor.types.VisitorType;
 
+import static network.aika.elements.Type.PATTERN;
 import static network.aika.visitor.types.VisitorType.PATTERN_CAT_VISITOR_TYPE;
 
 /**
@@ -31,7 +36,17 @@ public class PatternCategoryNeuron extends CategoryNeuron {
     }
 
     @Override
+    public Type getType() {
+        return PATTERN;
+    }
+
+    @Override
     public VisitorType getVisitorType() {
         return PATTERN_CAT_VISITOR_TYPE;
+    }
+
+    @Override
+    public CategoryActivation createActivation(Thought t) {
+        return new PatternCategoryActivation(t.createActivationId(), t, this);
     }
 }

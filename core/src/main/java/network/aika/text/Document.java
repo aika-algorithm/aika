@@ -19,6 +19,7 @@ package network.aika.text;
 import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.Timestamp;
+import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.PatternNeuron;
@@ -130,6 +131,11 @@ public class Document extends Thought {
         act.updateRanges(textReference);
         act.setNet(inputNet);
         return act;
+    }
+
+    @Override
+    public Type getType() {
+        return null;
     }
 
     @Override
