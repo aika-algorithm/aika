@@ -45,6 +45,7 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
 
     public void initIdentitySection(E act) {
         addConstant("Id: ", "" + act.getId());
+        addConstant("Type: ", "" + act.getType());
         addConstant("Label: ", act.getLabel());
 
         TextReference gr = act.getTextReference();

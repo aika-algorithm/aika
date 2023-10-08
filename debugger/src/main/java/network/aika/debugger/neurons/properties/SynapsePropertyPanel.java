@@ -35,7 +35,9 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addTitle(s.getClass().getSimpleName());
         addConstant("Synapse Id: ", "" + s.getSynapseId());
 
+        addConstant("Input-Type: ", "" + s.getInputType());
         addConstant("Input: ", s.getInput().toString());
+        addConstant("Output-Type: ", "" + s.getOutputType());
         addConstant("Output: ", s.getOutput().toString());
 
         addField(s.getWeight());

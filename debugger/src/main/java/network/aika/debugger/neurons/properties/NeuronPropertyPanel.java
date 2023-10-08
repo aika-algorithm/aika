@@ -35,6 +35,7 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
         addTitle(n.getClass().getSimpleName() + " " + "\n");
 
         addConstant("Id: ", "" + n.getId());
+        addConstant("Type: ", "" + n.getType());
         addConstant("Label: ", n.getLabel());
 
         addField(n.getBias());
