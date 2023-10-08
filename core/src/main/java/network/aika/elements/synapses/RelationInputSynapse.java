@@ -17,6 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.neurons.BindingNeuron;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.LatentRelationActivation;
@@ -29,11 +30,13 @@ import static network.aika.debugger.EventType.UPDATE;
  *
  * @author Lukas Molzberger
  */
-public class RelationInputSynapse extends BindingNeuronSynapse<
+public class RelationInputSynapse extends ConjunctiveSynapse<
         RelationInputSynapse,
         LatentRelationNeuron,
+        BindingNeuron,
         RelationInputLink,
-        LatentRelationActivation
+        LatentRelationActivation,
+        BindingActivation
         >
 {
     public RelationInputSynapse() {

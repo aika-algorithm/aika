@@ -19,6 +19,7 @@ package network.aika.elements.synapses.innerinhibitoryloop;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.innerinhibitoryloop.InnerNegativeFeedbackLink;
+import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.enums.Scope;
@@ -30,8 +31,10 @@ import network.aika.enums.Scope;
 public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
         InnerNegativeFeedbackSynapse,
         InnerInhibitoryNeuron,
+        BindingNeuron,
         InnerNegativeFeedbackLink,
-        InnerInhibitoryActivation
+        InnerInhibitoryActivation,
+        BindingActivation
         >
 {
     public InnerNegativeFeedbackSynapse() {

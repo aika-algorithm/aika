@@ -17,7 +17,9 @@
 package network.aika.elements.synapses.positivefeedbackloop;
 
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.positivefeedbackloop.PositiveFeedbackLink;
+import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 
@@ -25,11 +27,13 @@ import network.aika.elements.synapses.FeedbackSynapse;
  *
  * @author Lukas Molzberger
  */
-public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse, I extends Neuron, L extends PositiveFeedbackLink<S, IA>, IA extends Activation<?>> extends FeedbackSynapse<
+public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends PositiveFeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<O>> extends FeedbackSynapse<
         S,
         I,
+        O,
         L,
-        IA
+        IA,
+        OA
         >
 {
 

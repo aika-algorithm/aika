@@ -16,6 +16,7 @@
  */
 package network.aika.elements.synapses.positivefeedbackloop;
 
+import network.aika.elements.neurons.BindingNeuron;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
@@ -30,8 +31,10 @@ import network.aika.elements.neurons.PatternNeuron;
 public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         InnerPositiveFeedbackSynapse,
         PatternNeuron,
+        BindingNeuron,
         InnerPositiveFeedbackLink,
-        PatternActivation
+        PatternActivation,
+        BindingActivation
         >
 {
     @Override

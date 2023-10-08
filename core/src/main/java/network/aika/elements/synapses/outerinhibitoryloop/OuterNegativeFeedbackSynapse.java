@@ -20,6 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.links.outerinhibitoryloop.OuterNegativeFeedbackLink;
+import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.enums.Scope;
@@ -31,8 +32,10 @@ import network.aika.enums.Scope;
 public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
         OuterNegativeFeedbackSynapse,
         OuterInhibitoryNeuron,
+        BindingNeuron,
         OuterNegativeFeedbackLink,
-        OuterInhibitoryActivation
+        OuterInhibitoryActivation,
+        BindingActivation
         >
 {
     @Override

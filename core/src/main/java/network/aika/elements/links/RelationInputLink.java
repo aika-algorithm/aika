@@ -24,7 +24,7 @@ import network.aika.visitor.Visitor;
 /**
  * @author Lukas Molzberger
  */
-public class RelationInputLink extends BindingNeuronLink<RelationInputSynapse, LatentRelationActivation> {
+public class RelationInputLink extends ConjunctiveLink<RelationInputSynapse, LatentRelationActivation, BindingActivation> {
 
     public RelationInputLink(RelationInputSynapse s, LatentRelationActivation input, BindingActivation output) {
         super(s, input, output);

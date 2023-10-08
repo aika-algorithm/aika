@@ -31,7 +31,7 @@ import static network.aika.fields.Fields.scale;
  *
  * @author Lukas Molzberger
  */
-public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiveFeedbackSynapse, PatternActivation> {
+public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiveFeedbackSynapse, PatternActivation, BindingActivation> {
 
     protected AbstractFunction inputGradient;
 

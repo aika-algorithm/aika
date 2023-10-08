@@ -23,7 +23,7 @@ import network.aika.visitor.Visitor;
 /**
  * @author Lukas Molzberger
  */
-public class SameObjectLink extends BindingNeuronLink<SameObjectSynapse, BindingActivation> {
+public class SameObjectLink extends ConjunctiveLink<SameObjectSynapse, BindingActivation, BindingActivation> {
 
     public SameObjectLink(SameObjectSynapse s, BindingActivation input, BindingActivation output) {
         super(s, input, output);

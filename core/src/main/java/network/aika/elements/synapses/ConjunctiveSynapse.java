@@ -107,6 +107,10 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
         return propagable;
     }
 
+    public RelationInputSynapse getRelationInputSynapse() {
+        return null;
+    }
+
     @Override
     public void setModified() {
         O no = getOutput();

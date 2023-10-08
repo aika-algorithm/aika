@@ -26,7 +26,7 @@ import network.aika.visitor.Visitor;
 /**
  * @author Lukas Molzberger
  */
-public class InputObjectLink extends BindingNeuronLink<InputObjectSynapse, PatternActivation> {
+public class InputObjectLink extends ConjunctiveLink<InputObjectSynapse, PatternActivation, BindingActivation> {
 
     private AbstractFunction inputEntropy;
 

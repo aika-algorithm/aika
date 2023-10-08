@@ -28,11 +28,13 @@ import network.aika.enums.Scope;
  *
  * @author Lukas Molzberger
  */
-public class BindingCategoryInputSynapse extends BindingNeuronSynapse<
+public class BindingCategoryInputSynapse extends ConjunctiveSynapse<
         BindingCategoryInputSynapse,
         CategoryNeuron,
+        BindingNeuron,
         BindingCategoryInputLink,
-        CategoryActivation
+        CategoryActivation,
+        BindingActivation
         > implements CategoryInputSynapse
 {
 

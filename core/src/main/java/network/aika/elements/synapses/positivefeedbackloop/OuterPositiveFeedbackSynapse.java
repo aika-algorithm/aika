@@ -20,6 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.positivefeedbackloop.OuterPositiveFeedbackLink;
+import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.enums.Scope;
 
@@ -30,8 +31,10 @@ import network.aika.enums.Scope;
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         OuterPositiveFeedbackSynapse,
         PatternNeuron,
+        BindingNeuron,
         OuterPositiveFeedbackLink,
-        PatternActivation
+        PatternActivation,
+        BindingActivation
         >
 {
     @Override

@@ -19,6 +19,7 @@ package network.aika.elements.synapses;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.InputObjectLink;
+import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.enums.Scope;
 
@@ -26,11 +27,13 @@ import network.aika.enums.Scope;
  *
  * @author Lukas Molzberger
  */
-public class InputObjectSynapse extends BindingNeuronSynapse<
+public class InputObjectSynapse extends ConjunctiveSynapse<
         InputObjectSynapse,
         PatternNeuron,
+        BindingNeuron,
         InputObjectLink,
-        PatternActivation
+        PatternActivation,
+        BindingActivation
         >
 {
 

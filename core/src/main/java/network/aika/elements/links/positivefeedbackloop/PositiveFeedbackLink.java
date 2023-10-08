@@ -18,6 +18,7 @@ package network.aika.elements.links.positivefeedbackloop;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.FeedbackLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.positivefeedbackloop.PositiveFeedbackSynapse;
@@ -33,11 +34,11 @@ import static network.aika.fields.Fields.scale;
  *
  * @author Lukas Molzberger
  */
-public class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends Activation<?>> extends FeedbackLink<S, IA> {
+public class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>> extends FeedbackLink<S, IA, OA> {
 
     protected AbstractFunction inputGradient;
 
-    public PositiveFeedbackLink(S s, IA input, BindingActivation output) {
+    public PositiveFeedbackLink(S s, IA input, OA output) {
         super(s, input, output);
     }
 

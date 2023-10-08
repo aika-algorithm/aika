@@ -29,7 +29,7 @@ import network.aika.visitor.Visitor;
  *
  * @author Lukas Molzberger
  */
-public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiveFeedbackSynapse, PatternActivation> {
+public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiveFeedbackSynapse, PatternActivation, BindingActivation> {
 
     private AbstractFunction inputEntropy;
 

@@ -32,7 +32,7 @@ import static network.aika.elements.activations.InnerInhibitoryActivation.update
 /**
  * @author Lukas Molzberger
  */
-public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbackSynapse, InnerInhibitoryActivation> {
+public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbackSynapse, InnerInhibitoryActivation, BindingActivation> {
 
     public InnerNegativeFeedbackLink(InnerNegativeFeedbackSynapse s, InnerInhibitoryActivation input, BindingActivation output) {
         super(s, input, output);

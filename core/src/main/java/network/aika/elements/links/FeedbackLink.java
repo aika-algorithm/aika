@@ -18,6 +18,7 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.visitor.Visitor;
 
@@ -25,11 +26,11 @@ import network.aika.visitor.Visitor;
  * @author Lukas Molzberger
  *
  */
-public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activation<?>> extends BindingNeuronLink<S, IA> {
+public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>> extends ConjunctiveLink<S, IA, OA> {
 
     protected long[] visited;
 
-    public FeedbackLink(S s, IA input, BindingActivation output) {
+    public FeedbackLink(S s, IA input, OA output) {
         super(s, input, output);
     }
 

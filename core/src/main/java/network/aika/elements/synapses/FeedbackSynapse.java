@@ -16,10 +16,10 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.FeedbackLink;
-import network.aika.Thought;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.Neuron;
 import network.aika.fields.Field;
 
@@ -27,24 +27,26 @@ import network.aika.fields.Field;
  *
  * @author Lukas Molzberger
  */
-public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuron, L extends FeedbackLink<S, IA>, IA extends Activation<?>> extends BindingNeuronSynapse<
+public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends FeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<O>> extends ConjunctiveSynapse<
         S,
         I,
+        O,
         L,
-        IA
+        IA,
+        OA
         > {
 
     @Override
-    public Field getOutputNetForBias(BindingActivation act) {
+    public Field getOutputNetForBias(OA act) {
         return act.getNet();
     }
 
     @Override
-    public Field getOutputNetForWeight(BindingActivation act) {
+    public Field getOutputNetForWeight(OA act) {
         return act.getNet();
     }
 
-    public void initDummyLink(BindingActivation oAct) {
+    public void initDummyLink(OA oAct) {
         if(!linkExists(oAct, true))
             createAndInitLink(null, oAct);
     }
