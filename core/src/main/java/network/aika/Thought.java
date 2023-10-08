@@ -48,6 +48,7 @@ public abstract class Thought extends Queue implements Element {
 
     private Field annealing;
     private Field feedbackTrigger;
+    private Field instantiationFeedbackTrigger;
 
     protected final Model model;
 
@@ -104,9 +105,18 @@ public abstract class Thought extends Queue implements Element {
         return feedbackTrigger;
     }
 
+    public Field getInstantiationFeedbackTrigger() {
+        return instantiationFeedbackTrigger;
+    }
+
     public void setFeedbackTriggerRound() {
         feedbackTrigger.receiveUpdate(null, false, 1.0);
         feedbackTrigger.receiveUpdate(null, true, -1.0);
+    }
+
+    public void setInstantiationFeedbackTriggerRound() {
+        instantiationFeedbackTrigger.receiveUpdate(null, false, 1.0);
+        instantiationFeedbackTrigger.receiveUpdate(null, true, -1.0);
     }
 
     public abstract int length();

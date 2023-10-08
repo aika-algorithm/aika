@@ -23,6 +23,7 @@ import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
@@ -74,8 +75,9 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
 */
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(iAct, label);
-            Synapse s = (Synapse) iAct.getNeuron().makeAbstract();
-            s.setWeight(PASSIVE_SYNAPSE_WEIGHT);
+            ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
+            s.setWeight(5.0);
+            s.adjustBias();
         });
 
         return doc;

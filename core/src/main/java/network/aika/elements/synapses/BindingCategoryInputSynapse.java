@@ -22,6 +22,7 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.BindingCategoryInputLink;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.neurons.CategoryNeuron;
+import network.aika.elements.synapses.positivefeedbackloop.PositiveFeedbackSynapse;
 import network.aika.enums.Scope;
 
 import static network.aika.elements.Type.BINDING;
@@ -32,7 +33,7 @@ import static network.aika.elements.Type.PATTERN;
  *
  * @author Lukas Molzberger
  */
-public class BindingCategoryInputSynapse extends ConjunctiveSynapse<
+public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         BindingCategoryInputSynapse,
         CategoryNeuron,
         BindingNeuron,

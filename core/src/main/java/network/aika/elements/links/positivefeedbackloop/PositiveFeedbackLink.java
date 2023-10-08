@@ -24,6 +24,7 @@ import network.aika.elements.links.FeedbackLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.positivefeedbackloop.PositiveFeedbackSynapse;
 import network.aika.fields.AbstractFunction;
+import network.aika.fields.Field;
 import network.aika.fields.IdentityFunction;
 import network.aika.visitor.Visitor;
 
@@ -49,7 +50,11 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
         super.initInputValue();
 
         if(input == null)
-            linkAndConnect(getThought().getFeedbackTrigger(), 0, inputValue);
+            linkAndConnect(getFeedbackTrigger(), 0, inputValue);
+    }
+
+    protected Field getFeedbackTrigger() {
+        return getThought().getFeedbackTrigger();
     }
 
     @Override

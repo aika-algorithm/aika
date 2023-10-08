@@ -18,22 +18,28 @@ package network.aika.elements.links;
 
 import network.aika.elements.Type;
 import network.aika.elements.activations.*;
+import network.aika.elements.links.positivefeedbackloop.PositiveFeedbackLink;
 import network.aika.elements.synapses.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.BindingCategorySynapse;
 import network.aika.elements.synapses.CategorySynapse;
+import network.aika.fields.Field;
 import network.aika.visitor.Visitor;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class BindingCategoryInputLink extends ConjunctiveLink<BindingCategoryInputSynapse, CategoryActivation, BindingActivation> implements CategoryInputLink {
+public class BindingCategoryInputLink extends PositiveFeedbackLink<BindingCategoryInputSynapse, CategoryActivation, BindingActivation> implements CategoryInputLink {
 
     public BindingCategoryInputLink(BindingCategoryInputSynapse s, CategoryActivation input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    protected Field getFeedbackTrigger() {
+        return getThought().getInstantiationFeedbackTrigger();
     }
 
     @Override

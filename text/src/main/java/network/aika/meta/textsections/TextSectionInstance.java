@@ -79,11 +79,13 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
 
             if(isPartOfHeadline(tAct)) {
                 ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
-                s.setWeight(2.0);
+                s.setWeight(5.0);
+                s.adjustBias();
             }
             if(isHint(tAct)) {
                 ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
-                s.setWeight(PASSIVE_SYNAPSE_WEIGHT);
+                s.setWeight(5.0);
+                s.adjustBias();
             }
         });
 

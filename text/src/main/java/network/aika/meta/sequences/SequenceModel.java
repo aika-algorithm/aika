@@ -207,7 +207,8 @@ public abstract class SequenceModel implements Writable {
                 2.5
         );
         bn.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+                .setWeight(5.0)
+                .adjustBias();
 
         addPositiveFeedbackLoop(
                 bn,
@@ -296,7 +297,8 @@ public abstract class SequenceModel implements Writable {
                 p.netTarget
         );
         bn.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+                .setWeight(5.0)
+                .adjustBias();
 
         addOuterInhibitoryLoop(
                 bn,

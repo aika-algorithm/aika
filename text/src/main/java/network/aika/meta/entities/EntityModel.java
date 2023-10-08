@@ -98,7 +98,8 @@ public class EntityModel implements TemplateModel, Writable {
                 .setPersistent(true);
 
         entityCategory = entityPattern.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT)
+                .setWeight(5.0)
+                .adjustBias()
                 .getInput()
                 .setPersistent(true);
 
@@ -110,7 +111,8 @@ public class EntityModel implements TemplateModel, Writable {
         );
 
         entityBN.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+                .setWeight(5.0)
+                .adjustBias();
 
         addPositiveFeedbackLoop(
                 entityBN,

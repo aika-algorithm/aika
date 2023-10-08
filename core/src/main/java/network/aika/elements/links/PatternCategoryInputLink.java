@@ -19,9 +19,11 @@ package network.aika.elements.links;
 import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.links.positivefeedbackloop.PositiveFeedbackLink;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.PatternCategoryInputSynapse;
 import network.aika.elements.synapses.PatternCategorySynapse;
+import network.aika.fields.Field;
 import network.aika.visitor.Visitor;
 
 import static network.aika.elements.Type.BINDING;
@@ -31,10 +33,15 @@ import static network.aika.elements.Type.PATTERN;
 /**
  * @author Lukas Molzberger
  */
-public class PatternCategoryInputLink extends ConjunctiveLink<PatternCategoryInputSynapse, CategoryActivation, PatternActivation> implements CategoryInputLink {
+public class PatternCategoryInputLink extends PositiveFeedbackLink<PatternCategoryInputSynapse, CategoryActivation, PatternActivation> implements CategoryInputLink {
 
     public PatternCategoryInputLink(PatternCategoryInputSynapse s, CategoryActivation input, PatternActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    protected Field getFeedbackTrigger() {
+        return getThought().getInstantiationFeedbackTrigger();
     }
 
     @Override
