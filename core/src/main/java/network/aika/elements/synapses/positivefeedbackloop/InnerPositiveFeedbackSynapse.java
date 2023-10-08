@@ -55,14 +55,4 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
     @Override
     public void linkAndPropagateOut(PatternActivation act) {
     }
-
-    @Override
-    public double getSortingWeight() {
-        return 0.0;
-    }
-
-    @Override
-    public boolean checkLinkingEvent(Activation act) {
-        return true;
-    }
 }

@@ -47,22 +47,4 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
     public OuterPositiveFeedbackLink createLink(PatternActivation input, BindingActivation output) {
         return new OuterPositiveFeedbackLink(this, input, output);
     }
-
-    @Override
-    public void setPropagable(boolean propagable) {
-    }
-
-    @Override
-    public void linkAndPropagateOut(PatternActivation act) {
-    }
-
-    @Override
-    public double getSortingWeight() {
-        return 0.0;
-    }
-
-    @Override
-    public boolean checkLinkingEvent(Activation act) {
-        return true;
-    }
 }

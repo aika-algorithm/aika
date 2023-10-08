@@ -32,6 +32,12 @@ public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse,
         IA
         >
 {
+
+    @Override
+    public double getSortingWeight() {
+        return 0.0;
+    }
+
     @Override
     public boolean checkLinkingEvent(Activation act) {
         return true;
