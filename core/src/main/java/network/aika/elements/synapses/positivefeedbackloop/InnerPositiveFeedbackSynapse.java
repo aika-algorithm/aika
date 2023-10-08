@@ -25,7 +25,7 @@ import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
 import network.aika.elements.neurons.PatternNeuron;
 
-import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.*;
 
 /**
  *
@@ -42,7 +42,12 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
 {
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return PATTERN;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

@@ -43,9 +43,13 @@ public class PatternCategoryInputSynapse extends ConjunctiveSynapse<
 
     private double initialCategorySynapseWeight;
 
+    @Override
+    public Type getInputType() {
+        return PATTERN;
+    }
 
     @Override
-    public Type getType() {
+    public Type getOutputType() {
         return PATTERN;
     }
 

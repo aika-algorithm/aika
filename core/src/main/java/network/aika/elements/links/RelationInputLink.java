@@ -35,7 +35,12 @@ public class RelationInputLink extends ConjunctiveLink<RelationInputSynapse, Lat
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

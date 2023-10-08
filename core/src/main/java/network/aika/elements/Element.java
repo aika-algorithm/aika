@@ -27,8 +27,6 @@ import network.aika.fields.FieldObject;
  */
 public interface Element extends FieldObject {
 
-    Type getType();
-
     Timestamp getCreated();
 
     Timestamp getFired();

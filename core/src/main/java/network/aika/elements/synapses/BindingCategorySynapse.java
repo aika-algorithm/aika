@@ -33,7 +33,12 @@ public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynap
 
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

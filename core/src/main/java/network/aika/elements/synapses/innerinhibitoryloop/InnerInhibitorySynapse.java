@@ -32,7 +32,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.Type.INNER_INHIBITORY;
+import static network.aika.elements.Type.*;
 
 /**
  *
@@ -57,7 +57,12 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return INNER_INHIBITORY;
     }
 

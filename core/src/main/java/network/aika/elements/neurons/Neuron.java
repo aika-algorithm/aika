@@ -20,6 +20,7 @@ import network.aika.ActivationFunction;
 import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.PreActivation;
+import network.aika.elements.Type;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.exceptions.MissingInputCategoryNeuron;
@@ -96,6 +97,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         addProvider(m);
         setBias(0.0);
     }
+
+    public abstract Type getType();
 
     public Long getId() {
         return provider.getId();

@@ -38,7 +38,12 @@ public class OuterInhibitoryCategoryLink extends CategoryLink<OuterInhibitoryCat
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return OUTER_INHIBITORY;
+    }
+
+    @Override
+    public Type getOutputType() {
         return OUTER_INHIBITORY;
     }
 

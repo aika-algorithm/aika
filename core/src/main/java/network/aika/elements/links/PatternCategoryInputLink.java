@@ -38,7 +38,12 @@ public class PatternCategoryInputLink extends ConjunctiveLink<PatternCategoryInp
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return PATTERN;
+    }
+
+    @Override
+    public Type getOutputType() {
         return PATTERN;
     }
 

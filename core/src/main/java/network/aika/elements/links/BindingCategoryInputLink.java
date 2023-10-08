@@ -24,6 +24,7 @@ import network.aika.elements.synapses.CategorySynapse;
 import network.aika.visitor.Visitor;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
 
 
 /**
@@ -36,7 +37,12 @@ public class BindingCategoryInputLink extends ConjunctiveLink<BindingCategoryInp
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

@@ -17,6 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.Type;
 import network.aika.elements.activations.*;
 import network.aika.elements.neurons.relations.Relation;
 import network.aika.enums.Scope;
@@ -32,9 +33,6 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
-import network.aika.visitor.DownVisitor;
-import network.aika.visitor.relations.BoundDownVisitor;
-import network.aika.visitor.relations.UnboundDownVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,6 +73,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public Synapse() {
     }
+
+    public abstract Type getInputType();
+
+    public abstract Type getOutputType();
 
     public int getSynapseId() {
         return synapseId;

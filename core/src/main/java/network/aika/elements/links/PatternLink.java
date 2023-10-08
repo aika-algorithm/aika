@@ -29,6 +29,7 @@ import network.aika.enums.sign.Sign;
 import network.aika.queue.link.LinkCounting;
 import network.aika.visitor.Visitor;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.fields.ConstantField.ZERO;
 import static network.aika.fields.FieldLink.linkAndConnect;
@@ -53,7 +54,12 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return PATTERN;
     }
 

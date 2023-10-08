@@ -20,6 +20,7 @@ import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.Element;
 import network.aika.elements.LinkKey;
+import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
 import network.aika.fields.*;
@@ -70,6 +71,10 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         propagateRanges();
         getThought().onElementEvent(CREATE, this);
     }
+
+    public abstract Type getInputType();
+
+    public abstract Type getOutputType();
 
     public void addInputLinkingStep() {
         LinkingIn.add(this);

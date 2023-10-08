@@ -44,7 +44,12 @@ public class OuterInhibitoryCategoryInputLink extends DisjunctiveLink<OuterInhib
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return OUTER_INHIBITORY;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

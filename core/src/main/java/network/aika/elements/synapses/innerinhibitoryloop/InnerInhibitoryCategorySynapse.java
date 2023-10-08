@@ -24,8 +24,7 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.enums.Scope;
 
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.INNER_INHIBITORY;
+import static network.aika.elements.Type.*;
 
 /**
  *
@@ -33,9 +32,13 @@ import static network.aika.elements.Type.INNER_INHIBITORY;
  */
 public class InnerInhibitoryCategorySynapse extends CategorySynapse<InnerInhibitoryCategorySynapse, Neuron, InnerInhibitoryActivation> {
 
+    @Override
+    public Type getInputType() {
+        return INNER_INHIBITORY;
+    }
 
     @Override
-    public Type getType() {
+    public Type getOutputType() {
         return INNER_INHIBITORY;
     }
 

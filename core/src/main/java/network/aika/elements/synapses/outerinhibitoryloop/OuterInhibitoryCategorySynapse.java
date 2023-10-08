@@ -33,7 +33,12 @@ import static network.aika.elements.Type.OUTER_INHIBITORY;
 public class OuterInhibitoryCategorySynapse extends CategorySynapse<OuterInhibitoryCategorySynapse, Neuron, OuterInhibitoryActivation> {
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return OUTER_INHIBITORY;
+    }
+
+    @Override
+    public Type getOutputType() {
         return OUTER_INHIBITORY;
     }
 

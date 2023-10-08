@@ -27,6 +27,7 @@ import network.aika.visitor.Visitor;
 
 import java.util.stream.Stream;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.OUTER_INHIBITORY;
 import static network.aika.elements.activations.BindingActivation.isSelfRef;
 import static network.aika.fields.FieldLink.linkAndConnect;
@@ -66,7 +67,12 @@ public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse,
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return OUTER_INHIBITORY;
     }
 

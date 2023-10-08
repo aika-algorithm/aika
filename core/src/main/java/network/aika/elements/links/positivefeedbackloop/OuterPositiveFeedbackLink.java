@@ -26,6 +26,7 @@ import network.aika.fields.Fields;
 import network.aika.visitor.Visitor;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
 
 
 /**
@@ -41,7 +42,12 @@ public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiv
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return PATTERN;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

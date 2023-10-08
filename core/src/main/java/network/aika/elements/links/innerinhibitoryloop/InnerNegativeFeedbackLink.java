@@ -27,6 +27,7 @@ import network.aika.fields.MaxField;
 import network.aika.visitor.Visitor;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.INNER_INHIBITORY;
 import static network.aika.elements.activations.InnerInhibitoryActivation.getBindingActivation;
 import static network.aika.elements.activations.InnerInhibitoryActivation.updateConnected;
 
@@ -41,7 +42,12 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return INNER_INHIBITORY;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

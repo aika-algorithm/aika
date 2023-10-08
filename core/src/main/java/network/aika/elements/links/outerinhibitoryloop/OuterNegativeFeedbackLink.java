@@ -27,6 +27,7 @@ import network.aika.visitor.Visitor;
 import java.util.stream.Stream;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.OUTER_INHIBITORY;
 import static network.aika.fields.Fields.mul;
 
 /**
@@ -49,7 +50,12 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return OUTER_INHIBITORY;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

@@ -41,7 +41,7 @@ public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse,
 {
 
     @Override
-    public Type getType() {
+    public Type getOutputType() {
         return BINDING;
     }
 

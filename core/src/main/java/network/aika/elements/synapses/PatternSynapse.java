@@ -37,6 +37,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.enums.sign.Sign.NEG;
@@ -64,7 +65,12 @@ public class PatternSynapse extends ConjunctiveSynapse<
     protected SampleSpace sampleSpace = new SampleSpace();
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return PATTERN;
     }
 

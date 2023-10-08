@@ -25,8 +25,7 @@ import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.enums.Scope;
 
-import static network.aika.elements.Type.INNER_INHIBITORY;
-import static network.aika.elements.Type.OUTER_INHIBITORY;
+import static network.aika.elements.Type.*;
 
 /**
  *
@@ -42,7 +41,12 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
         > {
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return OUTER_INHIBITORY;
     }
 

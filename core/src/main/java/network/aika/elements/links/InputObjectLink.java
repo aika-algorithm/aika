@@ -25,6 +25,7 @@ import network.aika.fields.Fields;
 import network.aika.visitor.Visitor;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
 
 /**
  * @author Lukas Molzberger
@@ -38,7 +39,12 @@ public class InputObjectLink extends ConjunctiveLink<InputObjectSynapse, Pattern
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

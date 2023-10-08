@@ -23,6 +23,7 @@ import network.aika.elements.synapses.BindingCategorySynapse;
 import network.aika.visitor.Visitor;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
 
 /**
  * @author Lukas Molzberger
@@ -34,7 +35,12 @@ public class BindingCategoryLink extends CategoryLink<BindingCategorySynapse, Bi
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

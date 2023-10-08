@@ -21,6 +21,7 @@ import network.aika.Thought;
 import network.aika.elements.Element;
 import network.aika.elements.LinkKey;
 import network.aika.elements.Timestamp;
+import network.aika.elements.Type;
 import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.links.CategoryLink;
 import network.aika.elements.links.Link;
@@ -123,6 +124,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         thought.onElementEvent(CREATE, this);
     }
+
+    public abstract Type getType();
 
     public LinkKey getLinkKey() {
         return new LinkKey(

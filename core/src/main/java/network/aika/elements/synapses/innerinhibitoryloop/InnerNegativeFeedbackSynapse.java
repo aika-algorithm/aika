@@ -25,7 +25,7 @@ import network.aika.elements.neurons.InnerInhibitoryNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.enums.Scope;
 
-import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.*;
 
 /**
  *
@@ -44,7 +44,12 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return INNER_INHIBITORY;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

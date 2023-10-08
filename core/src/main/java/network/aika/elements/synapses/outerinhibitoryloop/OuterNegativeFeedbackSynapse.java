@@ -27,6 +27,7 @@ import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.enums.Scope;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.OUTER_INHIBITORY;
 
 /**
  *
@@ -43,7 +44,12 @@ public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
 {
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return OUTER_INHIBITORY;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

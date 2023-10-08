@@ -26,6 +26,7 @@ import network.aika.elements.neurons.PatternNeuron;
 import network.aika.enums.Scope;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
 
 /**
  *
@@ -42,7 +43,12 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
 {
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return PATTERN;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

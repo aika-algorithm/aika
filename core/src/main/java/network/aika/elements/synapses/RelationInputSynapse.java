@@ -27,6 +27,7 @@ import network.aika.elements.neurons.LatentRelationNeuron;
 
 import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
 
 /**
  *
@@ -45,7 +46,12 @@ public class RelationInputSynapse extends ConjunctiveSynapse<
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

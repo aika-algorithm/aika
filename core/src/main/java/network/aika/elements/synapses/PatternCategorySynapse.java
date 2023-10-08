@@ -32,9 +32,13 @@ import static network.aika.elements.Type.PATTERN;
  */
 public class PatternCategorySynapse extends CategorySynapse<PatternCategorySynapse, PatternNeuron, PatternActivation> {
 
+    @Override
+    public Type getInputType() {
+        return PATTERN;
+    }
 
     @Override
-    public Type getType() {
+    public Type getOutputType() {
         return PATTERN;
     }
 

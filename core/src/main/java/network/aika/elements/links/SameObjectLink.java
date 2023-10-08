@@ -34,7 +34,12 @@ public class SameObjectLink extends ConjunctiveLink<SameObjectSynapse, BindingAc
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return BINDING;
     }
 

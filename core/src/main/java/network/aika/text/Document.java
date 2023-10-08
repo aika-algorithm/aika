@@ -134,11 +134,6 @@ public class Document extends Thought {
     }
 
     @Override
-    public Type getType() {
-        return null;
-    }
-
-    @Override
     public Timestamp getCreated() {
         return MIN;
     }

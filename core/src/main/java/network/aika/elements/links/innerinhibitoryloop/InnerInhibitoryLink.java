@@ -23,6 +23,7 @@ import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitorySynapse;
 import network.aika.visitor.Visitor;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.INNER_INHIBITORY;
 import static network.aika.fields.FieldLink.linkAndConnect;
 
@@ -36,7 +37,12 @@ public class InnerInhibitoryLink extends DisjunctiveLink<InnerInhibitorySynapse,
     }
 
     @Override
-    public Type getType() {
+    public Type getInputType() {
+        return BINDING;
+    }
+
+    @Override
+    public Type getOutputType() {
         return INNER_INHIBITORY;
     }
 
