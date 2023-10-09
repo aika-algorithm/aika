@@ -27,7 +27,7 @@ import network.aika.fields.Field;
  *
  * @author Lukas Molzberger
  */
-public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends FeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<O>> extends ConjunctiveSynapse<
+public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends FeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<?>> extends ConjunctiveSynapse<
         S,
         I,
         O,
