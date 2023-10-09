@@ -69,10 +69,10 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
     @Override
     protected Document createDocument(String label) {
         Document doc = new Document(getModel(), label);
-/*
+
         AIKADebugger.createAndShowGUI()
                .setDocument(doc);
-*/
+
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(iAct, label);
             ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();

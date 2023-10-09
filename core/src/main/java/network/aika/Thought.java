@@ -78,9 +78,9 @@ public abstract class Thought extends Queue implements Element {
         instantiationFeedbackTrigger = new SumField(this, "instantiation feedback trigger", 0.0)
                 .setQueued(this, FEEDBACK_TRIGGER);
 
-        if(m.getCurrentThought() != null) {
+        if(m.getCurrentThought() != null)
             throw new PreviousThoughtNotDisconnected(m.getCurrentThought(), this);
-        }
+
         m.registerThought(this);
     }
 
