@@ -129,7 +129,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     }
 
     public PatternActivation getInputPatternActivation() {
-        return (PatternActivation) getInputLinksByType(InputObjectLink.class)
+        return getInputLinksByType(InputObjectLink.class)
                 .map(Link::getInput)
                 .findFirst()
                 .orElse(null);
