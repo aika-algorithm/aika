@@ -47,7 +47,7 @@ public abstract class InstantiationUtil<I extends InstantiationUtil> {
         return getTemplateModel().getModel();
     }
 
-    public I instantiate(String label, boolean makeAbstract) {
+    public I instantiate(String label) {
         getTemplateModel().prepareInstantiation();
 
         getModel()
@@ -59,6 +59,7 @@ public abstract class InstantiationUtil<I extends InstantiationUtil> {
 
         try {
             doc.setFeedbackTriggerRound();
+            doc.setInstantiationFeedbackTrigger(true);
 
             getTemplateModel().prepareExampleDoc(doc, label);
 
@@ -66,6 +67,8 @@ public abstract class InstantiationUtil<I extends InstantiationUtil> {
             doc.anneal();
             doc.process(MAX_ROUND, ANNEAL);
             doc.instantiateTemplates();
+            doc.setInstantiationFeedbackTrigger(false);
+
             doc.process(MAX_ROUND, null);
 
             mapResults(doc);

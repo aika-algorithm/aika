@@ -102,10 +102,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         textSectionModel.initStaticNeurons();
 
         profileTS = new TextSectionInstance(textSectionModel)
-                .instantiate(PROFILE_LABEL, false);
+                .instantiate(PROFILE_LABEL);
 
         tasksTS = new TextSectionInstance(textSectionModel)
-                .instantiate(TASKS_LABEL, false);
+                .instantiate(TASKS_LABEL);
 
         model.setN(0);
     }

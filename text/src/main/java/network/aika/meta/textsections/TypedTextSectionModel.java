@@ -107,7 +107,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     private void initHeadline() {
         headlineEntity = new EntityInstance(entityModel)
-                .instantiate(HEADLINE_LABEL, true);
+                .instantiate(HEADLINE_LABEL);
 
         tsHeadlineBN = addBindingNeuron(
                 headlineEntity.entityPatternN,
@@ -116,7 +116,8 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 bindingNetTarget
         );
         tsHeadlineBN.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+                .setWeight(5.0)
+                .adjustBias();
 
         addRelation(
                 tsHeadlineBN,

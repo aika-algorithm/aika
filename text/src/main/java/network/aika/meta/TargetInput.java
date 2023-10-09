@@ -49,11 +49,6 @@ public class TargetInput {
         this.label = label;
     }
 
-    public double getBindingValueTarget() {
-        return targetInputBN.getActivationFunction()
-                .f(bindingNetTarget);
-    }
-
     public PatternNeuron getTargetInput() {
         return targetInput;
     }
@@ -125,7 +120,8 @@ public class TargetInput {
                 bindingNetTarget
         );
         bn.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+                .setWeight(5.0)
+                .adjustBias();
 
         addPositiveFeedbackLoop(
                 bn,

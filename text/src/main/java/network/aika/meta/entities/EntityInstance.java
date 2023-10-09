@@ -74,18 +74,23 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
                .setDocument(doc);
 
         doc.setInstantiationCallback((tAct, iAct) -> {
-            generateLabel(iAct, label);
-            ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
-            s.setWeight(5.0);
-            s.adjustBias();
+            generateLabel(tAct, iAct, label);
+            Synapse s = (Synapse) iAct.getNeuron().makeAbstract();
+            if(s instanceof ConjunctiveSynapse) {
+                ConjunctiveSynapse cs = (ConjunctiveSynapse) s;
+                cs.setWeight(5.0);
+                cs.adjustBias();
+            } else {
+                s.setWeight(1.0);
+            }
         });
 
         return doc;
     }
 
-    private void generateLabel(Activation act, String label) {
-        act.getNeuron().setLabel(
-                act.getTemplate().getLabel().replace(ENTITY_LABEL, label)
+    private void generateLabel(Activation tAct, Activation iAct, String label) {
+        iAct.getNeuron().setLabel(
+                tAct.getLabel().replace(ENTITY_LABEL, label)
         );
     }
 

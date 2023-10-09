@@ -18,6 +18,7 @@ package network.aika.elements.activations;
 
 import network.aika.Thought;
 import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.SynapseSlot;
 
@@ -38,6 +39,14 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
 
     public ConjunctiveActivation(int id, Thought t, N n) {
         super(id, t, n);
+    }
+
+    @Override
+    protected void initInactiveLinks() {
+        neuron.getInputSynapsesByType(FeedbackSynapse.class)
+                .forEach(s ->
+                        s.initDummyLink(this)
+                );
     }
 
     public SynapseSlot getSlot(Synapse s) {

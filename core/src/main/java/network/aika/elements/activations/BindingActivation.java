@@ -194,14 +194,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         }
     }
 
-    @Override
-    protected void initInactiveLinks() {
-        neuron.getInputSynapsesByType(FeedbackSynapse.class)
-                .forEach(s ->
-                        s.initDummyLink(this)
-                );
-    }
-
     public boolean isInput() {
         return isInput;
     }

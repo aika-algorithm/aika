@@ -581,14 +581,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         thought.onElementEvent(UPDATE, this);
     }
 
-    public String toString() {
-        return getClass().getSimpleName() + " " + toKeyString();
-    }
-
-    public String toKeyString() {
-        return "id:" + getId() + " n:[" + getNeuron().toKeyString() + "]";
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -600,5 +592,14 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " " + toKeyString();
+    }
+
+    public String toKeyString() {
+        return "id:" + getId() + " n:[" + getNeuron().toKeyString() + "]";
     }
 }

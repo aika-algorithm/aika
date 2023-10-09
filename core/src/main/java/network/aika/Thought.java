@@ -117,9 +117,11 @@ public abstract class Thought extends Queue implements Element {
         feedbackTrigger.receiveUpdate(null, true, -1.0);
     }
 
-    public void setInstantiationFeedbackTriggerRound() {
-        instantiationFeedbackTrigger.receiveUpdate(null, false, 1.0);
-        instantiationFeedbackTrigger.receiveUpdate(null, true, -1.0);
+    public void setInstantiationFeedbackTrigger(boolean state) {
+        if(state)
+            instantiationFeedbackTrigger.receiveUpdate(null, false, 1.0);
+        else
+            instantiationFeedbackTrigger.receiveUpdate(null, true, -1.0);
     }
 
     public abstract int length();
