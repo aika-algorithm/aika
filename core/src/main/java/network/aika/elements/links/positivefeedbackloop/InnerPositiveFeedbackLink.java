@@ -42,6 +42,10 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     }
 
     @Override
+    public void propagateRanges() {
+    }
+
+    @Override
     public Type getInputType() {
         return PATTERN;
     }

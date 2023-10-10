@@ -35,10 +35,6 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     @Override
-    public void propagateRanges() {
-    }
-
-    @Override
     public void bindingVisit(Visitor v, int depth) {
         if(checkVisited(v))
             return;

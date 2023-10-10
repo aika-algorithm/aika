@@ -42,6 +42,10 @@ public class InnerNegativeFeedbackLink extends FeedbackLink<InnerNegativeFeedbac
     }
 
     @Override
+    public void propagateRanges() {
+    }
+
+    @Override
     public Type getInputType() {
         return INNER_INHIBITORY;
     }

@@ -50,6 +50,10 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
     }
 
     @Override
+    public void propagateRanges() {
+    }
+
+    @Override
     public Type getInputType() {
         return OUTER_INHIBITORY;
     }
