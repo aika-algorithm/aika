@@ -44,6 +44,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_X;
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
@@ -381,7 +382,8 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
         GraphicElement gn = (GraphicElement) n;
 
         act.getInputLinks()
-                .map(l -> l.getInput())
+                .map(Link::getInput)
+                .filter(Objects::nonNull)
                 .map(iAct -> getGraphManager().getNode(iAct))
                 .map(in -> (GraphicElement) gg.getNode(in.getId()))
                 .forEach(in -> {

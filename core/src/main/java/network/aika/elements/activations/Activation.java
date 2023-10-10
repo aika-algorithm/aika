@@ -475,7 +475,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Stream<Activation> getTemplateInstances() {
-        CategoryInputLink cil = getCategoryInputLink();
+        CategoryInputLink cil = getActiveCategoryInputLink();
         if(cil == null || cil.getInput() == null)
             return Stream.empty();
 
@@ -487,19 +487,18 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return isNewInstance || isTrue(net, 0.5);
     }
 
-    public CategoryInputLink getCategoryInputLink() {
+    public CategoryInputLink getActiveCategoryInputLink() {
         return getInputLinksByType(CategoryInputLink.class)
+                .filter(l -> l.getInput() != null)
                 .findFirst()
                 .orElse(null);
     }
 
     public Activation getActiveTemplateInstance() {
-        return getInputLinksByType(CategoryInputLink.class)
-                .map(CategoryInputLink::getInput)
-                .filter(Objects::nonNull)
-                .findFirst()
-                .map(CategoryActivation::getActiveTemplateInstance)
-                .orElse(null);
+        CategoryInputLink l = getActiveCategoryInputLink();
+        return l != null ?
+                l.getInput().getActiveTemplateInstance() :
+                null;
     }
 
     public Activation<N> resolveAbstractInputActivation() {
@@ -537,7 +536,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     private void linkTemplateAndInstance(Activation<N> ti) {
-        CategoryInputLink cl = getCategoryInputLink();
+        CategoryInputLink cl = getActiveCategoryInputLink();
         if(cl == null)
             cl = createCategoryInputLink();
 
