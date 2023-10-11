@@ -100,7 +100,7 @@ public class InnerInhibitionTest {
         Document doc = new Document(m, "test");
         AIKADebugger.createAndShowGUI()
                 .setDocument(doc)
-                .setTemplatesOnly(false);
+                .setShowNeurons(false, false);
 
         doc.setFeedbackTriggerRound();
 
@@ -170,7 +170,7 @@ public class InnerInhibitionTest {
         Document doc = new Document(m, "test");
         AIKADebugger.createAndShowGUI()
                 .setDocument(doc)
-                .setTemplatesOnly(false);
+                .setShowNeurons(false, false);
 
         doc.setFeedbackTriggerRound();
 

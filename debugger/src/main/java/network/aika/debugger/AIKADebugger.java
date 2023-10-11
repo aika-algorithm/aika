@@ -54,7 +54,7 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
     private Runnable currentTestCase;
     private Map<Integer, Runnable> testCaseListeners = new TreeMap<>();
 
-    private NavigableSet<Long> breakpoints = new TreeSet<>();
+    private boolean showNeurons;
     private boolean templatesOnly;
 
     public AIKADebugger() {
@@ -72,7 +72,7 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
         registerGlobalKeyListener();
 
         tabbedPane.addChangeListener(event-> {
-            if(tabbedPane.getSelectedIndex() == NEURON_TAB_INDEX) {
+            if(showNeurons && tabbedPane.getSelectedIndex() == NEURON_TAB_INDEX) {
                 neuronViewManager.updateGraphNeurons(templatesOnly);
             }
         });
@@ -148,16 +148,6 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
                 });
     }
 
-    public void addBreakpoints(Long... bps) {
-        breakpoints.addAll(Arrays.asList(bps));
-    }
-
-    public Long getNextBreakpoint() {
-        return breakpoints.ceiling(
-                actViewManager.getDocument().getCurrentTimestamp().getTimestamp()
-        );
-    }
-
     public void run() {
         boolean restart = false;
         do {
@@ -231,7 +221,8 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
         tabbedPane.setSelectedIndex(tabIndex);
     }
 
-    public AIKADebugger setTemplatesOnly(boolean templatesOnly) {
+    public AIKADebugger setShowNeurons(boolean showNeurons, boolean templatesOnly) {
+        this.showNeurons = showNeurons;
         this.templatesOnly = templatesOnly;
         return this;
     }

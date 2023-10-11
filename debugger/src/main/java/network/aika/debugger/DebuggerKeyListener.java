@@ -40,7 +40,6 @@ public class DebuggerKeyListener implements KeyListener {
         actions.put('m', new MAction());
         actions.put('e', new EAction());
         actions.put('r', new RAction());
-        actions.put('b', new BAction());
         actions.put('l', new LAction());
     }
 
@@ -110,17 +109,6 @@ public class DebuggerKeyListener implements KeyListener {
 //            debugger.getActivationViewManager().getConsoleManager().unregister();
             sm.setBreakpoint(null);
             sm.resetTimestamp();
-            sm.click();
-        }
-    }
-
-    private class BAction implements KeyEventAction {
-        @Override
-        public void execute(ActivationViewManager avm) {
-            StepManager sm = avm.getStepManager();
-            sm.setStepMode(false);
-            sm.resetTimestamp();
-            sm.setBreakpoint(debugger.getNextBreakpoint());
             sm.click();
         }
     }

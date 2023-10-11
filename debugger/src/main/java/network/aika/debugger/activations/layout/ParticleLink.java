@@ -66,18 +66,18 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
     public static ParticleLink create(Link l, Edge e, ActivationGraphManager gm) {
         if(l instanceof InputObjectLink) {
             return InputObjectParticleLink.create((InputObjectLink) l, e, gm);
-        } else if (l instanceof FeedbackLink<?, ?, ?>) {
-            return FeedbackParticleLink.create((FeedbackLink) l, e, gm);
+        } else if(l instanceof CategoryInputLink) {
+            return CategoryInputParticleLink.create(l, e, gm);
         } else if (l instanceof SameObjectLink) {
             return SameObjectParticleLink.create((SameObjectLink) l, e, gm);
         } else if (l instanceof RelationInputLink) {
             return RelationInputParticleLink.create((RelationInputLink) l, e, gm);
         } else if(l instanceof PatternLink) {
             return PatternParticleLink.create((PatternLink) l, e, gm);
-        } else if(l instanceof PatternCategoryInputLink) {
-            return PatternCategoryInputParticleLink.create((PatternCategoryInputLink) l, e, gm);
         } else if(l instanceof OuterInhibitoryLink) {
             return InhibitoryParticleLink.create((OuterInhibitoryLink) l, e, gm);
+        } else if (l instanceof FeedbackLink<?, ?, ?>) {
+            return FeedbackParticleLink.create((FeedbackLink) l, e, gm);
         }
         return new ParticleLink(l, e, gm);
     }
