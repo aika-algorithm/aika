@@ -55,10 +55,15 @@ public abstract class TrainingParser<C extends Context> extends Parser<C> implem
         Document doc = initDocument(txt, context, phase);
 
         try {
+            if(phase == TRAINING)
+                doc.setInstantiationFeedbackTrigger(true);
+
             infer(doc, context, phase);
 
-            if(phase == TRAINING)
+            if(phase == TRAINING) {
                 train(doc);
+                doc.setInstantiationFeedbackTrigger(false);
+            }
 
             doc.postProcessing();
             doc.updateModel();
