@@ -29,19 +29,13 @@ public interface StepManager {
 
     void setStepMode(boolean stepMode);
 
-    void setSwitchToDebugModeOnDelay(boolean switchToDebugModeOnDelay);
-
     void setStopAfterProcessed(boolean f);
 
     void resetTimestamp();
 
-    void setRestartTestcaseSignal(boolean restartTestcaseSignal);
-
     void click();
 
     boolean stopHere(When w);
-
-    void setBreakpoint(Long bp);
 
     void waitForClick();
 }

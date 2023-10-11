@@ -26,21 +26,11 @@ public class DummyStepManager implements StepManager {
     }
 
     @Override
-    public void setSwitchToDebugModeOnDelay(boolean switchToDebugModeOnDelay) {
-
-    }
-
-    @Override
     public void setStopAfterProcessed(boolean f) {
     }
 
     @Override
     public void resetTimestamp() {
-    }
-
-    @Override
-    public void setRestartTestcaseSignal(boolean restartTestcaseSignal) {
-
     }
 
     @Override
@@ -50,11 +40,6 @@ public class DummyStepManager implements StepManager {
     @Override
     public boolean stopHere(When w) {
         return false;
-    }
-
-    @Override
-    public void setBreakpoint(Long bp) {
-
     }
 
     @Override

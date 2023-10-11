@@ -23,17 +23,14 @@ import network.aika.debugger.neurons.NeuronConsoleManager;
 import network.aika.debugger.neurons.NeuronViewManager;
 import network.aika.debugger.stepmanager.DebugStepManager;
 import network.aika.debugger.stepmanager.StepManager;
-import network.aika.debugger.stepmanager.TestCaseRestartException;
 import network.aika.text.Document;
 import network.aika.text.Range;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.URL;
-import java.util.*;
 
 
 /**
@@ -50,9 +47,6 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
 
     final public static Integer ACTIVATION_TAB_INDEX = 0;
     final public static Integer NEURON_TAB_INDEX = 1;
-
-    private Runnable currentTestCase;
-    private Map<Integer, Runnable> testCaseListeners = new TreeMap<>();
 
     private boolean showNeurons;
     private boolean templatesOnly;
@@ -148,17 +142,6 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
                 });
     }
 
-    public void run() {
-        boolean restart = false;
-        do {
-            try {
-                currentTestCase.run();
-            } catch (TestCaseRestartException e) {
-                restart = true;
-            }
-        } while (restart);
-    }
-
     public void setModel(Model model) {
         neuronViewManager = new NeuronViewManager(model, new NeuronConsoleManager());
         addTab(NEURON_TAB_INDEX, "Neurons", KeyEvent.VK_N, neuronViewManager.getView());
@@ -173,18 +156,6 @@ public class AIKADebugger extends JPanel implements AIKADebugManager {
 
         setModel(doc.getModel());
         return this;
-    }
-
-    public Runnable getCurrentTestCase() {
-        return currentTestCase;
-    }
-
-    public void setCurrentTestCase(Runnable currentTestCase) {
-        this.currentTestCase = currentTestCase;
-    }
-
-    public Map<Integer, Runnable> getTestCaseListeners() {
-        return testCaseListeners;
     }
 
     public ActivationViewManager getActivationViewManager() {

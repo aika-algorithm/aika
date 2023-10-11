@@ -23,13 +23,12 @@ import network.aika.text.Document;
  */
 public class DebugStepManager implements StepManager {
 
+    long MAX_DELAY_TO_DEBUG_MODE = 4000;
+
     boolean stopAfterProcessed;
 
     boolean stepMode = true;
-    boolean switchToDebugModeOnDelay = true;
-    boolean restartTestcaseSignal = false;
 
-    Long nextBreakpoint = null;
     Document doc;
 
     Long lastTimestamp = null;
@@ -39,10 +38,6 @@ public class DebugStepManager implements StepManager {
 
     public DebugStepManager(Document doc) {
         this.doc = doc;
-    }
-
-    public void setSwitchToDebugModeOnDelay(boolean switchToDebugModeOnDelay) {
-        this.switchToDebugModeOnDelay = switchToDebugModeOnDelay;
     }
 
     public void setStopAfterProcessed(boolean b) {
@@ -63,19 +58,10 @@ public class DebugStepManager implements StepManager {
     }
 
     public boolean stopHere(When w) {
-        if(restartTestcaseSignal)
-            throw new TestCaseRestartException();
-
-        if(nextBreakpoint != null && doc.getCurrentTimestamp().getTimestamp() > nextBreakpoint) {
-            return true;
-        }
-
-        if(nextBreakpoint == null) {
-            long diff = lastTimestamp != null ? System.currentTimeMillis() - lastTimestamp : 0;
-            lastTimestamp = System.currentTimeMillis();
-            if(diff > 2000 && switchToDebugModeOnDelay)
-                stepMode = true;
-        }
+        long diff = lastTimestamp != null ? System.currentTimeMillis() - lastTimestamp : 0;
+        lastTimestamp = System.currentTimeMillis();
+        if (diff > MAX_DELAY_TO_DEBUG_MODE)
+            stepMode = true;
 
         if(w == When.AFTER && stopAfterProcessed) {
             stopAfterProcessed = false;
@@ -83,11 +69,6 @@ public class DebugStepManager implements StepManager {
         }
 
         return stepMode;
-    }
-
-    @Override
-    public void setBreakpoint(Long bp) {
-        nextBreakpoint = bp;
     }
 
     @Override
@@ -100,13 +81,5 @@ public class DebugStepManager implements StepManager {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean isRestartTestcaseSignal() {
-        return restartTestcaseSignal;
-    }
-
-    public void setRestartTestcaseSignal(boolean restartTestcaseSignal) {
-        this.restartTestcaseSignal = restartTestcaseSignal;
     }
 }
