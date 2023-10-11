@@ -57,19 +57,9 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
     }
 
     public static PatternNeuron create(Model m, String label) {
-        return create(m, label, false);
-    }
-
-    public static PatternNeuron create(Model m, String label, boolean abstr) {
-        PatternNeuron pn = new PatternNeuron(m)
+        return new PatternNeuron(m)
                 .setLabel(label)
                 .setPersistent(true);
-
-        if(abstr)
-            pn.makeAbstract()
-                    .setWeight(PASSIVE_SYNAPSE_WEIGHT);
-
-        return pn;
     }
 
     @Override

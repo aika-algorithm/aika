@@ -40,7 +40,7 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         BindingCategoryInputLink,
         CategoryActivation,
         BindingActivation
-        > implements CategoryInputSynapse
+        > implements CategoryInputSynapse<BindingCategoryInputSynapse>
 {
 
     private double initialCategorySynapseWeight;

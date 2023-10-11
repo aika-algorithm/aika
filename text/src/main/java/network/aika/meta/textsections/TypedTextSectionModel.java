@@ -33,7 +33,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
 import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
 import static network.aika.meta.NetworkMotifs.*;
@@ -87,7 +86,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     public void setTemplateOnly(boolean templateOnly) {
         headlineEntity.setTemplateOnly(templateOnly);
-        patternN.setTemplateOnly(templateOnly, true);
+        textSectionPatternN.setTemplateOnly(templateOnly, true);
         tsHeadlineBN.setTemplateOnly(templateOnly, true);
         beginBN.setTemplateOnly(templateOnly, true);
         endBN.setTemplateOnly(templateOnly, true);
@@ -116,7 +115,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 bindingNetTarget
         );
         tsHeadlineBN.makeAbstract()
-                .setWeight(5.0)
+                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
                 .adjustBias();
 
         addRelation(
@@ -139,7 +138,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
         addPositiveFeedbackLoop(
                 tsHeadlineBN,
-                patternN,
+                textSectionPatternN,
                 2.5,
                 0.0,
                 false
@@ -179,7 +178,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
         addPositiveFeedbackLoop(
                 hintBN,
-                patternN,
+                textSectionPatternN,
                 2.5,
                 0.0,
                 true
@@ -251,7 +250,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 getAbstractPatternLabel(
                         getTextSectionLabel(tsType)
                 ),
-                patternN
+                textSectionPatternN
         );
     }
 

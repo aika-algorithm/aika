@@ -40,7 +40,7 @@ public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         OuterInhibitoryCategoryInputLink,
         CategoryActivation,
         OuterInhibitoryActivation
-        > implements CategoryInputSynapse
+        > implements CategoryInputSynapse<OuterInhibitoryCategoryInputSynapse>
 {
 
     private double initialCategorySynapseWeight;

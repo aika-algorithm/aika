@@ -41,19 +41,9 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     }
 
     public static BindingNeuron create(Model m, String label) {
-        return create(m, label, false);
-    }
-
-    public static BindingNeuron create(Model m, String label, boolean abstr) {
-        BindingNeuron bn = new BindingNeuron(m)
+        return new BindingNeuron(m)
                 .setLabel(label)
                 .setPersistent(true);
-
-        if(abstr)
-            bn.makeAbstract()
-                    .setWeight(PASSIVE_SYNAPSE_WEIGHT);
-
-        return bn;
     }
 
     @Override

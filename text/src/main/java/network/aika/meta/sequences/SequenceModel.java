@@ -31,7 +31,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.meta.NetworkMotifs.*;
@@ -65,7 +64,7 @@ public abstract class SequenceModel implements Writable {
 
     protected OuterInhibitoryCategoryNeuron inhibCat;
 
-    public PatternNeuron patternN;
+    public PatternNeuron sequencePatternN;
 
     public BindingNeuron primaryBN;
 
@@ -138,7 +137,7 @@ public abstract class SequenceModel implements Writable {
     }
 
     public PatternNeuron getPatternNeuron() {
-        return patternN;
+        return sequencePatternN;
     }
 
     public abstract String getPatternType();
@@ -165,9 +164,12 @@ public abstract class SequenceModel implements Writable {
                 .setBias(5.0);
 
         // Abstract
-        patternN = PatternNeuron.create(model, getPatternType(), true);
-        patternN.setBias(PATTERN_NET_TARGET);
-        patternN.setTargetNet(PATTERN_NET_TARGET);
+        sequencePatternN = PatternNeuron.create(model, getPatternType());
+        sequencePatternN.setBias(PATTERN_NET_TARGET);
+        sequencePatternN.setTargetNet(PATTERN_NET_TARGET);
+        sequencePatternN.makeAbstract()
+                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                .adjustBias();
 
         outerInhibitoryN = new OuterInhibitoryNeuron(model)
                 .setLabel("I")
@@ -201,18 +203,18 @@ public abstract class SequenceModel implements Writable {
 
     protected BindingNeuron createSubPhraseBindingNeuron() {
         BindingNeuron bn = addBindingNeuron(
-                patternN,
+                sequencePatternN,
                 "Abstract SubPhrase",
                 5.0,
                 2.5
         );
         bn.makeAbstract()
-                .setWeight(5.0)
+                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
                 .adjustBias();
 
         addPositiveFeedbackLoop(
                 bn,
-                patternN,
+                sequencePatternN,
                 2.5,
                 0.0,
                 true
@@ -224,7 +226,7 @@ public abstract class SequenceModel implements Writable {
     protected BindingNeuron createPrimaryBindingNeuron() {
         BindingNeuron bn = createBindingNeuron(PRIMARY_BN_PARAMS, 0, false);
 
-        double patternValueTarget = patternN.getActivationFunction()
+        double patternValueTarget = sequencePatternN.getActivationFunction()
                 .f(PRIMARY_BN_PARAMS.patternNetTarget);
 
         addInnerInhibitoryLoop(
@@ -297,7 +299,7 @@ public abstract class SequenceModel implements Writable {
                 p.netTarget
         );
         bn.makeAbstract()
-                .setWeight(5.0)
+                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
                 .adjustBias();
 
         addOuterInhibitoryLoop(
@@ -308,7 +310,7 @@ public abstract class SequenceModel implements Writable {
 
         addPositiveFeedbackLoop(
                 bn,
-                patternN,
+                sequencePatternN,
                 p.pfWeight,
                 p.weakInputMargin,
                 isOptional
@@ -331,7 +333,7 @@ public abstract class SequenceModel implements Writable {
         out.writeLong(outerInhibitoryN.getId());
         out.writeLong(primaryBNInhibitoryN.getId());
         out.writeLong(inhibCat.getId());
-        out.writeLong(patternN.getId());
+        out.writeLong(sequencePatternN.getId());
         out.writeLong(primaryBN.getId());
     }
 
@@ -343,7 +345,7 @@ public abstract class SequenceModel implements Writable {
         outerInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         primaryBNInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         inhibCat = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        patternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        sequencePatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         primaryBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

@@ -40,7 +40,7 @@ public class PatternCategoryInputSynapse extends PositiveFeedbackSynapse<
         PatternCategoryInputLink,
         CategoryActivation,
         PatternActivation
-        > implements CategoryInputSynapse {
+        > implements CategoryInputSynapse<PatternCategoryInputSynapse> {
 
     private double initialCategorySynapseWeight;
 

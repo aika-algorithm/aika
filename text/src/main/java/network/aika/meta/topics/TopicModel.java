@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.NetworkMotifs.*;
 
 /**

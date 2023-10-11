@@ -31,7 +31,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
@@ -67,7 +66,7 @@ public class TextSectionModel implements Writable {
     protected LatentRelationNeuron relationPT;
     protected LatentRelationNeuron relationNT;
 
-    protected PatternNeuron patternN;
+    protected PatternNeuron textSectionPatternN;
 
     protected BindingNeuron beginBN;
 
@@ -144,10 +143,13 @@ public class TextSectionModel implements Writable {
                 .setTargetNet(5.0)
                 .setPersistent(true);
 
-        patternN = PatternNeuron.create(model, getAbstractPatternLabel(TEXT_SECTION_LABEL), true)
+        textSectionPatternN = PatternNeuron.create(model, getAbstractPatternLabel(TEXT_SECTION_LABEL))
                 .setBias(0.7)
-                .setTargetNet(0.7)
-                .setPersistent(true);
+                .setTargetNet(0.7);
+
+        textSectionPatternN.makeAbstract()
+                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                .adjustBias();
 
         beginInputPN = createTextSectionInput("Begin");
         beginBN = addBindingNeuron(beginInputPN, getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + "-Begin"), 10.0, bindingNetTarget);
@@ -175,7 +177,7 @@ public class TextSectionModel implements Writable {
 
         addPositiveFeedbackLoop(
                 beginBN,
-                patternN,
+                textSectionPatternN,
                 2.5,
                 0.0,
                 false
@@ -183,7 +185,7 @@ public class TextSectionModel implements Writable {
 
         addPositiveFeedbackLoop(
                 endBN,
-                patternN,
+                textSectionPatternN,
                 2.5,
                 0.0,
                 false
@@ -191,7 +193,7 @@ public class TextSectionModel implements Writable {
 
         addPositiveFeedbackLoop(
                 beginEndBN,
-                patternN,
+                textSectionPatternN,
                 2.5,
                 0.0,
                 false
@@ -251,7 +253,7 @@ public class TextSectionModel implements Writable {
     }
 
     public PatternActivation addTextSection(Document doc, int begin, int end) {
-        return new PatternActivation(doc.createActivationId(), doc, patternN);
+        return new PatternActivation(doc.createActivationId(), doc, textSectionPatternN);
     }
 
     @Override
@@ -259,7 +261,7 @@ public class TextSectionModel implements Writable {
         out.writeLong(beginEndRelation.getId());
         out.writeLong(relationPT.getId());
         out.writeLong(relationNT.getId());
-        out.writeLong(patternN.getId());
+        out.writeLong(textSectionPatternN.getId());
         out.writeLong(beginBN.getId());
         out.writeLong(endBN.getId());
         out.writeLong(beginEndBN.getId());
@@ -270,7 +272,7 @@ public class TextSectionModel implements Writable {
         beginEndRelation = m.lookupNeuronProvider(in.readLong()).getNeuron();
         relationPT = m.lookupNeuronProvider(in.readLong()).getNeuron();
         relationNT = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        patternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        textSectionPatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         beginBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         endBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         beginEndBN = m.lookupNeuronProvider(in.readLong()).getNeuron();

@@ -34,7 +34,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
 import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
 import static network.aika.meta.NetworkMotifs.*;
@@ -98,7 +97,7 @@ public class EntityModel implements TemplateModel, Writable {
                 .setPersistent(true);
 
         entityCategory = entityPattern.makeAbstract()
-                .setWeight(5.0)
+                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
                 .adjustBias()
                 .getInput()
                 .setPersistent(true);
@@ -111,7 +110,7 @@ public class EntityModel implements TemplateModel, Writable {
         );
 
         entityBN.makeAbstract()
-                .setWeight(5.0)
+                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
                 .adjustBias();
 
         addPositiveFeedbackLoop(

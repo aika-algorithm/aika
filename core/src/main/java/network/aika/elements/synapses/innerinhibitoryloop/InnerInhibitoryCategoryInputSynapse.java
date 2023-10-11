@@ -40,7 +40,7 @@ public class InnerInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InnerInhibitoryCategoryInputLink,
         CategoryActivation,
         InnerInhibitoryActivation
-        > implements CategoryInputSynapse
+        > implements CategoryInputSynapse<InnerInhibitoryCategoryInputSynapse>
 {
     private double initialCategorySynapseWeight;
 

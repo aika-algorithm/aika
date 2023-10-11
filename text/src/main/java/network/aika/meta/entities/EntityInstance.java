@@ -21,10 +21,9 @@ import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.elements.synapses.Synapse;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.text.Document;
@@ -34,7 +33,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
+import static network.aika.meta.NetworkMotifs.DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT;
 import static network.aika.meta.entities.EntityModel.ENTITY_LABEL;
 
 /**
@@ -75,14 +74,9 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
 */
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(tAct, iAct, label);
-            Synapse s = (Synapse) iAct.getNeuron().makeAbstract();
-            if(s instanceof ConjunctiveSynapse) {
-                ConjunctiveSynapse cs = (ConjunctiveSynapse) s;
-                cs.setWeight(5.0);
-                cs.adjustBias();
-            } else {
-                s.setWeight(1.0);
-            }
+            iAct.getNeuron().makeAbstract()
+                    .setWeight(iAct instanceof ConjunctiveActivation<?> ? DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT : 1.0)
+                    .adjustBias();
         });
 
         return doc;

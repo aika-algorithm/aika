@@ -37,6 +37,11 @@ import static network.aika.meta.sequences.SequenceModel.POS_MARGIN;
 public class NetworkMotifs {
     private static final Logger log = LoggerFactory.getLogger(NetworkMotifs.class);
 
+    public static double PASSIVE_SYNAPSE_WEIGHT = 0.0;
+
+    public static double DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT = 5.0;
+
+
     public static double SAME_OBJECT_MARGIN = 0.15;
 
     public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double netTarget) {

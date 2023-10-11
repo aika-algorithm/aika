@@ -317,6 +317,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return (S) this;
     }
 
+    public S adjustBias() {
+        return (S) this;
+    }
+
     public SumField getWeight() {
         return weight;
     }

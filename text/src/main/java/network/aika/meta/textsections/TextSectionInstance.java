@@ -22,6 +22,7 @@ import network.aika.TemplateModel;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
@@ -32,7 +33,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
+import static network.aika.meta.NetworkMotifs.DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT;
 import static network.aika.meta.textsections.TextSectionModel.TEXT_SECTION_LABEL;
 import static network.aika.meta.textsections.TypedTextSectionModel.*;
 
@@ -77,15 +78,10 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(tAct, iAct, label);
 
-            if(isPartOfHeadline(tAct)) {
-                ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
-                s.setWeight(5.0);
-                s.adjustBias();
-            }
-            if(isHint(tAct)) {
-                ConjunctiveSynapse s = (ConjunctiveSynapse) iAct.getNeuron().makeAbstract();
-                s.setWeight(5.0);
-                s.adjustBias();
+            if(isPartOfHeadline(tAct) || isHint(tAct)) {
+                iAct.getNeuron().makeAbstract()
+                        .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                        .adjustBias();
             }
         });
 

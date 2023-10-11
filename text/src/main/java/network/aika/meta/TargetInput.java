@@ -21,7 +21,6 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.text.Document;
 
-import static network.aika.elements.neurons.Neuron.PASSIVE_SYNAPSE_WEIGHT;
 import static network.aika.meta.NetworkMotifs.*;
 
 /**
@@ -120,7 +119,7 @@ public class TargetInput {
                 bindingNetTarget
         );
         bn.makeAbstract()
-                .setWeight(5.0)
+                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
                 .adjustBias();
 
         addPositiveFeedbackLoop(
