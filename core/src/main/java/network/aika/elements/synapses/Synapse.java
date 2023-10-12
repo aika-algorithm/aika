@@ -333,10 +333,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         this.trainingAllowed = trainingAllowed;
     }
 
-    public double getSortingWeight() {
-        return getWeight().getUpdatedValue();
-    }
-
     public abstract Direction getStoredAt();
 
     public NeuronProvider getPInput() {

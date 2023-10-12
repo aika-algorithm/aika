@@ -24,6 +24,7 @@ import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.positivefeedbackloop.PositiveFeedbackSynapse;
 import network.aika.fields.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +95,10 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
     public void updateSumOfLowerWeights() {
         ConjunctiveSynapse[] inputSynapses = sortInputSynapses();
 
+        double posFeedbackWeightSum = getInputSynapsesByType(PositiveFeedbackSynapse.class)
+                .mapToDouble(s -> s.getWeight().getUpdatedValue())
+                .sum();
+
         double sum = getCurrentCompleteBias();
         double lastSum = sum;
         for(ConjunctiveSynapse s: inputSynapses) {
@@ -104,12 +109,18 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
             s.setSumOfLowerWeights(new double[] {sum, lastSum});
 
             lastSum = sum;
-            sum += w;
+            if(!s.isOptional())
+                sum += w;
 
             if(!s.isLinkingAllowed(true))
                 lastSum = sum;
 
-            s.setPropagable(sum >= 0);
+            if(s instanceof PositiveFeedbackSynapse) {
+                s.setPropagable(sum >= 0);
+                posFeedbackWeightSum -= w;
+            } else {
+                s.setPropagable(posFeedbackWeightSum + sum >= 0);
+            }
         }
     }
 

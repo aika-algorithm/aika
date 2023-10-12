@@ -34,7 +34,7 @@ public abstract class DisjunctiveSynapse<
         L extends Link<S, IA, OA>,
         IA extends Activation<?>,
         OA extends Activation
-        > extends Synapse<S,I,O,L,IA,OA>
+        > extends Synapse<S, I, O, L, IA, OA>
 {
 
     @Override

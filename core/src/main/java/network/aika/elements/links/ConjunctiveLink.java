@@ -28,7 +28,8 @@ import static network.aika.fields.Fields.*;
 /**
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>> extends Link<S, IA, OA> {
+public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>>
+        extends Link<S, IA, OA> {
 
     private FieldOutput weightUpdatePosCase;
     private FieldOutput weightUpdateNegCase;

@@ -41,7 +41,6 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
-
     @Override
     public Type getInputType() {
         return PATTERN;

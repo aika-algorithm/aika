@@ -33,14 +33,16 @@ import static network.aika.elements.Type.PATTERN;
  *
  * @author Lukas Molzberger
  */
-public class PatternCategoryInputSynapse extends PositiveFeedbackSynapse<
-        PatternCategoryInputSynapse,
-        CategoryNeuron,
-        PatternNeuron,
-        PatternCategoryInputLink,
-        CategoryActivation,
-        PatternActivation
-        > implements CategoryInputSynapse<PatternCategoryInputSynapse> {
+public class PatternCategoryInputSynapse
+        extends PositiveFeedbackSynapse<
+            PatternCategoryInputSynapse,
+            CategoryNeuron,
+            PatternNeuron,
+            PatternCategoryInputLink,
+            CategoryActivation,
+            PatternActivation
+        >
+        implements CategoryInputSynapse<PatternCategoryInputSynapse> {
 
     private double initialCategorySynapseWeight;
 

@@ -27,14 +27,8 @@ import network.aika.elements.neurons.Neuron;
  *
  * @author Lukas Molzberger
  */
-public abstract class CategorySynapse<S extends CategorySynapse, I extends Neuron, IA extends Activation<?>> extends DisjunctiveSynapse<
-        S,
-        I,
-        CategoryNeuron,
-        CategoryLink<S, IA>,
-        IA,
-        CategoryActivation
-        >
+public abstract class CategorySynapse<S extends CategorySynapse, I extends Neuron, IA extends Activation<?>>
+        extends DisjunctiveSynapse<S, I, CategoryNeuron, CategoryLink<S, IA>, IA, CategoryActivation>
 {
 
     @Override

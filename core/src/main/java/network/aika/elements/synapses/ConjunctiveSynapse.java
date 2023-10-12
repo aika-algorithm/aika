@@ -40,8 +40,15 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends Link<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<?>> extends
-        Synapse<S, I, O, L, IA, OA>
+public abstract class ConjunctiveSynapse<
+            S extends ConjunctiveSynapse,
+            I extends Neuron,
+            O extends ConjunctiveNeuron<O, OA>,
+            L extends Link<S, IA, OA>,
+            IA extends Activation<?>,
+            OA extends ConjunctiveActivation<?>
+        >
+        extends Synapse<S, I, O, L, IA, OA>
 {
 
     protected SumField synapseBias = (SumField) new SumField(this, "synapseBias", TOLERANCE)
@@ -93,6 +100,12 @@ public abstract class ConjunctiveSynapse<S extends ConjunctiveSynapse, I extends
                 ((ConjunctiveSynapse)templateSyn).synapseBias.getUpdatedValue()
         );
         super.initFromTemplate(input, output, templateSyn);
+    }
+
+    public double getSortingWeight() {
+        return optional ?
+                0.0 :
+                getWeight().getUpdatedValue();
     }
 
     public void setPropagable(boolean propagable) {

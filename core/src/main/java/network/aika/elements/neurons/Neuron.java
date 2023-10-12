@@ -162,18 +162,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return npd;
     }
 
-    public PreActivation<A> getPreActivation(Thought t) {
-        PreActivation<A> npd = null;
-        synchronized (activations) {
-            WeakReference<PreActivation<A>> weakRef = activations
-                    .get(t.getId());
-
-            if(weakRef != null)
-                npd = weakRef.get();
-        }
-        return npd;
-    }
-
     public Stream<PreActivation<A>> getPreActivations() {
         synchronized (activations) {
             return activations.values()

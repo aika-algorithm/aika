@@ -30,26 +30,9 @@ import static network.aika.elements.Type.BINDING;
  *
  * @author Lukas Molzberger
  */
-public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends PositiveFeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<O>> extends FeedbackSynapse<
-        S,
-        I,
-        O,
-        L,
-        IA,
-        OA
-        >
+public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends PositiveFeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<O>>
+        extends FeedbackSynapse<S, I, O, L, IA, OA>
 {
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
-    @Override
-    public double getSortingWeight() {
-        return 0.0;
-    }
-
     @Override
     public boolean checkLinkingEvent(Activation act) {
         return true;

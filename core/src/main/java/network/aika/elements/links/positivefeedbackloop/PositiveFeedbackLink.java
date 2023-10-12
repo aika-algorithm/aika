@@ -37,7 +37,8 @@ import static network.aika.fields.Fields.scale;
  *
  * @author Lukas Molzberger
  */
-public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>> extends FeedbackLink<S, IA, OA> {
+public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>>
+        extends FeedbackLink<S, IA, OA> {
 
     protected AbstractFunction inputGradient;
 

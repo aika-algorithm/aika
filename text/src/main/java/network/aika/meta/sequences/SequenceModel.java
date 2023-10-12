@@ -168,7 +168,7 @@ public abstract class SequenceModel implements Writable {
         sequencePatternN.setBias(PATTERN_NET_TARGET);
         sequencePatternN.setTargetNet(PATTERN_NET_TARGET);
         sequencePatternN.makeAbstract()
-                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                .setWeight(10.0)
                 .adjustBias();
 
         outerInhibitoryN = new OuterInhibitoryNeuron(model)
