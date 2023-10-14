@@ -95,11 +95,11 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
     public void updateSumOfLowerWeights() {
         ConjunctiveSynapse[] inputSynapses = sortInputSynapses();
 
-        double posFeedbackWeightSum = getInputSynapsesByType(PositiveFeedbackSynapse.class)
+        double sum = getCurrentCompleteBias();
+        sum += getInputSynapsesByType(PositiveFeedbackSynapse.class)
                 .mapToDouble(s -> s.getWeight().getUpdatedValue())
                 .sum();
 
-        double sum = getCurrentCompleteBias();
         double lastSum = sum;
         for(ConjunctiveSynapse s: inputSynapses) {
             double w = s.getWeight().getUpdatedValue();
@@ -109,18 +109,13 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
             s.setSumOfLowerWeights(new double[] {sum, lastSum});
 
             lastSum = sum;
-            if(!s.isOptional())
+            if(!s.isOptional() && !(s instanceof PositiveFeedbackSynapse))
                 sum += w;
 
             if(!s.isLinkingAllowed(true))
                 lastSum = sum;
 
-            if(s instanceof PositiveFeedbackSynapse) {
-                s.setPropagable(sum >= 0);
-                posFeedbackWeightSum -= w;
-            } else {
-                s.setPropagable(posFeedbackWeightSum + sum >= 0);
-            }
+            s.setPropagable(sum >= 0);
         }
     }
 
