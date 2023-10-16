@@ -57,7 +57,7 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
 
     @Override
     public Scope getScope() {
-        return Scope.INPUT;
+        return Scope.SAME;
     }
 
     @Override

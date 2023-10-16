@@ -70,10 +70,4 @@ public class InputObjectLink extends ConjunctiveLink<InputObjectSynapse, Pattern
     @Override
     public void outerSelfRefVisit(Visitor v, int depth) {
     }
-
-    /*
-    @Override
-    public void innerInhibVisit(Visitor v, int depth) {
-    }
-     */
 }

@@ -52,6 +52,11 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     }
 
     @Override
+    public VisitorType getVisitorType() {
+        return BINDING_VISITOR_TYPE;
+    }
+
+    @Override
     public BindingCategoryInputSynapse makeAbstract() {
         BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron(getModel())
                 .setLabel(getLabel() + CATEGORY_LABEL);
@@ -62,11 +67,6 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
         s.setInitialCategorySynapseWeight(1.0);
 
         return s;
-    }
-
-    @Override
-    public VisitorType getVisitorType() {
-        return BINDING_VISITOR_TYPE;
     }
 
     @Override
