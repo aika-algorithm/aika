@@ -39,7 +39,7 @@ public class NetworkMotifs {
 
     public static double PASSIVE_SYNAPSE_WEIGHT = 0.0;
 
-    public static double DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT = 5.0;
+    public static double DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT = 10.0;
 
 
     public static double SAME_OBJECT_MARGIN = 0.15;

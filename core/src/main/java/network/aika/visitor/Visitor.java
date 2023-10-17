@@ -20,6 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
+import network.aika.enums.Scope;
 import network.aika.visitor.operator.Operator;
 import network.aika.visitor.types.VisitorType;
 import org.slf4j.Logger;
@@ -45,10 +46,10 @@ public abstract class Visitor<T extends ConjunctiveActivation> {
     }
 
     public void start(Activation<?> act) {
-        type.visit(this, act, null, 0);
+        type.visit(this, act, null, 1, 0);
     }
 
-    public void up(T bindingSource, int depth) {
+    public void up(T bindingSource, int state, int depth) {
         // Nothing to do
     }
 
@@ -58,9 +59,9 @@ public abstract class Visitor<T extends ConjunctiveActivation> {
         return v;
     }
 
-    public abstract void next(Activation<?> act, Link lastLink, int depth);
+    public abstract void next(Activation<?> act, Link lastLink, int state, int depth);
 
-    public abstract void next(Link<?, ?, ?> l, int depth);
+    public abstract void next(Link<?, ?, ?> l, int state, int depth);
 
     protected abstract String dirToString();
 
@@ -76,5 +77,9 @@ public abstract class Visitor<T extends ConjunctiveActivation> {
 
     public Activation getReferenceAct() {
         return referenceAct;
+    }
+
+    public static int filterState(int state, Link l) {
+        return state & (l.getSynapse().getScope() == Scope.SAME ? 1 : 0);
     }
 }

@@ -34,11 +34,12 @@ public class BoundDownVisitor extends DownVisitor<PatternActivation> {
     }
 
     @Override
-    public void up(PatternActivation origin, int depth) {
+    public void up(PatternActivation origin, int state, int depth) {
         checkRelation(
                 origin,
                 getOperator().getStartSynapse(),
                 OUTPUT,
+                state,
                 depth
         );
     }

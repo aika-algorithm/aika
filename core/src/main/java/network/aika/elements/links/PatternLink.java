@@ -137,18 +137,18 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
     }
 
     @Override
-    public void bindingVisit(Visitor v, int depth) {
+    public void bindingVisit(Visitor v, int state, int depth) {
     }
 
     @Override
-    public void outerInhibVisit(Visitor v, int depth) {
+    public void outerInhibVisit(Visitor v, int state, int depth) {
     }
 
     @Override
-    public void innerSelfRefVisit(Visitor v, int depth) {
+    public void innerSelfRefVisit(Visitor v, int state, int depth) {
     }
 
     @Override
-    public void outerSelfRefVisit(Visitor v, int depth) {
+    public void outerSelfRefVisit(Visitor v, int state, int depth) {
     }
 }

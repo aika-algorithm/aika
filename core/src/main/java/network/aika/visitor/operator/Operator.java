@@ -31,5 +31,5 @@ public interface Operator {
 
     Direction getDirection();
 
-    void check(UpVisitor v, Link lastLink, Activation act);
+    void check(UpVisitor v, Link lastLink, Activation act, int state);
 }

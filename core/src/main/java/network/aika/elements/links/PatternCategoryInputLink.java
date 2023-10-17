@@ -69,6 +69,6 @@ public class PatternCategoryInputLink extends PositiveFeedbackLink<PatternCatego
     }
 
     @Override
-    public void innerInhibVisit(Visitor v, int depth) {
+    public void innerInhibVisit(Visitor v, int state, int depth) {
     }
 }

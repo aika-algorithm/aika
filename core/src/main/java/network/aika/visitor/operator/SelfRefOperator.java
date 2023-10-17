@@ -46,7 +46,7 @@ public class SelfRefOperator implements Operator {
     }
 
     @Override
-    public void check(UpVisitor v, Link lastLink, Activation act) {
+    public void check(UpVisitor v, Link lastLink, Activation act, int state) {
         if(act == target)
             isSelfRef = true;
     }

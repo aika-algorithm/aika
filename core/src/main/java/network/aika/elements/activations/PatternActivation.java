@@ -120,47 +120,47 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
     }
 
     @Override
-    public void bindingVisit(Visitor v, Link lastLink, int depth) {
-        super.bindingVisit(v, lastLink, depth);
+    public void bindingVisit(Visitor v, Link lastLink, int state, int depth) {
+        super.bindingVisit(v, lastLink, state, depth);
 
-        v.up(this, depth);
+        v.up(this, state, depth);
     }
 
 
     @Override
-    public void innerInhibVisit(Visitor v, Link lastLink, int depth) {
-        super.innerInhibVisit(v, lastLink, depth);
+    public void innerInhibVisit(Visitor v, Link lastLink, int state, int depth) {
+        super.innerInhibVisit(v, lastLink, state, depth);
 
-        v.up(this, depth);
+        v.up(this, state, depth);
     }
 
     @Override
-    public void outerInhibVisit(Visitor v, Link lastLink, int depth) {
-        super.outerInhibVisit(v, lastLink, depth);
+    public void outerInhibVisit(Visitor v, Link lastLink, int state, int depth) {
+        super.outerInhibVisit(v, lastLink, state, depth);
 
-        v.up(this, depth);
+        v.up(this, state, depth);
     }
 
     @Override
-    public void innerSelfRefVisit(Visitor v, Link lastLink, int depth) {
-        super.innerSelfRefVisit(v, lastLink, depth);
+    public void innerSelfRefVisit(Visitor v, Link lastLink, int state, int depth) {
+        super.innerSelfRefVisit(v, lastLink, state, depth);
 
-        v.up(this, depth);
+        v.up(this, state, depth);
     }
 
     @Override
-    public void outerSelfRefVisit(Visitor v, Link lastLink, int depth) {
-        super.outerSelfRefVisit(v, lastLink, depth);
+    public void outerSelfRefVisit(Visitor v, Link lastLink, int state, int depth) {
+        super.outerSelfRefVisit(v, lastLink, state, depth);
 
-        v.up(this, depth);
+        v.up(this, state, depth);
     }
 
     @Override
-    public void patternCatVisit(Visitor v, Link lastLink, int depth) {
+    public void patternCatVisit(Visitor v, Link lastLink, int state, int depth) {
         if(v.isDown() && lastLink != null && lastLink.getSynapse().getScope() == Scope.INPUT)
-            v.up(this, depth);
+            v.up(this, state, depth);
         else
-            super.patternCatVisit(v, lastLink, depth);
+            super.patternCatVisit(v, lastLink, state, depth);
     }
 
     public double getSurprisal(Sign sign) {

@@ -80,32 +80,32 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         LinkingIn.add(this);
     }
 
-    public void bindingVisit(Visitor v, int depth) {
-        v.next(this, depth);
+    public void bindingVisit(Visitor v, int state, int depth) {
+        v.next(this, state, depth);
     }
 
-    public void patternVisit(Visitor v, int depth) {
-        v.next(this, depth);
+    public void patternVisit(Visitor v, int state, int depth) {
+        v.next(this, state, depth);
     }
 
-    public void innerInhibVisit(Visitor v, int depth) {
-         v.next(this, depth);
+    public void innerInhibVisit(Visitor v, int state, int depth) {
+         v.next(this, state, depth);
     }
 
-    public void innerSelfRefVisit(Visitor v, int depth) {
-        v.next(this, depth);
+    public void innerSelfRefVisit(Visitor v, int state, int depth) {
+        v.next(this, state, depth);
     }
 
-    public void outerInhibVisit(Visitor v, int depth) {
-        v.next(this, depth);
+    public void outerInhibVisit(Visitor v, int state, int depth) {
+        v.next(this, state, depth);
     }
 
-    public void outerSelfRefVisit(Visitor v, int depth) {
-        v.next(this, depth);
+    public void outerSelfRefVisit(Visitor v, int state, int depth) {
+        v.next(this, state, depth);
     }
 
-    public void patternCatVisit(Visitor v, int depth) {
-        v.next(this, depth);
+    public void patternCatVisit(Visitor v, int state, int depth) {
+        v.next(this, state, depth);
     }
 
     protected void connectGradientFields() {

@@ -47,7 +47,7 @@ public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visit
         this.operator = operator;
     }
 
-    public void checkRelation(T downBindingSource, Synapse relSyn, Direction relDir, int depth) {
+    public void checkRelation(T downBindingSource, Synapse relSyn, Direction relDir, int state, int depth) {
         relSyn.getRelation()
                 .evaluateLatentRelation((PatternActivation) downBindingSource, relDir.invert())
                 .forEach(relTokenAct -> {
@@ -66,29 +66,29 @@ public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visit
                                     relDir
                             );
 
-                            type.visit(v, relTokenAct, null, depth);
+                            type.visit(v, relTokenAct, null, state, depth);
                         }
                 );
     }
 
     @Override
-    public void next(Activation<?> act, Link lastLink, int depth) {
+    public void next(Activation<?> act, Link lastLink, int state, int depth) {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
 
         act.getInputLinks()
                 .forEach(l ->
-                        type.visit(this, l, depth + 1)
+                        type.visit(this, l, filterState(state, l), depth + 1)
                 );
     }
 
     @Override
-    public void next(Link<?, ?, ?> l, int depth) {
+    public void next(Link<?, ?, ?> l, int state, int depth) {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 
         if(l.getInput() != null)
-            type.visit(this, l.getInput(), l, depth + 1);
+            type.visit(this, l.getInput(), l, state, depth + 1);
     }
 
     public boolean isDown() {

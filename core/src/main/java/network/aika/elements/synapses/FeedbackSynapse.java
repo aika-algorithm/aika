@@ -44,9 +44,4 @@ public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuro
         if(!linkExists(oAct, true))
             createAndInitLink(null, oAct);
     }
-
-    @Override
-    public boolean isLinkingAllowed(boolean latent) {
-        return !latent;
-    }
 }

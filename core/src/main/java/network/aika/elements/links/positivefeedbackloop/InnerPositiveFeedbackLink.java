@@ -89,20 +89,20 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     }
 
     @Override
-    public void bindingVisit(Visitor v, int depth) {
+    public void bindingVisit(Visitor v, int state, int depth) {
         if(v.isDown())
-            super.bindingVisit(v, depth);
+            super.bindingVisit(v, state, depth);
     }
 
     @Override
-    public void patternVisit(Visitor v, int depth) {
+    public void patternVisit(Visitor v, int state, int depth) {
     }
 
     @Override
-    public void outerInhibVisit(Visitor v, int depth) {
+    public void outerInhibVisit(Visitor v, int state, int depth) {
     }
 
     @Override
-    public void innerSelfRefVisit(Visitor v, int depth) {
+    public void innerSelfRefVisit(Visitor v, int state, int depth) {
     }
 }

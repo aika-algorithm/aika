@@ -45,7 +45,7 @@ public interface VisitorType {
         return s == SAME ? OUTER_SELF_REF_VISITOR_TYPE : INNER_SELF_REF_VISITOR_TYPE;
     }
 
-    void visit(Visitor v, Link l, int depth);
+    void visit(Visitor v, Link l, int state, int depth);
 
-    void visit(Visitor v, Activation act, Link l, int depth);
+    void visit(Visitor v, Activation act, Link l, int state, int depth);
 }

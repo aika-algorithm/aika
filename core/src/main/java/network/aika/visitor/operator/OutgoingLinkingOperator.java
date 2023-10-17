@@ -47,7 +47,7 @@ public class OutgoingLinkingOperator extends LinkingOperator {
     }
 
     @Override
-    public void check(UpVisitor v, Link lastLink, Activation act) {
+    public void check(UpVisitor v, Link lastLink, Activation act, int state) {
         if(log.isDebugEnabled())
             log.debug("OutgoingLinkingOperator.check() startSynapse:" + getStartSynapse() + " lastLink:" + lastLink + " act:" + act);
 
@@ -64,6 +64,9 @@ public class OutgoingLinkingOperator extends LinkingOperator {
             return;
 
         if(!targetSyn.checkSingularLinkDoesNotExist(lastLink.getOutput()))
+            return;
+
+        if(!targetSyn.checkVisitorState(state))
             return;
 
         Link l = targetSyn.link(sourceAct, lastLink.getOutput());

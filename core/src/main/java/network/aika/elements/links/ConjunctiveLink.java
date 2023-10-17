@@ -40,27 +40,27 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
-    public void bindingVisit(Visitor v, int depth) {
-        next(v, depth);
+    public void bindingVisit(Visitor v, int state, int depth) {
+        next(v, state, depth);
     }
 
     @Override
-    public void patternVisit(Visitor v, int depth) {
-        next(v, depth);
+    public void patternVisit(Visitor v, int state, int depth) {
+        next(v, state, depth);
     }
 
     @Override
-    public void patternCatVisit(Visitor v, int depth) {
-        next(v, depth);
+    public void patternCatVisit(Visitor v, int state, int depth) {
+        next(v, state, depth);
     }
 
-    private void next(Visitor v, int depth) {
+    private void next(Visitor v, int state, int depth) {
         if(input == null)
             return;
 
         SynapseSlot slot = output.getSlot(synapse);
         if(slot.getSelectedLink() == this)
-            v.next(this, depth);
+            v.next(this, state, depth);
     }
 
     @Override

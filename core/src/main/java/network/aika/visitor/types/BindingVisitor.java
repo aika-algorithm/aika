@@ -26,11 +26,11 @@ import network.aika.visitor.Visitor;
  */
 public class BindingVisitor implements VisitorType {
 
-    public void visit(Visitor v, Link l, int depth) {
-        l.bindingVisit(v, depth);
+    public void visit(Visitor v, Link l, int state, int depth) {
+        l.bindingVisit(v, state, depth);
     }
 
-    public void visit(Visitor v, Activation act, Link l, int depth) {
-        act.bindingVisit(v, l, depth);
+    public void visit(Visitor v, Activation act, Link l, int state, int depth) {
+        act.bindingVisit(v, l, state, depth);
     }
 }

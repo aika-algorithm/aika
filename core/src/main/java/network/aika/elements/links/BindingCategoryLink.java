@@ -45,6 +45,6 @@ public class BindingCategoryLink extends CategoryLink<BindingCategorySynapse, Bi
     }
 
     @Override
-    public void patternCatVisit(Visitor v, int depth) {
+    public void patternCatVisit(Visitor v, int state, int depth) {
     }
 }

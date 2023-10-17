@@ -189,32 +189,32 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         net.setValue(v);
     }
 
-    public void bindingVisit(Visitor v, Link lastLink, int depth) {
-        v.next(this, lastLink, depth);
+    public void bindingVisit(Visitor v, Link lastLink, int state, int depth) {
+        v.next(this, lastLink, state, depth);
     }
 
-    public void patternVisit(Visitor v, Link lastLink, int depth) {
-        v.next(this, lastLink, depth);
+    public void patternVisit(Visitor v, Link lastLink, int state, int depth) {
+        v.next(this, lastLink, state, depth);
     }
 
-    public void innerInhibVisit(Visitor v, Link lastLink, int depth) {
-        v.next(this, lastLink, depth);
+    public void innerInhibVisit(Visitor v, Link lastLink, int state, int depth) {
+        v.next(this, lastLink, state, depth);
     }
 
-    public void innerSelfRefVisit(Visitor v, Link lastLink, int depth) {
-        v.next(this, lastLink, depth);
+    public void innerSelfRefVisit(Visitor v, Link lastLink, int state, int depth) {
+        v.next(this, lastLink, state, depth);
     }
 
-    public void outerInhibVisit(Visitor v, Link lastLink, int depth) {
-        v.next(this, lastLink, depth);
+    public void outerInhibVisit(Visitor v, Link lastLink, int state, int depth) {
+        v.next(this, lastLink, state, depth);
     }
 
-    public void outerSelfRefVisit(Visitor v, Link lastLink, int depth) {
-        v.next(this, lastLink, depth);
+    public void outerSelfRefVisit(Visitor v, Link lastLink, int state, int depth) {
+        v.next(this, lastLink, state, depth);
     }
 
-    public void patternCatVisit(Visitor v, Link lastLink, int depth) {
-        v.next(this, lastLink, depth);
+    public void patternCatVisit(Visitor v, Link lastLink, int state, int depth) {
+        v.next(this, lastLink, state, depth);
     }
 
     protected void connectGradientFields() {

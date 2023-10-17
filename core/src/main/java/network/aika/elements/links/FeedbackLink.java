@@ -35,55 +35,55 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     @Override
-    public void bindingVisit(Visitor v, int depth) {
+    public void bindingVisit(Visitor v, int state, int depth) {
         if(checkVisited(v))
             return;
 
-        super.bindingVisit(v, depth);
+        super.bindingVisit(v, state, depth);
     }
 
     @Override
-    public void patternVisit(Visitor v, int depth) {
+    public void patternVisit(Visitor v, int state, int depth) {
         if(checkVisited(v))
             return;
 
-        super.patternVisit(v, depth);
+        super.patternVisit(v, state, depth);
     }
 
     @Override
-    public void innerInhibVisit(Visitor v, int depth) {
+    public void innerInhibVisit(Visitor v, int state, int depth) {
         if(checkVisited(v))
             return;
 
-        super.innerInhibVisit(v, depth);
+        super.innerInhibVisit(v, state, depth);
     }
 
     @Override
-    public void outerInhibVisit(Visitor v, int depth) {
+    public void outerInhibVisit(Visitor v, int state, int depth) {
         if(checkVisited(v))
             return;
 
-        super.outerInhibVisit(v, depth);
+        super.outerInhibVisit(v, state, depth);
     }
 
     @Override
-    public void innerSelfRefVisit(Visitor v, int depth) {
+    public void innerSelfRefVisit(Visitor v, int state, int depth) {
         if(checkVisited(v))
             return;
 
-        super.innerInhibVisit(v, depth);
+        super.innerInhibVisit(v, state, depth);
     }
 
     @Override
-    public void outerSelfRefVisit(Visitor v, int depth) {
+    public void outerSelfRefVisit(Visitor v, int state, int depth) {
         if(checkVisited(v))
             return;
 
-        super.outerInhibVisit(v, depth);
+        super.outerInhibVisit(v, state, depth);
     }
 
     @Override
-    public void patternCatVisit(Visitor v, int depth) {
+    public void patternCatVisit(Visitor v, int state, int depth) {
     }
 
     private boolean checkVisited(Visitor v) {

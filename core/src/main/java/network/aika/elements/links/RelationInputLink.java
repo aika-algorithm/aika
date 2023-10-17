@@ -49,26 +49,26 @@ public class RelationInputLink extends ConjunctiveLink<RelationInputSynapse, Lat
     }
 
     @Override
-    public void patternVisit(Visitor v, int depth) {
+    public void patternVisit(Visitor v, int state, int depth) {
     }
 
     @Override
-    public void patternCatVisit(Visitor v, int depth) {
+    public void patternCatVisit(Visitor v, int state, int depth) {
     }
 
     @Override
-    public void innerInhibVisit(Visitor v, int depth) {
+    public void innerInhibVisit(Visitor v, int state, int depth) {
     }
 
     @Override
-    public void outerInhibVisit(Visitor v, int depth) {
+    public void outerInhibVisit(Visitor v, int state, int depth) {
     }
 
     @Override
-    public void innerSelfRefVisit(Visitor v, int depth) {
+    public void innerSelfRefVisit(Visitor v, int state, int depth) {
     }
 
     @Override
-    public void outerSelfRefVisit(Visitor v, int depth) {
+    public void outerSelfRefVisit(Visitor v, int state, int depth) {
     }
 }

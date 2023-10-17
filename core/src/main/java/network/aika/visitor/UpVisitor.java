@@ -39,8 +39,8 @@ public abstract class UpVisitor<T extends ConjunctiveActivation> extends Visitor
         this.referenceAct = downVisitor.referenceAct;
     }
 
-    public void check(Link lastLink, Activation act) {
-        operator.check(this, lastLink, act);
+    public void check(Link lastLink, Activation act, int state) {
+        operator.check(this, lastLink, act, state);
     }
 
     public boolean compatible(Synapse from, Synapse to) {
@@ -48,24 +48,24 @@ public abstract class UpVisitor<T extends ConjunctiveActivation> extends Visitor
     }
 
     @Override
-    public void next(Activation<?> act, Link lastLink, int depth) {
-        check(lastLink, act);
+    public void next(Activation<?> act, Link lastLink, int state, int depth) {
+        check(lastLink, act, state);
 
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
 
         act.getOutputLinks()
                 .forEach(l ->
-                        type.visit(this, l, depth + 1)
+                        type.visit(this, l, filterState(state, l), depth + 1)
                 );
     }
 
     @Override
-    public void next(Link<?, ?, ?> l, int depth) {
+    public void next(Link<?, ?, ?> l, int state, int depth) {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 
-        type.visit(this, l.getOutput(), l, depth + 1);
+        type.visit(this, l.getOutput(), l, state, depth + 1);
     }
 
     public boolean isDown() {

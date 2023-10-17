@@ -175,22 +175,22 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     }
 
     @Override
-    public void patternVisit(Visitor v, Link lastLink, int depth) {
-        super.patternVisit(v, lastLink, depth);
-        v.up(this, depth);
+    public void patternVisit(Visitor v, Link lastLink, int state, int depth) {
+        super.patternVisit(v, lastLink, state, depth);
+        v.up(this, state, depth);
     }
 
     @Override
-    public void patternCatVisit(Visitor v, Link lastLink, int depth) {
+    public void patternCatVisit(Visitor v, Link lastLink, int state, int depth) {
         if(v.isDown()) {
             v.setReferenceAct(this);
-            super.patternCatVisit(v, lastLink, depth);
+            super.patternCatVisit(v, lastLink, state, depth);
         } else {
             CategoryActivation cAct = getCategoryActivation();
             CategoryActivation refCAct = v.getReferenceAct().getCategoryActivation();
 
             if(cAct != null && cAct == refCAct)
-                super.patternCatVisit(v, lastLink, depth);
+                super.patternCatVisit(v, lastLink, state, depth);
         }
     }
 

@@ -86,18 +86,4 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
         if(input != null)
             linkAndConnect(input.getGradient(), 0, inputGradient);
     }
-
-    @Override
-    public void addInputLinkingStep() {
-    }
-
-    @Override
-    public void bindingVisit(Visitor v, int depth) {
-        if(v.isDown())
-            super.bindingVisit(v, depth);
-    }
-
-    @Override
-    public void patternVisit(Visitor v, int depth) {
-    }
 }

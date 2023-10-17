@@ -25,11 +25,11 @@ import network.aika.visitor.Visitor;
  */
 public class OuterInhibitoryVisitor implements VisitorType {
 
-    public void visit(Visitor v, Link l, int depth) {
-        l.outerInhibVisit(v, depth);
+    public void visit(Visitor v, Link l, int state, int depth) {
+        l.outerInhibVisit(v, state, depth);
     }
 
-    public void visit(Visitor v, Activation act, Link l, int depth) {
-        act.outerInhibVisit(v, l, depth);
+    public void visit(Visitor v, Activation act, Link l, int state, int depth) {
+        act.outerInhibVisit(v, l, state, depth);
     }
 }

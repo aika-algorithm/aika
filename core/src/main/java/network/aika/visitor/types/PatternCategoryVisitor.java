@@ -26,11 +26,11 @@ import network.aika.visitor.Visitor;
  */
 public class PatternCategoryVisitor implements VisitorType {
 
-    public void visit(Visitor v, Link l, int depth) {
-        l.patternCatVisit(v, depth);
+    public void visit(Visitor v, Link l, int state, int depth) {
+        l.patternCatVisit(v, state, depth);
     }
 
-    public void visit(Visitor v, Activation act, Link l, int depth) {
-        act.patternCatVisit(v, l, depth);
+    public void visit(Visitor v, Activation act, Link l, int state, int depth) {
+        act.patternCatVisit(v, l, state, depth);
     }
 }

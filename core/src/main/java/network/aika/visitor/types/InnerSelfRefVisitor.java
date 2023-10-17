@@ -25,11 +25,11 @@ import network.aika.visitor.Visitor;
  */
 public class InnerSelfRefVisitor implements VisitorType {
 
-    public void visit(Visitor v, Link l, int depth) {
-        l.innerSelfRefVisit(v, depth);
+    public void visit(Visitor v, Link l, int state, int depth) {
+        l.innerSelfRefVisit(v, state, depth);
     }
 
-    public void visit(Visitor v, Activation act, Link l, int depth) {
-        act.innerSelfRefVisit(v, l, depth);
+    public void visit(Visitor v, Activation act, Link l, int state, int depth) {
+        act.innerSelfRefVisit(v, l, state, depth);
     }
 }

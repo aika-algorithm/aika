@@ -100,6 +100,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return act.getDefaultNet();
     }
 
+    public boolean checkVisitorState(int state) {
+        return true;
+    }
+
     public boolean checkLinkingEvent(Activation act) {
         return act.isFired();
     }

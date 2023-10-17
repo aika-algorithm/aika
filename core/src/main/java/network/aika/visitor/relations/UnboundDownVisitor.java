@@ -36,11 +36,12 @@ public class UnboundDownVisitor extends DownVisitor<ConjunctiveActivation> {
     }
 
     @Override
-    public void up(ConjunctiveActivation bindingSource, int depth) {
+    public void up(ConjunctiveActivation bindingSource, int state, int depth) {
         type.visit(
                 new UnboundUpVisitor(this, bindingSource),
                 bindingSource,
                 null,
+                state,
                 depth
         );
 
@@ -48,15 +49,16 @@ public class UnboundDownVisitor extends DownVisitor<ConjunctiveActivation> {
         if (startSyn != null)
             expandRelation(
                     bindingSource,
+                    state,
                     depth,
                     startSyn.getOutput()
             );
     }
 
-    public void expandRelation(ConjunctiveActivation<?> origin, int depth, Neuron<?, ?> n) {
+    public void expandRelation(ConjunctiveActivation<?> origin, int state, int depth, Neuron<?, ?> n) {
         n.getSynapsesWithRelations()
                 .forEach(relSyn ->
-                        checkRelation(origin, relSyn, INPUT, depth)
+                        checkRelation(origin, relSyn, INPUT, state, depth)
                 );
     }
 }

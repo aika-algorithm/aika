@@ -61,13 +61,13 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
     }
 
     @Override
-    public BindingCategoryInputLink createLink(CategoryActivation input, BindingActivation output) {
-        return new BindingCategoryInputLink(this, input, output);
+    public boolean checkVisitorState(int state) {
+        return (state & 1) > 0;
     }
 
     @Override
-    public boolean isLinkingAllowed(boolean latent) {
-        return !latent;
+    public BindingCategoryInputLink createLink(CategoryActivation input, BindingActivation output) {
+        return new BindingCategoryInputLink(this, input, output);
     }
 
     @Override
