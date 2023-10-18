@@ -16,7 +16,6 @@
  */
 package network.aika.visitor.relations;
 
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
@@ -29,10 +28,10 @@ import static network.aika.enums.direction.Direction.OUTPUT;
 /**
  * @author Lukas Molzberger
  */
-public class BoundUpVisitor extends UpVisitor {
+public class BoundUpVisitor extends UpVisitor<PatternActivation> {
 
-    private ConjunctiveActivation downBindingSource;
-    private ConjunctiveActivation upBindingSource;
+    private PatternActivation downBindingSource;
+    private PatternActivation upBindingSource;
 
     private Synapse relation;
 
@@ -40,8 +39,8 @@ public class BoundUpVisitor extends UpVisitor {
 
     public BoundUpVisitor(
             DownVisitor downVisitor,
-            ConjunctiveActivation downBindingSource,
-            ConjunctiveActivation upBindingSource,
+            PatternActivation downBindingSource,
+            PatternActivation upBindingSource,
             Synapse relation,
             Direction relDir
     ) {

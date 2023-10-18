@@ -212,6 +212,7 @@ public class InnerInhibitionTest {
                 patternN,
                 2.5,
                 0.0,
+                false,
                 false
         );
 

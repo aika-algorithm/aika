@@ -17,7 +17,6 @@
 package network.aika.elements.neurons.relations;
 
 import network.aika.Model;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Document;
@@ -56,7 +55,7 @@ public class BeforeRelation extends Relation {
     }
 
     @Override
-    public Stream<ConjunctiveActivation> evaluateLatentRelation(ConjunctiveActivation fromAct, Direction dir) {
+    public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir) {
         Document doc = (Document) fromAct.getThought();
 
         Direction toSlot = dir.combine(relDirection);
@@ -70,7 +69,7 @@ public class BeforeRelation extends Relation {
                 fromPos + getRelEnd(dir)
         );
 
-        return doc.getRelatedTokensByTokenPosition(toSlot, targetRange).toList().stream();
+        return doc.getRelatedTokensByTokenPosition(toSlot, targetRange);
     }
 
     private long getRelBegin(Direction dir) {

@@ -66,6 +66,17 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
     }
 
     @Override
+    protected void registerPosRange(TextReference oldTextReference, TextReference newTextReference) {
+        Document doc = (Document) thought;
+
+        doc.updateGroundRef(
+                this,
+                oldTextReference,
+                newTextReference
+        );
+    }
+
+    @Override
     public PatternActivation instantiateTemplateNode() {
         PatternActivation ti = (PatternActivation) super.instantiateTemplateNode();
         if(ti != null)

@@ -29,7 +29,7 @@ import static network.aika.enums.direction.Direction.INPUT;
 /**
  * @author Lukas Molzberger
  */
-public class UnboundDownVisitor extends DownVisitor {
+public class UnboundDownVisitor extends DownVisitor<ConjunctiveActivation> {
 
     public UnboundDownVisitor(Thought t, VisitorType type, Operator operator) {
         super(t, type, operator);

@@ -17,7 +17,6 @@
 package network.aika.visitor.relations;
 
 import network.aika.Thought;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.types.VisitorType;
@@ -28,14 +27,14 @@ import static network.aika.enums.direction.Direction.OUTPUT;
 /**
  * @author Lukas Molzberger
  */
-public class BoundDownVisitor extends DownVisitor {
+public class BoundDownVisitor extends DownVisitor<PatternActivation> {
 
     public BoundDownVisitor(Thought t, VisitorType type, Operator operator) {
         super(t, type, operator);
     }
 
     @Override
-    public void up(ConjunctiveActivation origin, int state, int depth) {
+    public void up(PatternActivation origin, int state, int depth) {
         checkRelation(
                 origin,
                 getOperator().getStartSynapse(),

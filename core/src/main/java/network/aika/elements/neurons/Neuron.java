@@ -180,14 +180,26 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     public abstract VisitorType getVisitorType();
 
     public void startVisitor(LinkingOperator c, Activation act) {
-        Thought t = act.getThought();
+        getDownVisitor(
+                c,
+                act.getThought()
+        ).start(act);
+    }
+
+    public void startVisitor(LinkingOperator c, Link l) {
+        getDownVisitor(
+                c,
+                l.getThought()
+        ).start(l);
+    }
+
+    private DownVisitor getDownVisitor(LinkingOperator c, Thought t) {
         VisitorType type = getVisitorType();
 
         DownVisitor v = c.getStartSynapse().getRelation() != null ?
                 new BoundDownVisitor(t, type, c) :
                 new UnboundDownVisitor(t, type, c);
-
-        v.start(act);
+        return v;
     }
 
     public void linkOutgoing(Synapse targetSyn, Activation iAct) {
@@ -226,7 +238,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
                     startVisitor(
                             new IncomingLinkingOperator(l.getInput(), l.getSynapse(), l, targetSyn),
-                            l.getInput()
+                            l
                     );
                 });
     }

@@ -44,7 +44,7 @@ public class OuterInhibitoryCategorySynapse extends CategorySynapse<OuterInhibit
 
     @Override
     public Scope getScope() {
-        return Scope.SAME;
+        return Scope.INPUT;
     }
 
     @Override

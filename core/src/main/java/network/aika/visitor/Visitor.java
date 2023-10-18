@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Visitor {
+public abstract class Visitor<T extends ConjunctiveActivation> {
 
     protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
 
@@ -46,10 +46,14 @@ public abstract class Visitor {
     }
 
     public void start(Activation<?> act) {
-        type.visit(this, act, null, 1, 0);
+        type.visit(this, act, null, 3, 0);
     }
 
-    public void up(ConjunctiveActivation bindingSource, int state, int depth) {
+    public void start(Link l) {
+        type.visit(this, l, filterState(3, l), 0);
+    }
+
+    public void up(T bindingSource, int state, int depth) {
         // Nothing to do
     }
 
@@ -80,6 +84,8 @@ public abstract class Visitor {
     }
 
     public static int filterState(int state, Link l) {
-        return state & (l.getSynapse().getScope() == Scope.SAME ? 1 : 0);
+        return state &
+                ((l.getSynapse().getScope() != Scope.INPUT ? 1 : 0) +
+                (l.getSynapse().getScope() != Scope.SAME ? 2 : 0));
     }
 }

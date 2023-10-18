@@ -21,7 +21,6 @@ import network.aika.Thought;
 import network.aika.elements.Timestamp;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.enums.direction.Direction;
@@ -45,9 +44,9 @@ public class Document extends Thought {
 
     private final StringBuilder content;
 
-    private NavigableMap<TokenPositionKey, ConjunctiveActivation> tokenPosBeginIndex = new TreeMap<>();
+    private NavigableMap<TokenPositionKey, PatternActivation> tokenPosBeginIndex = new TreeMap<>();
 
-    private NavigableMap<TokenPositionKey, ConjunctiveActivation> tokenPosEndIndex = new TreeMap<>();
+    private NavigableMap<TokenPositionKey, PatternActivation> tokenPosEndIndex = new TreeMap<>();
 
     public Document(Model model, String content) {
         super(model);
@@ -57,12 +56,12 @@ public class Document extends Thought {
         }
     }
 
-    public void updateGroundRef(ConjunctiveActivation act, TextReference oldTextReference, TextReference newTextReference) {
-        updateGroundRef(tokenPosBeginIndex, act, getTPBegin(oldTextReference), getTPBegin(newTextReference));
-        updateGroundRef(tokenPosEndIndex, act, getTPEnd(oldTextReference), getTPEnd(newTextReference));
+    public void updateGroundRef(PatternActivation tokenAct, TextReference oldTextReference, TextReference newTextReference) {
+        updateGroundRef(tokenPosBeginIndex, tokenAct, getTPBegin(oldTextReference), getTPBegin(newTextReference));
+        updateGroundRef(tokenPosEndIndex, tokenAct, getTPEnd(oldTextReference), getTPEnd(newTextReference));
     }
 
-    private void updateGroundRef(NavigableMap<TokenPositionKey, ConjunctiveActivation> index, ConjunctiveActivation tokenAct, Long oldPos, Long newPos) {
+    private void updateGroundRef(NavigableMap<TokenPositionKey, PatternActivation> index, PatternActivation tokenAct, Long oldPos, Long newPos) {
         if(oldPos != null) {
             if (oldPos == newPos)
                 return;
@@ -74,7 +73,7 @@ public class Document extends Thought {
             index.put(new TokenPositionKey(newPos, tokenAct.getId()), tokenAct);
     }
 
-    public Stream<ConjunctiveActivation> getRelatedTokensByTokenPosition(Direction slot, Range r) {
+    public Stream<PatternActivation> getRelatedTokensByTokenPosition(Direction slot, Range r) {
         return getPositionIndex(slot)
                 .subMap(
                         new TokenPositionKey(r.getBegin(), Integer.MIN_VALUE),
@@ -84,7 +83,7 @@ public class Document extends Thought {
                 .stream();
     }
 
-    private NavigableMap<TokenPositionKey, ConjunctiveActivation> getPositionIndex(Direction slot) {
+    private NavigableMap<TokenPositionKey, PatternActivation> getPositionIndex(Direction slot) {
         return slot == Direction.OUTPUT ?
                 tokenPosEndIndex :
                 tokenPosBeginIndex;

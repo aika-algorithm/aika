@@ -94,6 +94,7 @@ public class TopicModel implements Writable {
                 topicPatternN,
                 2.5,
                 0.0,
+                false,
                 false
         );
     }

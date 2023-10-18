@@ -85,10 +85,6 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     }
 
     @Override
-    public void addInputLinkingStep() {
-    }
-
-    @Override
     public void bindingVisit(Visitor v, int state, int depth) {
         if(v.isDown())
             super.bindingVisit(v, state, depth);

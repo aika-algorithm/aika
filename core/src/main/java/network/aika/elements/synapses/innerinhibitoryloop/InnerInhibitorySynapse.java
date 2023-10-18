@@ -47,13 +47,7 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
         InnerInhibitoryActivation
         > {
 
-    private Relation relation;
-
     public InnerInhibitorySynapse() {
-    }
-
-    public InnerInhibitorySynapse(Relation rel) {
-        this.relation = rel;
     }
 
     @Override
@@ -64,11 +58,6 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
     @Override
     public Type getOutputType() {
         return INNER_INHIBITORY;
-    }
-
-    @Override
-    public Relation getRelation() {
-        return relation;
     }
 
     @Override
@@ -101,22 +90,5 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
     @Override
     public boolean linkOnUnsuppressed() {
         return true;
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        super.write(out);
-
-        out.writeBoolean(relation != null);
-        if(relation != null)
-            relation.write(out);
-    }
-
-    @Override
-    public void readFields(DataInput in, Model m) throws IOException {
-        super.readFields(in, m);
-
-        if(in.readBoolean())
-            relation = Relation.read(in, m);
     }
 }

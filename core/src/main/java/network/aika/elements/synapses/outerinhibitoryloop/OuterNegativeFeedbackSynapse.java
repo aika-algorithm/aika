@@ -59,6 +59,11 @@ public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
+    public boolean checkVisitorState(int state) {
+        return (state & 2) > 0;
+    }
+
+    @Override
     public void initDummyLink(BindingActivation oAct) {
     }
 

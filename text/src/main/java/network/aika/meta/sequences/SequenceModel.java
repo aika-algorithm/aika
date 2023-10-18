@@ -217,6 +217,7 @@ public abstract class SequenceModel implements Writable {
                 sequencePatternN,
                 2.5,
                 0.0,
+                false,
                 true
         );
 
@@ -224,7 +225,7 @@ public abstract class SequenceModel implements Writable {
     }
 
     protected BindingNeuron createPrimaryBindingNeuron() {
-        BindingNeuron bn = createBindingNeuron(PRIMARY_BN_PARAMS, 0, false);
+        BindingNeuron bn = createBindingNeuron(PRIMARY_BN_PARAMS, 0, true, false);
 
         double patternValueTarget = sequencePatternN.getActivationFunction()
                 .f(PRIMARY_BN_PARAMS.patternNetTarget);
@@ -267,7 +268,7 @@ public abstract class SequenceModel implements Writable {
             int pos,
             BindingNeuron lastBN
     ) {
-        BindingNeuron bn = createBindingNeuron(p, pos, isOptional);
+        BindingNeuron bn = createBindingNeuron(p, pos, false, isOptional);
 
         LatentRelationNeuron rel = pos > 0 ?
                 relPT :
@@ -288,6 +289,7 @@ public abstract class SequenceModel implements Writable {
     protected BindingNeuron createBindingNeuron(
             BindingNeuronParameters p,
             int pos,
+            boolean allowRelaxedMatching,
             boolean isOptional
     ) {
         log.info(p.labelPrefix + " Binding-Neuron: netTarget:" + p.netTarget);
@@ -313,6 +315,7 @@ public abstract class SequenceModel implements Writable {
                 sequencePatternN,
                 p.pfWeight,
                 p.weakInputMargin,
+                allowRelaxedMatching,
                 isOptional
         );
 

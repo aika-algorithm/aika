@@ -78,9 +78,7 @@ public class NetworkMotifs {
     }
 
     public static void addInnerInhibitoryLoop(BindingNeuron bn, InnerInhibitoryNeuron in, double weight) {
-        new InnerInhibitorySynapse(
-                new NearRelation(5)
-        )
+        new InnerInhibitorySynapse()
                 .setWeight(1.0)
                 .link(bn, in);
 
@@ -95,9 +93,10 @@ public class NetworkMotifs {
             PatternNeuron pn,
             double weight,
             double weakInputMargin,
+            boolean allowRelaxedMatching,
             boolean isOptional
     ) {
-        addPositiveFeedbackLoop(bn, pn, weight, weakInputMargin, isOptional, false);
+        addPositiveFeedbackLoop(bn, pn, weight, weakInputMargin, allowRelaxedMatching, isOptional, false);
     }
 
     public static void addPositiveFeedbackLoop(
@@ -105,6 +104,7 @@ public class NetworkMotifs {
             PatternNeuron pn,
             double weight,
             double weakInputMargin,
+            boolean allowRelaxedMatching,
             boolean isOptional,
             boolean isTemplateOnly
     ) {
@@ -117,7 +117,11 @@ public class NetworkMotifs {
 
         log.info("  " + pSyn + " targetNetContr:" + -pSyn.getSynapseBias().getValue());
 
-        InnerPositiveFeedbackSynapse posFeedSyn = new InnerPositiveFeedbackSynapse()
+        InnerPositiveFeedbackSynapse posFeedSyn = new InnerPositiveFeedbackSynapse(
+                        allowRelaxedMatching ?
+                                new NearRelation(5) :
+                                null
+                )
                 .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), pn.getTargetValue()))
                 .link(pn, bn)
                 .setTemplateOnly(isTemplateOnly)

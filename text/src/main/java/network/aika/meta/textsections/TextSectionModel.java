@@ -180,6 +180,7 @@ public class TextSectionModel implements Writable {
                 textSectionPatternN,
                 2.5,
                 0.0,
+                false,
                 false
         );
 
@@ -188,6 +189,7 @@ public class TextSectionModel implements Writable {
                 textSectionPatternN,
                 2.5,
                 0.0,
+                false,
                 false
         );
 
@@ -196,6 +198,7 @@ public class TextSectionModel implements Writable {
                 textSectionPatternN,
                 2.5,
                 0.0,
+                false,
                 false
         );
 

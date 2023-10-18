@@ -16,14 +16,19 @@
  */
 package network.aika.elements.synapses.positivefeedbackloop;
 
+import network.aika.Model;
 import network.aika.elements.Type;
 import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.relations.Relation;
 import network.aika.enums.Scope;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
 import network.aika.elements.neurons.PatternNeuron;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import static network.aika.elements.Type.*;
 
@@ -40,6 +45,16 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
+
+    public InnerPositiveFeedbackSynapse() {
+    }
+
+    public InnerPositiveFeedbackSynapse(Relation rel) {
+        this.relation = rel;
+    }
+
+    private Relation relation;
+
     @Override
     public Type getInputType() {
         return PATTERN;
@@ -53,6 +68,11 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
     @Override
     public Scope getScope() {
         return Scope.SAME;
+    }
+
+    @Override
+    public Relation getRelation() {
+        return relation;
     }
 
     @Override
@@ -70,5 +90,22 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
 
     @Override
     public void linkAndPropagateOut(PatternActivation act) {
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+
+        out.writeBoolean(relation != null);
+        if(relation != null)
+            relation.write(out);
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws IOException {
+        super.readFields(in, m);
+
+        if(in.readBoolean())
+            relation = Relation.read(in, m);
     }
 }

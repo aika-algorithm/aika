@@ -118,6 +118,7 @@ public class EntityModel implements TemplateModel, Writable {
                 entityPattern,
                 2.5,
                 0.0,
+                false,
                 false
         );
 

@@ -27,11 +27,11 @@ import static network.aika.utils.Utils.idToString;
 /**
  * @author Lukas Molzberger
  */
-public abstract class UpVisitor extends Visitor {
+public abstract class UpVisitor<T extends ConjunctiveActivation> extends Visitor<T> {
 
-    private final ConjunctiveActivation bindingSource;
+    private final T bindingSource;
 
-    protected UpVisitor(DownVisitor downVisitor, ConjunctiveActivation bindingSource) {
+    protected UpVisitor(DownVisitor<T> downVisitor, T bindingSource) {
         this.v = downVisitor.v;
         this.type = downVisitor.type;
         this.bindingSource = bindingSource;

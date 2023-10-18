@@ -17,7 +17,6 @@
 package network.aika.elements.neurons.relations;
 
 import network.aika.Model;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Document;
@@ -65,7 +64,7 @@ public class EqualsRelation extends Relation {
     }
 
     @Override
-    public Stream<ConjunctiveActivation> evaluateLatentRelation(ConjunctiveActivation fromAct, Direction dir) {
+    public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir) {
         Document doc = (Document) fromAct.getThought();
         Range r = fromAct.getTextReference().getTokenPosRange();
 
@@ -73,7 +72,7 @@ public class EqualsRelation extends Relation {
                 .filter(act -> fromAct != act)
                 .filter(act ->
                         compare(r, act.getTextReference().getTokenPosRange(), dir)
-                ).toList().stream();
+                );
     }
 
     public boolean compare(Range ra, Range rb, Direction dir) {

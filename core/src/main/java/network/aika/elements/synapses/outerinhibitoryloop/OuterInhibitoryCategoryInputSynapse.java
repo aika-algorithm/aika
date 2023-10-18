@@ -57,7 +57,7 @@ public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
 
     @Override
     public Scope getScope() {
-        return Scope.SAME;
+        return Scope.INPUT;
     }
 
     @Override
