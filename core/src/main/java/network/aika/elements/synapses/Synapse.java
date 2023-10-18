@@ -365,7 +365,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return null;
     }
 
-    public void createLatentRelation(OA oAct, PatternActivation fromOriginAct, PatternActivation toOriginAct) {
+    public void createLatentRelation(OA oAct, ConjunctiveActivation fromOriginAct, ConjunctiveActivation toOriginAct) {
     }
 
     @Override

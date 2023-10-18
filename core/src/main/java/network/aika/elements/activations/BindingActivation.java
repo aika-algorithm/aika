@@ -216,9 +216,14 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     @Override
     public void innerInhibVisit(Visitor v, Link lastLink, int state, int depth) {
-        if(getInputLinksByType(InnerPositiveFeedbackLink.class).count() > 0)
+        if(isConnectedToPattern())
             super.innerInhibVisit(v, lastLink, state, depth);
         else
             v.up(this, state, depth);
+    }
+
+    private boolean isConnectedToPattern() {
+        return getInputLinksByType(InnerPositiveFeedbackLink.class)
+                .anyMatch(l -> l.getInput() != null);
     }
 }
