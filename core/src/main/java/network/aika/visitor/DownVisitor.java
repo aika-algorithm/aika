@@ -58,6 +58,9 @@ public abstract class DownVisitor extends Visitor {
                                                 "upBS:" + relTokenAct.getClass().getSimpleName() + " " + relTokenAct.getId() + " " + relTokenAct.getLabel()
                                 );
 
+                            if(downBindingSource.getType() != relTokenAct.getType())
+                                return;
+
                             UpVisitor v = new BoundUpVisitor(
                                     this,
                                     downBindingSource,

@@ -64,8 +64,8 @@ public class BoundUpVisitor extends UpVisitor {
     public void createLatentRelation(Link l) {
         relation.createLatentRelation(
                 l.getOutput(),
-                relationDir.getInput(downBindingSource, upBindingSource),
-                relationDir.getOutput(downBindingSource, upBindingSource)
+                (PatternActivation) relationDir.getInput(downBindingSource, upBindingSource),
+                (PatternActivation) relationDir.getOutput(downBindingSource, upBindingSource)
         );
     }
 }
