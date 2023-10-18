@@ -78,7 +78,9 @@ public class NetworkMotifs {
     }
 
     public static void addInnerInhibitoryLoop(BindingNeuron bn, InnerInhibitoryNeuron in, double weight) {
-        new InnerInhibitorySynapse()
+        new InnerInhibitorySynapse(
+                new NearRelation(5)
+        )
                 .setWeight(1.0)
                 .link(bn, in);
 

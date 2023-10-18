@@ -17,6 +17,7 @@
 package network.aika.elements.neurons.relations;
 
 import network.aika.Model;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Document;
@@ -51,7 +52,7 @@ public class NearRelation extends Relation {
     }
 
     @Override
-    public Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir) {
+    public Stream<ConjunctiveActivation> evaluateLatentRelation(ConjunctiveActivation fromAct, Direction dir) {
         Document doc = (Document) fromAct.getThought();
 
         Range inputRange = fromAct.getTextReference().getTokenPosRange();
@@ -61,7 +62,7 @@ public class NearRelation extends Relation {
                 inputRange.getEnd() + distance
         );
 
-        return doc.getRelatedTokensByTokenPosition(INPUT, targetRange);
+        return doc.getRelatedTokensByTokenPosition(INPUT, targetRange).toList().stream();
     }
 
     public int getDistance() {

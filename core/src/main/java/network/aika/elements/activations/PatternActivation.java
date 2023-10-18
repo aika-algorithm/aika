@@ -24,8 +24,6 @@ import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.PatternNeuron;
-import network.aika.text.Document;
-import network.aika.text.TextReference;
 import network.aika.visitor.Visitor;
 import network.aika.enums.sign.Sign;
 
@@ -33,7 +31,6 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.fields.Fields.*;
 import static network.aika.utils.Utils.TOLERANCE;
@@ -63,17 +60,6 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
     public Map<LatentRelationNeuron, LatentRelationActivation> getToRelations() {
         return toRelations;
-    }
-
-    @Override
-    protected void registerPosRange(TextReference oldTextReference, TextReference newTextReference) {
-        Document doc = (Document) thought;
-
-        doc.updateGroundRef(
-                this,
-                oldTextReference,
-                newTextReference
-        );
     }
 
     @Override

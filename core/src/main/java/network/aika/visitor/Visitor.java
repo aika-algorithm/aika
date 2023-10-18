@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Visitor<T extends ConjunctiveActivation> {
+public abstract class Visitor {
 
     protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
 
@@ -53,7 +53,7 @@ public abstract class Visitor<T extends ConjunctiveActivation> {
         type.visit(this, l, filterState(3, l), 0);
     }
 
-    public void up(T bindingSource, int state, int depth) {
+    public void up(ConjunctiveActivation bindingSource, int state, int depth) {
         // Nothing to do
     }
 

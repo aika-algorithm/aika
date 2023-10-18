@@ -33,7 +33,7 @@ import static network.aika.utils.Utils.idToString;
 /**
  * @author Lukas Molzberger
  */
-public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visitor<T> {
+public abstract class DownVisitor extends Visitor {
 
     public DownVisitor(Thought t, VisitorType type, Operator operator) {
         this.v = t.getNewVisitorId();
@@ -47,9 +47,9 @@ public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visit
         this.operator = operator;
     }
 
-    public void checkRelation(T downBindingSource, Synapse relSyn, Direction relDir, int state, int depth) {
+    public void checkRelation(ConjunctiveActivation downBindingSource, Synapse relSyn, Direction relDir, int state, int depth) {
         relSyn.getRelation()
-                .evaluateLatentRelation((PatternActivation) downBindingSource, relDir.invert())
+                .evaluateLatentRelation(downBindingSource, relDir.invert())
                 .forEach(relTokenAct -> {
                             if (log.isDebugEnabled())
                                 log.debug(
@@ -58,9 +58,12 @@ public abstract class DownVisitor<T extends ConjunctiveActivation> extends Visit
                                                 "upBS:" + relTokenAct.getClass().getSimpleName() + " " + relTokenAct.getId() + " " + relTokenAct.getLabel()
                                 );
 
-                            UpVisitor<PatternActivation> v = new BoundUpVisitor(
+                            if(downBindingSource.getType() != relTokenAct.getType())
+                                return;
+
+                            UpVisitor v = new BoundUpVisitor(
                                     this,
-                                    (PatternActivation) downBindingSource,
+                                    downBindingSource,
                                     relTokenAct,
                                     relSyn,
                                     relDir
