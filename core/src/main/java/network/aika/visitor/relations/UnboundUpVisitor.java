@@ -24,7 +24,7 @@ import network.aika.visitor.UpVisitor;
 /**
  * @author Lukas Molzberger
  */
-public class UnboundUpVisitor extends UpVisitor<ConjunctiveActivation> {
+public class UnboundUpVisitor extends UpVisitor {
 
     public UnboundUpVisitor(DownVisitor downVisitor, ConjunctiveActivation bindingSource) {
         super(downVisitor, bindingSource);

@@ -21,6 +21,8 @@ import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.SynapseSlot;
+import network.aika.text.Document;
+import network.aika.text.TextReference;
 
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -39,6 +41,17 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
 
     public ConjunctiveActivation(int id, Thought t, N n) {
         super(id, t, n);
+    }
+
+    @Override
+    protected void registerPosRange(TextReference oldTextReference, TextReference newTextReference) {
+        Document doc = (Document) thought;
+
+        doc.updateGroundRef(
+                this,
+                oldTextReference,
+                newTextReference
+        );
     }
 
     @Override

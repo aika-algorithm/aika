@@ -17,6 +17,7 @@
 package network.aika.elements.neurons.relations;
 
 import network.aika.Model;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.enums.direction.Direction;
 import network.aika.utils.Writable;
@@ -32,7 +33,7 @@ import java.util.stream.Stream;
  */
 public abstract class Relation implements Writable {
 
-    public abstract Stream<PatternActivation> evaluateLatentRelation(PatternActivation fromAct, Direction dir);
+    public abstract Stream<ConjunctiveActivation> evaluateLatentRelation(ConjunctiveActivation fromAct, Direction dir);
 
     public abstract int getRelationType();
 
