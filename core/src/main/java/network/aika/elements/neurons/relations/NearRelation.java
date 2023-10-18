@@ -62,7 +62,7 @@ public class NearRelation extends Relation {
                 inputRange.getEnd() + distance
         );
 
-        return doc.getRelatedTokensByTokenPosition(INPUT, targetRange);
+        return doc.getRelatedTokensByTokenPosition(INPUT, targetRange).toList().stream();
     }
 
     public int getDistance() {

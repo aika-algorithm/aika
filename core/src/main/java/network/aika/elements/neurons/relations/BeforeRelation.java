@@ -70,7 +70,7 @@ public class BeforeRelation extends Relation {
                 fromPos + getRelEnd(dir)
         );
 
-        return doc.getRelatedTokensByTokenPosition(toSlot, targetRange);
+        return doc.getRelatedTokensByTokenPosition(toSlot, targetRange).toList().stream();
     }
 
     private long getRelBegin(Direction dir) {

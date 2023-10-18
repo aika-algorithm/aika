@@ -73,7 +73,7 @@ public class EqualsRelation extends Relation {
                 .filter(act -> fromAct != act)
                 .filter(act ->
                         compare(r, act.getTextReference().getTokenPosRange(), dir)
-                );
+                ).toList().stream();
     }
 
     public boolean compare(Range ra, Range rb, Direction dir) {

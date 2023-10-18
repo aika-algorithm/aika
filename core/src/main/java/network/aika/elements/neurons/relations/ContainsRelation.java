@@ -65,7 +65,7 @@ public class ContainsRelation extends Relation {
                 .filter(act -> fromAct != act)
                 .filter(act ->
                         contains(r, act.getTextReference().getTokenPosRange(), dir)
-                );
+                ).toList().stream();
     }
 
     private boolean contains(Range a, Range b, Direction dir) {
