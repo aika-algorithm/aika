@@ -27,7 +27,7 @@ import static network.aika.utils.Utils.idToString;
 /**
  * @author Lukas Molzberger
  */
-public abstract class UpVisitor extends Visitor {
+public class UpVisitor extends Visitor {
 
     private final ConjunctiveActivation bindingSource;
 

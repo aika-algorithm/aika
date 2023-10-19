@@ -14,34 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.relations;
+package network.aika.debugger.activations.properties;
 
-import network.aika.Thought;
-import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.activations.PatternActivation;
-import network.aika.visitor.DownVisitor;
-import network.aika.visitor.types.VisitorType;
-import network.aika.visitor.operator.Operator;
+import network.aika.debugger.properties.AbstractPropertyPanel;
+import network.aika.elements.neurons.Neuron;
 
-import static network.aika.enums.direction.Direction.OUTPUT;
 
 /**
  * @author Lukas Molzberger
  */
-public class BoundDownVisitor extends DownVisitor {
+public class PreActivationPropertyPanel extends AbstractPropertyPanel {
 
-    public BoundDownVisitor(Thought t, VisitorType type, Operator operator) {
-        super(t, type, operator);
+    public PreActivationPropertyPanel(Neuron<?, ?> n) {
+        n.getPreActivations()
+                .flatMap(preAct -> preAct.getTokenPosBeginIndex().entrySet().stream())
+                .limit(10)
+                .forEach(e -> {
+                    addConstant("TokenPos: ", "" + e.getKey() + " Act-Id:" + e.getValue().getId());
+                }
+        );
+
+        addFinal();
     }
 
-    @Override
-    public void up(ConjunctiveActivation origin, int state, int depth) {
-        checkRelation(
-                origin,
-                getOperator().getStartSynapse(),
-                OUTPUT,
-                state,
-                depth
-        );
+    public static PreActivationPropertyPanel create(Neuron n) {
+        return new PreActivationPropertyPanel(n);
     }
 }

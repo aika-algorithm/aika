@@ -17,10 +17,9 @@
 package network.aika.elements.neurons.relations;
 
 import network.aika.Model;
-import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.PreActivation;
+import network.aika.elements.activations.Activation;
 import network.aika.enums.direction.Direction;
-import network.aika.text.Document;
 import network.aika.text.Range;
 
 import java.io.DataInput;
@@ -65,11 +64,10 @@ public class EqualsRelation extends Relation {
     }
 
     @Override
-    public Stream<ConjunctiveActivation> evaluateLatentRelation(ConjunctiveActivation fromAct, Direction dir) {
-        Document doc = (Document) fromAct.getThought();
+    public Stream<Activation> evaluateLatentRelation(Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
         Range r = fromAct.getTextReference().getTokenPosRange();
 
-        return doc.getRelatedTokensByTokenPosition(compareBegin ? INPUT : OUTPUT, r)
+        return toPreAct.getRelatedTokensByTokenPosition(compareBegin ? INPUT : OUTPUT, r)
                 .filter(act -> fromAct != act)
                 .filter(act ->
                         compare(r, act.getTextReference().getTokenPosRange(), dir)

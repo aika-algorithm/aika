@@ -69,8 +69,25 @@ public class OutgoingLinkingOperator extends LinkingOperator {
         if(!targetSyn.checkVisitorState(state))
             return;
 
-        Link l = targetSyn.link(sourceAct, lastLink.getOutput());
+        targetSyn.link(sourceAct, lastLink.getOutput());
+    }
+
+    @Override
+    public void checkRelation(Synapse relSyn, Activation fromAct, Activation toAct, Direction relDir) {
+        if(log.isDebugEnabled())
+            log.debug("OutgoingLinkingOperator.check() startSynapse:" + getStartSynapse() + " act:" + toAct);
+
+        if(toAct.getNeuron() != targetSyn.getOutput())
+            return;
+
+        if(toAct == sourceAct)
+            return;
+
+        if(!targetSyn.checkSingularLinkDoesNotExist(fromAct))
+            return;
+
+        Link l = targetSyn.link(sourceAct, fromAct);
         if (l != null)
-            v.createLatentRelation(l);
+            fromAct.createLatentRelation(relSyn, relDir, fromAct, toAct);
     }
 }

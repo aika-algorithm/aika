@@ -22,14 +22,13 @@ import network.aika.elements.Type;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
 import network.aika.elements.links.InputObjectLink;
-import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.queue.activation.LinkingOut;
+import network.aika.visitor.DownVisitor;
 import network.aika.visitor.Visitor;
 import network.aika.visitor.operator.SelfRefOperator;
-import network.aika.visitor.relations.UnboundDownVisitor;
 import network.aika.visitor.types.VisitorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,7 +161,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
             log.debug("Start checking SelfRef for (" + toKeyString() + ", " + out.toKeyString() + ")");
 
         SelfRefOperator op = new SelfRefOperator(out);
-        new UnboundDownVisitor(
+        new DownVisitor(
                 thought,
                 VisitorType.getSelfRefVisitorType(identityRef),
                 op
@@ -212,14 +211,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
             netUnsuppressed.disconnectAndUnlinkInputs(false);
 
         super.disconnect();
-    }
-
-    @Override
-    public void innerInhibVisit(Visitor v, Link lastLink, int state, int depth) {
-        if(!v.isDown() || isConnectedToPattern())
-            super.innerInhibVisit(v, lastLink, state, depth);
-        else
-            v.up(this, state, depth);
     }
 
     private boolean isConnectedToPattern() {

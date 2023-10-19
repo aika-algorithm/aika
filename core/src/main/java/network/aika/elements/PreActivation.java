@@ -20,10 +20,16 @@ package network.aika.elements;
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.synapses.Synapse;
+import network.aika.enums.direction.Direction;
+import network.aika.text.Range;
+import network.aika.text.TextReference;
+import network.aika.text.TokenPositionKey;
 
 import java.util.*;
 import java.util.stream.Stream;
+
+import static network.aika.text.TextReference.getTPBegin;
+import static network.aika.text.TextReference.getTPEnd;
 
 /**
  *
@@ -33,6 +39,12 @@ public class PreActivation<A extends Activation> {
 
     private SortedSet<A> activations = new TreeSet<>();
 
+
+    private NavigableMap<TokenPositionKey, Activation> tokenPosBeginIndex = new TreeMap<>();
+
+    private NavigableMap<TokenPositionKey, Activation> tokenPosEndIndex = new TreeMap<>();
+
+
     public PreActivation(Thought t, NeuronProvider provider) {
         t.register(provider, this);
     }
@@ -41,7 +53,48 @@ public class PreActivation<A extends Activation> {
         return activations;
     }
 
+    public NavigableMap<TokenPositionKey, Activation> getTokenPosBeginIndex() {
+        return tokenPosBeginIndex;
+    }
+
+    public NavigableMap<TokenPositionKey, Activation> getTokenPosEndIndex() {
+        return tokenPosEndIndex;
+    }
+
     public void addActivation(A act) {
         activations.add(act);
+    }
+
+    public void updateGroundRef(Activation act, TextReference oldTextReference, TextReference newTextReference) {
+        updateGroundRef(tokenPosBeginIndex, act, getTPBegin(oldTextReference), getTPBegin(newTextReference));
+        updateGroundRef(tokenPosEndIndex, act, getTPEnd(oldTextReference), getTPEnd(newTextReference));
+    }
+
+    private void updateGroundRef(NavigableMap<TokenPositionKey, Activation> index, Activation tokenAct, Long oldPos, Long newPos) {
+        if(oldPos != null) {
+            if (oldPos == newPos)
+                return;
+
+            index.remove(new TokenPositionKey(oldPos, tokenAct.getId()));
+        }
+
+        if(newPos != null)
+            index.put(new TokenPositionKey(newPos, tokenAct.getId()), tokenAct);
+    }
+
+    public Stream<Activation> getRelatedTokensByTokenPosition(Direction slot, Range r) {
+        return getPositionIndex(slot)
+                .subMap(
+                        new TokenPositionKey(r.getBegin(), Integer.MIN_VALUE),
+                        new TokenPositionKey(r.getEnd(), Integer.MAX_VALUE)
+                )
+                .values()
+                .stream();
+    }
+
+    private NavigableMap<TokenPositionKey, Activation> getPositionIndex(Direction slot) {
+        return slot == Direction.OUTPUT ?
+                tokenPosEndIndex :
+                tokenPosBeginIndex;
     }
 }

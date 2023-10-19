@@ -45,9 +45,6 @@ public class Document extends Thought {
 
     private final StringBuilder content;
 
-    private NavigableMap<TokenPositionKey, ConjunctiveActivation> tokenPosBeginIndex = new TreeMap<>();
-
-    private NavigableMap<TokenPositionKey, ConjunctiveActivation> tokenPosEndIndex = new TreeMap<>();
 
     public Document(Model model, String content) {
         super(model);
@@ -55,39 +52,6 @@ public class Document extends Thought {
         if(content != null) {
             this.content.append(content);
         }
-    }
-
-    public void updateGroundRef(ConjunctiveActivation act, TextReference oldTextReference, TextReference newTextReference) {
-        updateGroundRef(tokenPosBeginIndex, act, getTPBegin(oldTextReference), getTPBegin(newTextReference));
-        updateGroundRef(tokenPosEndIndex, act, getTPEnd(oldTextReference), getTPEnd(newTextReference));
-    }
-
-    private void updateGroundRef(NavigableMap<TokenPositionKey, ConjunctiveActivation> index, ConjunctiveActivation tokenAct, Long oldPos, Long newPos) {
-        if(oldPos != null) {
-            if (oldPos == newPos)
-                return;
-
-            index.remove(new TokenPositionKey(oldPos, tokenAct.getId()));
-        }
-
-        if(newPos != null)
-            index.put(new TokenPositionKey(newPos, tokenAct.getId()), tokenAct);
-    }
-
-    public Stream<ConjunctiveActivation> getRelatedTokensByTokenPosition(Direction slot, Range r) {
-        return getPositionIndex(slot)
-                .subMap(
-                        new TokenPositionKey(r.getBegin(), Integer.MIN_VALUE),
-                        new TokenPositionKey(r.getEnd(), Integer.MAX_VALUE)
-                )
-                .values()
-                .stream();
-    }
-
-    private NavigableMap<TokenPositionKey, ConjunctiveActivation> getPositionIndex(Direction slot) {
-        return slot == Direction.OUTPUT ?
-                tokenPosEndIndex :
-                tokenPosBeginIndex;
     }
 
     public void append(String txt) {

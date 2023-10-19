@@ -44,4 +44,9 @@ public class TokenPositionKey implements Comparable<TokenPositionKey> {
         if(r != 0) return r;
         return Integer.compare(actId, k.actId);
     }
+
+    @Override
+    public String toString() {
+        return "Pos:" + pos + " Act-Id:" + actId;
+    }
 }

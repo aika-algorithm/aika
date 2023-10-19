@@ -18,9 +18,7 @@ package network.aika.debugger.activations;
 
 import network.aika.debugger.AbstractConsoleManager;
 import network.aika.debugger.ElementPanel;
-import network.aika.debugger.activations.properties.LinksPropertyPanel;
-import network.aika.debugger.activations.properties.SynapsesPropertyPanel;
-import network.aika.debugger.activations.properties.TemplateInstancesPropertyPanel;
+import network.aika.debugger.activations.properties.*;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.activations.Activation;
@@ -119,6 +117,22 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
                         templateInstancesPropertyPanel
                 );
         }
+
+        ActivationsPropertyPanel activationsPanel = ActivationsPropertyPanel.create(act.getNeuron());
+
+        addTab(
+                "Pre-Activation",
+                "Shows the Activations of this Neuron",
+                activationsPanel
+        );
+
+        PreActivationPropertyPanel preActivationPanel = PreActivationPropertyPanel.create(act.getNeuron());
+
+        addTab(
+                "Pre-Activation",
+                "Shows the Pre-Activation of this Neuron",
+                preActivationPanel
+        );
     }
 
     protected void setConsoleManager(AbstractConsoleManager cm) {

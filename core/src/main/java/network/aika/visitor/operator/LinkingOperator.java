@@ -37,6 +37,10 @@ public abstract class LinkingOperator implements Operator {
         this.targetSyn = targetSyn;
     }
 
+    public Synapse getTargetSyn() {
+        return targetSyn;
+    }
+
     public static Link link(Activation actA, Synapse synA, Link linkA, Activation actB, Synapse synB) {
         if (linkA == null)
             linkA = latentLink(actA, synA, actB, synB);

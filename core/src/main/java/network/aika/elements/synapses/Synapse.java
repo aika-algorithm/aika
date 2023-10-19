@@ -17,6 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
 import network.aika.elements.activations.*;
 import network.aika.elements.neurons.relations.Relation;
@@ -33,6 +34,7 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
+import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -365,7 +367,28 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return null;
     }
 
-    public void createLatentRelation(OA oAct, ConjunctiveActivation fromOriginAct, ConjunctiveActivation toOriginAct) {
+    public void expandRelation(LinkingOperator c, Activation from, Neuron to, Direction relDir) {
+        Relation rel = getRelation();
+        if(rel == null)
+            return;
+
+        PreActivation<?> toPreAct = to.getOrCreatePreActivation(from.getThought());
+
+        rel.evaluateLatentRelation(from, toPreAct, relDir.invert())
+                .forEach(relAct -> {
+                            if (log.isDebugEnabled())
+                                log.debug(
+                                        "REL " +
+                                                "downBS:" + from.getClass().getSimpleName() + " " + from.getId() + " " + from.getLabel() + "  " +
+                                                "upBS:" + relAct.getClass().getSimpleName() + " " + relAct.getId() + " " + relAct.getLabel()
+                                );
+
+                            c.checkRelation(this, from, relAct, relDir);
+                        }
+                );
+    }
+
+    public void createLatentRelation(OA oAct, Activation fromOriginAct, Activation toOriginAct) {
     }
 
     @Override

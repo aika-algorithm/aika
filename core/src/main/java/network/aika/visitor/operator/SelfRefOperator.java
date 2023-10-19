@@ -51,6 +51,12 @@ public class SelfRefOperator implements Operator {
             isSelfRef = true;
     }
 
+    @Override
+    public void checkRelation(Synapse relSyn, Activation fromAct, Activation toAct, Direction relDir) {
+        if(fromAct == target)
+            isSelfRef = true;
+    }
+
     public boolean isSelfRef() {
         return isSelfRef;
     }

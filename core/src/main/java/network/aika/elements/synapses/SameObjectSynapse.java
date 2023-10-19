@@ -77,14 +77,14 @@ public class SameObjectSynapse extends ConjunctiveSynapse<
     }
 
     @Override
-    public void createLatentRelation(BindingActivation oAct, ConjunctiveActivation fromOriginAct, ConjunctiveActivation toOriginAct) {
+    public void createLatentRelation(BindingActivation oAct, Activation fromOriginAct, Activation toOriginAct) {
         RelationInputSynapse ris = getRelationInputSynapse();
         if(ris.linkExists(oAct, true))
             return;
 
         LatentRelationActivation latentRelAct = ris.createOrLookupLatentActivation(
-                (PatternActivation) fromOriginAct,
-                (PatternActivation) toOriginAct
+                fromOriginAct,
+                toOriginAct
         );
 
         ris.createAndInitLink(latentRelAct, oAct);

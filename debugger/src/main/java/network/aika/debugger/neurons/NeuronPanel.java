@@ -18,6 +18,7 @@ package network.aika.debugger.neurons;
 
 import network.aika.debugger.ElementPanel;
 import network.aika.debugger.activations.properties.ActivationsPropertyPanel;
+import network.aika.debugger.activations.properties.PreActivationPropertyPanel;
 import network.aika.debugger.activations.properties.PropagablePropertyPanel;
 import network.aika.debugger.activations.properties.SynapsesPropertyPanel;
 import network.aika.debugger.properties.AbstractPropertyPanel;
@@ -66,6 +67,15 @@ public class NeuronPanel extends ElementPanel {
                 "Shows the Activations of this Neuron",
                 activationsPanel
         );
+
+        PreActivationPropertyPanel preActivationPanel = PreActivationPropertyPanel.create(n);
+
+        addTab(
+                "Pre-Activation",
+                "Shows the Pre-Activation of this Neuron",
+                preActivationPanel
+        );
+
         {
             AbstractPropertyPanel inputSynapsesPropertyPanel = SynapsesPropertyPanel.create(n, Direction.INPUT);
 

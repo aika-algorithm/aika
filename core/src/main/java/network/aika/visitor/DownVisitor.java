@@ -19,12 +19,8 @@ package network.aika.visitor;
 import network.aika.Thought;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.Synapse;
-import network.aika.enums.direction.Direction;
 import network.aika.visitor.operator.Operator;
-import network.aika.visitor.relations.BoundUpVisitor;
 import network.aika.visitor.types.VisitorType;
 
 import static network.aika.utils.Utils.depthToSpace;
@@ -33,7 +29,7 @@ import static network.aika.utils.Utils.idToString;
 /**
  * @author Lukas Molzberger
  */
-public abstract class DownVisitor extends Visitor {
+public class DownVisitor extends Visitor {
 
     public DownVisitor(Thought t, VisitorType type, Operator operator) {
         this.v = t.getNewVisitorId();
@@ -45,33 +41,6 @@ public abstract class DownVisitor extends Visitor {
         }
 
         this.operator = operator;
-    }
-
-    public void checkRelation(ConjunctiveActivation downBindingSource, Synapse relSyn, Direction relDir, int state, int depth) {
-        relSyn.getRelation()
-                .evaluateLatentRelation(downBindingSource, relDir.invert())
-                .forEach(relTokenAct -> {
-                            if (log.isDebugEnabled())
-                                log.debug(
-                                        depthToSpace(depth) + "U-TURN (rel) " +
-                                                "downBS:" + downBindingSource.getClass().getSimpleName() + " " + downBindingSource.getId() + " " + downBindingSource.getLabel() + "  " +
-                                                "upBS:" + relTokenAct.getClass().getSimpleName() + " " + relTokenAct.getId() + " " + relTokenAct.getLabel()
-                                );
-
-                            if(downBindingSource.getType() != relTokenAct.getType())
-                                return;
-
-                            UpVisitor v = new BoundUpVisitor(
-                                    this,
-                                    downBindingSource,
-                                    relTokenAct,
-                                    relSyn,
-                                    relDir
-                            );
-
-                            type.visit(v, relTokenAct, null, state, depth);
-                        }
-                );
     }
 
     @Override
@@ -92,6 +61,16 @@ public abstract class DownVisitor extends Visitor {
 
         if(l.getInput() != null)
             type.visit(this, l.getInput(), l, state, depth + 1);
+    }
+
+    public void up(ConjunctiveActivation bindingSource, int state, int depth) {
+        type.visit(
+                new UpVisitor(this, bindingSource),
+                bindingSource,
+                null,
+                state,
+                depth
+        );
     }
 
     public boolean isDown() {

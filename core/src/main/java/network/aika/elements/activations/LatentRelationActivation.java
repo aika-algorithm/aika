@@ -28,8 +28,8 @@ import static network.aika.elements.Type.BINDING;
  */
 public class LatentRelationActivation extends BindingActivation {
 
-    private PatternActivation fromAct;
-    private PatternActivation toAct;
+    private Activation fromAct;
+    private Activation toAct;
 
     public LatentRelationActivation(int id, Thought t, LatentRelationNeuron n) {
         super(id, t, n);
@@ -40,19 +40,19 @@ public class LatentRelationActivation extends BindingActivation {
         return BINDING;
     }
 
-    public PatternActivation getFromAct() {
+    public Activation getFromAct() {
         return fromAct;
     }
 
-    public void setFromAct(PatternActivation fromAct) {
+    public void setFromAct(Activation fromAct) {
         this.fromAct = fromAct;
     }
 
-    public PatternActivation getToAct() {
+    public Activation getToAct() {
         return toAct;
     }
 
-    public void setToAct(PatternActivation toAct) {
+    public void setToAct(Activation toAct) {
         this.toAct = toAct;
     }
 }

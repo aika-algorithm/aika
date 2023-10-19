@@ -28,6 +28,7 @@ import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.enums.direction.Direction;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.elements.synapses.CategoryInputSynapse;
@@ -136,6 +137,14 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected void connectWeightUpdate() {
 
+    }
+
+    public void createLatentRelation(Synapse relSyn, Direction relationDir, Activation fromAct, Activation toAct) {
+        relSyn.createLatentRelation(
+                this,
+                relationDir.getInput(fromAct, toAct),
+                relationDir.getOutput(fromAct, toAct)
+        );
     }
 
     protected void initNet() {

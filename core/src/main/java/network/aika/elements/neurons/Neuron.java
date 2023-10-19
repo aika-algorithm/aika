@@ -38,8 +38,6 @@ import network.aika.queue.activation.Save;
 import network.aika.utils.Writable;
 import network.aika.visitor.operator.OutgoingLinkingOperator;
 import network.aika.visitor.operator.LinkingOperator;
-import network.aika.visitor.relations.BoundDownVisitor;
-import network.aika.visitor.relations.UnboundDownVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +57,7 @@ import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
+import static network.aika.utils.Utils.depthToSpace;
 
 /**
  *
@@ -171,45 +170,20 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public List<Synapse> getSynapsesWithRelations() {
-        return getInputSynapsesAsStream()
-                .filter(s -> s.getRelation() != null)
-                .toList();
-    }
-
     public abstract VisitorType getVisitorType();
-
-    public void startVisitor(LinkingOperator c, Activation act) {
-        getDownVisitor(
-                c,
-                act.getThought()
-        ).start(act);
-    }
-
-    public void startVisitor(LinkingOperator c, Link l) {
-        getDownVisitor(
-                c,
-                l.getThought()
-        ).start(l);
-    }
-
-    private DownVisitor getDownVisitor(LinkingOperator c, Thought t) {
-        VisitorType type = getVisitorType();
-
-        DownVisitor v = c.getStartSynapse().getRelation() != null ?
-                new BoundDownVisitor(t, type, c) :
-                new UnboundDownVisitor(t, type, c);
-        return v;
-    }
 
     public void linkOutgoing(Synapse targetSyn, Activation iAct) {
         if(log.isDebugEnabled())
             log.debug("linkOutgoing: targetSyn:" + targetSyn + " iAct:" + iAct);
 
-        targetSyn.getOutput().startVisitor(
-                new OutgoingLinkingOperator(iAct, targetSyn),
-                iAct
-        );
+        Neuron to = targetSyn.getOutput();
+        LinkingOperator op = new OutgoingLinkingOperator(iAct, targetSyn);
+        new DownVisitor(
+                iAct.getThought(),
+                to.getVisitorType(),
+                op
+        ).start(iAct);
+        targetSyn.expandRelation(op, iAct, to, OUTPUT);
     }
 
     public void latentLinkOutgoing(Synapse sourceSyn, Activation iAct) {
@@ -221,10 +195,16 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                     if(log.isDebugEnabled())
                         log.debug("latentLinkOutgoing: sourceSyn:" + sourceSyn + " targetSyn:" + targetSyn + " iAct:" + iAct);
 
-                    targetSyn.getOutput().startVisitor(
-                            new IncomingLinkingOperator(iAct, sourceSyn, null, targetSyn),
-                            iAct
-                    );
+                    LinkingOperator op = new IncomingLinkingOperator(iAct, sourceSyn, null, targetSyn);
+                    new DownVisitor(
+                            iAct.getThought(),
+                            targetSyn.getOutput().getVisitorType(),
+                            op
+                    ).start(iAct);
+
+                    Neuron to = targetSyn.getInput();
+                    sourceSyn.expandRelation(op, iAct, to, OUTPUT);
+                    targetSyn.expandRelation(op, iAct, to, INPUT);
                 });
     }
 
@@ -236,10 +216,14 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                     if(log.isDebugEnabled())
                         log.debug("linkAndPropagateIn: link:" + l + " targetSyn:" + targetSyn);
 
-                    startVisitor(
-                            new IncomingLinkingOperator(l.getInput(), l.getSynapse(), l, targetSyn),
-                            l
-                    );
+                    LinkingOperator op = new IncomingLinkingOperator(l.getInput(), l.getSynapse(), l, targetSyn);
+                    new DownVisitor(
+                            l.getThought(),
+                            targetSyn.getOutput().getVisitorType(),
+                            op
+                    ).start(l);
+
+                    targetSyn.expandRelation(op, l.getOutput(), targetSyn.getOutput(), INPUT);
                 });
     }
 

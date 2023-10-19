@@ -17,17 +17,17 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.Type;
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.LatentRelationActivation;
 import network.aika.elements.links.RelationInputLink;
 import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.enums.direction.Direction;
 
 import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
 
 /**
  *
@@ -73,14 +73,19 @@ public class RelationInputSynapse extends ConjunctiveSynapse<
         return new RelationInputLink(this, input, output);
     }
 
-    public LatentRelationActivation createOrLookupLatentActivation(PatternActivation fromOriginAct, PatternActivation toOriginAct) {
-        return fromOriginAct.getToRelations().computeIfAbsent(getInput(), n -> {
-            LatentRelationActivation relAct = getInput().createActivation(fromOriginAct.getThought());
-            relAct.setFromAct(fromOriginAct);
-            relAct.setToAct(toOriginAct);
-            fromOriginAct.getThought().onElementEvent(UPDATE, relAct);
-            return relAct;
-        });
+    public LatentRelationActivation createOrLookupLatentActivation(Activation fromOriginAct, Activation toOriginAct) {
+        return getInput().getOrCreatePreActivation(fromOriginAct.getThought())
+                .getRelatedTokensByTokenPosition(Direction.INPUT, fromOriginAct.getTextReference().getTokenPosRange())
+                .map(LatentRelationActivation.class::cast)
+                .findFirst()
+                .orElseGet(() -> {
+                            LatentRelationActivation rAct = getInput().createActivation(fromOriginAct.getThought());
+                            rAct.setFromAct(fromOriginAct);
+                            rAct.setToAct(toOriginAct);
+                            fromOriginAct.getThought().onElementEvent(UPDATE, rAct);
+                            return rAct;
+                        }
+                );
     }
 
     @Override

@@ -58,10 +58,6 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
         return PATTERN;
     }
 
-    public Map<LatentRelationNeuron, LatentRelationActivation> getToRelations() {
-        return toRelations;
-    }
-
     @Override
     public PatternActivation instantiateTemplateNode() {
         PatternActivation ti = (PatternActivation) super.instantiateTemplateNode();
@@ -111,7 +107,6 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
         v.up(this, state, depth);
     }
-
 
     @Override
     public void innerInhibVisit(Visitor v, Link lastLink, int state, int depth) {
