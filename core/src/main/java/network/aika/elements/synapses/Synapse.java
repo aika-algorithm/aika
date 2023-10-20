@@ -367,11 +367,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return null;
     }
 
-    public void expandRelation(LinkingOperator c, Activation from, Neuron to, Direction relDir) {
-        Relation rel = getRelation();
-        if(rel == null)
-            return;
-
+    public void expandRelation(LinkingOperator op, Relation rel, Neuron to, Direction relDir) {
+        Activation from = op.getSourceAct();
         PreActivation<?> toPreAct = to.getOrCreatePreActivation(from.getThought());
 
         rel.evaluateLatentRelation(from, toPreAct, relDir.invert())
@@ -383,7 +380,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                                                 "upBS:" + relAct.getClass().getSimpleName() + " " + relAct.getId() + " " + relAct.getLabel()
                                 );
 
-                            c.checkRelation(this, from, relAct, relDir);
+                            op.relationCheck(this, relAct, relDir);
                         }
                 );
     }

@@ -19,7 +19,6 @@ package network.aika.visitor;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.Synapse;
 
 import static network.aika.utils.Utils.depthToSpace;
 import static network.aika.utils.Utils.idToString;
@@ -39,17 +38,9 @@ public class UpVisitor extends Visitor {
         this.referenceAct = downVisitor.referenceAct;
     }
 
-    public void check(Link lastLink, Activation act, int state) {
-        operator.check(this, lastLink, act, state);
-    }
-
-    public boolean compatible(Synapse from, Synapse to) {
-        return bindingSource != null;
-    }
-
     @Override
     public void next(Activation<?> act, Link lastLink, int state, int depth) {
-        check(lastLink, act, state);
+        operator.visitorCheck(this, lastLink, act, state);
 
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());

@@ -47,47 +47,45 @@ public class OutgoingLinkingOperator extends LinkingOperator {
     }
 
     @Override
-    public void check(UpVisitor v, Link lastLink, Activation act, int state) {
-        if(log.isDebugEnabled())
-            log.debug("OutgoingLinkingOperator.check() startSynapse:" + getStartSynapse() + " lastLink:" + lastLink + " act:" + act);
+    public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
+        if(!targetSyn.checkVisitorState(state))
+            return;
 
         if(lastLink == null)
             return;
 
-        if(act.getNeuron() != targetSyn.getOutput())
-            return;
+        assert lastLink.getOutput() == act;
 
-        if(act == sourceAct)
-            return;
-
-        if(!v.compatible(lastLink.getSynapse(), targetSyn))
-            return;
-
-        if(!targetSyn.checkSingularLinkDoesNotExist(lastLink.getOutput()))
-            return;
-
-        if(!targetSyn.checkVisitorState(state))
-            return;
-
-        targetSyn.link(sourceAct, lastLink.getOutput());
+        checkAndLink(act);
     }
 
     @Override
-    public void checkRelation(Synapse relSyn, Activation fromAct, Activation toAct, Direction relDir) {
+    public Link checkAndLink(Activation act) {
         if(log.isDebugEnabled())
-            log.debug("OutgoingLinkingOperator.check() startSynapse:" + getStartSynapse() + " act:" + toAct);
+            log.debug("OutgoingLinkingOperator.checkAndLink() startSynapse:" + getStartSynapse() + " act:" + act);
 
-        if(toAct.getNeuron() != targetSyn.getOutput())
-            return;
+        if(act.getNeuron() != targetSyn.getOutput())
+            return null;
 
-        if(toAct == sourceAct)
-            return;
+        if(act == sourceAct)
+            return null;
 
-        if(!targetSyn.checkSingularLinkDoesNotExist(fromAct))
-            return;
+        if(!targetSyn.checkSingularLinkDoesNotExist(act))
+            return null;
 
-        Link l = targetSyn.link(sourceAct, fromAct);
+        return targetSyn.link(sourceAct, act);
+    }
+
+    @Override
+    public void relationCheck(Synapse relSyn, Activation relatedAct, Direction relDir) {
+        assert relDir == Direction.OUTPUT;
+
+        Link l = checkAndLink(relatedAct);
         if (l != null)
-            fromAct.createLatentRelation(relSyn, relDir, fromAct, toAct);
+            relSyn.createLatentRelation(
+                    relatedAct,
+                    sourceAct,
+                    relatedAct
+            );
     }
 }

@@ -20,6 +20,7 @@ import network.aika.Thought;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.synapses.Synapse.getLatentLink;
 
@@ -35,6 +36,12 @@ public abstract class LinkingOperator implements Operator {
     public LinkingOperator(Activation sourceAct, Synapse targetSyn) {
         this.sourceAct = sourceAct;
         this.targetSyn = targetSyn;
+    }
+
+    public abstract Link checkAndLink(Activation act);
+
+    public Activation getSourceAct() {
+        return sourceAct;
     }
 
     public Synapse getTargetSyn() {

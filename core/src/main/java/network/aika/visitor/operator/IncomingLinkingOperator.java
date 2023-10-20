@@ -36,8 +36,8 @@ public class IncomingLinkingOperator extends LinkingOperator {
     private Synapse sourceSyn;
     private Link sourceLink; // null if latent
 
-    public IncomingLinkingOperator(Activation fromAct, Synapse sourceSyn, Link sourceLink, Synapse targetSyn) {
-        super(fromAct, targetSyn);
+    public IncomingLinkingOperator(Activation sourceAct, Synapse sourceSyn, Link sourceLink, Synapse targetSyn) {
+        super(sourceAct, targetSyn);
         this.sourceSyn = sourceSyn;
         this.sourceLink = sourceLink;
     }
@@ -53,46 +53,40 @@ public class IncomingLinkingOperator extends LinkingOperator {
     }
 
     @Override
-    public void check(UpVisitor v, Link lastLink, Activation act, int state) {
-        if(log.isDebugEnabled())
-            log.debug("IncomingLinkingOperator.check() startSynapse:" + getStartSynapse() + " sourceLink:" + sourceLink + " lastLink:" + lastLink + " act:" + act);
-
-        if (act.getNeuron() != targetSyn.getInput())
-            return;
-
-        if (act == sourceAct)
-            return;
-
-        if (!v.compatible(sourceSyn, targetSyn))
-            return;
-
-        if (!targetSyn.checkLinkingEvent(act))
+    public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
+        if(!targetSyn.checkVisitorState(state))
             return;
 
         if(sourceLink == null && !sourceSyn.checkVisitorState(state))
             return;
 
-        if(!targetSyn.checkVisitorState(state))
-            return;
-
-        link(sourceAct, sourceSyn, sourceLink, act, targetSyn);
+        checkAndLink(act);
     }
 
-    public void checkRelation(Synapse relSyn, Activation fromAct, Activation toAct, Direction relDir) {
+    @Override
+    public Link checkAndLink(Activation act) {
         if(log.isDebugEnabled())
-            log.debug("IncomingLinkingOperator.check() startSynapse:" + getStartSynapse() + " sourceLink:" + sourceLink  + " toAct:" + toAct);
+            log.debug("IncomingLinkingOperator.check() startSynapse:" + getStartSynapse() + " sourceLink:" + sourceLink + " act:" + act);
 
-        if (toAct.getNeuron() != targetSyn.getInput())
-            return;
+        if (act.getNeuron() != targetSyn.getInput())
+            return null;
 
-        if (toAct == sourceAct)
-            return;
+        if (act == sourceAct)
+            return null;
 
-        if (!targetSyn.checkLinkingEvent(toAct))
-            return;
+        if (!targetSyn.checkLinkingEvent(act))
+            return null;
 
-        Link l = link(sourceAct, sourceSyn, sourceLink, toAct, targetSyn);
+        return link(sourceAct, sourceSyn, sourceLink, act, targetSyn);
+    }
+
+    public void relationCheck(Synapse relSyn, Activation relatedAct, Direction relDir) {
+        Link l = checkAndLink(relatedAct);
         if (l != null)
-            l.getOutput().createLatentRelation(relSyn, relDir, fromAct, toAct);
+            relSyn.createLatentRelation(
+                    l.getOutput(),
+                    relDir.getInput(sourceAct, relatedAct),
+                    relDir.getOutput(sourceAct, relatedAct)
+            );
     }
 }

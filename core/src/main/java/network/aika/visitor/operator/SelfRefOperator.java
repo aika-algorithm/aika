@@ -46,15 +46,14 @@ public class SelfRefOperator implements Operator {
     }
 
     @Override
-    public void check(UpVisitor v, Link lastLink, Activation act, int state) {
+    public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
         if(act == target)
             isSelfRef = true;
     }
 
     @Override
-    public void checkRelation(Synapse relSyn, Activation fromAct, Activation toAct, Direction relDir) {
-        if(fromAct == target)
-            isSelfRef = true;
+    public void relationCheck(Synapse relSyn, Activation relAct, Direction relDir) {
+        throw new UnsupportedOperationException();
     }
 
     public boolean isSelfRef() {

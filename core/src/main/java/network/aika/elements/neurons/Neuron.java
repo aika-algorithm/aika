@@ -21,6 +21,7 @@ import network.aika.Model;
 import network.aika.Thought;
 import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
+import network.aika.elements.neurons.relations.Relation;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.exceptions.MissingInputCategoryNeuron;
@@ -178,12 +179,17 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
         Neuron to = targetSyn.getOutput();
         LinkingOperator op = new OutgoingLinkingOperator(iAct, targetSyn);
-        new DownVisitor(
-                iAct.getThought(),
-                to.getVisitorType(),
-                op
-        ).start(iAct);
-        targetSyn.expandRelation(op, iAct, to, OUTPUT);
+
+        Relation rel = targetSyn.getRelation();
+        if(rel != null)
+            targetSyn.expandRelation(op, rel, to, OUTPUT);
+        else {
+            new DownVisitor(
+                    iAct.getThought(),
+                    to.getVisitorType(),
+                    op
+            ).start(iAct);
+        }
     }
 
     public void latentLinkOutgoing(Synapse sourceSyn, Activation iAct) {
@@ -196,15 +202,19 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                         log.debug("latentLinkOutgoing: sourceSyn:" + sourceSyn + " targetSyn:" + targetSyn + " iAct:" + iAct);
 
                     LinkingOperator op = new IncomingLinkingOperator(iAct, sourceSyn, null, targetSyn);
-                    new DownVisitor(
-                            iAct.getThought(),
-                            targetSyn.getOutput().getVisitorType(),
-                            op
-                    ).start(iAct);
-
                     Neuron to = targetSyn.getInput();
-                    sourceSyn.expandRelation(op, iAct, to, OUTPUT);
-                    targetSyn.expandRelation(op, iAct, to, INPUT);
+
+                    if(sourceSyn.getRelation() != null)
+                        sourceSyn.expandRelation(op, sourceSyn.getRelation(), to, OUTPUT);
+                    else if(targetSyn.getRelation() != null)
+                        targetSyn.expandRelation(op, targetSyn.getRelation(), to, INPUT);
+                    else {
+                        new DownVisitor(
+                                iAct.getThought(),
+                                targetSyn.getOutput().getVisitorType(),
+                                op
+                        ).start(iAct);
+                    }
                 });
     }
 
@@ -216,14 +226,17 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                     if(log.isDebugEnabled())
                         log.debug("linkAndPropagateIn: link:" + l + " targetSyn:" + targetSyn);
 
-                    LinkingOperator op = new IncomingLinkingOperator(l.getInput(), l.getSynapse(), l, targetSyn);
-                    new DownVisitor(
-                            l.getThought(),
-                            targetSyn.getOutput().getVisitorType(),
-                            op
-                    ).start(l);
-
-                    targetSyn.expandRelation(op, l.getOutput(), targetSyn.getOutput(), INPUT);
+                    LinkingOperator op = new IncomingLinkingOperator(l.getOutput(), l.getSynapse(), l, targetSyn);
+                    Relation rel = targetSyn.getRelation();
+                    if(rel != null)
+                        targetSyn.expandRelation(op, rel, targetSyn.getOutput(), INPUT);
+                    else {
+                        new DownVisitor(
+                                l.getThought(),
+                                targetSyn.getOutput().getVisitorType(),
+                                op
+                        ).start(l);
+                    }
                 });
     }
 
