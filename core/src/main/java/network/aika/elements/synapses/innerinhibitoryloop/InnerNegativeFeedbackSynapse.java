@@ -40,11 +40,13 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
         BindingActivation
         >
 {
+    public static int TYPE_ID = 8;
+
     public InnerNegativeFeedbackSynapse() {
     }
 
     public int getTypeId() {
-        return 8;
+        return TYPE_ID;
     }
 
     @Override

@@ -31,8 +31,10 @@ import static network.aika.elements.Type.BINDING;
  */
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
 
+    public static int TYPE_ID = 15;
+
     public int getTypeId() {
-        return 15;
+        return TYPE_ID;
     }
 
     @Override

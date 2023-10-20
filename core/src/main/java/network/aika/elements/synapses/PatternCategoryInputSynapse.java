@@ -44,10 +44,12 @@ public class PatternCategoryInputSynapse
         >
         implements CategoryInputSynapse<PatternCategoryInputSynapse> {
 
+    public static int TYPE_ID = 1;
+
     private double initialCategorySynapseWeight;
 
     public int getTypeId() {
-        return 1;
+        return TYPE_ID;
     }
 
     @Override

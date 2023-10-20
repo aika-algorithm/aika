@@ -42,11 +42,13 @@ public class RelationInputSynapse extends ConjunctiveSynapse<
         BindingActivation
         >
 {
+    public static int TYPE_ID = 6;
+
     public RelationInputSynapse() {
     }
 
     public int getTypeId() {
-        return 6;
+        return TYPE_ID;
     }
 
     @Override

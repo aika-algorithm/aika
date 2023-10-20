@@ -42,10 +42,12 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         > implements CategoryInputSynapse<BindingCategoryInputSynapse>
 {
+    public static int TYPE_ID = 7;
+
     private double initialCategorySynapseWeight;
 
     public int getTypeId() {
-        return 7;
+        return TYPE_ID;
     }
 
 

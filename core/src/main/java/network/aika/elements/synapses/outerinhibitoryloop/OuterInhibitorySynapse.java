@@ -40,8 +40,11 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
         OuterInhibitoryActivation
         > {
 
+    public static int TYPE_ID = 12;
+
+
     public int getTypeId() {
-        return 12;
+        return TYPE_ID;
     }
 
     @Override

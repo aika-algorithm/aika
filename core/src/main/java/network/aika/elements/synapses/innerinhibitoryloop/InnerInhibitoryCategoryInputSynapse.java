@@ -42,10 +42,12 @@ public class InnerInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InnerInhibitoryActivation
         > implements CategoryInputSynapse<InnerInhibitoryCategoryInputSynapse>
 {
+    public static int TYPE_ID = 11;
+
     private double initialCategorySynapseWeight;
 
     public int getTypeId() {
-        return 11;
+        return TYPE_ID;
     }
 
     @Override

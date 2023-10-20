@@ -47,6 +47,8 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
         InnerInhibitoryActivation
         > {
 
+    public static int TYPE_ID = 10;
+
     private Relation relation;
 
     public InnerInhibitorySynapse() {
@@ -57,7 +59,7 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
     }
 
     public int getTypeId() {
-        return 10;
+        return TYPE_ID;
     }
 
     @Override

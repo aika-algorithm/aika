@@ -45,6 +45,8 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
+    public static int TYPE_ID = 4;
+
     private Relation relation;
 
     public InnerPositiveFeedbackSynapse() {
@@ -55,7 +57,7 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
     }
 
     public int getTypeId() {
-        return 4;
+        return TYPE_ID;
     }
 
     @Override

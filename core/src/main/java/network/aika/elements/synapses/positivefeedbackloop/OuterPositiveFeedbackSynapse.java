@@ -41,9 +41,10 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
+    public static int TYPE_ID = 5;
 
     public int getTypeId() {
-        return 5;
+        return TYPE_ID;
     }
 
     @Override

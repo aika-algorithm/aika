@@ -42,9 +42,10 @@ public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
         BindingActivation
         >
 {
+    public static int TYPE_ID = 9;
 
     public int getTypeId() {
-        return 9;
+        return TYPE_ID;
     }
 
     @Override
