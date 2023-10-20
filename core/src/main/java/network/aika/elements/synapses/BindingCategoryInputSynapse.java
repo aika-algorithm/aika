@@ -42,8 +42,12 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         > implements CategoryInputSynapse<BindingCategoryInputSynapse>
 {
-
     private double initialCategorySynapseWeight;
+
+    public int getTypeId() {
+        return 7;
+    }
+
 
     @Override
     public Type getInputType() {

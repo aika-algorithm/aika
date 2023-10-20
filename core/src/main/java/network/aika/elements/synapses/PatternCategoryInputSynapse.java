@@ -46,6 +46,10 @@ public class PatternCategoryInputSynapse
 
     private double initialCategorySynapseWeight;
 
+    public int getTypeId() {
+        return 1;
+    }
+
     @Override
     public Type getInputType() {
         return PATTERN;

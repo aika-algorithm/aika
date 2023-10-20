@@ -40,6 +40,10 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
         OuterInhibitoryActivation
         > {
 
+    public int getTypeId() {
+        return 12;
+    }
+
     @Override
     public Type getInputType() {
         return BINDING;

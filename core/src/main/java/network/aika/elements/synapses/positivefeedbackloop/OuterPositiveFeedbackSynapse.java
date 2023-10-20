@@ -41,6 +41,11 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
+
+    public int getTypeId() {
+        return 5;
+    }
+
     @Override
     public Type getInputType() {
         return PATTERN;

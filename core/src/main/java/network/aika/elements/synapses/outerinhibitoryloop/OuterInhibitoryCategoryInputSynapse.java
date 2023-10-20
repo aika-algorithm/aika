@@ -45,6 +45,10 @@ public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
 
     private double initialCategorySynapseWeight;
 
+    public int getTypeId() {
+        return 13;
+    }
+
     @Override
     public Type getInputType() {
         return OUTER_INHIBITORY;

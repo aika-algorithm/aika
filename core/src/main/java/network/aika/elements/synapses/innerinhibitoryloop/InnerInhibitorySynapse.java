@@ -56,6 +56,10 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
         this.relation = rel;
     }
 
+    public int getTypeId() {
+        return 10;
+    }
+
     @Override
     public Type getInputType() {
         return BINDING;

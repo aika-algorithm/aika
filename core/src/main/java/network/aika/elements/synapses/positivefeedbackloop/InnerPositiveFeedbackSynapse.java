@@ -45,6 +45,7 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
+    private Relation relation;
 
     public InnerPositiveFeedbackSynapse() {
     }
@@ -53,7 +54,9 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         this.relation = rel;
     }
 
-    private Relation relation;
+    public int getTypeId() {
+        return 4;
+    }
 
     @Override
     public Type getInputType() {

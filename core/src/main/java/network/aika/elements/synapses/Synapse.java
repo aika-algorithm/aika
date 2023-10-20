@@ -88,6 +88,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         this.synapseId = synapseId;
     }
 
+    public abstract int getTypeId();
+
     public Scope getScope() {
         return null;
     }

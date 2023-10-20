@@ -49,6 +49,10 @@ public class SameObjectSynapse extends ConjunctiveSynapse<
 {
     private Integer relationSynId;
 
+    public int getTypeId() {
+        return 3;
+    }
+
     @Override
     public Type getInputType() {
         return BINDING;

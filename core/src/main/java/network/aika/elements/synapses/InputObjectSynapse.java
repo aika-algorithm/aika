@@ -40,6 +40,11 @@ public class InputObjectSynapse extends ConjunctiveSynapse<
         BindingActivation
         >
 {
+
+    public int getTypeId() {
+        return 2;
+    }
+
     @Override
     public Type getInputType() {
         return PATTERN;

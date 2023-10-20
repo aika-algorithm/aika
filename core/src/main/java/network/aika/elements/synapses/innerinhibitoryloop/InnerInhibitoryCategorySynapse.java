@@ -32,6 +32,10 @@ import static network.aika.elements.Type.*;
  */
 public class InnerInhibitoryCategorySynapse extends CategorySynapse<InnerInhibitoryCategorySynapse, Neuron, InnerInhibitoryActivation> {
 
+    public int getTypeId() {
+        return 16;
+    }
+
     @Override
     public Type getInputType() {
         return INNER_INHIBITORY;

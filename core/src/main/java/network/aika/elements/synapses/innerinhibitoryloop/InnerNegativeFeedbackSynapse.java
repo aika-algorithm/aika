@@ -43,6 +43,10 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
     public InnerNegativeFeedbackSynapse() {
     }
 
+    public int getTypeId() {
+        return 8;
+    }
+
     @Override
     public Type getInputType() {
         return INNER_INHIBITORY;

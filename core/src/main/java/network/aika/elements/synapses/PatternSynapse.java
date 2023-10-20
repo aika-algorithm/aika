@@ -64,6 +64,10 @@ public class PatternSynapse extends ConjunctiveSynapse<
 
     protected SampleSpace sampleSpace = new SampleSpace();
 
+    public int getTypeId() {
+        return 0;
+    }
+
     @Override
     public Type getInputType() {
         return BINDING;
