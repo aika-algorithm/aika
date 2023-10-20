@@ -24,33 +24,20 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.enums.Scope;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
+import static network.aika.enums.Scope.SAME;
 
 /**
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 15,
+        inputType = BINDING,
+        outputType = BINDING,
+        scope = SAME
+)
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
-
-    public static int TYPE_ID = 15;
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.SAME;
-    }
 
     @Override
     public BindingCategoryLink createLink(BindingActivation input, CategoryActivation output) {

@@ -28,11 +28,19 @@ import network.aika.enums.direction.Direction;
 
 import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
+import static network.aika.enums.Scope.SAME;
 
 /**
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 6,
+        inputType = BINDING,
+        outputType = BINDING,
+        scope = Scope.INPUT
+)
 public class RelationInputSynapse extends ConjunctiveSynapse<
         RelationInputSynapse,
         LatentRelationNeuron,
@@ -42,28 +50,7 @@ public class RelationInputSynapse extends ConjunctiveSynapse<
         BindingActivation
         >
 {
-    public static int TYPE_ID = 6;
-
     public RelationInputSynapse() {
-    }
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.INPUT;
     }
 
     @Override

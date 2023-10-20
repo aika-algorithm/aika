@@ -20,6 +20,7 @@ import network.aika.Model;
 import network.aika.elements.Type;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.relations.Relation;
+import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
@@ -31,11 +32,19 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.*;
+import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Scope.SAME;
 
 /**
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 4,
+        inputType = PATTERN,
+        outputType = BINDING,
+        scope = SAME
+)
 public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         InnerPositiveFeedbackSynapse,
         PatternNeuron,
@@ -45,8 +54,6 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
-    public static int TYPE_ID = 4;
-
     private Relation relation;
 
     public InnerPositiveFeedbackSynapse() {
@@ -54,25 +61,6 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
 
     public InnerPositiveFeedbackSynapse(Relation rel) {
         this.relation = rel;
-    }
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return PATTERN;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.SAME;
     }
 
     @Override

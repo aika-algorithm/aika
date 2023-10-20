@@ -23,15 +23,24 @@ import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.positivefeedbackloop.OuterPositiveFeedbackLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.Scope;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
+import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Scope.SAME;
 
 /**
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 6,
+        inputType = PATTERN,
+        outputType = BINDING,
+        scope = INPUT
+)
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         OuterPositiveFeedbackSynapse,
         PatternNeuron,
@@ -41,27 +50,6 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
-    public static int TYPE_ID = 5;
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return PATTERN;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.INPUT;
-    }
-
     @Override
     public boolean checkSingularLinkDoesNotExist(BindingActivation oAct) {
         return !linkExists(oAct, false);

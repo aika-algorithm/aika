@@ -25,6 +25,7 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
 import network.aika.elements.neurons.relations.Relation;
 import network.aika.elements.synapses.DisjunctiveSynapse;
+import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.Scope;
 import network.aika.fields.FieldOutput;
 
@@ -33,11 +34,18 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.*;
+import static network.aika.enums.Scope.SAME;
 
 /**
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 10,
+        inputType = BINDING,
+        outputType = INNER_INHIBITORY,
+        scope = SAME
+)
 public class InnerInhibitorySynapse extends DisjunctiveSynapse<
         InnerInhibitorySynapse,
         BindingNeuron,
@@ -46,9 +54,6 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
         BindingActivation,
         InnerInhibitoryActivation
         > {
-
-    public static int TYPE_ID = 10;
-
     private Relation relation;
 
     public InnerInhibitorySynapse() {
@@ -58,28 +63,9 @@ public class InnerInhibitorySynapse extends DisjunctiveSynapse<
         this.relation = rel;
     }
 
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return INNER_INHIBITORY;
-    }
-
     @Override
     public Relation getRelation() {
         return relation;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.SAME;
     }
 
     @Override

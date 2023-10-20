@@ -31,6 +31,7 @@ import network.aika.visitor.types.VisitorType;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Set;
 
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.sign.Sign.POS;

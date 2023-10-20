@@ -26,11 +26,18 @@ import network.aika.enums.Scope;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
+import static network.aika.enums.Scope.INPUT;
 
 /**
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 2,
+        inputType = PATTERN,
+        outputType = BINDING,
+        scope = INPUT
+)
 public class InputObjectSynapse extends ConjunctiveSynapse<
         InputObjectSynapse,
         PatternNeuron,
@@ -40,26 +47,6 @@ public class InputObjectSynapse extends ConjunctiveSynapse<
         BindingActivation
         >
 {
-    public static int TYPE_ID = 2;
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return PATTERN;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.INPUT;
-    }
 
     @Override
     public InputObjectLink createLink(PatternActivation input, BindingActivation output) {

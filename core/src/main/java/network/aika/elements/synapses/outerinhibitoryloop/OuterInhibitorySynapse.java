@@ -23,14 +23,22 @@ import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
+import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.Scope;
 
 import static network.aika.elements.Type.*;
+import static network.aika.enums.Scope.INPUT;
 
 /**
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 12,
+        inputType = BINDING,
+        outputType = OUTER_INHIBITORY,
+        scope = INPUT
+)
 public class OuterInhibitorySynapse extends DisjunctiveSynapse<
         OuterInhibitorySynapse,
         BindingNeuron,
@@ -39,29 +47,6 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
         BindingActivation,
         OuterInhibitoryActivation
         > {
-
-    public static int TYPE_ID = 12;
-
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return OUTER_INHIBITORY;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.INPUT;
-    }
-
     @Override
     public boolean isLinkingAllowed(boolean latent) {
         return !latent;

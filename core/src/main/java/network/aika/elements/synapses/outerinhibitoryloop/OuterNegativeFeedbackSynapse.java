@@ -24,15 +24,22 @@ import network.aika.elements.links.outerinhibitoryloop.OuterNegativeFeedbackLink
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
+import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.Scope;
 
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.OUTER_INHIBITORY;
+import static network.aika.elements.Type.*;
+import static network.aika.enums.Scope.INPUT;
 
 /**
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 9,
+        inputType = OUTER_INHIBITORY,
+        outputType = BINDING,
+        scope = INPUT
+)
 public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
         OuterNegativeFeedbackSynapse,
         OuterInhibitoryNeuron,
@@ -42,27 +49,6 @@ public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
         BindingActivation
         >
 {
-    public static int TYPE_ID = 9;
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return OUTER_INHIBITORY;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.INPUT;
-    }
-
     @Override
     public boolean checkVisitorState(int state) {
         return (state & 2) > 0;

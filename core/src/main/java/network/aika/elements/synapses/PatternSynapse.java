@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
+import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.enums.sign.Sign.NEG;
 import static network.aika.enums.sign.Sign.POS;
@@ -48,6 +49,12 @@ import static network.aika.enums.sign.Sign.POS;
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 0,
+        inputType = BINDING,
+        outputType = PATTERN,
+        scope = SAME
+)
 public class PatternSynapse extends ConjunctiveSynapse<
         PatternSynapse,
         BindingNeuron,
@@ -63,27 +70,6 @@ public class PatternSynapse extends ConjunctiveSynapse<
     protected double frequencyINegOPos;
 
     protected SampleSpace sampleSpace = new SampleSpace();
-
-    public static int TYPE_ID = 0;
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return PATTERN;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.SAME;
-    }
 
     @Override
     public PatternLink createLink(BindingActivation input, PatternActivation output) {

@@ -32,12 +32,20 @@ import java.io.IOException;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
+import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Scope.SAME;
 
 /**
  * The Same Object Binding Neuron Synapse is an inner synapse between two binding neurons of the same object.
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 3,
+        inputType = BINDING,
+        outputType = BINDING,
+        scope = SAME
+)
 public class SameObjectSynapse extends ConjunctiveSynapse<
         SameObjectSynapse,
         BindingNeuron,
@@ -48,22 +56,6 @@ public class SameObjectSynapse extends ConjunctiveSynapse<
         >
 {
     private Integer relationSynId;
-
-    public static int TYPE_ID = 3;
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
 
     public Integer getRelationSynId() {
         return relationSynId;
@@ -114,7 +106,7 @@ public class SameObjectSynapse extends ConjunctiveSynapse<
 
     @Override
     public Scope getScope() {
-        return Scope.SAME;
+        return SAME;
     }
 
     @Override

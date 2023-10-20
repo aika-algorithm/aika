@@ -22,37 +22,24 @@ import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryCategoryLink;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.CategorySynapse;
+import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.Scope;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.OUTER_INHIBITORY;
+import static network.aika.enums.Scope.INPUT;
 
 /**
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 17,
+        inputType = OUTER_INHIBITORY,
+        outputType = OUTER_INHIBITORY,
+        scope = INPUT
+)
 public class OuterInhibitoryCategorySynapse extends CategorySynapse<OuterInhibitoryCategorySynapse, Neuron, OuterInhibitoryActivation> {
-
-    public static int TYPE_ID = 17;
-
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return OUTER_INHIBITORY;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return OUTER_INHIBITORY;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.INPUT;
-    }
 
     @Override
     public boolean isLinkingAllowed(boolean latent) {

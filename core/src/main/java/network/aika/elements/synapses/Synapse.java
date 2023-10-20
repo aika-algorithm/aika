@@ -21,6 +21,16 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
 import network.aika.elements.activations.*;
 import network.aika.elements.neurons.relations.Relation;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategorySynapse;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitorySynapse;
+import network.aika.elements.synapses.innerinhibitoryloop.InnerNegativeFeedbackSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.OuterNegativeFeedbackSynapse;
+import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
+import network.aika.elements.synapses.positivefeedbackloop.OuterPositiveFeedbackSynapse;
 import network.aika.enums.Scope;
 import network.aika.Thought;
 import network.aika.elements.Element;
@@ -41,6 +51,7 @@ import org.slf4j.LoggerFactory;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MAX;
@@ -55,6 +66,27 @@ import static network.aika.utils.Utils.TOLERANCE;
 public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neuron<O, OA>, L extends Link<S, IA, OA>, IA extends Activation<?>, OA extends Activation> implements Element, Writable {
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
+
+    public Set<Class<? extends Synapse>> SYNAPSE_TYPES = Set.of(
+            PatternSynapse.class,
+            PatternCategoryInputSynapse.class,
+            InputObjectSynapse.class,
+            SameObjectSynapse.class,
+            InnerPositiveFeedbackSynapse.class,
+            OuterPositiveFeedbackSynapse.class,
+            RelationInputSynapse.class,
+            BindingCategoryInputSynapse.class,
+            InnerNegativeFeedbackSynapse.class,
+            OuterNegativeFeedbackSynapse.class,
+            InnerInhibitorySynapse.class,
+            InnerInhibitoryCategoryInputSynapse.class,
+            OuterInhibitorySynapse.class,
+            OuterInhibitoryCategoryInputSynapse.class,
+            PatternCategorySynapse.class,
+            BindingCategorySynapse.class,
+            InnerInhibitoryCategorySynapse.class,
+            OuterInhibitoryCategorySynapse.class
+    );
 
     protected static final double[] SULW_ZERO = new double[] {0.0, 0.0};
 
@@ -76,10 +108,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     public Synapse() {
     }
 
-    public abstract Type getInputType();
-
-    public abstract Type getOutputType();
-
     public int getSynapseId() {
         return synapseId;
     }
@@ -88,10 +116,20 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         this.synapseId = synapseId;
     }
 
-    public abstract int getTypeId();
+    public Type getInputType() {
+        return getClass().getAnnotation(SynapseType.class).inputType();
+    }
+
+    public Type getOutputType() {
+        return getClass().getAnnotation(SynapseType.class).outputType();
+    }
+
+    public int getTypeId() {
+        return getClass().getAnnotation(SynapseType.class).synapseTypeId();
+    }
 
     public Scope getScope() {
-        return null;
+        return getClass().getAnnotation(SynapseType.class).scope();
     }
 
     public abstract double[] getSumOfLowerWeights();

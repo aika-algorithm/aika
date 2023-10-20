@@ -23,10 +23,8 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.synapses.*;
 import network.aika.visitor.types.VisitorType;
 
-import java.util.List;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
 import static network.aika.visitor.types.VisitorType.BINDING_VISITOR_TYPE;
 
 

@@ -27,12 +27,19 @@ import network.aika.enums.Scope;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
+import static network.aika.enums.Scope.SAME;
 
 /**
  * The Same Pattern Binding Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 1,
+        inputType = PATTERN,
+        outputType = PATTERN,
+        scope = SAME
+)
 public class PatternCategoryInputSynapse
         extends PositiveFeedbackSynapse<
             PatternCategoryInputSynapse,
@@ -44,28 +51,7 @@ public class PatternCategoryInputSynapse
         >
         implements CategoryInputSynapse<PatternCategoryInputSynapse> {
 
-    public static int TYPE_ID = 1;
-
     private double initialCategorySynapseWeight;
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return PATTERN;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return PATTERN;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.SAME;
-    }
 
     @Override
     public PatternCategoryInputLink createLink(CategoryActivation input, PatternActivation output) {

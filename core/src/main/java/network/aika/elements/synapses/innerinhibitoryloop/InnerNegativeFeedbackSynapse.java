@@ -16,21 +16,27 @@
  */
 package network.aika.elements.synapses.innerinhibitoryloop;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InnerInhibitoryActivation;
 import network.aika.elements.links.innerinhibitoryloop.InnerNegativeFeedbackLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.InnerInhibitoryNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
-import network.aika.enums.Scope;
+import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.*;
+import static network.aika.enums.Scope.SAME;
 
 /**
  *
  * @author Lukas Molzberger
  */
+@SynapseType(
+        synapseTypeId = 8,
+        inputType = INNER_INHIBITORY,
+        outputType = BINDING,
+        scope = SAME
+)
 public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
         InnerNegativeFeedbackSynapse,
         InnerInhibitoryNeuron,
@@ -40,32 +46,8 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
         BindingActivation
         >
 {
-    public static int TYPE_ID = 8;
-
-    public InnerNegativeFeedbackSynapse() {
-    }
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return INNER_INHIBITORY;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
     @Override
     public void setPropagable(boolean propagable) {
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.SAME;
     }
 
     @Override
