@@ -42,9 +42,6 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addField(s.getWeight());
         initSynapseProperties(s);
 
-        if(s.getRelation() != null)
-            addConstant("Relation: ", "" + s.getRelation());
-
         addConstant("Is Template Only: ", "" + s.isTemplateOnly());
         addConstant("Initial Instance Weight: ", "" + Utils.doubleToString(s.getInitialInstanceWeight()));
     }
@@ -54,6 +51,9 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addConstant("Net UB: ", doubleToString(s.getNetUB()));
         addConstant("Is Training Allowed: ", "" + s.isTrainingAllowed());
         addConstant("Stored At: ", "" + s.getStoredAt());
+
+        if(s.getRelation() != null)
+            addConstant("Relation: ", "" + s.getRelation());
     }
 
     public static SynapsePropertyPanel create(Synapse s, Link ref) {

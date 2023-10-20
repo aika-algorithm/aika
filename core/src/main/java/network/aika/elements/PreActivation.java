@@ -39,7 +39,6 @@ public class PreActivation<A extends Activation> {
 
     private SortedSet<A> activations = new TreeSet<>();
 
-
     private NavigableMap<TokenPositionKey, Activation> tokenPosBeginIndex = new TreeMap<>();
 
     private NavigableMap<TokenPositionKey, Activation> tokenPosEndIndex = new TreeMap<>();
@@ -65,12 +64,12 @@ public class PreActivation<A extends Activation> {
         activations.add(act);
     }
 
-    public void updateGroundRef(Activation act, TextReference oldTextReference, TextReference newTextReference) {
-        updateGroundRef(tokenPosBeginIndex, act, getTPBegin(oldTextReference), getTPBegin(newTextReference));
-        updateGroundRef(tokenPosEndIndex, act, getTPEnd(oldTextReference), getTPEnd(newTextReference));
+    public void updateTextReference(Activation act, TextReference oldTextReference, TextReference newTextReference) {
+        updateTextReference(tokenPosBeginIndex, act, getTPBegin(oldTextReference), getTPBegin(newTextReference));
+        updateTextReference(tokenPosEndIndex, act, getTPEnd(oldTextReference), getTPEnd(newTextReference));
     }
 
-    private void updateGroundRef(NavigableMap<TokenPositionKey, Activation> index, Activation tokenAct, Long oldPos, Long newPos) {
+    private void updateTextReference(NavigableMap<TokenPositionKey, Activation> index, Activation tokenAct, Long oldPos, Long newPos) {
         if(oldPos != null) {
             if (oldPos == newPos)
                 return;

@@ -25,14 +25,14 @@ import static network.aika.utils.Utils.doubleToString;
 /**
  * @author Lukas Molzberger
  */
-public class InputInhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<OuterInhibitoryNeuron> {
+public class OuterInhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<OuterInhibitoryNeuron> {
 
 
-    public InputInhibitoryNeuronPropertyPanel(OuterInhibitoryNeuron n, Activation ref) {
+    public OuterInhibitoryNeuronPropertyPanel(OuterInhibitoryNeuron n, Activation ref) {
         super(n, ref);
     }
 
-    public static InputInhibitoryNeuronPropertyPanel create(OuterInhibitoryNeuron n, Activation ref) {
-        return new InputInhibitoryNeuronPropertyPanel(n, ref);
+    public static OuterInhibitoryNeuronPropertyPanel create(OuterInhibitoryNeuron n, Activation ref) {
+        return new OuterInhibitoryNeuronPropertyPanel(n, ref);
     }
 }

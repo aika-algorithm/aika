@@ -43,16 +43,6 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
     }
 
     @Override
-    protected void registerPosRange(TextReference oldTextReference, TextReference newTextReference) {
-        getNeuron().getOrCreatePreActivation(thought)
-                .updateGroundRef(
-                        this,
-                        oldTextReference,
-                        newTextReference
-                );
-    }
-
-    @Override
     protected void initInactiveLinks() {
         neuron.getInputSynapsesByType(FeedbackSynapse.class)
                 .forEach(s ->

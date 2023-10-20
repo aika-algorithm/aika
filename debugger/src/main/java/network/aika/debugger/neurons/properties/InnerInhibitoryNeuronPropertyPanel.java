@@ -23,14 +23,14 @@ import network.aika.elements.neurons.InnerInhibitoryNeuron;
 /**
  * @author Lukas Molzberger
  */
-public class SameInhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<InnerInhibitoryNeuron> {
+public class InnerInhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<InnerInhibitoryNeuron> {
 
 
-    public SameInhibitoryNeuronPropertyPanel(InnerInhibitoryNeuron n, Activation ref) {
+    public InnerInhibitoryNeuronPropertyPanel(InnerInhibitoryNeuron n, Activation ref) {
         super(n, ref);
     }
 
-    public static SameInhibitoryNeuronPropertyPanel create(InnerInhibitoryNeuron n, Activation ref) {
-        return new SameInhibitoryNeuronPropertyPanel(n, ref);
+    public static InnerInhibitoryNeuronPropertyPanel create(InnerInhibitoryNeuron n, Activation ref) {
+        return new InnerInhibitoryNeuronPropertyPanel(n, ref);
     }
 }

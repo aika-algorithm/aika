@@ -121,16 +121,16 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         ActivationsPropertyPanel activationsPanel = ActivationsPropertyPanel.create(act.getNeuron());
 
         addTab(
-                "Pre-Activation",
-                "Shows the Activations of this Neuron",
+                "Activations",
+                "Activations of this Neurons",
                 activationsPanel
         );
 
-        PreActivationPropertyPanel preActivationPanel = PreActivationPropertyPanel.create(act.getNeuron());
+        TextReferencesPropertyPanel preActivationPanel = TextReferencesPropertyPanel.create(act.getNeuron());
 
         addTab(
-                "Pre-Activation",
-                "Shows the Pre-Activation of this Neuron",
+                "Text-References",
+                "Text-References of the Activations of this Neuron",
                 preActivationPanel
         );
     }

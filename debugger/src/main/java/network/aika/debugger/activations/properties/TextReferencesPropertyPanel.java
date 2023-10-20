@@ -23,9 +23,9 @@ import network.aika.elements.neurons.Neuron;
 /**
  * @author Lukas Molzberger
  */
-public class PreActivationPropertyPanel extends AbstractPropertyPanel {
+public class TextReferencesPropertyPanel extends AbstractPropertyPanel {
 
-    public PreActivationPropertyPanel(Neuron<?, ?> n) {
+    public TextReferencesPropertyPanel(Neuron<?, ?> n) {
         n.getPreActivations()
                 .flatMap(preAct -> preAct.getTokenPosBeginIndex().entrySet().stream())
                 .limit(10)
@@ -37,7 +37,7 @@ public class PreActivationPropertyPanel extends AbstractPropertyPanel {
         addFinal();
     }
 
-    public static PreActivationPropertyPanel create(Neuron n) {
-        return new PreActivationPropertyPanel(n);
+    public static TextReferencesPropertyPanel create(Neuron n) {
+        return new TextReferencesPropertyPanel(n);
     }
 }

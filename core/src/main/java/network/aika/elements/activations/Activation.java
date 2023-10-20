@@ -301,6 +301,12 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void registerPosRange(TextReference oldTextReference, TextReference newTextReference) {
+        getNeuron().getOrCreatePreActivation(thought)
+                .updateTextReference(
+                        this,
+                        oldTextReference,
+                        newTextReference
+                );
     }
 
     protected void propagateRanges() {
