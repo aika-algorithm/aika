@@ -18,7 +18,7 @@ package network.aika.debugger.activations.properties;
 
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.*;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.TextReference;
 
 import static network.aika.debugger.AbstractConsole.NOT_SET_STR;

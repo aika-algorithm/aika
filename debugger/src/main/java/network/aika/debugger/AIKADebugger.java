@@ -23,7 +23,7 @@ import network.aika.debugger.neurons.NeuronConsoleManager;
 import network.aika.debugger.neurons.NeuronViewManager;
 import network.aika.debugger.stepmanager.DebugStepManager;
 import network.aika.debugger.stepmanager.StepManager;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.Range;
 
 import javax.swing.*;

@@ -22,7 +22,7 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.meta.entities.EntityInstance;
 import network.aika.meta.entities.EntityModel;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import org.slf4j.Logger;

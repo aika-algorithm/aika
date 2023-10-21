@@ -17,7 +17,7 @@
 package network.aika.fields;
 
 
-import network.aika.Thought;
+import network.aika.Document;
 
 /**
  *
@@ -27,5 +27,5 @@ public interface FieldObject {
 
     void disconnect();
 
-    Thought getThought();
+    Document getThought();
 }

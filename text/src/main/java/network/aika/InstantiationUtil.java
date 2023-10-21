@@ -17,10 +17,7 @@
 package network.aika;
 
 import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.meta.entities.EntityInstance;
 import network.aika.meta.exceptions.FailedInstantiationException;
-import network.aika.meta.textsections.TextSectionInstance;
-import network.aika.text.Document;
 
 import static network.aika.queue.Phase.ANNEAL;
 import static network.aika.queue.Phase.INFERENCE;

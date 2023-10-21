@@ -16,7 +16,7 @@
  */
 package network.aika.debugger.activations.renderer;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.debugger.ConsoleRenderer;
 import network.aika.debugger.Visible;
 import network.aika.elements.Element;
@@ -30,11 +30,11 @@ import java.awt.*;
  */
 public class QueueRenderer implements ConsoleRenderer {
 
-    Thought thought;
+    Document thought;
 
     protected Visible sortKey;
 
-    public QueueRenderer(Thought t, Visible sortKey) {
+    public QueueRenderer(Document t, Visible sortKey) {
         this.thought = t;
         this.sortKey = sortKey;
     }

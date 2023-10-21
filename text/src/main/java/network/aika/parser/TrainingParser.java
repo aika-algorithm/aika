@@ -18,7 +18,7 @@ package network.aika.parser;
 
 import network.aika.callbacks.InstantiationCallback;
 import network.aika.elements.activations.Activation;
-import network.aika.text.Document;
+import network.aika.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

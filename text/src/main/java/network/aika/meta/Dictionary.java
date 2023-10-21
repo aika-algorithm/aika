@@ -22,7 +22,7 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternCategorySynapse;
 import network.aika.enums.sign.Sign;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import org.slf4j.Logger;

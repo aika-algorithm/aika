@@ -17,12 +17,11 @@
  */
 package network.aika.elements.activations;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Type;
 import network.aika.elements.neurons.CategoryNeuron;
 
 import static network.aika.elements.Type.INNER_INHIBITORY;
-import static network.aika.elements.Type.PATTERN;
 
 /**
  *
@@ -30,7 +29,7 @@ import static network.aika.elements.Type.PATTERN;
  */
 public class InnerInhibitoryCategoryActivation extends CategoryActivation {
 
-    public InnerInhibitoryCategoryActivation(int id, Thought t, CategoryNeuron neuron) {
+    public InnerInhibitoryCategoryActivation(int id, Document t, CategoryNeuron neuron) {
         super(id, t, neuron);
     }
 

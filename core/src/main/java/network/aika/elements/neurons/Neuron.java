@@ -18,7 +18,7 @@ package network.aika.elements.neurons;
 
 import network.aika.ActivationFunction;
 import network.aika.Model;
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
 import network.aika.elements.neurons.relations.Relation;
@@ -58,7 +58,6 @@ import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
-import static network.aika.utils.Utils.depthToSpace;
 
 /**
  *
@@ -140,13 +139,13 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public void register(A act) {
-        Thought t = act.getThought();
+        Document t = act.getThought();
         PreActivation<A> npd = getOrCreatePreActivation(t);
         npd.addActivation(act);
         provider.updateLastUsed(t.getId());
     }
 
-    public PreActivation<A> getOrCreatePreActivation(Thought t) {
+    public PreActivation<A> getOrCreatePreActivation(Document t) {
         PreActivation<A> npd;
         synchronized (activations) {
             WeakReference<PreActivation<A>> weakRef = activations
@@ -240,7 +239,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                 });
     }
 
-    public SortedSet<A> getActivations(Thought t) {
+    public SortedSet<A> getActivations(Document t) {
         if(t == null)
             return Collections.emptySortedSet();
 
@@ -327,7 +326,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return true;
     }
 
-    public abstract A createActivation(Thought t);
+    public abstract A createActivation(Document t);
 
     public abstract void addInactiveLinks(Activation act);
 
@@ -372,7 +371,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return provider.outputSynapses.values();
     }
 
-    public Stream<? extends Synapse> getOutputSynapsesAsStream(Thought t) {
+    public Stream<? extends Synapse> getOutputSynapsesAsStream(Document t) {
             return getOutputSynapsesAsStream();
     }
 
@@ -602,7 +601,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     @Override
-    public Thought getThought() {
+    public Document getThought() {
         Model m = getModel();
         if(m == null)
             return null;

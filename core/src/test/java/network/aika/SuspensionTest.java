@@ -25,7 +25,7 @@ import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
 import network.aika.utils.Writable;

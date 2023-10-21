@@ -27,7 +27,7 @@ import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.fields.FieldOutput;
 import network.aika.meta.LabelUtil;
-import network.aika.text.Document;
+import network.aika.Document;
 import org.apache.commons.csv.CSVPrinter;
 
 import java.io.File;

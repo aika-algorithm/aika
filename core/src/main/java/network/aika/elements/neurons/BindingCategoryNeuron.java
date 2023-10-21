@@ -17,7 +17,7 @@
 package network.aika.elements.neurons;
 
 import network.aika.Model;
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Type;
 import network.aika.elements.activations.BindingCategoryActivation;
 import network.aika.elements.activations.CategoryActivation;
@@ -46,7 +46,7 @@ public class BindingCategoryNeuron extends CategoryNeuron {
     }
 
     @Override
-    public CategoryActivation createActivation(Thought t) {
+    public CategoryActivation createActivation(Document t) {
         return new BindingCategoryActivation(t.createActivationId(), t, this);
     }
 }

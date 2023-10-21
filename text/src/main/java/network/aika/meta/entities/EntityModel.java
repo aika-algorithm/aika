@@ -23,7 +23,7 @@ import network.aika.elements.neurons.relations.ContainsRelation;
 import network.aika.enums.direction.Direction;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.utils.Writable;

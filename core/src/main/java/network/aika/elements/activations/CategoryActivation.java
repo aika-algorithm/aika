@@ -16,7 +16,7 @@
  */
 package network.aika.elements.activations;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.links.*;
 import network.aika.text.TextReference;
 import network.aika.elements.neurons.CategoryNeuron;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  */
 public abstract class CategoryActivation extends DisjunctiveActivation<CategoryNeuron> {
 
-    public CategoryActivation(int id, Thought t, CategoryNeuron neuron) {
+    public CategoryActivation(int id, Document t, CategoryNeuron neuron) {
         super(id, t, neuron);
     }
 

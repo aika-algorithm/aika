@@ -21,7 +21,7 @@ import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelation;
 import network.aika.elements.synapses.*;
 import network.aika.meta.Dictionary;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.Range;
 import network.aika.tokenizer.SimpleWordTokenizer;
 import org.junit.jupiter.api.Test;

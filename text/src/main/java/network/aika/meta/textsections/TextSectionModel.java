@@ -21,7 +21,7 @@ import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.BeforeRelation;
 import network.aika.meta.sequences.PhraseModel;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.Range;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;

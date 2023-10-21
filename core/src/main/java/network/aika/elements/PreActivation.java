@@ -17,7 +17,7 @@
 package network.aika.elements;
 
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.direction.Direction;
@@ -44,7 +44,7 @@ public class PreActivation<A extends Activation> {
     private NavigableMap<TokenPositionKey, Activation> tokenPosEndIndex = new TreeMap<>();
 
 
-    public PreActivation(Thought t, NeuronProvider provider) {
+    public PreActivation(Document t, NeuronProvider provider) {
         t.register(provider, this);
     }
 

@@ -23,7 +23,7 @@ import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SameObjectSynapse;
 import network.aika.meta.Dictionary;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.Range;
 import org.junit.jupiter.api.Test;
 

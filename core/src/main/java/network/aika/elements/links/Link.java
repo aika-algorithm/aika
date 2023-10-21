@@ -17,7 +17,7 @@
 package network.aika.elements.links;
 
 import network.aika.Model;
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.LinkKey;
 import network.aika.elements.Type;
@@ -293,7 +293,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     @Override
-    public Thought getThought() {
+    public Document getThought() {
         return output.getThought();
     }
 

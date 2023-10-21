@@ -20,8 +20,11 @@ package network.aika;
 import network.aika.debugger.EventListener;
 import network.aika.debugger.EventType;
 import network.aika.callbacks.InstantiationCallback;
+import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
+import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.neurons.PatternNeuron;
 import network.aika.exceptions.PreviousThoughtNotDisconnected;
 import network.aika.fields.*;
 import network.aika.elements.PreActivation;
@@ -32,28 +35,36 @@ import network.aika.queue.Step;
 import network.aika.queue.activation.InactiveLinks;
 import network.aika.queue.activation.Instantiation;
 import network.aika.queue.thought.AnnealStep;
+import network.aika.text.TextReference;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static network.aika.elements.Timestamp.MIN;
+import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.queue.Phase.*;
 import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
+ * The {@code Document} class represents a single document which may be either used for processing a text or as
+ * training input. A document consists of the raw text, the interpretations and the activations.
  *
  * @author Lukas Molzberger
  */
-public abstract class Thought extends Queue implements Element {
-
-    private Field annealing;
-    private Field feedbackTrigger;
-    private Field instantiationFeedbackTrigger;
+public class Document extends Queue implements Element {
 
     protected final Model model;
 
     private Long id;
+
+    private final StringBuilder content;
+
     private long absoluteBeginChar;
+
+    private Field annealing;
+    private Field feedbackTrigger;
+    private Field instantiationFeedbackTrigger;
 
     private int activationIdCounter = 0;
 
@@ -66,9 +77,15 @@ public abstract class Thought extends Queue implements Element {
     private InstantiationCallback instantiationCallback;
 
 
-    public Thought(Model m) {
+    public Document(Model m, String content) {
         model = m;
         id = model.createThoughtId();
+
+        this.content = new StringBuilder();
+        if(content != null) {
+            this.content.append(content);
+        }
+
         absoluteBeginChar = m.getN();
 
         annealing = new InputField(this, "anneal", 0.0);
@@ -123,8 +140,6 @@ public abstract class Thought extends Queue implements Element {
         else
             instantiationFeedbackTrigger.receiveUpdate(null, true, -1.0);
     }
-
-    public abstract int length();
 
     public Step getCurrentStep() {
         return currentStep;
@@ -234,7 +249,80 @@ public abstract class Thought extends Queue implements Element {
                 .collect(Collectors.joining());
     }
 
+    public void append(String txt) {
+        content.append(txt);
+    }
+
+    public char charAt(int i) {
+        return content.charAt(i);
+    }
+
+    public String getContent() {
+        return content.toString();
+    }
+
+    public int length() {
+        return content.length();
+    }
+
+    public String getTextSegment(Range range) {
+        if(range == null)
+            return "";
+
+        Range r = range.limit(new Range(0, length()));
+        return content.substring((int) r.getBegin(), (int) r.getEnd());
+    }
+
+    public static String getText(Activation<?> act) {
+        return ((Document)act.getThought()).getTextSegment(act.getTextReference().getCharRange());
+    }
+
+    public PatternActivation addToken(PatternNeuron n, TextReference textReference) {
+        return addToken(n, textReference, n.getTargetNet());
+    }
+
+    public PatternActivation addToken(PatternNeuron n, TextReference textReference, double inputNet) {
+        PatternActivation act = new PatternActivation(
+                createActivationId(),
+                this,
+                n
+        );
+
+        act.updateRanges(textReference);
+        act.setNet(inputNet);
+        return act;
+    }
+
+    @Override
+    public Timestamp getCreated() {
+        return MIN;
+    }
+
+    @Override
+    public Timestamp getFired() {
+        return NOT_SET;
+    }
+
+    @Override
+    public Document getThought() {
+        return this;
+    }
+
+    public String docToString() {
+        StringBuilder sb = new StringBuilder(content);
+        sb.append("\n");
+        sb.append(activationsToString());
+        return sb.toString();
+    }
+
     public String toString() {
-        return getClass().getSimpleName() + " id:" + id;
+        StringBuilder sb = new StringBuilder();
+        sb.append(super.toString());
+        sb.append(" Content: ");
+        sb.append(
+                content.substring(0, Math.min(content.length(), 100))
+                        .replaceAll("[\\n\\r\\s]+", " ")
+        );
+        return sb.toString();
     }
 }

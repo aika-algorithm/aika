@@ -17,7 +17,7 @@
 package network.aika.tokenizer;
 
 import network.aika.parser.Context;
-import network.aika.text.Document;
+import network.aika.Document;
 
 /**
  *

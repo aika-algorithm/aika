@@ -16,12 +16,11 @@
  */
 package network.aika.elements.activations;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.SynapseSlot;
-import network.aika.text.TextReference;
 
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -38,7 +37,7 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
 
     protected NavigableMap<Long, SynapseSlot> slots;
 
-    public ConjunctiveActivation(int id, Thought t, N n) {
+    public ConjunctiveActivation(int id, Document t, N n) {
         super(id, t, n);
     }
 

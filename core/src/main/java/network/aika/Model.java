@@ -47,9 +47,9 @@ public class Model implements Writable {
 
     public final Map<Long, NeuronProvider> providers = new TreeMap<>();
 
-    private Thought currentThought;
+    private Document currentThought;
 
-    private SortedMap<Long, Thought> thoughts = new TreeMap<>();
+    private SortedMap<Long, Document> thoughts = new TreeMap<>();
 
     private long lastProcessedThought;
 
@@ -75,7 +75,7 @@ public class Model implements Writable {
         return suspensionCallback.createId();
     }
 
-    public Thought getCurrentThought() {
+    public Document getCurrentThought() {
         return currentThought;
     }
 
@@ -85,12 +85,12 @@ public class Model implements Writable {
                 thoughts.firstKey();
     }
 
-    public void registerThought(Thought t) {
+    public void registerThought(Document t) {
         this.currentThought = t;
         thoughts.put(t.getId(), t);
     }
 
-    public void deregisterThought(Thought t) {
+    public void deregisterThought(Document t) {
         if(currentThought == t)
             currentThought = null;
 

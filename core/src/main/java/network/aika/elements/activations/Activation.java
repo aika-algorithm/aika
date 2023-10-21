@@ -17,7 +17,7 @@
 package network.aika.elements.activations;
 
 import network.aika.Model;
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.LinkKey;
 import network.aika.elements.Timestamp;
@@ -60,7 +60,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected final int id;
     protected N neuron;
-    protected Thought thought;
+    protected Document thought;
 
     protected Timestamp created = NOT_SET;
     protected Timestamp fired = NOT_SET;
@@ -86,7 +86,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected TextReference textReference;
 
-    public Activation(int id, Thought t, N n) {
+    public Activation(int id, Document t, N n) {
         this.id = id;
         this.neuron = n;
         this.thought = t;
@@ -274,7 +274,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return isTrue(net, 0.0);
     }
 
-    public Thought getThought() {
+    public Document getThought() {
         return thought;
     }
 

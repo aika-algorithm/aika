@@ -26,7 +26,7 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.utils.Writable;
 
 import java.io.DataInput;

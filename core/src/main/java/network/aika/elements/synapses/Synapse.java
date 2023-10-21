@@ -32,7 +32,7 @@ import network.aika.elements.synapses.outerinhibitoryloop.OuterNegativeFeedbackS
 import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 import network.aika.elements.synapses.positivefeedbackloop.OuterPositiveFeedbackSynapse;
 import network.aika.enums.Scope;
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;
@@ -175,7 +175,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         if(propagateLinkExists(iAct))
             return;
 
-        Thought t = iAct.getThought();
+        Document t = iAct.getThought();
         OA oAct = getOutput().createActivation(t);
 
         createAndInitLink(iAct, oAct);
@@ -494,7 +494,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     @Override
-    public Thought getThought() {
+    public Document getThought() {
         Model m = getModel();
         return m != null ?
                 m.getCurrentThought() :

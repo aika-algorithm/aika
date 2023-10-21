@@ -16,7 +16,7 @@
  */
 package network.aika.elements.activations;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Type;
 import network.aika.elements.links.innerinhibitoryloop.InnerInhibitoryLink;
 import network.aika.elements.links.innerinhibitoryloop.InnerNegativeFeedbackLink;
@@ -26,7 +26,6 @@ import network.aika.fields.FieldLink;
 import network.aika.fields.IdentityFunction;
 import network.aika.fields.MaxField;
 
-import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.INNER_INHIBITORY;
 import static network.aika.elements.activations.BindingActivation.isSelfRef;
 import static network.aika.queue.Phase.INFERENCE;
@@ -38,7 +37,7 @@ import static network.aika.queue.Phase.INFERENCE;
  */
 public class InnerInhibitoryActivation extends DisjunctiveActivation<InnerInhibitoryNeuron> {
 
-    public InnerInhibitoryActivation(int id, Thought t, InnerInhibitoryNeuron neuron) {
+    public InnerInhibitoryActivation(int id, Document t, InnerInhibitoryNeuron neuron) {
         super(id, t, neuron);
     }
 

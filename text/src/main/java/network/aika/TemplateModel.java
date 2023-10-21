@@ -16,8 +16,6 @@
  */
 package network.aika;
 
-import network.aika.text.Document;
-
 /**
  *
  * @author Lukas Molzberger

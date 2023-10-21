@@ -16,12 +16,11 @@
  */
 package network.aika.queue.thought;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Timestamp;
 import network.aika.ActivationFunction;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
-import network.aika.queue.Step;
 import network.aika.queue.keys.DocQueueKey;
 
 import static network.aika.queue.Phase.*;
@@ -33,15 +32,15 @@ import static network.aika.utils.Utils.doubleToString;
  *
  * @author Lukas Molzberger
  */
-public class AnnealStep extends ElementStep<Thought> {
+public class AnnealStep extends ElementStep<Document> {
 
     double nextStep;
 
-    public static void add(Thought t) {
+    public static void add(Document t) {
         add(new AnnealStep(t));
     }
 
-    public AnnealStep(Thought t) {
+    public AnnealStep(Document t) {
         super(t);
     }
 
@@ -56,7 +55,7 @@ public class AnnealStep extends ElementStep<Thought> {
 
     @Override
     public void process() {
-        Thought t = queue;
+        Document t = queue;
 
         double av = t.getAnnealing().getValue();
         nextStep = t.getConfig().getAnnealStepSize() / ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT.outerGrad(av);

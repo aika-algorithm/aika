@@ -16,7 +16,7 @@
  */
 package network.aika.elements.activations;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Type;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
@@ -49,7 +49,7 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
     private Double[] cachedSurprisal;
 
-    public PatternActivation(int id, Thought t, PatternNeuron patternNeuron) {
+    public PatternActivation(int id, Document t, PatternNeuron patternNeuron) {
         super(id, t, patternNeuron);
     }
 

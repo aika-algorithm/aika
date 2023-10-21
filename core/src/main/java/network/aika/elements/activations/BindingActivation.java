@@ -16,7 +16,7 @@
  */
 package network.aika.elements.activations;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Timestamp;
 import network.aika.elements.Type;
 import network.aika.elements.links.Link;
@@ -59,7 +59,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     protected FieldOutput valueUnsuppressed;
 
 
-    public BindingActivation(int id, Thought t, BindingNeuron n) {
+    public BindingActivation(int id, Document t, BindingNeuron n) {
         super(id, t, n);
 
         valueUnsuppressed = func(

@@ -25,7 +25,7 @@ import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.text.Document;
+import network.aika.Document;
 
 import java.util.function.Predicate;
 

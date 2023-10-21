@@ -18,7 +18,7 @@ package experiment.logger;
 
 import network.aika.elements.links.outerinhibitoryloop.OuterNegativeFeedbackLink;
 import network.aika.fields.Field;
-import network.aika.text.Document;
+import network.aika.Document;
 import org.apache.commons.csv.CSVPrinter;
 
 import java.io.File;

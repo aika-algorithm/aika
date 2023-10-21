@@ -16,7 +16,7 @@
  */
 package network.aika.debugger.activations;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.debugger.AbstractGraphManager;
 import network.aika.debugger.AbstractParticleLink;
 import network.aika.debugger.activations.layout.ParticleLink;
@@ -33,11 +33,11 @@ import org.graphstream.ui.layout.springbox.NodeParticle;
  */
 public class ActivationGraphManager extends AbstractGraphManager<Activation, Link, ActivationParticle> {
 
-    private Thought thought;
+    private Document thought;
 
     private boolean disabledForces = false;
 
-    public ActivationGraphManager(Graph graph, Thought t) {
+    public ActivationGraphManager(Graph graph, Document t) {
         super(graph);
         thought = t;
 
@@ -55,7 +55,7 @@ public class ActivationGraphManager extends AbstractGraphManager<Activation, Lin
         this.disabledForces = disabledForces;
     }
 
-    public Thought getThought() {
+    public Document getThought() {
         return thought;
     }
 

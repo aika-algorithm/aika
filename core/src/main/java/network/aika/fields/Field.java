@@ -17,7 +17,7 @@
 package network.aika.fields;
 
 import network.aika.Model;
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.queue.Phase;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
@@ -60,7 +60,7 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
         initIO();
     }
 
-    public <F extends Field> F setQueued(Thought q, Phase p) {
+    public <F extends Field> F setQueued(Document q, Phase p) {
         interceptor = new QueueInterceptor(q, this, p);
         return (F) this;
     }
