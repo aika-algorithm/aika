@@ -124,7 +124,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         if(synapse.isTemplateOnly())
             return;
 
-        Link l = oAct.getInputLink(iAct);
+        Link l = oAct.getInputLink(iAct, synapse.getSynapseId());
 
         if(l != null)
             return;
@@ -142,16 +142,18 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public LinkKey getInputLinkKey() {
+        int synId = synapse.getSynapseId();
         return input != null ?
-                input.getLinkKey() :
+                new LinkKey(input, synId) :
                 new LinkKey(
                         synapse.getPInput().getId(),
-                        null
+                        null,
+                        synId
                 );
     }
 
     public LinkKey getOutputLinkKey() {
-        return output.getLinkKey();
+        return new LinkKey(output, synapse.getSynapseId());
     }
 
     public abstract void connectWeightUpdate();

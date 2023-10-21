@@ -215,7 +215,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public L getLink(IA iAct, OA oAct) {
-        L l = (L) oAct.getInputLink(iAct);
+        L l = (L) oAct.getInputLink(iAct, synapseId);
         assert l == null || l.getSynapse() == this;
         return l;
     }

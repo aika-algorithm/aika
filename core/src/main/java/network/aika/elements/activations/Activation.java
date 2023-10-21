@@ -127,12 +127,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public abstract Type getType();
 
-    public LinkKey getLinkKey() {
-        return new LinkKey(
-                neuron.getId(),
-                id
-        );
-    }
 
     protected void connectWeightUpdate() {
 
@@ -351,12 +345,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return neuron.getProvider();
     }
 
-    public Link getInputLink(Activation iAct) {
-        return inputLinks.get(iAct.getLinkKey());
-    }
-
-    public Link getInputDummyLink(Neuron n) {
-        return inputLinks.get(new LinkKey(n.getId(), null));
+    public Link getInputLink(Activation iAct, int synapseId) {
+        return inputLinks.get(new LinkKey(iAct, synapseId));
     }
 
     public <IL extends Link> Optional<IL> getInputLinkByType(Class<IL> linkType) {
