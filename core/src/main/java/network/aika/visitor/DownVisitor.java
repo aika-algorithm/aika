@@ -65,7 +65,7 @@ public class DownVisitor extends Visitor {
 
     public void up(ConjunctiveActivation bindingSource, int state, int depth) {
         type.visit(
-                new UpVisitor(this, bindingSource),
+                new UpVisitor(this),
                 bindingSource,
                 null,
                 state,

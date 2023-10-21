@@ -44,6 +44,7 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
+import network.aika.visitor.Visitor;
 import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,7 @@ import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
+import static network.aika.visitor.Visitor.synapseTypeToBitmask;
 
 /**
  *
@@ -67,7 +69,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
-    public Set<Class<? extends Synapse>> SYNAPSE_TYPES = Set.of(
+    public static Set<Class<? extends Synapse>> SYNAPSE_TYPES = Set.of(
             PatternSynapse.class,
             PatternCategoryInputSynapse.class,
             InputObjectSynapse.class,
@@ -87,6 +89,15 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             InnerInhibitoryCategorySynapse.class,
             OuterInhibitoryCategorySynapse.class
     );
+
+    public static int getStartFilter(Type t) {
+        return SYNAPSE_TYPES.stream()
+                .map(c -> c.getAnnotation(SynapseType.class))
+                .filter(st -> st.outputType() == t)
+                .map(st -> synapseTypeToBitmask(st.synapseTypeId()))
+                .mapToInt(Integer::intValue)
+                .sum();
+    }
 
     protected static final double[] SULW_ZERO = new double[] {0.0, 0.0};
 

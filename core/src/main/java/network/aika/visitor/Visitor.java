@@ -20,6 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.visitor.operator.Operator;
 import network.aika.visitor.types.VisitorType;
@@ -45,12 +46,33 @@ public abstract class Visitor {
         return operator;
     }
 
+    public static int synapseTypeToBitmask(int synapseTypeId) {
+        return 1 << synapseTypeId;
+    }
+
+    public int getStartState(Activation act) {
+        return 3 + (Synapse.getStartFilter(act.getNeuron().getType()) << 2);
+    }
+
     public void start(Activation<?> act) {
-        type.visit(this, act, null, 3, 0);
+        type.visit(
+                this,
+                act,
+                null,
+                getStartState(act),
+                0
+        );
     }
 
     public void start(Link l) {
-        type.visit(this, l, filterState(3, l), 0);
+        type.visit(
+                this,
+                l,
+                filterState(
+                        getStartState(l.getOutput()),
+                        l
+                ), 0
+        );
     }
 
     public void up(ConjunctiveActivation bindingSource, int state, int depth) {

@@ -28,12 +28,10 @@ import static network.aika.utils.Utils.idToString;
  */
 public class UpVisitor extends Visitor {
 
-    private final ConjunctiveActivation bindingSource;
 
-    protected UpVisitor(DownVisitor downVisitor, ConjunctiveActivation bindingSource) {
+    protected UpVisitor(DownVisitor downVisitor) {
         this.v = downVisitor.v;
         this.type = downVisitor.type;
-        this.bindingSource = bindingSource;
         this.operator = downVisitor.operator;
         this.referenceAct = downVisitor.referenceAct;
     }
