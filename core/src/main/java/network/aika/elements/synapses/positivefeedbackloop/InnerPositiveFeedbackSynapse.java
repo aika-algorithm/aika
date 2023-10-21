@@ -81,9 +81,10 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
     public void setPropagable(boolean propagable) {
     }
 
+    /*
     @Override
     public void linkAndPropagateOut(PatternActivation act) {
-    }
+    }*/
 
     @Override
     public void write(DataOutput out) throws IOException {
