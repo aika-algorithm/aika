@@ -29,8 +29,8 @@ import static network.aika.elements.Type.INNER_INHIBITORY;
  */
 public class InnerInhibitoryCategoryActivation extends CategoryActivation {
 
-    public InnerInhibitoryCategoryActivation(int id, Document t, CategoryNeuron neuron) {
-        super(id, t, neuron);
+    public InnerInhibitoryCategoryActivation(int id, Document doc, CategoryNeuron neuron) {
+        super(id, doc, neuron);
     }
 
     @Override

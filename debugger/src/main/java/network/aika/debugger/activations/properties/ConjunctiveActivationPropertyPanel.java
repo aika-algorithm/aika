@@ -30,9 +30,9 @@ public class ConjunctiveActivationPropertyPanel<E extends ConjunctiveActivation>
 
     @Override
     public void initInferenceSection(E act) {
-        addField(act.getThought().getAnnealing());
-        addField(act.getThought().getFeedbackTrigger());
-        addField(act.getThought().getInstantiationFeedbackTrigger());
+        addField(act.getDocument().getAnnealing());
+        addField(act.getDocument().getFeedbackTrigger());
+        addField(act.getDocument().getInstantiationFeedbackTrigger());
         super.initInferenceSection(act);
     }
 }

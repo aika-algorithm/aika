@@ -70,8 +70,8 @@ public class InnerInhibitoryNeuron extends DisjunctiveNeuron<InnerInhibitoryNeur
     }
 
     @Override
-    public InnerInhibitoryActivation createActivation(Document t) {
-        return new InnerInhibitoryActivation(t.createActivationId(), t, this);
+    public InnerInhibitoryActivation createActivation(Document doc) {
+        return new InnerInhibitoryActivation(doc.createActivationId(), doc, this);
     }
 
     public ActivationFunction getActivationFunction() {

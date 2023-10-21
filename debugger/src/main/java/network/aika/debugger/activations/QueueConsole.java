@@ -49,8 +49,8 @@ public class QueueConsole extends AbstractConsole {
         this.sortKeyVisible = sortKeyVisible;
     }
 
-    public void renderQueue(StyledDocument sDoc, Document t) {
-        QueueRenderer queueRenderer = new QueueRenderer(t, sortKeyVisible);
+    public void renderQueue(StyledDocument sDoc, Document doc) {
+        QueueRenderer queueRenderer = new QueueRenderer(doc, sortKeyVisible);
 
         queueRenderer.render(sDoc, highlightedElement);
     }

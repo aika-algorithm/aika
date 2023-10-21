@@ -31,8 +31,8 @@ import static network.aika.utils.Utils.idToString;
  */
 public class DownVisitor extends Visitor {
 
-    public DownVisitor(Document t, VisitorType type, Operator operator) {
-        this.v = t.getNewVisitorId();
+    public DownVisitor(Document doc, VisitorType type, Operator operator) {
+        this.v = doc.getNewVisitorId();
         this.type = type;
 
         if(log.isDebugEnabled()) {

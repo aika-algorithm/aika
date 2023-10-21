@@ -51,11 +51,9 @@ public class SynapsesPropertyPanel extends AbstractPropertyPanel {
     }
 
     public static SynapsesPropertyPanel create(Element element, Direction dir) {
-        Document t = null;
         Neuron n = null;
         if(element instanceof Activation<?>) {
             Activation act = (Activation) element;
-            t = act.getThought();
             n = act.getNeuron();
         } else if(element instanceof Neuron<?, ?>) {
             n = (Neuron) element;

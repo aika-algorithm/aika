@@ -139,20 +139,20 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public void register(A act) {
-        Document t = act.getThought();
-        PreActivation<A> npd = getOrCreatePreActivation(t);
+        Document doc = act.getDocument();
+        PreActivation<A> npd = getOrCreatePreActivation(doc);
         npd.addActivation(act);
-        provider.updateLastUsed(t.getId());
+        provider.updateLastUsed(doc.getId());
     }
 
-    public PreActivation<A> getOrCreatePreActivation(Document t) {
+    public PreActivation<A> getOrCreatePreActivation(Document doc) {
         PreActivation<A> npd;
         synchronized (activations) {
             WeakReference<PreActivation<A>> weakRef = activations
                     .computeIfAbsent(
-                            t.getId(),
+                            doc.getId(),
                             n -> new WeakReference<>(
-                                    new PreActivation<>(t, provider)
+                                    new PreActivation<>(doc, provider)
                             )
                     );
 
@@ -184,7 +184,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
             targetSyn.expandRelation(op, rel, to, OUTPUT);
         else {
             new DownVisitor(
-                    iAct.getThought(),
+                    iAct.getDocument(),
                     to.getVisitorType(),
                     op
             ).start(iAct);
@@ -209,7 +209,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                         targetSyn.expandRelation(op, targetSyn.getRelation(), to, INPUT);
                     else {
                         new DownVisitor(
-                                iAct.getThought(),
+                                iAct.getDocument(),
                                 targetSyn.getOutput().getVisitorType(),
                                 op
                         ).start(iAct);
@@ -231,7 +231,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                         targetSyn.expandRelation(op, rel, targetSyn.getOutput(), INPUT);
                     else {
                         new DownVisitor(
-                                l.getThought(),
+                                l.getDocument(),
                                 targetSyn.getOutput().getVisitorType(),
                                 op
                         ).start(l);
@@ -239,11 +239,11 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                 });
     }
 
-    public SortedSet<A> getActivations(Document t) {
-        if(t == null)
+    public SortedSet<A> getActivations(Document doc) {
+        if(doc == null)
             return Collections.emptySortedSet();
 
-        WeakReference<PreActivation<A>> weakRef = activations.get(t.getId());
+        WeakReference<PreActivation<A>> weakRef = activations.get(doc.getId());
         if(weakRef == null)
             return Collections.emptyNavigableSet();
 
@@ -326,7 +326,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return true;
     }
 
-    public abstract A createActivation(Document t);
+    public abstract A createActivation(Document doc);
 
     public abstract void addInactiveLinks(Activation act);
 
@@ -337,7 +337,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected SumField initBias() {
         return (SumField) new SumField(this, "bias", TOLERANCE)
-                .setQueued(getThought(), TRAINING)
+                .setQueued(getDocument(), TRAINING)
                 .addListener("onBiasModified", (fl, nr, u) ->
                         setModified()
                 );
@@ -371,7 +371,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return provider.outputSynapses.values();
     }
 
-    public Stream<? extends Synapse> getOutputSynapsesAsStream(Document t) {
+    public Stream<? extends Synapse> getOutputSynapsesAsStream(Document doc) {
             return getOutputSynapsesAsStream();
     }
 
@@ -601,12 +601,12 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     @Override
-    public Document getThought() {
+    public Document getDocument() {
         Model m = getModel();
         if(m == null)
             return null;
 
-        return m.getCurrentThought();
+        return m.getCurrentDocument();
     }
 
     public String getLabel() {

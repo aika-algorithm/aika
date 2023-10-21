@@ -60,7 +60,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected final int id;
     protected N neuron;
-    protected Document thought;
+    protected Document doc;
 
     protected Timestamp created = NOT_SET;
     protected Timestamp fired = NOT_SET;
@@ -86,18 +86,18 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected TextReference textReference;
 
-    public Activation(int id, Document t, N n) {
+    public Activation(int id, Document doc, N n) {
         this.id = id;
         this.neuron = n;
-        this.thought = t;
-        setCreated(t.getCurrentTimestamp());
+        this.doc = doc;
+        setCreated(doc.getCurrentTimestamp());
 
         inputLinks = new TreeMap<>();
         outputLinks = new TreeMap<>();
 
         initNet();
-        net.setQueued(thought, INFERENCE);
-        netPreAnneal.setQueued(thought, PRE_ANNEAL);
+        net.setQueued(doc, INFERENCE);
+        netPreAnneal.setQueued(doc, PRE_ANNEAL);
 
         initOnFiredListener();
 
@@ -110,7 +110,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         );
 
         gradient = new SumField(this, "gradient", TOLERANCE)
-                .setQueued(thought, TRAINING);
+                .setQueued(doc, TRAINING);
 
         if (getModel().getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
             connectGradientFields();
@@ -119,10 +119,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         initInactiveLinks();
 
-        thought.register(this);
+        doc.register(this);
         neuron.register(this);
 
-        thought.onElementEvent(CREATE, this);
+        doc.onElementEvent(CREATE, this);
     }
 
     public abstract Type getType();
@@ -156,7 +156,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected void initOnFiredListener() {
         net.addListener("onFired", (fl, nr, u) -> {
                     if(fl.getInput().exceedsThreshold() && fired == NOT_SET) {
-                        fired = thought.getCurrentTimestamp();
+                        fired = doc.getCurrentTimestamp();
                         LinkingOut.add(this, false);
                         Counting.add(this);
                     }
@@ -274,8 +274,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return isTrue(net, 0.0);
     }
 
-    public Document getThought() {
-        return thought;
+    public Document getDocument() {
+        return doc;
     }
 
     public TextReference getTextReference() {
@@ -291,11 +291,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
             propagateRanges();
         }
-        thought.onElementEvent(TOKEN_POSITION, this);
+        doc.onElementEvent(TOKEN_POSITION, this);
     }
 
     protected void registerPosRange(TextReference oldTextReference, TextReference newTextReference) {
-        getNeuron().getOrCreatePreActivation(thought)
+        getNeuron().getOrCreatePreActivation(doc)
                 .updateTextReference(
                         this,
                         oldTextReference,
@@ -312,7 +312,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         if(textReference == null)
             return null;
         Range r = textReference.getCharRange();
-        return r.getAbsoluteRange(thought.getCharRange());
+        return r.getAbsoluteRange(doc.getCharRange());
     }
 
     @Override
@@ -513,20 +513,20 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         N n = (N) neuron.instantiateTemplate();
 
-        Activation<N> ti = n.createActivation(getThought());
+        Activation<N> ti = n.createActivation(getDocument());
 
         ti.textReference = textReference;
         ti.isNewInstance = true;
         ti.fired = fired;
 
-        thought.onElementEvent(TOKEN_POSITION, ti);
+        doc.onElementEvent(TOKEN_POSITION, ti);
 
         linkTemplateAndInstance(ti);
 
         instantiateTemplateEdges(ti);
 
-        if(thought.getInstantiationCallback() != null)
-            thought.getInstantiationCallback().onInstantiation(this, ti);
+        if(doc.getInstantiationCallback() != null)
+            doc.getInstantiationCallback().onInstantiation(this, ti);
 
         return ti;
     }
@@ -544,7 +544,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         if(catSyn == null)
             return null;
 
-        CategoryActivation catAct = catSyn.getInput().createActivation(thought);
+        CategoryActivation catAct = catSyn.getInput().createActivation(doc);
 
         Synapse s = ((Synapse)catSyn);
         return (CategoryInputLink) s.createAndInitLink(catAct, this);
@@ -573,7 +573,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public void initFromTemplate(Activation templateAct) {
         fired = templateAct.fired;
-        thought.onElementEvent(UPDATE, this);
+        doc.onElementEvent(UPDATE, this);
     }
 
     @Override

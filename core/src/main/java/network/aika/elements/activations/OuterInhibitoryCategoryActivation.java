@@ -28,8 +28,8 @@ import static network.aika.elements.Type.OUTER_INHIBITORY;
  */
 public class OuterInhibitoryCategoryActivation extends CategoryActivation {
 
-    public OuterInhibitoryCategoryActivation(int id, Document t, CategoryNeuron neuron) {
-        super(id, t, neuron);
+    public OuterInhibitoryCategoryActivation(int id, Document doc, CategoryNeuron neuron) {
+        super(id, doc, neuron);
     }
 
     @Override

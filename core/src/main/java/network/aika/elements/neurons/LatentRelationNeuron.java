@@ -55,12 +55,12 @@ public class LatentRelationNeuron extends BindingNeuron {
     @Override
     protected SumField initBias() {
         return new SumField(this, "bias", TOLERANCE)
-                .setQueued(getThought(), TRAINING);
+                .setQueued(getDocument(), TRAINING);
     }
 
     @Override
-    public LatentRelationActivation createActivation(Document t) {
-        return new LatentRelationActivation(t.createActivationId(), t, this);
+    public LatentRelationActivation createActivation(Document doc) {
+        return new LatentRelationActivation(doc.createActivationId(), doc, this);
     }
 
     @Override

@@ -69,7 +69,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         }
 
         propagateRanges();
-        getThought().onElementEvent(CREATE, this);
+        getDocument().onElementEvent(CREATE, this);
     }
 
     public abstract Type getInputType();
@@ -293,8 +293,8 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     @Override
-    public Document getThought() {
-        return output.getThought();
+    public Document getDocument() {
+        return output.getDocument();
     }
 
     @Override

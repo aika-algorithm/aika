@@ -83,7 +83,7 @@ public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbac
         return mul(
                 this,
                 "annealing * iAct(" + getInputKeyString() + ").value * weight",
-                getThought().getAnnealing(),
+                getDocument().getAnnealing(),
                 innerWeightedInput
         );
     }

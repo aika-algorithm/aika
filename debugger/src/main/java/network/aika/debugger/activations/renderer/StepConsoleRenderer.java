@@ -33,19 +33,19 @@ import java.awt.*;
  */
 public class StepConsoleRenderer implements ConsoleRenderer {
 
-    private Document t;
+    private Document doc;
     private boolean selected;
 
     private Visible sortKey;
 
-    public StepConsoleRenderer(Document t, Step step, Element highlightedElement, Visible sortKey) {
-        this.t = t;
+    public StepConsoleRenderer(Document doc, Step step, Element highlightedElement, Visible sortKey) {
+        this.doc = doc;
         this.sortKey = sortKey;
         this.selected = step.getElement() == highlightedElement;
     }
 
     public void render(StyledDocument sDoc, Step s) {
-        Timestamp currentTimestamp = t.getTimestampOnProcess();
+        Timestamp currentTimestamp = doc.getTimestampOnProcess();
 
         Color c = new Color(
                 selected ? 150 : 0,

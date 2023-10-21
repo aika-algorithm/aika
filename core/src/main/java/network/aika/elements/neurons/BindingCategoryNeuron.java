@@ -46,7 +46,7 @@ public class BindingCategoryNeuron extends CategoryNeuron {
     }
 
     @Override
-    public CategoryActivation createActivation(Document t) {
-        return new BindingCategoryActivation(t.createActivationId(), t, this);
+    public CategoryActivation createActivation(Document doc) {
+        return new BindingCategoryActivation(doc.createActivationId(), doc, this);
     }
 }

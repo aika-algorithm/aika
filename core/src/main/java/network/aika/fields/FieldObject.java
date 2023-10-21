@@ -27,5 +27,5 @@ public interface FieldObject {
 
     void disconnect();
 
-    Document getThought();
+    Document getDocument();
 }

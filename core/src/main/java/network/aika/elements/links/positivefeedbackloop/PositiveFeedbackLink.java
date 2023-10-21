@@ -51,7 +51,7 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
     }
 
     protected Field getFeedbackTrigger() {
-        return getThought().getFeedbackTrigger();
+        return getDocument().getFeedbackTrigger();
     }
 
     @Override

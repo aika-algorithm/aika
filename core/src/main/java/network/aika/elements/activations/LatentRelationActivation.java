@@ -31,8 +31,8 @@ public class LatentRelationActivation extends BindingActivation {
     private Activation fromAct;
     private Activation toAct;
 
-    public LatentRelationActivation(int id, Document t, LatentRelationNeuron n) {
-        super(id, t, n);
+    public LatentRelationActivation(int id, Document doc, LatentRelationNeuron n) {
+        super(id, doc, n);
     }
 
     @Override

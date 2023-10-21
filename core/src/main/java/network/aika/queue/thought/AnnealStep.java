@@ -36,12 +36,12 @@ public class AnnealStep extends ElementStep<Document> {
 
     double nextStep;
 
-    public static void add(Document t) {
-        add(new AnnealStep(t));
+    public static void add(Document doc) {
+        add(new AnnealStep(doc));
     }
 
-    public AnnealStep(Document t) {
-        super(t);
+    public AnnealStep(Document doc) {
+        super(doc);
     }
 
     @Override
@@ -55,19 +55,19 @@ public class AnnealStep extends ElementStep<Document> {
 
     @Override
     public void process() {
-        Document t = queue;
+        Document doc = queue;
 
-        double av = t.getAnnealing().getValue();
-        nextStep = t.getConfig().getAnnealStepSize() / ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT.outerGrad(av);
+        double av = doc.getAnnealing().getValue();
+        nextStep = doc.getConfig().getAnnealStepSize() / ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT.outerGrad(av);
         double nextAnnealValue = nextStep + av;
         nextAnnealValue = Math.min(nextAnnealValue, 1.0);
 
-        t.incrementRound();
-        t.setFeedbackTriggerRound();
-        t.getAnnealing().setValue(nextAnnealValue);
+        doc.incrementRound();
+        doc.setFeedbackTriggerRound();
+        doc.getAnnealing().setValue(nextAnnealValue);
 
         if (nextAnnealValue < 1.0)
-            AnnealStep.add(t);
+            AnnealStep.add(doc);
     }
 
     @Override

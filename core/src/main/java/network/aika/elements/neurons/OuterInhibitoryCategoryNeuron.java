@@ -46,7 +46,7 @@ public class OuterInhibitoryCategoryNeuron extends CategoryNeuron {
     }
 
     @Override
-    public CategoryActivation createActivation(Document t) {
-        return new OuterInhibitoryCategoryActivation(t.createActivationId(), t, this);
+    public CategoryActivation createActivation(Document doc) {
+        return new OuterInhibitoryCategoryActivation(doc.createActivationId(), doc, this);
     }
 }

@@ -46,7 +46,7 @@ public class PatternCategoryNeuron extends CategoryNeuron {
     }
 
     @Override
-    public CategoryActivation createActivation(Document t) {
-        return new PatternCategoryActivation(t.createActivationId(), t, this);
+    public CategoryActivation createActivation(Document doc) {
+        return new PatternCategoryActivation(doc.createActivationId(), doc, this);
     }
 }

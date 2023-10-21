@@ -39,7 +39,7 @@ public class BindingCategoryInputLink extends PositiveFeedbackLink<BindingCatego
 
     @Override
     protected Field getFeedbackTrigger() {
-        return getThought().getInstantiationFeedbackTrigger();
+        return getDocument().getInstantiationFeedbackTrigger();
     }
 
     @Override

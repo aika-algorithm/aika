@@ -97,7 +97,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     private boolean templateOnly;
 
     protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
-            .setQueued(getThought(), TRAINING)
+            .setQueued(getDocument(), TRAINING)
             .addListener("onWeightModified", (fl, nr, u) -> {
                 checkWeight();
                 setModified();
@@ -175,8 +175,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         if(propagateLinkExists(iAct))
             return;
 
-        Document t = iAct.getThought();
-        OA oAct = getOutput().createActivation(t);
+        Document doc = iAct.getDocument();
+        OA oAct = getOutput().createActivation(doc);
 
         createAndInitLink(iAct, oAct);
     }
@@ -409,7 +409,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public void expandRelation(LinkingOperator op, Relation rel, Neuron to, Direction relDir) {
         Activation from = op.getSourceAct();
-        PreActivation<?> toPreAct = to.getOrCreatePreActivation(from.getThought());
+        PreActivation<?> toPreAct = to.getOrCreatePreActivation(from.getDocument());
 
         rel.evaluateLatentRelation(from, toPreAct, relDir.invert())
                 .forEach(relAct -> {
@@ -494,10 +494,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     @Override
-    public Document getThought() {
+    public Document getDocument() {
         Model m = getModel();
         return m != null ?
-                m.getCurrentThought() :
+                m.getCurrentDocument() :
                 null;
     }
 

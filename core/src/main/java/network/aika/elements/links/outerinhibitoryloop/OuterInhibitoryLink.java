@@ -47,7 +47,7 @@ public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse,
         super(inhibitorySynapse, input, output);
 
         net = new SumField(this, "net", null)
-                .setQueued(getThought(), NEGATIVE_FEEDBACK);
+                .setQueued(getDocument(), NEGATIVE_FEEDBACK);
         linkAndConnect(weightedInput, net);
         linkAndConnect(output.getNeuron().getBias(), net)
                 .setPropagateUpdates(false);

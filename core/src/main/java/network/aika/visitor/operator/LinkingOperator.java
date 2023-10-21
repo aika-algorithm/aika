@@ -59,8 +59,8 @@ public abstract class LinkingOperator implements Operator {
         if (linkA != null)
             return linkA;
 
-        Document t = actA.getThought();
-        Activation oAct = synA.getOutput().createActivation(t);
+        Document doc = actA.getDocument();
+        Activation oAct = synA.getOutput().createActivation(doc);
 
         return synA.createAndInitLink(actA, oAct);
     }

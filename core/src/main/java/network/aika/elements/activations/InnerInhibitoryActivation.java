@@ -37,8 +37,8 @@ import static network.aika.queue.Phase.INFERENCE;
  */
 public class InnerInhibitoryActivation extends DisjunctiveActivation<InnerInhibitoryNeuron> {
 
-    public InnerInhibitoryActivation(int id, Document t, InnerInhibitoryNeuron neuron) {
-        super(id, t, neuron);
+    public InnerInhibitoryActivation(int id, Document doc, InnerInhibitoryNeuron neuron) {
+        super(id, doc, neuron);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class InnerInhibitoryActivation extends DisjunctiveActivation<InnerInhibi
     @Override
     protected void initNet() {
         net = new MaxField(this, "net", this::onSelectionChanged)
-                .setQueued(thought, INFERENCE);
+                .setQueued(doc, INFERENCE);
 
         initNetPreAnneal();
     }

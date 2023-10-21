@@ -26,7 +26,6 @@ import network.aika.elements.synapses.PatternCategorySynapse;
 import network.aika.fields.Field;
 import network.aika.visitor.Visitor;
 
-import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 
 
@@ -41,7 +40,7 @@ public class PatternCategoryInputLink extends PositiveFeedbackLink<PatternCatego
 
     @Override
     protected Field getFeedbackTrigger() {
-        return getThought().getInstantiationFeedbackTrigger();
+        return getDocument().getInstantiationFeedbackTrigger();
     }
 
     @Override

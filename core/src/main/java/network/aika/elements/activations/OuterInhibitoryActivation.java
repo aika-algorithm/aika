@@ -38,8 +38,8 @@ import static network.aika.elements.Type.OUTER_INHIBITORY;
  */
 public class OuterInhibitoryActivation extends DisjunctiveActivation<OuterInhibitoryNeuron> {
 
-    public OuterInhibitoryActivation(int id, Document t, OuterInhibitoryNeuron neuron) {
-        super(id, t, neuron);
+    public OuterInhibitoryActivation(int id, Document doc, OuterInhibitoryNeuron neuron) {
+        super(id, doc, neuron);
     }
 
     @Override

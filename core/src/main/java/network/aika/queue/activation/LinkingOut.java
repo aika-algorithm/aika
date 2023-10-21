@@ -49,7 +49,7 @@ public class LinkingOut extends ElementStep<Activation> {
 
         n.wakeupPropagable();
 
-        n.getOutputSynapsesAsStream(act.getThought())
+        n.getOutputSynapsesAsStream(act.getDocument())
                 .filter(s ->
                         s.linkOnUnsuppressed() == unsuppressed
                 )

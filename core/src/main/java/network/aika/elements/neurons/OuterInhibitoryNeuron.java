@@ -69,8 +69,8 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryNeur
     }
 
     @Override
-    public OuterInhibitoryActivation createActivation(Document t) {
-        return new OuterInhibitoryActivation(t.createActivationId(), t, this);
+    public OuterInhibitoryActivation createActivation(Document doc) {
+        return new OuterInhibitoryActivation(doc.createActivationId(), doc, this);
     }
 
     public ActivationFunction getActivationFunction() {

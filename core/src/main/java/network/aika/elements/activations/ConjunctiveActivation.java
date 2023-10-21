@@ -37,8 +37,8 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
 
     protected NavigableMap<Long, SynapseSlot> slots;
 
-    public ConjunctiveActivation(int id, Document t, N n) {
-        super(id, t, n);
+    public ConjunctiveActivation(int id, Document doc, N n) {
+        super(id, doc, n);
     }
 
     @Override

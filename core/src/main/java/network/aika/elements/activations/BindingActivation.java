@@ -59,8 +59,8 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     protected FieldOutput valueUnsuppressed;
 
 
-    public BindingActivation(int id, Document t, BindingNeuron n) {
-        super(id, t, n);
+    public BindingActivation(int id, Document doc, BindingNeuron n) {
+        super(id, doc, n);
 
         valueUnsuppressed = func(
                 this,
@@ -96,7 +96,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
         netUnsuppressed.addListener("onFiredUnsuppressed", (fl, nr, u) -> {
                     if (fl.getInput().exceedsThreshold() && firedUnsuppressed == NOT_SET) {
-                        firedUnsuppressed = thought.getCurrentTimestamp();
+                        firedUnsuppressed = doc.getCurrentTimestamp();
                         LinkingOut.add(this, true);
                     }
                 }
@@ -162,7 +162,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
         SelfRefOperator op = new SelfRefOperator(out);
         new DownVisitor(
-                thought,
+                doc,
                 VisitorType.getSelfRefVisitorType(identityRef),
                 op
         ).start(this);

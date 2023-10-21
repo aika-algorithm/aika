@@ -95,10 +95,10 @@ public class Document extends Queue implements Element {
         instantiationFeedbackTrigger = new SumField(this, "instantiation feedback trigger", 0.0)
                 .setQueued(this, FEEDBACK_TRIGGER);
 
-        if(m.getCurrentThought() != null)
-            throw new PreviousThoughtNotDisconnected(m.getCurrentThought(), this);
+        if(m.getCurrentDocument() != null)
+            throw new PreviousThoughtNotDisconnected(m.getCurrentDocument(), this);
 
-        m.registerThought(this);
+        m.registerDocument(this);
     }
 
     public long getNewVisitorId() {
@@ -273,7 +273,7 @@ public class Document extends Queue implements Element {
     }
 
     public static String getText(Activation<?> act) {
-        return ((Document)act.getThought()).getTextSegment(act.getTextReference().getCharRange());
+        return act.getDocument().getTextSegment(act.getTextReference().getCharRange());
     }
 
     public PatternActivation addToken(PatternNeuron n, TextReference textReference) {
@@ -303,7 +303,7 @@ public class Document extends Queue implements Element {
     }
 
     @Override
-    public Document getThought() {
+    public Document getDocument() {
         return this;
     }
 

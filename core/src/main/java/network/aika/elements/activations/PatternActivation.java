@@ -49,8 +49,8 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
     private Double[] cachedSurprisal;
 
-    public PatternActivation(int id, Document t, PatternNeuron patternNeuron) {
-        super(id, t, patternNeuron);
+    public PatternActivation(int id, Document doc, PatternNeuron patternNeuron) {
+        super(id, doc, patternNeuron);
     }
 
     @Override

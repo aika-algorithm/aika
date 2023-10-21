@@ -28,8 +28,8 @@ import static network.aika.elements.Type.PATTERN;
  */
 public class PatternCategoryActivation extends CategoryActivation {
 
-    public PatternCategoryActivation(int id, Document t, CategoryNeuron neuron) {
-        super(id, t, neuron);
+    public PatternCategoryActivation(int id, Document doc, CategoryNeuron neuron) {
+        super(id, doc, neuron);
     }
 
     @Override

@@ -78,8 +78,8 @@ public class QueueInterceptor {
     }
 
     private int getRound(boolean nextRound) {
-        Document t = field.getReference().getThought();
-        return t != null ? t.getRound(nextRound) : 0;
+        Document doc = field.getReference().getDocument();
+        return doc != null ? doc.getRound(nextRound) : 0;
     }
 
     public void process(FieldStep s) {

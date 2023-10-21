@@ -33,13 +33,13 @@ import org.graphstream.ui.layout.springbox.NodeParticle;
  */
 public class ActivationGraphManager extends AbstractGraphManager<Activation, Link, ActivationParticle> {
 
-    private Document thought;
+    private Document doc;
 
     private boolean disabledForces = false;
 
-    public ActivationGraphManager(Graph graph, Document t) {
+    public ActivationGraphManager(Graph graph, Document doc) {
         super(graph);
-        thought = t;
+        this.doc = doc;
 
         k = STANDARD_DISTANCE_X;
         K1Init = 0.06f;
@@ -55,8 +55,8 @@ public class ActivationGraphManager extends AbstractGraphManager<Activation, Lin
         this.disabledForces = disabledForces;
     }
 
-    public Document getThought() {
-        return thought;
+    public Document getDocument() {
+        return doc;
     }
 
     protected Long getAikaNodeId(Activation act) {

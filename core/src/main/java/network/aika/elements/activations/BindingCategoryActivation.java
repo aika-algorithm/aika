@@ -28,8 +28,8 @@ import static network.aika.elements.Type.BINDING;
  */
 public class BindingCategoryActivation extends CategoryActivation {
 
-    public BindingCategoryActivation(int id, Document t, CategoryNeuron neuron) {
-        super(id, t, neuron);
+    public BindingCategoryActivation(int id, Document doc, CategoryNeuron neuron) {
+        super(id, doc, neuron);
     }
 
     @Override

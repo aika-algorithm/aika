@@ -75,7 +75,7 @@ public class Model implements Writable {
         return suspensionCallback.createId();
     }
 
-    public Document getCurrentThought() {
+    public Document getCurrentDocument() {
         return currentThought;
     }
 
@@ -85,18 +85,18 @@ public class Model implements Writable {
                 thoughts.firstKey();
     }
 
-    public void registerThought(Document t) {
-        this.currentThought = t;
-        thoughts.put(t.getId(), t);
+    public void registerDocument(Document doc) {
+        this.currentThought = doc;
+        thoughts.put(doc.getId(), doc);
     }
 
-    public void deregisterThought(Document t) {
-        if(currentThought == t)
+    public void deregisterThought(Document doc) {
+        if(currentThought == doc)
             currentThought = null;
 
-        thoughts.remove(t.getId());
+        thoughts.remove(doc.getId());
 
-        lastProcessedThought = Math.max(lastProcessedThought, t.getId());
+        lastProcessedThought = Math.max(lastProcessedThought, doc.getId());
     }
 
     public Collection<NeuronProvider> getActiveNeurons() {

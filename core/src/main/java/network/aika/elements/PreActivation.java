@@ -44,8 +44,8 @@ public class PreActivation<A extends Activation> {
     private NavigableMap<TokenPositionKey, Activation> tokenPosEndIndex = new TreeMap<>();
 
 
-    public PreActivation(Document t, NeuronProvider provider) {
-        t.register(provider, this);
+    public PreActivation(Document doc, NeuronProvider provider) {
+        doc.register(provider, this);
     }
 
     public SortedSet<A> getActivations() {

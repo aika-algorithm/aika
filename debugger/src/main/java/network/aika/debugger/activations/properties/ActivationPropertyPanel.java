@@ -54,7 +54,7 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
             addConstant("Absolute Char Range: ", act.getAbsoluteCharRange() != null ? "" + act.getAbsoluteCharRange() : NOT_SET_STR);
             addConstant("Token Position Range: ", "" + gr.getTokenPosRange());
 
-            Document doc = (Document) act.getThought();
+            Document doc = (Document) act.getDocument();
             addConstant("Covered Text: ", gr.getCharRange() != null ? "" + doc.getTextSegment(gr.getCharRange()) : NOT_SET_STR);
         }
     }
