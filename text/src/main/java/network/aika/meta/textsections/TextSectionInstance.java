@@ -22,11 +22,9 @@ import network.aika.TemplateModel;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.synapses.CategoryInputSynapse;
-import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.utils.Writable;
 
 import java.io.DataInput;

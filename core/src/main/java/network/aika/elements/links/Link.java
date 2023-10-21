@@ -17,7 +17,7 @@
 package network.aika.elements.links;
 
 import network.aika.Model;
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.LinkKey;
 import network.aika.elements.Type;
@@ -69,14 +69,14 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         }
 
         propagateRanges();
-        getThought().onElementEvent(CREATE, this);
+        getDocument().onElementEvent(CREATE, this);
     }
 
     public abstract Type getInputType();
 
     public abstract Type getOutputType();
 
-    public void addInputLinkingStep() {
+    public void addLinkingStep() {
         LinkingIn.add(this);
     }
 
@@ -124,7 +124,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         if(synapse.isTemplateOnly())
             return;
 
-        Link l = oAct.getInputLink(iAct);
+        Link l = oAct.getInputLink(iAct, synapse.getSynapseId());
 
         if(l != null)
             return;
@@ -142,16 +142,18 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public LinkKey getInputLinkKey() {
+        int synId = synapse.getSynapseId();
         return input != null ?
-                input.getLinkKey() :
+                new LinkKey(input, synId) :
                 new LinkKey(
                         synapse.getPInput().getId(),
-                        null
+                        null,
+                        synId
                 );
     }
 
     public LinkKey getOutputLinkKey() {
-        return output.getLinkKey();
+        return new LinkKey(output, synapse.getSynapseId());
     }
 
     public abstract void connectWeightUpdate();
@@ -199,7 +201,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
     public void init() {
         if(input != null && synapse.isLinkingAllowed(false))
-            addInputLinkingStep();
+            addLinkingStep();
     }
 
     public void initFromTemplate(Link template) {
@@ -291,8 +293,8 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     @Override
-    public Thought getThought() {
-        return output.getThought();
+    public Document getDocument() {
+        return output.getDocument();
     }
 
     @Override

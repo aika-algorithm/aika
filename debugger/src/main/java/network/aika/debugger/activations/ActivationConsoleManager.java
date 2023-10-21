@@ -16,7 +16,7 @@
  */
 package network.aika.debugger.activations;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.debugger.EventListener;
 import network.aika.debugger.EventType;
 import network.aika.debugger.AbstractConsoleManager;
@@ -25,7 +25,7 @@ import network.aika.elements.Element;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.queue.Step;
-import network.aika.text.Document;
+import network.aika.Document;
 
 import javax.swing.*;
 import java.awt.*;
@@ -220,7 +220,7 @@ public class ActivationConsoleManager extends JSplitPane implements AbstractCons
         update(l);
     }
 
-    public Thought getThought() {
+    public Document getThought() {
         return doc;
     }
 

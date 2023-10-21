@@ -25,7 +25,7 @@ import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.text.Document;
+import network.aika.Document;
 
 import java.util.function.Predicate;
 
@@ -46,7 +46,7 @@ public class LabelUtil {
     }
 
     public static void generateTemplateInstanceLabels(Activation<?> act) {
-        Document doc = (Document) act.getThought();
+        Document doc = (Document) act.getDocument();
         String actTxt = doc.getTextSegment(act.getTextReference().getCharRange());
         if(act instanceof BindingActivation) {
             if(act.getNeuron().getLabel() == null) {
@@ -72,7 +72,7 @@ public class LabelUtil {
     }
 
     private static String extractContext(Activation<?> act) {
-        Document doc = (Document) act.getThought();
+        Document doc = (Document) act.getDocument();
 
         Activation<?> tAct = act.getTemplate();
         if(tAct == null)

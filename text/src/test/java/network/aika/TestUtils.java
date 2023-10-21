@@ -19,7 +19,7 @@ package network.aika;
 import network.aika.elements.neurons.*;
 import network.aika.meta.Dictionary;
 import network.aika.meta.NetworkMotifs;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 

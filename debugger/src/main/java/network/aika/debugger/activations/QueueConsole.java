@@ -16,7 +16,7 @@
  */
 package network.aika.debugger.activations;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.debugger.AbstractConsole;
 import network.aika.debugger.Visible;
 import network.aika.debugger.activations.renderer.QueueRenderer;
@@ -49,8 +49,8 @@ public class QueueConsole extends AbstractConsole {
         this.sortKeyVisible = sortKeyVisible;
     }
 
-    public void renderQueue(StyledDocument sDoc, Thought t) {
-        QueueRenderer queueRenderer = new QueueRenderer(t, sortKeyVisible);
+    public void renderQueue(StyledDocument sDoc, Document doc) {
+        QueueRenderer queueRenderer = new QueueRenderer(doc, sortKeyVisible);
 
         queueRenderer.render(sDoc, highlightedElement);
     }

@@ -16,7 +16,7 @@
  */
 package network.aika.visitor;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
@@ -31,8 +31,8 @@ import static network.aika.utils.Utils.idToString;
  */
 public class DownVisitor extends Visitor {
 
-    public DownVisitor(Thought t, VisitorType type, Operator operator) {
-        this.v = t.getNewVisitorId();
+    public DownVisitor(Document doc, VisitorType type, Operator operator) {
+        this.v = doc.getNewVisitorId();
         this.type = type;
 
         if(log.isDebugEnabled()) {

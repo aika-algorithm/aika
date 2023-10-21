@@ -16,7 +16,7 @@
  */
 package network.aika.queue;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Timestamp;
 import network.aika.elements.Element;
 import network.aika.fields.QueueInterceptor;
@@ -43,7 +43,7 @@ public class FieldStep<E extends Element> extends Step<E> {
     private double delta = 0.0;
 
 
-    public FieldStep(Thought queue, Phase p, int round, QueueInterceptor qf) {
+    public FieldStep(Document queue, Phase p, int round, QueueInterceptor qf) {
         super(queue);
         this.phase = p;
         this.round = p.isDelayed() ?
@@ -58,7 +58,7 @@ public class FieldStep<E extends Element> extends Step<E> {
             return;
 
         if(isQueued()) {
-            Thought q = interceptor.getQueue();
+            Document q = interceptor.getQueue();
             q.removeStep(this);
             sortValue = convertSortValue(newSortValue);
             q.addStep(this);

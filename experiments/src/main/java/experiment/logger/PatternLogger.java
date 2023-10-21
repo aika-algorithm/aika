@@ -27,7 +27,7 @@ import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternSynapse;
 import network.aika.fields.FieldOutput;
 import network.aika.meta.LabelUtil;
-import network.aika.text.Document;
+import network.aika.Document;
 import org.apache.commons.csv.CSVPrinter;
 
 import java.io.File;
@@ -127,7 +127,7 @@ public class PatternLogger {
 
     public void log(PatternActivation pAct) {
         PatternNeuron pn = pAct.getNeuron();
-        Document doc = (Document) pAct.getThought();
+        Document doc = (Document) pAct.getDocument();
         try {
             List entry = new ArrayList();
 

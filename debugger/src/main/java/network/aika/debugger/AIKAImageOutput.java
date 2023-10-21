@@ -19,7 +19,7 @@ package network.aika.debugger;
 import network.aika.debugger.activations.ActivationViewManager;
 import network.aika.debugger.neurons.NeuronViewManager;
 import network.aika.debugger.stepmanager.DummyStepManager;
-import network.aika.text.Document;
+import network.aika.Document;
 
 /**
  * @author Lukas Molzberger

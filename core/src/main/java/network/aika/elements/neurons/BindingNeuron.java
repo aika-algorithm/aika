@@ -17,7 +17,7 @@
 package network.aika.elements.neurons;
 
 import network.aika.Model;
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.synapses.*;
@@ -73,8 +73,8 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     }
 
     @Override
-    public BindingActivation createActivation(Thought t) {
-        return new BindingActivation(t.createActivationId(), t, this);
+    public BindingActivation createActivation(Document doc) {
+        return new BindingActivation(doc.createActivationId(), doc, this);
     }
 
     @Override

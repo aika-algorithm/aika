@@ -205,7 +205,7 @@ public abstract class SequenceModel implements Writable {
         BindingNeuron bn = addBindingNeuron(
                 sequencePatternN,
                 "Abstract SubPhrase",
-                5.0,
+                10.0,
                 2.5
         );
         bn.makeAbstract()

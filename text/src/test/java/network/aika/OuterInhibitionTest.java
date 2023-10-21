@@ -38,7 +38,7 @@ import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitorySynapse;
 import network.aika.elements.synapses.outerinhibitoryloop.OuterNegativeFeedbackSynapse;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
 import org.junit.jupiter.api.Test;

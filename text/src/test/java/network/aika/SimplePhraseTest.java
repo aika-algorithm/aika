@@ -17,7 +17,7 @@
 package network.aika;
 
 import network.aika.meta.Dictionary;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.TextReference;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

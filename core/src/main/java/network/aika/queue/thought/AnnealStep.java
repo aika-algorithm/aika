@@ -16,12 +16,11 @@
  */
 package network.aika.queue.thought;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Timestamp;
 import network.aika.ActivationFunction;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
-import network.aika.queue.Step;
 import network.aika.queue.keys.DocQueueKey;
 
 import static network.aika.queue.Phase.*;
@@ -33,16 +32,16 @@ import static network.aika.utils.Utils.doubleToString;
  *
  * @author Lukas Molzberger
  */
-public class AnnealStep extends ElementStep<Thought> {
+public class AnnealStep extends ElementStep<Document> {
 
     double nextStep;
 
-    public static void add(Thought t) {
-        add(new AnnealStep(t));
+    public static void add(Document doc) {
+        add(new AnnealStep(doc));
     }
 
-    public AnnealStep(Thought t) {
-        super(t);
+    public AnnealStep(Document doc) {
+        super(doc);
     }
 
     @Override
@@ -56,19 +55,19 @@ public class AnnealStep extends ElementStep<Thought> {
 
     @Override
     public void process() {
-        Thought t = queue;
+        Document doc = queue;
 
-        double av = t.getAnnealing().getValue();
-        nextStep = t.getConfig().getAnnealStepSize() / ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT.outerGrad(av);
+        double av = doc.getAnnealing().getValue();
+        nextStep = doc.getConfig().getAnnealStepSize() / ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT.outerGrad(av);
         double nextAnnealValue = nextStep + av;
         nextAnnealValue = Math.min(nextAnnealValue, 1.0);
 
-        t.incrementRound();
-        t.setFeedbackTriggerRound();
-        t.getAnnealing().setValue(nextAnnealValue);
+        doc.incrementRound();
+        doc.setFeedbackTriggerRound();
+        doc.getAnnealing().setValue(nextAnnealValue);
 
         if (nextAnnealValue < 1.0)
-            AnnealStep.add(t);
+            AnnealStep.add(doc);
     }
 
     @Override

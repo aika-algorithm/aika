@@ -16,10 +16,9 @@
  */
 package network.aika.queue;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.Timestamp;
-import network.aika.queue.keys.FiredQueueKey;
 import network.aika.queue.keys.QueueKey;
 
 import static network.aika.queue.keys.QueueKey.MAX_ROUND;
@@ -30,11 +29,11 @@ import static network.aika.queue.keys.QueueKey.MAX_ROUND;
  */
 public abstract class Step<E extends Element> {
 
-    protected Thought queue;
+    protected Document queue;
 
     protected QueueKey queueKey;
 
-    public Step(Thought queue) {
+    public Step(Document queue) {
         this.queue = queue;
     }
 

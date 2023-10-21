@@ -16,12 +16,11 @@
  */
 package network.aika.debugger.activations.renderer;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.debugger.ConsoleRenderer;
 import network.aika.debugger.Visible;
 import network.aika.elements.Element;
 import network.aika.elements.Timestamp;
-import network.aika.queue.ElementStep;
 import network.aika.queue.Step;
 import network.aika.queue.keys.QueueKey;
 import network.aika.utils.Utils;
@@ -34,19 +33,19 @@ import java.awt.*;
  */
 public class StepConsoleRenderer implements ConsoleRenderer {
 
-    private Thought t;
+    private Document doc;
     private boolean selected;
 
     private Visible sortKey;
 
-    public StepConsoleRenderer(Thought t, Step step, Element highlightedElement, Visible sortKey) {
-        this.t = t;
+    public StepConsoleRenderer(Document doc, Step step, Element highlightedElement, Visible sortKey) {
+        this.doc = doc;
         this.sortKey = sortKey;
         this.selected = step.getElement() == highlightedElement;
     }
 
     public void render(StyledDocument sDoc, Step s) {
-        Timestamp currentTimestamp = t.getTimestampOnProcess();
+        Timestamp currentTimestamp = doc.getTimestampOnProcess();
 
         Color c = new Color(
                 selected ? 150 : 0,

@@ -18,7 +18,7 @@ package network.aika.elements.neurons;
 
 import network.aika.ActivationFunction;
 import network.aika.Model;
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Type;
 import network.aika.elements.activations.OuterInhibitoryActivation;
 import network.aika.elements.synapses.*;
@@ -27,7 +27,6 @@ import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategor
 import network.aika.visitor.types.VisitorType;
 
 import static network.aika.elements.Type.OUTER_INHIBITORY;
-import static network.aika.enums.Scope.INPUT;
 
 /**
  *
@@ -70,8 +69,8 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryNeur
     }
 
     @Override
-    public OuterInhibitoryActivation createActivation(Thought t) {
-        return new OuterInhibitoryActivation(t.createActivationId(), t, this);
+    public OuterInhibitoryActivation createActivation(Document doc) {
+        return new OuterInhibitoryActivation(doc.createActivationId(), doc, this);
     }
 
     public ActivationFunction getActivationFunction() {

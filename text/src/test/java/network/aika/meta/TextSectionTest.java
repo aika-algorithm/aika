@@ -26,7 +26,7 @@ import network.aika.meta.textsections.TextSectionInstance;
 import network.aika.meta.textsections.TypedTextSectionModel;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.tokenizer.SimpleWordTokenizer;

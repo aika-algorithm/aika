@@ -16,7 +16,7 @@
  */
 package network.aika.elements.activations;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Timestamp;
 import network.aika.elements.Type;
 import network.aika.elements.links.Link;
@@ -25,6 +25,7 @@ import network.aika.elements.links.InputObjectLink;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.BindingNeuron;
+import network.aika.enums.LinkingMode;
 import network.aika.queue.activation.LinkingOut;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.Visitor;
@@ -38,6 +39,7 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.elements.Type.BINDING;
+import static network.aika.enums.LinkingMode.UNSUPPRESSED;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.func;
 import static network.aika.fields.Fields.isTrue;
@@ -59,8 +61,8 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     protected FieldOutput valueUnsuppressed;
 
 
-    public BindingActivation(int id, Thought t, BindingNeuron n) {
-        super(id, t, n);
+    public BindingActivation(int id, Document doc, BindingNeuron n) {
+        super(id, doc, n);
 
         valueUnsuppressed = func(
                 this,
@@ -96,8 +98,8 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
         netUnsuppressed.addListener("onFiredUnsuppressed", (fl, nr, u) -> {
                     if (fl.getInput().exceedsThreshold() && firedUnsuppressed == NOT_SET) {
-                        firedUnsuppressed = thought.getCurrentTimestamp();
-                        LinkingOut.add(this, true);
+                        firedUnsuppressed = doc.getCurrentTimestamp();
+                        LinkingOut.add(this, UNSUPPRESSED);
                     }
                 }
         );
@@ -162,7 +164,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
         SelfRefOperator op = new SelfRefOperator(out);
         new DownVisitor(
-                thought,
+                doc,
                 VisitorType.getSelfRefVisitorType(identityRef),
                 op
         ).start(this);

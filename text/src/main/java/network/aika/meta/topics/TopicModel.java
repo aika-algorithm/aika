@@ -21,7 +21,7 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.meta.entities.EntityModel;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

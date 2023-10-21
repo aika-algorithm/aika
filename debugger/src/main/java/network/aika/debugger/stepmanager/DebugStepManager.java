@@ -16,7 +16,7 @@
  */
 package network.aika.debugger.stepmanager;
 
-import network.aika.text.Document;
+import network.aika.Document;
 
 /**
  * @author Lukas Molzberger

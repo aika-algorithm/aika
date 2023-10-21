@@ -19,7 +19,7 @@ package network.aika;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.meta.Dictionary;
-import network.aika.text.Document;
+import network.aika.Document;
 import org.junit.jupiter.api.Test;
 
 import static network.aika.TestHelper.initPatternTheCat;

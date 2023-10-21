@@ -17,7 +17,6 @@
 package network.aika.elements.neurons;
 
 import network.aika.Model;
-import network.aika.Thought;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;

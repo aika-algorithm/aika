@@ -17,7 +17,7 @@
 package network.aika.elements.neurons;
 
 import network.aika.Model;
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.InnerInhibitoryCategoryActivation;
@@ -47,7 +47,7 @@ public class InnerInhibitoryCategoryNeuron extends CategoryNeuron {
     }
 
     @Override
-    public CategoryActivation createActivation(Thought t) {
-        return new InnerInhibitoryCategoryActivation(t.createActivationId(), t, this);
+    public CategoryActivation createActivation(Document doc) {
+        return new InnerInhibitoryCategoryActivation(doc.createActivationId(), doc, this);
     }
 }

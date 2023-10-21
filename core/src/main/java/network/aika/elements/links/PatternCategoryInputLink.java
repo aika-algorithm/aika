@@ -24,9 +24,10 @@ import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.PatternCategoryInputSynapse;
 import network.aika.elements.synapses.PatternCategorySynapse;
 import network.aika.fields.Field;
+import network.aika.enums.LinkingMode;
+import network.aika.queue.activation.LinkingOut;
 import network.aika.visitor.Visitor;
 
-import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 
 
@@ -40,8 +41,14 @@ public class PatternCategoryInputLink extends PositiveFeedbackLink<PatternCatego
     }
 
     @Override
+    public void addLinkingStep() {
+        super.addLinkingStep();
+        LinkingOut.add(output, LinkingMode.FEEDBACK);
+    }
+
+    @Override
     protected Field getFeedbackTrigger() {
-        return getThought().getInstantiationFeedbackTrigger();
+        return getDocument().getInstantiationFeedbackTrigger();
     }
 
     @Override

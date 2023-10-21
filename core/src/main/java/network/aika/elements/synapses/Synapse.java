@@ -32,7 +32,7 @@ import network.aika.elements.synapses.outerinhibitoryloop.OuterNegativeFeedbackS
 import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 import network.aika.elements.synapses.positivefeedbackloop.OuterPositiveFeedbackSynapse;
 import network.aika.enums.Scope;
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;
@@ -42,6 +42,7 @@ import network.aika.fields.FieldOutput;
 import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.enums.LinkingMode;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
 import network.aika.visitor.Visitor;
@@ -108,7 +109,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     private boolean templateOnly;
 
     protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
-            .setQueued(getThought(), TRAINING)
+            .setQueued(getDocument(), TRAINING)
             .addListener("onWeightModified", (fl, nr, u) -> {
                 checkWeight();
                 setModified();
@@ -170,8 +171,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             delete();
     }
 
-    public boolean linkOnUnsuppressed() {
-        return false;
+    public boolean checkLinkingMode(LinkingMode mode) {
+        return mode == LinkingMode.REGULAR;
     }
 
     public boolean isLinkingAllowed(boolean latent) {
@@ -186,8 +187,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         if(propagateLinkExists(iAct))
             return;
 
-        Thought t = iAct.getThought();
-        OA oAct = getOutput().createActivation(t);
+        Document doc = iAct.getDocument();
+        OA oAct = getOutput().createActivation(doc);
 
         createAndInitLink(iAct, oAct);
     }
@@ -226,7 +227,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public L getLink(IA iAct, OA oAct) {
-        L l = (L) oAct.getInputLink(iAct);
+        L l = (L) oAct.getInputLink(iAct, synapseId);
         assert l == null || l.getSynapse() == this;
         return l;
     }
@@ -420,7 +421,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public void expandRelation(LinkingOperator op, Relation rel, Neuron to, Direction relDir) {
         Activation from = op.getSourceAct();
-        PreActivation<?> toPreAct = to.getOrCreatePreActivation(from.getThought());
+        PreActivation<?> toPreAct = to.getOrCreatePreActivation(from.getDocument());
 
         rel.evaluateLatentRelation(from, toPreAct, relDir.invert())
                 .forEach(relAct -> {
@@ -505,10 +506,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     @Override
-    public Thought getThought() {
+    public Document getDocument() {
         Model m = getModel();
         return m != null ?
-                m.getCurrentThought() :
+                m.getCurrentDocument() :
                 null;
     }
 

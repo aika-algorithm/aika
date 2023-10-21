@@ -16,7 +16,7 @@
  */
 package network.aika.exceptions;
 
-import network.aika.Thought;
+import network.aika.Document;
 
 import static java.lang.String.format;
 
@@ -26,7 +26,7 @@ import static java.lang.String.format;
  */
 public class PreviousThoughtNotDisconnected extends RuntimeException {
 
-    public PreviousThoughtNotDisconnected(Thought oldThought, Thought newThought) {
+    public PreviousThoughtNotDisconnected(Document oldThought, Document newThought) {
         super(format("The new thought [%d] can not be processed until the old thought [%d] is disconnected.", newThought.getId(), oldThought.getId()));
     }
 }

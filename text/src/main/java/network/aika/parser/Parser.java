@@ -20,7 +20,7 @@ package network.aika.parser;
 import network.aika.debugger.AIKADebugger;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.queue.Phase;
-import network.aika.text.Document;
+import network.aika.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

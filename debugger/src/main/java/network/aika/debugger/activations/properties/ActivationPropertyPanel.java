@@ -18,7 +18,7 @@ package network.aika.debugger.activations.properties;
 
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.*;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.text.TextReference;
 
 import static network.aika.debugger.AbstractConsole.NOT_SET_STR;
@@ -54,7 +54,7 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
             addConstant("Absolute Char Range: ", act.getAbsoluteCharRange() != null ? "" + act.getAbsoluteCharRange() : NOT_SET_STR);
             addConstant("Token Position Range: ", "" + gr.getTokenPosRange());
 
-            Document doc = (Document) act.getThought();
+            Document doc = (Document) act.getDocument();
             addConstant("Covered Text: ", gr.getCharRange() != null ? "" + doc.getTextSegment(gr.getCharRange()) : NOT_SET_STR);
         }
     }

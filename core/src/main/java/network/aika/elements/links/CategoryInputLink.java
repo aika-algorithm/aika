@@ -37,7 +37,7 @@ public interface CategoryInputLink {
         if(iAct == null || oAct == null)
             return;
 
-        Link l = iAct.getInputLink(oAct);
+        Link l = iAct.getInputLink(oAct, getSynapse().getSynapseId());
         if(l != null)
             return;
 

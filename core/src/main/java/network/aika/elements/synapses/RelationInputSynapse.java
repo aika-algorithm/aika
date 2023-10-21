@@ -16,7 +16,6 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.enums.Scope;
@@ -28,8 +27,6 @@ import network.aika.enums.direction.Direction;
 
 import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Scope.SAME;
 
 /**
  *
@@ -67,15 +64,15 @@ public class RelationInputSynapse extends ConjunctiveSynapse<
     }
 
     public LatentRelationActivation createOrLookupLatentActivation(Activation fromOriginAct, Activation toOriginAct) {
-        return getInput().getOrCreatePreActivation(fromOriginAct.getThought())
+        return getInput().getOrCreatePreActivation(fromOriginAct.getDocument())
                 .getRelatedTokensByTokenPosition(Direction.INPUT, fromOriginAct.getTextReference().getTokenPosRange())
                 .map(LatentRelationActivation.class::cast)
                 .findFirst()
                 .orElseGet(() -> {
-                            LatentRelationActivation rAct = getInput().createActivation(fromOriginAct.getThought());
+                            LatentRelationActivation rAct = getInput().createActivation(fromOriginAct.getDocument());
                             rAct.setFromAct(fromOriginAct);
                             rAct.setToAct(toOriginAct);
-                            fromOriginAct.getThought().onElementEvent(UPDATE, rAct);
+                            fromOriginAct.getDocument().onElementEvent(UPDATE, rAct);
                             return rAct;
                         }
                 );

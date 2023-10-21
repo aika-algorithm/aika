@@ -27,7 +27,7 @@ import network.aika.elements.activations.*;
 import network.aika.parser.Context;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;
-import network.aika.text.Document;
+import network.aika.Document;
 import network.aika.tokenizer.SimpleCharTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.apache.commons.io.IOUtils;

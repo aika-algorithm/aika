@@ -52,7 +52,7 @@ public abstract class ConjunctiveSynapse<
 {
 
     protected SumField synapseBias = (SumField) new SumField(this, "synapseBias", TOLERANCE)
-            .setQueued(getThought(), TRAINING)
+            .setQueued(getDocument(), TRAINING)
             .addListener("onSynapseBiasModified", (fl, nr, u) -> {
                         setModified();
                         getOutput().updateSumOfLowerWeights();

@@ -16,7 +16,7 @@
  */
 package network.aika.debugger.activations.renderer;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.debugger.ConsoleRenderer;
 import network.aika.debugger.Visible;
 import network.aika.elements.Element;
@@ -30,19 +30,19 @@ import java.awt.*;
  */
 public class QueueRenderer implements ConsoleRenderer {
 
-    Thought thought;
+    Document doc;
 
     protected Visible sortKey;
 
-    public QueueRenderer(Thought t, Visible sortKey) {
-        this.thought = t;
+    public QueueRenderer(Document doc, Visible sortKey) {
+        this.doc = doc;
         this.sortKey = sortKey;
     }
 
     public void render(StyledDocument sDoc, Element highlightedElement) {
-        if(thought.getCurrentStep() != null) {
-            new StepConsoleRenderer(thought, thought.getCurrentStep(), highlightedElement, sortKey)
-                    .render(sDoc, thought.getCurrentStep());
+        if(doc.getCurrentStep() != null) {
+            new StepConsoleRenderer(doc, doc.getCurrentStep(), highlightedElement, sortKey)
+                    .render(sDoc, doc.getCurrentStep());
         }
 
         appendText(sDoc,
@@ -50,8 +50,8 @@ public class QueueRenderer implements ConsoleRenderer {
                 "regular",
                 Color.BLACK
         );
-        for(Step s: thought.getQueue()) {
-            new StepConsoleRenderer(thought, s, highlightedElement, sortKey)
+        for(Step s: doc.getQueue()) {
+            new StepConsoleRenderer(doc, s, highlightedElement, sortKey)
                     .render(sDoc, s);
         }
 

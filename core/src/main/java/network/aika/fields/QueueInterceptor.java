@@ -17,7 +17,7 @@
 package network.aika.fields;
 
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.debugger.FieldObserver;
 import network.aika.queue.FieldStep;
 import network.aika.queue.Phase;
@@ -39,11 +39,11 @@ public class QueueInterceptor {
 
     private Field field;
 
-    private Thought queue;
+    private Document queue;
 
     private List<FieldObserver> observers = new ArrayList<>();
 
-    public QueueInterceptor(Thought q, Field f, Phase p) {
+    public QueueInterceptor(Document q, Field f, Phase p) {
         this.queue = q;
         this.field = f;
         this.phase = p;
@@ -78,8 +78,8 @@ public class QueueInterceptor {
     }
 
     private int getRound(boolean nextRound) {
-        Thought t = field.getReference().getThought();
-        return t != null ? t.getRound(nextRound) : 0;
+        Document doc = field.getReference().getDocument();
+        return doc != null ? doc.getRound(nextRound) : 0;
     }
 
     public void process(FieldStep s) {
@@ -106,7 +106,7 @@ public class QueueInterceptor {
         );
     }
 
-    public Thought getQueue() {
+    public Document getQueue() {
         return queue;
     }
 }

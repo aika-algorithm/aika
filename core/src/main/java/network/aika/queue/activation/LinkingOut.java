@@ -18,6 +18,7 @@ package network.aika.queue.activation;
 
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.activations.Activation;
+import network.aika.enums.LinkingMode;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
@@ -30,16 +31,16 @@ import static network.aika.queue.Phase.OUTPUT_LINKING;
  */
 public class LinkingOut extends ElementStep<Activation> {
 
-    private boolean unsuppressed;
+    private LinkingMode mode;
 
-    public static void add(Activation act, boolean unsuppressed) {
-        Step.add(new LinkingOut(act, unsuppressed));
+    public static void add(Activation act, LinkingMode mode) {
+        Step.add(new LinkingOut(act, mode));
     }
 
-    public LinkingOut(Activation act, boolean unsuppressed) {
+    public LinkingOut(Activation act, LinkingMode mode) {
         super(act);
 
-        this.unsuppressed = unsuppressed;
+        this.mode = mode;
     }
 
     @Override
@@ -49,9 +50,9 @@ public class LinkingOut extends ElementStep<Activation> {
 
         n.wakeupPropagable();
 
-        n.getOutputSynapsesAsStream(act.getThought())
+        n.getOutputSynapsesAsStream(act.getDocument())
                 .filter(s ->
-                        s.linkOnUnsuppressed() == unsuppressed
+                        s.checkLinkingMode(mode)
                 )
                 .toList()
                 .forEach(s ->
@@ -66,6 +67,6 @@ public class LinkingOut extends ElementStep<Activation> {
 
     @Override
     public String toString() {
-        return super.toString() + " Unsuppressed:" + unsuppressed;
+        return super.toString() + " LinkingMode:" + mode;
     }
 }

@@ -16,12 +16,11 @@
  */
 package network.aika.elements.activations;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.Type;
 import network.aika.elements.neurons.CategoryNeuron;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
 
 /**
  *
@@ -29,8 +28,8 @@ import static network.aika.elements.Type.PATTERN;
  */
 public class BindingCategoryActivation extends CategoryActivation {
 
-    public BindingCategoryActivation(int id, Thought t, CategoryNeuron neuron) {
-        super(id, t, neuron);
+    public BindingCategoryActivation(int id, Document doc, CategoryNeuron neuron) {
+        super(id, doc, neuron);
     }
 
     @Override

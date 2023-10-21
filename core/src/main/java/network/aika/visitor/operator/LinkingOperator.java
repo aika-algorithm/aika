@@ -16,11 +16,10 @@
  */
 package network.aika.visitor.operator;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.synapses.Synapse.getLatentLink;
 
@@ -60,8 +59,8 @@ public abstract class LinkingOperator implements Operator {
         if (linkA != null)
             return linkA;
 
-        Thought t = actA.getThought();
-        Activation oAct = synA.getOutput().createActivation(t);
+        Document doc = actA.getDocument();
+        Activation oAct = synA.getOutput().createActivation(doc);
 
         return synA.createAndInitLink(actA, oAct);
     }

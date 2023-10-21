@@ -17,6 +17,8 @@
 package network.aika.elements;
 
 
+import network.aika.elements.activations.Activation;
+
 /**
  *
  * @author Lukas Molzberger
@@ -26,21 +28,25 @@ public class LinkKey implements Comparable<LinkKey> {
     private final long nId;
     private final Integer actId;
 
-    public LinkKey(long nId, Integer actId) {
-        this.nId = nId;
-        this.actId = actId;
+    private final int synapseId;
+
+    public LinkKey(Activation act, int synapseId) {
+        this(act.getNeuron().getId(), act.getId(), synapseId);
     }
 
+    public LinkKey(long nId, Integer actId, int synapseId) {
+        this.nId = nId;
+        this.actId = actId;
+        this.synapseId = synapseId;
+    }
+
+
     public static LinkKey getFromLinkKey(long nId) {
-        return new LinkKey(nId, null);
+        return new LinkKey(nId, null, Integer.MIN_VALUE);
     }
 
     public static LinkKey getToLinkKey(long nId) {
-        return new LinkKey(nId, Integer.MAX_VALUE);
-    }
-
-    public String toString() {
-        return "[" + nId + "]:" + actId;
+        return new LinkKey(nId, Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     @Override
@@ -49,6 +55,14 @@ public class LinkKey implements Comparable<LinkKey> {
         if(r != 0)
             return r;
 
+        r = compareActId(lk);
+        if(r != 0)
+            return r;
+
+        return Integer.compare(synapseId, lk.synapseId);
+    }
+
+    private int compareActId(LinkKey lk) {
         if(actId == lk.actId)
             return 0;
 
@@ -59,5 +73,9 @@ public class LinkKey implements Comparable<LinkKey> {
             return 1;
 
         return Integer.compare(actId, lk.actId);
+    }
+
+    public String toString() {
+        return "[" + nId + "]:" + actId + ":" + synapseId;
     }
 }

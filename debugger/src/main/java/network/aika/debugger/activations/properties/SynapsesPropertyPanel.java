@@ -16,18 +16,15 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.Thought;
+import network.aika.Document;
 import network.aika.debugger.neurons.properties.SynapsePropertyPanel;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.Element;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.PreActivation;
 import network.aika.elements.synapses.Synapse;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,11 +51,9 @@ public class SynapsesPropertyPanel extends AbstractPropertyPanel {
     }
 
     public static SynapsesPropertyPanel create(Element element, Direction dir) {
-        Thought t = null;
         Neuron n = null;
         if(element instanceof Activation<?>) {
             Activation act = (Activation) element;
-            t = act.getThought();
             n = act.getNeuron();
         } else if(element instanceof Neuron<?, ?>) {
             n = (Neuron) element;
