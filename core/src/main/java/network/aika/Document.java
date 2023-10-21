@@ -220,7 +220,7 @@ public class Document extends Queue implements Element {
     }
 
     public void train() {
-        activationsById.values()
+        getActivations()
                 .forEach(InactiveLinks::add);
 
         process(MAX_ROUND, TRAINING);
@@ -230,7 +230,7 @@ public class Document extends Queue implements Element {
         if (!getConfig().isMetaInstantiationEnabled())
             return;
 
-        activationsById.values().stream()
+        getActivations().stream()
                 .filter(act -> act.getNeuron().isAbstract())
                 .filter(Activation::isFired)
                 .forEach(Instantiation::add);
@@ -242,8 +242,7 @@ public class Document extends Queue implements Element {
     }
 
     public String activationsToString() {
-        return activationsById
-                .values()
+        return getActivations()
                 .stream()
                 .map(act -> act + "\n")
                 .collect(Collectors.joining());
