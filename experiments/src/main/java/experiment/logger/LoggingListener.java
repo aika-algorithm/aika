@@ -21,7 +21,7 @@ import network.aika.debugger.EventType;
 import network.aika.elements.Element;
 import network.aika.queue.FieldStep;
 import network.aika.queue.Step;
-import network.aika.queue.thought.AnnealStep;
+import network.aika.queue.document.AnnealStep;
 
 /**
  * @author Lukas Molzberger
