@@ -17,22 +17,21 @@
 package network.aika.elements.synapses.positivefeedbackloop;
 
 import network.aika.Model;
-import network.aika.elements.Type;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.relations.Relation;
 import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.Scope;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
 import network.aika.elements.neurons.PatternNeuron;
+import network.aika.enums.LinkingMode;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.*;
-import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.LinkingMode.FEEDBACK;
 import static network.aika.enums.Scope.SAME;
 
 /**
@@ -78,13 +77,13 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
     }
 
     @Override
-    public void setPropagable(boolean propagable) {
+    public boolean checkLinkingMode(LinkingMode mode) {
+        return mode == FEEDBACK;
     }
 
-    /*
     @Override
-    public void linkAndPropagateOut(PatternActivation act) {
-    }*/
+    public void setPropagable(boolean propagable) {
+    }
 
     @Override
     public void write(DataOutput out) throws IOException {

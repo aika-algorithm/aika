@@ -28,6 +28,7 @@ import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.enums.LinkingMode;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.elements.synapses.CategoryInputSynapse;
@@ -157,7 +158,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         net.addListener("onFired", (fl, nr, u) -> {
                     if(fl.getInput().exceedsThreshold() && fired == NOT_SET) {
                         fired = doc.getCurrentTimestamp();
-                        LinkingOut.add(this, false);
+                        LinkingOut.add(this, LinkingMode.REGULAR);
                         Counting.add(this);
                     }
                 }

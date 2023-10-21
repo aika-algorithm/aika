@@ -42,6 +42,7 @@ import network.aika.fields.FieldOutput;
 import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.enums.LinkingMode;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
 import network.aika.visitor.operator.LinkingOperator;
@@ -159,8 +160,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             delete();
     }
 
-    public boolean linkOnUnsuppressed() {
-        return false;
+    public boolean checkLinkingMode(LinkingMode mode) {
+        return mode == LinkingMode.REGULAR;
     }
 
     public boolean isLinkingAllowed(boolean latent) {

@@ -64,8 +64,8 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
     }
 
     @Override
-    public void addInputLinkingStep() {
-        super.addInputLinkingStep();
+    public void addLinkingStep() {
+        super.addLinkingStep();
 
         Synapse posFeedbackSyn = input.getNeuron().getInputSynapse(output.getNeuronProvider());
         if(posFeedbackSyn != null && posFeedbackSyn.getLink(output, input) == null)

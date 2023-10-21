@@ -76,7 +76,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
     public abstract Type getOutputType();
 
-    public void addInputLinkingStep() {
+    public void addLinkingStep() {
         LinkingIn.add(this);
     }
 
@@ -201,7 +201,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
     public void init() {
         if(input != null && synapse.isLinkingAllowed(false))
-            addInputLinkingStep();
+            addLinkingStep();
     }
 
     public void initFromTemplate(Link template) {
