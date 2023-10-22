@@ -25,7 +25,6 @@ import network.aika.elements.links.InputObjectLink;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.enums.LinkingMode;
 import network.aika.queue.activation.LinkingOut;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.Visitor;
@@ -39,7 +38,7 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.elements.Type.BINDING;
-import static network.aika.enums.LinkingMode.UNSUPPRESSED;
+import static network.aika.enums.linkingmode.LinkingMode.UNSUPPRESSED;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.func;
 import static network.aika.fields.Fields.isTrue;
@@ -113,6 +112,10 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         return valueUnsuppressed;
     }
 
+    @Override
+    public boolean isFiredUnsuppressed() {
+        return isTrue(netUnsuppressed, 0.0);
+    }
 
     @Override
     public boolean isActiveTemplateInstance() {

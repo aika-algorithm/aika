@@ -26,9 +26,11 @@ import network.aika.elements.neurons.OuterInhibitoryNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.Scope;
+import network.aika.enums.linkingmode.LinkingMode;
 
 import static network.aika.elements.Type.*;
 import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
 
 /**
  *
@@ -81,7 +83,7 @@ public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public boolean checkLinkingEvent(Activation act) {
-        return true;
+    public LinkingMode getLinkingMode() {
+        return FEEDBACK;
     }
 }

@@ -42,10 +42,9 @@ import network.aika.fields.FieldOutput;
 import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.enums.LinkingMode;
+import network.aika.enums.linkingmode.LinkingMode;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
-import network.aika.visitor.Visitor;
 import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +57,7 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
+import static network.aika.enums.linkingmode.LinkingMode.REGULAR;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 import static network.aika.visitor.Visitor.synapseTypeToBitmask;
@@ -158,10 +158,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return true;
     }
 
-    public boolean checkLinkingEvent(Activation act) {
-        return act.isFired();
-    }
-
     public FieldOutput getInputValue(IA input) {
         return input.getValue();
     }
@@ -171,8 +167,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             delete();
     }
 
-    public boolean checkLinkingMode(LinkingMode mode) {
-        return mode == LinkingMode.REGULAR;
+    public LinkingMode getLinkingMode() {
+        return REGULAR;
     }
 
     public boolean isLinkingAllowed(boolean latent) {

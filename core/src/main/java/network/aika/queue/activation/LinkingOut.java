@@ -18,7 +18,7 @@ package network.aika.queue.activation;
 
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.activations.Activation;
-import network.aika.enums.LinkingMode;
+import network.aika.enums.linkingmode.LinkingMode;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
@@ -52,7 +52,7 @@ public class LinkingOut extends ElementStep<Activation> {
 
         n.getOutputSynapsesAsStream(act.getDocument())
                 .filter(s ->
-                        s.checkLinkingMode(mode)
+                        s.getLinkingMode() == mode
                 )
                 .toList()
                 .forEach(s ->

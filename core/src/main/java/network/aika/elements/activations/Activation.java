@@ -28,7 +28,6 @@ import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.enums.LinkingMode;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.elements.synapses.CategoryInputSynapse;
@@ -45,6 +44,7 @@ import static network.aika.debugger.EventType.*;
 import static network.aika.elements.LinkKey.getFromLinkKey;
 import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
+import static network.aika.enums.linkingmode.LinkingMode.REGULAR;
 import static network.aika.queue.Phase.PRE_ANNEAL;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
@@ -158,7 +158,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         net.addListener("onFired", (fl, nr, u) -> {
                     if(fl.getInput().exceedsThreshold() && fired == NOT_SET) {
                         fired = doc.getCurrentTimestamp();
-                        LinkingOut.add(this, LinkingMode.REGULAR);
+                        LinkingOut.add(this, REGULAR);
                         Counting.add(this);
                     }
                 }
@@ -273,6 +273,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public boolean isFired() {
         return isTrue(net, 0.0);
+    }
+
+    public boolean isFiredUnsuppressed() {
+        return isFired();
     }
 
     public Document getDocument() {
