@@ -34,7 +34,7 @@ import network.aika.text.Range;
 import network.aika.queue.Step;
 import network.aika.queue.activation.InactiveLinks;
 import network.aika.queue.activation.Instantiation;
-import network.aika.queue.thought.AnnealStep;
+import network.aika.queue.document.AnnealStep;
 import network.aika.text.TextReference;
 
 import java.util.*;
@@ -316,7 +316,7 @@ public class Document extends Queue implements Element {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(super.toString());
+        sb.append(" Id:" + id);
         sb.append(" Content: ");
         sb.append(
                 content.substring(0, Math.min(content.length(), 100))

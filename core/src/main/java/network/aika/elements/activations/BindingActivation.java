@@ -181,6 +181,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     @Override
     public void patternVisit(Visitor v, Link lastLink, int state, int depth) {
         super.patternVisit(v, lastLink, state, depth);
+        // Hack needed to allow the latent linking of the primary pattern link to work
         v.up(this, state, depth);
     }
 
@@ -216,10 +217,5 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
             netUnsuppressed.disconnectAndUnlinkInputs(false);
 
         super.disconnect();
-    }
-
-    private boolean isConnectedToPattern() {
-        return getInputLinksByType(InnerPositiveFeedbackLink.class)
-                .anyMatch(l -> l.getInput() != null);
     }
 }
