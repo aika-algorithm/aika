@@ -17,16 +17,18 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.Type;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.links.BindingCategoryInputLink;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.synapses.positivefeedbackloop.PositiveFeedbackSynapse;
-import network.aika.enums.Scope;
+import network.aika.visitor.DownVisitor;
+import network.aika.visitor.operator.SelfRefOperator;
+import network.aika.visitor.types.VisitorType;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.Scope.SAME;
 
 /**
@@ -50,6 +52,17 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         > implements CategoryInputSynapse<BindingCategoryInputSynapse>
 {
     private double initialCategorySynapseWeight;
+
+    @Override
+    public boolean checkSecondaryVisitorRun(Activation iAct, Activation oAct) {
+        SelfRefOperator op = new SelfRefOperator(oAct);
+        new DownVisitor(
+                iAct.getDocument(),
+                VisitorType.BINDING_VISITOR_TYPE,
+                op
+        ).start(iAct);
+        return op.isSelfRef();
+    }
 
     @Override
     public boolean checkVisitorState(int state) {

@@ -59,7 +59,7 @@ public class InputObjectSynapse extends ConjunctiveSynapse<
     }
 
     @Override
-    public boolean checkSingularLinkDoesNotExist(BindingActivation oAct) {
+    public boolean checkOutputSidePrecondition(BindingActivation oAct) {
         return !linkExists(oAct, true);
     }
 }

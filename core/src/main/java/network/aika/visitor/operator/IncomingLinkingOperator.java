@@ -77,7 +77,13 @@ public class IncomingLinkingOperator extends LinkingOperator {
         if (!targetSyn.getLinkingMode().check(act))
             return null;
 
-        return link(sourceAct, sourceSyn, sourceLink, act, targetSyn);
+        if(sourceLink != null && !targetSyn.checkSecondaryVisitorRun(act, sourceLink.getOutput()))
+            return null;
+
+        if (sourceLink == null)
+            sourceLink = latentLink(sourceAct, sourceSyn, act, targetSyn);
+
+        return targetSyn.link(act, sourceLink.getOutput());
     }
 
     public void relationCheck(Synapse relSyn, Activation relatedAct, Direction relDir) {

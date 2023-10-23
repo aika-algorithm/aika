@@ -51,7 +51,7 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         >
 {
     @Override
-    public boolean checkSingularLinkDoesNotExist(BindingActivation oAct) {
+    public boolean checkOutputSidePrecondition(BindingActivation oAct) {
         return !linkExists(oAct, false);
     }
 

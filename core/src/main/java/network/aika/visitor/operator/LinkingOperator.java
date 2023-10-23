@@ -47,13 +47,6 @@ public abstract class LinkingOperator implements Operator {
         return targetSyn;
     }
 
-    public static Link link(Activation actA, Synapse synA, Link linkA, Activation actB, Synapse synB) {
-        if (linkA == null)
-            linkA = latentLink(actA, synA, actB, synB);
-
-        return synB.link(actB, linkA.getOutput());
-    }
-
     public static Link latentLink(Activation actA, Synapse synA, Activation actB, Synapse synB) {
         Link linkA = getLatentLink(synA, synB, actA, actB);
         if (linkA != null)

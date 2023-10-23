@@ -220,7 +220,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     public void linkAndPropagateIn(Link l) {
         getInputSynapsesAsStream()
                 .filter(targetSyn -> targetSyn != l.getSynapse())
-                .filter(targetSyn -> targetSyn.checkSingularLinkDoesNotExist(l.getOutput()))
+                .filter(targetSyn -> targetSyn.checkOutputSidePrecondition(l.getOutput()))
                 .forEach(targetSyn -> {
                     if(log.isDebugEnabled())
                         log.debug("linkAndPropagateIn: link:" + l + " targetSyn:" + targetSyn);
