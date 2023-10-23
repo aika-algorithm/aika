@@ -80,10 +80,11 @@ public class IncomingLinkingOperator extends LinkingOperator {
         if(sourceLink != null && !targetSyn.checkSecondaryVisitorRun(act, sourceLink.getOutput()))
             return null;
 
-        if (sourceLink == null)
-            sourceLink = latentLink(sourceAct, sourceSyn, act, targetSyn);
+        Link sl = sourceLink != null ?
+                sourceLink :
+                latentLink(sourceAct, sourceSyn, act, targetSyn);
 
-        return targetSyn.link(act, sourceLink.getOutput());
+        return targetSyn.link(act, sl.getOutput());
     }
 
     public void relationCheck(Synapse relSyn, Activation relatedAct, Direction relDir) {
