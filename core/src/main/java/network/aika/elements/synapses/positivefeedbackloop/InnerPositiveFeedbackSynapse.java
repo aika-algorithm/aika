@@ -24,6 +24,7 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
 import network.aika.elements.neurons.PatternNeuron;
+import network.aika.enums.linkingmode.LinkingMode;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -31,6 +32,7 @@ import java.io.IOException;
 
 import static network.aika.elements.Type.*;
 import static network.aika.enums.Scope.SAME;
+import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
 
 /**
  *
@@ -63,6 +65,11 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
     @Override
     public Relation getRelation() {
         return relation;
+    }
+
+    @Override
+    public LinkingMode getLinkingMode() {
+        return FEEDBACK;
     }
 
     @Override

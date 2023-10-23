@@ -34,9 +34,4 @@ public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse,
         extends FeedbackSynapse<S, I, O, L, IA, OA>
 {
 
-    @Override
-    public LinkingMode getLinkingMode() {
-        return FEEDBACK;
-    }
-
 }

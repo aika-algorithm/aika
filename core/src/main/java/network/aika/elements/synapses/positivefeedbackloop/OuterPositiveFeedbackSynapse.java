@@ -25,11 +25,13 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.Scope;
+import network.aika.enums.linkingmode.LinkingMode;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.Scope.INPUT;
 import static network.aika.enums.Scope.SAME;
+import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
 
 /**
  *
@@ -50,6 +52,11 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
+    @Override
+    public LinkingMode getLinkingMode() {
+        return FEEDBACK;
+    }
+
     @Override
     public boolean checkOutputSidePrecondition(BindingActivation oAct) {
         return !linkExists(oAct, false);

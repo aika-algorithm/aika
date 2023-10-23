@@ -42,12 +42,6 @@ public class PatternCategoryInputLink extends PositiveFeedbackLink<PatternCatego
     }
 
     @Override
-    public void addLinkingStep() {
-        super.addLinkingStep();
-        LinkingOut.add(output, FEEDBACK);
-    }
-
-    @Override
     protected Field getFeedbackTrigger() {
         return getDocument().getInstantiationFeedbackTrigger();
     }

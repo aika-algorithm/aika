@@ -25,10 +25,12 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
+import network.aika.queue.activation.LinkingOut;
 import network.aika.queue.link.LinkingIn;
 import network.aika.visitor.Visitor;
 
 import static network.aika.debugger.EventType.CREATE;
+import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.elements.Timestamp.FIRED_COMPARATOR;
@@ -78,6 +80,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
     public void addLinkingStep() {
         LinkingIn.add(this);
+        LinkingOut.add(output, FEEDBACK);
     }
 
     public void bindingVisit(Visitor v, int state, int depth) {
