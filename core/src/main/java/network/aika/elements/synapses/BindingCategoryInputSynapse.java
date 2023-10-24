@@ -29,6 +29,7 @@ import network.aika.visitor.operator.SelfRefOperator;
 import network.aika.visitor.types.VisitorType;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.enums.Scope.INPUT;
 import static network.aika.enums.Scope.SAME;
 
 /**
@@ -58,7 +59,7 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         SelfRefOperator op = new SelfRefOperator(oAct);
         new DownVisitor(
                 iAct.getDocument(),
-                VisitorType.BINDING_VISITOR_TYPE,
+                VisitorType.getSelfRefVisitorType(INPUT),
                 op
         ).start(iAct);
         return op.isSelfRef();
