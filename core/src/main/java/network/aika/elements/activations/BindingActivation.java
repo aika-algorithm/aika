@@ -20,6 +20,7 @@ import network.aika.Document;
 import network.aika.elements.Timestamp;
 import network.aika.elements.Type;
 import network.aika.elements.links.Link;
+import network.aika.elements.links.innerinhibitoryloop.InnerInhibitoryLink;
 import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
 import network.aika.elements.links.InputObjectLink;
 import network.aika.enums.Scope;
@@ -183,6 +184,16 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         super.patternVisit(v, lastLink, state, depth);
         // Hack needed to allow the latent linking of the primary pattern link to work
         v.up(this, state, depth);
+    }
+
+    @Override
+    public void bindingVisit(Visitor v, Link lastLink, int state, int depth) {
+        super.bindingVisit(v, lastLink, state, depth);
+
+        if(depth <= 2 && lastLink instanceof InnerInhibitoryLink) {
+            // Hack needed to allow the inner neg feedback link to work
+            v.up(this, state, depth);
+        }
     }
 
     @Override

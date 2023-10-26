@@ -47,6 +47,11 @@ public class InnerNegativeFeedbackSynapse extends FeedbackSynapse<
         >
 {
     @Override
+    public boolean checkVisitorState(int state) {
+        return (state & 1) > 0;
+    }
+
+    @Override
     public void setPropagable(boolean propagable) {
     }
 

@@ -50,11 +50,11 @@ public class OutgoingLinkingOperator extends LinkingOperator {
     public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
         if(!targetSyn.checkVisitorState(state))
             return;
-
+/*
         if(lastLink == null)
             return;
-
-        assert lastLink.getOutput() == act;
+*/
+        assert lastLink == null || lastLink.getOutput() == act;
 
         checkAndLink(act);
     }
