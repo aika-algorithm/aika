@@ -42,6 +42,14 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     }
 
     @Override
+    protected void initWeightInput() {
+        if(input != null)
+            input.lookupOutputSlot(this);
+
+        super.initWeightInput();
+    }
+
+    @Override
     public void propagateRanges() {
     }
 

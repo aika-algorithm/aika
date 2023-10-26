@@ -70,7 +70,7 @@ public abstract class ConjunctiveSynapse<
     }
 
     public void initBiasInput(OA act) {
-        linkAndConnect(synapseBias, getOutputNetForBias(act))
+        linkAndConnect(synapseBias, act.getNet())
                 .setPropagateUpdates(false);
     }
 

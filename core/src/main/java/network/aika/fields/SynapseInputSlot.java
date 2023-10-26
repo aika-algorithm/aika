@@ -16,26 +16,28 @@
  */
 package network.aika.fields;
 
-import java.util.List;
+
+import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.synapses.Synapse;
 
 /**
  * @author Lukas Molzberger
  */
-public interface FieldInput extends UpdateListener<FieldLink> {
+public class SynapseInputSlot extends MaxField {
+    public SynapseInputSlot(Synapse ref, String label) {
+        super(ref, label);
+    }
 
-    String getLabel();
+    public ConjunctiveLink getSelectedLink() {
+        return getLink(getSelectedInput());
+    }
 
-    void addInput(FieldLink fl);
+    public static ConjunctiveLink getLink(FieldLink fl) {
+        return (ConjunctiveLink) fl.getInput().getReference();
+    }
 
-    void removeInput(FieldLink fl);
-
-    List<FieldLink> getInputs();
-
-    void connectInputs(boolean initialize);
-
-    void disconnectAndUnlinkInputs(boolean deinitialize);
-
-    int getNextArg();
-
-    FieldObject getReference();
+    @Override
+    protected boolean isCandidate(FieldLink fl) {
+        return getLink(fl).getInput() != null;
+    }
 }

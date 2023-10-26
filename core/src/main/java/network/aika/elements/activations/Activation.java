@@ -24,10 +24,12 @@ import network.aika.elements.Timestamp;
 import network.aika.elements.Type;
 import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.links.CategoryLink;
+import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.elements.synapses.CategoryInputSynapse;
@@ -133,10 +135,14 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     }
 
+    public SynapseOutputSlot lookupOutputSlot(Link l) {
+        return null;
+    }
+
     protected void initNet() {
         net = new SumField(this, "net", null);
 
-        linkAndConnect(getNeuron().getBias(), getDefaultNet())
+        linkAndConnect(getNeuron().getBias(), net)
                 .setPropagateUpdates(false);
 
         initNetPreAnneal();
@@ -163,10 +169,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                     }
                 }
         );
-    }
-
-    public Field getDefaultNet() {
-        return net;
     }
 
     protected void initInactiveLinks() {

@@ -175,7 +175,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public Field getWeightedOutput() {
-        return synapse.getOutputNetForWeight(output);
+        return output.getNet();
     }
 
     protected void initInputValue() {
@@ -200,6 +200,10 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
         weightedInput.connectInputs(true);
         return weightedInput;
+    }
+
+    public FieldLink getInputValueLink() {
+        return weightedInput.getInputLinkByArg(0);
     }
 
     public void init() {

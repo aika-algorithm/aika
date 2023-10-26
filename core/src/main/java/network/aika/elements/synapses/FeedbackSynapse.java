@@ -30,16 +30,6 @@ import network.aika.fields.Field;
 public abstract class FeedbackSynapse<S extends FeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends FeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<?>>
         extends ConjunctiveSynapse<S, I, O, L, IA, OA> {
 
-    @Override
-    public Field getOutputNetForBias(OA act) {
-        return act.getNet();
-    }
-
-    @Override
-    public Field getOutputNetForWeight(OA act) {
-        return act.getNet();
-    }
-
     public void initDummyLink(OA oAct) {
         if(!linkExists(oAct, true))
             createAndInitLink(null, oAct);

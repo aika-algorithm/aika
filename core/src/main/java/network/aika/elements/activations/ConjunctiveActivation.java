@@ -17,10 +17,12 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
+import network.aika.elements.links.Link;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.fields.SynapseSlot;
+import network.aika.fields.SynapseInputSlot;
+import network.aika.fields.SynapseOutputSlot;
 
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -35,7 +37,8 @@ import static network.aika.fields.Fields.scale;
  */
 public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> extends Activation<N> {
 
-    protected NavigableMap<Long, SynapseSlot> slots;
+    protected NavigableMap<Long, SynapseInputSlot> inputSlots;
+    protected NavigableMap<Long, SynapseOutputSlot> outputSlots;
 
     public ConjunctiveActivation(int id, Document doc, N n) {
         super(id, doc, n);
@@ -49,20 +52,38 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
                 );
     }
 
-    public SynapseSlot getSlot(Synapse s) {
-        return slots.get(s.getInput().getId());
+    public SynapseInputSlot getInputSlot(Synapse s) {
+        return inputSlots.get(s.getInput().getId());
     }
 
-    public SynapseSlot lookupSlot(Synapse s) {
-        if(slots == null)
-            slots = new TreeMap<>();
+    public SynapseInputSlot lookupInputSlot(Synapse s) {
+        if(inputSlots == null)
+            inputSlots = new TreeMap<>();
 
-        return slots.computeIfAbsent(s.getInput().getId(), nId -> {
-            SynapseSlot f = new SynapseSlot(s, "slot-" + nId);
-            linkAndConnect(f, s.getOutputNetForWeight(this));
+        return inputSlots.computeIfAbsent(s.getInput().getId(), nId -> {
+            SynapseInputSlot f = new SynapseInputSlot(s, "slot-" + nId);
+            linkAndConnect(f, net);
             return f;
         });
     }
+
+    public SynapseOutputSlot getOutputSlot(Synapse s) {
+        return outputSlots.get(s.getOutput().getId());
+    }
+
+    @Override
+    public SynapseOutputSlot lookupOutputSlot(Link l) {
+        Synapse syn = l.getSynapse();
+        if(outputSlots == null)
+            outputSlots = new TreeMap<>();
+
+        return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId -> {
+            SynapseOutputSlot f = new SynapseOutputSlot(syn, "slot-" + nId);
+            linkAndConnect(f, l.getOutput().getNet());
+            return f;
+        });
+    }
+
 
     @Override
     protected void connectWeightUpdate() {

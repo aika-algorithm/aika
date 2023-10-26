@@ -58,7 +58,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         if(input == null)
             return;
 
-        SynapseSlot slot = output.getSlot(synapse);
+        SynapseInputSlot slot = output.getInputSlot(synapse);
         if(slot.getSelectedLink() == this)
             v.next(this, state, depth);
     }
@@ -73,7 +73,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
 
     @Override
     public Field getWeightedOutput() {
-        return output.lookupSlot(synapse);
+        return output.lookupInputSlot(synapse);
     }
 
     @Override
