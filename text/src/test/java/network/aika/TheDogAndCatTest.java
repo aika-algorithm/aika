@@ -16,9 +16,8 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.OuterInhibitoryNeuron;
+import network.aika.elements.neurons.InhibitoryNeuron;
 import network.aika.meta.Dictionary;
-import network.aika.Document;
 import org.junit.jupiter.api.Test;
 
 import static network.aika.TestHelper.initPatternTheCat;
@@ -43,13 +42,13 @@ public class TheDogAndCatTest {
         Dictionary dict = new Dictionary(m);
         dict.initStaticNeurons();
 
-        OuterInhibitoryNeuron inhibNThe = new OuterInhibitoryNeuron(m)
+        InhibitoryNeuron inhibNThe = new InhibitoryNeuron(m)
                 .setLabel("I-the");
 
-        OuterInhibitoryNeuron inhibNCat = new OuterInhibitoryNeuron(m)
+        InhibitoryNeuron inhibNCat = new InhibitoryNeuron(m)
                 .setLabel("I-cat");
 
-        OuterInhibitoryNeuron inhibNDog = new OuterInhibitoryNeuron(m)
+        InhibitoryNeuron inhibNDog = new InhibitoryNeuron(m)
                 .setLabel("I-dog");
 
         initPatternTheCat(m, dict, inhibNThe, inhibNCat, 3);

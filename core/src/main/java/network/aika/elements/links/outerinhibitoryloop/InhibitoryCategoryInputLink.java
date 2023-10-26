@@ -14,34 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links.innerinhibitoryloop;
+package network.aika.elements.links.outerinhibitoryloop;
 
 import network.aika.elements.Type;
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.InnerInhibitoryActivation;
+import network.aika.elements.activations.*;
 import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitoryCategorySynapse;
 import network.aika.visitor.Visitor;
 
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.INNER_INHIBITORY;
+import static network.aika.elements.Type.*;
+import static network.aika.elements.activations.InhibitoryActivation.crossConnectFields;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class InnerInhibitoryCategoryInputLink extends DisjunctiveLink<InnerInhibitoryCategoryInputSynapse, CategoryActivation, InnerInhibitoryActivation> implements CategoryInputLink {
+public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCategoryInputSynapse, CategoryActivation, InhibitoryActivation> implements CategoryInputLink {
 
-    public InnerInhibitoryCategoryInputLink(InnerInhibitoryCategoryInputSynapse s, CategoryActivation input, InnerInhibitoryActivation output) {
+    public InhibitoryCategoryInputLink(InhibitoryCategoryInputSynapse s, CategoryActivation input, InhibitoryActivation output) {
         super(s, input, output);
+
+        input.getCategoryInputs()
+                .forEach(act ->
+                        crossConnectFields((InhibitoryActivation) act, output)
+                );
     }
 
     @Override
     public Type getInputType() {
-        return INNER_INHIBITORY;
+        return OUTER_INHIBITORY;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class InnerInhibitoryCategoryInputLink extends DisjunctiveLink<InnerInhib
 
     @Override
     public CategorySynapse createCategorySynapse() {
-        return new InnerInhibitoryCategorySynapse();
+        return new InhibitoryCategorySynapse();
     }
 
     @Override
@@ -63,10 +67,6 @@ public class InnerInhibitoryCategoryInputLink extends DisjunctiveLink<InnerInhib
     }
 
     @Override
-    public void outerInhibVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
     public void innerSelfRefVisit(Visitor v, int state, int depth) {
     }
 
@@ -75,7 +75,7 @@ public class InnerInhibitoryCategoryInputLink extends DisjunctiveLink<InnerInhib
     }
 
     @Override
-    public void instantiateTemplate(CategoryActivation iAct, InnerInhibitoryActivation oAct) {
+    public void instantiateTemplate(CategoryActivation iAct, InhibitoryActivation oAct) {
         instantiateTemplate(iAct, oAct, this);
     }
 }

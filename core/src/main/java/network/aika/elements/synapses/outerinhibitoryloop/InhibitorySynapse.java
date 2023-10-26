@@ -16,15 +16,13 @@
  */
 package network.aika.elements.synapses.outerinhibitoryloop;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.OuterInhibitoryActivation;
-import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryLink;
+import network.aika.elements.activations.InhibitoryActivation;
+import network.aika.elements.links.outerinhibitoryloop.InhibitoryLink;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.OuterInhibitoryNeuron;
+import network.aika.elements.neurons.InhibitoryNeuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.Scope;
 
 import static network.aika.elements.Type.*;
 import static network.aika.enums.Scope.INPUT;
@@ -39,13 +37,13 @@ import static network.aika.enums.Scope.INPUT;
         outputType = OUTER_INHIBITORY,
         scope = INPUT
 )
-public class OuterInhibitorySynapse extends DisjunctiveSynapse<
-        OuterInhibitorySynapse,
+public class InhibitorySynapse extends DisjunctiveSynapse<
+        InhibitorySynapse,
         BindingNeuron,
-        OuterInhibitoryNeuron,
-        OuterInhibitoryLink,
+        InhibitoryNeuron,
+        InhibitoryLink,
         BindingActivation,
-        OuterInhibitoryActivation
+        InhibitoryActivation
         > {
     @Override
     public boolean isLinkingAllowed(boolean latent) {
@@ -53,13 +51,13 @@ public class OuterInhibitorySynapse extends DisjunctiveSynapse<
     }
 
     @Override
-    public OuterInhibitoryLink createLink(BindingActivation input, OuterInhibitoryActivation output) {
-        return new OuterInhibitoryLink(this, input, output);
+    public InhibitoryLink createLink(BindingActivation input, InhibitoryActivation output) {
+        return new InhibitoryLink(this, input, output);
     }
 
     @Override
-    public OuterInhibitorySynapse instantiateTemplate(BindingNeuron input, OuterInhibitoryNeuron output) {
-        OuterInhibitorySynapse s = new OuterInhibitorySynapse();
+    public InhibitorySynapse instantiateTemplate(BindingNeuron input, InhibitoryNeuron output) {
+        InhibitorySynapse s = new InhibitorySynapse();
         s.initFromTemplate(input, output, this);
         return s;
     }

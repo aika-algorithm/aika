@@ -36,9 +36,8 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitorySynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterNegativeFeedbackSynapse;
-import network.aika.Document;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.NegativeFeedbackSynapse;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
 import org.junit.jupiter.api.Test;
@@ -67,7 +66,7 @@ public class OuterInhibitionTest {
         m.setConfig(c);
 
         PatternNeuron in = new PatternNeuron(m).setLabel("IN");
-        OuterInhibitoryNeuron inhib = new OuterInhibitoryNeuron(m).setLabel("I");
+        InhibitoryNeuron inhib = new InhibitoryNeuron(m).setLabel("I");
 
         BindingNeuron na = addBindingNeuronOuter(m,  "A", 1.0, in, inhib);
         BindingNeuron nb = addBindingNeuronOuter(m, "B", 1.5, in, inhib);
@@ -89,18 +88,18 @@ public class OuterInhibitionTest {
         doc.disconnect();
     }
 
-    private static BindingNeuron addBindingNeuronOuter(Model m, String label, double bias, PatternNeuron in, OuterInhibitoryNeuron inhib) {
+    private static BindingNeuron addBindingNeuronOuter(Model m, String label, double bias, PatternNeuron in, InhibitoryNeuron inhib) {
         BindingNeuron bn = new BindingNeuron(m).setLabel(label);
 
         new InputObjectSynapse()
                 .setWeight(10.0)
                 .link(in, bn)
                 .adjustBias();
-        new OuterNegativeFeedbackSynapse()
+        new NegativeFeedbackSynapse()
                 .setWeight(-20.0)
                 .link(inhib, bn);
 
-        new OuterInhibitorySynapse()
+        new InhibitorySynapse()
                 .setWeight(1.0)
                 .link(bn, inhib);
 

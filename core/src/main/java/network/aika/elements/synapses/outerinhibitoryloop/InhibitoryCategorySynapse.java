@@ -16,16 +16,13 @@
  */
 package network.aika.elements.synapses.outerinhibitoryloop;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.OuterInhibitoryActivation;
-import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryCategoryLink;
+import network.aika.elements.activations.InhibitoryActivation;
+import network.aika.elements.links.outerinhibitoryloop.InhibitoryCategoryLink;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.Scope;
 
-import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.OUTER_INHIBITORY;
 import static network.aika.enums.Scope.INPUT;
 
@@ -39,7 +36,7 @@ import static network.aika.enums.Scope.INPUT;
         outputType = OUTER_INHIBITORY,
         scope = INPUT
 )
-public class OuterInhibitoryCategorySynapse extends CategorySynapse<OuterInhibitoryCategorySynapse, Neuron, OuterInhibitoryActivation> {
+public class InhibitoryCategorySynapse extends CategorySynapse<InhibitoryCategorySynapse, Neuron, InhibitoryActivation> {
 
     @Override
     public boolean isLinkingAllowed(boolean latent) {
@@ -47,7 +44,7 @@ public class OuterInhibitoryCategorySynapse extends CategorySynapse<OuterInhibit
     }
 
     @Override
-    public OuterInhibitoryCategoryLink createLink(OuterInhibitoryActivation input, CategoryActivation output) {
-        return new OuterInhibitoryCategoryLink(this, input, output);
+    public InhibitoryCategoryLink createLink(InhibitoryActivation input, CategoryActivation output) {
+        return new InhibitoryCategoryLink(this, input, output);
     }
 }

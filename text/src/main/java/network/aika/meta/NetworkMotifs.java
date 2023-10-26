@@ -20,10 +20,8 @@ import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.relations.NearRelation;
 import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitorySynapse;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerNegativeFeedbackSynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitorySynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterNegativeFeedbackSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.NegativeFeedbackSynapse;
 import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,12 +58,12 @@ public class NetworkMotifs {
         return bn;
     }
 
-    public static void addOuterInhibitoryLoop(BindingNeuron bn, OuterInhibitoryNeuron in, double weight) {
-        new OuterInhibitorySynapse()
+    public static void addOuterInhibitoryLoop(BindingNeuron bn, InhibitoryNeuron in, double weight) {
+        new InhibitorySynapse()
                 .setWeight(1.0)
                 .link(bn, in);
 
-        new OuterNegativeFeedbackSynapse()
+        new NegativeFeedbackSynapse()
                 .setWeight(weight)
                 .link(in, bn)
                 .adjustBias();
@@ -75,19 +73,6 @@ public class NetworkMotifs {
         return bindingNetTarget +
                 getPosFeedbackMargin(bindingNetTarget, patternValueTarget) +
                 SAME_OBJECT_MARGIN;
-    }
-
-    public static void addInnerInhibitoryLoop(BindingNeuron bn, InnerInhibitoryNeuron in, double weight) {
-        new InnerInhibitorySynapse(
-                new NearRelation(5)
-        )
-                .setWeight(1.0)
-                .link(bn, in);
-
-        new InnerNegativeFeedbackSynapse()
-                .setWeight(-weight)
-                .link(in, bn)
-                .setSynapseBias(weight);
     }
 
     public static void addPositiveFeedbackLoop(

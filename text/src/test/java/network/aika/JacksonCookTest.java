@@ -21,7 +21,6 @@ import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.elements.neurons.relations.BeforeRelation;
 import network.aika.elements.synapses.*;
 import network.aika.meta.Dictionary;
-import network.aika.Document;
 import network.aika.text.Range;
 import network.aika.tokenizer.SimpleWordTokenizer;
 import org.junit.jupiter.api.Test;
@@ -178,14 +177,14 @@ public class JacksonCookTest {
                 .link(cookProfessionBN, professionCN);
 
         addOuterInhibitoryLoop(
-                new OuterInhibitoryNeuron(m)
+                new InhibitoryNeuron(m)
                         .setLabel("I-jackson"),
                 false,
                 jacksonForenameBN,
                 jacksonCityBN
         );
         addOuterInhibitoryLoop(
-                new OuterInhibitoryNeuron(m)
+                new InhibitoryNeuron(m)
                         .setLabel("I-cook"),
                 false,
                 cookSurnameBN,

@@ -58,11 +58,9 @@ public abstract class SequenceModel implements Writable {
 
     protected LatentRelationNeuron relContains;
 
-    public OuterInhibitoryNeuron outerInhibitoryN;
+    public InhibitoryNeuron inhibitoryN;
 
-    public InnerInhibitoryNeuron primaryBNInhibitoryN;
-
-    protected OuterInhibitoryCategoryNeuron inhibCat;
+    protected InhibitoryCategoryNeuron inhibCat;
 
     public PatternNeuron sequencePatternN;
 
@@ -128,11 +126,11 @@ public abstract class SequenceModel implements Writable {
         return relNT;
     }
 
-    public OuterInhibitoryNeuron getOuterInhibitoryNeuron() {
-        return outerInhibitoryN;
+    public InhibitoryNeuron getOuterInhibitoryNeuron() {
+        return inhibitoryN;
     }
 
-    public OuterInhibitoryCategoryNeuron getInhibitoryCategory() {
+    public InhibitoryCategoryNeuron getInhibitoryCategory() {
         return inhibCat;
     }
 
@@ -171,20 +169,12 @@ public abstract class SequenceModel implements Writable {
                 .setWeight(10.0)
                 .adjustBias();
 
-        outerInhibitoryN = new OuterInhibitoryNeuron(model)
+        inhibitoryN = new InhibitoryNeuron(model)
                 .setLabel("I")
                 .setPersistent(true);
 
-        outerInhibitoryN.makeAbstract()
+        inhibitoryN.makeAbstract()
                 .setWeight(1.0);
-
-
-        primaryBNInhibitoryN = new InnerInhibitoryNeuron(model)
-                .setLabel("I")
-                .setPersistent(true);
-
-        primaryBNInhibitoryN.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         log.info(getPatternType() + " Pattern: netTarget:" + PATTERN_NET_TARGET);
 
@@ -229,12 +219,6 @@ public abstract class SequenceModel implements Writable {
 
         double patternValueTarget = sequencePatternN.getActivationFunction()
                 .f(PRIMARY_BN_PARAMS.patternNetTarget);
-
-        addInnerInhibitoryLoop(
-                bn,
-                primaryBNInhibitoryN,
-                -getMaxBindingNetTarget(PRIMARY_BN_PARAMS.netTarget, patternValueTarget)
-        );
 
         return bn;
     }
@@ -306,7 +290,7 @@ public abstract class SequenceModel implements Writable {
 
         addOuterInhibitoryLoop(
                 bn,
-                outerInhibitoryN,
+                inhibitoryN,
                 getNegMargin(pos) * -bn.getTargetNet()
         );
 
@@ -333,8 +317,7 @@ public abstract class SequenceModel implements Writable {
         out.writeLong(relPT.getId());
         out.writeLong(relNT.getId());
         out.writeLong(relContains.getId());
-        out.writeLong(outerInhibitoryN.getId());
-        out.writeLong(primaryBNInhibitoryN.getId());
+        out.writeLong(inhibitoryN.getId());
         out.writeLong(inhibCat.getId());
         out.writeLong(sequencePatternN.getId());
         out.writeLong(primaryBN.getId());
@@ -345,8 +328,7 @@ public abstract class SequenceModel implements Writable {
         relPT = m.lookupNeuronProvider(in.readLong()).getNeuron();
         relNT = m.lookupNeuronProvider(in.readLong()).getNeuron();
         relContains = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        outerInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        primaryBNInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         inhibCat = m.lookupNeuronProvider(in.readLong()).getNeuron();
         sequencePatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         primaryBN = m.lookupNeuronProvider(in.readLong()).getNeuron();

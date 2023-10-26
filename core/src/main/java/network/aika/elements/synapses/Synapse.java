@@ -21,14 +21,10 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
 import network.aika.elements.activations.*;
 import network.aika.elements.neurons.relations.Relation;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategorySynapse;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitorySynapse;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerNegativeFeedbackSynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitorySynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterNegativeFeedbackSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitoryCategorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.NegativeFeedbackSynapse;
 import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 import network.aika.elements.synapses.positivefeedbackloop.OuterPositiveFeedbackSynapse;
 import network.aika.enums.Scope;
@@ -79,16 +75,12 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             OuterPositiveFeedbackSynapse.class,
             RelationInputSynapse.class,
             BindingCategoryInputSynapse.class,
-            InnerNegativeFeedbackSynapse.class,
-            OuterNegativeFeedbackSynapse.class,
-            InnerInhibitorySynapse.class,
-            InnerInhibitoryCategoryInputSynapse.class,
-            OuterInhibitorySynapse.class,
-            OuterInhibitoryCategoryInputSynapse.class,
+            NegativeFeedbackSynapse.class,
+            InhibitorySynapse.class,
+            InhibitoryCategoryInputSynapse.class,
             PatternCategorySynapse.class,
             BindingCategorySynapse.class,
-            InnerInhibitoryCategorySynapse.class,
-            OuterInhibitoryCategorySynapse.class
+            InhibitoryCategorySynapse.class
     );
 
     public static int getStartFilter(Type t) {

@@ -19,7 +19,6 @@ package network.aika;
 import network.aika.elements.neurons.*;
 import network.aika.meta.Dictionary;
 import network.aika.meta.NetworkMotifs;
-import network.aika.Document;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 
@@ -42,22 +41,12 @@ public class TestUtils {
         }
     }
 
-    public static OuterInhibitoryNeuron addOuterInhibitoryLoop(OuterInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
+    public static InhibitoryNeuron addOuterInhibitoryLoop(InhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
         if(inhibN == null)
             return null;
 
         for(BindingNeuron bn: bns) {
             NetworkMotifs.addOuterInhibitoryLoop(bn, inhibN, -20.0);
-        }
-        return inhibN;
-    }
-
-    public static InnerInhibitoryNeuron addInnerInhibitoryLoop(InnerInhibitoryNeuron inhibN, boolean sameInhibSynapse, BindingNeuron... bns) {
-        if(inhibN == null)
-            return null;
-
-        for(BindingNeuron bn: bns) {
-            NetworkMotifs.addInnerInhibitoryLoop(bn, inhibN, -20.0);
         }
         return inhibN;
     }

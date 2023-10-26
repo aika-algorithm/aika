@@ -61,9 +61,9 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     protected PatternNeuron hintInputPN;
 
-    protected OuterInhibitoryNeuron outerTsBeginInhibitoryN;
+    protected InhibitoryNeuron outerTsBeginInhibitoryN;
 
-    protected OuterInhibitoryNeuron outerTsEndInhibitoryN;
+    protected InhibitoryNeuron outerTsEndInhibitoryN;
 
 
     public TypedTextSectionModel(EntityModel entityModel) {
@@ -203,7 +203,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
     }
 
     private void initTextSection() {
-        outerTsBeginInhibitoryN = new OuterInhibitoryNeuron(model)
+        outerTsBeginInhibitoryN = new InhibitoryNeuron(model)
                 .setLabel("Outer Begin " + TEXT_SECTION_LABEL)
                 .setPersistent(true);
 
@@ -213,7 +213,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 NEG_MARGIN_TS * -beginBN.getTargetNet()
         );
 
-        outerTsEndInhibitoryN = new OuterInhibitoryNeuron(model)
+        outerTsEndInhibitoryN = new InhibitoryNeuron(model)
                 .setLabel("Outer End " + TEXT_SECTION_LABEL)
                 .setPersistent(true);
 
@@ -300,8 +300,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
         headlineEntity.write(out);
         out.writeLong(hintBN.getId());
-        out.writeLong(innerTsBeginInhibitoryN.getId());
-        out.writeLong(innerTsEndInhibitoryN.getId());
         out.writeLong(outerTsBeginInhibitoryN.getId());
         out.writeLong(outerTsEndInhibitoryN.getId());
     }
@@ -314,8 +312,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         headlineEntity.readFields(in, m);
 
         hintBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        innerTsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        innerTsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         outerTsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         outerTsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }

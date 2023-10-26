@@ -20,34 +20,33 @@ import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.InnerInhibitoryCategoryActivation;
+import network.aika.elements.activations.InhibitoryCategoryActivation;
 import network.aika.visitor.types.VisitorType;
 
-import static network.aika.elements.Type.INNER_INHIBITORY;
-import static network.aika.visitor.types.VisitorType.INNER_INHIB_VISITOR_TYPE;
+import static network.aika.elements.Type.OUTER_INHIBITORY;
+import static network.aika.visitor.types.VisitorType.OUTER_INHIB_VISITOR_TYPE;
 
 /**
  * @author Lukas Molzberger
  */
-public class InnerInhibitoryCategoryNeuron extends CategoryNeuron {
+public class InhibitoryCategoryNeuron extends CategoryNeuron {
 
-
-    public InnerInhibitoryCategoryNeuron(Model m) {
+    public InhibitoryCategoryNeuron(Model m) {
         super(m);
     }
 
     @Override
     public Type getType() {
-        return INNER_INHIBITORY;
+        return OUTER_INHIBITORY;
     }
 
     @Override
     public VisitorType getVisitorType() {
-        return INNER_INHIB_VISITOR_TYPE;
+        return OUTER_INHIB_VISITOR_TYPE;
     }
 
     @Override
     public CategoryActivation createActivation(Document doc) {
-        return new InnerInhibitoryCategoryActivation(doc.createActivationId(), doc, this);
+        return new InhibitoryCategoryActivation(doc.createActivationId(), doc, this);
     }
 }

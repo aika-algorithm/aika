@@ -80,11 +80,6 @@ public class TextSectionModel implements Writable {
 
     protected PatternNeuron beginEndInputPN;
 
-
-    protected InnerInhibitoryNeuron innerTsBeginInhibitoryN;
-
-    protected InnerInhibitoryNeuron innerTsEndInhibitoryN;
-
     protected double bindingNetTarget = 2.5;
 
     public TextSectionModel(PhraseModel phraseModel) {
@@ -200,44 +195,6 @@ public class TextSectionModel implements Writable {
                 0.0,
                 false,
                 false
-        );
-
-        innerTsBeginInhibitoryN = new InnerInhibitoryNeuron(model)
-                .setLabel("Inner " + TEXT_SECTION_LABEL + " Begin")
-                .setPersistent(true);
-
-        innerTsBeginInhibitoryN.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
-
-        addInnerInhibitoryLoop(
-                beginBN,
-                innerTsBeginInhibitoryN,
-                0.0 // NEG_MARGIN_TS_BEGIN * -beginBN.getTargetNet()
-        );
-
-        addInnerInhibitoryLoop(
-                beginEndBN,
-                innerTsBeginInhibitoryN,
-                0.0 // NEG_MARGIN_TS_BEGIN * -beginEndBN.getTargetNet()
-        );
-
-        innerTsEndInhibitoryN = new InnerInhibitoryNeuron(model)
-                .setLabel("Inner " + TEXT_SECTION_LABEL + " End")
-                .setPersistent(true);
-
-        innerTsEndInhibitoryN.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
-
-        addInnerInhibitoryLoop(
-                endBN,
-                innerTsEndInhibitoryN,
-                0.0 // NEG_MARGIN_TS_END * -endBN.getTargetNet()
-        );
-
-        addInnerInhibitoryLoop(
-                beginEndBN,
-                innerTsEndInhibitoryN,
-                0.0 // NEG_MARGIN_TS_END * -beginEndBN.getTargetNet()
         );
     }
 

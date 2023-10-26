@@ -20,8 +20,8 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.*;
-import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryLink;
-import network.aika.elements.links.outerinhibitoryloop.OuterNegativeFeedbackLink;
+import network.aika.elements.links.outerinhibitoryloop.InhibitoryLink;
+import network.aika.elements.links.outerinhibitoryloop.NegativeFeedbackLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.PatternSynapse;
@@ -188,7 +188,6 @@ public class PatternLogger {
                 bn.getId() + (bn.isAbstract() ? "-abstr" : ""),
                 print(iAct.getNet()),
                 print(iAct.getNetPreAnneal()),
-                print(iAct.getNetUnsuppressed()),
                 print(iAct.getNetOuterGradient()),
                 print(iAct.getGradient()),
                 print(iAct.getUpdateValue()),
@@ -216,9 +215,9 @@ public class PatternLogger {
     }
 
     private static String getSuppressingBindingActLabel(BindingActivation act) {
-        return act.getInputLinksByType(OuterNegativeFeedbackLink.class)
+        return act.getInputLinksByType(NegativeFeedbackLink.class)
                 .map(Link::getInput)
-                .flatMap(inhibAct -> inhibAct.getInputLinksByType(OuterInhibitoryLink.class))
+                .flatMap(inhibAct -> inhibAct.getInputLinksByType(InhibitoryLink.class))
                 .map(Link::getInput)
                 .filter(supprAct -> supprAct.getNet().getUpdatedValue() > 0.0)
                 .map(Activation::getLabel)

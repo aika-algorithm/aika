@@ -23,7 +23,6 @@ import network.aika.elements.synapses.InputObjectSynapse;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.elements.synapses.SameObjectSynapse;
 import network.aika.meta.Dictionary;
-import network.aika.Document;
 import network.aika.text.Range;
 import org.junit.jupiter.api.Test;
 
@@ -113,7 +112,7 @@ public class ABCDTest {
                 .setWeight(10.0)
                 .link(b_IN, b_bcBN)
                 .adjustBias();
-        TestUtils.addOuterInhibitoryLoop(new OuterInhibitoryNeuron(m).setLabel("I-b"), false, b_abBN, b_bcBN);
+        TestUtils.addOuterInhibitoryLoop(new InhibitoryNeuron(m).setLabel("I-b"), false, b_abBN, b_bcBN);
         b_abBN.setBias(3.0);
         b_bcBN.setBias(2.5);
 

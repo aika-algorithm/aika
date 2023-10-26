@@ -56,13 +56,11 @@ public abstract class AbstractParticle<G extends AbstractGraphManager> extends S
         neuronTypeModifiers.put(BindingNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(0,205,0);"));
         neuronTypeModifiers.put(LatentRelationNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(10,170,0);"));
 
-        neuronTypeModifiers.put(OuterInhibitoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,100,255);"));
-        neuronTypeModifiers.put(InnerInhibitoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(90,90,245);"));
+        neuronTypeModifiers.put(InhibitoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,100,255);"));
 
         neuronTypeModifiers.put(PatternCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
         neuronTypeModifiers.put(BindingCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-        neuronTypeModifiers.put(InnerInhibitoryCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-        neuronTypeModifiers.put(OuterInhibitoryCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
+        neuronTypeModifiers.put(InhibitoryCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
 
         neuronTypeModifiers.put(PatternNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(224, 34, 245);"));
     }

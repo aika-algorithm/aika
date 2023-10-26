@@ -16,38 +16,31 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.InnerInhibitoryActivation;
-import network.aika.fields.MaxField;
+import network.aika.elements.activations.InhibitoryActivation;
 
-import static network.aika.elements.activations.InnerInhibitoryActivation.getBindingActivation;
 
 /**
  * @author Lukas Molzberger
  */
-public class InnerInhibitoryActivationPropertyPanel extends ActivationPropertyPanel<InnerInhibitoryActivation> {
+public class InhibitoryActivationPropertyPanel extends ActivationPropertyPanel<InhibitoryActivation> {
 
-    public InnerInhibitoryActivationPropertyPanel(InnerInhibitoryActivation act) {
+
+    public InhibitoryActivationPropertyPanel(InhibitoryActivation act) {
         super(act);
     }
 
     @Override
-    public void initIdentitySection(InnerInhibitoryActivation act) {
+    public void initIdentitySection(InhibitoryActivation act) {
         super.initIdentitySection(act);
     }
 
     @Override
-    public void initInferenceSection(InnerInhibitoryActivation act) {
-        MaxField inhibNet = (MaxField)act.getNet();
-        if(inhibNet.getSelectedInput() != null) {
-            BindingActivation selectedAct = getBindingActivation(inhibNet.getSelectedInput());
-            addConstant("Selected Input: ", selectedAct.getId() + " - '" + selectedAct.getLabel() + "'");
-        }
+    public void initInferenceSection(InhibitoryActivation act) {
         super.initInferenceSection(act);
     }
 
     @Override
-    public void initTrainingSection(InnerInhibitoryActivation act) {
+    public void initTrainingSection(InhibitoryActivation act) {
         super.initTrainingSection(act);
     }
 }

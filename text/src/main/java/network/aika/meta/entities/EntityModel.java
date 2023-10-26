@@ -66,7 +66,7 @@ public class EntityModel implements TemplateModel, Writable {
 
     protected BindingNeuron entityBN;
 
-    protected OuterInhibitoryNeuron outerInhibitoryN;
+    protected InhibitoryNeuron outerInhibitoryN;
 
     protected BindingNeuron targetInputBN;
 
@@ -122,7 +122,7 @@ public class EntityModel implements TemplateModel, Writable {
                 false
         );
 
-        outerInhibitoryN = new OuterInhibitoryNeuron(model)
+        outerInhibitoryN = new InhibitoryNeuron(model)
                 .setLabel("I")
                 .setPersistent(true);
 

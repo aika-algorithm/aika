@@ -18,10 +18,10 @@ package network.aika.elements.synapses.outerinhibitoryloop;
 
 import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.OuterInhibitoryActivation;
-import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryCategoryInputLink;
+import network.aika.elements.activations.InhibitoryActivation;
+import network.aika.elements.links.outerinhibitoryloop.InhibitoryCategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.OuterInhibitoryNeuron;
+import network.aika.elements.neurons.InhibitoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
@@ -41,14 +41,14 @@ import static network.aika.enums.Scope.INPUT;
         outputType = BINDING,
         scope = INPUT
 )
-public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
-        OuterInhibitoryCategoryInputSynapse,
+public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
+        InhibitoryCategoryInputSynapse,
         CategoryNeuron,
-        OuterInhibitoryNeuron,
-        OuterInhibitoryCategoryInputLink,
+        InhibitoryNeuron,
+        InhibitoryCategoryInputLink,
         CategoryActivation,
-        OuterInhibitoryActivation
-        > implements CategoryInputSynapse<OuterInhibitoryCategoryInputSynapse>
+        InhibitoryActivation
+        > implements CategoryInputSynapse<InhibitoryCategoryInputSynapse>
 {
     public static int TYPE_ID = 13;
 
@@ -79,8 +79,8 @@ public class OuterInhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
     }
 
     @Override
-    public OuterInhibitoryCategoryInputLink createLink(CategoryActivation input, OuterInhibitoryActivation output) {
-        return new OuterInhibitoryCategoryInputLink(this, input, output);
+    public InhibitoryCategoryInputLink createLink(CategoryActivation input, InhibitoryActivation output) {
+        return new InhibitoryCategoryInputLink(this, input, output);
     }
 
     @Override

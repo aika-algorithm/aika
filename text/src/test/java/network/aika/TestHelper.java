@@ -37,7 +37,7 @@ import static network.aika.meta.NetworkMotifs.addOuterInhibitoryLoop;
  */
 public class TestHelper {
 
-    public static void initPatternTheCat(Model m, Dictionary dict, OuterInhibitoryNeuron inhibNThe, OuterInhibitoryNeuron inhibNCat, int variant) {
+    public static void initPatternTheCat(Model m, Dictionary dict, InhibitoryNeuron inhibNThe, InhibitoryNeuron inhibNCat, int variant) {
         PatternNeuron theIN = dict.lookupInputToken("the");
         PatternNeuron catIN = dict.lookupInputToken("cat");
 
@@ -138,7 +138,7 @@ public class TestHelper {
         catBN.setBias(3.0);
     }
 
-    public static void initPatternTheDog(Model m, Dictionary dict, OuterInhibitoryNeuron inhibNThe, OuterInhibitoryNeuron inhibNDog, int variant) {
+    public static void initPatternTheDog(Model m, Dictionary dict, InhibitoryNeuron inhibNThe, InhibitoryNeuron inhibNDog, int variant) {
         PatternNeuron theIN = dict.lookupInputToken("the");
         PatternNeuron dogIN = dict.lookupInputToken("dog");
 
@@ -189,7 +189,7 @@ public class TestHelper {
         PatternNeuron theDogP = initPatternLoop(m, "the dog", theBN, dogBN);
 
         addOuterInhibitoryLoop(theBN, inhibNThe, -10.0);
-        addOuterInhibitoryLoop(theBN, new OuterInhibitoryNeuron(m).setLabel("I-the (tg)"), -10.0);
+        addOuterInhibitoryLoop(theBN, new InhibitoryNeuron(m).setLabel("I-the (tg)"), -10.0);
 
         theDogP.setBias(3.0);
 

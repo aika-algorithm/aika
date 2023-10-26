@@ -19,7 +19,7 @@ package network.aika.debugger.activations.layout;
 import network.aika.debugger.AbstractParticleLink;
 import network.aika.debugger.activations.ActivationGraphManager;
 import network.aika.debugger.activations.particles.ActivationParticle;
-import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryLink;
+import network.aika.elements.links.outerinhibitoryloop.InhibitoryLink;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.links.*;
 import org.graphstream.graph.Edge;
@@ -74,8 +74,8 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
             return RelationInputParticleLink.create((RelationInputLink) l, e, gm);
         } else if(l instanceof PatternLink) {
             return PatternParticleLink.create((PatternLink) l, e, gm);
-        } else if(l instanceof OuterInhibitoryLink) {
-            return InhibitoryParticleLink.create((OuterInhibitoryLink) l, e, gm);
+        } else if(l instanceof InhibitoryLink) {
+            return InhibitoryParticleLink.create((InhibitoryLink) l, e, gm);
         } else if (l instanceof FeedbackLink<?, ?, ?>) {
             return FeedbackParticleLink.create((FeedbackLink) l, e, gm);
         }

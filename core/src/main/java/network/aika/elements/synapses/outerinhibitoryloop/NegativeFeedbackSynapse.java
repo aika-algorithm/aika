@@ -16,16 +16,13 @@
  */
 package network.aika.elements.synapses.outerinhibitoryloop;
 
-import network.aika.elements.Type;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.OuterInhibitoryActivation;
-import network.aika.elements.links.outerinhibitoryloop.OuterNegativeFeedbackLink;
+import network.aika.elements.activations.InhibitoryActivation;
+import network.aika.elements.links.outerinhibitoryloop.NegativeFeedbackLink;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.OuterInhibitoryNeuron;
+import network.aika.elements.neurons.InhibitoryNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.Scope;
 import network.aika.enums.linkingmode.LinkingMode;
 
 import static network.aika.elements.Type.*;
@@ -42,12 +39,12 @@ import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
         outputType = BINDING,
         scope = INPUT
 )
-public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
-        OuterNegativeFeedbackSynapse,
-        OuterInhibitoryNeuron,
+public class NegativeFeedbackSynapse extends FeedbackSynapse<
+        NegativeFeedbackSynapse,
+        InhibitoryNeuron,
         BindingNeuron,
-        OuterNegativeFeedbackLink,
-        OuterInhibitoryActivation,
+        NegativeFeedbackLink,
+        InhibitoryActivation,
         BindingActivation
         >
 {
@@ -72,12 +69,12 @@ public class OuterNegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
-    public OuterNegativeFeedbackLink createLink(OuterInhibitoryActivation input, BindingActivation output) {
-        return new OuterNegativeFeedbackLink(this, input, output);
+    public NegativeFeedbackLink createLink(InhibitoryActivation input, BindingActivation output) {
+        return new NegativeFeedbackLink(this, input, output);
     }
 
     @Override
-    public void linkAndPropagateOut(OuterInhibitoryActivation act) {
+    public void linkAndPropagateOut(InhibitoryActivation act) {
         getOutput()
                 .linkOutgoing(this, act);
     }

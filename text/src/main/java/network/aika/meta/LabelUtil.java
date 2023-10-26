@@ -56,11 +56,7 @@ public class LabelUtil {
             if(act.getNeuron().getLabel() == null) {
                 act.getNeuron().setLabel(actTxt);
             }
-        } else if(act instanceof OuterInhibitoryActivation) {
-            if(act.getNeuron().getLabel() == null) {
-                act.getNeuron().setLabel(actTxt);
-            }
-        } else if(act instanceof InnerInhibitoryActivation) {
+        } else if(act instanceof InhibitoryActivation) {
             if(act.getNeuron().getLabel() == null) {
                 act.getNeuron().setLabel(actTxt);
             }

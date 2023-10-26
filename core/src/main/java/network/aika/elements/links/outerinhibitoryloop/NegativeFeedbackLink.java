@@ -18,10 +18,10 @@ package network.aika.elements.links.outerinhibitoryloop;
 
 import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.OuterInhibitoryActivation;
+import network.aika.elements.activations.InhibitoryActivation;
 import network.aika.elements.links.FeedbackLink;
 import network.aika.fields.*;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterNegativeFeedbackSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.NegativeFeedbackSynapse;
 import network.aika.visitor.Visitor;
 
 import java.util.stream.Stream;
@@ -33,17 +33,17 @@ import static network.aika.fields.Fields.mul;
 /**
  * @author Lukas Molzberger
  */
-public class OuterNegativeFeedbackLink extends FeedbackLink<OuterNegativeFeedbackSynapse, OuterInhibitoryActivation, BindingActivation> {
+public class NegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, InhibitoryActivation, BindingActivation> {
 
     private Multiplication innerWeightedInput;
 
-    public OuterNegativeFeedbackLink(OuterNegativeFeedbackSynapse s, OuterInhibitoryActivation input, BindingActivation output) {
+    public NegativeFeedbackLink(NegativeFeedbackSynapse s, InhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
 
         if(input == null)
             return;
 
-        OuterInhibitoryActivation.connectFields(
+        InhibitoryActivation.connectFields(
                 input.getAllInhibitoryLinks(),
                 Stream.of(this)
         );

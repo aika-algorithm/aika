@@ -14,32 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.elements.activations;
 
-import network.aika.elements.links.outerinhibitoryloop.OuterNegativeFeedbackLink;
+import network.aika.Document;
+import network.aika.elements.Type;
+import network.aika.elements.neurons.CategoryNeuron;
+
+import static network.aika.elements.Type.OUTER_INHIBITORY;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class OuterNegativeFeedbackLinkPropertyPanel extends FeedbackLinkPropertyPanel<OuterNegativeFeedbackLink> {
+public class InhibitoryCategoryActivation extends CategoryActivation {
 
-
-    public OuterNegativeFeedbackLinkPropertyPanel(OuterNegativeFeedbackLink l) {
-        super(l);
+    public InhibitoryCategoryActivation(int id, Document doc, CategoryNeuron neuron) {
+        super(id, doc, neuron);
     }
 
     @Override
-    public void initIdentitySection(OuterNegativeFeedbackLink l) {
-        super.initIdentitySection(l);
-    }
-
-    @Override
-    public void initInferenceSection(OuterNegativeFeedbackLink l) {
-        super.initInferenceSection(l);
-    }
-
-    @Override
-    public void initTrainingSection(OuterNegativeFeedbackLink l) {
-        super.initTrainingSection(l);
+    public Type getType() {
+        return OUTER_INHIBITORY;
     }
 }

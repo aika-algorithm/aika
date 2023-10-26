@@ -20,10 +20,10 @@ import network.aika.ActivationFunction;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.Type;
-import network.aika.elements.activations.OuterInhibitoryActivation;
+import network.aika.elements.activations.InhibitoryActivation;
 import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitoryCategorySynapse;
 import network.aika.visitor.types.VisitorType;
 
 import static network.aika.elements.Type.OUTER_INHIBITORY;
@@ -32,9 +32,9 @@ import static network.aika.elements.Type.OUTER_INHIBITORY;
  *
  * @author Lukas Molzberger
  */
-public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryNeuron, OuterInhibitoryActivation> {
+public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, InhibitoryActivation> {
 
-    public OuterInhibitoryNeuron(Model m) {
+    public InhibitoryNeuron(Model m) {
         super(m);
     }
 
@@ -44,11 +44,11 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryNeur
     }
 
     @Override
-    public OuterInhibitoryCategoryInputSynapse makeAbstract() {
-        OuterInhibitoryCategoryNeuron inhibCategory = new OuterInhibitoryCategoryNeuron(getModel())
+    public InhibitoryCategoryInputSynapse makeAbstract() {
+        InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(getModel())
                 .setLabel(getLabel() + CATEGORY_LABEL);
 
-        OuterInhibitoryCategoryInputSynapse s = new OuterInhibitoryCategoryInputSynapse()
+        InhibitoryCategoryInputSynapse s = new InhibitoryCategoryInputSynapse()
                 .link(inhibCategory, this);
 
         s.setInitialCategorySynapseWeight(1.0);
@@ -62,15 +62,15 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryNeur
     }
 
     @Override
-    public OuterInhibitoryNeuron instantiateTemplate() {
-        OuterInhibitoryNeuron n = new OuterInhibitoryNeuron(getModel());
+    public InhibitoryNeuron instantiateTemplate() {
+        InhibitoryNeuron n = new InhibitoryNeuron(getModel());
         n.initFromTemplate(this);
         return n;
     }
 
     @Override
-    public OuterInhibitoryActivation createActivation(Document doc) {
-        return new OuterInhibitoryActivation(doc.createActivationId(), doc, this);
+    public InhibitoryActivation createActivation(Document doc) {
+        return new InhibitoryActivation(doc.createActivationId(), doc, this);
     }
 
     public ActivationFunction getActivationFunction() {
@@ -80,17 +80,17 @@ public class OuterInhibitoryNeuron extends DisjunctiveNeuron<OuterInhibitoryNeur
 
     @Override
     public CategorySynapse createCategorySynapse() {
-        return new OuterInhibitoryCategorySynapse();
+        return new InhibitoryCategorySynapse();
     }
 
     @Override
-    public OuterInhibitoryCategoryInputSynapse getCategoryInputSynapse() {
-        return getInputSynapseByType(OuterInhibitoryCategoryInputSynapse.class);
+    public InhibitoryCategoryInputSynapse getCategoryInputSynapse() {
+        return getInputSynapseByType(InhibitoryCategoryInputSynapse.class);
     }
 
     @Override
-    public OuterInhibitoryCategorySynapse getCategoryOutputSynapse() {
-        return getOutputSynapseByType(OuterInhibitoryCategorySynapse.class);
+    public InhibitoryCategorySynapse getCategoryOutputSynapse() {
+        return getOutputSynapseByType(InhibitoryCategorySynapse.class);
     }
 
     @Override

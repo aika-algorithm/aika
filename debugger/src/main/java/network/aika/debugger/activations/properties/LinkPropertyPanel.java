@@ -19,8 +19,7 @@ package network.aika.debugger.activations.properties;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.*;
-import network.aika.elements.links.innerinhibitoryloop.InnerInhibitoryLink;
-import network.aika.elements.links.outerinhibitoryloop.OuterInhibitoryLink;
+import network.aika.elements.links.outerinhibitoryloop.InhibitoryLink;
 
 
 /**
@@ -71,10 +70,8 @@ public class LinkPropertyPanel<E extends Link> extends AbstractPropertyPanel {
     public static LinkPropertyPanel create(Link l) {
         if(l instanceof ConjunctiveLink) {
             return ConjunctiveLinkPropertyPanel.create((ConjunctiveLink) l);
-        } else if(l instanceof OuterInhibitoryLink) {
-            return new OuterInhibitoryLinkPropertyPanel((OuterInhibitoryLink) l);
-        } else if(l instanceof InnerInhibitoryLink) {
-            return new InnerInhibitoryLinkPropertyPanel((InnerInhibitoryLink) l);
+        } else if(l instanceof InhibitoryLink) {
+            return new InhibitoryLinkPropertyPanel((InhibitoryLink) l);
         }
 
         return new LinkPropertyPanel(l);

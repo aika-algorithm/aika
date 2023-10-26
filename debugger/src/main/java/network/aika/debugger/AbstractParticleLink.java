@@ -19,14 +19,10 @@ package network.aika.debugger;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitoryCategorySynapse;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerInhibitorySynapse;
-import network.aika.elements.synapses.innerinhibitoryloop.InnerNegativeFeedbackSynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitoryCategorySynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitorySynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterNegativeFeedbackSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitoryCategorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.NegativeFeedbackSynapse;
 import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
@@ -58,25 +54,21 @@ public abstract class AbstractParticleLink<E extends Element> {
     static {
         synapseTypeModifiers.put(InputObjectSynapse.class, "fill-color: rgb(0,150,00);");
         synapseTypeModifiers.put(RelationInputSynapse.class, "fill-color: rgb(50,230,50);");
-        synapseTypeModifiers.put(OuterNegativeFeedbackSynapse.class, "fill-color: rgb(185,0,0);");
-        synapseTypeModifiers.put(InnerNegativeFeedbackSynapse.class, "fill-color: rgb(175,0,0);");
+        synapseTypeModifiers.put(NegativeFeedbackSynapse.class, "fill-color: rgb(185,0,0);");
         synapseTypeModifiers.put(SameObjectSynapse.class, "fill-color: rgb(50,200,120);");
         synapseTypeModifiers.put(InnerPositiveFeedbackSynapse.class, "fill-color: rgb(120,200,50); ");
 
-        synapseTypeModifiers.put(OuterInhibitorySynapse.class, "fill-color: rgb(100,100,255);");
-        synapseTypeModifiers.put(InnerInhibitorySynapse.class, "fill-color: rgb(90,90,245);");
+        synapseTypeModifiers.put(InhibitorySynapse.class, "fill-color: rgb(100,100,255);");
 
         synapseTypeModifiers.put(PatternCategorySynapse.class, "fill-color: rgb(100,0,200);");
         synapseTypeModifiers.put(BindingCategorySynapse.class, "fill-color: rgb(110,0,220);");
-        synapseTypeModifiers.put(OuterInhibitoryCategorySynapse.class, "fill-color: rgb(110,0,220);");
-        synapseTypeModifiers.put(InnerInhibitoryCategorySynapse.class, "fill-color: rgb(110,0,220);");
+        synapseTypeModifiers.put(InhibitoryCategorySynapse.class, "fill-color: rgb(110,0,220);");
 
         synapseTypeModifiers.put(PatternSynapse.class, "fill-color: rgb(224, 34, 245);");
 
         synapseTypeModifiers.put(PatternCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
         synapseTypeModifiers.put(BindingCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
-        synapseTypeModifiers.put(OuterInhibitoryCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
-        synapseTypeModifiers.put(InnerInhibitoryCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
+        synapseTypeModifiers.put(InhibitoryCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
     }
 
 

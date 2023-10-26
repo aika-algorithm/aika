@@ -18,9 +18,9 @@ package network.aika.elements.links.outerinhibitoryloop;
 
 import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.OuterInhibitoryActivation;
+import network.aika.elements.activations.InhibitoryActivation;
 import network.aika.elements.links.DisjunctiveLink;
-import network.aika.elements.synapses.outerinhibitoryloop.OuterInhibitorySynapse;
+import network.aika.elements.synapses.outerinhibitoryloop.InhibitorySynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.visitor.Visitor;
@@ -37,13 +37,13 @@ import static network.aika.utils.Utils.TOLERANCE;
 /**
  * @author Lukas Molzberger
  */
-public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse, BindingActivation, OuterInhibitoryActivation> {
+public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingActivation, InhibitoryActivation> {
 
     protected FieldOutput value;
 
     protected Field net;
 
-    public OuterInhibitoryLink(OuterInhibitorySynapse inhibitorySynapse, BindingActivation input, OuterInhibitoryActivation output) {
+    public InhibitoryLink(InhibitorySynapse inhibitorySynapse, BindingActivation input, InhibitoryActivation output) {
         super(inhibitorySynapse, input, output);
 
         net = new SumField(this, "net", null)
@@ -60,7 +60,7 @@ public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse,
                 x -> output.getActivationFunction().f(x)
         );
 
-        OuterInhibitoryActivation.connectFields(
+        InhibitoryActivation.connectFields(
                 Stream.of(this),
                 output.getAllNegativeFeedbackLinks()
         );
@@ -96,7 +96,7 @@ public class OuterInhibitoryLink extends DisjunctiveLink<OuterInhibitorySynapse,
     public void outerSelfRefVisit(Visitor v, int state, int depth) {
     }
 
-    public void connectFields(OuterNegativeFeedbackLink out) {
+    public void connectFields(NegativeFeedbackLink out) {
         if(isSelfRef(getInput(), out.getOutput(), Scope.SAME))
             return;
 

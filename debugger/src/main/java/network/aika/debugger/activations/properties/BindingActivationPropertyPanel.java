@@ -28,13 +28,6 @@ public class BindingActivationPropertyPanel<E extends BindingActivation> extends
         super(act);
     }
 
-    @Override
-    public void initInferenceSection(E act) {
-        super.initInferenceSection(act);
-        addField(act.getNetUnsuppressed());
-        addField(act.getValueUnsuppressed());
-    }
-
     public static BindingActivationPropertyPanel create(BindingActivation act) {
         if(act instanceof LatentRelationActivation) {
             return LatentRelationActivationPropertyPanel.create((LatentRelationActivation) act);

@@ -17,16 +17,13 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
-import network.aika.elements.Timestamp;
 import network.aika.elements.Type;
 import network.aika.elements.links.Link;
-import network.aika.elements.links.innerinhibitoryloop.InnerInhibitoryLink;
 import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
 import network.aika.elements.links.InputObjectLink;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.queue.activation.LinkingOut;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.Visitor;
 import network.aika.visitor.operator.SelfRefOperator;
@@ -37,11 +34,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.elements.Type.BINDING;
-import static network.aika.enums.linkingmode.LinkingMode.UNSUPPRESSED;
-import static network.aika.fields.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.func;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -54,68 +47,13 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     private boolean isInput;
 
-    protected Timestamp firedUnsuppressed = NOT_SET;
-
-    protected SumField netUnsuppressed;
-
-    protected FieldOutput valueUnsuppressed;
-
-
     public BindingActivation(int id, Document doc, BindingNeuron n) {
         super(id, doc, n);
-
-        valueUnsuppressed = func(
-                this,
-                "valueUnsuppressed = f(netUnsuppressed)",
-                TOLERANCE,
-                netUnsuppressed,
-                x -> getActivationFunction().f(x)
-        );
     }
 
     @Override
     public Type getType() {
         return BINDING;
-    }
-
-    @Override
-    public Field getDefaultNet() {
-        return netUnsuppressed;
-    }
-
-    @Override
-    protected void initNet() {
-        netUnsuppressed = new SumField(this, "netUnsuppressed", TOLERANCE);
-
-        super.initNet();
-
-        linkAndConnect(netUnsuppressed, net);
-    }
-
-    @Override
-    protected void initOnFiredListener() {
-        super.initOnFiredListener();
-
-        netUnsuppressed.addListener("onFiredUnsuppressed", (fl, nr, u) -> {
-                    if (fl.getInput().exceedsThreshold() && firedUnsuppressed == NOT_SET) {
-                        firedUnsuppressed = doc.getCurrentTimestamp();
-                        LinkingOut.add(this, UNSUPPRESSED);
-                    }
-                }
-        );
-    }
-
-    public SumField getNetUnsuppressed() {
-        return netUnsuppressed;
-    }
-
-    public FieldOutput getValueUnsuppressed() {
-        return valueUnsuppressed;
-    }
-
-    @Override
-    public boolean isFiredUnsuppressed() {
-        return isTrue(netUnsuppressed, 0.0);
     }
 
     @Override
@@ -187,16 +125,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     }
 
     @Override
-    public void bindingVisit(Visitor v, Link lastLink, int state, int depth) {
-        super.bindingVisit(v, lastLink, state, depth);
-
-        if(depth <= 2 && lastLink instanceof InnerInhibitoryLink) {
-            // Hack needed to allow the inner neg feedback link to work
-            v.up(this, state, depth);
-        }
-    }
-
-    @Override
     public void patternCatVisit(Visitor v, Link lastLink, int state, int depth) {
         if(v.isDown()) {
             v.setReferenceAct(this);
@@ -220,13 +148,5 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     public void updateBias(double u) {
         getNet().receiveUpdate(null, false, u);
-    }
-
-    @Override
-    public void disconnect() {
-        if(netUnsuppressed != null)
-            netUnsuppressed.disconnectAndUnlinkInputs(false);
-
-        super.disconnect();
     }
 }
