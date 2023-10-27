@@ -14,73 +14,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses.outerinhibitoryloop;
+package network.aika.elements.synapses.inhibitoryloop;
 
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InhibitoryActivation;
-import network.aika.elements.links.outerinhibitoryloop.NegativeFeedbackLink;
+import network.aika.elements.links.outerinhibitoryloop.InhibitoryLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.InhibitoryNeuron;
-import network.aika.elements.synapses.FeedbackSynapse;
+import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.linkingmode.LinkingMode;
 
 import static network.aika.elements.Type.*;
 import static network.aika.enums.Scope.INPUT;
-import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
 
 /**
  *
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 9,
-        inputType = OUTER_INHIBITORY,
-        outputType = BINDING,
+        synapseTypeId = 12,
+        inputType = BINDING,
+        outputType = OUTER_INHIBITORY,
         scope = INPUT
 )
-public class NegativeFeedbackSynapse extends FeedbackSynapse<
-        NegativeFeedbackSynapse,
-        InhibitoryNeuron,
+public class InhibitorySynapse extends DisjunctiveSynapse<
+        InhibitorySynapse,
         BindingNeuron,
-        NegativeFeedbackLink,
-        InhibitoryActivation,
-        BindingActivation
-        >
-{
-    @Override
-    public boolean checkVisitorState(int state) {
-        return (state & 2) > 0;
-    }
-
-    @Override
-    public void initDummyLink(BindingActivation oAct) {
-    }
-
-    @Override
-    protected void checkWeight() {
-        if(!isNegative())
-            delete();
-    }
-
+        InhibitoryNeuron,
+        InhibitoryLink,
+        BindingActivation,
+        InhibitoryActivation
+        > {
     @Override
     public boolean isLinkingAllowed(boolean latent) {
-        return false;
+        return !latent;
     }
 
     @Override
-    public NegativeFeedbackLink createLink(InhibitoryActivation input, BindingActivation output) {
-        return new NegativeFeedbackLink(this, input, output);
+    public InhibitoryLink createLink(BindingActivation input, InhibitoryActivation output) {
+        return new InhibitoryLink(this, input, output);
     }
 
     @Override
-    public void linkAndPropagateOut(InhibitoryActivation act) {
-        getOutput()
-                .linkOutgoing(this, act);
-    }
-
-    @Override
-    public LinkingMode getLinkingMode() {
-        return FEEDBACK;
+    public InhibitorySynapse instantiateTemplate(BindingNeuron input, InhibitoryNeuron output) {
+        InhibitorySynapse s = new InhibitorySynapse();
+        s.initFromTemplate(input, output, this);
+        return s;
     }
 }

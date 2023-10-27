@@ -116,15 +116,8 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
     }
 
     @Override
-    public void innerInhibVisit(Visitor v, Link lastLink, int state, int depth) {
-        super.innerInhibVisit(v, lastLink, state, depth);
-
-        v.up(this, state, depth);
-    }
-
-    @Override
-    public void outerInhibVisit(Visitor v, Link lastLink, int state, int depth) {
-        super.outerInhibVisit(v, lastLink, state, depth);
+    public void inhibVisit(Visitor v, Link lastLink, int state, int depth) {
+        super.inhibVisit(v, lastLink, state, depth);
 
         v.up(this, state, depth);
     }

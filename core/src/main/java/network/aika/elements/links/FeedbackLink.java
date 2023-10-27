@@ -17,7 +17,6 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.visitor.Visitor;
@@ -51,19 +50,11 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
     }
 
     @Override
-    public void innerInhibVisit(Visitor v, int state, int depth) {
+    public void inhibVisit(Visitor v, int state, int depth) {
         if(checkVisited(v))
             return;
 
-        super.innerInhibVisit(v, state, depth);
-    }
-
-    @Override
-    public void outerInhibVisit(Visitor v, int state, int depth) {
-        if(checkVisited(v))
-            return;
-
-        super.outerInhibVisit(v, state, depth);
+        super.inhibVisit(v, state, depth);
     }
 
     @Override
@@ -71,7 +62,7 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
         if(checkVisited(v))
             return;
 
-        super.innerInhibVisit(v, state, depth);
+        super.innerSelfRefVisit(v, state, depth);
     }
 
     @Override
@@ -79,7 +70,7 @@ public abstract class FeedbackLink<S extends FeedbackSynapse, IA extends Activat
         if(checkVisited(v))
             return;
 
-        super.outerInhibVisit(v, state, depth);
+        super.inhibVisit(v, state, depth);
     }
 
     @Override

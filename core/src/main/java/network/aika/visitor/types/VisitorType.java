@@ -31,15 +31,10 @@ public interface VisitorType {
     VisitorType PATTERN_VISITOR_TYPE = new PatternVisitor();
     VisitorType PATTERN_CAT_VISITOR_TYPE = new PatternCategoryVisitor();
     VisitorType BINDING_VISITOR_TYPE = new BindingVisitor();
-    VisitorType INNER_INHIB_VISITOR_TYPE = new InnerInhibitoryVisitor();
-    VisitorType OUTER_INHIB_VISITOR_TYPE = new OuterInhibitoryVisitor();
+    VisitorType INHIB_VISITOR_TYPE = new InhibitoryVisitor();
     VisitorType INNER_SELF_REF_VISITOR_TYPE = new InnerSelfRefVisitor();
     VisitorType OUTER_SELF_REF_VISITOR_TYPE = new OuterSelfRefVisitor();
 
-
-    static VisitorType getInhibitoryVisitorType(Scope s) {
-        return s == SAME ? INNER_INHIB_VISITOR_TYPE : OUTER_INHIB_VISITOR_TYPE;
-    }
 
     static VisitorType getSelfRefVisitorType(Scope s) {
         return s == SAME ? OUTER_SELF_REF_VISITOR_TYPE : INNER_SELF_REF_VISITOR_TYPE;

@@ -69,8 +69,4 @@ public class PatternCategoryInputLink extends PositiveFeedbackLink<PatternCatego
     public void instantiateTemplate(CategoryActivation iAct, PatternActivation oAct) {
         instantiateTemplate(iAct, oAct, this);
     }
-
-    @Override
-    public void innerInhibVisit(Visitor v, int state, int depth) {
-    }
 }

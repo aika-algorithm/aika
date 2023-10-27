@@ -91,15 +91,11 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         v.next(this, state, depth);
     }
 
-    public void innerInhibVisit(Visitor v, int state, int depth) {
-         v.next(this, state, depth);
-    }
-
     public void innerSelfRefVisit(Visitor v, int state, int depth) {
         v.next(this, state, depth);
     }
 
-    public void outerInhibVisit(Visitor v, int state, int depth) {
+    public void inhibVisit(Visitor v, int state, int depth) {
         v.next(this, state, depth);
     }
 
@@ -198,8 +194,14 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         FieldLink.link(synapse.getWeight(), 1, weightedInput)
                 .setPropagateUpdates(false);
 
-        weightedInput.connectInputs(true);
+        checkConnectInputValueLink();
+        weightedInput.getInputLinkByArg(1).connect(true);
+
         return weightedInput;
+    }
+
+    protected void checkConnectInputValueLink() {
+        getInputValueLink().connect(true);
     }
 
     public FieldLink getInputValueLink() {

@@ -57,11 +57,7 @@ public class RelationInputLink extends ConjunctiveLink<RelationInputSynapse, Lat
     }
 
     @Override
-    public void innerInhibVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void outerInhibVisit(Visitor v, int state, int depth) {
+    public void inhibVisit(Visitor v, int state, int depth) {
     }
 
     @Override

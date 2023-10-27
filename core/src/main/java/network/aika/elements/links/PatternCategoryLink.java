@@ -46,8 +46,4 @@ public class PatternCategoryLink extends CategoryLink<PatternCategorySynapse, Pa
     @Override
     protected void connectGradientFields() {
     }
-
-    @Override
-    public void innerInhibVisit(Visitor v, int state, int depth) {
-    }
 }

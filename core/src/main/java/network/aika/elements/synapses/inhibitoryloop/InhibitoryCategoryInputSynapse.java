@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses.outerinhibitoryloop;
+package network.aika.elements.synapses.inhibitoryloop;
 
 import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;

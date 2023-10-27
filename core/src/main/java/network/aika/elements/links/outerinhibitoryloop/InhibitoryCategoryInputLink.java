@@ -21,8 +21,8 @@ import network.aika.elements.activations.*;
 import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.outerinhibitoryloop.InhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.outerinhibitoryloop.InhibitoryCategorySynapse;
+import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategoryInputSynapse;
+import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategorySynapse;
 import network.aika.visitor.Visitor;
 
 import static network.aika.elements.Type.*;
@@ -60,10 +60,6 @@ public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCateg
 
     @Override
     public void patternCatVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void innerInhibVisit(Visitor v, int state, int depth) {
     }
 
     @Override

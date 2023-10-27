@@ -42,11 +42,11 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     }
 
     @Override
-    protected void initWeightInput() {
-        if(input != null)
+    protected void checkConnectInputValueLink() {
+        if (input != null) {
             input.lookupOutputSlot(this);
-
-        super.initWeightInput();
+        } else
+            super.checkConnectInputValueLink();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     }
 
     @Override
-    public void outerInhibVisit(Visitor v, int state, int depth) {
+    public void inhibVisit(Visitor v, int state, int depth) {
     }
 
     @Override

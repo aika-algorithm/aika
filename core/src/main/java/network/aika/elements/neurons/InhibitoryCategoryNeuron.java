@@ -24,7 +24,7 @@ import network.aika.elements.activations.InhibitoryCategoryActivation;
 import network.aika.visitor.types.VisitorType;
 
 import static network.aika.elements.Type.OUTER_INHIBITORY;
-import static network.aika.visitor.types.VisitorType.OUTER_INHIB_VISITOR_TYPE;
+import static network.aika.visitor.types.VisitorType.INHIB_VISITOR_TYPE;
 
 /**
  * @author Lukas Molzberger
@@ -42,7 +42,7 @@ public class InhibitoryCategoryNeuron extends CategoryNeuron {
 
     @Override
     public VisitorType getVisitorType() {
-        return OUTER_INHIB_VISITOR_TYPE;
+        return INHIB_VISITOR_TYPE;
     }
 
     @Override

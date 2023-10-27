@@ -23,13 +23,13 @@ import network.aika.visitor.Visitor;
 /**
  * @author Lukas Molzberger
  */
-public class OuterInhibitoryVisitor implements VisitorType {
+public class InhibitoryVisitor implements VisitorType {
 
     public void visit(Visitor v, Link l, int state, int depth) {
-        l.outerInhibVisit(v, state, depth);
+        l.inhibVisit(v, state, depth);
     }
 
     public void visit(Visitor v, Activation act, Link l, int state, int depth) {
-        act.outerInhibVisit(v, l, state, depth);
+        act.inhibVisit(v, l, state, depth);
     }
 }

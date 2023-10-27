@@ -26,16 +26,9 @@ import java.util.stream.Stream;
 public class MaxField extends SumField {
 
     private FieldLink selectedInput;
-    private MaxFieldListener listener;
 
     public MaxField(FieldObject ref, String label) {
         super(ref, label, null);
-    }
-
-    public MaxField(FieldObject ref, String label, MaxFieldListener listener) {
-        this(ref, label);
-
-        this.listener = listener;
     }
 
     public FieldLink getSelectedInput() {
@@ -66,10 +59,12 @@ public class MaxField extends SumField {
                 .max(Comparator.comparingDouble(AbstractFieldLink::getInputValue))
                 .orElse(null);
 
-        if(listener != null && lastSelectedInput != selectedInput)
-            listener.onSelectionChanged(lastSelectedInput, selectedInput);
+        checkListener(lastSelectedInput, selectedInput);
 
         super.triggerUpdate(nextRound, u);
+    }
+
+    protected void checkListener(FieldLink lastSelectedInput, FieldLink selectedInput) {
     }
 
     protected boolean isCandidate(FieldLink fl) {

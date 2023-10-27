@@ -17,25 +17,52 @@
 package network.aika.fields;
 
 
-import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 
 /**
  * @author Lukas Molzberger
  */
 public class SynapseOutputSlot extends MaxField {
-    public SynapseOutputSlot(Synapse ref, String label) {
-        super(ref, label, (lsi, nsi) -> {
-            getLink(lsi).getInputValueLink().disconnect(true);
-            getLink(nsi).getInputValueLink().connect(true);
-        });
+
+    private MaxFieldListener listener;
+    private Activation inputAct;
+    private int synapseId;
+
+    public SynapseOutputSlot(Synapse ref, Activation iAct, String label) {
+        super(ref, label);
+        this.inputAct = iAct;
+        this.synapseId = ref.getSynapseId();
+
+        listener = (lsi, nsi) -> {
+            updateConnection(lsi, false);
+            updateConnection(nsi, true);
+        };
     }
 
-    public ConjunctiveLink getSelectedLink() {
+    protected void checkListener(FieldLink lastSelectedInput, FieldLink selectedInput) {
+        if(listener != null && lastSelectedInput != selectedInput)
+            listener.onSelectionChanged(lastSelectedInput, selectedInput);
+    }
+
+    private void updateConnection(FieldLink si, boolean state) {
+        if(si == null)
+            return;
+
+        FieldLink fl = getLink(si).getInputValueLink();
+        if (state)
+            fl.connect(true);
+        else
+            fl.disconnect(true);
+    }
+
+    public Link getSelectedLink() {
         return getLink(getSelectedInput());
     }
 
-    public static ConjunctiveLink getLink(FieldLink fl) {
-        return (ConjunctiveLink) fl.getInput().getReference();
+    public Link getLink(FieldLink fl) {
+        return ((Activation) fl.getInput().getReference())
+                .getInputLink(inputAct, synapseId);
     }
 }
