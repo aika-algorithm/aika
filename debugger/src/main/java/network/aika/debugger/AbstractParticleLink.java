@@ -93,16 +93,22 @@ public abstract class AbstractParticleLink<E extends Element> {
     public abstract void processLayout();
 
     public void onEvent() {
+        String synapseTypeModifier = "";
+
         Synapse s;
         if(link instanceof Link) {
-            s = ((Link) link).getSynapse();
+            Link l = ((Link) link);
+            s = l.getSynapse();
+
+            if(!l.isActive())
+                synapseTypeModifier += " stroke-mode: dashes;";
         } else {
             s = (Synapse) link;
         }
 
-        String synapseTypeModifier = synapseTypeModifiers.get(s.getClass());
-        if(synapseTypeModifier == null)
-            synapseTypeModifier = "";
+        String style = synapseTypeModifiers.get(s.getClass());
+        if(style != null)
+            synapseTypeModifier += style;
 
         if(s instanceof FeedbackSynapse)
             synapseTypeModifier += " arrow-shape: diamond;";

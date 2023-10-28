@@ -74,6 +74,17 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         getDocument().onElementEvent(CREATE, this);
     }
 
+    public boolean isActive() {
+        return isInputSideActive() && isOutputSideActive();
+    }
+
+    public boolean isInputSideActive() {
+        return true;
+    }
+
+    public boolean isOutputSideActive() {
+        return true;
+    }
     public abstract Type getInputType();
 
     public abstract Type getOutputType();
@@ -95,6 +106,9 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         weightedInput.disconnectAndUnlinkInputs(false);
     }
 
+    public void disableDummyLink() {
+        weightedInput.disconnectAndUnlinkInputs(true);
+    }
 
     public void instantiateTemplate(I iAct, O oAct) {
         if(iAct == null || oAct == null)

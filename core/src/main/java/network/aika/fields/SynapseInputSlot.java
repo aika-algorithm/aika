@@ -17,15 +17,34 @@
 package network.aika.fields;
 
 
+import network.aika.debugger.EventType;
 import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 
 /**
  * @author Lukas Molzberger
  */
 public class SynapseInputSlot extends MaxField {
+
+
     public SynapseInputSlot(Synapse ref, String label) {
         super(ref, label);
+    }
+
+    protected void checkListener(FieldLink lastSelectedInput, FieldLink selectedInput) {
+        updateConnection(lastSelectedInput, false);
+        updateConnection(selectedInput, true);
+    }
+
+    private void updateConnection(FieldLink si, boolean state) {
+        if(si == null)
+            return;
+        Link l = getLink(si);
+
+        if (state != l.isInputSideActive()) {
+            l.getDocument().onElementEvent(EventType.UPDATE, l);
+        }
     }
 
     public ConjunctiveLink getSelectedLink() {
@@ -33,6 +52,9 @@ public class SynapseInputSlot extends MaxField {
     }
 
     public static ConjunctiveLink getLink(FieldLink fl) {
+        if(fl == null)
+            return null;
+
         return (ConjunctiveLink) fl.getInput().getReference();
     }
 

@@ -24,6 +24,7 @@ import network.aika.elements.synapses.positivefeedbackloop.PositiveFeedbackSynap
 import network.aika.fields.AbstractFunction;
 import network.aika.fields.Field;
 import network.aika.fields.IdentityFunction;
+import network.aika.fields.MaxField;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
@@ -44,10 +45,9 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
 
     @Override
     protected void initInputValue() {
-        super.initInputValue();
+        inputValue = new MaxField(this, "max-input-value");
 
-        if(input == null)
-            linkAndConnect(getFeedbackTrigger(), 0, inputValue);
+        linkAndConnect(getFeedbackTrigger(), 0, inputValue);
     }
 
     protected Field getFeedbackTrigger() {

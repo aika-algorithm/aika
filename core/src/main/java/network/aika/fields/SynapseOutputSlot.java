@@ -17,6 +17,7 @@
 package network.aika.fields;
 
 
+import network.aika.debugger.EventType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
@@ -26,7 +27,6 @@ import network.aika.elements.synapses.Synapse;
  */
 public class SynapseOutputSlot extends MaxField {
 
-    private MaxFieldListener listener;
     private Activation inputAct;
     private int synapseId;
 
@@ -34,27 +34,26 @@ public class SynapseOutputSlot extends MaxField {
         super(ref, label);
         this.inputAct = iAct;
         this.synapseId = ref.getSynapseId();
-
-        listener = (lsi, nsi) -> {
-            updateConnection(lsi, false);
-            updateConnection(nsi, true);
-        };
     }
 
     protected void checkListener(FieldLink lastSelectedInput, FieldLink selectedInput) {
-        if(listener != null && lastSelectedInput != selectedInput)
-            listener.onSelectionChanged(lastSelectedInput, selectedInput);
+        updateConnection(lastSelectedInput, false);
+        updateConnection(selectedInput, true);
     }
 
     private void updateConnection(FieldLink si, boolean state) {
         if(si == null)
             return;
-
-        FieldLink fl = getLink(si).getInputValueLink();
+        Link l = getLink(si);
+        FieldLink fl = l.getInputValueLink();
         if (state)
             fl.connect(true);
         else
             fl.disconnect(true);
+
+        if(state != l.isOutputSideActive()) {
+            l.getDocument().onElementEvent(EventType.UPDATE, l);
+        }
     }
 
     public Link getSelectedLink() {

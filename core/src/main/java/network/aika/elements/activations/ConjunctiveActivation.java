@@ -52,6 +52,12 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
                 );
     }
 
+    public void removeDummyLink(Synapse s) {
+        Link l = getInputLink(null, s);
+        if(l != null)
+            l.disableDummyLink();
+    }
+
     public SynapseInputSlot getInputSlot(Synapse s) {
         return inputSlots.get(s.getInput().getId());
     }

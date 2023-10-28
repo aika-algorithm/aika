@@ -20,6 +20,7 @@ import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
+import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 import network.aika.fields.*;
 import network.aika.visitor.Visitor;
@@ -39,6 +40,17 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
 
     public InnerPositiveFeedbackLink(InnerPositiveFeedbackSynapse s, PatternActivation input, BindingActivation output) {
         super(s, input, output);
+
+        if(input != null)
+            output.removeDummyLink(s);
+    }
+
+    public boolean isInputSideActive() {
+        if(input == null)
+            return true;
+        SynapseOutputSlot sos = input.getOutputSlot(synapse);
+
+        return sos != null && sos.getSelectedLink() == this;
     }
 
     @Override

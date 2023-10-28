@@ -39,6 +39,11 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         super(s, input, output);
     }
 
+    public boolean isOutputSideActive() {
+        SynapseInputSlot sis = output.getInputSlot(synapse);
+        return sis != null && sis.getSelectedLink() == this;
+    }
+
     @Override
     public void visit(Visitor v, int state, int depth) {
        if(input == null)
