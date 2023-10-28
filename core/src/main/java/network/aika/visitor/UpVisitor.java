@@ -17,7 +17,6 @@
 package network.aika.visitor;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 
 import static network.aika.utils.Utils.depthToSpace;
@@ -28,10 +27,8 @@ import static network.aika.utils.Utils.idToString;
  */
 public class UpVisitor extends Visitor {
 
-
     protected UpVisitor(DownVisitor downVisitor) {
         this.v = downVisitor.v;
-        this.type = downVisitor.type;
         this.operator = downVisitor.operator;
         this.referenceAct = downVisitor.referenceAct;
     }
@@ -45,7 +42,7 @@ public class UpVisitor extends Visitor {
 
         act.getOutputLinks()
                 .forEach(l ->
-                        type.visit(this, l, filterState(state, l), depth + 1)
+                        l.visit(this, filterState(state, l), depth + 1)
                 );
     }
 
@@ -54,7 +51,7 @@ public class UpVisitor extends Visitor {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 
-        type.visit(this, l.getOutput(), l, state, depth + 1);
+        l.getOutput().visit(this, l, state, depth + 1);
     }
 
     public boolean isDown() {

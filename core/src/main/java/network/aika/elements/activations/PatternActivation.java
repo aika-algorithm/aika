@@ -102,46 +102,10 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
     }
 
     @Override
-    public void bindingVisit(Visitor v, Link lastLink, int state, int depth) {
-        super.bindingVisit(v, lastLink, state, depth);
+    public void visit(Visitor v, Link lastLink, int state, int depth) {
+        super.visit(v, lastLink, state, depth);
 
         v.up(this, state, depth);
-    }
-
-    @Override
-    public void patternVisit(Visitor v, Link lastLink, int state, int depth) {
-        super.patternVisit(v, lastLink, state, depth);
-
-        v.up(this, state, depth);
-    }
-
-    @Override
-    public void inhibVisit(Visitor v, Link lastLink, int state, int depth) {
-        super.inhibVisit(v, lastLink, state, depth);
-
-        v.up(this, state, depth);
-    }
-
-    @Override
-    public void innerSelfRefVisit(Visitor v, Link lastLink, int state, int depth) {
-        super.innerSelfRefVisit(v, lastLink, state, depth);
-
-        v.up(this, state, depth);
-    }
-
-    @Override
-    public void outerSelfRefVisit(Visitor v, Link lastLink, int state, int depth) {
-        super.outerSelfRefVisit(v, lastLink, state, depth);
-
-        v.up(this, state, depth);
-    }
-
-    @Override
-    public void patternCatVisit(Visitor v, Link lastLink, int state, int depth) {
-        if(v.isDown() && lastLink != null && lastLink.getSynapse().getScope() == Scope.INPUT)
-            v.up(this, state, depth);
-        else
-            super.patternCatVisit(v, lastLink, state, depth);
     }
 
     public double getSurprisal(Sign sign) {

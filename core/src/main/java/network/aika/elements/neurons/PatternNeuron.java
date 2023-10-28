@@ -26,7 +26,6 @@ import network.aika.statistic.SampleSpace;
 import network.aika.text.Range;
 import network.aika.utils.Bound;
 import network.aika.utils.Utils;
-import network.aika.visitor.types.VisitorType;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -34,7 +33,6 @@ import java.io.IOException;
 
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.sign.Sign.POS;
-import static network.aika.visitor.types.VisitorType.PATTERN_VISITOR_TYPE;
 
 /**
  *
@@ -77,11 +75,6 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
 
     public static String getCategoryLabel(String placeholder) {
         return placeholder + CATEGORY_LABEL;
-    }
-
-    @Override
-    public VisitorType getVisitorType() {
-        return PATTERN_VISITOR_TYPE;
     }
 
     @Override

@@ -21,7 +21,6 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 import network.aika.visitor.operator.Operator;
-import network.aika.visitor.types.VisitorType;
 
 import static network.aika.utils.Utils.depthToSpace;
 import static network.aika.utils.Utils.idToString;
@@ -31,13 +30,12 @@ import static network.aika.utils.Utils.idToString;
  */
 public class DownVisitor extends Visitor {
 
-    public DownVisitor(Document doc, VisitorType type, Operator operator) {
+    public DownVisitor(Document doc, Operator operator) {
         this.v = doc.getNewVisitorId();
-        this.type = type;
 
         if(log.isDebugEnabled()) {
             log.debug("");
-            log.debug(depthToSpace(0) + "Start: Visitor:" + getClass().getSimpleName() + " Operator:" + operator.getClass().getSimpleName() + " Type:" + type.getClass().getSimpleName());
+            log.debug(depthToSpace(0) + "Start: Visitor:" + getClass().getSimpleName() + " Operator:" + operator.getClass().getSimpleName());
         }
 
         this.operator = operator;
@@ -50,7 +48,7 @@ public class DownVisitor extends Visitor {
 
         act.getInputLinks()
                 .forEach(l ->
-                        type.visit(this, l, filterState(state, l), depth + 1)
+                        l.visit(this, filterState(state, l), depth + 1)
                 );
     }
 
@@ -60,13 +58,12 @@ public class DownVisitor extends Visitor {
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 
         if(l.getInput() != null)
-            type.visit(this, l.getInput(), l, state, depth + 1);
+            l.getInput().visit(this, l, state, depth + 1);
     }
 
     public void up(ConjunctiveActivation bindingSource, int state, int depth) {
-        type.visit(
+        bindingSource.visit(
                 new UpVisitor(this),
-                bindingSource,
                 null,
                 state,
                 depth

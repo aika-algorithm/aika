@@ -58,10 +58,6 @@ public class BindingCategoryInputLink extends PositiveFeedbackLink<BindingCatego
     }
 
     @Override
-    public void patternCatVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
     public void instantiateTemplate(CategoryActivation iAct, BindingActivation oAct) {
         instantiateTemplate(iAct, oAct, this);
     }

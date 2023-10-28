@@ -71,18 +71,4 @@ public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiv
                 output.getGradient()
         );
     }
-
-    @Override
-    public void bindingVisit(Visitor v, int state, int depth) {
-        if(v.isDown())
-            super.bindingVisit(v, state, depth);
-    }
-
-    @Override
-    public void patternVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void outerSelfRefVisit(Visitor v, int state, int depth) {
-    }
 }

@@ -57,9 +57,4 @@ public class InputObjectSynapse extends ConjunctiveSynapse<
     public boolean checkVisitorState(int state) {
         return (state & 2) > 0;
     }
-
-    @Override
-    public boolean checkOutputSidePrecondition(BindingActivation oAct) {
-        return !linkExists(oAct, true);
-    }
 }

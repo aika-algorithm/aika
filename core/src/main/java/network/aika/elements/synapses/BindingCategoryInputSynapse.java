@@ -16,7 +16,6 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.activations.BindingActivation;
@@ -26,10 +25,8 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.synapses.positivefeedbackloop.PositiveFeedbackSynapse;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.operator.SelfRefOperator;
-import network.aika.visitor.types.VisitorType;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.enums.Scope.INPUT;
 import static network.aika.enums.Scope.SAME;
 
 /**
@@ -59,7 +56,6 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         SelfRefOperator op = new SelfRefOperator(oAct);
         new DownVisitor(
                 iAct.getDocument(),
-                VisitorType.getSelfRefVisitorType(INPUT),
                 op
         ).start(iAct);
         return op.isSelfRef();

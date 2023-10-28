@@ -43,8 +43,4 @@ public class BindingCategoryLink extends CategoryLink<BindingCategorySynapse, Bi
     public Type getOutputType() {
         return BINDING;
     }
-
-    @Override
-    public void patternCatVisit(Visitor v, int state, int depth) {
-    }
 }

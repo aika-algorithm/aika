@@ -33,7 +33,6 @@ import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;
 import network.aika.elements.synapses.Synapse;
 import network.aika.visitor.DownVisitor;
-import network.aika.visitor.types.VisitorType;
 import network.aika.visitor.operator.IncomingLinkingOperator;
 import network.aika.queue.activation.Save;
 import network.aika.utils.Writable;
@@ -170,8 +169,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public abstract VisitorType getVisitorType();
-
     public void linkOutgoing(Synapse targetSyn, Activation iAct) {
         if(log.isDebugEnabled())
             log.debug("linkOutgoing: targetSyn:" + targetSyn + " iAct:" + iAct);
@@ -185,7 +182,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         else {
             new DownVisitor(
                     iAct.getDocument(),
-                    to.getVisitorType(),
                     op
             ).start(iAct);
         }
@@ -210,7 +206,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                     else {
                         new DownVisitor(
                                 iAct.getDocument(),
-                                targetSyn.getOutput().getVisitorType(),
                                 op
                         ).start(iAct);
                     }
@@ -220,7 +215,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     public void linkAndPropagateIn(Link l) {
         getInputSynapsesAsStream()
                 .filter(targetSyn -> targetSyn != l.getSynapse())
-                .filter(targetSyn -> targetSyn.checkOutputSidePrecondition(l.getOutput()))
                 .forEach(targetSyn -> {
                     if(log.isDebugEnabled())
                         log.debug("linkAndPropagateIn: link:" + l + " targetSyn:" + targetSyn);
@@ -232,7 +226,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                     else {
                         new DownVisitor(
                                 l.getDocument(),
-                                targetSyn.getOutput().getVisitorType(),
                                 op
                         ).start(l);
                     }

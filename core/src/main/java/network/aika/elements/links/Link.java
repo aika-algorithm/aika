@@ -83,27 +83,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         LinkingOut.add(output, FEEDBACK);
     }
 
-    public void bindingVisit(Visitor v, int state, int depth) {
-        v.next(this, state, depth);
-    }
-
-    public void patternVisit(Visitor v, int state, int depth) {
-        v.next(this, state, depth);
-    }
-
-    public void innerSelfRefVisit(Visitor v, int state, int depth) {
-        v.next(this, state, depth);
-    }
-
-    public void inhibVisit(Visitor v, int state, int depth) {
-        v.next(this, state, depth);
-    }
-
-    public void outerSelfRefVisit(Visitor v, int state, int depth) {
-        v.next(this, state, depth);
-    }
-
-    public void patternCatVisit(Visitor v, int state, int depth) {
+    public void visit(Visitor v, int state, int depth) {
         v.next(this, state, depth);
     }
 

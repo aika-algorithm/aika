@@ -25,9 +25,7 @@ import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.visitor.DownVisitor;
-import network.aika.visitor.Visitor;
 import network.aika.visitor.operator.SelfRefOperator;
-import network.aika.visitor.types.VisitorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,7 +105,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         SelfRefOperator op = new SelfRefOperator(out);
         new DownVisitor(
                 doc,
-                VisitorType.getSelfRefVisitorType(identityRef),
                 op
         ).start(this);
 
@@ -115,27 +112,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
             log.debug("Finished checking SelfRef for (" + toKeyString() + ", " + out.toKeyString() + ") : " + op.isSelfRef());
 
         return op.isSelfRef();
-    }
-
-    @Override
-    public void patternVisit(Visitor v, Link lastLink, int state, int depth) {
-        super.patternVisit(v, lastLink, state, depth);
-        // Hack needed to allow the latent linking of the primary pattern link to work
-        v.up(this, state, depth);
-    }
-
-    @Override
-    public void patternCatVisit(Visitor v, Link lastLink, int state, int depth) {
-        if(v.isDown()) {
-            v.setReferenceAct(this);
-            super.patternCatVisit(v, lastLink, state, depth);
-        } else {
-            CategoryActivation cAct = getCategoryActivation();
-            CategoryActivation refCAct = v.getReferenceAct().getCategoryActivation();
-
-            if(cAct != null && cAct == refCAct)
-                super.patternCatVisit(v, lastLink, state, depth);
-        }
     }
 
     public boolean isInput() {

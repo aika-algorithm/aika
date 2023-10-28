@@ -135,20 +135,4 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
     public AbstractFunction getInformationGain() {
         return informationGain;
     }
-
-    @Override
-    public void bindingVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void inhibVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void innerSelfRefVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void outerSelfRefVisit(Visitor v, int state, int depth) {
-    }
 }

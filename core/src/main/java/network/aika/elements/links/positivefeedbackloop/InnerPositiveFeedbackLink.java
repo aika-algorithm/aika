@@ -91,12 +91,4 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
         if(input != null)
             linkAndConnect(input.getGradient(), 0, inputGradient);
     }
-
-    @Override
-    public void inhibVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void innerSelfRefVisit(Visitor v, int state, int depth) {
-    }
 }

@@ -24,7 +24,6 @@ import network.aika.elements.activations.InhibitoryActivation;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategorySynapse;
-import network.aika.visitor.types.VisitorType;
 
 import static network.aika.elements.Type.OUTER_INHIBITORY;
 
@@ -54,11 +53,6 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
         s.setInitialCategorySynapseWeight(1.0);
 
         return s;
-    }
-
-    @Override
-    public VisitorType getVisitorType() {
-        return VisitorType.INHIB_VISITOR_TYPE;
     }
 
     @Override

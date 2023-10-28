@@ -57,11 +57,6 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         return FEEDBACK;
     }
 
-    @Override
-    public boolean checkOutputSidePrecondition(BindingActivation oAct) {
-        return !linkExists(oAct, false);
-    }
-
     public OuterPositiveFeedbackLink createLink(PatternActivation input, BindingActivation output) {
         return new OuterPositiveFeedbackLink(this, input, output);
     }

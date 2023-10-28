@@ -198,13 +198,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                 .orElse(null);
     }
 
-    /**
-     * Returns true, if either the synapse allows more than one link or the link does not exist yet.
-     */
-    public boolean checkOutputSidePrecondition(OA oAct) {
-        return true;
-    }
-
     public boolean checkSecondaryVisitorRun(Activation iAct, Activation oAct) {
         return true;
     }

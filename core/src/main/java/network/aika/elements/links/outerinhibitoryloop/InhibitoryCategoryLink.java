@@ -46,16 +46,4 @@ public class InhibitoryCategoryLink extends CategoryLink<InhibitoryCategorySynap
     public Type getOutputType() {
         return OUTER_INHIBITORY;
     }
-
-    @Override
-    public void patternCatVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void innerSelfRefVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void outerSelfRefVisit(Visitor v, int state, int depth) {
-    }
 }

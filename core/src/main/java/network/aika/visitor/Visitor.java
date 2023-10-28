@@ -23,7 +23,6 @@ import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.visitor.operator.Operator;
-import network.aika.visitor.types.VisitorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +34,6 @@ public abstract class Visitor {
     protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
 
     protected long v;
-
-    protected VisitorType type;
 
     protected Operator operator;
 
@@ -55,9 +52,8 @@ public abstract class Visitor {
     }
 
     public void start(Activation<?> act) {
-        type.visit(
+        act.visit(
                 this,
-                act,
                 null,
                 getStartState(act),
                 0
@@ -65,9 +61,8 @@ public abstract class Visitor {
     }
 
     public void start(Link l) {
-        type.visit(
+        l.visit(
                 this,
-                l,
                 filterState(
                         getStartState(l.getOutput()),
                         l
@@ -90,10 +85,6 @@ public abstract class Visitor {
     public abstract void next(Link<?, ?, ?> l, int state, int depth);
 
     protected abstract String dirToString();
-
-    public VisitorType getType() {
-        return type;
-    }
 
     public abstract boolean isDown();
 

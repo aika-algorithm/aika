@@ -21,11 +21,9 @@ import network.aika.Document;
 import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.synapses.*;
-import network.aika.visitor.types.VisitorType;
 
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.visitor.types.VisitorType.BINDING_VISITOR_TYPE;
 
 
 /**
@@ -47,11 +45,6 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     @Override
     public Type getType() {
         return BINDING;
-    }
-
-    @Override
-    public VisitorType getVisitorType() {
-        return BINDING_VISITOR_TYPE;
     }
 
     @Override

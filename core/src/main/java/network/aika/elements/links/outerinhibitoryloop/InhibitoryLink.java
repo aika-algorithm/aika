@@ -76,22 +76,6 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
         return OUTER_INHIBITORY;
     }
 
-    @Override
-    public void patternVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void patternCatVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void innerSelfRefVisit(Visitor v, int state, int depth) {
-    }
-
-    @Override
-    public void outerSelfRefVisit(Visitor v, int state, int depth) {
-    }
-
     public void connectFields(NegativeFeedbackLink out) {
         if(isSelfRef(getInput(), out.getOutput(), Scope.SAME))
             return;

@@ -70,9 +70,6 @@ public class OutgoingLinkingOperator extends LinkingOperator {
         if(act == sourceAct)
             return null;
 
-        if(!targetSyn.checkOutputSidePrecondition(act))
-            return null;
-
         if(!targetSyn.checkSecondaryVisitorRun(sourceAct, act))
             return null;
 
