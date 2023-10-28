@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links.outerinhibitoryloop;
+package network.aika.elements.links.inhibitoryloop;
 
 import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
@@ -23,7 +23,6 @@ import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.inhibitoryloop.InhibitorySynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
-import network.aika.visitor.Visitor;
 
 import java.util.stream.Stream;
 

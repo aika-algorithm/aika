@@ -19,10 +19,10 @@ package network.aika.elements.activations;
 import network.aika.Document;
 import network.aika.elements.Type;
 import network.aika.elements.links.*;
-import network.aika.elements.links.outerinhibitoryloop.InhibitoryCategoryInputLink;
-import network.aika.elements.links.outerinhibitoryloop.InhibitoryCategoryLink;
-import network.aika.elements.links.outerinhibitoryloop.InhibitoryLink;
-import network.aika.elements.links.outerinhibitoryloop.NegativeFeedbackLink;
+import network.aika.elements.links.inhibitoryloop.InhibitoryCategoryInputLink;
+import network.aika.elements.links.inhibitoryloop.InhibitoryCategoryLink;
+import network.aika.elements.links.inhibitoryloop.InhibitoryLink;
+import network.aika.elements.links.inhibitoryloop.NegativeFeedbackLink;
 import network.aika.elements.neurons.InhibitoryNeuron;
 
 import java.util.List;

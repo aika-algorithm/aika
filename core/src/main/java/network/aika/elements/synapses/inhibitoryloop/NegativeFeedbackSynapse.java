@@ -18,7 +18,7 @@ package network.aika.elements.synapses.inhibitoryloop;
 
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InhibitoryActivation;
-import network.aika.elements.links.outerinhibitoryloop.NegativeFeedbackLink;
+import network.aika.elements.links.inhibitoryloop.NegativeFeedbackLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.InhibitoryNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;

@@ -17,7 +17,7 @@
 package network.aika.debugger.activations.properties;
 
 import network.aika.elements.links.FeedbackLink;
-import network.aika.elements.links.outerinhibitoryloop.NegativeFeedbackLink;
+import network.aika.elements.links.inhibitoryloop.NegativeFeedbackLink;
 import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
 
 /**

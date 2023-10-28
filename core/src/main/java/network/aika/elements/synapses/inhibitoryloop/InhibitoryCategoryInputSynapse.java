@@ -19,7 +19,7 @@ package network.aika.elements.synapses.inhibitoryloop;
 import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.InhibitoryActivation;
-import network.aika.elements.links.outerinhibitoryloop.InhibitoryCategoryInputLink;
+import network.aika.elements.links.inhibitoryloop.InhibitoryCategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.InhibitoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;

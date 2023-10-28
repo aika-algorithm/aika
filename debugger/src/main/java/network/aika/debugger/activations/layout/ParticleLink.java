@@ -19,7 +19,7 @@ package network.aika.debugger.activations.layout;
 import network.aika.debugger.AbstractParticleLink;
 import network.aika.debugger.activations.ActivationGraphManager;
 import network.aika.debugger.activations.particles.ActivationParticle;
-import network.aika.elements.links.outerinhibitoryloop.InhibitoryLink;
+import network.aika.elements.links.inhibitoryloop.InhibitoryLink;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.links.*;
 import org.graphstream.graph.Edge;

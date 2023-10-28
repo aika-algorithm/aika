@@ -19,7 +19,7 @@ package network.aika.debugger.activations.properties;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.*;
-import network.aika.elements.links.outerinhibitoryloop.InhibitoryLink;
+import network.aika.elements.links.inhibitoryloop.InhibitoryLink;
 
 
 /**
