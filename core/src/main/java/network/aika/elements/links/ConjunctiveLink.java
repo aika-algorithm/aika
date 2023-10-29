@@ -22,6 +22,7 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.fields.*;
 import network.aika.visitor.Visitor;
 
+import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 
 
@@ -31,6 +32,9 @@ import static network.aika.fields.Fields.*;
 public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>>
         extends Link<S, IA, OA> {
 
+    protected SynapseInputSlot synInputSlot;
+    protected SynapseOutputSlot synOutputSlot;
+
     private FieldOutput weightUpdatePosCase;
     private FieldOutput weightUpdateNegCase;
     private FieldOutput biasUpdateNegCase;
@@ -39,9 +43,39 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         super(s, input, output);
     }
 
+    @Override
+    public void link() {
+        super.link();
+
+        if (input != null)
+            synInputSlot = input.registerOutputSlot(this);
+
+        synOutputSlot = output.registerInputSlot(synapse);
+    }
+
+    @Override
+    protected void checkConnectInputValueLink() {
+        if (input == null)
+            super.checkConnectInputValueLink();
+    }
+
+    public SynapseInputSlot getSynInputSlot() {
+        return synInputSlot;
+    }
+
+    public SynapseOutputSlot getSynOutputSlot() {
+        return synOutputSlot;
+    }
+
+    public boolean isInputSideActive() {
+        if(input == null)
+            return true;
+
+        return synInputSlot != null && synInputSlot.getSelectedLink() == this;
+    }
+
     public boolean isOutputSideActive() {
-        SynapseInputSlot sis = output.getInputSlot(synapse);
-        return sis != null && sis.getSelectedLink() == this;
+        return synOutputSlot != null && synOutputSlot.getSelectedLink() == this;
     }
 
     @Override
@@ -49,8 +83,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
        if(input == null)
             return;
 
-        SynapseInputSlot slot = output.getInputSlot(synapse);
-        if(slot.getSelectedLink() == this)
+        if(isOutputSideActive())
             v.next(this, state, depth);
     }
 
@@ -58,13 +91,18 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     protected void initWeightInput() {
         super.initWeightInput();
 
+        if (synInputSlot != null)
+            linkAndConnect(output.getNet(), synInputSlot);
+
+        linkAndConnect(synOutputSlot, output.getNet());
+
         if(synapse.isOptional())
             synapse.initBiasInput(output);
     }
 
     @Override
     public Field getWeightedOutput() {
-        return output.lookupInputSlot(synapse);
+        return synOutputSlot;
     }
 
     @Override

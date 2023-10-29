@@ -18,7 +18,7 @@ package network.aika.fields;
 
 
 import network.aika.debugger.EventType;
-import network.aika.elements.activations.Activation;
+import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 
@@ -27,13 +27,9 @@ import network.aika.elements.synapses.Synapse;
  */
 public class SynapseOutputSlot extends MaxField {
 
-    private Activation inputAct;
-    private int synapseId;
 
-    public SynapseOutputSlot(Synapse ref, Activation iAct, String label) {
+    public SynapseOutputSlot(Synapse ref, String label) {
         super(ref, label);
-        this.inputAct = iAct;
-        this.synapseId = ref.getSynapseId();
     }
 
     protected void checkListener(FieldLink lastSelectedInput, FieldLink selectedInput) {
@@ -45,23 +41,24 @@ public class SynapseOutputSlot extends MaxField {
         if(si == null)
             return;
         Link l = getLink(si);
-        FieldLink fl = l.getInputValueLink();
-        if (state)
-            fl.connect(true);
-        else
-            fl.disconnect(true);
 
-        if(state != l.isOutputSideActive()) {
+        if (state != l.isInputSideActive())
             l.getDocument().onElementEvent(EventType.UPDATE, l);
-        }
     }
 
-    public Link getSelectedLink() {
+    public ConjunctiveLink getSelectedLink() {
         return getLink(getSelectedInput());
     }
 
-    public Link getLink(FieldLink fl) {
-        return ((Activation) fl.getInput().getReference())
-                .getInputLink(inputAct, synapseId);
+    public static ConjunctiveLink getLink(FieldLink fl) {
+        if(fl == null)
+            return null;
+
+        return (ConjunctiveLink) fl.getInput().getReference();
+    }
+
+    @Override
+    protected boolean isCandidate(FieldLink fl) {
+        return getLink(fl).getInput() != null;
     }
 }

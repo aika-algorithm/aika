@@ -45,10 +45,20 @@ public class LinkPropertyPanel<E extends Link> extends AbstractPropertyPanel {
     }
 
     public void initIdentitySection(E l) {
+        initInputIdentitySection(l);
+        initOutputIdentitySection(l);
+    }
+
+    public void initInputIdentitySection(E l) {
         addConstant("Input-Type: ", "" + l.getInputType());
         addConstant("Input: ", getShortString(l.getInput()));
+        addConstant("Input-IsActive: ", "" + l.isInputSideActive());
+    }
+
+    public void initOutputIdentitySection(E l) {
         addConstant("Output-Type: ", "" + l.getOutputType());
         addConstant("Output: ", getShortString(l.getOutput()));
+        addConstant("Output-IsActive: ", "" + l.isOutputSideActive());
     }
 
     public void initInferenceSection(E l) {

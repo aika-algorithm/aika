@@ -82,6 +82,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected NavigableMap<LinkKey, Link> inputLinks;
     protected NavigableMap<LinkKey, Link> outputLinks;
 
+    protected NavigableMap<Long, SynapseInputSlot> outputSlots;
+
     public boolean instantiationIsQueued;
     protected boolean isNewInstance;
 
@@ -130,11 +132,16 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
 
     protected void connectWeightUpdate() {
-
     }
 
-    public SynapseOutputSlot lookupOutputSlot(Link l) {
-        return null;
+    public SynapseInputSlot registerOutputSlot(Link l) {
+        if(outputSlots == null)
+            outputSlots = new TreeMap<>();
+
+        Synapse syn = l.getSynapse();
+        return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId ->
+                new SynapseInputSlot(syn, l.getInput(), "in-slot-" + nId)
+        );
     }
 
     protected void initNet() {

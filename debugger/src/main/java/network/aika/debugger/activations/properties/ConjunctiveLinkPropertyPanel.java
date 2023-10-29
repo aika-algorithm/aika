@@ -24,17 +24,22 @@ import network.aika.elements.links.*;
  */
 public class ConjunctiveLinkPropertyPanel<E extends ConjunctiveLink> extends LinkPropertyPanel<E> {
 
-
     public ConjunctiveLinkPropertyPanel(E l) {
         super(l);
     }
 
-    public void initInferenceSection(E l) {
-        super.initInferenceSection(l);
+    @Override
+    public void initInputIdentitySection(E l) {
+        super.initInputIdentitySection(l);
+
+        addField(l.getSynInputSlot());
     }
 
-    public void initInferenceOutSection(E l) {
-        super.initInferenceOutSection(l);
+    @Override
+    public void initOutputIdentitySection(E l) {
+        super.initOutputIdentitySection(l);
+
+        addField(l.getSynOutputSlot());
     }
 
     public void initTrainingSection(E l) {
