@@ -233,9 +233,14 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             getOutput()
                     .latentLinkOutgoing(this, act);
 
-        if (getNetUB(act) > 0.0) {
+        if (isPropagable(act)) {
             propagate(act);
         }
+    }
+
+    protected boolean isPropagable(IA act) {
+        return getRelation() == null &&
+                getNetUB(act) > 0.0;
     }
 
     public L link(IA iAct, OA oAct) {
