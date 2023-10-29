@@ -28,4 +28,9 @@ public class Regular implements LinkingMode {
     public boolean check(Activation oAct) {
         return oAct.isFired();
     }
+
+    @Override
+    public String toString() {
+        return "Regular";
+    }
 }

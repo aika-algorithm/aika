@@ -28,4 +28,9 @@ public class Feedback implements LinkingMode {
     public boolean check(Activation oAct) {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Feedback";
+    }
 }

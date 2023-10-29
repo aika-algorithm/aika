@@ -251,10 +251,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return isTrue(net, 0.0);
     }
 
-    public boolean isFiredUnsuppressed() {
-        return isFired();
-    }
-
     public Document getDocument() {
         return doc;
     }
