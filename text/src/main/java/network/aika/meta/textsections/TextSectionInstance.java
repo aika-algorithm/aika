@@ -70,8 +70,8 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
 
         Document doc = new Document(getModel(), headline + " " + textSection);
 
-//        AIKADebugger.createAndShowGUI()
-//               .setDocument(doc);
+        AIKADebugger.createAndShowGUI()
+               .setDocument(doc);
 
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(tAct, iAct, label);
