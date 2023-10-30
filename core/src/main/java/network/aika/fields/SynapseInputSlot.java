@@ -51,7 +51,7 @@ public class SynapseInputSlot extends MaxField {
         else
             fl.disconnect(true);
 
-        if(state != l.isOutputSideActive()) {
+        if(state == l.isOutputSideActive()) {
             l.getDocument().onElementEvent(EventType.UPDATE, l);
         }
     }

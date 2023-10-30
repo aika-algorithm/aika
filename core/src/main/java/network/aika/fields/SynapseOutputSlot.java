@@ -42,7 +42,7 @@ public class SynapseOutputSlot extends MaxField {
             return;
         Link l = getLink(si);
 
-        if (state != l.isInputSideActive())
+        if (state == l.isInputSideActive())
             l.getDocument().onElementEvent(EventType.UPDATE, l);
     }
 
