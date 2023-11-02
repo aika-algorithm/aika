@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.activations.properties.links;
 
 import network.aika.elements.links.*;
 
@@ -53,9 +53,7 @@ public class ConjunctiveLinkPropertyPanel<E extends ConjunctiveLink> extends Lin
     }
 
     public static ConjunctiveLinkPropertyPanel create(ConjunctiveLink l) {
-        if(l instanceof FeedbackLink) {
-            return FeedbackLinkPropertyPanel.create((FeedbackLink) l);
-        } else if(l instanceof PatternLink) {
+        if(l instanceof PatternLink) {
             return new PatternLinkPropertyPanel((PatternLink)l);
         } else if(l instanceof InputObjectLink) {
             return InputPatternLinkPropertyPanel.create((InputObjectLink)l);

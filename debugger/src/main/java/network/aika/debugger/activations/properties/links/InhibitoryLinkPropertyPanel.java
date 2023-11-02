@@ -14,34 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.activations.properties.links;
 
-import network.aika.elements.activations.PatternActivation;
-
+import network.aika.elements.links.inhibitoryloop.InhibitoryLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class PatternActivationPropertyPanel<A extends PatternActivation> extends ConjunctiveActivationPropertyPanel<A> {
+public class InhibitoryLinkPropertyPanel extends LinkPropertyPanel<InhibitoryLink> {
+
+    public InhibitoryLinkPropertyPanel(InhibitoryLink l) {
+        super(l);
+    }
 
 
-    public PatternActivationPropertyPanel(A act) {
-        super(act);
+    @Override
+    public void initInferenceSection(InhibitoryLink l) {
+        addField(l.getInputValue());
+        addField(l.getValue());
+        addField(l.getNet());
     }
 
     @Override
-    public void initIdentitySection(A act) {
-        super.initIdentitySection(act);
-    }
-
-    @Override
-    public void initInferenceSection(A act) {
-        super.initInferenceSection(act);
-    }
-
-    @Override
-    public void initTrainingSection(A act) {
-        addField(act.getEntropy());
-        super.initTrainingSection(act);
+    public void initTrainingSection(InhibitoryLink l) {
+        super.initTrainingSection(l);
     }
 }

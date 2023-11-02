@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.activations.properties.links;
 
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.Activation;

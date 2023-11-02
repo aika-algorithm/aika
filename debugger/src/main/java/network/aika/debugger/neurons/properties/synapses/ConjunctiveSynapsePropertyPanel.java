@@ -14,11 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.neurons.properties;
+package network.aika.debugger.neurons.properties.synapses;
 
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 
 import static network.aika.utils.Utils.doubleToString;
 
@@ -44,14 +43,10 @@ public class ConjunctiveSynapsePropertyPanel<E extends ConjunctiveSynapse> exten
     }
 
     public static ConjunctiveSynapsePropertyPanel create(ConjunctiveSynapse s, Link ref) {
-        if(s instanceof InnerPositiveFeedbackSynapse) {
-            return new PositiveFeedbackSynapsePropertyPanel((InnerPositiveFeedbackSynapse) s, ref);
-        } else if(s instanceof SameObjectSynapse) {
+        if(s instanceof SameObjectSynapse) {
             return new SameObjectSynapsePropertyPanel((SameObjectSynapse) s, ref);
         } else if(s instanceof PatternSynapse) {
             return new PatternSynapsePropertyPanel((PatternSynapse) s, ref);
-        } else if(s instanceof RelationInputSynapse) {
-            return new RelationInputSynapsePropertyPanel((RelationInputSynapse) s, ref);
         }
 
         return new ConjunctiveSynapsePropertyPanel(s, ref);

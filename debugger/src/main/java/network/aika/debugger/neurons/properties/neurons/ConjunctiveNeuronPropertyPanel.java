@@ -14,28 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.neurons.properties.neurons;
 
-import network.aika.elements.links.FeedbackLink;
-import network.aika.elements.links.inhibitoryloop.NegativeFeedbackLink;
-import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.neurons.PatternNeuron;
+
 
 /**
  * @author Lukas Molzberger
  */
-public class FeedbackLinkPropertyPanel<L extends FeedbackLink> extends ConjunctiveLinkPropertyPanel<L> {
+public class ConjunctiveNeuronPropertyPanel<E extends ConjunctiveNeuron> extends NeuronPropertyPanel<E> {
 
-    public FeedbackLinkPropertyPanel(L l) {
-        super(l);
+
+    public ConjunctiveNeuronPropertyPanel(E n, Activation ref) {
+        super(n, ref);
     }
 
-    public static FeedbackLinkPropertyPanel create(FeedbackLink l) {
-        if(l instanceof InnerPositiveFeedbackLink) {
-            return new PositiveFeedbackLinkPropertyPanel((InnerPositiveFeedbackLink) l);
-        } else if(l instanceof NegativeFeedbackLink) {
-            return new NegativeFeedbackLinkPropertyPanel((NegativeFeedbackLink) l);
+    public static ConjunctiveNeuronPropertyPanel create(ConjunctiveNeuron n, Activation ref) {
+        if(n instanceof BindingNeuron) {
+            return BindingNeuronPropertyPanel.create((BindingNeuron) n, ref);
+        } else if(n instanceof PatternNeuron) {
+            return PatternNeuronPropertyPanel.create((PatternNeuron) n, ref);
         }
 
-        return new FeedbackLinkPropertyPanel(l);
+        return new ConjunctiveNeuronPropertyPanel(n, ref);
     }
 }

@@ -16,7 +16,7 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.debugger.neurons.properties.NeuronPropertyPanel;
+import network.aika.debugger.neurons.properties.neurons.NeuronPropertyPanel;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;

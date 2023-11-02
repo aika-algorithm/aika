@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.neurons.properties;
+package network.aika.debugger.neurons.properties.neurons;
 
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.Activation;
@@ -56,8 +56,6 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
     public static NeuronPropertyPanel create(Neuron n, Activation ref) {
         if(n instanceof ConjunctiveNeuron<?, ?>) {
             return ConjunctiveNeuronPropertyPanel.create((ConjunctiveNeuron) n, ref);
-        } else if(n instanceof InhibitoryNeuron) {
-            return OuterInhibitoryNeuronPropertyPanel.create((InhibitoryNeuron) n, ref);
         }
 
         return new NeuronPropertyPanel(n, ref);

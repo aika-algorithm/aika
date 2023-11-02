@@ -2,6 +2,7 @@ package network.aika.elements.synapses;
 
 import network.aika.elements.Type;
 import network.aika.enums.Transition;
+import network.aika.enums.linkingmode.LinkingMode;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -20,4 +21,5 @@ public @interface SynapseType {
     public Type outputType();
 
     public Transition[] transition();
+
 }

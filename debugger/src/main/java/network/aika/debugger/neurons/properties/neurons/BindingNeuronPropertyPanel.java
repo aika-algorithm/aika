@@ -14,24 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.neurons.properties.neurons;
 
-import network.aika.elements.links.PatternLink;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.LatentRelationNeuron;
+
+import static network.aika.utils.Utils.doubleToString;
+
 
 /**
  * @author Lukas Molzberger
  */
-public class PatternLinkPropertyPanel extends ConjunctiveLinkPropertyPanel<PatternLink> {
+public class BindingNeuronPropertyPanel<E extends BindingNeuron> extends ConjunctiveNeuronPropertyPanel<E> {
 
-    public PatternLinkPropertyPanel(PatternLink l) {
-        super(l);
+    public BindingNeuronPropertyPanel(E n, Activation ref) {
+        super(n, ref);
     }
 
+    public static BindingNeuronPropertyPanel create(BindingNeuron n, Activation ref) {
+        if(n instanceof LatentRelationNeuron) {
+            return LatentRelationNeuronPropertyPanel.create((LatentRelationNeuron) n, ref);
+        }
 
-    @Override
-    public void initTrainingSection(PatternLink l) {
-        addField(l.getOutputEntropy());
-        addField(l.getInformationGain());
-        super.initTrainingSection(l);
+        return new BindingNeuronPropertyPanel(n, ref);
     }
 }

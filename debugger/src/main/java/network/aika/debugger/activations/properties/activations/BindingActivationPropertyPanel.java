@@ -14,28 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.activations.properties.activations;
 
-import network.aika.elements.activations.LatentRelationActivation;
+import network.aika.elements.activations.*;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class LatentRelationActivationPropertyPanel extends BindingActivationPropertyPanel<LatentRelationActivation> {
+public class BindingActivationPropertyPanel<E extends BindingActivation> extends ConjunctiveActivationPropertyPanel<E> {
 
-    public LatentRelationActivationPropertyPanel(LatentRelationActivation act) {
+    public BindingActivationPropertyPanel(E act) {
         super(act);
     }
 
-    @Override
-    public void initInferenceSection(LatentRelationActivation act) {
-        super.initInferenceSection(act);
-        addConstant("Rel-From: ", "" + act.getFromAct());
-        addConstant("Rel-To: ", "" + act.getToAct());
-    }
+    public static BindingActivationPropertyPanel create(BindingActivation act) {
+        if(act instanceof LatentRelationActivation) {
+            return LatentRelationActivationPropertyPanel.create((LatentRelationActivation) act);
+        }
 
-    public static LatentRelationActivationPropertyPanel create(LatentRelationActivation act) {
-        return new LatentRelationActivationPropertyPanel(act);
+        return new BindingActivationPropertyPanel(act);
     }
 }

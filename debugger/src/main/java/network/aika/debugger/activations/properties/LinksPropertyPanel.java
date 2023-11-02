@@ -16,6 +16,7 @@
  */
 package network.aika.debugger.activations.properties;
 
+import network.aika.debugger.activations.properties.links.LinkPropertyPanel;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.Element;

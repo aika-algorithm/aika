@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.neurons.properties;
+package network.aika.debugger.neurons.properties.neurons;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.PatternNeuron;

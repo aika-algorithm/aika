@@ -16,8 +16,7 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.Document;
-import network.aika.debugger.neurons.properties.SynapsePropertyPanel;
+import network.aika.debugger.neurons.properties.synapses.SynapsePropertyPanel;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.Element;

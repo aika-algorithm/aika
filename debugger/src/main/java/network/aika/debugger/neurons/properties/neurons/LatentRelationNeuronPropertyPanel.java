@@ -14,29 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.neurons.properties.neurons;
 
-import network.aika.elements.links.inhibitoryloop.InhibitoryLink;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.LatentRelationNeuron;
 
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryLinkPropertyPanel extends LinkPropertyPanel<InhibitoryLink> {
+public class LatentRelationNeuronPropertyPanel extends BindingNeuronPropertyPanel<LatentRelationNeuron> {
 
-    public InhibitoryLinkPropertyPanel(InhibitoryLink l) {
-        super(l);
+    public LatentRelationNeuronPropertyPanel(LatentRelationNeuron n, Activation ref) {
+        super(n, ref);
+
+        addConstant("Relation: ", "" + n.getRelation());
     }
 
+    public static LatentRelationNeuronPropertyPanel create(LatentRelationNeuron n, Activation ref) {
 
-    @Override
-    public void initInferenceSection(InhibitoryLink l) {
-        addField(l.getInputValue());
-        addField(l.getValue());
-        addField(l.getNet());
-    }
-
-    @Override
-    public void initTrainingSection(InhibitoryLink l) {
-        super.initTrainingSection(l);
+        return new LatentRelationNeuronPropertyPanel(n, ref);
     }
 }

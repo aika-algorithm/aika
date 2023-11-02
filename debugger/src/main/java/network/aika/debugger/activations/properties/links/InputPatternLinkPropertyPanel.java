@@ -14,25 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.activations.properties.links;
 
-import network.aika.elements.activations.*;
-
+import network.aika.elements.links.InputObjectLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class BindingActivationPropertyPanel<E extends BindingActivation> extends ConjunctiveActivationPropertyPanel<E> {
+public class InputPatternLinkPropertyPanel<E extends InputObjectLink> extends ConjunctiveLinkPropertyPanel<E> {
 
-    public BindingActivationPropertyPanel(E act) {
-        super(act);
+    public InputPatternLinkPropertyPanel(E l) {
+        super(l);
     }
 
-    public static BindingActivationPropertyPanel create(BindingActivation act) {
-        if(act instanceof LatentRelationActivation) {
-            return LatentRelationActivationPropertyPanel.create((LatentRelationActivation) act);
-        }
+    @Override
+    public void initInferenceSection(E l) {
+        super.initInferenceSection(l);
+    }
 
-        return new BindingActivationPropertyPanel(act);
+    @Override
+    public void initTrainingSection(E l) {
+        addField(l.getInputEntropy());
+
+        super.initTrainingSection(l);
+    }
+
+    public static InputPatternLinkPropertyPanel create(InputObjectLink l) {
+        return new InputPatternLinkPropertyPanel(l);
     }
 }

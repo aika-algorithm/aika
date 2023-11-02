@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.neurons.properties;
+package network.aika.debugger.neurons.properties.synapses;
 
+import network.aika.debugger.neurons.properties.synapses.ConjunctiveSynapsePropertyPanel;
 import network.aika.elements.links.Link;
 import network.aika.text.Range;
 import network.aika.elements.synapses.PatternSynapse;

@@ -14,25 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.neurons.properties.synapses;
 
-import network.aika.elements.activations.ConjunctiveActivation;
+import network.aika.debugger.neurons.properties.synapses.ConjunctiveSynapsePropertyPanel;
+import network.aika.elements.links.Link;
+import network.aika.elements.synapses.SameObjectSynapse;
 
 /**
  * @author Lukas Molzberger
  */
-public class ConjunctiveActivationPropertyPanel<E extends ConjunctiveActivation> extends ActivationPropertyPanel<E> {
+public class SameObjectSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel<SameObjectSynapse> {
 
-
-    public ConjunctiveActivationPropertyPanel(E act) {
-        super(act);
+    public SameObjectSynapsePropertyPanel(SameObjectSynapse s, Link ref) {
+        super(s, ref);
     }
 
-    @Override
-    public void initInferenceSection(E act) {
-        addField(act.getDocument().getAnnealing());
-        addField(act.getDocument().getFeedbackTrigger());
-        addField(act.getDocument().getInstantiationFeedbackTrigger());
-        super.initInferenceSection(act);
+    public void initSynapseProperties(SameObjectSynapse s) {
+        super.initSynapseProperties(s);
+
+        addConstant("Relation-SynapseId: ", "" + s.getRelationSynId());
     }
 }

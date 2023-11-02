@@ -14,24 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.neurons.properties;
+package network.aika.debugger.activations.properties.activations;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.activations.LatentRelationActivation;
+
 
 /**
  * @author Lukas Molzberger
  */
-public class LatentRelationNeuronPropertyPanel extends BindingNeuronPropertyPanel<LatentRelationNeuron> {
+public class LatentRelationActivationPropertyPanel extends BindingActivationPropertyPanel<LatentRelationActivation> {
 
-    public LatentRelationNeuronPropertyPanel(LatentRelationNeuron n, Activation ref) {
-        super(n, ref);
-
-        addConstant("Relation: ", "" + n.getRelation());
+    public LatentRelationActivationPropertyPanel(LatentRelationActivation act) {
+        super(act);
     }
 
-    public static LatentRelationNeuronPropertyPanel create(LatentRelationNeuron n, Activation ref) {
+    @Override
+    public void initInferenceSection(LatentRelationActivation act) {
+        super.initInferenceSection(act);
+        addConstant("Rel-From: ", "" + act.getFromAct());
+        addConstant("Rel-To: ", "" + act.getToAct());
+    }
 
-        return new LatentRelationNeuronPropertyPanel(n, ref);
+    public static LatentRelationActivationPropertyPanel create(LatentRelationActivation act) {
+        return new LatentRelationActivationPropertyPanel(act);
     }
 }

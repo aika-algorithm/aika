@@ -16,10 +16,10 @@
  */
 package network.aika.debugger.properties;
 
-import network.aika.debugger.activations.properties.ActivationPropertyPanel;
-import network.aika.debugger.activations.properties.LinkPropertyPanel;
-import network.aika.debugger.neurons.properties.NeuronPropertyPanel;
-import network.aika.debugger.neurons.properties.SynapsePropertyPanel;
+import network.aika.debugger.activations.properties.activations.ActivationPropertyPanel;
+import network.aika.debugger.activations.properties.links.LinkPropertyPanel;
+import network.aika.debugger.neurons.properties.neurons.NeuronPropertyPanel;
+import network.aika.debugger.neurons.properties.synapses.SynapsePropertyPanel;
 import network.aika.elements.Element;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;

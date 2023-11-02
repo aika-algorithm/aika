@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties;
+package network.aika.debugger.activations.properties.activations;
 
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.*;
@@ -86,8 +86,6 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
             return new PatternActivationPropertyPanel((PatternActivation) act);
         } else if(act instanceof BindingActivation) {
             return BindingActivationPropertyPanel.create((BindingActivation) act);
-        } else if(act instanceof InhibitoryActivation) {
-            return new InhibitoryActivationPropertyPanel((InhibitoryActivation) act);
         }
 
         return new ActivationPropertyPanel(act);

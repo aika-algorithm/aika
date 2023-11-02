@@ -14,25 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.neurons.properties;
+package network.aika.debugger.activations.properties.activations;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.InhibitoryNeuron;
-
-import static network.aika.utils.Utils.doubleToString;
-
+import network.aika.elements.activations.ConjunctiveActivation;
 
 /**
  * @author Lukas Molzberger
  */
-public class OuterInhibitoryNeuronPropertyPanel extends NeuronPropertyPanel<InhibitoryNeuron> {
+public class ConjunctiveActivationPropertyPanel<E extends ConjunctiveActivation> extends ActivationPropertyPanel<E> {
 
 
-    public OuterInhibitoryNeuronPropertyPanel(InhibitoryNeuron n, Activation ref) {
-        super(n, ref);
+    public ConjunctiveActivationPropertyPanel(E act) {
+        super(act);
     }
 
-    public static OuterInhibitoryNeuronPropertyPanel create(InhibitoryNeuron n, Activation ref) {
-        return new OuterInhibitoryNeuronPropertyPanel(n, ref);
+    @Override
+    public void initInferenceSection(E act) {
+        addField(act.getDocument().getAnnealing());
+        addField(act.getDocument().getFeedbackTrigger());
+        addField(act.getDocument().getInstantiationFeedbackTrigger());
+        super.initInferenceSection(act);
     }
 }
