@@ -47,7 +47,7 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
     }
 
     protected void initSynapseProperties(E s) {
-        addConstant("Scope: ", "" + s.getScope());
+        addConstant("Scope: ", "" + s.getTransitions());
         addConstant("Net UB: ", doubleToString(s.getNetUB()));
         addConstant("Is Training Allowed: ", "" + s.isTrainingAllowed());
         addConstant("Stored At: ", "" + s.getStoredAt());

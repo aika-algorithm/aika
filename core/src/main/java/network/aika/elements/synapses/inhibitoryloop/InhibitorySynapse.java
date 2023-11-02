@@ -25,7 +25,7 @@ import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.*;
-import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Transition.INPUT;
 
 /**
  *
@@ -35,7 +35,7 @@ import static network.aika.enums.Scope.INPUT;
         synapseTypeId = 12,
         inputType = BINDING,
         outputType = INHIBITORY,
-        scope = INPUT
+        transition = INPUT
 )
 public class InhibitorySynapse extends DisjunctiveSynapse<
         InhibitorySynapse,

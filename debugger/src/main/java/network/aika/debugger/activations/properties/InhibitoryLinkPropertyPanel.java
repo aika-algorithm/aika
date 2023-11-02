@@ -27,10 +27,6 @@ public class InhibitoryLinkPropertyPanel extends LinkPropertyPanel<InhibitoryLin
         super(l);
     }
 
-    @Override
-    public void initIdentitySection(InhibitoryLink l) {
-        super.initIdentitySection(l);
-    }
 
     @Override
     public void initInferenceSection(InhibitoryLink l) {

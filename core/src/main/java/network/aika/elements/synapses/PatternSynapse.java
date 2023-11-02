@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Scope.SAME;
+import static network.aika.enums.Transition.SAME;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.enums.sign.Sign.NEG;
 import static network.aika.enums.sign.Sign.POS;
@@ -51,7 +51,7 @@ import static network.aika.enums.sign.Sign.POS;
         synapseTypeId = 0,
         inputType = BINDING,
         outputType = PATTERN,
-        scope = SAME
+        transition = SAME
 )
 public class PatternSynapse extends ConjunctiveSynapse<
         PatternSynapse,

@@ -20,6 +20,7 @@ import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
+import network.aika.utils.BitUtils;
 import network.aika.visitor.operator.Operator;
 
 import static network.aika.utils.Utils.depthToSpace;
@@ -50,7 +51,10 @@ public class DownVisitor extends Visitor {
                 .forEach(l ->
                         l.visit(
                                 this,
-                                l.getSynapse().transition(state),
+                                BitUtils.transition(
+                                        state,
+                                        l.getSynapse().getTransitions()
+                                ),
                                 depth + 1
                         )
                 );

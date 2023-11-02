@@ -31,8 +31,11 @@ public class LinkPropertyPanel<E extends Link> extends AbstractPropertyPanel {
     public LinkPropertyPanel(E l) {
         addTitle(l.getClass().getSimpleName());
 
-        addTitle("Identity:",SUB_TITLE_SIZE);
-        initIdentitySection(l);
+        addTitle("Input:",SUB_TITLE_SIZE);
+        initInputIdentitySection(l);
+
+        addTitle("Output:",SUB_TITLE_SIZE);
+        initOutputIdentitySection(l);
 
         addTitle("Inference:",SUB_TITLE_SIZE);
         initInferenceSection(l);
@@ -44,21 +47,17 @@ public class LinkPropertyPanel<E extends Link> extends AbstractPropertyPanel {
         initTrainingSection(l);
     }
 
-    public void initIdentitySection(E l) {
-        initInputIdentitySection(l);
-        initOutputIdentitySection(l);
-    }
 
     public void initInputIdentitySection(E l) {
-        addConstant("Input-Type: ", "" + l.getInputType());
-        addConstant("Input: ", getShortString(l.getInput()));
-        addConstant("Input-IsActive: ", "" + l.isInputSideActive());
+        addConstant("Type: ", "" + l.getInputType());
+        addConstant("Activation: ", getShortString(l.getInput()));
+        addConstant("IsActive: ", "" + l.isInputSideActive());
     }
 
     public void initOutputIdentitySection(E l) {
-        addConstant("Output-Type: ", "" + l.getOutputType());
-        addConstant("Output: ", getShortString(l.getOutput()));
-        addConstant("Output-IsActive: ", "" + l.isOutputSideActive());
+        addConstant("Type: ", "" + l.getOutputType());
+        addConstant("Activation: ", getShortString(l.getOutput()));
+        addConstant("IsActive: ", "" + l.isOutputSideActive());
     }
 
     public void initInferenceSection(E l) {

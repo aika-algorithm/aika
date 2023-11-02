@@ -27,15 +27,6 @@ public class PatternLinkPropertyPanel extends ConjunctiveLinkPropertyPanel<Patte
         super(l);
     }
 
-    @Override
-    public void initIdentitySection(PatternLink l) {
-        super.initIdentitySection(l);
-    }
-
-    @Override
-    public void initInferenceSection(PatternLink l) {
-        super.initInferenceSection(l);
-    }
 
     @Override
     public void initTrainingSection(PatternLink l) {

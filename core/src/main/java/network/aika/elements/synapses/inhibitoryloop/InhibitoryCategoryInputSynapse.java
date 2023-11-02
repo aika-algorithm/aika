@@ -25,10 +25,11 @@ import network.aika.elements.neurons.InhibitoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.Scope;
+import network.aika.enums.Transition;
 
 import static network.aika.elements.Type.*;
-import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Transition.CATEGORY;
+import static network.aika.enums.Transition.INPUT;
 
 /**
  * The Inhibitory Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
@@ -39,7 +40,7 @@ import static network.aika.enums.Scope.INPUT;
         synapseTypeId = 13,
         inputType = INHIBITORY,
         outputType = BINDING,
-        scope = INPUT
+        transition = {INPUT, CATEGORY}
 )
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InhibitoryCategoryInputSynapse,
@@ -53,25 +54,6 @@ public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
     public static int TYPE_ID = 13;
 
     private double initialCategorySynapseWeight;
-
-    public int getTypeId() {
-        return TYPE_ID;
-    }
-
-    @Override
-    public Type getInputType() {
-        return INHIBITORY;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Scope getScope() {
-        return Scope.INPUT;
-    }
 
     @Override
     public boolean isLinkingAllowed(boolean latent) {

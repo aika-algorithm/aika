@@ -18,6 +18,7 @@ package network.aika.visitor;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.utils.BitUtils;
 
 import static network.aika.utils.Utils.depthToSpace;
 import static network.aika.utils.Utils.idToString;
@@ -43,7 +44,10 @@ public class UpVisitor extends Visitor {
                 .forEach(l ->
                         l.visit(
                                 this,
-                                l.getSynapse().transition(state),
+                                BitUtils.transition(
+                                        state,
+                                        l.getSynapse().getTransitions()
+                                ),
                                 depth + 1
                         )
                 );

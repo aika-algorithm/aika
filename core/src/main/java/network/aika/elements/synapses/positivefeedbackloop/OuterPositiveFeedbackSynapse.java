@@ -16,21 +16,17 @@
  */
 package network.aika.elements.synapses.positivefeedbackloop;
 
-import network.aika.elements.Type;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.positivefeedbackloop.OuterPositiveFeedbackLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.Scope;
 import network.aika.enums.linkingmode.LinkingMode;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Scope.INPUT;
-import static network.aika.enums.Scope.SAME;
+import static network.aika.enums.Transition.INPUT;
 import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
 
 /**
@@ -41,7 +37,7 @@ import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
         synapseTypeId = 6,
         inputType = PATTERN,
         outputType = BINDING,
-        scope = INPUT
+        transition = INPUT
 )
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         OuterPositiveFeedbackSynapse,

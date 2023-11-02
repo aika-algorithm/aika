@@ -24,7 +24,8 @@ import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.INHIBITORY;
-import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Transition.CATEGORY;
+import static network.aika.enums.Transition.INPUT;
 
 /**
  *
@@ -34,7 +35,7 @@ import static network.aika.enums.Scope.INPUT;
         synapseTypeId = 17,
         inputType = INHIBITORY,
         outputType = INHIBITORY,
-        scope = INPUT
+        transition = {INPUT, CATEGORY}
 )
 public class InhibitoryCategorySynapse extends CategorySynapse<InhibitoryCategorySynapse, Neuron, InhibitoryActivation> {
 

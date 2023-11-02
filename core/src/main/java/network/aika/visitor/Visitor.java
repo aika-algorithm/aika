@@ -17,10 +17,10 @@
 package network.aika.visitor;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
-import network.aika.enums.Scope;
+import network.aika.enums.Transition;
+import network.aika.utils.BitUtils;
 import network.aika.visitor.operator.Operator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,11 +52,13 @@ public abstract class Visitor {
     public void start(Link l) {
         l.visit(
                 this,
-                l.getSynapse().transition(
-                        l.getOutput().getStartState()
+                BitUtils.transition(
+                        l.getOutput().getStartState(),
+                        l.getSynapse().getTransitions()
                 ), 0
         );
     }
+
 
     public void up(ConjunctiveActivation bindingSource, int state, int depth) {
         // Nothing to do

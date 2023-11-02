@@ -27,18 +27,4 @@ public class PositiveFeedbackLinkPropertyPanel extends FeedbackLinkPropertyPanel
         super(l);
     }
 
-    @Override
-    public void initIdentitySection(InnerPositiveFeedbackLink l) {
-        super.initIdentitySection(l);
-    }
-
-    @Override
-    public void initInferenceSection(InnerPositiveFeedbackLink l) {
-        super.initInferenceSection(l);
-    }
-
-    @Override
-    public void initTrainingSection(InnerPositiveFeedbackLink l) {
-        super.initTrainingSection(l);
-    }
 }

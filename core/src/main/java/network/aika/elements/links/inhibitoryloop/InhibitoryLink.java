@@ -21,7 +21,7 @@ import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.InhibitoryActivation;
 import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.inhibitoryloop.InhibitorySynapse;
-import network.aika.enums.Scope;
+import network.aika.enums.Transition;
 import network.aika.fields.*;
 
 import java.util.stream.Stream;
@@ -76,7 +76,7 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
     }
 
     public void connectFields(NegativeFeedbackLink out) {
-        if(isSelfRef(getInput(), out.getOutput(), Scope.SAME))
+        if(isSelfRef(getInput(), out.getOutput(), Transition.SAME))
             return;
 
         linkAndConnect(getNet(), out.getInputValue());

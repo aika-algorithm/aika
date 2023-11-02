@@ -33,6 +33,7 @@ public class ConjunctiveLinkPropertyPanel<E extends ConjunctiveLink> extends Lin
         super.initInputIdentitySection(l);
 
         addField(l.getSynInputSlot());
+        addConstant("Slot Selection: ", "" + l.getSynInputSlot().getSelectedLink());
     }
 
     @Override
@@ -40,6 +41,7 @@ public class ConjunctiveLinkPropertyPanel<E extends ConjunctiveLink> extends Lin
         super.initOutputIdentitySection(l);
 
         addField(l.getSynOutputSlot());
+        addConstant("Slot Selection: ", "" + l.getSynOutputSlot().getSelectedLink());
     }
 
     public void initTrainingSection(E l) {

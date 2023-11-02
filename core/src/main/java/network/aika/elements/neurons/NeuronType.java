@@ -1,7 +1,6 @@
 package network.aika.elements.neurons;
 
 import network.aika.elements.Type;
-import network.aika.enums.Scope;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -16,16 +16,14 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.links.BindingCategoryLink;
 import network.aika.elements.neurons.Neuron;
-import network.aika.enums.Scope;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Scope.SAME;
+import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Transition.CATEGORY;
 
 /**
  *
@@ -35,7 +33,7 @@ import static network.aika.enums.Scope.SAME;
         synapseTypeId = 15,
         inputType = BINDING,
         outputType = BINDING,
-        scope = SAME
+        transition = {SAME, CATEGORY}
 )
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
 

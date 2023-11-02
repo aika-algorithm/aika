@@ -28,11 +28,6 @@ public class InputPatternLinkPropertyPanel<E extends InputObjectLink> extends Co
     }
 
     @Override
-    public void initIdentitySection(E l) {
-        super.initIdentitySection(l);
-    }
-
-    @Override
     public void initInferenceSection(E l) {
         super.initInferenceSection(l);
     }

@@ -19,7 +19,7 @@ package network.aika.elements.synapses;
 import network.aika.Model;
 import network.aika.elements.activations.*;
 import network.aika.elements.relations.Relation;
-import network.aika.enums.Scope;
+import network.aika.enums.Transition;
 import network.aika.elements.links.SameObjectLink;
 import network.aika.elements.neurons.BindingNeuron;
 
@@ -28,7 +28,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.enums.Scope.SAME;
+import static network.aika.enums.Transition.SAME;
 
 /**
  * The Same Object Binding Neuron Synapse is an inner synapse between two binding neurons of the same object.
@@ -39,7 +39,7 @@ import static network.aika.enums.Scope.SAME;
         synapseTypeId = 3,
         inputType = BINDING,
         outputType = BINDING,
-        scope = SAME
+        transition = SAME
 )
 public class SameObjectSynapse extends ConjunctiveSynapse<
         SameObjectSynapse,
@@ -97,11 +97,6 @@ public class SameObjectSynapse extends ConjunctiveSynapse<
                     .setTemplateOnly(templateOnly);
 
         return this;
-    }
-
-    @Override
-    public Scope getScope() {
-        return SAME;
     }
 
     @Override

@@ -26,7 +26,7 @@ import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.linkingmode.LinkingMode;
 
 import static network.aika.elements.Type.*;
-import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Transition.INPUT;
 import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
 
 /**
@@ -37,7 +37,7 @@ import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
         synapseTypeId = 9,
         inputType = INHIBITORY,
         outputType = BINDING,
-        scope = INPUT
+        transition = INPUT
 )
 public class NegativeFeedbackSynapse extends FeedbackSynapse<
         NegativeFeedbackSynapse,

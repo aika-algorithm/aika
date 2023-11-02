@@ -29,22 +29,6 @@ public class FeedbackLinkPropertyPanel<L extends FeedbackLink> extends Conjuncti
         super(l);
     }
 
-    @Override
-    public void initIdentitySection(L l) {
-        super.initIdentitySection(l);
-    }
-
-    @Override
-    public void initInferenceSection(L l) {
-        super.initInferenceSection(l);
-    }
-
-    @Override
-    public void initTrainingSection(L l) {
-        super.initTrainingSection(l);
-    }
-
-
     public static FeedbackLinkPropertyPanel create(FeedbackLink l) {
         if(l instanceof InnerPositiveFeedbackLink) {
             return new PositiveFeedbackLinkPropertyPanel((InnerPositiveFeedbackLink) l);

@@ -16,17 +16,15 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.InputObjectLink;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
-import network.aika.enums.Scope;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Transition.INPUT;
 
 /**
  *
@@ -36,7 +34,7 @@ import static network.aika.enums.Scope.INPUT;
         synapseTypeId = 2,
         inputType = PATTERN,
         outputType = BINDING,
-        scope = INPUT
+        transition = INPUT
 )
 public class InputObjectSynapse extends ConjunctiveSynapse<
         InputObjectSynapse,

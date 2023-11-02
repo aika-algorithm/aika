@@ -27,7 +27,7 @@ import network.aika.elements.synapses.inhibitoryloop.InhibitorySynapse;
 import network.aika.elements.synapses.inhibitoryloop.NegativeFeedbackSynapse;
 import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 import network.aika.elements.synapses.positivefeedbackloop.OuterPositiveFeedbackSynapse;
-import network.aika.enums.Scope;
+import network.aika.enums.Transition;
 import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
@@ -65,11 +65,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
-    private Type inputType = getClass().getAnnotation(SynapseType.class).inputType();
-    private Type outputType = getClass().getAnnotation(SynapseType.class).outputType();
-
-    private Scope scope = getClass().getAnnotation(SynapseType.class).scope();
-
+    private final SynapseType synapseType = getClass().getAnnotation(SynapseType.class);
 
     public static Set<Class<? extends Synapse>> SYNAPSE_TYPES = Set.of(
             PatternSynapse.class,
@@ -88,12 +84,13 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             InhibitoryCategorySynapse.class
     );
 
-    public static int getStartRequirements(Type t) {
+    public static int getStartRequirements(Type type) {
         return SYNAPSE_TYPES.stream()
                 .map(c -> c.getAnnotation(SynapseType.class))
-                .filter(st -> st.outputType() == t)
-                .map(st -> getRequirements(st))
-                .reduce(BitUtils.aggregateOp())
+                .filter(st -> st.outputType() == type)
+                .flatMap(st -> Stream.of(st.transition()))
+                .map(Transition::getState)
+                .reduce(BitUtils.or())
                 .orElse(0);
     }
 
@@ -134,21 +131,15 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public Type getInputType() {
-        return inputType;
+        return synapseType.inputType();
     }
 
     public Type getOutputType() {
-        return outputType;
+        return synapseType.outputType();
     }
 
-    public Scope getScope() {
-        return scope;
-    }
-
-    public int transition(int state) {
-        return state &
-                ((scope != Scope.INPUT ? 1 : 0) +
-                 (scope != Scope.SAME ? 2 : 0));
+    public Transition[] getTransitions() {
+        return synapseType.transition();
     }
 
     public boolean checkVisitorState(int state) {

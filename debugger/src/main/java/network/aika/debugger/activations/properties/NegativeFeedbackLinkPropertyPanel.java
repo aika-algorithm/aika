@@ -28,18 +28,5 @@ public class NegativeFeedbackLinkPropertyPanel extends FeedbackLinkPropertyPanel
         super(l);
     }
 
-    @Override
-    public void initIdentitySection(NegativeFeedbackLink l) {
-        super.initIdentitySection(l);
-    }
 
-    @Override
-    public void initInferenceSection(NegativeFeedbackLink l) {
-        super.initInferenceSection(l);
-    }
-
-    @Override
-    public void initTrainingSection(NegativeFeedbackLink l) {
-        super.initTrainingSection(l);
-    }
 }

@@ -16,34 +16,22 @@
  */
 package network.aika.enums;
 
-import network.aika.enums.direction.Direction;
-
 /**
  *
  * @author Lukas Molzberger
  */
-public enum Scope {
-    INPUT(Direction.OUTPUT),
-    SAME(Direction.INPUT);
+public enum Transition {
+    INPUT(1),
+    SAME(2),
+    CATEGORY(4);
 
-    static {
-        INPUT.inverted = SAME;
-        SAME.inverted = INPUT;
+    private int state;
+
+    Transition(int state) {
+        this.state = state;
     }
 
-    private Direction relationDir;
-
-    private Scope inverted;
-
-    Scope(Direction relationDir) {
-        this.relationDir = relationDir;
-    }
-
-    public Direction getRelationDir() {
-        return relationDir;
-    }
-
-    public Scope getInverted() {
-        return inverted;
+    public int getState() {
+        return state;
     }
 }

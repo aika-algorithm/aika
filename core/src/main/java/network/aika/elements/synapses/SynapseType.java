@@ -1,12 +1,13 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.Type;
-import network.aika.enums.Scope;
+import network.aika.enums.Transition;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
+import java.util.Set;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -18,5 +19,5 @@ public @interface SynapseType {
 
     public Type outputType();
 
-    public Scope scope();
+    public Transition[] transition();
 }

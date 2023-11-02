@@ -20,7 +20,7 @@ import network.aika.Document;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
 import network.aika.elements.links.InputObjectLink;
-import network.aika.enums.Scope;
+import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.visitor.DownVisitor;
@@ -76,7 +76,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         super.connectWeightUpdate();
     }
 
-    public static boolean isSelfRef(BindingActivation in, BindingActivation out, Scope identityRef) {
+    public static boolean isSelfRef(BindingActivation in, BindingActivation out, Transition identityRef) {
         if(in == null)
             return false;
 
@@ -88,7 +88,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
             return in.isSelfRef(out, identityRef);
     }
 
-    private boolean isSelfRef(BindingActivation out, Scope identityRef) {
+    private boolean isSelfRef(BindingActivation out, Transition identityRef) {
         if(this == out)
             return true;
 
