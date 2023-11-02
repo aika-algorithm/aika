@@ -22,12 +22,12 @@ import network.aika.elements.links.positivefeedbackloop.OuterPositiveFeedbackLin
 import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.linkingmode.LinkingMode;
+import network.aika.enums.LinkingMode;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
+import static network.aika.enums.LinkingMode.FEEDBACK;
 
 /**
  *
@@ -37,7 +37,8 @@ import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
         synapseTypeId = 6,
         inputType = PATTERN,
         outputType = BINDING,
-        transition = INPUT
+        transition = INPUT,
+        linkingMode = FEEDBACK
 )
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         OuterPositiveFeedbackSynapse,
@@ -48,11 +49,6 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
-    @Override
-    public LinkingMode getLinkingMode() {
-        return FEEDBACK;
-    }
-
     public OuterPositiveFeedbackLink createLink(PatternActivation input, BindingActivation output) {
         return new OuterPositiveFeedbackLink(this, input, output);
     }

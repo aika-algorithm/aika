@@ -44,7 +44,7 @@ import static network.aika.debugger.EventType.*;
 import static network.aika.elements.LinkKey.getFromLinkKey;
 import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
-import static network.aika.enums.linkingmode.LinkingMode.REGULAR;
+import static network.aika.enums.LinkingMode.REGULAR;
 import static network.aika.queue.Phase.PRE_ANNEAL;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;

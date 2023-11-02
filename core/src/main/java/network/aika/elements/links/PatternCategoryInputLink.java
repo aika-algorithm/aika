@@ -16,7 +16,6 @@
  */
 package network.aika.elements.links;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.positivefeedbackloop.PositiveFeedbackLink;
@@ -24,12 +23,6 @@ import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.PatternCategoryInputSynapse;
 import network.aika.elements.synapses.PatternCategorySynapse;
 import network.aika.fields.Field;
-import network.aika.enums.linkingmode.LinkingMode;
-import network.aika.queue.activation.LinkingOut;
-import network.aika.visitor.Visitor;
-
-import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
 
 
 /**

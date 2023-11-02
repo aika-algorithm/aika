@@ -22,9 +22,6 @@ import network.aika.elements.links.positivefeedbackloop.PositiveFeedbackLink;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.FeedbackSynapse;
-import network.aika.enums.linkingmode.LinkingMode;
-
-import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
 
 /**
  *

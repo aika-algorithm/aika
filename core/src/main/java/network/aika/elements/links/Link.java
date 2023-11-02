@@ -30,7 +30,7 @@ import network.aika.queue.link.LinkingIn;
 import network.aika.visitor.Visitor;
 
 import static network.aika.debugger.EventType.CREATE;
-import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
+import static network.aika.enums.LinkingMode.FEEDBACK;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.elements.Timestamp.FIRED_COMPARATOR;

@@ -14,23 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.enums.linkingmode;
+package network.aika.enums;
 
 import network.aika.elements.activations.Activation;
+
+import java.util.function.Predicate;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class Regular implements LinkingMode {
+public enum LinkingMode {
+    REGULAR(Activation::isFired),
+    FEEDBACK(oAct -> true);
 
-    @Override
-    public boolean check(Activation oAct) {
-        return oAct.isFired();
+    LinkingMode(Predicate<Activation> check) {
+        this.check = check;
     }
 
-    @Override
-    public String toString() {
-        return "Regular";
+    Predicate<Activation> check;
+
+    public boolean check(Activation oAct) {
+        return check.test(oAct);
     }
 }

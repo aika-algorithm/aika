@@ -23,11 +23,11 @@ import network.aika.elements.neurons.BindingNeuron;
 import network.aika.elements.neurons.InhibitoryNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.linkingmode.LinkingMode;
+import network.aika.enums.LinkingMode;
 
 import static network.aika.elements.Type.*;
 import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
+import static network.aika.enums.LinkingMode.FEEDBACK;
 
 /**
  *
@@ -37,7 +37,8 @@ import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
         synapseTypeId = 9,
         inputType = INHIBITORY,
         outputType = BINDING,
-        transition = INPUT
+        transition = INPUT,
+        linkingMode = FEEDBACK
 )
 public class NegativeFeedbackSynapse extends FeedbackSynapse<
         NegativeFeedbackSynapse,
@@ -77,10 +78,5 @@ public class NegativeFeedbackSynapse extends FeedbackSynapse<
     public void linkAndPropagateOut(InhibitoryActivation act) {
         getOutput()
                 .linkOutgoing(this, act);
-    }
-
-    @Override
-    public LinkingMode getLinkingMode() {
-        return FEEDBACK;
     }
 }
