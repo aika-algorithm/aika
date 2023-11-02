@@ -48,7 +48,11 @@ public class DownVisitor extends Visitor {
 
         act.getInputLinks()
                 .forEach(l ->
-                        l.visit(this, filterState(state, l), depth + 1)
+                        l.visit(
+                                this,
+                                l.getSynapse().transition(state),
+                                depth + 1
+                        )
                 );
     }
 

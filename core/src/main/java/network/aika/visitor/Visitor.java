@@ -20,7 +20,6 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.visitor.operator.Operator;
 import org.slf4j.Logger;
@@ -37,25 +36,15 @@ public abstract class Visitor {
 
     protected Operator operator;
 
-    protected BindingActivation referenceAct;
-
     public Operator getOperator() {
         return operator;
-    }
-
-    public static int synapseTypeToBitmask(int synapseTypeId) {
-        return 1 << synapseTypeId;
-    }
-
-    public int getStartState(Activation act) {
-        return 3 + (Synapse.getStartFilter(act.getNeuron().getType()) << 2);
     }
 
     public void start(Activation<?> act) {
         act.visit(
                 this,
                 null,
-                getStartState(act),
+                act.getStartState(),
                 0
         );
     }
@@ -63,9 +52,8 @@ public abstract class Visitor {
     public void start(Link l) {
         l.visit(
                 this,
-                filterState(
-                        getStartState(l.getOutput()),
-                        l
+                l.getSynapse().transition(
+                        l.getOutput().getStartState()
                 ), 0
         );
     }
@@ -87,18 +75,4 @@ public abstract class Visitor {
     protected abstract String dirToString();
 
     public abstract boolean isDown();
-
-    public void setReferenceAct(BindingActivation refAct) {
-        this.referenceAct = refAct;
-    }
-
-    public Activation getReferenceAct() {
-        return referenceAct;
-    }
-
-    public static int filterState(int state, Link l) {
-        return state &
-                ((l.getSynapse().getScope() != Scope.INPUT ? 1 : 0) +
-                (l.getSynapse().getScope() != Scope.SAME ? 2 : 0));
-    }
 }

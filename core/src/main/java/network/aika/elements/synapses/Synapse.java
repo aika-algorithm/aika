@@ -38,6 +38,7 @@ import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.linkingmode.LinkingMode;
+import network.aika.utils.BitUtils;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
 import network.aika.visitor.operator.LinkingOperator;
@@ -55,7 +56,6 @@ import static network.aika.elements.Timestamp.MIN;
 import static network.aika.enums.linkingmode.LinkingMode.REGULAR;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
-import static network.aika.visitor.Visitor.synapseTypeToBitmask;
 
 /**
  *
@@ -82,13 +82,21 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             InhibitoryCategorySynapse.class
     );
 
-    public static int getStartFilter(Type t) {
+    public static int getStartRequirements(Type t) {
         return SYNAPSE_TYPES.stream()
                 .map(c -> c.getAnnotation(SynapseType.class))
                 .filter(st -> st.outputType() == t)
-                .map(st -> synapseTypeToBitmask(st.synapseTypeId()))
-                .mapToInt(Integer::intValue)
-                .sum();
+                .map(st -> getRequirements(st))
+                .reduce(BitUtils.aggregateOp())
+                .orElse(0);
+    }
+
+    private static int getRequirements(SynapseType st) {
+        return 0;
+    }
+
+    private static int getForbidden(SynapseType st) {
+        return 0;
     }
 
     protected static final double[] SULW_ZERO = new double[] {0.0, 0.0};
@@ -135,11 +143,17 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return getClass().getAnnotation(SynapseType.class).scope();
     }
 
-    public abstract double[] getSumOfLowerWeights();
+    public int transition(int state) {
+        return state &
+                ((getScope() != Scope.INPUT ? 1 : 0) +
+                 (getScope() != Scope.SAME ? 2 : 0));
+    }
 
     public boolean checkVisitorState(int state) {
         return true;
     }
+
+    public abstract double[] getSumOfLowerWeights();
 
     public FieldOutput getInputValue(IA input) {
         return input.getValue();

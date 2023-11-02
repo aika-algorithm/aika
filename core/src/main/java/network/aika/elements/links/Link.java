@@ -23,6 +23,7 @@ import network.aika.elements.LinkKey;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
+import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.queue.activation.LinkingOut;

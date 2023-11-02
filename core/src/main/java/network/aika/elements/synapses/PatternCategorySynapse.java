@@ -16,14 +16,11 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.PatternCategoryLink;
 import network.aika.elements.neurons.PatternNeuron;
-import network.aika.enums.Scope;
 
-import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.Scope.SAME;
 

@@ -30,7 +30,6 @@ public class UpVisitor extends Visitor {
     protected UpVisitor(DownVisitor downVisitor) {
         this.v = downVisitor.v;
         this.operator = downVisitor.operator;
-        this.referenceAct = downVisitor.referenceAct;
     }
 
     @Override
@@ -42,7 +41,11 @@ public class UpVisitor extends Visitor {
 
         act.getOutputLinks()
                 .forEach(l ->
-                        l.visit(this, filterState(state, l), depth + 1)
+                        l.visit(
+                                this,
+                                l.getSynapse().transition(state),
+                                depth + 1
+                        )
                 );
     }
 
@@ -51,7 +54,8 @@ public class UpVisitor extends Visitor {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 
-        l.getOutput().visit(this, l, state, depth + 1);
+        l.getOutput()
+                .visit(this, l, state, depth + 1);
     }
 
     public boolean isDown() {
@@ -64,9 +68,5 @@ public class UpVisitor extends Visitor {
 
     protected String dirToString() {
         return "up";
-    }
-
-    public void createLatentRelation(Link l) {
-        // Nothing to do
     }
 }
