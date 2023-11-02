@@ -48,16 +48,6 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     }
 
     @Override
-    public Type getInputType() {
-        return PATTERN;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
-    @Override
     public void initFromTemplate(Link template) {
         super.initFromTemplate(template);
         synapse.initDummyLink(output);

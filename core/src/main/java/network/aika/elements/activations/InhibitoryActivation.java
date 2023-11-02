@@ -17,7 +17,6 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
-import network.aika.elements.Type;
 import network.aika.elements.links.*;
 import network.aika.elements.links.inhibitoryloop.InhibitoryCategoryInputLink;
 import network.aika.elements.links.inhibitoryloop.InhibitoryCategoryLink;
@@ -29,8 +28,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static network.aika.elements.Type.OUTER_INHIBITORY;
-
 
 /**
  *
@@ -40,11 +37,6 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
 
     public InhibitoryActivation(int id, Document doc, InhibitoryNeuron neuron) {
         super(id, doc, neuron);
-    }
-
-    @Override
-    public Type getType() {
-        return OUTER_INHIBITORY;
     }
 
     @Override

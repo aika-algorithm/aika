@@ -19,7 +19,7 @@ package network.aika.meta.entities;
 import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.ContainsRelation;
+import network.aika.elements.relations.ContainsRelation;
 import network.aika.enums.direction.Direction;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;

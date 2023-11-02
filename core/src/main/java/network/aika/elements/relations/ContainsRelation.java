@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.neurons.relations;
+package network.aika.elements.relations;
 
 import network.aika.Model;
 import network.aika.elements.PreActivation;
@@ -28,82 +28,64 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.enums.direction.Direction.OUTPUT;
 
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class EqualsRelation extends Relation {
+public class ContainsRelation extends Relation {
 
-    boolean compareBegin;
-    boolean compareEnd;
+    private Direction relationDir;
 
-    EqualsRelation() {
+    ContainsRelation() {
     }
 
-    public EqualsRelation(boolean compareBegin, boolean compareEnd) {
-        this.compareBegin = compareBegin;
-        this.compareEnd = compareEnd;
-
-        assert compareBegin || compareEnd;
+    public ContainsRelation(Direction relDir) {
+        relationDir = relDir;
     }
 
     @Override
     public int getRelationType() {
-        return 3;
-    }
-
-    public boolean isCompareBegin() {
-        return compareBegin;
-    }
-
-    public boolean isCompareEnd() {
-        return compareEnd;
+        return 2;
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
+    public Stream<Activation> evaluateLatentRelation(Activation fromAct, PreActivation<?> toPreAct, Direction vDir) {
         Range r = fromAct.getTextReference().getTokenPosRange();
+        Direction dir = relationDir.combine(vDir);
 
-        return toPreAct.getRelatedTokensByTokenPosition(compareBegin ? INPUT : OUTPUT, r)
+        return (
+                dir == Direction.OUTPUT ?
+                        toPreAct.getRelatedTokensByTokenPosition(INPUT, r) :
+                        toPreAct.getRelatedTokensByTokenPosition(INPUT, new Range(0, r.getBegin()))
+        )
                 .filter(act -> fromAct != act)
                 .filter(act ->
-                        compare(r, act.getTextReference().getTokenPosRange(), dir)
+                        contains(r, act.getTextReference().getTokenPosRange(), dir)
                 ).toList().stream();
     }
 
-    public boolean compare(Range ra, Range rb, Direction dir) {
-        if(compareBegin) {
-            if(ra.getBegin() != rb.getBegin())
-                return false;
-        }
-
-        if(compareEnd) {
-            if(ra.getEnd() != rb.getEnd())
-                return false;
-        }
-
-        return true;
+    private boolean contains(Range a, Range b, Direction dir) {
+        return dir == Direction.OUTPUT ?
+                a.contains(b) :
+                b.contains(a);
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
-        out.writeBoolean(compareBegin);
-        out.writeBoolean(compareEnd);
+        relationDir.write(out);
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
-        compareBegin = in.readBoolean();
-        compareEnd = in.readBoolean();
+        relationDir = Direction.read(in);
     }
 
     @Override
     public String toString() {
-        return "EqualsRelation: " + " compareBegin:" + compareBegin + " compareEnd:" + compareEnd;
+        return "ContainsRelation: " + " " + relationDir;
     }
 }

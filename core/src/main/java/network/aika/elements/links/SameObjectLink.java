@@ -16,13 +16,8 @@
  */
 package network.aika.elements.links;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.synapses.SameObjectSynapse;
-import network.aika.visitor.Visitor;
-
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
 
 /**
  * @author Lukas Molzberger
@@ -31,16 +26,6 @@ public class SameObjectLink extends ConjunctiveLink<SameObjectSynapse, BindingAc
 
     public SameObjectLink(SameObjectSynapse s, BindingActivation input, BindingActivation output) {
         super(s, input, output);
-    }
-
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
     }
 
     @Override

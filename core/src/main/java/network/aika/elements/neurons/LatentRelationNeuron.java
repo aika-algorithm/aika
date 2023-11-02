@@ -18,7 +18,7 @@ package network.aika.elements.neurons;
 
 import network.aika.Model;
 import network.aika.Document;
-import network.aika.elements.neurons.relations.Relation;
+import network.aika.elements.relations.Relation;
 import network.aika.fields.SumField;
 import network.aika.elements.activations.LatentRelationActivation;
 

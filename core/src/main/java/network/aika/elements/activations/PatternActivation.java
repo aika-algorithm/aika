@@ -17,21 +17,12 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
-import network.aika.elements.Type;
 import network.aika.elements.links.Link;
-import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.LatentRelationNeuron;
-import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.PatternNeuron;
 import network.aika.visitor.Visitor;
 import network.aika.enums.sign.Sign;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.TreeMap;
-
-import static network.aika.elements.Type.PATTERN;
 import static network.aika.fields.Fields.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -41,21 +32,12 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
-    private Map<LatentRelationNeuron, LatentRelationActivation> toRelations = new TreeMap<>(
-            Comparator.comparingLong(Neuron::getId)
-    );
-
     private FieldFunction entropy;
 
     private Double[] cachedSurprisal;
 
     public PatternActivation(int id, Document doc, PatternNeuron patternNeuron) {
         super(id, doc, patternNeuron);
-    }
-
-    @Override
-    public Type getType() {
-        return PATTERN;
     }
 
     @Override

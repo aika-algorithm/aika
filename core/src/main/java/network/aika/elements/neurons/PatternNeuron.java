@@ -31,6 +31,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.sign.Sign.POS;
 
@@ -38,6 +39,7 @@ import static network.aika.enums.sign.Sign.POS;
  *
  * @author Lukas Molzberger
  */
+@NeuronType(type = PATTERN)
 public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActivation> {
 
     protected double frequency;
@@ -47,11 +49,6 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
 
     public PatternNeuron(Model m) {
         super(m);
-    }
-
-    @Override
-    public Type getType() {
-        return PATTERN;
     }
 
     public static PatternNeuron create(Model m, String label) {

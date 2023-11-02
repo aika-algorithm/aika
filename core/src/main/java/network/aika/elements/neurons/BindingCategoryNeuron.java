@@ -27,15 +27,11 @@ import static network.aika.elements.Type.BINDING;
 /**
  * @author Lukas Molzberger
  */
+@NeuronType(type = BINDING)
 public class BindingCategoryNeuron extends CategoryNeuron {
 
     public BindingCategoryNeuron(Model m) {
         super(m);
-    }
-
-    @Override
-    public Type getType() {
-        return BINDING;
     }
 
     @Override

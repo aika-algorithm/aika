@@ -16,13 +16,9 @@
  */
 package network.aika.elements.links;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.synapses.PatternCategorySynapse;
-import network.aika.visitor.Visitor;
-
-import static network.aika.elements.Type.PATTERN;
 
 /**
  * @author Lukas Molzberger
@@ -31,16 +27,6 @@ public class PatternCategoryLink extends CategoryLink<PatternCategorySynapse, Pa
 
     public PatternCategoryLink(PatternCategorySynapse s, PatternActivation input, CategoryActivation output) {
         super(s, input, output);
-    }
-
-    @Override
-    public Type getInputType() {
-        return PATTERN;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return PATTERN;
     }
 
     @Override

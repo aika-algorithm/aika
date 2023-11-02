@@ -17,10 +17,7 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
-import network.aika.elements.Type;
 import network.aika.elements.neurons.LatentRelationNeuron;
-
-import static network.aika.elements.Type.BINDING;
 
 
 /**
@@ -33,11 +30,6 @@ public class LatentRelationActivation extends BindingActivation {
 
     public LatentRelationActivation(int id, Document doc, LatentRelationNeuron n) {
         super(id, doc, n);
-    }
-
-    @Override
-    public Type getType() {
-        return BINDING;
     }
 
     public Activation getFromAct() {

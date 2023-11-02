@@ -86,9 +86,14 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     public boolean isOutputSideActive() {
         return true;
     }
-    public abstract Type getInputType();
 
-    public abstract Type getOutputType();
+    public Type getInputType() {
+        return synapse.getInputType();
+    }
+
+    public Type getOutputType() {
+        return synapse.getOutputType();
+    }
 
     public void addLinkingStep() {
         LinkingIn.add(this);

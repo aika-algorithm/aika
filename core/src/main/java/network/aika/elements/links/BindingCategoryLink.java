@@ -16,14 +16,9 @@
  */
 package network.aika.elements.links;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.synapses.BindingCategorySynapse;
-import network.aika.visitor.Visitor;
-
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
 
 /**
  * @author Lukas Molzberger
@@ -32,15 +27,5 @@ public class BindingCategoryLink extends CategoryLink<BindingCategorySynapse, Bi
 
     public BindingCategoryLink(BindingCategorySynapse s, BindingActivation input, CategoryActivation output) {
         super(s, input, output);
-    }
-
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
     }
 }

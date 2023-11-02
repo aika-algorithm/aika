@@ -17,10 +17,7 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
-import network.aika.elements.Type;
 import network.aika.elements.neurons.CategoryNeuron;
-
-import static network.aika.elements.Type.BINDING;
 
 /**
  *
@@ -32,8 +29,4 @@ public class BindingCategoryActivation extends CategoryActivation {
         super(id, doc, neuron);
     }
 
-    @Override
-    public Type getType() {
-        return BINDING;
-    }
 }

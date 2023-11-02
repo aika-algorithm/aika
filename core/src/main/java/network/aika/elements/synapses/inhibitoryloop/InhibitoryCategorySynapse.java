@@ -23,7 +23,7 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.SynapseType;
 
-import static network.aika.elements.Type.OUTER_INHIBITORY;
+import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.enums.Scope.INPUT;
 
 /**
@@ -32,8 +32,8 @@ import static network.aika.enums.Scope.INPUT;
  */
 @SynapseType(
         synapseTypeId = 17,
-        inputType = OUTER_INHIBITORY,
-        outputType = OUTER_INHIBITORY,
+        inputType = INHIBITORY,
+        outputType = INHIBITORY,
         scope = INPUT
 )
 public class InhibitoryCategorySynapse extends CategorySynapse<InhibitoryCategorySynapse, Neuron, InhibitoryActivation> {

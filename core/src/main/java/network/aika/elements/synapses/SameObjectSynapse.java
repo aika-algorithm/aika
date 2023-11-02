@@ -17,22 +17,17 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
-import network.aika.elements.Type;
 import network.aika.elements.activations.*;
-import network.aika.elements.links.BindingCategoryInputLink;
-import network.aika.elements.neurons.relations.Relation;
+import network.aika.elements.relations.Relation;
 import network.aika.enums.Scope;
 import network.aika.elements.links.SameObjectLink;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.enums.direction.Direction;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Scope.INPUT;
 import static network.aika.enums.Scope.SAME;
 
 /**

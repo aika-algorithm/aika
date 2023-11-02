@@ -21,9 +21,10 @@ import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
-import network.aika.elements.neurons.relations.Relation;
+import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
+import network.aika.elements.synapses.SynapseType;
 import network.aika.exceptions.MissingInputCategoryNeuron;
 import network.aika.exceptions.NeuronExistsTwiceException;
 import network.aika.fields.*;
@@ -68,6 +69,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected static final String CATEGORY_LABEL = " Category";
 
+    private Type type = getClass().getAnnotation(NeuronType.class).type();
+
     private int synapseIdCounter = 0;
 
     private volatile boolean modified;
@@ -95,7 +98,9 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         setBias(0.0);
     }
 
-    public abstract Type getType();
+    public Type getType() {
+        return type;
+    }
 
     public Long getId() {
         return provider.getId();

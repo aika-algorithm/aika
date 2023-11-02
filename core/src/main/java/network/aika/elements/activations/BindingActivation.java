@@ -17,7 +17,6 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
-import network.aika.elements.Type;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
 import network.aika.elements.links.InputObjectLink;
@@ -32,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static network.aika.elements.Type.BINDING;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -47,11 +45,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     public BindingActivation(int id, Document doc, BindingNeuron n) {
         super(id, doc, n);
-    }
-
-    @Override
-    public Type getType() {
-        return BINDING;
     }
 
     @Override

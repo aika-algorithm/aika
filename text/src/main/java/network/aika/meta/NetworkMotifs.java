@@ -18,7 +18,7 @@ package network.aika.meta;
 
 import network.aika.elements.neurons.LatentRelationNeuron;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.NearRelation;
+import network.aika.elements.relations.NearRelation;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.inhibitoryloop.InhibitorySynapse;
 import network.aika.elements.synapses.inhibitoryloop.NegativeFeedbackSynapse;

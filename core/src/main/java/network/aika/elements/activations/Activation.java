@@ -128,7 +128,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         doc.onElementEvent(CREATE, this);
     }
 
-    public abstract Type getType();
+    public Type getType() {
+        return neuron.getType();
+    }
 
     public int getStartState() {
         return Synapse.getStartRequirements(getNeuron().getType());

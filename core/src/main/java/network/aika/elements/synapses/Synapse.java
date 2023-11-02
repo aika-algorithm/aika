@@ -20,7 +20,7 @@ import network.aika.Model;
 import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
 import network.aika.elements.activations.*;
-import network.aika.elements.neurons.relations.Relation;
+import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategorySynapse;
 import network.aika.elements.synapses.inhibitoryloop.InhibitorySynapse;
@@ -64,6 +64,12 @@ import static network.aika.utils.Utils.TOLERANCE;
 public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neuron<O, OA>, L extends Link<S, IA, OA>, IA extends Activation<?>, OA extends Activation> implements Element, Writable {
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
+
+    private Type inputType = getClass().getAnnotation(SynapseType.class).inputType();
+    private Type outputType = getClass().getAnnotation(SynapseType.class).outputType();
+
+    private Scope scope = getClass().getAnnotation(SynapseType.class).scope();
+
 
     public static Set<Class<? extends Synapse>> SYNAPSE_TYPES = Set.of(
             PatternSynapse.class,
@@ -128,25 +134,21 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public Type getInputType() {
-        return getClass().getAnnotation(SynapseType.class).inputType();
+        return inputType;
     }
 
     public Type getOutputType() {
-        return getClass().getAnnotation(SynapseType.class).outputType();
-    }
-
-    public int getTypeId() {
-        return getClass().getAnnotation(SynapseType.class).synapseTypeId();
+        return outputType;
     }
 
     public Scope getScope() {
-        return getClass().getAnnotation(SynapseType.class).scope();
+        return scope;
     }
 
     public int transition(int state) {
         return state &
-                ((getScope() != Scope.INPUT ? 1 : 0) +
-                 (getScope() != Scope.SAME ? 2 : 0));
+                ((scope != Scope.INPUT ? 1 : 0) +
+                 (scope != Scope.SAME ? 2 : 0));
     }
 
     public boolean checkVisitorState(int state) {

@@ -47,16 +47,6 @@ public class PatternCategoryInputLink extends PositiveFeedbackLink<PatternCatego
     }
 
     @Override
-    public Type getInputType() {
-        return PATTERN;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return PATTERN;
-    }
-
-    @Override
     public CategorySynapse createCategorySynapse() {
         return new PatternCategorySynapse();
     }

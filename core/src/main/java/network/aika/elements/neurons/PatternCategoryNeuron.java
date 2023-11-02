@@ -22,20 +22,17 @@ import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.PatternCategoryActivation;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 
 /**
  * @author Lukas Molzberger
  */
+@NeuronType(type = PATTERN)
 public class PatternCategoryNeuron extends CategoryNeuron {
 
     public PatternCategoryNeuron(Model m) {
         super(m);
-    }
-
-    @Override
-    public Type getType() {
-        return PATTERN;
     }
 
     @Override

@@ -16,16 +16,12 @@
  */
 package network.aika.elements.links;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.*;
 import network.aika.elements.links.positivefeedbackloop.PositiveFeedbackLink;
 import network.aika.elements.synapses.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.BindingCategorySynapse;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.fields.Field;
-import network.aika.visitor.Visitor;
-
-import static network.aika.elements.Type.BINDING;
 
 
 /**
@@ -40,16 +36,6 @@ public class BindingCategoryInputLink extends PositiveFeedbackLink<BindingCatego
     @Override
     protected Field getFeedbackTrigger() {
         return getDocument().getInstantiationFeedbackTrigger();
-    }
-
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
     }
 
     @Override

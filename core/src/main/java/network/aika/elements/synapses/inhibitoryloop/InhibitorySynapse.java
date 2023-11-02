@@ -34,7 +34,7 @@ import static network.aika.enums.Scope.INPUT;
 @SynapseType(
         synapseTypeId = 12,
         inputType = BINDING,
-        outputType = OUTER_INHIBITORY,
+        outputType = INHIBITORY,
         scope = INPUT
 )
 public class InhibitorySynapse extends DisjunctiveSynapse<

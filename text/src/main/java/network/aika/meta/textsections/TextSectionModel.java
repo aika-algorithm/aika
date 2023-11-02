@@ -19,7 +19,7 @@ package network.aika.meta.textsections;
 import network.aika.Model;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.relations.BeforeRelation;
+import network.aika.elements.relations.BeforeRelation;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.Document;
 import network.aika.text.Range;

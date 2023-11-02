@@ -35,7 +35,7 @@ import static network.aika.enums.linkingmode.LinkingMode.FEEDBACK;
  */
 @SynapseType(
         synapseTypeId = 9,
-        inputType = OUTER_INHIBITORY,
+        inputType = INHIBITORY,
         outputType = BINDING,
         scope = INPUT
 )

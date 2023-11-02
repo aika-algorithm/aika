@@ -29,6 +29,7 @@ import static network.aika.elements.Type.BINDING;
 /**
  * @author Lukas Molzberger
  */
+@NeuronType(type = BINDING)
 public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActivation> {
 
 
@@ -40,11 +41,6 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
         return new BindingNeuron(m)
                 .setLabel(label)
                 .setPersistent(true);
-    }
-
-    @Override
-    public Type getType() {
-        return BINDING;
     }
 
     @Override

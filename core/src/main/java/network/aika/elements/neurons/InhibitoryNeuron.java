@@ -25,21 +25,17 @@ import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategorySynapse;
 
-import static network.aika.elements.Type.OUTER_INHIBITORY;
+import static network.aika.elements.Type.INHIBITORY;
 
 /**
  *
  * @author Lukas Molzberger
  */
+@NeuronType(type = INHIBITORY)
 public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, InhibitoryActivation> {
 
     public InhibitoryNeuron(Model m) {
         super(m);
-    }
-
-    @Override
-    public Type getType() {
-        return OUTER_INHIBITORY;
     }
 
     @Override

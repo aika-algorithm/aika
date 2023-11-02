@@ -22,7 +22,7 @@ import network.aika.elements.activations.InhibitoryActivation;
 import network.aika.elements.links.CategoryLink;
 import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategorySynapse;
 
-import static network.aika.elements.Type.OUTER_INHIBITORY;
+import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.elements.activations.InhibitoryActivation.crossConnectFields;
 
 /**
@@ -38,11 +38,11 @@ public class InhibitoryCategoryLink extends CategoryLink<InhibitoryCategorySynap
 
     @Override
     public Type getInputType() {
-        return OUTER_INHIBITORY;
+        return INHIBITORY;
     }
 
     @Override
     public Type getOutputType() {
-        return OUTER_INHIBITORY;
+        return INHIBITORY;
     }
 }

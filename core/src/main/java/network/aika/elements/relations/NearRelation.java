@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.neurons.relations;
+package network.aika.elements.relations;
 
 import network.aika.Model;
 import network.aika.elements.PreActivation;
@@ -34,58 +34,52 @@ import static network.aika.enums.direction.Direction.INPUT;
  *
  * @author Lukas Molzberger
  */
-public class ContainsRelation extends Relation {
+public class NearRelation extends Relation {
 
-    private Direction relationDir;
+    private int distance;
 
-    ContainsRelation() {
+    NearRelation() {
     }
 
-    public ContainsRelation(Direction relDir) {
-        relationDir = relDir;
+    public NearRelation(int distance) {
+        this.distance = distance;
     }
 
     @Override
     public int getRelationType() {
-        return 2;
+        return 4;
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(Activation fromAct, PreActivation<?> toPreAct, Direction vDir) {
-        Range r = fromAct.getTextReference().getTokenPosRange();
-        Direction dir = relationDir.combine(vDir);
+    public Stream<Activation> evaluateLatentRelation(Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
+        Range inputRange = fromAct.getTextReference().getTokenPosRange();
 
-        return (
-                dir == Direction.OUTPUT ?
-                        toPreAct.getRelatedTokensByTokenPosition(INPUT, r) :
-                        toPreAct.getRelatedTokensByTokenPosition(INPUT, new Range(0, r.getBegin()))
-        )
-                .filter(act -> fromAct != act)
-                .filter(act ->
-                        contains(r, act.getTextReference().getTokenPosRange(), dir)
-                ).toList().stream();
+        Range targetRange = new Range(
+                inputRange.getBegin() - distance,
+                inputRange.getEnd() + distance
+        );
+
+        return toPreAct.getRelatedTokensByTokenPosition(INPUT, targetRange).toList().stream();
     }
 
-    private boolean contains(Range a, Range b, Direction dir) {
-        return dir == Direction.OUTPUT ?
-                a.contains(b) :
-                b.contains(a);
+    public int getDistance() {
+        return distance;
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
-        relationDir.write(out);
+        out.writeInt(distance);
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
-        relationDir = Direction.read(in);
+        distance = in.readInt();
     }
 
     @Override
     public String toString() {
-        return "ContainsRelation: " + " " + relationDir;
+        return "NearRelation: dist:" + distance;
     }
 }

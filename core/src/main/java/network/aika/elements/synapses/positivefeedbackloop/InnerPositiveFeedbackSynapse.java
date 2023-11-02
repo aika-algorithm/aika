@@ -18,7 +18,7 @@ package network.aika.elements.synapses.positivefeedbackloop;
 
 import network.aika.Model;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.relations.Relation;
+import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;

@@ -27,7 +27,7 @@ import network.aika.fields.*;
 import java.util.stream.Stream;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.OUTER_INHIBITORY;
+import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.elements.activations.BindingActivation.isSelfRef;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.queue.Phase.NEGATIVE_FEEDBACK;
@@ -72,7 +72,7 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
 
     @Override
     public Type getOutputType() {
-        return OUTER_INHIBITORY;
+        return INHIBITORY;
     }
 
     public void connectFields(NegativeFeedbackLink out) {

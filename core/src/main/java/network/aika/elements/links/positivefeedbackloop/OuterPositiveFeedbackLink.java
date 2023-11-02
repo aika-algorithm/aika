@@ -16,17 +16,12 @@
  */
 package network.aika.elements.links.positivefeedbackloop;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.positivefeedbackloop.OuterPositiveFeedbackSynapse;
 import network.aika.fields.AbstractFunction;
 import network.aika.fields.Fields;
-import network.aika.visitor.Visitor;
-
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
 
 
 /**
@@ -39,16 +34,6 @@ public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiv
 
     public OuterPositiveFeedbackLink(OuterPositiveFeedbackSynapse s, PatternActivation input, BindingActivation output) {
         super(s, input, output);
-    }
-
-    @Override
-    public Type getInputType() {
-        return PATTERN;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
     }
 
     @Override

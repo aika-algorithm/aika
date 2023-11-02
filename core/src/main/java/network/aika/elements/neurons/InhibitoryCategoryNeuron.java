@@ -22,20 +22,16 @@ import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.InhibitoryCategoryActivation;
 
-import static network.aika.elements.Type.OUTER_INHIBITORY;
+import static network.aika.elements.Type.INHIBITORY;
 
 /**
  * @author Lukas Molzberger
  */
+@NeuronType(type = INHIBITORY)
 public class InhibitoryCategoryNeuron extends CategoryNeuron {
 
     public InhibitoryCategoryNeuron(Model m) {
         super(m);
-    }
-
-    @Override
-    public Type getType() {
-        return OUTER_INHIBITORY;
     }
 
     @Override

@@ -38,16 +38,6 @@ public class InputObjectLink extends ConjunctiveLink<InputObjectSynapse, Pattern
         super(s, input, output);
     }
 
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
     public AbstractFunction getInputEntropy() {
         return inputEntropy;
     }

@@ -17,10 +17,7 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
-import network.aika.elements.Type;
 import network.aika.elements.neurons.CategoryNeuron;
-
-import static network.aika.elements.Type.PATTERN;
 
 /**
  *
@@ -30,10 +27,5 @@ public class PatternCategoryActivation extends CategoryActivation {
 
     public PatternCategoryActivation(int id, Document doc, CategoryNeuron neuron) {
         super(id, doc, neuron);
-    }
-
-    @Override
-    public Type getType() {
-        return PATTERN;
     }
 }

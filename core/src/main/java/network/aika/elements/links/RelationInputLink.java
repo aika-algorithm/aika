@@ -16,14 +16,10 @@
  */
 package network.aika.elements.links;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.BindingActivation;
 import network.aika.elements.activations.LatentRelationActivation;
 import network.aika.elements.synapses.RelationInputSynapse;
 import network.aika.visitor.Visitor;
-
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
 
 /**
  * @author Lukas Molzberger
@@ -32,16 +28,6 @@ public class RelationInputLink extends ConjunctiveLink<RelationInputSynapse, Lat
 
     public RelationInputLink(RelationInputSynapse s, LatentRelationActivation input, BindingActivation output) {
         super(s, input, output);
-    }
-
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
     }
 
     @Override
