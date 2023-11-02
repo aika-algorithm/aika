@@ -50,20 +50,6 @@ public abstract class AbstractParticle<G extends AbstractGraphManager> extends S
     protected Map<Long, AbstractParticleLink> inputParticleLinks = new TreeMap<>();
     protected Map<Long, AbstractParticleLink> outputParticleLinks = new TreeMap<>();
 
-    protected static Map<Class<? extends Neuron>, Consumer<Node>> neuronTypeModifiers = new HashMap<>();
-
-    static {
-        neuronTypeModifiers.put(BindingNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(0,205,0);"));
-        neuronTypeModifiers.put(LatentRelationNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(10,170,0);"));
-
-        neuronTypeModifiers.put(InhibitoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,100,255);"));
-
-        neuronTypeModifiers.put(PatternCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-        neuronTypeModifiers.put(BindingCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-        neuronTypeModifiers.put(InhibitoryCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-
-        neuronTypeModifiers.put(PatternNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(224, 34, 245);"));
-    }
 
     /**
      * Default repulsion.

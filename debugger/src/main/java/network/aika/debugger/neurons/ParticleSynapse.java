@@ -13,6 +13,7 @@ import org.graphstream.ui.geom.Vector3;
 import org.miv.pherd.geom.Point3;
 
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
+import static network.aika.debugger.TypeMapper.synapseTypeModifiers;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 

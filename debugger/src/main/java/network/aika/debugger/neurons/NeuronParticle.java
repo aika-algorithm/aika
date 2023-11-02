@@ -33,6 +33,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
+import static network.aika.debugger.TypeMapper.neuronTypeModifiers;
 
 /**
  * @author Lukas Molzberger

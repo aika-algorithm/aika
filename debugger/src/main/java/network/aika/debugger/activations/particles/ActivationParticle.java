@@ -35,6 +35,7 @@ import org.graphstream.ui.layout.springbox.implementations.SpringBox;
 
 import java.util.function.Consumer;
 
+import static network.aika.debugger.TypeMapper.neuronTypeModifiers;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 

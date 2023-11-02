@@ -30,6 +30,8 @@ import org.graphstream.graph.Node;
 import java.util.HashMap;
 import java.util.Map;
 
+import static network.aika.debugger.TypeMapper.synapseTypeModifiers;
+
 /**
  * @author Lukas Molzberger
  */
@@ -46,31 +48,6 @@ public abstract class AbstractParticleLink<E extends Element> {
     protected AbstractParticle outputParticle;
 
     protected AbstractGraphManager graphManager;
-
-
-    protected static Map<Class<? extends Synapse>, String> synapseTypeModifiers = new HashMap<>();
-
-
-    static {
-        synapseTypeModifiers.put(InputObjectSynapse.class, "fill-color: rgb(0,150,00);");
-        synapseTypeModifiers.put(RelationInputSynapse.class, "fill-color: rgb(50,230,50);");
-        synapseTypeModifiers.put(NegativeFeedbackSynapse.class, "fill-color: rgb(185,0,0);");
-        synapseTypeModifiers.put(SameObjectSynapse.class, "fill-color: rgb(50,200,120);");
-        synapseTypeModifiers.put(InnerPositiveFeedbackSynapse.class, "fill-color: rgb(120,200,50); ");
-
-        synapseTypeModifiers.put(InhibitorySynapse.class, "fill-color: rgb(100,100,255);");
-
-        synapseTypeModifiers.put(PatternCategorySynapse.class, "fill-color: rgb(100,0,200);");
-        synapseTypeModifiers.put(BindingCategorySynapse.class, "fill-color: rgb(110,0,220);");
-        synapseTypeModifiers.put(InhibitoryCategorySynapse.class, "fill-color: rgb(110,0,220);");
-
-        synapseTypeModifiers.put(PatternSynapse.class, "fill-color: rgb(224, 34, 245);");
-
-        synapseTypeModifiers.put(PatternCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
-        synapseTypeModifiers.put(BindingCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
-        synapseTypeModifiers.put(InhibitoryCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
-    }
-
 
     public AbstractParticleLink(E link, Edge e, AbstractGraphManager gm) {
         this.link = link;
