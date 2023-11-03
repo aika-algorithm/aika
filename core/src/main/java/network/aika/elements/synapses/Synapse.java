@@ -33,6 +33,7 @@ import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.LinkingMode;
+import network.aika.utils.BitUtils;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
 import network.aika.visitor.operator.LinkingOperator;
@@ -126,12 +127,22 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.transition();
     }
 
-    public boolean checkVisitorState(int state) {
+    public boolean checkForbiddenTransitions(Link l, Direction dir) {
+        Transition[] curTrans = l.getSynapse().getTransitions();
+        for(Transition ft: synapseType.forbidden())
+            for(Transition t: curTrans)
+                if(ft == t)
+                    return false;
+
         return true;
     }
 
-    public boolean transitionAllowed(Link l, Direction dir) {
-        return false;
+    public boolean checkRequiredTransitions(int state) {
+        for(Transition rt: synapseType.required())
+            if(!BitUtils.isSet(state, rt))
+                return false;
+
+        return true;
     }
 
     public abstract double[] getSumOfLowerWeights();

@@ -48,12 +48,12 @@ public class OutgoingLinkingOperator extends LinkingOperator {
 
     @Override
     public boolean transitionAllowed(Link l, Direction dir) {
-        return targetSyn.transitionAllowed(l, dir);
+        return targetSyn.checkForbiddenTransitions(l, dir);
     }
 
     @Override
     public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
-        if(!targetSyn.checkVisitorState(state))
+        if(!targetSyn.checkRequiredTransitions(state))
             return;
 /*
         if(lastLink == null)

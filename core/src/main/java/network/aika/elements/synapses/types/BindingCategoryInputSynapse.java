@@ -64,7 +64,7 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
     }
 */
     @Override
-    public boolean checkVisitorState(int state) {
+    public boolean checkRequiredTransitions(int state) {
         return (state & 1) > 0;
     }
 

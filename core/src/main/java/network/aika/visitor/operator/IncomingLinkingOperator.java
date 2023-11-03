@@ -54,18 +54,18 @@ public class IncomingLinkingOperator extends LinkingOperator {
 
     @Override
     public boolean transitionAllowed(Link l, Direction dir) {
-        if(sourceLink == null && !sourceSyn.transitionAllowed(l, dir))
+        if(sourceLink == null && !sourceSyn.checkForbiddenTransitions(l, dir))
             return false;
 
-        return targetSyn.transitionAllowed(l, dir);
+        return targetSyn.checkForbiddenTransitions(l, dir);
     }
 
     @Override
     public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
-        if(!targetSyn.checkVisitorState(state))
+        if(!targetSyn.checkRequiredTransitions(state))
             return;
 
-        if(sourceLink == null && !sourceSyn.checkVisitorState(state))
+        if(sourceLink == null && !sourceSyn.checkRequiredTransitions(state))
             return;
 
         checkAndLink(act);

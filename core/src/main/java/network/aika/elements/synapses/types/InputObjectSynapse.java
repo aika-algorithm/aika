@@ -56,7 +56,7 @@ public class InputObjectSynapse extends ConjunctiveSynapse<
     }
 
     @Override
-    public boolean checkVisitorState(int state) {
+    public boolean checkRequiredTransitions(int state) {
         return (state & 2) > 0;
     }
 }

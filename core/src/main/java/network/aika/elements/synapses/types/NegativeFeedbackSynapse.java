@@ -51,7 +51,7 @@ public class NegativeFeedbackSynapse extends FeedbackSynapse<
         >
 {
     @Override
-    public boolean checkVisitorState(int state) {
+    public boolean checkRequiredTransitions(int state) {
         return (state & 2) > 0;
     }
 

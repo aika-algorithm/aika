@@ -31,10 +31,13 @@ public class BitUtils {
     }
 
     public static int transition(int state, Transition[] transition) {
-        int aggrTrans = 0;
         for(Transition t: transition)
-            aggrTrans = aggrTrans | t.getState();
+            state = state | t.getState();
 
-        return state & aggrTrans;
+        return state;
+    }
+
+    public static boolean isSet(int state, Transition t) {
+        return (state & t.getState()) > 0;
     }
 }
