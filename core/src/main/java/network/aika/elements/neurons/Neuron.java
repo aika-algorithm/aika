@@ -24,7 +24,6 @@ import network.aika.elements.Type;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
-import network.aika.elements.synapses.SynapseType;
 import network.aika.exceptions.MissingInputCategoryNeuron;
 import network.aika.exceptions.NeuronExistsTwiceException;
 import network.aika.fields.*;

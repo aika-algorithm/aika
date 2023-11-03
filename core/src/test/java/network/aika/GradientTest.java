@@ -16,8 +16,7 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.PatternNeuron;
-import network.aika.Document;
+import network.aika.elements.neurons.types.PatternNeuron;
 import org.junit.jupiter.api.Test;
 
 

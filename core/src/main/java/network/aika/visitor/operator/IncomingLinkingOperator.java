@@ -53,6 +53,14 @@ public class IncomingLinkingOperator extends LinkingOperator {
     }
 
     @Override
+    public boolean transitionAllowed(Link l, Direction dir) {
+        if(sourceLink == null && !sourceSyn.transitionAllowed(l, dir))
+            return false;
+
+        return targetSyn.transitionAllowed(l, dir);
+    }
+
+    @Override
     public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
         if(!targetSyn.checkVisitorState(state))
             return;
@@ -76,10 +84,10 @@ public class IncomingLinkingOperator extends LinkingOperator {
 
         if (!targetSyn.getLinkingMode().check(act))
             return null;
-
+/*
         if(sourceLink != null && !targetSyn.checkSecondaryVisitorRun(act, sourceLink.getOutput()))
             return null;
-
+*/
         Link sl = sourceLink != null ?
                 sourceLink :
                 latentLink(sourceAct, sourceSyn, act, targetSyn);

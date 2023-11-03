@@ -17,18 +17,14 @@
 package network.aika.debugger.activations.layout;
 
 import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
-import network.aika.elements.links.PatternLink;
-import network.aika.text.TextReference;
+import network.aika.elements.links.types.PatternLink;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
 import java.util.Objects;
 import java.util.OptionalDouble;
-
-import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_X;
 
 
 /**

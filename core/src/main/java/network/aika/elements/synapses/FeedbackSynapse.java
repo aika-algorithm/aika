@@ -21,7 +21,6 @@ import network.aika.elements.links.FeedbackLink;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.Neuron;
-import network.aika.fields.Field;
 
 /**
  *

@@ -18,14 +18,13 @@ package network.aika;
 
 
 
-import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.suspension.LabelKey;
 import network.aika.suspension.SuspensionCallback;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.synapses.InputObjectSynapse;
+import network.aika.elements.synapses.types.InputObjectSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.Document;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
 import network.aika.utils.Writable;

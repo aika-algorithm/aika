@@ -19,14 +19,9 @@ package network.aika.elements.synapses;
 import network.aika.Model;
 import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
-import network.aika.elements.activations.*;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.relations.Relation;
-import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategorySynapse;
-import network.aika.elements.synapses.inhibitoryloop.InhibitorySynapse;
-import network.aika.elements.synapses.inhibitoryloop.NegativeFeedbackSynapse;
-import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
-import network.aika.elements.synapses.positivefeedbackloop.OuterPositiveFeedbackSynapse;
+import network.aika.elements.synapses.types.*;
 import network.aika.enums.Transition;
 import network.aika.Document;
 import network.aika.elements.Element;
@@ -38,7 +33,6 @@ import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.LinkingMode;
-import network.aika.utils.BitUtils;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
 import network.aika.visitor.operator.LinkingOperator;
@@ -53,7 +47,6 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
-import static network.aika.enums.LinkingMode.REGULAR;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -84,15 +77,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             InhibitoryCategorySynapse.class
     );
 
-    public static int getStartRequirements(Type type) {
-        return SYNAPSE_TYPES.stream()
-                .map(c -> c.getAnnotation(SynapseType.class))
-                .filter(st -> st.outputType() == type)
-                .flatMap(st -> Stream.of(st.transition()))
-                .map(Transition::getState)
-                .reduce(BitUtils.or())
-                .orElse(0);
-    }
 
     private static int getRequirements(SynapseType st) {
         return 0;
@@ -144,6 +128,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public boolean checkVisitorState(int state) {
         return true;
+    }
+
+    public boolean transitionAllowed(Link l, Direction dir) {
+        return false;
     }
 
     public abstract double[] getSumOfLowerWeights();
@@ -204,11 +192,11 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                 .findAny()
                 .orElse(null);
     }
-
+/*
     public boolean checkSecondaryVisitorRun(Activation iAct, Activation oAct) {
         return true;
     }
-
+*/
     public L getLink(IA iAct, OA oAct) {
         L l = (L) oAct.getInputLink(iAct, synapseId);
         assert l == null || l.getSynapse() == this;

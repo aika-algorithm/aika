@@ -17,11 +17,13 @@
 package network.aika;
 
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.neurons.types.InhibitoryNeuron;
+import network.aika.elements.neurons.types.LatentRelationNeuron;
+import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.relations.BeforeRelation;
-import network.aika.elements.synapses.InputObjectSynapse;
-import network.aika.elements.synapses.RelationInputSynapse;
-import network.aika.elements.synapses.SameObjectSynapse;
+import network.aika.elements.synapses.types.InputObjectSynapse;
+import network.aika.elements.synapses.types.RelationInputSynapse;
+import network.aika.elements.synapses.types.SameObjectSynapse;
 import network.aika.meta.Dictionary;
 import network.aika.text.Range;
 import org.junit.jupiter.api.Test;

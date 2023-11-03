@@ -19,7 +19,6 @@ package network.aika.debugger.neurons.properties.neurons;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.neurons.InhibitoryNeuron;
 import network.aika.elements.neurons.Neuron;
 import network.aika.utils.Utils;
 

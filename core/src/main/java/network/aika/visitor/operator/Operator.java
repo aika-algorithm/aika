@@ -31,6 +31,8 @@ public interface Operator {
 
     Direction getDirection();
 
+    boolean transitionAllowed(Link l, Direction dir);
+
     void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state);
 
     void relationCheck(Synapse relSyn, Activation toAct, Direction relDir);

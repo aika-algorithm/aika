@@ -21,5 +21,9 @@ public @interface SynapseType {
 
     public Transition[] transition();
 
+    public Transition[] required();
+
+    public Transition[] forbidden();
+
     public LinkingMode linkingMode() default LinkingMode.REGULAR;
 }

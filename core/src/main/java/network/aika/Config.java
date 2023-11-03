@@ -16,9 +16,6 @@
  */
 package network.aika;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.Neuron;
-
 /**
  *
  * @author Lukas Molzberger

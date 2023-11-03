@@ -17,7 +17,7 @@
 package network.aika.debugger.neurons.properties.neurons;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.text.Range;
 import network.aika.enums.sign.Sign;
 

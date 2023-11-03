@@ -33,11 +33,13 @@
 package network.aika;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.neurons.*;
-import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.inhibitoryloop.InhibitorySynapse;
-import network.aika.elements.synapses.inhibitoryloop.NegativeFeedbackSynapse;
+import network.aika.elements.neurons.types.InhibitoryNeuron;
+import network.aika.elements.neurons.types.PatternNeuron;
+import network.aika.elements.synapses.types.InhibitorySynapse;
+import network.aika.elements.synapses.types.InputObjectSynapse;
+import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
 import org.junit.jupiter.api.Test;

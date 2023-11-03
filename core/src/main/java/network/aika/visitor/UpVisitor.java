@@ -18,6 +18,7 @@ package network.aika.visitor;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.enums.direction.Direction;
 import network.aika.utils.BitUtils;
 
 import static network.aika.utils.Utils.depthToSpace;
@@ -55,6 +56,9 @@ public class UpVisitor extends Visitor {
 
     @Override
     public void next(Link<?, ?, ?> l, int state, int depth) {
+        if(!operator.transitionAllowed(l, Direction.OUTPUT))
+            return;
+
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 

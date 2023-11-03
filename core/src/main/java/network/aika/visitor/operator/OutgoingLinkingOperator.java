@@ -47,6 +47,11 @@ public class OutgoingLinkingOperator extends LinkingOperator {
     }
 
     @Override
+    public boolean transitionAllowed(Link l, Direction dir) {
+        return targetSyn.transitionAllowed(l, dir);
+    }
+
+    @Override
     public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
         if(!targetSyn.checkVisitorState(state))
             return;
@@ -69,10 +74,10 @@ public class OutgoingLinkingOperator extends LinkingOperator {
 
         if(act == sourceAct)
             return null;
-
+/*
         if(!targetSyn.checkSecondaryVisitorRun(sourceAct, act))
             return null;
-
+*/
         return targetSyn.link(sourceAct, act);
     }
 

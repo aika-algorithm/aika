@@ -1,5 +1,5 @@
 package network.aika;
-import network.aika.elements.synapses.PatternSynapse;
+import network.aika.elements.synapses.types.PatternSynapse;
 import network.aika.enums.sign.Sign;
 import org.junit.jupiter.api.Test;
 

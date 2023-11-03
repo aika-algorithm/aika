@@ -17,7 +17,7 @@
 package network.aika.meta.sequences;
 
 import network.aika.Model;
-import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.types.PatternCategoryNeuron;
 import network.aika.meta.Dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

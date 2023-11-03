@@ -16,10 +16,9 @@
  */
 package network.aika.debugger.neurons.properties.synapses;
 
-import network.aika.debugger.neurons.properties.synapses.ConjunctiveSynapsePropertyPanel;
 import network.aika.elements.links.Link;
 import network.aika.text.Range;
-import network.aika.elements.synapses.PatternSynapse;
+import network.aika.elements.synapses.types.PatternSynapse;
 import network.aika.enums.sign.Sign;
 
 import static network.aika.debugger.AbstractConsole.NOT_SET_STR;

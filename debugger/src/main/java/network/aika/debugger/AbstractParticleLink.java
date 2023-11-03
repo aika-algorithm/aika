@@ -19,16 +19,8 @@ package network.aika.debugger;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategorySynapse;
-import network.aika.elements.synapses.inhibitoryloop.InhibitorySynapse;
-import network.aika.elements.synapses.inhibitoryloop.NegativeFeedbackSynapse;
-import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static network.aika.debugger.TypeMapper.synapseTypeModifiers;
 

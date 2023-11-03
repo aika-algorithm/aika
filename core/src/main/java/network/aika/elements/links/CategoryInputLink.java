@@ -15,7 +15,8 @@ package network.aika.elements.links;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import network.aika.elements.activations.*;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.Synapse;
 

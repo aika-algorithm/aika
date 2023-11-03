@@ -16,14 +16,18 @@
  */
 package network.aika.meta;
 
+import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.CategoryActivation;
+import network.aika.elements.activations.types.BindingActivation;
+import network.aika.elements.activations.types.InhibitoryActivation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.enums.direction.Direction;
-import network.aika.elements.activations.*;
 import network.aika.elements.links.Link;
-import network.aika.elements.links.positivefeedbackloop.InnerPositiveFeedbackLink;
+import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.synapses.PatternSynapse;
-import network.aika.elements.synapses.RelationInputSynapse;
+import network.aika.elements.neurons.types.PatternNeuron;
+import network.aika.elements.synapses.types.PatternSynapse;
+import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.Document;
 

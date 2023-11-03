@@ -17,6 +17,8 @@
 package network.aika.debugger.activations.properties.links;
 
 import network.aika.elements.links.*;
+import network.aika.elements.links.types.InputObjectLink;
+import network.aika.elements.links.types.PatternLink;
 
 
 /**

@@ -18,12 +18,9 @@ package network.aika.debugger;
 
 
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.types.*;
 import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.inhibitoryloop.InhibitoryCategorySynapse;
-import network.aika.elements.synapses.inhibitoryloop.InhibitorySynapse;
-import network.aika.elements.synapses.inhibitoryloop.NegativeFeedbackSynapse;
-import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
+import network.aika.elements.synapses.types.*;
 import org.graphstream.graph.Node;
 
 import java.util.HashMap;

@@ -18,8 +18,8 @@ package network.aika.debugger.activations.particles;
 
 import network.aika.debugger.activations.ActivationGraphManager;
 import network.aika.debugger.activations.LayoutState;
-import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.LatentRelationActivation;
+import network.aika.elements.activations.types.BindingActivation;
+import network.aika.elements.activations.types.LatentRelationActivation;
 import org.graphstream.graph.Node;
 
 /**

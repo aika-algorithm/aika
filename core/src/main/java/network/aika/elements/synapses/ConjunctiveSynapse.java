@@ -17,6 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.ConjunctiveNeuron;

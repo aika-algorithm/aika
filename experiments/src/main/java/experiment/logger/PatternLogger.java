@@ -17,14 +17,16 @@
 package experiment.logger;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.BindingActivation;
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.activations.types.BindingActivation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.*;
-import network.aika.elements.links.inhibitoryloop.InhibitoryLink;
-import network.aika.elements.links.inhibitoryloop.NegativeFeedbackLink;
+import network.aika.elements.links.types.InhibitoryLink;
+import network.aika.elements.links.types.NegativeFeedbackLink;
+import network.aika.elements.links.types.InputObjectLink;
+import network.aika.elements.links.types.PatternLink;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.synapses.PatternSynapse;
+import network.aika.elements.neurons.types.PatternNeuron;
+import network.aika.elements.synapses.types.PatternSynapse;
 import network.aika.fields.FieldOutput;
 import network.aika.meta.LabelUtil;
 import network.aika.Document;

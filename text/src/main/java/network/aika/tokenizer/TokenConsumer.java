@@ -16,7 +16,7 @@
  */
 package network.aika.tokenizer;
 
-import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.text.TextReference;
 
 /**

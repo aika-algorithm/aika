@@ -18,8 +18,7 @@ package network.aika.elements.neurons;
 
 import network.aika.Model;
 import network.aika.Document;
-import network.aika.elements.Type;
-import network.aika.elements.activations.BindingCategoryActivation;
+import network.aika.elements.activations.types.BindingCategoryActivation;
 import network.aika.elements.activations.CategoryActivation;
 
 import static network.aika.elements.Type.BINDING;

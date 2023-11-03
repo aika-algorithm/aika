@@ -21,7 +21,7 @@ import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.Document;

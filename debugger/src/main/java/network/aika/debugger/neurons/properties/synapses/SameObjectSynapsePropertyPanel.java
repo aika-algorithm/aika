@@ -16,9 +16,8 @@
  */
 package network.aika.debugger.neurons.properties.synapses;
 
-import network.aika.debugger.neurons.properties.synapses.ConjunctiveSynapsePropertyPanel;
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.SameObjectSynapse;
+import network.aika.elements.synapses.types.SameObjectSynapse;
 
 /**
  * @author Lukas Molzberger

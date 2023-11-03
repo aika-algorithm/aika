@@ -17,10 +17,10 @@
 package network.aika.meta;
 
 import network.aika.Model;
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.PatternNeuron;
-import network.aika.elements.synapses.PatternCategorySynapse;
+import network.aika.elements.neurons.types.PatternNeuron;
+import network.aika.elements.synapses.types.PatternCategorySynapse;
 import network.aika.enums.sign.Sign;
 import network.aika.Document;
 import network.aika.text.TextReference;

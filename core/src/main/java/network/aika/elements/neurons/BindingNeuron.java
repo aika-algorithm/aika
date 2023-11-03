@@ -18,9 +18,10 @@ package network.aika.elements.neurons;
 
 import network.aika.Model;
 import network.aika.Document;
-import network.aika.elements.Type;
-import network.aika.elements.activations.BindingActivation;
+import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.synapses.*;
+import network.aika.elements.synapses.types.BindingCategoryInputSynapse;
+import network.aika.elements.synapses.types.BindingCategorySynapse;
 
 
 import static network.aika.elements.Type.BINDING;

@@ -18,7 +18,7 @@ package network.aika.debugger.neurons.properties.neurons;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.BindingNeuron;
-import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.neurons.types.LatentRelationNeuron;
 
 import static network.aika.utils.Utils.doubleToString;
 

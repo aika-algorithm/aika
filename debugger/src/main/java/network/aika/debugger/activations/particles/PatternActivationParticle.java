@@ -18,7 +18,7 @@ package network.aika.debugger.activations.particles;
 
 import network.aika.debugger.activations.ActivationGraphManager;
 import network.aika.debugger.activations.LayoutState;
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.activations.types.PatternActivation;
 import org.graphstream.graph.Node;
 
 /**

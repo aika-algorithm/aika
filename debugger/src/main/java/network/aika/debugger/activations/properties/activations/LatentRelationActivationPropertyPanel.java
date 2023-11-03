@@ -16,7 +16,7 @@
  */
 package network.aika.debugger.activations.properties.activations;
 
-import network.aika.elements.activations.LatentRelationActivation;
+import network.aika.elements.activations.types.LatentRelationActivation;
 
 
 /**

@@ -16,7 +16,7 @@
  */
 package network.aika.debugger.activations.properties.activations;
 
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.activations.types.PatternActivation;
 
 
 /**

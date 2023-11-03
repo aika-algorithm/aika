@@ -18,8 +18,9 @@ package network.aika.meta;
 
 import network.aika.Model;
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.neurons.types.LatentRelationNeuron;
 import network.aika.Document;
+import network.aika.elements.neurons.types.PatternNeuron;
 
 import static network.aika.meta.NetworkMotifs.*;
 

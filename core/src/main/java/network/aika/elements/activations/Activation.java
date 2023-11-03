@@ -132,9 +132,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return neuron.getType();
     }
 
-    public int getStartState() {
-        return Synapse.getStartRequirements(getNeuron().getType());
-    }
 
     protected void connectWeightUpdate() {
     }

@@ -16,7 +16,7 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.InhibitoryNeuron;
+import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.meta.Dictionary;
 import org.junit.jupiter.api.Test;
 

@@ -17,7 +17,7 @@
 package experiment.logger;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.LatentRelationActivation;
+import network.aika.elements.activations.types.LatentRelationActivation;
 import network.aika.Document;
 import org.apache.commons.csv.CSVPrinter;
 

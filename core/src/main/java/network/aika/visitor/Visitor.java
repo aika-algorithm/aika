@@ -19,7 +19,6 @@ package network.aika.visitor;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
-import network.aika.enums.Transition;
 import network.aika.utils.BitUtils;
 import network.aika.visitor.operator.Operator;
 import org.slf4j.Logger;
@@ -44,7 +43,7 @@ public abstract class Visitor {
         act.visit(
                 this,
                 null,
-                act.getStartState(),
+                0,
                 0
         );
     }
@@ -53,7 +52,7 @@ public abstract class Visitor {
         l.visit(
                 this,
                 BitUtils.transition(
-                        l.getOutput().getStartState(),
+                        0,
                         l.getSynapse().getTransitions()
                 ), 0
         );

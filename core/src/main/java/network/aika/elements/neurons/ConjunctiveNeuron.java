@@ -24,7 +24,7 @@ import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.synapses.positivefeedbackloop.PositiveFeedbackSynapse;
+import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.fields.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

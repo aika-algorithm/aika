@@ -17,13 +17,11 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
-import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.SynapseOutputSlot;
-import network.aika.fields.SynapseInputSlot;
 
 import java.util.NavigableMap;
 import java.util.TreeMap;

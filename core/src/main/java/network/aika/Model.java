@@ -16,7 +16,7 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.PatternNeuron;
+import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.suspension.InMemorySuspensionCallback;
 import network.aika.suspension.SuspensionCallback;

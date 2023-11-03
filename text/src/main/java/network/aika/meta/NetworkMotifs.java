@@ -16,13 +16,12 @@
  */
 package network.aika.meta;
 
-import network.aika.elements.neurons.LatentRelationNeuron;
+import network.aika.elements.neurons.types.InhibitoryNeuron;
+import network.aika.elements.neurons.types.LatentRelationNeuron;
 import network.aika.elements.neurons.*;
+import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.relations.NearRelation;
-import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.inhibitoryloop.InhibitorySynapse;
-import network.aika.elements.synapses.inhibitoryloop.NegativeFeedbackSynapse;
-import network.aika.elements.synapses.positivefeedbackloop.InnerPositiveFeedbackSynapse;
+import network.aika.elements.synapses.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

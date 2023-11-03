@@ -17,13 +17,15 @@
 package experiment;
 
 import network.aika.Config;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.types.BindingActivation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.meta.Dictionary;
 import network.aika.meta.LabelUtil;
 import network.aika.meta.sequences.SyllableModel;
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
-import network.aika.elements.activations.*;
 import network.aika.parser.Context;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;

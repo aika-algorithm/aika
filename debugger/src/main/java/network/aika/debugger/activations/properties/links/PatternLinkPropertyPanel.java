@@ -16,8 +16,7 @@
  */
 package network.aika.debugger.activations.properties.links;
 
-import network.aika.debugger.activations.properties.links.ConjunctiveLinkPropertyPanel;
-import network.aika.elements.links.PatternLink;
+import network.aika.elements.links.types.PatternLink;
 
 /**
  * @author Lukas Molzberger

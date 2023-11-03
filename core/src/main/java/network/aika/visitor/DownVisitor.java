@@ -20,6 +20,7 @@ import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
+import network.aika.enums.direction.Direction;
 import network.aika.utils.BitUtils;
 import network.aika.visitor.operator.Operator;
 
@@ -62,6 +63,9 @@ public class DownVisitor extends Visitor {
 
     @Override
     public void next(Link<?, ?, ?> l, int state, int depth) {
+        if(!operator.transitionAllowed(l, Direction.INPUT))
+            return;
+
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 

@@ -16,7 +16,7 @@
  */
 package experiment.logger;
 
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.Document;
 import org.apache.commons.csv.CSVFormat;
 

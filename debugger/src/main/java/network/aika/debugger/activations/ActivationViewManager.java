@@ -23,7 +23,7 @@ import network.aika.debugger.activations.layout.ParticleLink;
 import network.aika.debugger.activations.particles.ActivationParticle;
 import network.aika.debugger.stepmanager.StepManager;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.PatternActivation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.queue.Step;
 import network.aika.Document;
