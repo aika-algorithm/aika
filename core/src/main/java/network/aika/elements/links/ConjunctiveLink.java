@@ -94,8 +94,6 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         if (synInputSlot != null)
             linkAndConnect(output.getNet(), synInputSlot);
 
-        linkAndConnect(synOutputSlot, output.getNet());
-
         if(synapse.isOptional())
             synapse.initBiasInput(output);
     }

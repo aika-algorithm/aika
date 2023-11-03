@@ -44,7 +44,7 @@ import static network.aika.enums.LinkingMode.FEEDBACK;
         outputType = BINDING,
         transition = SAME,
         linkingMode = FEEDBACK,
-        forbidden = {INPUT}
+        forbidden = INPUT
 )
 public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         InnerPositiveFeedbackSynapse,

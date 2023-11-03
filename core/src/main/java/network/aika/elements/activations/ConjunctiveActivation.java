@@ -60,9 +60,11 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
         if(inputSlots == null)
             inputSlots = new TreeMap<>();
 
-        return inputSlots.computeIfAbsent(syn.getInput().getId(), nId ->
-            new SynapseOutputSlot(syn, "out-slot-" + nId)
-        );
+        return inputSlots.computeIfAbsent(syn.getInput().getId(), nId -> {
+            SynapseOutputSlot slot = new SynapseOutputSlot(syn, "out-slot-" + nId);
+            linkAndConnect(slot, getNet());
+            return slot;
+        });
     }
 
     @Override
