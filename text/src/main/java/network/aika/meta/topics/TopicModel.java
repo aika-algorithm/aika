@@ -17,7 +17,7 @@
 package network.aika.meta.topics;
 
 import network.aika.Model;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.meta.entities.EntityModel;

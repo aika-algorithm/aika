@@ -19,7 +19,7 @@ package network.aika.elements.synapses.types;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.links.types.InhibitoryLink;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
@@ -32,12 +32,9 @@ import static network.aika.enums.Transition.INPUT;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 12,
         inputType = BINDING,
         outputType = INHIBITORY,
-        transition = INPUT,
-        required = {},
-        forbidden = {}
+        transition = INPUT
 )
 public class InhibitorySynapse extends DisjunctiveSynapse<
         InhibitorySynapse,

@@ -24,7 +24,7 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.types.InnerPositiveFeedbackLink;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.types.PatternSynapse;
 import network.aika.elements.synapses.types.RelationInputSynapse;

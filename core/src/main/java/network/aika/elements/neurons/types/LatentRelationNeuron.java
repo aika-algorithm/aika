@@ -18,7 +18,7 @@ package network.aika.elements.neurons.types;
 
 import network.aika.Model;
 import network.aika.Document;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.relations.Relation;
 import network.aika.fields.SumField;
 import network.aika.elements.activations.types.LatentRelationActivation;
@@ -27,6 +27,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.elements.Type.BINDING;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -34,6 +35,7 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
+@NeuronType(type = BINDING)
 public class LatentRelationNeuron extends BindingNeuron {
 
     private Relation relation;

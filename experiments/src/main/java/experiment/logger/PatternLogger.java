@@ -24,7 +24,7 @@ import network.aika.elements.links.types.InhibitoryLink;
 import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.links.types.InputObjectLink;
 import network.aika.elements.links.types.PatternLink;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.types.PatternSynapse;
 import network.aika.fields.FieldOutput;

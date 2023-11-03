@@ -24,7 +24,7 @@ import network.aika.suspension.SuspensionCallback;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.types.InputObjectSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
 import network.aika.utils.Writable;

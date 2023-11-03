@@ -32,12 +32,9 @@ import static network.aika.enums.Transition.CATEGORY;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 15,
         inputType = BINDING,
         outputType = BINDING,
-        transition = {SAME, CATEGORY},
-        required = {},
-        forbidden = {}
+        transition = {SAME, CATEGORY}
 )
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
 

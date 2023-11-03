@@ -128,13 +128,16 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public boolean checkForbiddenTransitions(Link l, Direction dir) {
-        Transition[] curTrans = l.getSynapse().getTransitions();
         for(Transition ft: synapseType.forbidden())
-            for(Transition t: curTrans)
+            for(Transition t: l.getSynapse().getTransitions())
                 if(ft == t)
                     return false;
 
         return true;
+    }
+
+    public boolean checkUp(Class<? extends Neuron> type) {
+        return synapseType.up() == type;
     }
 
     public boolean checkRequiredTransitions(int state) {

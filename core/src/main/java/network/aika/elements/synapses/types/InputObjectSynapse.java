@@ -19,7 +19,7 @@ package network.aika.elements.synapses.types;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.types.InputObjectLink;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
@@ -33,12 +33,9 @@ import static network.aika.enums.Transition.INPUT;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 2,
         inputType = PATTERN,
         outputType = BINDING,
-        transition = INPUT,
-        required = {},
-        forbidden = {}
+        transition = INPUT
 )
 public class InputObjectSynapse extends ConjunctiveSynapse<
         InputObjectSynapse,
@@ -53,10 +50,5 @@ public class InputObjectSynapse extends ConjunctiveSynapse<
     @Override
     public InputObjectLink createLink(PatternActivation input, BindingActivation output) {
         return new InputObjectLink(this, input, output);
-    }
-
-    @Override
-    public boolean checkRequiredTransitions(int state) {
-        return (state & 2) > 0;
     }
 }

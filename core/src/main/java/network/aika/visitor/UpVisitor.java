@@ -56,14 +56,13 @@ public class UpVisitor extends Visitor {
 
     @Override
     public void next(Link<?, ?, ?> l, int state, int depth) {
-        if(!operator.transitionAllowed(l, Direction.OUTPUT))
+        if(!operator.checkForbiddenTransitions(l, Direction.OUTPUT))
             return;
 
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 
-        l.getOutput()
-                .visit(this, l, state, depth + 1);
+        next(l.getOutput(), l, state, depth + 1);
     }
 
     public boolean isDown() {

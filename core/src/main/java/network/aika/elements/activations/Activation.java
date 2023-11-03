@@ -193,10 +193,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         net.setValue(v);
     }
 
-    public void visit(Visitor v, Link lastLink, int state, int depth) {
-        v.next(this, lastLink, state, depth);
-    }
-
     protected void connectGradientFields() {
         netOuterGradient =
                 func(

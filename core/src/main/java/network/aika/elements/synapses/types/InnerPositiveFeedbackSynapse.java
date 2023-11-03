@@ -17,7 +17,7 @@
 package network.aika.elements.synapses.types;
 
 import network.aika.Model;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.activations.types.BindingActivation;
@@ -31,6 +31,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.*;
+import static network.aika.enums.Transition.INPUT;
 import static network.aika.enums.Transition.SAME;
 import static network.aika.enums.LinkingMode.FEEDBACK;
 
@@ -39,13 +40,11 @@ import static network.aika.enums.LinkingMode.FEEDBACK;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 4,
         inputType = PATTERN,
         outputType = BINDING,
         transition = SAME,
         linkingMode = FEEDBACK,
-        required = {},
-        forbidden = {}
+        forbidden = {INPUT}
 )
 public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         InnerPositiveFeedbackSynapse,

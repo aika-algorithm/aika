@@ -16,6 +16,7 @@
  */
 package network.aika.visitor.operator;
 
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
@@ -53,11 +54,16 @@ public class IncomingLinkingOperator extends LinkingOperator {
     }
 
     @Override
-    public boolean transitionAllowed(Link l, Direction dir) {
+    public boolean checkForbiddenTransitions(Link l, Direction dir) {
         if(sourceLink == null && !sourceSyn.checkForbiddenTransitions(l, dir))
             return false;
 
         return targetSyn.checkForbiddenTransitions(l, dir);
+    }
+
+    @Override
+    public boolean checkUp(Class<? extends Neuron> type) {
+        return targetSyn.checkUp(type);
     }
 
     @Override

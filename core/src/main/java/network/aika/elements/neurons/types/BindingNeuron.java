@@ -14,11 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.neurons;
+package network.aika.elements.neurons.types;
 
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.activations.types.BindingActivation;
+import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.types.BindingCategorySynapse;

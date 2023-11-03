@@ -63,23 +63,25 @@ public class DownVisitor extends Visitor {
 
     @Override
     public void next(Link<?, ?, ?> l, int state, int depth) {
-        if(!operator.transitionAllowed(l, Direction.INPUT))
+        if(!operator.checkForbiddenTransitions(l, Direction.INPUT))
             return;
 
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 
-        if(l.getInput() != null)
-            l.getInput().visit(this, l, state, depth + 1);
+        Activation iAct = l.getInput();
+        if(iAct != null) {
+            next(iAct, l, state, depth + 1);
+//            iAct.visit(this, l, state, depth + 1);
+
+            if(operator.checkUp(iAct.getNeuron().getClass()))
+                up(iAct, state, depth);
+        }
     }
 
-    public void up(ConjunctiveActivation bindingSource, int state, int depth) {
-        bindingSource.visit(
-                new UpVisitor(this),
-                null,
-                state,
-                depth
-        );
+    public void up(Activation bindingSource, int state, int depth) {
+        new UpVisitor(this)
+                .next(bindingSource, null, state, depth);
     }
 
     public boolean isDown() {

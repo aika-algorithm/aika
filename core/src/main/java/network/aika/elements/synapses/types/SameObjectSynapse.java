@@ -22,7 +22,7 @@ import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.LatentRelationActivation;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.links.types.SameObjectLink;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
 
@@ -31,6 +31,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.enums.Transition.INPUT;
 import static network.aika.enums.Transition.SAME;
 
 /**
@@ -39,12 +40,10 @@ import static network.aika.enums.Transition.SAME;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 3,
         inputType = BINDING,
         outputType = BINDING,
         transition = SAME,
-        required = {},
-        forbidden = {}
+        required = {INPUT}
 )
 public class SameObjectSynapse extends ConjunctiveSynapse<
         SameObjectSynapse,

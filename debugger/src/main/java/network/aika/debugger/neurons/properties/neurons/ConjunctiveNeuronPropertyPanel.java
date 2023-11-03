@@ -17,7 +17,7 @@
 package network.aika.debugger.neurons.properties.neurons;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 

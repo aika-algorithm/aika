@@ -17,7 +17,7 @@
 package network.aika.elements.synapses.types;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.LatentRelationActivation;
 import network.aika.elements.links.types.RelationInputLink;
@@ -35,12 +35,9 @@ import static network.aika.enums.Transition.INPUT;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 6,
         inputType = BINDING,
         outputType = BINDING,
-        transition = INPUT,
-        required = {},
-        forbidden = {}
+        transition = INPUT
 )
 public class RelationInputSynapse extends ConjunctiveSynapse<
         RelationInputSynapse,

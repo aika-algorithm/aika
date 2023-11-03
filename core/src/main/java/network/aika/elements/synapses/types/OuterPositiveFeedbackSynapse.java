@@ -19,7 +19,7 @@ package network.aika.elements.synapses.types;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.types.OuterPositiveFeedbackLink;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
@@ -34,13 +34,10 @@ import static network.aika.enums.LinkingMode.FEEDBACK;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 6,
         inputType = PATTERN,
         outputType = BINDING,
         transition = INPUT,
-        linkingMode = FEEDBACK,
-        required = {},
-        forbidden = {}
+        linkingMode = FEEDBACK
 )
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         OuterPositiveFeedbackSynapse,

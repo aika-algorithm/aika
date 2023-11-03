@@ -16,7 +16,7 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.types.InputObjectSynapse;
 import network.aika.text.Range;

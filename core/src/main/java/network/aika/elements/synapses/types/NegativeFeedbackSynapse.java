@@ -19,7 +19,7 @@ package network.aika.elements.synapses.types;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.links.types.NegativeFeedbackLink;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.elements.synapses.SynapseType;
@@ -33,13 +33,10 @@ import static network.aika.enums.LinkingMode.FEEDBACK;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 9,
         inputType = INHIBITORY,
         outputType = BINDING,
         transition = INPUT,
-        linkingMode = FEEDBACK,
-        required = {},
-        forbidden = {}
+        linkingMode = FEEDBACK
 )
 public class NegativeFeedbackSynapse extends FeedbackSynapse<
         NegativeFeedbackSynapse,
@@ -50,11 +47,6 @@ public class NegativeFeedbackSynapse extends FeedbackSynapse<
         BindingActivation
         >
 {
-    @Override
-    public boolean checkRequiredTransitions(int state) {
-        return (state & 2) > 0;
-    }
-
     @Override
     public void initDummyLink(BindingActivation oAct) {
     }

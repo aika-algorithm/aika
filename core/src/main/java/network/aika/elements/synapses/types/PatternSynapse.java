@@ -27,7 +27,7 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.text.Range;
 import network.aika.statistic.SampleSpace;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.enums.sign.Sign;
 import network.aika.utils.Bound;
 import network.aika.utils.Utils;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Transition.*;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.enums.sign.Sign.NEG;
 import static network.aika.enums.sign.Sign.POS;
@@ -50,12 +50,11 @@ import static network.aika.enums.sign.Sign.POS;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 0,
         inputType = BINDING,
         outputType = PATTERN,
         transition = SAME,
-        required = {},
-        forbidden = {}
+        forbidden = {INPUT, CATEGORY},
+        up = BindingNeuron.class
 )
 public class PatternSynapse extends ConjunctiveSynapse<
         PatternSynapse,

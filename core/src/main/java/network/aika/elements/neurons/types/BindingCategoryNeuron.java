@@ -14,12 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.neurons;
+package network.aika.elements.neurons.types;
 
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.activations.types.BindingCategoryActivation;
 import network.aika.elements.activations.CategoryActivation;
+import network.aika.elements.neurons.CategoryNeuron;
+import network.aika.elements.neurons.NeuronType;
 
 import static network.aika.elements.Type.BINDING;
 

@@ -35,12 +35,9 @@ import static network.aika.enums.Transition.SAME;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 1,
         inputType = PATTERN,
         outputType = PATTERN,
-        transition = {SAME, CATEGORY},
-        required = {},
-        forbidden = {}
+        transition = {SAME, CATEGORY}
 )
 public class PatternCategoryInputSynapse
         extends PositiveFeedbackSynapse<

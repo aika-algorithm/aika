@@ -32,12 +32,9 @@ import static network.aika.enums.Transition.INPUT;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 17,
         inputType = INHIBITORY,
         outputType = INHIBITORY,
-        transition = {INPUT, CATEGORY},
-        required = {},
-        forbidden = {}
+        transition = {INPUT, CATEGORY}
 )
 public class InhibitoryCategorySynapse extends CategorySynapse<InhibitoryCategorySynapse, Neuron, InhibitoryActivation> {
 

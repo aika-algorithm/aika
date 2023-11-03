@@ -17,9 +17,7 @@
 package network.aika;
 
 import network.aika.elements.neurons.*;
-import network.aika.elements.neurons.types.InhibitoryNeuron;
-import network.aika.elements.neurons.types.LatentRelationNeuron;
-import network.aika.elements.neurons.types.PatternNeuron;
+import network.aika.elements.neurons.types.*;
 import network.aika.elements.relations.BeforeRelation;
 import network.aika.elements.synapses.types.*;
 import network.aika.meta.Dictionary;

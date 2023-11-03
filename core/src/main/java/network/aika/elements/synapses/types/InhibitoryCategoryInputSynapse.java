@@ -35,12 +35,9 @@ import static network.aika.enums.Transition.INPUT;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 13,
         inputType = INHIBITORY,
         outputType = BINDING,
-        transition = {INPUT, CATEGORY},
-        required = {},
-        forbidden = {}
+        transition = {INPUT, CATEGORY}
 )
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InhibitoryCategoryInputSynapse,
@@ -51,8 +48,6 @@ public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InhibitoryActivation
         > implements CategoryInputSynapse<InhibitoryCategoryInputSynapse>
 {
-    public static int TYPE_ID = 13;
-
     private double initialCategorySynapseWeight;
 
     @Override

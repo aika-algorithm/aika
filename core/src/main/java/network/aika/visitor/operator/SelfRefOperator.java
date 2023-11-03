@@ -16,9 +16,13 @@
  */
 package network.aika.visitor.operator;
 
+import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.elements.neurons.Neuron;
+import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.Synapse;
+import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.UpVisitor;
 
@@ -29,10 +33,13 @@ public class SelfRefOperator implements Operator {
 
     private Activation target;
 
+    private Transition identityRef;
+
     private boolean isSelfRef;
 
-    public SelfRefOperator(Activation target) {
+    public SelfRefOperator(Activation target, Transition identityRef) {
         this.target = target;
+        this.identityRef = identityRef;
     }
 
     @Override
@@ -43,6 +50,20 @@ public class SelfRefOperator implements Operator {
     @Override
     public Direction getDirection() {
         return null;
+    }
+
+    @Override
+    public boolean checkForbiddenTransitions(Link l, Direction dir) {
+        for(Transition t: l.getSynapse().getTransitions())
+            if(t == identityRef)
+                return true;
+
+        return false;
+    }
+
+    @Override
+    public boolean checkUp(Class<? extends Neuron> type) {
+        return type == PatternNeuron.class;
     }
 
     @Override

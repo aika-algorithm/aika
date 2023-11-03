@@ -84,13 +84,6 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
         return entropy;
     }
 
-    @Override
-    public void visit(Visitor v, Link lastLink, int state, int depth) {
-        super.visit(v, lastLink, state, depth);
-
-        v.up(this, state, depth);
-    }
-
     public double getSurprisal(Sign sign) {
         if(cachedSurprisal == null)
             cachedSurprisal = new Double[2];

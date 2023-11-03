@@ -16,7 +16,7 @@
  */
 package network.aika.elements.synapses.types;
 
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.links.types.BindingCategoryInputLink;
 import network.aika.elements.activations.CategoryActivation;
@@ -35,12 +35,10 @@ import static network.aika.enums.Transition.SAME;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 7,
         inputType = BINDING,
         outputType = BINDING,
         transition = {SAME, CATEGORY},
-        required = {},
-        forbidden = {}
+        required = CATEGORY
 )
 public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         BindingCategoryInputSynapse,
@@ -63,10 +61,6 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         return op.isSelfRef();
     }
 */
-    @Override
-    public boolean checkRequiredTransitions(int state) {
-        return (state & 1) > 0;
-    }
 
     @Override
     public BindingCategoryInputLink createLink(CategoryActivation input, BindingActivation output) {

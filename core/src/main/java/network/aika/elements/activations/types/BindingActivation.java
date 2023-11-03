@@ -24,7 +24,7 @@ import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.links.types.InputObjectLink;
 import network.aika.enums.Transition;
 import network.aika.fields.*;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.operator.SelfRefOperator;
 import org.slf4j.Logger;
@@ -97,7 +97,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         if(log.isDebugEnabled())
             log.debug("Start checking SelfRef for (" + toKeyString() + ", " + out.toKeyString() + ")");
 
-        SelfRefOperator op = new SelfRefOperator(out);
+        SelfRefOperator op = new SelfRefOperator(out, identityRef);
         new DownVisitor(
                 doc,
                 op

@@ -19,9 +19,10 @@ package network.aika.meta.entities;
 import network.aika.InstantiationUtil;
 import network.aika.Model;
 import network.aika.TemplateModel;
+import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.neurons.BindingNeuron;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
@@ -67,10 +68,10 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
     @Override
     protected Document createDocument(String label) {
         Document doc = new Document(getModel(), label);
-/*
+
         AIKADebugger.createAndShowGUI()
                .setDocument(doc);
-*/
+
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(tAct, iAct, label);
             iAct.getNeuron().makeAbstract()

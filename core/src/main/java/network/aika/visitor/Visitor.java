@@ -40,8 +40,8 @@ public abstract class Visitor {
     }
 
     public void start(Activation<?> act) {
-        act.visit(
-                this,
+        next(
+                act,
                 null,
                 0,
                 0

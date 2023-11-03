@@ -32,12 +32,9 @@ import static network.aika.enums.Transition.SAME;
  * @author Lukas Molzberger
  */
 @SynapseType(
-        synapseTypeId = 14,
         inputType = PATTERN,
         outputType = PATTERN,
-        transition = {SAME, CATEGORY},
-        required = {},
-        forbidden = {}
+        transition = {SAME, CATEGORY}
 )
 public class PatternCategorySynapse extends CategorySynapse<PatternCategorySynapse, PatternNeuron, PatternActivation> {
 
