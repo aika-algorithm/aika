@@ -83,8 +83,8 @@ public class QueueInterceptor {
     }
 
     public void process(FieldStep s) {
-        field.triggerUpdate(false, s.getDelta());
         step = null;
+        field.triggerUpdate(false, s.getDelta());
 
         updateObservers();
     }

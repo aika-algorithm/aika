@@ -59,12 +59,15 @@ public class MaxField extends SumField {
                 .max(Comparator.comparingDouble(AbstractFieldLink::getInputValue))
                 .orElse(null);
 
-        checkListener(lastSelectedInput, selectedInput);
+        if(lastSelectedInput != selectedInput) {
+            updateConnection(lastSelectedInput, false);
+            updateConnection(selectedInput, true);
+        }
 
         super.triggerUpdate(nextRound, u);
     }
 
-    protected void checkListener(FieldLink lastSelectedInput, FieldLink selectedInput) {
+    protected void updateConnection(FieldLink si, boolean state) {
     }
 
     protected boolean isCandidate(FieldLink fl) {

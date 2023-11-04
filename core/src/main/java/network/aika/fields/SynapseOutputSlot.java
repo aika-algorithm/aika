@@ -27,17 +27,12 @@ import network.aika.elements.synapses.Synapse;
  */
 public class SynapseOutputSlot extends MaxField {
 
-
     public SynapseOutputSlot(Synapse ref, String label) {
         super(ref, label);
     }
 
-    protected void checkListener(FieldLink lastSelectedInput, FieldLink selectedInput) {
-        updateConnection(lastSelectedInput, false);
-        updateConnection(selectedInput, true);
-    }
-
-    private void updateConnection(FieldLink si, boolean state) {
+    @Override
+    protected void updateConnection(FieldLink si, boolean state) {
         if(si == null)
             return;
         Link l = getLink(si);
