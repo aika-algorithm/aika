@@ -263,7 +263,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public void initFromTemplate(I input, O output, Synapse templateSyn) {
-        synapseId = templateSyn.synapseId;
+        synapseId = output.getNewSynapseId();
         setInput(input);
         setOutput(output);
 

@@ -37,12 +37,6 @@ public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiv
         super(s, input, output);
     }
 
-    @Override
-    public void initFromTemplate(Link template) {
-        super.initFromTemplate(template);
-        synapse.initDummyLink(output);
-    }
-
     public AbstractFunction getInputEntropy() {
         return inputEntropy;
     }

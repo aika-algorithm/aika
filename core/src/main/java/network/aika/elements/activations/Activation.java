@@ -513,7 +513,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         doc.onElementEvent(TOKEN_POSITION, ti);
 
         linkTemplateAndInstance(ti);
-
         instantiateTemplateEdges(ti);
 
         if(doc.getInstantiationCallback() != null)

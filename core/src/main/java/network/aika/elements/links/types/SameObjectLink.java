@@ -20,6 +20,7 @@ import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.types.SameObjectSynapse;
+import network.aika.queue.link.PostInstantiation;
 
 /**
  * @author Lukas Molzberger
@@ -32,11 +33,7 @@ public class SameObjectLink extends ConjunctiveLink<SameObjectSynapse, BindingAc
 
     @Override
     protected void postInstantiation(Link newInstance) {
-        SameObjectLink nl = (SameObjectLink) newInstance;
-
-        nl.synapse.setRelationSynId(
-                synapse.getRelationSynId()
-        );
+        PostInstantiation.add((SameObjectLink) newInstance, this);
     }
 
     @Override

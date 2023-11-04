@@ -54,6 +54,8 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
     protected SumField gradient;
 
+    protected Integer instanceSynapseId;
+
     public Link(S s, I input, O output) {
         this.synapse = s;
         this.input = input;
@@ -72,6 +74,10 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
         propagateRanges();
         getDocument().onElementEvent(CREATE, this);
+    }
+
+    public Integer getInstanceSynapseId() {
+        return instanceSynapseId;
     }
 
     public boolean isActive() {
@@ -213,6 +219,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void initFromTemplate(Link template) {
+        template.instanceSynapseId = synapse.getSynapseId();
     }
 
     public void link() {
