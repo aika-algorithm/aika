@@ -43,7 +43,7 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
 
     @Override
     protected void initInputValue() {
-        inputValue = new MaxField(this, "max-input-value");
+        inputValue = new MaxField(this, "input-value-ft");
 
         linkAndConnect(getFeedbackTrigger(), 0, inputValue);
     }

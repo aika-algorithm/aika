@@ -288,6 +288,8 @@ public class Document extends Queue implements Element {
         );
 
         act.updateRanges(textReference);
+
+        act.getNet().disconnectInputs(false);
         act.setNet(inputNet);
         return act;
     }

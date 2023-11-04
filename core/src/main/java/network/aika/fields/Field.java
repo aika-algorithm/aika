@@ -110,6 +110,12 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
         );
     }
 
+    public void disconnectInputs(boolean deinitialize) {
+        getInputs().forEach(fl ->
+                fl.disconnect(deinitialize)
+        );
+    }
+
     public void disconnectAndUnlinkInputs(boolean deinitialize) {
         getInputs().forEach(fl -> {
             fl.disconnect(deinitialize);

@@ -61,32 +61,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     private final SynapseType synapseType = getClass().getAnnotation(SynapseType.class);
 
-    public static Set<Class<? extends Synapse>> SYNAPSE_TYPES = Set.of(
-            PatternSynapse.class,
-            PatternCategoryInputSynapse.class,
-            InputObjectSynapse.class,
-            SameObjectSynapse.class,
-            InnerPositiveFeedbackSynapse.class,
-            OuterPositiveFeedbackSynapse.class,
-            RelationInputSynapse.class,
-            BindingCategoryInputSynapse.class,
-            NegativeFeedbackSynapse.class,
-            InhibitorySynapse.class,
-            InhibitoryCategoryInputSynapse.class,
-            PatternCategorySynapse.class,
-            BindingCategorySynapse.class,
-            InhibitoryCategorySynapse.class
-    );
-
-
-    private static int getRequirements(SynapseType st) {
-        return 0;
-    }
-
-    private static int getForbidden(SynapseType st) {
-        return 0;
-    }
-
     protected static final double[] SULW_ZERO = new double[] {0.0, 0.0};
 
     protected int synapseId;

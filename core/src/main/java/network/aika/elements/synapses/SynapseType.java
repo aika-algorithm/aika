@@ -1,6 +1,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.Type;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.enums.LinkingMode;
 import network.aika.enums.Transition;
@@ -24,7 +25,7 @@ public @interface SynapseType {
 
     public Transition[] forbidden() default {};
 
-    public Class up() default PatternNeuron.class;
+    public Class<? extends Neuron> up() default PatternNeuron.class;
 
     public LinkingMode linkingMode() default LinkingMode.REGULAR;
 }
