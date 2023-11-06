@@ -98,6 +98,11 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
             synapse.initBiasInput(output);
     }
 
+    public void initFromTemplate(Link template) {
+        super.initFromTemplate(template);
+        synapse.initBiasInput(output);
+    }
+
     @Override
     public Field getWeightedOutput() {
         return synOutputSlot;
