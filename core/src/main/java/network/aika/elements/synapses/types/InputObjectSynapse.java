@@ -27,6 +27,7 @@ import network.aika.elements.synapses.SynapseType;
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.Transition.INPUT;
+import static network.aika.enums.Transition.SAME;
 
 /**
  *
@@ -35,7 +36,8 @@ import static network.aika.enums.Transition.INPUT;
 @SynapseType(
         inputType = PATTERN,
         outputType = BINDING,
-        transition = INPUT
+        transition = INPUT,
+        forbidden = SAME
 )
 public class InputObjectSynapse extends ConjunctiveSynapse<
         InputObjectSynapse,

@@ -22,6 +22,9 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.utils.Utils;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import static network.aika.utils.Utils.doubleToString;
 
 
@@ -47,7 +50,24 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
     }
 
     protected void initSynapseProperties(E s) {
-        addConstant("Scope: ", "" + s.getTransitions());
+        addConstant("Transitions: ", "" +
+                Arrays.asList(s.getTransitions())
+                        .stream()
+                        .map(t -> "" + t)
+                        .collect(Collectors.joining(", "))
+        );
+        addConstant("Forbidden: ", "" +
+                Arrays.asList(s.getForbidden())
+                        .stream()
+                        .map(t -> "" + t)
+                        .collect(Collectors.joining(", "))
+        );
+        addConstant("Required: ", "" +
+                Arrays.asList(s.getRequired())
+                        .stream()
+                        .map(t -> "" + t)
+                        .collect(Collectors.joining(", "))
+        );
         addConstant("Net UB: ", doubleToString(s.getNetUB()));
         addConstant("Is Training Allowed: ", "" + s.isTrainingAllowed());
         addConstant("Stored At: ", "" + s.getStoredAt());

@@ -101,6 +101,14 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.transition();
     }
 
+    public Transition[] getForbidden() {
+        return synapseType.forbidden();
+    }
+
+    public Transition[] getRequired() {
+        return synapseType.required();
+    }
+
     public boolean checkForbiddenTransitions(Link l, Direction dir) {
         for(Transition ft: synapseType.forbidden())
             for(Transition t: l.getSynapse().getTransitions())
