@@ -83,7 +83,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
        if(input == null)
             return;
 
-        if(isOutputSideActive())
+        if(isActive())
             v.next(this, state, depth);
     }
 

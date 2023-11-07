@@ -27,7 +27,10 @@ import network.aika.elements.neurons.Neuron;
  * @author Lukas Molzberger
  */
 public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends PositiveFeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<O>>
-        extends FeedbackSynapse<S, I, O, L, IA, OA>
+        extends ConjunctiveSynapse<S, I, O, L, IA, OA>
 {
-
+    public void initDummyLink(OA oAct) {
+        if(!linkExists(oAct, true))
+            createAndInitLink(null, oAct);
+    }
 }

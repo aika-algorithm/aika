@@ -23,6 +23,7 @@ import network.aika.fields.AbstractFunction;
 import network.aika.fields.Field;
 import network.aika.fields.IdentityFunction;
 import network.aika.fields.MaxField;
+import network.aika.visitor.Visitor;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
@@ -33,12 +34,34 @@ import static network.aika.fields.Fields.scale;
  * @author Lukas Molzberger
  */
 public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>>
-        extends FeedbackLink<S, IA, OA> {
+        extends ConjunctiveLink<S, IA, OA> {
+
+    protected long[] visited;
 
     protected AbstractFunction inputGradient;
 
     public PositiveFeedbackLink(S s, IA input, OA output) {
         super(s, input, output);
+    }
+
+    @Override
+    public void visit(Visitor v, int state, int depth) {
+        if(checkVisited(v))
+            return;
+
+        super.visit(v, state, depth);
+    }
+
+    private boolean checkVisited(Visitor v) {
+        if(visited == null)
+            visited = new long[2];
+
+        int dir = v.getDirectionIndex();
+        if(visited[dir] == v.getV())
+            return true;
+
+        visited[dir] = v.getV();
+        return false;
     }
 
     @Override

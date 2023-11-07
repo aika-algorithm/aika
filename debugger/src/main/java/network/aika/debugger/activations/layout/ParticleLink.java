@@ -19,11 +19,7 @@ package network.aika.debugger.activations.layout;
 import network.aika.debugger.AbstractParticleLink;
 import network.aika.debugger.activations.ActivationGraphManager;
 import network.aika.debugger.activations.particles.ActivationParticle;
-import network.aika.elements.links.types.InhibitoryLink;
-import network.aika.elements.links.types.InputObjectLink;
-import network.aika.elements.links.types.PatternLink;
-import network.aika.elements.links.types.RelationInputLink;
-import network.aika.elements.links.types.SameObjectLink;
+import network.aika.elements.links.types.*;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.links.*;
 import org.graphstream.graph.Edge;
@@ -80,8 +76,10 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
             return PatternParticleLink.create((PatternLink) l, e, gm);
         } else if(l instanceof InhibitoryLink) {
             return InhibitoryParticleLink.create((InhibitoryLink) l, e, gm);
-        } else if (l instanceof FeedbackLink<?, ?, ?>) {
-            return FeedbackParticleLink.create((FeedbackLink) l, e, gm);
+        } else if (l instanceof PositiveFeedbackLink) {
+            return FeedbackParticleLink.create(l, e, gm);
+        } else if (l instanceof NegativeFeedbackLink) {
+            return FeedbackParticleLink.create(l, e, gm);
         }
         return new ParticleLink(l, e, gm);
     }

@@ -24,6 +24,7 @@ import network.aika.queue.Step;
 
 import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * @author Lukas Molzberger
@@ -50,7 +51,7 @@ public class QueueRenderer implements ConsoleRenderer {
                 "regular",
                 Color.BLACK
         );
-        for(Step s: doc.getQueue()) {
+        for(Step s: new ArrayList<>(doc.getQueue())) {
             new StepConsoleRenderer(doc, s, highlightedElement, sortKey)
                     .render(sDoc, s);
         }

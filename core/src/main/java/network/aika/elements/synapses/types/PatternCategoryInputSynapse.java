@@ -26,8 +26,7 @@ import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
 
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Transition.CATEGORY;
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Transition.*;
 
 /**
  * The Same Pattern Binding Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
@@ -37,7 +36,9 @@ import static network.aika.enums.Transition.SAME;
 @SynapseType(
         inputType = PATTERN,
         outputType = PATTERN,
-        transition = {SAME, CATEGORY}
+        transition = {SAME, CATEGORY},
+        forbidden = INPUT,
+        required = {SAME, CATEGORY}
 )
 public class PatternCategoryInputSynapse
         extends PositiveFeedbackSynapse<

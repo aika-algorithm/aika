@@ -4,9 +4,10 @@ import network.aika.debugger.AbstractParticleLink;
 import network.aika.debugger.activations.ActivationGraphManager;
 import network.aika.debugger.activations.layout.*;
 import network.aika.debugger.activations.particles.ActivationParticle;
+import network.aika.elements.synapses.PositiveFeedbackSynapse;
+import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.links.*;
-import network.aika.elements.synapses.FeedbackSynapse;
 import network.aika.elements.synapses.Synapse;
 import org.graphstream.graph.Edge;
 import org.graphstream.ui.geom.Vector3;
@@ -42,7 +43,7 @@ public class ParticleSynapse<S extends Synapse> extends AbstractParticleLink<S> 
         if(synapseTypeModifier == null)
             synapseTypeModifier = "";
 
-        if(s instanceof FeedbackSynapse)
+        if(s instanceof PositiveFeedbackSynapse || s instanceof NegativeFeedbackSynapse)
             synapseTypeModifier += " arrow-shape: diamond;";
 
         edge.setAttribute("ui.style", synapseTypeModifier);

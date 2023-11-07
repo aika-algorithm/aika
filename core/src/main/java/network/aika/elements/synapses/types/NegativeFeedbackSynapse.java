@@ -21,13 +21,15 @@ import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
-import network.aika.elements.synapses.FeedbackSynapse;
+import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.SynapseType;
+import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.Type.*;
 import static network.aika.enums.Transition.INPUT;
 import static network.aika.enums.LinkingMode.FEEDBACK;
 import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.direction.Direction.OUTPUT;
 
 /**
  *
@@ -40,7 +42,7 @@ import static network.aika.enums.Transition.SAME;
         forbidden = SAME,
         linkingMode = FEEDBACK
 )
-public class NegativeFeedbackSynapse extends FeedbackSynapse<
+public class NegativeFeedbackSynapse extends Synapse<
         NegativeFeedbackSynapse,
         InhibitoryNeuron,
         BindingNeuron,
@@ -49,8 +51,10 @@ public class NegativeFeedbackSynapse extends FeedbackSynapse<
         BindingActivation
         >
 {
+
     @Override
-    public void initDummyLink(BindingActivation oAct) {
+    public double[] getSumOfLowerWeights() {
+        return SULW_ZERO;
     }
 
     @Override
@@ -70,8 +74,20 @@ public class NegativeFeedbackSynapse extends FeedbackSynapse<
     }
 
     @Override
+    public Direction getStoredAt() {
+        return OUTPUT;
+    }
+
+    @Override
     public void linkAndPropagateOut(InhibitoryActivation act) {
         getOutput()
                 .linkOutgoing(this, act);
+    }
+
+    @Override
+    public void setModified() {
+        BindingNeuron no = getOutput();
+        if(no != null)
+            no.setModified();
     }
 }

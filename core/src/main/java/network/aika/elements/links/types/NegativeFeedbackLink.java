@@ -19,7 +19,7 @@ package network.aika.elements.links.types;
 import network.aika.elements.Type;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
-import network.aika.elements.links.FeedbackLink;
+import network.aika.elements.links.Link;
 import network.aika.fields.*;
 import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
 import network.aika.visitor.Visitor;
@@ -33,7 +33,7 @@ import static network.aika.fields.Fields.mul;
 /**
  * @author Lukas Molzberger
  */
-public class NegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, InhibitoryActivation, BindingActivation> {
+public class NegativeFeedbackLink extends Link<NegativeFeedbackSynapse, InhibitoryActivation, BindingActivation> {
 
     private Multiplication innerWeightedInput;
 
@@ -86,6 +86,11 @@ public class NegativeFeedbackLink extends FeedbackLink<NegativeFeedbackSynapse, 
                 getDocument().getAnnealing(),
                 innerWeightedInput
         );
+    }
+
+    @Override
+    public void connectWeightUpdate() {
+        // TODO!
     }
 
     @Override

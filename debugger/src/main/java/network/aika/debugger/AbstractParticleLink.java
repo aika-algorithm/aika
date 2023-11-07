@@ -19,6 +19,7 @@ package network.aika.debugger;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.*;
+import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 
@@ -79,7 +80,7 @@ public abstract class AbstractParticleLink<E extends Element> {
         if(style != null)
             synapseTypeModifier += style;
 
-        if(s instanceof FeedbackSynapse)
+        if(s instanceof PositiveFeedbackSynapse || s instanceof NegativeFeedbackSynapse)
             synapseTypeModifier += " arrow-shape: diamond;";
 
         edge.setAttribute("ui.style", synapseTypeModifier);

@@ -19,7 +19,7 @@ package network.aika.elements.activations;
 import network.aika.Document;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.synapses.FeedbackSynapse;
+import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.SynapseOutputSlot;
 
@@ -44,7 +44,7 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
 
     @Override
     protected void initInactiveLinks() {
-        neuron.getInputSynapsesByType(FeedbackSynapse.class)
+        neuron.getInputSynapsesByType(PositiveFeedbackSynapse.class)
                 .forEach(s ->
                         s.initDummyLink(this)
                 );
