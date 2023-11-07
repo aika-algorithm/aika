@@ -214,12 +214,7 @@ public abstract class SequenceModel implements Writable {
     }
 
     protected BindingNeuron createPrimaryBindingNeuron() {
-        BindingNeuron bn = createBindingNeuron(PRIMARY_BN_PARAMS, 0, true, false);
-
-        double patternValueTarget = sequencePatternN.getActivationFunction()
-                .f(PRIMARY_BN_PARAMS.patternNetTarget);
-
-        return bn;
+        return createBindingNeuron(PRIMARY_BN_PARAMS, 0, true, false);
     }
 
     protected void expandContinueBindingNeurons(
