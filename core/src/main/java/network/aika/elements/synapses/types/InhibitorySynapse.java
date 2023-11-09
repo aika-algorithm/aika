@@ -26,6 +26,7 @@ import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.*;
 import static network.aika.enums.Transition.INPUT;
+import static network.aika.enums.Transition.SAME;
 
 /**
  *
@@ -34,7 +35,8 @@ import static network.aika.enums.Transition.INPUT;
 @SynapseType(
         inputType = BINDING,
         outputType = INHIBITORY,
-        transition = INPUT
+        transition = INPUT,
+        forbidden = SAME
 )
 public class InhibitorySynapse extends DisjunctiveSynapse<
         InhibitorySynapse,

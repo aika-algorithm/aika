@@ -26,8 +26,7 @@ import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.*;
-import static network.aika.enums.Transition.CATEGORY;
-import static network.aika.enums.Transition.INPUT;
+import static network.aika.enums.Transition.*;
 
 /**
  * The Inhibitory Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
@@ -37,7 +36,8 @@ import static network.aika.enums.Transition.INPUT;
 @SynapseType(
         inputType = INHIBITORY,
         outputType = BINDING,
-        transition = {INPUT, CATEGORY}
+        transition = {INPUT, CATEGORY},
+        forbidden = SAME
 )
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InhibitoryCategoryInputSynapse,
