@@ -33,13 +33,20 @@ public class SelfRefOperator implements Operator {
 
     private Activation target;
 
-    private Transition identityRef;
+    private Transition[] required;
+    private Transition[] forbidden;
 
     private boolean isSelfRef;
 
-    public SelfRefOperator(Activation target, Transition identityRef) {
+    public SelfRefOperator(Activation target, Transition[] required, Transition[] forbidden) {
         this.target = target;
-        this.identityRef = identityRef;
+        this.required = required;
+        this.forbidden = forbidden;
+    }
+
+    @Override
+    public Run getRun() {
+        return Run.SECONDARY;
     }
 
     @Override
@@ -54,11 +61,11 @@ public class SelfRefOperator implements Operator {
 
     @Override
     public boolean checkForbiddenTransitions(Link l, Direction dir) {
-        for(Transition t: l.getSynapse().getTransitions())
-            if(t == identityRef)
-                return true;
+        for(Transition ft: forbidden)
+            if (l.getSynapse().isForbiddenTransition(ft))
+                return false;
 
-        return false;
+        return true;
     }
 
     @Override

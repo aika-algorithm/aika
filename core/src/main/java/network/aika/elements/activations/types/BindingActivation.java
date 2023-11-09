@@ -33,6 +33,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static network.aika.enums.Transition.INPUT;
+import static network.aika.enums.Transition.SAME;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -78,26 +80,26 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         super.connectWeightUpdate();
     }
 
-    public static boolean isSelfRef(BindingActivation in, BindingActivation out, Transition identityRef) {
+    public static boolean isSelfRef(BindingActivation in, BindingActivation out) {
         if(in == null)
             return false;
 
         if (in.isAbstract() && !out.isAbstract())
-            return in.isSelfRef((BindingActivation) out.getTemplate(), identityRef);
+            return in.isSelfRef((BindingActivation) out.getTemplate());
         else if (!in.isAbstract() && out.isAbstract())
-            return out.isSelfRef((BindingActivation) in.getTemplate(), identityRef);
+            return out.isSelfRef((BindingActivation) in.getTemplate());
         else
-            return in.isSelfRef(out, identityRef);
+            return in.isSelfRef(out);
     }
 
-    private boolean isSelfRef(BindingActivation out, Transition identityRef) {
+    private boolean isSelfRef(BindingActivation out) {
         if(this == out)
             return true;
 
         if(log.isDebugEnabled())
             log.debug("Start checking SelfRef for (" + toKeyString() + ", " + out.toKeyString() + ")");
 
-        SelfRefOperator op = new SelfRefOperator(out, identityRef);
+        SelfRefOperator op = new SelfRefOperator(out, new Transition[]{INPUT}, new Transition[]{SAME});
         new DownVisitor(
                 doc,
                 op

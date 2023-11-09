@@ -28,6 +28,7 @@ import network.aika.visitor.Visitor;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
 import static network.aika.fields.Fields.scale;
+import static network.aika.visitor.operator.Run.SECONDARY;
 
 /**
  *
@@ -54,13 +55,15 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
 
     private boolean checkVisited(Visitor v) {
         if(visited == null)
-            visited = new long[2];
+            visited = new long[4];
 
-        int dir = v.getDirectionIndex();
-        if(visited[dir] == v.getV())
+        int index = v.getDirectionIndex() +
+                (v.getRun() == SECONDARY ? 2 : 0);
+
+        if(visited[index] == v.getV())
             return true;
 
-        visited[dir] = v.getV();
+        visited[index] = v.getV();
         return false;
     }
 

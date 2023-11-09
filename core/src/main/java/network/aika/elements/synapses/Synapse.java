@@ -36,14 +36,15 @@ import network.aika.enums.LinkingMode;
 import network.aika.utils.BitUtils;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
+import network.aika.visitor.DownVisitor;
 import network.aika.visitor.operator.LinkingOperator;
+import network.aika.visitor.operator.SelfRefOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MAX;
@@ -101,6 +102,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.transition();
     }
 
+    public boolean isSecondaryRunRequired() {
+        return synapseType.requiredSecondary().length > 0;
+    }
+
     public Transition[] getForbidden() {
         return synapseType.forbidden();
     }
@@ -109,13 +114,29 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.required();
     }
 
+
+    public Transition[] getForbiddenSecondary() {
+        return synapseType.forbiddenSecondary();
+    }
+
+    public Transition[] getRequiredSecondary() {
+        return synapseType.requiredSecondary();
+    }
+
     public boolean checkForbiddenTransitions(Link l, Direction dir) {
         for(Transition ft: synapseType.forbidden())
-            for(Transition t: l.getSynapse().getTransitions())
-                if(ft == t)
-                    return false;
+            if (l.getSynapse().isForbiddenTransition(ft))
+                return false;
 
         return true;
+    }
+
+    public boolean isForbiddenTransition(Transition ft) {
+        for(Transition t: getTransitions())
+            if(ft == t)
+                return true;
+
+        return false;
     }
 
     public boolean checkUp(Class<? extends Neuron> type) {
@@ -188,11 +209,19 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                 .findAny()
                 .orElse(null);
     }
-/*
+
     public boolean checkSecondaryVisitorRun(Activation iAct, Activation oAct) {
-        return true;
+        if(!isSecondaryRunRequired())
+            return true;
+
+        SelfRefOperator op = new SelfRefOperator(oAct, getRequiredSecondary(), getForbiddenSecondary());
+        new DownVisitor(
+                iAct.getDocument(),
+                op
+        ).start(iAct);
+        return op.isSelfRef();
     }
-*/
+
     public L getLink(IA iAct, OA oAct) {
         L l = (L) oAct.getInputLink(iAct, synapseId);
         assert l == null || l.getSynapse() == this;

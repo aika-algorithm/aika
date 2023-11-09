@@ -90,10 +90,13 @@ public class IncomingLinkingOperator extends LinkingOperator {
 
         if (!targetSyn.getLinkingMode().check(act))
             return null;
-/*
-        if(sourceLink != null && !targetSyn.checkSecondaryVisitorRun(act, sourceLink.getOutput()))
+
+        if(sourceLink == null && !sourceSyn.checkSecondaryVisitorRun(act, sourceAct))
             return null;
-*/
+
+        if(!targetSyn.checkSecondaryVisitorRun(act, sourceAct))
+            return null;
+
         Link sl = sourceLink != null ?
                 sourceLink :
                 latentLink(sourceAct, sourceSyn, act, targetSyn);

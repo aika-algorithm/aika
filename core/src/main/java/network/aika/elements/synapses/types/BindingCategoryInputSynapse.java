@@ -38,7 +38,9 @@ import static network.aika.enums.Transition.*;
         outputType = BINDING,
         transition = {SAME, CATEGORY},
         forbidden = SAME,
-        required = {CATEGORY, INPUT}
+        required = {CATEGORY, INPUT},
+        forbiddenSecondary = INPUT,
+        requiredSecondary = {CATEGORY, SAME}
 )
 public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         BindingCategoryInputSynapse,
@@ -50,17 +52,7 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         > implements CategoryInputSynapse<BindingCategoryInputSynapse>
 {
     private double initialCategorySynapseWeight;
-/*
-    @Override
-    public boolean checkSecondaryVisitorRun(Activation iAct, Activation oAct) {
-        SelfRefOperator op = new SelfRefOperator(oAct);
-        new DownVisitor(
-                iAct.getDocument(),
-                op
-        ).start(iAct);
-        return op.isSelfRef();
-    }
-*/
+
 
     @Override
     public BindingCategoryInputLink createLink(CategoryActivation input, BindingActivation output) {

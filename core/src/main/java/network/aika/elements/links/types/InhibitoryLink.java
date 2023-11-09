@@ -76,7 +76,7 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
     }
 
     public void connectFields(NegativeFeedbackLink out) {
-        if(isSelfRef(getInput(), out.getOutput(), Transition.SAME))
+        if(isSelfRef(getInput(), out.getOutput()))
             return;
 
         linkAndConnect(getNet(), out.getInputValue());

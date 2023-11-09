@@ -68,6 +68,21 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
                         .map(t -> "" + t)
                         .collect(Collectors.joining(", "))
         );
+        if(s.isSecondaryRunRequired()) {
+            addConstant("Forbidden: ", "" +
+                    Arrays.asList(s.getForbiddenSecondary())
+                            .stream()
+                            .map(t -> "" + t)
+                            .collect(Collectors.joining(", "))
+            );
+            addConstant("Required: ", "" +
+                    Arrays.asList(s.getRequiredSecondary())
+                            .stream()
+                            .map(t -> "" + t)
+                            .collect(Collectors.joining(", "))
+            );
+        }
+
         addConstant("Net UB: ", doubleToString(s.getNetUB()));
         addConstant("Is Training Allowed: ", "" + s.isTrainingAllowed());
         addConstant("Stored At: ", "" + s.getStoredAt());

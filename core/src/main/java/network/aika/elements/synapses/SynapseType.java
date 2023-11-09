@@ -25,6 +25,10 @@ public @interface SynapseType {
 
     public Transition[] forbidden() default {};
 
+    public Transition[] requiredSecondary() default {};
+
+    public Transition[] forbiddenSecondary() default {};
+
     public Class<? extends Neuron> up() default PatternNeuron.class;
 
     public LinkingMode linkingMode() default LinkingMode.REGULAR;

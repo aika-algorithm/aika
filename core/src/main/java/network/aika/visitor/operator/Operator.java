@@ -33,6 +33,8 @@ public interface Operator {
 
     Direction getDirection();
 
+    Run getRun();
+
     boolean checkForbiddenTransitions(Link l, Direction dir);
 
     boolean checkUp(Class<? extends Neuron> type);
