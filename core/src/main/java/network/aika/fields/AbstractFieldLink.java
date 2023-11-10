@@ -63,6 +63,11 @@ public abstract class AbstractFieldLink<O extends UpdateListener> {
             output.receiveUpdate(this, nextRound, u);
     }
 
+    public static void updateConnected(FieldLink fl, boolean newConnected, boolean initialize) {
+        if(fl != null)
+            fl.updateConnected(newConnected, initialize);
+    }
+
     public void updateConnected(boolean newConnected, boolean initialize) {
         if(!connected && newConnected)
             connect(initialize);

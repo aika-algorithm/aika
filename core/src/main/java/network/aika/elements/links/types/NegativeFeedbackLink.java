@@ -69,11 +69,6 @@ public class NegativeFeedbackLink extends Link<NegativeFeedbackSynapse, Inhibito
     }
 
     @Override
-    public Field getWeightedOutput() {
-        return getOutput().getNet();
-    }
-
-    @Override
     protected void connectInputValue() {
     }
 

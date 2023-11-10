@@ -17,11 +17,12 @@
 package network.aika.fields;
 
 
-import network.aika.debugger.EventType;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.ConjunctiveLink;
-import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
+
+import static network.aika.enums.direction.Direction.INPUT;
 
 /**
  * @author Lukas Molzberger
@@ -41,27 +42,19 @@ public class SynapseInputSlot extends MaxField {
     protected void updateConnection(FieldLink si, boolean state) {
         if(si == null)
             return;
-        Link l = getLink(si);
-        FieldLink fl = l.getInputValueLink();
-        if (state)
-            fl.connect(true);
-        else
-            fl.disconnect(true);
-
-        if(state == l.isOutputSideActive()) {
-            l.getDocument().onElementEvent(EventType.UPDATE, l);
-        }
+        ConjunctiveLink l = getLink(si);
+        l.updateLinkState(INPUT, state);
     }
 
-    public Link getSelectedLink() {
+    public ConjunctiveLink getSelectedLink() {
         return getLink(getSelectedInput());
     }
 
-    public Link getLink(FieldLink fl) {
+    public ConjunctiveLink getLink(FieldLink fl) {
         if(fl == null)
             return null;
 
-        return ((Activation) fl.getInput().getReference())
+        return (ConjunctiveLink) ((ConjunctiveActivation) fl.getInput().getReference())
                 .getInputLink(inputAct, synapseId);
     }
 }

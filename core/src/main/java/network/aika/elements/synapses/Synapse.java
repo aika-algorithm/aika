@@ -210,18 +210,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                 .orElse(null);
     }
 
-    public boolean checkSecondaryVisitorRun(Activation iAct, Activation oAct) {
-        if(!isSecondaryRunRequired())
-            return true;
-
-        SelfRefOperator op = new SelfRefOperator(oAct, getRequiredSecondary(), getForbiddenSecondary());
-        new DownVisitor(
-                iAct.getDocument(),
-                op
-        ).start(iAct);
-        return op.isSelfRef();
-    }
-
     public L getLink(IA iAct, OA oAct) {
         L l = (L) oAct.getInputLink(iAct, synapseId);
         assert l == null || l.getSynapse() == this;
