@@ -45,11 +45,6 @@ public class SelfRefOperator implements Operator {
     }
 
     @Override
-    public Run getRun() {
-        return Run.SECONDARY;
-    }
-
-    @Override
     public Synapse getStartSynapse() {
         return null;
     }

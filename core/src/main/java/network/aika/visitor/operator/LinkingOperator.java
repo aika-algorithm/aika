@@ -37,11 +37,6 @@ public abstract class LinkingOperator implements Operator {
         this.targetSyn = targetSyn;
     }
 
-    @Override
-    public Run getRun() {
-        return Run.PRIMARY;
-    }
-
     public abstract Link checkAndLink(Activation act);
 
     public Activation getSourceAct() {

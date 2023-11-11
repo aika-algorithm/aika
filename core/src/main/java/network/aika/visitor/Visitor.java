@@ -21,7 +21,6 @@ import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 import network.aika.utils.BitUtils;
 import network.aika.visitor.operator.Operator;
-import network.aika.visitor.operator.Run;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,8 +76,4 @@ public abstract class Visitor {
     protected abstract String dirToString();
 
     public abstract boolean isDown();
-
-    public Run getRun() {
-        return operator.getRun();
-    }
 }

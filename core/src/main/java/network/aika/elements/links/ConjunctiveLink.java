@@ -16,12 +16,15 @@
  */
 package network.aika.elements.links;
 
+import network.aika.debugger.EventType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.enums.direction.Direction;
 import network.aika.fields.*;
 import network.aika.visitor.Visitor;
 
+import static network.aika.fields.AbstractFieldLink.updateConnected;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 
@@ -33,11 +36,15 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         extends Link<S, IA, OA> {
 
     protected SynapseInputSlot synInputSlot;
+    protected FieldLink inputSlotFL;
+
     protected SynapseOutputSlot synOutputSlot;
+    protected FieldLink outputSlotFL;
 
     private FieldOutput weightUpdatePosCase;
     private FieldOutput weightUpdateNegCase;
     private FieldOutput biasUpdateNegCase;
+
 
     public ConjunctiveLink(S s, IA input, OA output) {
         super(s, input, output);
@@ -67,6 +74,23 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         return synOutputSlot;
     }
 
+
+    public void updateLinkState(Direction dir, boolean state) {
+        if(dir == Direction.INPUT) {
+            updateConnected(getInputValueLink(), state, true);
+            updateConnected(outputSlotFL, state, true);
+        } else {
+            updateConnected(inputSlotFL, state, true);
+        }
+
+        boolean oppositeState = dir == Direction.INPUT ?
+                isOutputSideActive() :
+                isInputSideActive();
+
+        if(state == oppositeState)
+            getDocument().onElementEvent(EventType.UPDATE, this);
+    }
+
     public boolean isInputSideActive() {
         if(input == null)
             return true;
@@ -92,7 +116,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         super.initWeightInput();
 
         if (synInputSlot != null)
-            linkAndConnect(output.getNet(), synInputSlot);
+            inputSlotFL = linkAndConnect(output.getNet(), synInputSlot);
 
         if(synapse.isOptional())
             synapse.initBiasInput(output);
@@ -104,8 +128,8 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
-    public Field getWeightedOutput() {
-        return synOutputSlot;
+    protected void initWeightedOutput() {
+        outputSlotFL = linkAndConnect(weightedInput, synOutputSlot);
     }
 
     @Override
