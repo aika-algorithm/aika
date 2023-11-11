@@ -47,7 +47,7 @@ public class UpVisitor extends Visitor {
                                 this,
                                 BitUtils.transition(
                                         state,
-                                        l.getSynapse().getTransitions()
+                                        l.getSynapse().getTransition()
                                 ),
                                 depth + 1
                         )

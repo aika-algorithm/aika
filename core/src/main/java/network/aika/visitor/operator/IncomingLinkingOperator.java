@@ -43,14 +43,8 @@ public class IncomingLinkingOperator extends LinkingOperator {
         this.sourceLink = sourceLink;
     }
 
-    @Override
     public Synapse getStartSynapse() {
         return sourceSyn;
-    }
-
-    @Override
-    public Direction getDirection() {
-        return Direction.INPUT;
     }
 
     @Override
@@ -59,11 +53,6 @@ public class IncomingLinkingOperator extends LinkingOperator {
             return false;
 
         return targetSyn.checkForbiddenTransitions(l, dir);
-    }
-
-    @Override
-    public boolean checkUp(Class<? extends Neuron> type) {
-        return targetSyn.checkUp(type);
     }
 
     @Override

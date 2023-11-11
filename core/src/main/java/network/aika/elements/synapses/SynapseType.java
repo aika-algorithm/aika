@@ -19,7 +19,7 @@ public @interface SynapseType {
 
     public Type outputType();
 
-    public Transition[] transition();
+    public Transition transition();
 
     public Transition[] required() default {};
 

@@ -28,6 +28,7 @@ import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.enums.Transition;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.elements.synapses.CategoryInputSynapse;
@@ -35,7 +36,6 @@ import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.queue.activation.Counting;
 import network.aika.queue.activation.LinkingOut;
-import network.aika.visitor.Visitor;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -134,6 +134,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
 
     protected void connectWeightUpdate() {
+    }
+
+    public BindingSignalSlot getBSSlot(Transition t) {
+        return null;
     }
 
     public SynapseInputSlot registerOutputSlot(Link l) {

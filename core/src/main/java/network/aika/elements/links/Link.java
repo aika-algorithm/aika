@@ -23,14 +23,19 @@ import network.aika.elements.LinkKey;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
+import network.aika.elements.activations.types.PatternActivation;
+import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.queue.activation.LinkingOut;
 import network.aika.queue.link.LinkingIn;
+import network.aika.visitor.DownVisitor;
 import network.aika.visitor.Visitor;
+import network.aika.visitor.operator.BindingSignalCollector;
 
 import static network.aika.debugger.EventType.CREATE;
 import static network.aika.enums.LinkingMode.FEEDBACK;
+import static network.aika.fields.AbstractFieldLink.updateConnected;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.elements.Timestamp.FIRED_COMPARATOR;
@@ -206,7 +211,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     protected void checkConnectInputValueLink() {
-        getInputValueLink().connect(true);
+        updateConnected(getInputValueLink(), true, true);
     }
 
     public FieldLink getInputValueLink() {
@@ -228,6 +233,17 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
         if(getOutput() != null)
             linkOutput();
+    }
+
+    public PatternActivation retrieveBindingSignal() {
+        Transition bsType = synapse.getTransition();
+        BindingSignalCollector op = new BindingSignalCollector(bsType, bsType.getInverted());
+        new DownVisitor(
+                getDocument(),
+                op
+        ).start(this);
+
+        return op.getBindingSignal();
     }
 
     public FieldOutput getWeightedInput() {

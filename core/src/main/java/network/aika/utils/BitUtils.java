@@ -30,9 +30,8 @@ public class BitUtils {
         return (a, b) -> a | b;
     }
 
-    public static int transition(int state, Transition[] transition) {
-        for(Transition t: transition)
-            state = state | t.getState();
+    public static int transition(int state, Transition t) {
+        state = state | t.getState();
 
         return state;
     }

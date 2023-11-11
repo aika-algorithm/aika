@@ -21,7 +21,6 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.relations.Relation;
-import network.aika.elements.synapses.types.*;
 import network.aika.enums.Transition;
 import network.aika.Document;
 import network.aika.elements.Element;
@@ -36,9 +35,7 @@ import network.aika.enums.LinkingMode;
 import network.aika.utils.BitUtils;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
-import network.aika.visitor.DownVisitor;
 import network.aika.visitor.operator.LinkingOperator;
-import network.aika.visitor.operator.SelfRefOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +95,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.outputType();
     }
 
-    public Transition[] getTransitions() {
+    public Transition getTransition() {
         return synapseType.transition();
     }
 
@@ -132,15 +129,11 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public boolean isForbiddenTransition(Transition ft) {
-        for(Transition t: getTransitions())
-            if(ft == t)
-                return true;
-
-        return false;
+        return ft == getTransition();
     }
 
-    public boolean checkUp(Class<? extends Neuron> type) {
-        return synapseType.up() == type;
+    public boolean checkUp(Activation bsAct) {
+        return synapseType.up() == bsAct.getNeuron().getClass();
     }
 
     public boolean checkRequiredTransitions(int state) {

@@ -51,7 +51,7 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
 
     protected void initSynapseProperties(E s) {
         addConstant("Transitions: ", "" +
-                Arrays.asList(s.getTransitions())
+                Arrays.asList(s.getTransition())
                         .stream()
                         .map(t -> "" + t)
                         .collect(Collectors.joining(", "))

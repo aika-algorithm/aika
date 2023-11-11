@@ -17,14 +17,12 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
+import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.fields.SynapseOutputSlot;
 
-import java.util.NavigableMap;
-import java.util.TreeMap;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.scale;
@@ -36,7 +34,7 @@ import static network.aika.fields.Fields.scale;
  */
 public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> extends Activation<N> {
 
-    protected NavigableMap<Long, SynapseOutputSlot> inputSlots;
+    // protected NavigableMap<Long, SynapseOutputSlot> inputSlots;
 
     public ConjunctiveActivation(int id, Document doc, N n) {
         super(id, doc, n);
@@ -56,6 +54,10 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
             l.disableDummyLink();
     }
 
+    public void registerBindingSignalSlot(ConjunctiveLink l) {
+    }
+
+    /*
     public SynapseOutputSlot registerInputSlot(Synapse syn) {
         if(inputSlots == null)
             inputSlots = new TreeMap<>();
@@ -66,6 +68,7 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
             return slot;
         });
     }
+    */
 
     @Override
     protected void connectWeightUpdate() {

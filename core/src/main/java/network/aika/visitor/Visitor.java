@@ -53,7 +53,7 @@ public abstract class Visitor {
                 this,
                 BitUtils.transition(
                         0,
-                        l.getSynapse().getTransitions()
+                        l.getSynapse().getTransition()
                 ), 0
         );
     }

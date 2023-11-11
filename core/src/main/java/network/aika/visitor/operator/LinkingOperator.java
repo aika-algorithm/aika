@@ -17,9 +17,12 @@
 package network.aika.visitor.operator;
 
 import network.aika.Document;
+import network.aika.elements.activations.BindingSignalSlot;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.enums.Transition;
 
 import static network.aika.elements.synapses.Synapse.getLatentLink;
 
@@ -38,6 +41,23 @@ public abstract class LinkingOperator implements Operator {
     }
 
     public abstract Link checkAndLink(Activation act);
+
+    @Override
+    public boolean checkUp(Activation bsAct, int depth) {
+        if(!checkBSSlotCompatibility(bsAct, targetSyn.getTransition()))
+            return false;
+
+        return targetSyn.checkUp(bsAct);
+    }
+
+    protected boolean checkBSSlotCompatibility(Activation bsAct, Transition t) {
+        BindingSignalSlot bsSlot = sourceAct.getBSSlot(t);
+        if(bsSlot == null)
+            return true;
+
+        PatternActivation bs = bsSlot.getBindingSignal();
+        return bs == null || bs == bsAct;
+    }
 
     public Activation getSourceAct() {
         return sourceAct;

@@ -27,11 +27,22 @@ public enum Transition {
 
     private int state;
 
+    private Transition inverted;
+
+    static {
+        INPUT.inverted = SAME;
+        SAME.inverted = INPUT;
+    }
+
     Transition(int state) {
         this.state = state;
     }
 
     public int getState() {
         return state;
+    }
+
+    public Transition getInverted() {
+        return inverted;
     }
 }

@@ -18,7 +18,6 @@ package network.aika.visitor;
 
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 import network.aika.enums.direction.Direction;
 import network.aika.utils.BitUtils;
@@ -54,7 +53,7 @@ public class DownVisitor extends Visitor {
                                 this,
                                 BitUtils.transition(
                                         state,
-                                        l.getSynapse().getTransitions()
+                                        l.getSynapse().getTransition()
                                 ),
                                 depth + 1
                         )
@@ -69,13 +68,13 @@ public class DownVisitor extends Visitor {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 
+        int nd = depth + 1;
         Activation iAct = l.getInput();
         if(iAct != null) {
-            next(iAct, l, state, depth + 1);
-//            iAct.visit(this, l, state, depth + 1);
+            next(iAct, l, state, nd);
 
-            if(operator.checkUp(iAct.getNeuron().getClass()))
-                up(iAct, state, depth);
+            if(operator.checkUp(iAct, nd))
+                up(iAct, state, nd);
         }
     }
 

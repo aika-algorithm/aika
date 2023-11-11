@@ -40,14 +40,6 @@ public class ConjunctiveLinkPropertyPanel<E extends ConjunctiveLink> extends Lin
             addConstant("Slot Selection: ", "" + l.getSynInputSlot().getSelectedLink());
     }
 
-    @Override
-    public void initOutputIdentitySection(E l) {
-        super.initOutputIdentitySection(l);
-
-        addField(l.getSynOutputSlot());
-        addConstant("Slot Selection: ", "" + l.getSynOutputSlot().getSelectedLink());
-    }
-
     public void initTrainingSection(E l) {
         addField(l.getWeightUpdatePosCase());
         addField(l.getWeightUpdateNegCase());
