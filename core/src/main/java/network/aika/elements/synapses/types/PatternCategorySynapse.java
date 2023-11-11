@@ -24,8 +24,7 @@ import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Transition.CATEGORY;
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Transition.*;
 
 /**
  *
@@ -34,7 +33,8 @@ import static network.aika.enums.Transition.SAME;
 @SynapseType(
         inputType = PATTERN,
         outputType = PATTERN,
-        transition = {SAME, CATEGORY}
+        transition = CATEGORY,
+        forbidden = INPUT
 )
 public class PatternCategorySynapse extends CategorySynapse<PatternCategorySynapse, PatternNeuron, PatternActivation> {
 

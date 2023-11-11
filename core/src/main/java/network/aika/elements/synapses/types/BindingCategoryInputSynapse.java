@@ -36,7 +36,7 @@ import static network.aika.enums.Transition.*;
 @SynapseType(
         inputType = BINDING,
         outputType = BINDING,
-        transition = {SAME, CATEGORY},
+        transition = CATEGORY,
         forbidden = SAME,
         required = {CATEGORY, INPUT},
         forbiddenSecondary = INPUT,

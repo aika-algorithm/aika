@@ -34,7 +34,8 @@ import static network.aika.enums.Transition.CATEGORY;
 @SynapseType(
         inputType = BINDING,
         outputType = BINDING,
-        transition = {SAME, CATEGORY}
+        transition = CATEGORY,
+        forbidden = SAME
 )
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
 

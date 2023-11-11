@@ -36,7 +36,7 @@ import static network.aika.enums.Transition.*;
 @SynapseType(
         inputType = INHIBITORY,
         outputType = BINDING,
-        transition = {INPUT, CATEGORY},
+        transition = CATEGORY,
         forbidden = SAME
 )
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
