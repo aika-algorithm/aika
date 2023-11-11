@@ -38,6 +38,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
 
     protected SynapseInputSlot synInputSlot;
     protected FieldLink inputSlotFL;
+    protected SynapseOutputSlot synOutputSlot;
 
     private FieldOutput weightUpdatePosCase;
     private FieldOutput weightUpdateNegCase;
@@ -57,6 +58,8 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
 
             output.registerBindingSignalSlot(this);
         }
+
+        synOutputSlot = output.registerInputSlot(synapse);
     }
 
     @Override
@@ -67,6 +70,10 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
 
     public SynapseInputSlot getSynInputSlot() {
         return synInputSlot;
+    }
+
+    public SynapseOutputSlot getSynOutputSlot() {
+        return synOutputSlot;
     }
 
     public void updateLinkState(Direction dir, boolean state) {
@@ -98,6 +105,10 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         return synInputSlot != null && synInputSlot.getSelectedLink() == this;
     }
 
+    public boolean isOutputSideActive() {
+        return synOutputSlot != null && synOutputSlot.getSelectedLink() == this;
+    }
+
     @Override
     public void visit(Visitor v, int state, int depth) {
        if(input == null)
@@ -121,6 +132,10 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     public void initFromTemplate(Link template) {
         super.initFromTemplate(template);
         synapse.initBiasInput(output);
+    }
+
+    protected void initWeightedOutput() {
+        linkAndConnect(weightedInput, synOutputSlot);
     }
 
     @Override
