@@ -59,6 +59,9 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     @Override
     public void registerBindingSignalSlot(ConjunctiveLink l) {
         BindingSignalSlot bsSlot = getBSSlot(l.getSynapse().getTransition());
+        if(bsSlot == null)
+            return;
+
         PatternActivation bs = l.retrieveBindingSignal();
         bsSlot.connectBindingSignal(bs, true);
     }
