@@ -17,6 +17,9 @@
 package network.aika.elements.activations;
 
 import network.aika.elements.activations.types.PatternActivation;
+import network.aika.enums.Transition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -24,9 +27,18 @@ import network.aika.elements.activations.types.PatternActivation;
  */
 public class BindingSignalSlot {
 
+    protected static final Logger log = LoggerFactory.getLogger(BindingSignalSlot.class);
+
+
     int sourcesCount;
 
     PatternActivation bindingSignal;
+
+    Transition bsType;
+
+    public BindingSignalSlot(Transition bsType) {
+        this.bsType = bsType;
+    }
 
     public boolean isSet() {
         return bindingSignal != null;
@@ -36,15 +48,17 @@ public class BindingSignalSlot {
         return bindingSignal;
     }
 
-    public void connectBindingSignal(PatternActivation bindingSignal, boolean state) {
-        if(bindingSignal == null)
+    public void connectBindingSignal(PatternActivation bs, boolean state) {
+        if(bs == null)
             return;
 
-        assert !isSet() || this.bindingSignal == bindingSignal;
+        if(isSet() && bindingSignal != bs) {
+            log.warn(bsType + " Binding-Signal is reset from:" + bindingSignal + " to:" + bs);
+        }
 
         if(state) {
             sourcesCount++;
-            this.bindingSignal = bindingSignal;
+            bindingSignal = bs;
         } else {
             sourcesCount--;
             if(sourcesCount <= 0)
@@ -53,6 +67,6 @@ public class BindingSignalSlot {
     }
 
     public String toString() {
-        return (bindingSignal != null ? bindingSignal : "--") + " (" + sourcesCount + ")";
+        return "(" + bsType + ") : " + (bindingSignal != null ? bindingSignal : "--") + " (" + sourcesCount + ")";
     }
 }

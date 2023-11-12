@@ -22,6 +22,7 @@ import network.aika.elements.Element;
 import network.aika.elements.LinkKey;
 import network.aika.elements.Timestamp;
 import network.aika.elements.Type;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.links.CategoryLink;
 import network.aika.elements.links.Link;
@@ -183,6 +184,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void initInactiveLinks() {
+    }
+
+    public PatternActivation getBindingSignal(Transition t) {
+        return null;
     }
 
     public boolean isNewInstance() {

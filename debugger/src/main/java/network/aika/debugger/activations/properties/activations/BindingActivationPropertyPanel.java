@@ -36,8 +36,8 @@ public class BindingActivationPropertyPanel<E extends BindingActivation> extends
     public void initIdentitySection(E act) {
         super.initIdentitySection(act);
 
-        addConstant("BS-Slot (INPUT): ", "" + act.getBSSlot(INPUT));
-        addConstant("BS-Slot (SAME): ", "" + act.getBSSlot(SAME));
+        addConstant("BS-Slot ", "" + act.getBSSlot(INPUT));
+        addConstant("BS-Slot ", "" + act.getBSSlot(SAME));
     }
 
     public static BindingActivationPropertyPanel create(BindingActivation act) {

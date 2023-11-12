@@ -18,10 +18,9 @@ package network.aika.elements.activations.types;
 
 import network.aika.Document;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.links.Link;
+import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.visitor.Visitor;
 import network.aika.enums.sign.Sign;
 
 import static network.aika.fields.Fields.*;
@@ -39,6 +38,11 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
     public PatternActivation(int id, Document doc, PatternNeuron patternNeuron) {
         super(id, doc, patternNeuron);
+    }
+
+    @Override
+    public PatternActivation getBindingSignal(Transition t) {
+        return this;
     }
 
     @Override
