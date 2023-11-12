@@ -557,6 +557,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         instanceAct.initFromTemplate(this);
 
         getOutputLinks()
+                .filter(l -> !(l instanceof CategoryLink))
                 .forEach(l ->
                         l.instantiateTemplate(
                                 instanceAct,
