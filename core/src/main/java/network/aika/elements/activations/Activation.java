@@ -458,12 +458,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .orElse(null);
     }
 
-    public CategoryActivation getCategoryActivation() {
-        return getCategoryActivations()
-                .findFirst()
-                .orElse(null);
-    }
-
     public Stream<CategoryActivation> getCategoryActivations() {
         return getOutputLinksByType(CategoryLink.class)
                 .map(l -> (CategoryActivation) l.getOutput())
@@ -564,7 +558,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         getOutputLinks()
                 .filter(l -> !(l instanceof CategoryLink))
-//                .filter(l -> l.getOutput().isFired())
+
+                .filter(l -> l.getOutput().isFired())
                 .forEach(l ->
                         l.instantiateTemplate(
                                 instanceAct,

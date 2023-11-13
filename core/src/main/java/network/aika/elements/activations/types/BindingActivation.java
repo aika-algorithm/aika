@@ -17,12 +17,10 @@
 package network.aika.elements.activations.types;
 
 import network.aika.Document;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
-import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.links.types.InputObjectLink;
 import network.aika.enums.Transition;
 import network.aika.fields.*;
@@ -31,9 +29,6 @@ import network.aika.visitor.DownVisitor;
 import network.aika.visitor.operator.SelfRefOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Objects;
-import java.util.stream.Stream;
 
 import static network.aika.enums.Transition.INPUT;
 import static network.aika.enums.Transition.SAME;
@@ -64,12 +59,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     @Override
     public void registerBindingSignalSlot(ConjunctiveLink l) {
-        BindingSignalSlot bsSlot = getBSSlot(l.getSynapse().getTransition());
-        if(bsSlot == null)
-            return;
-
-        PatternActivation bs = l.retrieveBindingSignal();
-        bsSlot.connectBindingSignal(bs, true);
+        l.retrieveAndConnectBindingSignals(this, true);
     }
 
     public BindingSignalSlot getBSSlot(Transition t) {

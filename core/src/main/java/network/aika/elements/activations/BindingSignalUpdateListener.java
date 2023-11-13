@@ -14,24 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.visitor.operator;
+package network.aika.elements.activations;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.links.Link;
-import network.aika.elements.synapses.Synapse;
-import network.aika.enums.direction.Direction;
-import network.aika.visitor.UpVisitor;
+import network.aika.elements.activations.types.PatternActivation;
+import network.aika.enums.Transition;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public interface Operator {
+public interface BindingSignalUpdateListener {
 
-    boolean checkForbiddenTransitions(Link l, Direction dir);
-
-    boolean checkUp(Activation bsAct, int state, int depth);
-
-    void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state);
-
-    void relationCheck(Synapse relSyn, Activation toAct, Direction relDir);
+    void onUpdate(Transition t, PatternActivation oldBS, PatternActivation newBS, boolean state);
 }

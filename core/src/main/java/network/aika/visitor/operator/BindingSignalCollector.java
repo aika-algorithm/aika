@@ -6,25 +6,25 @@ import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
+import network.aika.utils.BitUtils;
 import network.aika.visitor.UpVisitor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BindingSignalCollector implements Operator {
 
-    private Transition bsType;
     private Transition forbidden;
 
-    private PatternActivation bindingSignal;
-
-    private int depth;
+    private Map<Transition, PatternActivation> bindingSignals = new HashMap<>(2);
 
 
-    public BindingSignalCollector(Transition bsType, Transition forbidden) {
-        this.bsType = bsType;
+    public BindingSignalCollector(Transition forbidden) {
         this.forbidden = forbidden;
     }
 
-    public PatternActivation getBindingSignal() {
-        return bindingSignal;
+    public Map<Transition, PatternActivation> getBindingSignals() {
+        return bindingSignals;
     }
 
     @Override
@@ -33,13 +33,13 @@ public class BindingSignalCollector implements Operator {
     }
 
     @Override
-    public boolean checkUp(Activation bsAct, int depth) {
+    public boolean checkUp(Activation bsAct, int state, int depth) {
         if(!(bsAct instanceof PatternActivation))
             return false;
 
-        if(bindingSignal == null || depth > this.depth) {
-            this.bindingSignal = (PatternActivation) bsAct;
-            this.depth = depth;
+        for(Transition t: Transition.values()) {
+            if(BitUtils.isSet(state, t))
+                bindingSignals.put(t, (PatternActivation) bsAct);
         }
 
         return false;

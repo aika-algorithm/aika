@@ -52,7 +52,7 @@ public class SelfRefOperator implements Operator {
     }
 
     @Override
-    public boolean checkUp(Activation bsAct, int depth) {
+    public boolean checkUp(Activation bsAct, int state, int depth) {
         return bsAct instanceof PatternActivation;
     }
 

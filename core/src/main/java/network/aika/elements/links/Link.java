@@ -23,6 +23,8 @@ import network.aika.elements.LinkKey;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
+import network.aika.elements.activations.BindingSignalSlot;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.enums.Transition;
 import network.aika.fields.*;
@@ -32,6 +34,8 @@ import network.aika.queue.link.LinkingIn;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.Visitor;
 import network.aika.visitor.operator.BindingSignalCollector;
+
+import java.util.Map;
 
 import static network.aika.debugger.EventType.CREATE;
 import static network.aika.enums.LinkingMode.FEEDBACK;
@@ -235,15 +239,23 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
             linkOutput();
     }
 
-    public PatternActivation retrieveBindingSignal() {
+    public void retrieveAndConnectBindingSignals(ConjunctiveActivation oAct, boolean state) {
+        retrieveBindingSignals()
+                .forEach((t, bs) -> {
+                    BindingSignalSlot bsSlot = oAct.getBSSlot(t);
+                    if(bsSlot != null)
+                        bsSlot.connectBindingSignal(bs, state);
+                });
+    }
+
+    public Map<Transition, PatternActivation> retrieveBindingSignals() {
         Transition bsType = synapse.getTransition();
-        BindingSignalCollector op = new BindingSignalCollector(bsType, bsType.getInverted());
+        BindingSignalCollector op = new BindingSignalCollector(bsType.getInverted());
         new DownVisitor(
                 getDocument(),
                 op
         ).start(this);
-
-        return op.getBindingSignal();
+        return op.getBindingSignals();
     }
 
     public FieldOutput getWeightedInput() {

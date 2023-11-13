@@ -20,6 +20,7 @@ import network.aika.debugger.EventType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.ConjunctiveActivation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.*;
@@ -60,6 +61,13 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         }
 
         synOutputSlot = output.registerInputSlot(synapse);
+
+        BindingSignalSlot slot = output.getBSSlot(synapse.getTransition());
+        if(slot != null)
+            slot.addListener((t, oBS, nBS, state) -> {
+                PatternActivation bs = retrieveBindingSignals().get(t);
+                updateConnected(inputSlotFL, state && nBS == bs, true);
+            });
     }
 
     @Override
@@ -79,16 +87,12 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     public void updateLinkState(Direction dir, boolean state) {
         if(dir == Direction.INPUT) {
             updateConnected(getInputValueLink(), state, true);
+            //updateConnected(outputSlotFL, state, true);
 
-            BindingSignalSlot bsSlot = output.getBSSlot(synapse.getTransition());
-            if (bsSlot != null)
-                bsSlot.connectBindingSignal(
-                        retrieveBindingSignal(),
-                        state
-                );
-        } /* else {
-            updateConnected(inputSlotFL, state, true);
-        } */
+            retrieveAndConnectBindingSignals(output, state);
+        } else {
+          //  updateConnected(inputSlotFL, state, true);
+        }
 
         boolean oppositeState = dir == Direction.INPUT ?
                 isOutputSideActive() :

@@ -21,6 +21,8 @@ import network.aika.enums.Transition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Lukas Molzberger
@@ -30,14 +32,24 @@ public class BindingSignalSlot {
     protected static final Logger log = LoggerFactory.getLogger(BindingSignalSlot.class);
 
 
-    int sourcesCount;
+    private int sourcesCount;
 
-    PatternActivation bindingSignal;
+    private PatternActivation bindingSignal;
 
-    Transition bsType;
+    private Transition bsType;
+
+    private ArrayList<BindingSignalUpdateListener> listeners = new ArrayList<>(2);
 
     public BindingSignalSlot(Transition bsType) {
         this.bsType = bsType;
+    }
+
+    public void addListener(BindingSignalUpdateListener l) {
+        this.listeners.add(l);
+
+        if(bindingSignal != null) {
+            l.onUpdate(bsType, null, bindingSignal, true);
+        }
     }
 
     public boolean isSet() {
@@ -54,6 +66,10 @@ public class BindingSignalSlot {
 
         if(isSet() && bindingSignal != bs) {
             log.warn(bsType + " Binding-Signal is reset from:" + bindingSignal + " to:" + bs);
+        }
+
+        for(BindingSignalUpdateListener l: listeners) {
+            l.onUpdate(bsType, bindingSignal, bs, state);
         }
 
         if(state) {

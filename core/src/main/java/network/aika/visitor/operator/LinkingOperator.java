@@ -47,7 +47,7 @@ public abstract class LinkingOperator implements Operator {
     public abstract Link checkAndLink(Activation act);
 
     @Override
-    public boolean checkUp(Activation act, int depth) {
+    public boolean checkUp(Activation act, int state, int depth) {
         if(!targetSyn.checkUp(act))
             return false;
 
