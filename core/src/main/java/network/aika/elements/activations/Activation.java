@@ -480,7 +480,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public boolean isActiveTemplateInstance() {
-        return isNewInstance || isTrue(net, 0.5);
+        return isNewInstance ||
+                (!isAbstract() && isTrue(net, 0.5));
     }
 
     public CategoryInputLink getActiveCategoryInputLink() {
@@ -490,17 +491,17 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .orElse(null);
     }
 
+    public Activation<N> resolveAbstractInputActivation() {
+        return isInstantiable() ?
+                getActiveTemplateInstance() :
+                this;
+    }
+
     public Activation getActiveTemplateInstance() {
         CategoryInputLink l = getActiveCategoryInputLink();
         return l != null ?
                 l.getInput().getActiveTemplateInstance() :
                 null;
-    }
-
-    public Activation<N> resolveAbstractInputActivation() {
-        return isInstantiable() ?
-                getActiveTemplateInstance() :
-                this;
     }
 
     public boolean isInstantiable() {
@@ -563,6 +564,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         getOutputLinks()
                 .filter(l -> !(l instanceof CategoryLink))
+//                .filter(l -> l.getOutput().isFired())
                 .forEach(l ->
                         l.instantiateTemplate(
                                 instanceAct,

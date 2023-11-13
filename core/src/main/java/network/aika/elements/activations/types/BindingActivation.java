@@ -83,16 +83,8 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     @Override
     public boolean isActiveTemplateInstance() {
         return isNewInstance || (
-                isTrue(net, 0.0) &&
-                        getOutputPatternActivations()
-                                .anyMatch(Activation::isFired)
+                !isAbstract() && isTrue(net, 0.0) && sameBS.isSet()
         );
-    }
-
-    public Stream<PatternActivation> getOutputPatternActivations() {
-        return getInputLinksByType(InnerPositiveFeedbackLink.class)
-                .map(Link::getInput)
-                .filter(Objects::nonNull);
     }
 
     public PatternActivation getInputPatternActivation() {

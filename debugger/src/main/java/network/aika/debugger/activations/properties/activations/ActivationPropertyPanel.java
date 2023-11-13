@@ -67,6 +67,7 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
         addField(act.getNetPreAnneal());
         addConstant("CreationTS: ", "" + act.getCreated());
         addConstant("FiredTS: ", "" + act.getFired());
+        addConstant("isNewInstance: ", "" + act.isNewInstance());
     }
 
     public void initTrainingSection(E act) {
