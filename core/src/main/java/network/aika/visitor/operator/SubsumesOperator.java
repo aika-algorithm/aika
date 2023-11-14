@@ -17,68 +17,39 @@
 package network.aika.visitor.operator;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
-import network.aika.statistic.SampleSpace;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.UpVisitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.Transition.SAME;
 
 /**
  * @author Lukas Molzberger
  */
-public class SelfRefOperator implements Operator {
-
-    private static final Logger log = LoggerFactory.getLogger(SelfRefOperator.class);
-
-    private Activation target;
+public class SubsumesOperator implements Operator {
 
     private Transition[] forbidden;
 
-    private boolean isSelfRef;
+    private PatternActivation target;
 
-    public SelfRefOperator(Activation target, Transition[] forbidden) {
+    private boolean subsumes;
+
+    public SubsumesOperator(PatternActivation target, Transition[] forbidden) {
         this.target = target;
         this.forbidden = forbidden;
     }
 
-    public static boolean isSelfRef(BindingActivation in, BindingActivation out) {
-        if(in == null)
-            return false;
-
-        if (in.isAbstract() && !out.isAbstract())
-            return isSelfRefIntern(in, (BindingActivation) out.getTemplate());
-        else if (!in.isAbstract() && out.isAbstract())
-            return isSelfRefIntern(out, (BindingActivation) in.getTemplate());
-        else
-            return isSelfRefIntern(in, out);
-    }
-
-    private static boolean isSelfRefIntern(BindingActivation in, BindingActivation out) {
-        if(in == out)
-            return true;
-
-        if(log.isDebugEnabled())
-            log.debug("Start checking SelfRef for (" + in.toKeyString() + ", " + out.toKeyString() + ")");
-
-        SelfRefOperator op = new SelfRefOperator(out, new Transition[]{SAME});
+    public static boolean subsumes(Transition bsType, PatternActivation a, PatternActivation b) {
+        SubsumesOperator op = new SubsumesOperator(b, new Transition[]{bsType.getInverted()});
         new DownVisitor(
-                in.getDocument(),
+                a.getDocument(),
                 op
-        ).start(in);
+        ).start(a);
 
-        if(log.isDebugEnabled())
-            log.debug("Finished checking SelfRef for (" + in.toKeyString() + ", " + out.toKeyString() + ") : " + op.isSelfRef);
-
-        return op.isSelfRef;
+        return op.subsumes;
     }
 
     @Override
@@ -92,17 +63,18 @@ public class SelfRefOperator implements Operator {
 
     @Override
     public boolean checkUp(Activation bsAct, int state, int depth) {
-        return bsAct instanceof PatternActivation;
+        if(bsAct == target)
+            subsumes = true;
+
+        return false;
     }
 
     @Override
     public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
-        if(act == target)
-            isSelfRef = true;
     }
 
     @Override
-    public void relationCheck(Synapse relSyn, Activation relAct, Direction relDir) {
+    public void relationCheck(Synapse relSyn, Activation toAct, Direction relDir) {
         throw new UnsupportedOperationException();
     }
 }

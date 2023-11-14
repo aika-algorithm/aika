@@ -22,6 +22,7 @@ import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.*;
 import network.aika.visitor.Visitor;
@@ -29,6 +30,7 @@ import network.aika.visitor.Visitor;
 import static network.aika.fields.AbstractFieldLink.updateConnected;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
+import static network.aika.visitor.operator.SubsumesOperator.subsumes;
 
 
 /**
@@ -61,13 +63,20 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         }
 
         synOutputSlot = output.registerInputSlot(synapse);
+    }
 
-        BindingSignalSlot slot = output.getBSSlot(synapse.getTransition());
-        if(slot != null)
-            slot.addListener((t, oBS, nBS, state) -> {
-                PatternActivation bs = retrieveBindingSignals().get(t);
-                updateConnected(inputSlotFL, state && nBS == bs, true);
-            });
+    private void updateInputSlotFieldLink(Transition t, PatternActivation oBS, PatternActivation nBS, boolean state) {
+        PatternActivation bs = retrieveBindingSignals().get(t);
+        if(bs == null)
+            return;
+
+        updateConnected(
+                inputSlotFL,
+                state && (
+                        subsumes(t, nBS, bs) || subsumes(t, bs, nBS)
+                ),
+                true
+        );
     }
 
     @Override
@@ -126,8 +135,13 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     protected void initWeightInput() {
         super.initWeightInput();
 
-        if (synInputSlot != null)
+        if (synInputSlot != null) {
             inputSlotFL = linkAndConnect(output.getNet(), synInputSlot);
+
+            BindingSignalSlot slot = output.getBSSlot(synapse.getTransition());
+            if(slot != null)
+                slot.addListener(this::updateInputSlotFieldLink);
+        }
 
         if(synapse.isOptional())
             synapse.initBiasInput(output);

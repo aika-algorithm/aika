@@ -91,37 +91,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         super.connectWeightUpdate();
     }
 
-    public static boolean isSelfRef(BindingActivation in, BindingActivation out) {
-        if(in == null)
-            return false;
-
-        if (in.isAbstract() && !out.isAbstract())
-            return in.isSelfRef((BindingActivation) out.getTemplate());
-        else if (!in.isAbstract() && out.isAbstract())
-            return out.isSelfRef((BindingActivation) in.getTemplate());
-        else
-            return in.isSelfRef(out);
-    }
-
-    private boolean isSelfRef(BindingActivation out) {
-        if(this == out)
-            return true;
-
-        if(log.isDebugEnabled())
-            log.debug("Start checking SelfRef for (" + toKeyString() + ", " + out.toKeyString() + ")");
-
-        SelfRefOperator op = new SelfRefOperator(out, new Transition[]{INPUT}, new Transition[]{SAME});
-        new DownVisitor(
-                doc,
-                op
-        ).start(this);
-
-        if(log.isDebugEnabled())
-            log.debug("Finished checking SelfRef for (" + toKeyString() + ", " + out.toKeyString() + ") : " + op.isSelfRef());
-
-        return op.isSelfRef();
-    }
-
     public boolean isInput() {
         return isInput;
     }

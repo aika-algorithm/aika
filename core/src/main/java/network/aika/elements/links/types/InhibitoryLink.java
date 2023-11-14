@@ -28,10 +28,10 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.INHIBITORY;
-import static network.aika.elements.activations.types.BindingActivation.isSelfRef;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.queue.Phase.NEGATIVE_FEEDBACK;
 import static network.aika.utils.Utils.TOLERANCE;
+import static network.aika.visitor.operator.SelfRefOperator.isSelfRef;
 
 /**
  * @author Lukas Molzberger
