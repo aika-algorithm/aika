@@ -30,6 +30,7 @@ import network.aika.visitor.Visitor;
 import static network.aika.fields.AbstractFieldLink.updateConnected;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
+import static network.aika.visitor.operator.BindingSignalCollector.retrieveBindingSignals;
 import static network.aika.visitor.operator.SubsumesOperator.subsumes;
 
 
@@ -41,6 +42,9 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
 
     protected SynapseInputSlot synInputSlot;
     protected FieldLink inputSlotFL;
+
+    protected Subtraction outputNet;
+
     protected SynapseOutputSlot synOutputSlot;
 
     private FieldOutput weightUpdatePosCase;
@@ -63,10 +67,12 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         }
 
         synOutputSlot = output.registerInputSlot(synapse);
+
+        outputNet = sub(this, "outputNet", output.getNet(), synOutputSlot);
     }
 
     private void updateInputSlotFieldLink(Transition t, PatternActivation oBS, PatternActivation nBS, boolean state) {
-        PatternActivation bs = retrieveBindingSignals().get(t);
+        PatternActivation bs = retrieveBindingSignals(input, t).get(t);
         if(bs == null)
             return;
 
@@ -91,6 +97,10 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
 
     public SynapseOutputSlot getSynOutputSlot() {
         return synOutputSlot;
+    }
+
+    public Subtraction getOutputNet() {
+        return outputNet;
     }
 
     public void updateLinkState(Direction dir, boolean state) {
@@ -136,7 +146,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         super.initWeightInput();
 
         if (synInputSlot != null) {
-            inputSlotFL = linkAndConnect(output.getNet(), synInputSlot);
+            inputSlotFL = linkAndConnect(outputNet, synInputSlot);
 
             BindingSignalSlot slot = output.getBSSlot(synapse.getTransition());
             if(slot != null)

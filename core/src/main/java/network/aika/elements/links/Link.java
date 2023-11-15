@@ -44,6 +44,7 @@ import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.elements.Timestamp.FIRED_COMPARATOR;
 import static network.aika.fields.ThresholdOperator.Type.ABOVE;
+import static network.aika.visitor.operator.BindingSignalCollector.retrieveBindingSignals;
 
 /**
  *
@@ -240,22 +241,12 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void retrieveAndConnectBindingSignals(ConjunctiveActivation oAct, boolean state) {
-        retrieveBindingSignals()
+        retrieveBindingSignals(this, synapse.getTransition())
                 .forEach((t, bs) -> {
                     BindingSignalSlot bsSlot = oAct.getBSSlot(t);
                     if(bsSlot != null)
                         bsSlot.connectBindingSignal(bs, state);
                 });
-    }
-
-    public Map<Transition, PatternActivation> retrieveBindingSignals() {
-        Transition bsType = synapse.getTransition();
-        BindingSignalCollector op = new BindingSignalCollector(bsType.getInverted());
-        new DownVisitor(
-                getDocument(),
-                op
-        ).start(this);
-        return op.getBindingSignals();
     }
 
     public FieldOutput getWeightedInput() {

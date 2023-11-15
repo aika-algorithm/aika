@@ -7,6 +7,7 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.utils.BitUtils;
+import network.aika.visitor.DownVisitor;
 import network.aika.visitor.UpVisitor;
 
 import java.util.HashMap;
@@ -18,6 +19,23 @@ public class BindingSignalCollector implements Operator {
 
     private Map<Transition, PatternActivation> bindingSignals = new HashMap<>(2);
 
+    public static Map<Transition, PatternActivation> retrieveBindingSignals(Activation act, Transition t) {
+        BindingSignalCollector op = new BindingSignalCollector(t.getInverted());
+        new DownVisitor(
+                act.getDocument(),
+                op
+        ).start(act);
+        return op.getBindingSignals();
+    }
+
+    public static Map<Transition, PatternActivation> retrieveBindingSignals(Link l, Transition t) {
+        BindingSignalCollector op = new BindingSignalCollector(t.getInverted());
+        new DownVisitor(
+                l.getDocument(),
+                op
+        ).start(l);
+        return op.getBindingSignals();
+    }
 
     public BindingSignalCollector(Transition forbidden) {
         this.forbidden = forbidden;

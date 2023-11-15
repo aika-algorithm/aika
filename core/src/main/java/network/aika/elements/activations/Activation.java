@@ -147,7 +147,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         Synapse syn = l.getSynapse();
         return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId ->
-                new SynapseInputSlot(syn, l.getInput(), "in-slot-" + nId)
+                new SynapseInputSlot(syn, "in-slot-" + nId)
         );
     }
 

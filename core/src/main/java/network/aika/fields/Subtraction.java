@@ -16,39 +16,22 @@
  */
 package network.aika.fields;
 
-
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.links.ConjunctiveLink;
-import network.aika.elements.synapses.Synapse;
-
-import static network.aika.enums.direction.Direction.INPUT;
-
 /**
  * @author Lukas Molzberger
  */
-public class SynapseInputSlot extends MaxField {
+public class Subtraction extends AbstractFunction {
 
-    public SynapseInputSlot(Synapse ref, String label) {
+    public Subtraction(FieldObject ref, String label) {
         super(ref, label);
     }
 
     @Override
-    protected void updateConnection(FieldLink si, boolean state) {
-        if(si == null)
-            return;
-        ConjunctiveLink l = getLink(si);
-        l.updateLinkState(INPUT, state);
+    protected int getNumberOfFunctionArguments() {
+        return 2;
     }
 
-    public ConjunctiveLink getSelectedLink() {
-        return getLink(getSelectedInput());
-    }
-
-    public ConjunctiveLink getLink(FieldLink fl) {
-        if(fl == null)
-            return null;
-
-        return (ConjunctiveLink) fl.getInput().getReference();
+    @Override
+    protected double computeUpdate(FieldLink fl, double u) {
+        return fl.getArgument() == 0 ? u : -u;
     }
 }
