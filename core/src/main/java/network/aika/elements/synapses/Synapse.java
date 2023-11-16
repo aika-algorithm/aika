@@ -35,6 +35,8 @@ import network.aika.enums.LinkingMode;
 import network.aika.utils.BitUtils;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
+import network.aika.visitor.DownVisitor;
+import network.aika.visitor.operator.IncomingLinkingOperator;
 import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +48,8 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
+import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -233,6 +237,25 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return iAct.getOutputLinks(this)
                         .findAny()
                         .isPresent();
+    }
+
+    public void latentLinking(Synapse sourceSyn, Activation iAct) {
+        if(log.isDebugEnabled())
+            log.debug("latentLinkOutgoing: sourceSyn:" + sourceSyn + " targetSyn:" + this + " iAct:" + iAct);
+
+        LinkingOperator op = new IncomingLinkingOperator(iAct, sourceSyn, null, this);
+        Neuron to = getInput();
+
+        if(sourceSyn.getRelation() != null)
+            sourceSyn.expandRelation(op, sourceSyn.getRelation(), to, OUTPUT);
+        else if(getRelation() != null)
+            expandRelation(op, getRelation(), to, INPUT);
+        else {
+            new DownVisitor(
+                    iAct.getDocument(),
+                    op
+            ).start(iAct);
+        }
     }
 
     public L link(IA iAct, OA oAct) {

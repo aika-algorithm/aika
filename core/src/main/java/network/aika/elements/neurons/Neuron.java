@@ -191,34 +191,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public void latentLinkOutgoing(Synapse sourceSyn, Activation iAct) {
-        if(!sourceSyn.isLinkingAllowed(true))
-            return;
-
-        getInputSynapsesAsStream()
-                .filter(targetSyn -> sourceSyn != targetSyn)
-                .filter(targetSyn -> targetSyn.isLinkingAllowed(true))
-                .filter(targetSyn -> getNetUB(sourceSyn, targetSyn) > 0.0)
-                .forEach(targetSyn -> {
-                    if(log.isDebugEnabled())
-                        log.debug("latentLinkOutgoing: sourceSyn:" + sourceSyn + " targetSyn:" + targetSyn + " iAct:" + iAct);
-
-                    LinkingOperator op = new IncomingLinkingOperator(iAct, sourceSyn, null, targetSyn);
-                    Neuron to = targetSyn.getInput();
-
-                    if(sourceSyn.getRelation() != null)
-                        sourceSyn.expandRelation(op, sourceSyn.getRelation(), to, OUTPUT);
-                    else if(targetSyn.getRelation() != null)
-                        targetSyn.expandRelation(op, targetSyn.getRelation(), to, INPUT);
-                    else {
-                        new DownVisitor(
-                                iAct.getDocument(),
-                                op
-                        ).start(iAct);
-                    }
-                });
-    }
-
     public void linkAndPropagateIn(Link l) {
         getInputSynapsesAsStream()
                 .filter(targetSyn -> targetSyn != l.getSynapse())

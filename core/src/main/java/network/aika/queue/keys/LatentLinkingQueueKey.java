@@ -27,27 +27,29 @@ import static network.aika.elements.Timestamp.NOT_SET;
 /**
  * @author Lukas Molzberger
  */
-public class FiredQueueKey extends QueueKey {
+public class LatentLinkingQueueKey extends FiredQueueKey {
 
-    protected static Comparator<FiredQueueKey> COMPARATOR = Comparator
-            .<FiredQueueKey, Timestamp>comparing(k -> k.fired)
-            .thenComparing(k -> k.created);
+    private static Comparator<LatentLinkingQueueKey> COMPARATOR = Comparator
+            .<LatentLinkingQueueKey>comparingLong(k -> k.sourceInputId)
+            .thenComparingLong(k -> k.targetInputId);
 
-    private Timestamp created;
-    private Timestamp fired;
+    long sourceInputId;
+    long targetInputId;
 
-    public FiredQueueKey(int round, Phase phase, Element element, Timestamp currentTimestamp) {
-        super(round, phase, currentTimestamp);
-        this.created = element.getCreated();
-        this.fired = element.getFired();
+    public LatentLinkingQueueKey(int round, Phase phase, Element element, long sourceInputId, long targetInputId, Timestamp currentTimestamp) {
+        super(round, phase, element, currentTimestamp);
+
+        this.sourceInputId = sourceInputId;
+        this.targetInputId = targetInputId;
     }
 
-    public Timestamp getFired() {
-        return fired;
-    }
+    @Override
+    public int compareTo(QueueKey qk) {
+        int r = FiredQueueKey.COMPARATOR.compare(this, (FiredQueueKey) qk);
+        if(r != 0)
+            return r;
 
-    public Timestamp getCreated() {
-        return created;
+        return COMPARATOR.compare(this, (LatentLinkingQueueKey) qk);
     }
 
     @Override
@@ -61,11 +63,8 @@ public class FiredQueueKey extends QueueKey {
                 ",f:" + firedStr +
                 ",c:" + getCreated() +
                 ",ts:" + getCurrentTimestamp() +
+                ",s-id:" + sourceInputId +
+                ",t-id:" + targetInputId +
                 "]";
-    }
-
-    @Override
-    public int compareTo(QueueKey qk) {
-        return COMPARATOR.compare(this, (FiredQueueKey) qk);
     }
 }

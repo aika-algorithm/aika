@@ -16,13 +16,17 @@
  */
 package network.aika.queue.activation;
 
+import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.Neuron;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.LinkingMode;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
+import network.aika.queue.keys.LatentLinkingQueueKey;
 
+import static network.aika.elements.synapses.Synapse.getNetUB;
 import static network.aika.queue.Phase.LATENT_LINKING;
 
 /**
@@ -31,21 +35,10 @@ import static network.aika.queue.Phase.LATENT_LINKING;
  */
 public class LatentLinking extends ElementStep<Activation> {
 
-    private LinkingMode mode;
+    private Synapse sourceSyn;
+    private Synapse targetSyn;
 
     public static void add(Activation act, LinkingMode mode) {
-        Step.add(new LatentLinking(act, mode));
-    }
-
-    public LatentLinking(Activation act, LinkingMode mode) {
-        super(act);
-
-        this.mode = mode;
-    }
-
-    @Override
-    public void process() {
-        Activation<?> act = getElement();
         Neuron<?, ?> n = act.getNeuron();
 
         n.wakeupPropagable();
@@ -53,12 +46,48 @@ public class LatentLinking extends ElementStep<Activation> {
         n.getOutputSynapsesAsStream(act.getDocument())
                 .filter(s ->
                         s.getLinkingMode() == mode
-                )
-                .toList()
-                .forEach(s ->
-                        s.getOutput()
-                                .latentLinkOutgoing(s, act)
+                ).forEach(sourceSyn ->
+                        expandTargetSynapses(act, sourceSyn)
                 );
+    }
+
+    private static void expandTargetSynapses(Activation act, Synapse sourceSyn) {
+        if(!sourceSyn.isLinkingAllowed(true))
+            return;
+
+        Neuron<?, ?> targetNeuron = sourceSyn.getOutput();
+
+        targetNeuron.getInputSynapsesAsStream()
+        .filter(ts -> sourceSyn != ts)
+        .filter(ts -> ts.isLinkingAllowed(true))
+        .filter(ts -> getNetUB(sourceSyn, ts) > 0.0)
+        .forEach(ts ->
+                Step.add(new LatentLinking(act, sourceSyn, ts))
+        );
+    }
+
+    public LatentLinking(Activation act, Synapse sourceSyn, Synapse targetSyn) {
+        super(act);
+
+        this.sourceSyn = sourceSyn;
+        this.targetSyn = targetSyn;
+    }
+
+    @Override
+    public void createQueueKey(Timestamp timestamp) {
+        queueKey = new LatentLinkingQueueKey(
+                getRound(),
+                getPhase(),
+                getElement(),
+                sourceSyn.getInput().getId(),
+                targetSyn.getInput().getId(),
+                timestamp
+        );
+    }
+
+    @Override
+    public void process() {
+        targetSyn.latentLinking(sourceSyn, getElement());
     }
 
     @Override
@@ -68,6 +97,8 @@ public class LatentLinking extends ElementStep<Activation> {
 
     @Override
     public String toString() {
-        return super.toString() + " LinkingMode:" + mode;
+        return super.toString() +
+                " Source-Syn Input-Id:" + sourceSyn.getInput().getId() +
+                " Target-Syn Input-Id:" + targetSyn.getInput().getId();
     }
 }
