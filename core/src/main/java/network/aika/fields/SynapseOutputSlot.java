@@ -27,8 +27,8 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  */
 public class SynapseOutputSlot extends MaxField {
 
-    public SynapseOutputSlot(Synapse ref, String label) {
-        super(ref, label);
+    public SynapseOutputSlot(Synapse ref, String label, Double tolerance) {
+        super(ref, label, tolerance);
     }
 
     @Override

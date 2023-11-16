@@ -28,6 +28,7 @@ import network.aika.visitor.Visitor;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
 import static network.aika.fields.Fields.scale;
+import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
@@ -67,7 +68,7 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
 
     @Override
     protected void initInputValue() {
-        inputValue = new MaxField(this, "input-value-ft");
+        inputValue = new MaxField(this, "input-value-ft", TOLERANCE);
 
         linkAndConnect(getFeedbackTrigger(), 0, inputValue);
     }

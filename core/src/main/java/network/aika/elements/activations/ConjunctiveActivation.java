@@ -29,6 +29,7 @@ import java.util.TreeMap;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.scale;
+import static network.aika.utils.Utils.TOLERANCE;
 
 
 /**
@@ -65,7 +66,7 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
             inputSlots = new TreeMap<>();
 
         return inputSlots.computeIfAbsent(syn.getInput().getId(), nId -> {
-            SynapseOutputSlot slot = new SynapseOutputSlot(syn, "out-slot-" + nId);
+            SynapseOutputSlot slot = new SynapseOutputSlot(syn, "out-slot-" + nId, TOLERANCE);
             linkAndConnect(slot, getNet());
             return slot;
         });

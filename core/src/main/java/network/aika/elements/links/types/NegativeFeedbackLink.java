@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.fields.Fields.mul;
+import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
@@ -65,7 +66,7 @@ public class NegativeFeedbackLink extends Link<NegativeFeedbackSynapse, Inhibito
 
     @Override
     protected void initInputValue() {
-        inputValue = new MaxField(this, "max-input-value");
+        inputValue = new MaxField(this, "max-input-value", TOLERANCE);
     }
 
     @Override
