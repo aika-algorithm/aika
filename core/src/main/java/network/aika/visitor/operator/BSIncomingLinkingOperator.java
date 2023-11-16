@@ -16,28 +16,26 @@
  */
 package network.aika.visitor.operator;
 
-import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.UpVisitor;
 import network.aika.visitor.Visitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  * @author Lukas Molzberger
  */
-public class OutgoingLinkingOperator extends LinkingOperator {
+public class BSIncomingLinkingOperator extends LinkingOperator {
 
     protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
 
-    public OutgoingLinkingOperator(Activation sourceAct, Synapse targetSyn) {
-        super(sourceAct, targetSyn);
-    }
 
-    public Synapse getStartSynapse() {
-        return targetSyn;
+    public BSIncomingLinkingOperator(Activation sourceAct, Synapse targetSyn) {
+        super(sourceAct, targetSyn);
     }
 
     @Override
@@ -49,11 +47,6 @@ public class OutgoingLinkingOperator extends LinkingOperator {
     public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
         if(!targetSyn.checkRequiredTransitions(state))
             return;
-/*
-        if(lastLink == null)
-            return;
-*/
-        assert lastLink == null || lastLink.getOutput() == act;
 
         checkAndLink(act);
     }
@@ -61,27 +54,27 @@ public class OutgoingLinkingOperator extends LinkingOperator {
     @Override
     public Link checkAndLink(Activation act) {
         if(log.isDebugEnabled())
-            log.debug("OutgoingLinkingOperator.checkAndLink() startSynapse:" + getStartSynapse() + " act:" + act);
+            log.debug("BSIncomingLinkingOperator.check() act:" + act);
 
-        if(act.getNeuron() != targetSyn.getOutput())
+        if (act.getNeuron() != targetSyn.getInput())
             return null;
 
-        if(act == sourceAct)
+        if (act == sourceAct)
             return null;
 
-        return targetSyn.link(sourceAct, act);
+        if (!targetSyn.getLinkingMode().check(act))
+            return null;
+
+        return targetSyn.link(act, sourceAct);
     }
 
-    @Override
     public void relationCheck(Synapse relSyn, Activation relatedAct, Direction relDir) {
-        assert relDir == Direction.OUTPUT;
-
         Link l = checkAndLink(relatedAct);
         if (l != null)
             relSyn.createLatentRelation(
-                    relatedAct,
-                    sourceAct,
-                    relatedAct
+                    l.getOutput(),
+                    relDir.getInput(sourceAct, relatedAct),
+                    relDir.getOutput(sourceAct, relatedAct)
             );
     }
 }

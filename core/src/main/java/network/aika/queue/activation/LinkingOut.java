@@ -18,11 +18,20 @@ package network.aika.queue.activation;
 
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.relations.Relation;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.LinkingMode;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
+import network.aika.queue.link.LinkingIn;
+import network.aika.visitor.DownVisitor;
+import network.aika.visitor.operator.LinkingOperator;
+import network.aika.visitor.operator.OutgoingLinkingOperator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.queue.Phase.OUTPUT_LINKING;
 
 /**
@@ -30,6 +39,8 @@ import static network.aika.queue.Phase.OUTPUT_LINKING;
  * @author Lukas Molzberger
  */
 public class LinkingOut extends ElementStep<Activation> {
+
+    protected static final Logger log = LoggerFactory.getLogger(LinkingIn.class);
 
     private LinkingMode mode;
 
@@ -56,9 +67,27 @@ public class LinkingOut extends ElementStep<Activation> {
                 )
                 .toList()
                 .forEach(s ->
-                        s.getOutput()
-                                .linkOutgoing(s, act)
+                        linkOutgoing(s, act)
                 );
+    }
+
+
+    public void linkOutgoing(Synapse targetSyn, Activation iAct) {
+        if(log.isDebugEnabled())
+            log.debug("linkOutgoing: targetSyn:" + targetSyn + " iAct:" + iAct);
+
+        Neuron to = targetSyn.getOutput();
+        LinkingOperator op = new OutgoingLinkingOperator(iAct, targetSyn);
+
+        Relation rel = targetSyn.getRelation();
+        if(rel != null)
+            targetSyn.expandRelation(op, rel, to, OUTPUT);
+        else {
+            new DownVisitor(
+                    iAct.getDocument(),
+                    op
+            ).start(iAct);
+        }
     }
 
     @Override

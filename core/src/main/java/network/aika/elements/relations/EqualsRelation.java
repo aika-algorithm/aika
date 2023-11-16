@@ -21,6 +21,7 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.activations.Activation;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Range;
+import network.aika.text.TextReference;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -64,8 +65,8 @@ public class EqualsRelation extends Relation {
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
-        Range r = fromAct.getTextReference().getTokenPosRange();
+    public Stream<Activation> evaluateLatentRelation(TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
+        Range r = ref.getTokenPosRange();
 
         return toPreAct.getRelatedTokensByTokenPosition(compareBegin ? INPUT : OUTPUT, r)
                 .filter(act -> fromAct != act)

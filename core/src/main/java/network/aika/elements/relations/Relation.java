@@ -20,6 +20,7 @@ import network.aika.Model;
 import network.aika.elements.PreActivation;
 import network.aika.elements.activations.Activation;
 import network.aika.enums.direction.Direction;
+import network.aika.text.TextReference;
 import network.aika.utils.Writable;
 
 import java.io.DataInput;
@@ -33,7 +34,7 @@ import java.util.stream.Stream;
  */
 public abstract class Relation implements Writable {
 
-    public abstract Stream<Activation> evaluateLatentRelation(Activation fromAct, PreActivation<?> toPreAct, Direction dir);
+    public abstract Stream<Activation> evaluateLatentRelation(TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir);
 
     public abstract int getRelationType();
 

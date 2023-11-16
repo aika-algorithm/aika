@@ -14,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.queue.link;
+package network.aika.queue.activation;
 
+import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.relations.Relation;
@@ -24,6 +26,8 @@ import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
 import network.aika.visitor.DownVisitor;
+import network.aika.visitor.UpVisitor;
+import network.aika.visitor.operator.BSIncomingLinkingOperator;
 import network.aika.visitor.operator.IncomingLinkingOperator;
 import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
@@ -36,47 +40,40 @@ import static network.aika.queue.Phase.INPUT_LINKING;
  *
  * @author Lukas Molzberger
  */
-public class LinkingIn extends ElementStep<Link> {
+public class BSLinkingIn extends ElementStep<Activation> {
 
-    protected static final Logger log = LoggerFactory.getLogger(LinkingIn.class);
+    protected static final Logger log = LoggerFactory.getLogger(BSLinkingIn.class);
 
+    private PatternActivation bindingSignal;
 
-    public static void add(Link l) {
-        Step.add(new LinkingIn(l));
+    public static void add(Activation act, PatternActivation bs) {
+        Step.add(new BSLinkingIn(act, bs));
     }
 
-    public LinkingIn(Link l) {
-        super(l);
+    public BSLinkingIn(Activation act, PatternActivation bs) {
+        super(act);
+        this.bindingSignal = bs;
     }
 
     @Override
     public void process() {
-        Link l = getElement();
-        linkAndPropagateIn(l);
-    }
-
-    public void linkAndPropagateIn(Link l) {
-        Neuron<?, ?> n = l.getOutput().getNeuron();
+        Neuron<?, ?> n = getElement().getNeuron();
         n.getInputSynapsesAsStream()
-                .filter(targetSyn -> targetSyn != l.getSynapse())
                 .forEach(targetSyn ->
-                    linkIncoming(l, targetSyn)
+                        linkIncoming(targetSyn)
                 );
     }
 
-    private static void linkIncoming(Link l, Synapse targetSyn) {
-        if(log.isDebugEnabled())
-            log.debug("linkAndPropagateIn: link:" + l + " targetSyn:" + targetSyn);
-
-        LinkingOperator op = new IncomingLinkingOperator(l.getOutput(), l.getSynapse(), l, targetSyn);
+    private void linkIncoming(Synapse targetSyn) {
+        LinkingOperator op = new BSIncomingLinkingOperator(getElement(), targetSyn);
         Relation rel = targetSyn.getRelation();
         if(rel != null)
             targetSyn.expandRelation(op, rel, targetSyn.getOutput(), INPUT);
         else {
-            new DownVisitor(
-                    l.getDocument(),
+            new UpVisitor(
+                    bindingSignal.getDocument(),
                     op
-            ).start(l);
+            ).start(bindingSignal);
         }
     }
 

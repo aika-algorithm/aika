@@ -21,6 +21,7 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.activations.Activation;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Range;
+import network.aika.text.TextReference;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -55,11 +56,11 @@ public class BeforeRelation extends Relation {
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
+    public Stream<Activation> evaluateLatentRelation(TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
         Direction toSlot = dir.combine(relDirection);
         Direction fromSlot = toSlot.invert();
 
-        Range inputRange = fromAct.getTextReference().getTokenPosRange();
+        Range inputRange = ref.getTokenPosRange();
         long fromPos = inputRange.getPosition(fromSlot);
 
         Range targetRange = new Range(

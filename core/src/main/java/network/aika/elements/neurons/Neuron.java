@@ -173,44 +173,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public void linkOutgoing(Synapse targetSyn, Activation iAct) {
-        if(log.isDebugEnabled())
-            log.debug("linkOutgoing: targetSyn:" + targetSyn + " iAct:" + iAct);
-
-        Neuron to = targetSyn.getOutput();
-        LinkingOperator op = new OutgoingLinkingOperator(iAct, targetSyn);
-
-        Relation rel = targetSyn.getRelation();
-        if(rel != null)
-            targetSyn.expandRelation(op, rel, to, OUTPUT);
-        else {
-            new DownVisitor(
-                    iAct.getDocument(),
-                    op
-            ).start(iAct);
-        }
-    }
-
-    public void linkAndPropagateIn(Link l) {
-        getInputSynapsesAsStream()
-                .filter(targetSyn -> targetSyn != l.getSynapse())
-                .forEach(targetSyn -> {
-                    if(log.isDebugEnabled())
-                        log.debug("linkAndPropagateIn: link:" + l + " targetSyn:" + targetSyn);
-
-                    LinkingOperator op = new IncomingLinkingOperator(l.getOutput(), l.getSynapse(), l, targetSyn);
-                    Relation rel = targetSyn.getRelation();
-                    if(rel != null)
-                        targetSyn.expandRelation(op, rel, targetSyn.getOutput(), INPUT);
-                    else {
-                        new DownVisitor(
-                                l.getDocument(),
-                                op
-                        ).start(l);
-                    }
-                });
-    }
-
     public SortedSet<A> getActivations(Document doc) {
         if(doc == null)
             return Collections.emptySortedSet();

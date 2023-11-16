@@ -28,6 +28,7 @@ import network.aika.fields.SumField;
 import network.aika.enums.sign.Sign;
 import network.aika.queue.link.LinkCounting;
 
+import static network.aika.enums.Transition.SAME;
 import static network.aika.fields.ConstantField.ZERO;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.func;
@@ -54,9 +55,8 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
     public void addLinkingSteps() {
         super.addLinkingSteps();
 
-        Synapse posFeedbackSyn = input.getNeuron().getInputSynapse(output.getNeuronProvider());
-        if(posFeedbackSyn != null && posFeedbackSyn.getLink(output, input) == null)
-            posFeedbackSyn.createAndInitLink(output, input);
+        input.getBSSlot(SAME)
+                .connectBindingSignal(output, true);
     }
 
     @Override

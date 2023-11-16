@@ -32,6 +32,7 @@ import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.LinkingMode;
+import network.aika.text.TextReference;
 import network.aika.utils.BitUtils;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
@@ -419,7 +420,11 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         Activation from = op.getSourceAct();
         PreActivation<?> toPreAct = to.getOrCreatePreActivation(from.getDocument());
 
-        rel.evaluateLatentRelation(from, toPreAct, relDir.invert())
+        TextReference ref = from.getTextReference();
+        if(ref == null)
+            return;
+
+        rel.evaluateLatentRelation(ref, from, toPreAct, relDir.invert())
                 .forEach(relAct -> {
                             if (log.isDebugEnabled())
                                 log.debug(

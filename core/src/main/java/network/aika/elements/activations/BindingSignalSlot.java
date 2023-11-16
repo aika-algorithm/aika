@@ -68,9 +68,7 @@ public class BindingSignalSlot {
             log.warn(bsType + " Binding-Signal is reset from:" + bindingSignal + " to:" + bs);
         }
 
-        for(BindingSignalUpdateListener l: listeners) {
-            l.onUpdate(bsType, bindingSignal, bs, state);
-        }
+        boolean lastState = sourcesCount > 0;
 
         if(state) {
             sourcesCount++;
@@ -79,6 +77,12 @@ public class BindingSignalSlot {
             sourcesCount--;
             if(sourcesCount <= 0)
                 this.bindingSignal = null;
+        }
+
+        if(state != lastState) {
+            for (BindingSignalUpdateListener l : listeners.toArray(new BindingSignalUpdateListener[0])) {
+                l.onUpdate(bsType, bindingSignal, bs, state);
+            }
         }
     }
 

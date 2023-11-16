@@ -22,11 +22,12 @@ import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.types.InputObjectLink;
+import network.aika.enums.LinkingMode;
 import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.BindingNeuron;
-import network.aika.visitor.DownVisitor;
-import network.aika.visitor.operator.SelfRefOperator;
+import network.aika.queue.activation.BSLinkingIn;
+import network.aika.queue.activation.BSLinkingOut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,13 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     public BindingActivation(int id, Document doc, BindingNeuron n) {
         super(id, doc, n);
+
+        sameBS.addListener((t, oBS, nBS, state) -> {
+            if(state) {
+                BSLinkingIn.add(this, nBS);
+                BSLinkingOut.add(this, nBS, LinkingMode.REGULAR);
+            }
+        });
     }
 
     @Override

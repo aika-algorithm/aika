@@ -21,6 +21,7 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.activations.Activation;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Range;
+import network.aika.text.TextReference;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -51,8 +52,8 @@ public class NearRelation extends Relation {
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
-        Range inputRange = fromAct.getTextReference().getTokenPosRange();
+    public Stream<Activation> evaluateLatentRelation(TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
+        Range inputRange = ref.getTokenPosRange();
 
         Range targetRange = new Range(
                 inputRange.getBegin() - distance,
