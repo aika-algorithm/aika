@@ -167,7 +167,15 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     public void disconnect() {
     }
 
+    protected boolean isPropagable(IA act) {
+        return getRelation() == null &&
+                getNetUB(act) > 0.0;
+    }
+
     public void propagate(IA iAct) {
+        if(!isPropagable(iAct))
+            return;
+
         if(propagateLinkExists(iAct))
             return;
 
@@ -176,6 +184,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
         createAndInitLink(iAct, oAct);
     }
+
     public static double getNetUB(Synapse synA, Synapse synB) {
         if(synB != null)
             return synA.getWeight().getUpdatedValue() + synB.getWeight().getUpdatedValue() +
@@ -224,24 +233,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return iAct.getOutputLinks(this)
                         .findAny()
                         .isPresent();
-    }
-
-    public void linkAndPropagateOut(IA act) {
-        getOutput()
-                .linkOutgoing(this, act);
-
-        if (isLinkingAllowed(true))
-            getOutput()
-                    .latentLinkOutgoing(this, act);
-
-        if (isPropagable(act)) {
-            propagate(act);
-        }
-    }
-
-    protected boolean isPropagable(IA act) {
-        return getRelation() == null &&
-                getNetUB(act) > 0.0;
     }
 
     public L link(IA iAct, OA oAct) {

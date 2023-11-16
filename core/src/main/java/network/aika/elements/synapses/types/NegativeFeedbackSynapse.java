@@ -79,12 +79,6 @@ public class NegativeFeedbackSynapse extends Synapse<
     }
 
     @Override
-    public void linkAndPropagateOut(InhibitoryActivation act) {
-        getOutput()
-                .linkOutgoing(this, act);
-    }
-
-    @Override
     public void setModified() {
         BindingNeuron no = getOutput();
         if(no != null)

@@ -25,10 +25,13 @@ import network.aika.elements.links.types.InhibitoryCategoryLink;
 import network.aika.elements.links.types.InhibitoryLink;
 import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
+import network.aika.queue.activation.LinkingOut;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
+
+import static network.aika.enums.LinkingMode.REGULAR;
 
 
 /**
@@ -39,6 +42,11 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
 
     public InhibitoryActivation(int id, Document doc, InhibitoryNeuron neuron) {
         super(id, doc, neuron);
+    }
+
+    @Override
+    public void addLinkingSteps() {
+        LinkingOut.add(this, REGULAR);
     }
 
     @Override

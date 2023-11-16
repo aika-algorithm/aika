@@ -25,17 +25,13 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
 import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.activations.types.PatternActivation;
-import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
+import network.aika.queue.activation.LatentLinking;
 import network.aika.queue.activation.LinkingOut;
+import network.aika.queue.activation.Propagate;
 import network.aika.queue.link.LinkingIn;
-import network.aika.visitor.DownVisitor;
 import network.aika.visitor.Visitor;
-import network.aika.visitor.operator.BindingSignalCollector;
-
-import java.util.Map;
 
 import static network.aika.debugger.EventType.CREATE;
 import static network.aika.enums.LinkingMode.FEEDBACK;
@@ -110,9 +106,11 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         return synapse.getOutputType();
     }
 
-    public void addLinkingStep() {
+    public void addLinkingSteps() {
         LinkingIn.add(this);
         LinkingOut.add(output, FEEDBACK);
+        LatentLinking.add(output, FEEDBACK);
+        Propagate.add(output, FEEDBACK);
     }
 
     public void visit(Visitor v, int state, int depth) {
@@ -225,7 +223,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
     public void init() {
         if(input != null && synapse.isLinkingAllowed(false))
-            addLinkingStep();
+            addLinkingSteps();
     }
 
     public void initFromTemplate(Link template) {

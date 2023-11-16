@@ -192,6 +192,9 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public void latentLinkOutgoing(Synapse sourceSyn, Activation iAct) {
+        if(!sourceSyn.isLinkingAllowed(true))
+            return;
+
         getInputSynapsesAsStream()
                 .filter(targetSyn -> sourceSyn != targetSyn)
                 .filter(targetSyn -> targetSyn.isLinkingAllowed(true))

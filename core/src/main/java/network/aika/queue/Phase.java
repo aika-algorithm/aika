@@ -25,6 +25,8 @@ public enum Phase {
     POST_INSTANTIATION(),
     INPUT_LINKING(),
     OUTPUT_LINKING(),
+    LATENT_LINKING(),
+    PROPAGATE(),
     FEEDBACK_TRIGGER(),
     INFERENCE(),
     PRE_ANNEAL(),

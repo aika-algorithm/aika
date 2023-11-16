@@ -16,28 +16,28 @@
  */
 package network.aika.queue.activation;
 
-import network.aika.elements.neurons.Neuron;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.Neuron;
 import network.aika.enums.LinkingMode;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
 
-import static network.aika.queue.Phase.OUTPUT_LINKING;
+import static network.aika.queue.Phase.LATENT_LINKING;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class LinkingOut extends ElementStep<Activation> {
+public class LatentLinking extends ElementStep<Activation> {
 
     private LinkingMode mode;
 
     public static void add(Activation act, LinkingMode mode) {
-        Step.add(new LinkingOut(act, mode));
+        Step.add(new LatentLinking(act, mode));
     }
 
-    public LinkingOut(Activation act, LinkingMode mode) {
+    public LatentLinking(Activation act, LinkingMode mode) {
         super(act);
 
         this.mode = mode;
@@ -57,13 +57,13 @@ public class LinkingOut extends ElementStep<Activation> {
                 .toList()
                 .forEach(s ->
                         s.getOutput()
-                                .linkOutgoing(s, act)
+                                .latentLinkOutgoing(s, act)
                 );
     }
 
     @Override
     public Phase getPhase() {
-        return OUTPUT_LINKING;
+        return LATENT_LINKING;
     }
 
     @Override

@@ -30,6 +30,6 @@ public abstract class CategoryLink<S extends CategorySynapse, IA extends Activat
     }
 
     @Override
-    public void addLinkingStep() {
+    public void addLinkingSteps() {
     }
 }

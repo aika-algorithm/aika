@@ -56,10 +56,6 @@ public class RelationInputSynapse extends ConjunctiveSynapse<
     }
 
     @Override
-    public void linkAndPropagateOut(LatentRelationActivation act) {
-    }
-
-    @Override
     public RelationInputLink createLink(LatentRelationActivation input, BindingActivation output) {
         return new RelationInputLink(this, input, output);
     }
