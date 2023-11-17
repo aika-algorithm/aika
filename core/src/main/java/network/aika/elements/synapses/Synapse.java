@@ -190,9 +190,13 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         createAndInitLink(iAct, oAct);
     }
 
+    public double getWeightForNetUB() {
+        return getWeight().getUpdatedValue();
+    }
+
     public static double getNetUB(Synapse synA, Synapse synB) {
         if(synB != null)
-            return synA.getWeight().getUpdatedValue() + synB.getWeight().getUpdatedValue() +
+            return synA.getWeightForNetUB() + synB.getWeightForNetUB() +
                     Math.min(
                             synA.getSumOfLowerWeights()[0],
                             synB.getSumOfLowerWeights()[0]
@@ -202,11 +206,12 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public double getNetUB() {
-        return getWeight().getUpdatedValue() + getSumOfLowerWeights()[isLinkingAllowed(true) ? 1 : 0];
+        return getWeightForNetUB() +
+                getSumOfLowerWeights()[isLinkingAllowed(true) ? 1 : 0];
     }
 
     public double getNetUB(IA iAct) {
-        return (getInputValue(iAct).getUpdatedValue() * getWeight().getUpdatedValue()) +
+        return (getInputValue(iAct).getUpdatedValue() * getWeightForNetUB()) +
                 getSumOfLowerWeights()[isLinkingAllowed(true) ? 1 : 0];
     }
 

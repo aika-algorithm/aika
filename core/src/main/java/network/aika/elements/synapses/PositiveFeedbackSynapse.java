@@ -33,4 +33,9 @@ public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse,
         if(!linkExists(oAct, true))
             createAndInitLink(null, oAct);
     }
+
+    @Override
+    public double getWeightForNetUB() {
+        return 0.0;
+    }
 }
