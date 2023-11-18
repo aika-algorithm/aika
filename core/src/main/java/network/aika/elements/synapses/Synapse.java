@@ -245,25 +245,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                         .isPresent();
     }
 
-    public void latentLinking(Synapse sourceSyn, Activation iAct) {
-        if(log.isDebugEnabled())
-            log.debug("latentLinkOutgoing: sourceSyn:" + sourceSyn + " targetSyn:" + this + " iAct:" + iAct);
-
-        LinkingOperator op = new IncomingLinkingOperator(iAct, sourceSyn, null, this);
-        Neuron to = getInput();
-
-        if(sourceSyn.getRelation() != null)
-            sourceSyn.expandRelation(op, sourceSyn.getRelation(), to, OUTPUT);
-        else if(getRelation() != null)
-            expandRelation(op, getRelation(), to, INPUT);
-        else {
-            new DownVisitor(
-                    iAct.getDocument(),
-                    op
-            ).start(iAct);
-        }
-    }
-
     public L link(IA iAct, OA oAct) {
         L l = getLink(iAct, oAct);
         if (l != null) {

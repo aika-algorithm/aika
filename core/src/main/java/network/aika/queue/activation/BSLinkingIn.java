@@ -65,7 +65,7 @@ public class BSLinkingIn extends ElementStep<Activation> {
     }
 
     private void linkIncoming(Synapse targetSyn) {
-        LinkingOperator op = new BSIncomingLinkingOperator(getElement(), targetSyn);
+        LinkingOperator op = new BSIncomingLinkingOperator(getElement(), null, targetSyn);
         Relation rel = targetSyn.getRelation();
         if(rel != null)
             targetSyn.expandRelation(op, rel, targetSyn.getOutput(), INPUT);

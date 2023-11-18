@@ -33,19 +33,31 @@ public class BSIncomingLinkingOperator extends LinkingOperator {
 
     protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
 
+    private Synapse sourceSyn; // Set only during latent linking
 
-    public BSIncomingLinkingOperator(Activation sourceAct, Synapse targetSyn) {
+    public BSIncomingLinkingOperator(Activation sourceAct, Synapse sourceSyn, Synapse targetSyn) {
         super(sourceAct, targetSyn);
+        this.sourceSyn = sourceSyn;
+    }
+
+    public Synapse getStartSynapse() {
+        return sourceSyn;
     }
 
     @Override
     public boolean checkForbiddenTransitions(Link l, Direction dir) {
+        if(sourceSyn != null && !sourceSyn.checkForbiddenTransitions(l, dir))
+            return false;
+
         return targetSyn.checkForbiddenTransitions(l, dir);
     }
 
     @Override
     public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
         if(!targetSyn.checkRequiredTransitions(state))
+            return;
+
+        if(sourceSyn != null && !sourceSyn.checkRequiredTransitions(state))
             return;
 
         checkAndLink(act);
@@ -65,7 +77,19 @@ public class BSIncomingLinkingOperator extends LinkingOperator {
         if (!targetSyn.getLinkingMode().check(act))
             return null;
 
-        return targetSyn.link(act, sourceAct);
+        Activation targetAct;
+
+        if(sourceSyn == null)
+            targetAct = sourceAct;
+        else {
+            Link sl = latentLink(sourceAct, sourceSyn, act, targetSyn);
+            if(sl == null)
+                return null;
+
+            targetAct = sl.getOutput();
+        }
+
+        return targetSyn.link(act, targetAct);
     }
 
     public void relationCheck(Synapse relSyn, Activation relatedAct, Direction relDir) {

@@ -26,6 +26,7 @@ import network.aika.enums.LinkingMode;
 import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.BindingNeuron;
+import network.aika.queue.activation.BSLatentLinking;
 import network.aika.queue.activation.BSLinkingIn;
 import network.aika.queue.activation.BSLinkingOut;
 import org.slf4j.Logger;
@@ -54,7 +55,10 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         sameBS.addListener((t, oBS, nBS, state) -> {
             if(state) {
                 BSLinkingIn.add(this, nBS);
-                BSLinkingOut.add(this, nBS, LinkingMode.REGULAR);
+                if(isFired()) {
+                    BSLinkingOut.add(this, nBS, LinkingMode.REGULAR);
+                    BSLatentLinking.add(this, nBS, LinkingMode.REGULAR);
+                }
             }
         });
     }

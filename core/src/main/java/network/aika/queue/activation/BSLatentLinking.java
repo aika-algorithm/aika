@@ -18,6 +18,7 @@ package network.aika.queue.activation;
 
 import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.LinkingMode;
@@ -26,6 +27,8 @@ import network.aika.queue.Phase;
 import network.aika.queue.Step;
 import network.aika.queue.keys.LatentLinkingQueueKey;
 import network.aika.visitor.DownVisitor;
+import network.aika.visitor.UpVisitor;
+import network.aika.visitor.operator.BSIncomingLinkingOperator;
 import network.aika.visitor.operator.IncomingLinkingOperator;
 import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
@@ -40,14 +43,15 @@ import static network.aika.queue.Phase.LATENT_LINKING;
  *
  * @author Lukas Molzberger
  */
-public class LatentLinking extends ElementStep<Activation> {
+public class BSLatentLinking extends ElementStep<Activation> {
 
-    protected static final Logger log = LoggerFactory.getLogger(LatentLinking.class);
+    protected static final Logger log = LoggerFactory.getLogger(BSLatentLinking.class);
 
+    private PatternActivation bindingSignal;
     private Synapse sourceSyn;
     private Synapse targetSyn;
 
-    public static void add(Activation act, LinkingMode mode) {
+    public static void add(Activation act, PatternActivation bs, LinkingMode mode) {
         Neuron<?, ?> n = act.getNeuron();
 
         n.wakeupPropagable();
@@ -56,11 +60,11 @@ public class LatentLinking extends ElementStep<Activation> {
                 .filter(s ->
                         s.getLinkingMode() == mode
                 ).forEach(sourceSyn ->
-                        expandTargetSynapses(act, sourceSyn)
+                        expandTargetSynapses(act, bs, sourceSyn)
                 );
     }
 
-    private static void expandTargetSynapses(Activation act, Synapse sourceSyn) {
+    private static void expandTargetSynapses(Activation act, PatternActivation bs, Synapse sourceSyn) {
         if(!sourceSyn.isLinkingAllowed(true))
             return;
 
@@ -71,13 +75,14 @@ public class LatentLinking extends ElementStep<Activation> {
         .filter(ts -> ts.isLinkingAllowed(true))
         .filter(ts -> getNetUB(sourceSyn, ts) > 0.0)
         .forEach(ts ->
-                Step.add(new LatentLinking(act, sourceSyn, ts))
+                Step.add(new BSLatentLinking(act, bs, sourceSyn, ts))
         );
     }
 
-    public LatentLinking(Activation act, Synapse sourceSyn, Synapse targetSyn) {
+    public BSLatentLinking(Activation act, PatternActivation bs, Synapse sourceSyn, Synapse targetSyn) {
         super(act);
 
+        this.bindingSignal = bs;
         this.sourceSyn = sourceSyn;
         this.targetSyn = targetSyn;
     }
@@ -101,7 +106,7 @@ public class LatentLinking extends ElementStep<Activation> {
         if(log.isDebugEnabled())
             log.debug("latentLinkOutgoing: sourceSyn:" + sourceSyn + " targetSyn:" + this + " iAct:" + iAct);
 
-        LinkingOperator op = new IncomingLinkingOperator(iAct, sourceSyn, null, targetSyn);
+        LinkingOperator op = new BSIncomingLinkingOperator(iAct, sourceSyn, targetSyn);
         Neuron to = targetSyn.getInput();
 
         if(sourceSyn.getRelation() != null)
@@ -109,10 +114,10 @@ public class LatentLinking extends ElementStep<Activation> {
         else if(targetSyn.getRelation() != null)
             targetSyn.expandRelation(op, targetSyn.getRelation(), to, INPUT);
         else {
-            new DownVisitor(
-                    iAct.getDocument(),
+            new UpVisitor(
+                    bindingSignal.getDocument(),
                     op
-            ).start(iAct);
+            ).start(bindingSignal);
         }
     }
 
