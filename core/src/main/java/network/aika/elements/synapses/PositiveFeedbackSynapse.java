@@ -29,11 +29,6 @@ import network.aika.elements.neurons.Neuron;
 public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends PositiveFeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<O>>
         extends ConjunctiveSynapse<S, I, O, L, IA, OA>
 {
-    public void initDummyLink(OA oAct) {
-        if(!linkExists(oAct, true))
-            createAndInitLink(null, oAct);
-    }
-
     @Override
     public double getWeightForNetUB() {
         return 0.0;

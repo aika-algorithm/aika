@@ -123,8 +123,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
             connectWeightUpdate();
         }
 
-        initInactiveLinks();
-
         doc.register(this);
         neuron.register(this);
 
@@ -189,9 +187,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         LinkingOut.add(this, REGULAR);
         LatentLinking.add(this, REGULAR);
         Propagate.add(this, REGULAR);
-    }
-
-    protected void initInactiveLinks() {
     }
 
     public PatternActivation getBindingSignal(Transition t) {

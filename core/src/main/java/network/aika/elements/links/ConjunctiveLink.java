@@ -66,7 +66,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
             output.registerBindingSignalSlot(this);
         }
 
-        synOutputSlot = output.registerInputSlot(synapse);
+        synOutputSlot = output.registerInputSlot(this);
 
         outputNet = sub(this, "outputNet", output.getNet(), synOutputSlot);
     }
@@ -220,5 +220,9 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
 
     public FieldOutput getBiasUpdateNegCase() {
         return biasUpdateNegCase;
+    }
+
+    public void connectOutputToNet(SynapseOutputSlot slot) {
+        linkAndConnect(slot, output.getNet());
     }
 }

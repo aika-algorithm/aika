@@ -20,6 +20,7 @@ import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleFunction;
 
 import static network.aika.fields.FieldLink.*;
+import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
@@ -28,6 +29,19 @@ public class Fields {
 
     public static boolean isTrue(FieldOutput f, double threshold) {
         return f != null && f.getValue() > threshold;
+    }
+
+    public static MaxField max(FieldObject ref, String label, FieldOutput... in) {
+        if(in == null)
+            return null;
+
+        MaxField max = new MaxField(ref, label, TOLERANCE);
+        for(FieldOutput fi: in)
+            link(fi, max);
+
+        max.connectInputs(true);
+
+        return max;
     }
 
     public static Addition add(FieldObject ref, String label, FieldOutput in1, FieldOutput in2) {

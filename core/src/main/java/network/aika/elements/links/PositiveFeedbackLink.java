@@ -19,16 +19,11 @@ package network.aika.elements.links;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
-import network.aika.fields.AbstractFunction;
-import network.aika.fields.Field;
-import network.aika.fields.IdentityFunction;
-import network.aika.fields.MaxField;
+import network.aika.fields.*;
 import network.aika.visitor.Visitor;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.mul;
-import static network.aika.fields.Fields.scale;
-import static network.aika.utils.Utils.TOLERANCE;
+import static network.aika.fields.Fields.*;
 
 /**
  *
@@ -67,20 +62,18 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
     }
 
     @Override
-    protected void initInputValue() {
-        inputValue = new MaxField(this, "input-value-ft", TOLERANCE);
-
-        linkAndConnect(getFeedbackTrigger(), 0, inputValue);
+    public void connectOutputToNet(SynapseOutputSlot slot) {
+        linkAndConnect(
+                max(this, "ft-out",
+                        slot,
+                        getFeedbackTrigger()
+                ),
+                output.getNet()
+        );
     }
 
     protected Field getFeedbackTrigger() {
         return getDocument().getFeedbackTrigger();
-    }
-
-    @Override
-    public void initFromTemplate(Link template) {
-        super.initFromTemplate(template);
-        synapse.initDummyLink(output);
     }
 
     @Override
