@@ -16,7 +16,6 @@
  */
 package network.aika.elements.synapses.types;
 
-import network.aika.Document;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.activations.CategoryActivation;

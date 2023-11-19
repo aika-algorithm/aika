@@ -66,7 +66,7 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
     protected void initInputValue() {
         inputValue = new MaxField(this, "input-value-ft", TOLERANCE);
 
-        linkAndConnect(getFeedbackTrigger(), 1, inputValue);
+        linkAndConnect(getFeedbackTrigger(), 0, inputValue);
     }
 
     protected Field getFeedbackTrigger() {
