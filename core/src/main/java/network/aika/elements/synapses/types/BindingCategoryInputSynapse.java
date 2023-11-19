@@ -16,6 +16,7 @@
  */
 package network.aika.elements.synapses.types;
 
+import network.aika.Document;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.links.types.BindingCategoryInputLink;
@@ -24,6 +25,7 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
+import network.aika.fields.Field;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.enums.Transition.*;
@@ -53,6 +55,11 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
 {
     private double initialCategorySynapseWeight;
 
+
+    @Override
+    protected Field getFeedbackTrigger(Document doc) {
+        return doc.getInstantiationFeedbackTrigger();
+    }
 
     @Override
     public BindingCategoryInputLink createLink(CategoryActivation input, BindingActivation output) {

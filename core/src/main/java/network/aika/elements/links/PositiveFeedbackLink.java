@@ -62,21 +62,6 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
     }
 
     @Override
-    public void connectOutputToNet(SynapseOutputSlot slot) {
-        linkAndConnect(
-                max(this, "ft-out",
-                        slot,
-                        getFeedbackTrigger()
-                ),
-                output.getNet()
-        );
-    }
-
-    protected Field getFeedbackTrigger() {
-        return getDocument().getFeedbackTrigger();
-    }
-
-    @Override
     protected void connectGradientFields() {
         super.connectGradientFields();
 

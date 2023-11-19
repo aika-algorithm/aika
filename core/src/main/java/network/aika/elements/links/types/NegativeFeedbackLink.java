@@ -74,9 +74,10 @@ public class NegativeFeedbackLink extends Link<NegativeFeedbackSynapse, Inhibito
     }
 
     @Override
-    protected Multiplication initWeightedInput() {
-        innerWeightedInput = super.initWeightedInput();
-        return mul(
+    protected void initWeightedInput() {
+        super.initWeightedInput();
+        innerWeightedInput = weightedInput;
+        weightedInput = mul(
                 this,
                 "annealing * iAct(" + getInputKeyString() + ").value * weight",
                 getDocument().getAnnealing(),

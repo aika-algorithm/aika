@@ -19,7 +19,8 @@ package network.aika.elements.activations;
 import network.aika.Document;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.fields.SynapseOutputSlot;
 
 import java.util.NavigableMap;
@@ -45,17 +46,23 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
     public void registerBindingSignalSlot(ConjunctiveLink l) {
     }
 
-    public SynapseOutputSlot registerInputSlot(ConjunctiveLink l) {
-        Synapse syn = l.getSynapse();
-
+    public SynapseOutputSlot registerInputSlot(ConjunctiveSynapse syn) {
         if(inputSlots == null)
             inputSlots = new TreeMap<>();
 
         return inputSlots.computeIfAbsent(syn.getInput().getId(), nId -> {
             SynapseOutputSlot slot = new SynapseOutputSlot(syn, "out-slot-" + nId, TOLERANCE);
-            l.connectOutputToNet(slot);
+            syn.connectOutputToNet(slot, this);
             return slot;
         });
+    }
+
+    @Override
+    protected void initFeedbackSynapseInputSlots() {
+        neuron.getInputSynapsesByType(PositiveFeedbackSynapse.class)
+                .forEach(s ->
+                        s.initFeedbackSynapseOutputSlot(this)
+                );
     }
 
     @Override

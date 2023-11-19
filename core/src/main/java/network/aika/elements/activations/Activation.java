@@ -123,6 +123,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
             connectWeightUpdate();
         }
 
+        initFeedbackSynapseInputSlots();
+
         doc.register(this);
         neuron.register(this);
 
@@ -141,11 +143,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return null;
     }
 
-    public SynapseInputSlot registerOutputSlot(Link l) {
+    public SynapseInputSlot registerOutputSlot(Synapse syn) {
         if(outputSlots == null)
             outputSlots = new TreeMap<>();
 
-        Synapse syn = l.getSynapse();
         return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId ->
                 new SynapseInputSlot(syn, "in-slot-" + nId, TOLERANCE)
         );
@@ -187,6 +188,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         LinkingOut.add(this, REGULAR);
         LatentLinking.add(this, REGULAR);
         Propagate.add(this, REGULAR);
+    }
+
+    protected void initFeedbackSynapseInputSlots() {
     }
 
     public PatternActivation getBindingSignal(Transition t) {

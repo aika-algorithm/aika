@@ -36,11 +36,6 @@ public class PatternCategoryInputLink extends PositiveFeedbackLink<PatternCatego
     }
 
     @Override
-    protected Field getFeedbackTrigger() {
-        return getDocument().getInstantiationFeedbackTrigger();
-    }
-
-    @Override
     public CategorySynapse createCategorySynapse() {
         return new PatternCategorySynapse();
     }

@@ -74,6 +74,22 @@ public class Fields {
         return sub;
     }
 
+    public static Multiplication mul(FieldObject ref, String label, FieldOutput in1, boolean propagateUpdates1, FieldOutput in2, boolean propagateUpdates2) {
+        if(in1 == null || in2 == null)
+            return null;
+
+        Multiplication mul = new Multiplication(ref, label);
+        FieldLink fl1 = link(in1, 0, mul);
+        fl1.setPropagateUpdates(propagateUpdates1);
+
+        FieldLink fl2 = link(in2, 1, mul);
+        fl2.setPropagateUpdates(propagateUpdates2);
+
+        mul.connectInputs(true);
+
+        return mul;
+    }
+
     public static Multiplication mul(FieldObject ref, String label, FieldOutput in1, FieldOutput in2) {
         if(in1 == null || in2 == null)
             return null;
