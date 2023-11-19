@@ -24,6 +24,7 @@ import network.aika.visitor.Visitor;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
+import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
@@ -59,6 +60,23 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
 
         visited[index] = v.getV();
         return false;
+    }
+
+    @Override
+    protected void initInputValue() {
+        inputValue = new MaxField(this, "input-value-ft", TOLERANCE);
+
+        linkAndConnect(getFeedbackTrigger(), 1, inputValue);
+    }
+
+    protected Field getFeedbackTrigger() {
+        return getDocument().getFeedbackTrigger();
+    }
+
+    @Override
+    public void initFromTemplate(Link template) {
+        super.initFromTemplate(template);
+        synapse.initDummyLink(output);
     }
 
     @Override

@@ -23,6 +23,7 @@ import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.elements.synapses.types.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.types.BindingCategorySynapse;
 import network.aika.elements.synapses.CategorySynapse;
+import network.aika.fields.Field;
 
 
 /**
@@ -32,6 +33,11 @@ public class BindingCategoryInputLink extends PositiveFeedbackLink<BindingCatego
 
     public BindingCategoryInputLink(BindingCategoryInputSynapse s, CategoryActivation input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    protected Field getFeedbackTrigger() {
+        return getDocument().getInstantiationFeedbackTrigger();
     }
 
     @Override

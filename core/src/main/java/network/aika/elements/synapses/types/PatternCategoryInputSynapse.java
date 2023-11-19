@@ -25,7 +25,6 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
-import network.aika.fields.Field;
 
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.Transition.*;
@@ -58,11 +57,6 @@ public class PatternCategoryInputSynapse
     @Override
     public PatternCategoryInputLink createLink(CategoryActivation input, PatternActivation output) {
         return new PatternCategoryInputLink(this, input, output);
-    }
-
-    @Override
-    protected Field getFeedbackTrigger(Document doc) {
-        return doc.getInstantiationFeedbackTrigger();
     }
 
     @Override

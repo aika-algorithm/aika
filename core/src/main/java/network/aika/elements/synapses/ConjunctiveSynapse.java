@@ -76,10 +76,6 @@ public abstract class ConjunctiveSynapse<
                 .setPropagateUpdates(false);
     }
 
-    public void connectOutputToNet(SynapseOutputSlot slot, Activation oAct) {
-        linkAndConnect(slot, oAct.getNet());
-    }
-
     public S setSynapseBias(double b) {
         synapseBias.setValue(b);
 

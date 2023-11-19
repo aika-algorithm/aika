@@ -208,6 +208,10 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         );
     }
 
+    protected void checkConnectInputValueLink() {
+        updateConnected(getInputValueLink(), true, true);
+    }
+
     public FieldLink getInputValueLink() {
         return weightedInput.getInputLinkByArg(0);
     }

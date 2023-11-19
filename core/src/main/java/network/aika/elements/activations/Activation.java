@@ -123,7 +123,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
             connectWeightUpdate();
         }
 
-        initFeedbackSynapseInputSlots();
+        initInactiveLinks();
 
         doc.register(this);
         neuron.register(this);
@@ -190,7 +190,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         Propagate.add(this, REGULAR);
     }
 
-    protected void initFeedbackSynapseInputSlots() {
+    protected void initInactiveLinks() {
     }
 
     public PatternActivation getBindingSignal(Transition t) {
