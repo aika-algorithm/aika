@@ -199,7 +199,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         );
     }
 
-    protected Multiplication initWeightedInput() {
+    protected void initWeightedInput() {
         weightedInput = new Multiplication(this, "iAct(" + getInputKeyString() + ").value * s.weight");
 
         FieldLink.link(inputValue, 0, weightedInput);
@@ -209,8 +209,6 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
         checkConnectInputValueLink();
         weightedInput.getInputLinkByArg(1).connect(true);
-
-        return weightedInput;
     }
 
     protected void checkConnectInputValueLink() {
