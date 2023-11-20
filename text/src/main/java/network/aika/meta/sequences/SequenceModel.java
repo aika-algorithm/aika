@@ -59,8 +59,6 @@ public abstract class SequenceModel implements Writable {
 
     public InhibitoryNeuron inhibitoryN;
 
-    protected InhibitoryCategoryNeuron inhibCat;
-
     public PatternNeuron sequencePatternN;
 
     public BindingNeuron primaryBN;
@@ -127,10 +125,6 @@ public abstract class SequenceModel implements Writable {
 
     public InhibitoryNeuron getOuterInhibitoryNeuron() {
         return inhibitoryN;
-    }
-
-    public InhibitoryCategoryNeuron getInhibitoryCategory() {
-        return inhibCat;
     }
 
     public PatternNeuron getPatternNeuron() {
@@ -312,7 +306,6 @@ public abstract class SequenceModel implements Writable {
         out.writeLong(relNT.getId());
         out.writeLong(relContains.getId());
         out.writeLong(inhibitoryN.getId());
-        out.writeLong(inhibCat.getId());
         out.writeLong(sequencePatternN.getId());
         out.writeLong(primaryBN.getId());
     }
@@ -323,7 +316,6 @@ public abstract class SequenceModel implements Writable {
         relNT = m.lookupNeuronProvider(in.readLong()).getNeuron();
         relContains = m.lookupNeuronProvider(in.readLong()).getNeuron();
         inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        inhibCat = m.lookupNeuronProvider(in.readLong()).getNeuron();
         sequencePatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         primaryBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
