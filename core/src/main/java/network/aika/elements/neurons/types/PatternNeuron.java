@@ -37,6 +37,7 @@ import java.io.IOException;
 
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.sign.Sign.POS;
+import static network.aika.text.Range.length;
 
 /**
  *
@@ -138,16 +139,12 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
                     .count(absoluteRange);
     }
 
-    public double getAvgCoveredSpaceFromTemplate(Range absoluteRange) {
+    public Double getAvgCoveredSpaceFromTemplate(Range absoluteRange) {
         PatternNeuron tn = getTemplate();
 
-        if(tn != null)
-            return tn.getAverageCoveredSpace().getAvgCoveredSpace();
-
-        if(absoluteRange != null)
-            return absoluteRange.length();
-
-        return 0;
+        return tn != null ?
+                tn.getAverageCoveredSpace().getAvgCoveredSpace() :
+                length(absoluteRange);
     }
 
     public void applyMovingAverage(double alpha) {
@@ -172,7 +169,7 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
     }
 
     public double getSurprisal(Sign s, Range range, boolean addCurrentInstance) {
-        double n = sampleSpace.getN(range, getAvgCoveredSpaceFromTemplate(range));
+        double n = sampleSpace.getN(range, this);
         double p = getProbability(s, n, addCurrentInstance);
         return -Utils.surprisal(p);
     }

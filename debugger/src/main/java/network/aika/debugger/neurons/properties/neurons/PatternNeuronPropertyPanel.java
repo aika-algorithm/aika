@@ -52,7 +52,7 @@ public class PatternNeuronPropertyPanel<E extends PatternNeuron> extends Conjunc
     }
 
     private String probabilityToString(Sign s, PatternNeuron n, Range range) {
-        double N = n.getSampleSpace().getN(range);
+        double N = n.getSampleSpace().getN(range, n);
         if(N == 0.0)
             return NOT_SET_STR;
 
@@ -64,7 +64,7 @@ public class PatternNeuronPropertyPanel<E extends PatternNeuron> extends Conjunc
     }
 
     private String surprisalToString(Sign s, PatternNeuron n, Range range) {
-        double N = n.getSampleSpace().getN(range);
+        double N = n.getSampleSpace().getN(range, n);
         if(N == 0.0)
             return NOT_SET_STR;
 

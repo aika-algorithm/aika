@@ -17,6 +17,7 @@
 package network.aika.statistic;
 
 import network.aika.Model;
+import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.text.Range;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
@@ -25,6 +26,8 @@ import org.slf4j.LoggerFactory;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+
+import static network.aika.text.Range.length;
 
 /**
  * The <a href="https://en.wikipedia.org/wiki/Sample_space}">Sample Space</a> keeps track of the number of
@@ -47,7 +50,11 @@ public class SampleSpace implements Writable {
         return N;
     }
 
-    public double getN(Range range, double avgCoveredSpace) {
+    public double getN(Range range, PatternNeuron pn) {
+        Double avgCoveredSpace = pn != null ?
+                pn.getAvgCoveredSpaceFromTemplate(range) :
+                length(range);
+
         double n = range != null ? N + getInactiveInstancesSinceLastPos(range, avgCoveredSpace) : N;
         assert n >= 0.0;
         return n;
@@ -116,7 +123,7 @@ public class SampleSpace implements Writable {
     }
 
     public String toString(Range r) {
-        return "N:" + getN(r, r.length()) + " lastPosition:" + (lastPosition != null ? lastPosition : "X");
+        return "N:" + getN(r, null) + " lastPosition:" + (lastPosition != null ? lastPosition : "X");
     }
 
     public String toString() {

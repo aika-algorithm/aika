@@ -25,6 +25,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.text.Range.length;
 import static network.aika.utils.Utils.doubleToString;
 
 /**
@@ -38,7 +39,7 @@ public class AverageCoveredSpace implements Writable {
 
     public void count(Range r) {
         n++;
-        coveredSpace += r.length();
+        coveredSpace += length(r);
     }
 
     public double getAvgCoveredSpace() {

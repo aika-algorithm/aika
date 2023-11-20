@@ -53,19 +53,19 @@ public class PatternSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel
     }
 
     private String frequencyToString(Sign is, Sign os, PatternSynapse s, Range range) {
-        double N = s.getSampleSpace().getN(range);
+        double N = s.getSampleSpace().getN(range, s.getOutput());
         if(N == 0.0)
             return NOT_SET_STR;
 
         try {
-            return doubleToString(s.getFrequency(is, os, s.getSampleSpace().getN(range)));
+            return doubleToString(s.getFrequency(is, os, s.getSampleSpace().getN(range, s.getOutput())));
         } catch(IllegalStateException e) {
             return NOT_SET_STR;
         }
     }
 
     private String probabilityToString(Sign is, Sign os, PatternSynapse s, Range range) {
-        double N = s.getSampleSpace().getN(range);
+        double N = s.getSampleSpace().getN(range, s.getOutput());
         if(N == 0.0)
             return NOT_SET_STR;
 
@@ -77,7 +77,7 @@ public class PatternSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel
     }
 
     private String surprisalToString(Sign is, Sign os, PatternSynapse s, Range range) {
-        double N = s.getSampleSpace().getN(range);
+        double N = s.getSampleSpace().getN(range, s.getOutput());
         if(N == 0.0)
             return NOT_SET_STR;
 

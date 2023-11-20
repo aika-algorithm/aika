@@ -105,6 +105,12 @@ public class Range implements Writable {
         return end - begin;
     }
 
+    public static Long length(Range r) {
+        return r != null ?
+                r.length() :
+                null;
+    }
+
     public String toString() {
         return "[" + begin + "," + end + "]";
     }
