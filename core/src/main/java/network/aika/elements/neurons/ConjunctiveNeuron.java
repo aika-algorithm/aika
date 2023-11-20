@@ -40,6 +40,7 @@ import java.util.stream.Stream;
  */
 public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends ConjunctiveActivation> extends Neuron<N, A> {
 
+
     private static final Logger log = LoggerFactory.getLogger(ConjunctiveNeuron.class);
 
     public ConjunctiveNeuron(Model m) {
@@ -68,15 +69,23 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
     }
 
     public boolean isInstanceOf(ConjunctiveNeuron templateNeuron) {
+        Neuron tn = getTemplate();
+        if (tn == null)
+            return false;
+
+        return tn.getId() == templateNeuron.getId();
+    }
+
+    public N getTemplate() {
         CategorySynapse<?,?,?> cs = getCategoryOutputSynapse();
         if(cs == null)
-            return false;
+            return null;
 
         CategoryInputSynapse cis = cs.getOutput().getOutgoingCategoryInputSynapse();
         if(cis == null)
-            return false;
+            return null;
 
-        return cis.getOutput().getId() == templateNeuron.getId();
+        return (N) cis.getOutput();
     }
 
     @Override

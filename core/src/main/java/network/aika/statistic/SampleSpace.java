@@ -47,8 +47,8 @@ public class SampleSpace implements Writable {
         return N;
     }
 
-    public double getN(Range range) {
-        double n = range != null ? N + getInactiveInstancesSinceLastPos(range) : N;
+    public double getN(Range range, double avgCoveredSpace) {
+        double n = range != null ? N + getInactiveInstancesSinceLastPos(range, avgCoveredSpace) : N;
         assert n >= 0.0;
         return n;
     }
@@ -69,8 +69,8 @@ public class SampleSpace implements Writable {
         N *= alpha;
     }
 
-    public void countSkippedInstances(Range range) {
-        N += getInactiveInstancesSinceLastPos(range);
+    public void countSkippedInstances(Range range, double avgCoveredSpace) {
+        N += getInactiveInstancesSinceLastPos(range, avgCoveredSpace);
     }
 
     public void count() {
@@ -81,7 +81,7 @@ public class SampleSpace implements Writable {
         lastPosition = absoluteRange.getEnd();
     }
 
-    public long getInactiveInstancesSinceLastPos(Range absoluteRange) {
+    public double getInactiveInstancesSinceLastPos(Range absoluteRange, double avgCoveredSpace) {
         if(absoluteRange == null || lastPosition == null)
             return 0;
 
@@ -91,7 +91,7 @@ public class SampleSpace implements Writable {
             return 0;
         }
 
-        return x / absoluteRange.length();
+        return x / avgCoveredSpace;
     }
 
     @Override
@@ -116,7 +116,7 @@ public class SampleSpace implements Writable {
     }
 
     public String toString(Range r) {
-        return "N:" + getN(r) + " lastPosition:" + (lastPosition != null ? lastPosition : "X");
+        return "N:" + getN(r, r.length()) + " lastPosition:" + (lastPosition != null ? lastPosition : "X");
     }
 
     public String toString() {

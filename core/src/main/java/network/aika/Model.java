@@ -221,8 +221,10 @@ public class Model implements Writable {
         suspensionCallback.open();
     }
 
-    public void close() throws IOException {
-        suspensionCallback.saveIndex(this);
+    public void close(boolean store) throws IOException {
+        if(store)
+            suspensionCallback.saveIndex(this);
+
         suspensionCallback.close();
     }
 
