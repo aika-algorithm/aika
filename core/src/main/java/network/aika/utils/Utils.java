@@ -85,11 +85,15 @@ public class Utils {
         return Math.abs(x) < tolerance;
     }
 
-    public static String doubleToString(double x) {
+    public static String doubleToString(Double x) {
+        if(x == null)
+            return "--";
         return doubleToString(x, "#.######");
     }
 
-    public static String doubleToString(double d, String format) {
+    public static String doubleToString(Double d, String format) {
+        if(d == null)
+            return "--";
         DecimalFormat formatter = new DecimalFormat(format, DecimalFormatSymbols.getInstance(Locale.ENGLISH));
         formatter.setRoundingMode( RoundingMode.DOWN );
         return formatter.format(d);
