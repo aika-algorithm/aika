@@ -42,9 +42,9 @@ public class AverageCoveredSpace implements Writable {
         coveredSpace += length(r);
     }
 
-    public double getAvgCoveredSpace() {
+    public Double getAvgCoveredSpace() {
         if(n == 0)
-            return 0;
+            return null;
 
         return (double) coveredSpace / (double) n;
     }

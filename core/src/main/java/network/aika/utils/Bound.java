@@ -9,7 +9,7 @@ public enum Bound {
     public static double BETA_THRESHOLD = 0.95;
 
     public double probability(double f, double n) {
-        assert n > 0.0;
+        assert n > 0.0 && Double.isFinite(n);
 
         BetaDistribution dist;
 

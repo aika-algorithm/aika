@@ -142,9 +142,11 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
     public Double getAvgCoveredSpaceFromTemplate(Range absoluteRange) {
         PatternNeuron tn = getTemplate();
 
-        return tn != null ?
-                tn.getAverageCoveredSpace().getAvgCoveredSpace() :
-                length(absoluteRange);
+        Double result = null;
+        if(tn != null)
+            result = tn.getAverageCoveredSpace().getAvgCoveredSpace();
+
+        return result != null ? result : length(absoluteRange);
     }
 
     public void applyMovingAverage(double alpha) {
