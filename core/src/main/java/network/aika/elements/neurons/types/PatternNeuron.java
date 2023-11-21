@@ -207,6 +207,6 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
         sampleSpace = SampleSpace.read(in, m);
 
         if(in.readBoolean())
-            averageCoveredSpace.readFields(in, m);
+            averageCoveredSpace = AverageCoveredSpace.read(in, m);
     }
 }

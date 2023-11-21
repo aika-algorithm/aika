@@ -98,7 +98,7 @@ public class BeforeRelation extends Relation {
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
         relDirection = in.readBoolean() ? INPUT : OUTPUT;
-        offsetRange.read(in, m);
+        offsetRange = Range.read(in, m);
     }
 
     @Override
