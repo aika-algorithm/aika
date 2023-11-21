@@ -51,13 +51,14 @@ public class SampleSpace implements Writable {
     }
 
     public double getN(Range range, PatternNeuron pn) {
+        if(range == null)
+            return N;
+
         Double avgCoveredSpace = pn != null ?
                 pn.getAvgCoveredSpaceFromTemplate(range) :
-                length(range);
+                range.length();
 
-        double n = range != null ? N + getInactiveInstancesSinceLastPos(range, avgCoveredSpace) : N;
-        assert n >= 0.0;
-        return n;
+        return N + getInactiveInstancesSinceLastPos(range, avgCoveredSpace);
     }
 
     public void setN(int N) {
