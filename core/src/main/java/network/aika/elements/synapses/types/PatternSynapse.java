@@ -72,6 +72,25 @@ public class PatternSynapse extends ConjunctiveSynapse<
 
     protected SampleSpace sampleSpace = new SampleSpace();
 
+
+    protected boolean isPropagable(BindingActivation act) {
+        return true;
+    }
+
+    public void setPropagable(boolean propagable) {
+    }
+
+    public boolean isPropagable() {
+        return true;
+    }
+
+    @Override
+    public void link() {
+        super.link();
+        // Pattern Synapses always need to be propagable because their inputs may depend on each other.
+        getInput().updatePropagable(output, true);
+    }
+
     @Override
     public PatternLink createLink(BindingActivation input, PatternActivation output) {
         checkAlreadyLinkedToPattern(input);

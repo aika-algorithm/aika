@@ -41,7 +41,7 @@ public class ConjunctiveSynapsePropertyPanel<E extends ConjunctiveSynapse> exten
         addConstant("isOptional", "" + s.isOptional());
         addConstant("Sum of Lower Weights (0):", doubleToString(s.getSumOfLowerWeights()[0], "#.######"));
         addConstant("Sum of Lower Weights (1):", doubleToString(s.getSumOfLowerWeights()[1], "#.######"));
-        addConstant("Sorting Weight:", "" + s.getSortingWeight());
+        addConstant("Sorting Weight:", "" + doubleToString(s.getSortingWeight(), "#.######"));
     }
 
     public static ConjunctiveSynapsePropertyPanel create(ConjunctiveSynapse s, Link ref) {

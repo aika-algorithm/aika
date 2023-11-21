@@ -26,6 +26,7 @@ import network.aika.elements.links.types.InhibitoryLink;
 import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.queue.activation.LinkingOut;
+import network.aika.queue.activation.Propagate;
 
 import java.util.List;
 import java.util.Objects;
@@ -47,6 +48,7 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
     @Override
     public void addLinkingSteps() {
         LinkingOut.add(this, REGULAR);
+        Propagate.add(this, REGULAR);
     }
 
     @Override
