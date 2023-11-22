@@ -90,7 +90,8 @@ public class TargetInput {
     public void initTargetInput() {
         targetInput = new PatternNeuron(model)
                 .setLabel(label + " " + TARGET_INPUT_LABEL)
-                .setTargetNet(targetInputNetTarget);
+                .setTargetNet(targetInputNetTarget)
+                .setPersistent(true);
 
         targetInput.makeAbstract()
                 .setWeight(1.0)
