@@ -35,8 +35,9 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
-import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
+import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
+import static network.aika.meta.LabelUtil.*;
 import static network.aika.meta.NetworkMotifs.*;
 import static network.aika.meta.TargetInput.TARGET_INPUT_LABEL;
 
@@ -63,9 +64,9 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     protected PatternNeuron hintInputPN;
 
-    protected InhibitoryNeuron outerTsBeginInhibitoryN;
+    protected InhibitoryNeuron tsBeginInhibitoryN;
 
-    protected InhibitoryNeuron outerTsEndInhibitoryN;
+    protected InhibitoryNeuron tsEndInhibitoryN;
 
 
     public TypedTextSectionModel(EntityModel entityModel) {
@@ -117,7 +118,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 bindingNetTarget
         );
         tsHeadlineBN.makeAbstract()
-                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                .setWeight(getDefaultInputCategorySynapseWeight(tsHeadlineBN.getType()))
                 .adjustBias();
 
         addRelation(
@@ -171,7 +172,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
         hintBN = addBindingNeuron(
                 hintInputPN,
-                getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + " Hint"),
+                getAbstractLabel(BINDING, TEXT_SECTION_LABEL + " Hint"),
                 10.0,
                 bindingNetTarget
         );
@@ -205,30 +206,31 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
     }
 
     private void initTextSection() {
-        outerTsBeginInhibitoryN = new InhibitoryNeuron(model)
-                .setLabel("Outer Begin " + TEXT_SECTION_LABEL)
+        tsBeginInhibitoryN = new InhibitoryNeuron(model)
+                .setLabel("Begin " + TEXT_SECTION_LABEL)
                 .setPersistent(true);
 
-        addOuterInhibitoryLoop(
+        addInhibitoryLoop(
                 beginBN,
-                outerTsBeginInhibitoryN,
+                tsBeginInhibitoryN,
                 NEG_MARGIN_TS * -beginBN.getTargetNet()
         );
 
-        outerTsEndInhibitoryN = new InhibitoryNeuron(model)
-                .setLabel("Outer End " + TEXT_SECTION_LABEL)
+        tsEndInhibitoryN = new InhibitoryNeuron(model)
+                .setLabel("End " + TEXT_SECTION_LABEL)
                 .setPersistent(true);
 
-        addOuterInhibitoryLoop(
+        addInhibitoryLoop(
                 endBN,
-                outerTsEndInhibitoryN,
+                tsEndInhibitoryN,
                 NEG_MARGIN_TS * -endBN.getTargetNet()
         );
     }
 
     public PatternNeuron getHeadlinePattern(String tsType) {
         return getModel().getInputNeuron(
-                getAbstractPatternLabel(
+                getAbstractLabel(
+                        PATTERN,
                         getHeadlineLabel(tsType)
                 ),
                 headlineEntity.entityPatternN
@@ -251,7 +253,8 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     public PatternNeuron getTextSectionPattern(String tsType) {
         return getModel().getInputNeuron(
-                getAbstractPatternLabel(
+                getAbstractLabel(
+                        PATTERN,
                         getTextSectionLabel(tsType)
                 ),
                 textSectionPatternN
@@ -302,8 +305,8 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
         headlineEntity.write(out);
         out.writeLong(hintBN.getId());
-        out.writeLong(outerTsBeginInhibitoryN.getId());
-        out.writeLong(outerTsEndInhibitoryN.getId());
+        out.writeLong(tsBeginInhibitoryN.getId());
+        out.writeLong(tsEndInhibitoryN.getId());
     }
 
     @Override
@@ -314,7 +317,7 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         headlineEntity.readFields(in, m);
 
         hintBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        outerTsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        outerTsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        tsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        tsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

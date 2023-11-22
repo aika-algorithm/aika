@@ -16,6 +16,7 @@
  */
 package network.aika.meta;
 
+import network.aika.elements.Type;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
@@ -36,10 +37,19 @@ public class NetworkMotifs {
 
     public static double PASSIVE_SYNAPSE_WEIGHT = 0.0;
 
-    public static double DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT = 5.0;
-
+    public static double DEFAULT_BINDING_INPUT_CATEGORY_SYNAPSE_WEIGHT = 5.0;
+    public static double DEFAULT_PATTERN_INPUT_CATEGORY_SYNAPSE_WEIGHT = 5.0;
+    public static double DEFAULT_INHIBITORY_INPUT_CATEGORY_SYNAPSE_WEIGHT = 1.0;
 
     public static double SAME_OBJECT_MARGIN = 0.15;
+
+    public static double getDefaultInputCategorySynapseWeight(Type type) {
+        return switch (type) {
+            case BINDING -> DEFAULT_BINDING_INPUT_CATEGORY_SYNAPSE_WEIGHT;
+            case PATTERN -> DEFAULT_PATTERN_INPUT_CATEGORY_SYNAPSE_WEIGHT;
+            case INHIBITORY -> DEFAULT_INHIBITORY_INPUT_CATEGORY_SYNAPSE_WEIGHT;
+        };
+    }
 
     public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double netTarget) {
         BindingNeuron bn = new BindingNeuron(input.getModel())
@@ -57,7 +67,7 @@ public class NetworkMotifs {
         return bn;
     }
 
-    public static void addOuterInhibitoryLoop(BindingNeuron bn, InhibitoryNeuron in, double weight) {
+    public static void addInhibitoryLoop(BindingNeuron bn, InhibitoryNeuron in, double weight) {
         new InhibitorySynapse()
                 .setWeight(1.0)
                 .link(bn, in);

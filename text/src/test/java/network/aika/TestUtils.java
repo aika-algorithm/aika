@@ -48,7 +48,7 @@ public class TestUtils {
             return null;
 
         for(BindingNeuron bn: bns) {
-            NetworkMotifs.addOuterInhibitoryLoop(bn, inhibN, -20.0);
+            NetworkMotifs.addInhibitoryLoop(bn, inhibN, -20.0);
         }
         return inhibN;
     }

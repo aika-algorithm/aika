@@ -30,7 +30,7 @@ import network.aika.text.Range;
 import static network.aika.TestUtils.initPatternLoop;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.meta.NetworkMotifs.addOuterInhibitoryLoop;
+import static network.aika.meta.NetworkMotifs.addInhibitoryLoop;
 
 
 /**
@@ -190,8 +190,8 @@ public class TestHelper {
 
         PatternNeuron theDogP = initPatternLoop(m, "the dog", theBN, dogBN);
 
-        addOuterInhibitoryLoop(theBN, inhibNThe, -10.0);
-        addOuterInhibitoryLoop(theBN, new InhibitoryNeuron(m).setLabel("I-the (tg)"), -10.0);
+        addInhibitoryLoop(theBN, inhibNThe, -10.0);
+        addInhibitoryLoop(theBN, new InhibitoryNeuron(m).setLabel("I-the (tg)"), -10.0);
 
         theDogP.setBias(3.0);
 

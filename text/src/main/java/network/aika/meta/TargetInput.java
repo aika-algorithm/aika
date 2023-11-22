@@ -121,7 +121,7 @@ public class TargetInput {
                 bindingNetTarget
         );
         bn.makeAbstract()
-                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                .setWeight(getDefaultInputCategorySynapseWeight(bn.getType()))
                 .adjustBias();
 
         addPositiveFeedbackLoop(

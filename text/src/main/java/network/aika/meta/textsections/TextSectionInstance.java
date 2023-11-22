@@ -31,7 +31,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.meta.NetworkMotifs.DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT;
+import static network.aika.meta.NetworkMotifs.getDefaultInputCategorySynapseWeight;
 import static network.aika.meta.textsections.TextSectionModel.TEXT_SECTION_LABEL;
 import static network.aika.meta.textsections.TypedTextSectionModel.*;
 
@@ -78,7 +78,7 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
 
             if(isPartOfHeadline(tAct) || isHint(tAct)) {
                 iAct.getNeuron().makeAbstract()
-                        .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                        .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
                         .adjustBias();
             }
         });

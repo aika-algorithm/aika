@@ -33,10 +33,11 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
-import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
+import static network.aika.meta.LabelUtil.*;
 import static network.aika.meta.NetworkMotifs.*;
 
 /**
@@ -46,9 +47,6 @@ import static network.aika.meta.NetworkMotifs.*;
 public class TextSectionModel implements Writable {
 
     private static final Logger log = LoggerFactory.getLogger(TextSectionModel.class);
-
-    protected static double NEG_MARGIN_TS_BEGIN = 1.1;
-    protected static double NEG_MARGIN_TS_END = 1.1;
 
     protected static double NEG_MARGIN_TS = 1.1;
 
@@ -140,26 +138,26 @@ public class TextSectionModel implements Writable {
                 .setTargetNet(5.0)
                 .setPersistent(true);
 
-        textSectionPatternN = PatternNeuron.create(model, getAbstractPatternLabel(TEXT_SECTION_LABEL))
+        textSectionPatternN = PatternNeuron.create(model, getAbstractLabel(PATTERN, TEXT_SECTION_LABEL))
                 .setBias(0.7)
                 .setTargetNet(0.7);
 
         textSectionPatternN.makeAbstract()
-                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                .setWeight(getDefaultInputCategorySynapseWeight(textSectionPatternN.getType()))
                 .adjustBias();
 
         beginInputPN = createTextSectionInput("Begin");
-        beginBN = addBindingNeuron(beginInputPN, getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + "-Begin"), 10.0, bindingNetTarget);
+        beginBN = addBindingNeuron(beginInputPN, getAbstractLabel(BINDING, TEXT_SECTION_LABEL + "-Begin"), 10.0, bindingNetTarget);
         beginBN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         endInputPN = createTextSectionInput("End");
-        endBN = addBindingNeuron(endInputPN, getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + "-End"), 10.0, bindingNetTarget);
+        endBN = addBindingNeuron(endInputPN, getAbstractLabel(BINDING, TEXT_SECTION_LABEL + "-End"), 10.0, bindingNetTarget);
         endBN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
         beginEndInputPN = createTextSectionInput("Begin/End");
-        beginEndBN = addBindingNeuron(beginEndInputPN, getAbstractBindingNeuronLabel(TEXT_SECTION_LABEL + "-BeginEnd"), 10.0, bindingNetTarget);
+        beginEndBN = addBindingNeuron(beginEndInputPN, getAbstractLabel(BINDING, TEXT_SECTION_LABEL + "-BeginEnd"), 10.0, bindingNetTarget);
         beginEndBN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 

@@ -21,7 +21,6 @@ import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.meta.TargetInput;
@@ -33,7 +32,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.meta.NetworkMotifs.DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT;
+import static network.aika.meta.NetworkMotifs.getDefaultInputCategorySynapseWeight;
 import static network.aika.meta.entities.EntityModel.ENTITY_LABEL;
 
 /**
@@ -75,7 +74,7 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(tAct, iAct, label);
             iAct.getNeuron().makeAbstract()
-                    .setWeight(iAct instanceof ConjunctiveActivation<?> ? DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT : 1.0)
+                    .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
                     .adjustBias();
         });
 

@@ -38,8 +38,8 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.meta.LabelUtil.getAbstractBindingNeuronLabel;
-import static network.aika.meta.LabelUtil.getAbstractPatternLabel;
+import static network.aika.elements.Type.*;
+import static network.aika.meta.LabelUtil.getAbstractLabel;
 import static network.aika.meta.NetworkMotifs.*;
 
 /**
@@ -70,7 +70,7 @@ public class EntityModel implements TemplateModel, Writable {
 
     protected BindingNeuron entityBN;
 
-    protected InhibitoryNeuron outerInhibitoryN;
+    protected InhibitoryNeuron inhibitoryN;
 
     protected BindingNeuron targetInputBN;
 
@@ -95,26 +95,26 @@ public class EntityModel implements TemplateModel, Writable {
         targetInput.initTargetInput();
 
         entityPattern = new PatternNeuron(model)
-                .setLabel(getAbstractPatternLabel(ENTITY_LABEL))
+                .setLabel(getAbstractLabel(PATTERN, ENTITY_LABEL))
                 .setTargetNet(ENTITY_NET_TARGET)
                 .setBias(ENTITY_NET_TARGET)
                 .setPersistent(true);
 
         entityCategory = entityPattern.makeAbstract()
-                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                .setWeight(getDefaultInputCategorySynapseWeight(entityPattern.getType()))
                 .adjustBias()
                 .getInput()
                 .setPersistent(true);
 
         entityBN = addBindingNeuron(
                 phraseModel.getPatternNeuron(),
-                getAbstractBindingNeuronLabel(ENTITY_LABEL),
+                getAbstractLabel(BINDING, ENTITY_LABEL),
                 10.0,
                 BINDING_NET_TARGET
         );
 
         entityBN.makeAbstract()
-                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                .setWeight(getDefaultInputCategorySynapseWeight(entityBN.getType()))
                 .adjustBias();
 
         addPositiveFeedbackLoop(
@@ -126,16 +126,16 @@ public class EntityModel implements TemplateModel, Writable {
                 false
         );
 
-        outerInhibitoryN = new InhibitoryNeuron(model)
-                .setLabel("I")
+        inhibitoryN = new InhibitoryNeuron(model)
+                .setLabel(getAbstractLabel(INHIBITORY, ENTITY_LABEL))
                 .setPersistent(true);
 
-        outerInhibitoryN.makeAbstract()
+        inhibitoryN.makeAbstract()
                 .setWeight(1.0);
 
-        addOuterInhibitoryLoop(
+        addInhibitoryLoop(
                 entityBN,
-                outerInhibitoryN,
+                inhibitoryN,
                 NEG_MARGIN * -entityBN.getTargetNet()
         );
 

@@ -29,6 +29,7 @@ import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.types.PatternSynapse;
 import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.elements.synapses.Synapse;
+import network.aika.elements.Type;
 import network.aika.Document;
 
 import java.util.function.Predicate;
@@ -41,16 +42,12 @@ import static network.aika.enums.direction.Direction.INPUT;
  */
 public class LabelUtil {
 
-    public static String getAbstractPatternLabel(String placeholder) {
-        return "Abstract " + placeholder;
-    }
-
-    public static String getAbstractBindingNeuronLabel(String placeholder) {
+    public static String getAbstractLabel(Type t, String placeholder) {
         return "Abstract " + placeholder;
     }
 
     public static void generateTemplateInstanceLabels(Activation<?> act) {
-        Document doc = (Document) act.getDocument();
+        Document doc = act.getDocument();
         String actTxt = doc.getTextSegment(act.getTextReference().getCharRange());
         if(act instanceof BindingActivation) {
             if(act.getNeuron().getLabel() == null) {

@@ -192,7 +192,7 @@ public abstract class SequenceModel implements Writable {
                 2.5
         );
         bn.makeAbstract()
-                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                .setWeight(getDefaultInputCategorySynapseWeight(bn.getType()))
                 .adjustBias();
 
         addPositiveFeedbackLoop(
@@ -273,10 +273,10 @@ public abstract class SequenceModel implements Writable {
                 p.netTarget
         );
         bn.makeAbstract()
-                .setWeight(DEFAULT_INPUT_CATEGORY_SYNAPSE_WEIGHT)
+                .setWeight(getDefaultInputCategorySynapseWeight(bn.getType()))
                 .adjustBias();
 
-        addOuterInhibitoryLoop(
+        addInhibitoryLoop(
                 bn,
                 inhibitoryN,
                 getNegMargin(pos) * -bn.getTargetNet()
