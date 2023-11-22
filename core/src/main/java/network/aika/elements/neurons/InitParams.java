@@ -30,14 +30,10 @@ import java.io.IOException;
 public class InitParams implements Writable {
 
     double targetNet;
-    Double instanceTargetNet;
 
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeDouble(targetNet);
-        out.writeBoolean(instanceTargetNet != null);
-        if(instanceTargetNet != null)
-            out.writeDouble(instanceTargetNet);
     }
 
     public static InitParams read(DataInput in, Model m) throws Exception {
@@ -49,7 +45,5 @@ public class InitParams implements Writable {
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         targetNet = in.readDouble();
-        if(in.readBoolean())
-            instanceTargetNet = in.readDouble();
     }
 }
