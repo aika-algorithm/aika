@@ -25,9 +25,13 @@ import network.aika.enums.sign.Sign;
 import network.aika.Document;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
+import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.Objects;
 
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
@@ -36,7 +40,7 @@ import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
  *
  * @author Lukas Molzberger
  */
-public class Dictionary {
+public class Dictionary implements Writable {
 
     private static final Logger log = LoggerFactory.getLogger(Dictionary.class);
 
@@ -114,5 +118,15 @@ public class Dictionary {
                 n,
                 ref
         );
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeLong(inputToken.getId());
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        inputToken = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }
