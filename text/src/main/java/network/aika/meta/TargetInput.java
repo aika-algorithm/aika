@@ -45,7 +45,7 @@ public class TargetInput implements Writable {
 
     protected BindingNeuron targetInputBN;
 
-    protected double targetInputNetTarget = 5.0;
+    protected double targetInputNetTarget = 1.5;
 
     public double bindingNetTarget = 2.5;
 
@@ -100,11 +100,12 @@ public class TargetInput implements Writable {
     public void initTargetInput() {
         targetInput = new PatternNeuron(model)
                 .setLabel(label + " " + TARGET_INPUT_LABEL)
+                .setBias(targetInputNetTarget)
                 .setTargetNet(targetInputNetTarget)
                 .setPersistent(true);
 
         targetInput.makeAbstract()
-                .setWeight(1.0)
+                .setWeight(2.0)
                 .adjustBias()
                 .getInput();
     }

@@ -476,6 +476,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         out.writeBoolean(initParams != null);
         if(initParams != null)
             initParams.write(out);
+
+        out.writeBoolean(getProvider().isPersistent());
     }
 
     public static Neuron read(DataInput in, Model m) throws Exception {
@@ -519,6 +521,9 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
         if(in.readBoolean())
             initParams = InitParams.read(in, m);
+
+        if(in.readBoolean())
+            setPersistent(true);
     }
 
     @Override

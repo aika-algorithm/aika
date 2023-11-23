@@ -96,11 +96,16 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
         getPhraseModel().getPatternNeuron().setTemplateOnly(false);
 
         entityPatternN = lookupInstance(doc, entityModel.entityPattern);
+        entityPatternN.setPersistent(true);
+
         entityBN = lookupInstance(doc, entityModel.entityBN);
         entityBN.setPersistent(true);
 
         targetInputBN = lookupInstance(doc, entityModel.targetInputBN);
+        targetInputBN.setPersistent(true);
+
         targetInputPN = lookupInstance(doc, entityModel.targetInput.getTargetInput());
+        targetInputBN.setPersistent(true);
     }
 
     @Override

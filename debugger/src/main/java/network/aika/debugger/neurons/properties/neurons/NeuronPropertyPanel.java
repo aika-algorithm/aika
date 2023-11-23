@@ -50,6 +50,7 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
 
         addConstant("Is Template Only: ", "" + n.isTemplateOnly());
         addConstant("Is Modified: ", "" + n.isModified());
+        addConstant("Is Persistent: ", "" + n.getProvider().isPersistent());
     }
 
     public static NeuronPropertyPanel create(Neuron n, Activation ref) {

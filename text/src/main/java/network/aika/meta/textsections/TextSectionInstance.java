@@ -97,7 +97,9 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
         );
 
         headlineTargetInputPN = lookupInstance(doc, tsModel.headlineEntity.targetInputPN);
+        headlineTargetInputPN.setPersistent(true);
         hintInputPN = lookupInstance(doc, tsModel.hintInputPN);
+        hintInputPN.setPersistent(true);
     }
 
     private void generateLabel(Activation tAct, Activation iAct, String label) {
