@@ -58,8 +58,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
     protected BindingNeuron tsHeadlineBN;
 
-//    protected BindingNeuron tsTypeBN;
-
     protected BindingNeuron hintBN;
 
     protected PatternNeuron hintInputPN;
@@ -93,7 +91,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         tsHeadlineBN.setTemplateOnly(templateOnly, true);
         beginBN.setTemplateOnly(templateOnly, true);
         endBN.setTemplateOnly(templateOnly, true);
-        beginEndBN.setTemplateOnly(templateOnly, true);
         hintBN.setTemplateOnly(templateOnly, true);
     }
 
@@ -124,15 +121,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         addRelation(
                 tsHeadlineBN,
                 beginBN,
-                phraseModel.relPT,
-                5.0,
-                10.0,
-                false
-        );
-
-        addRelation(
-                tsHeadlineBN,
-                beginEndBN,
                 phraseModel.relPT,
                 5.0,
                 10.0,
@@ -190,7 +178,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         );
 
         sectionHintRelations(beginBN, relationPT);
-        sectionHintRelations(beginEndBN, relationPT);
         sectionHintRelations(endBN, relationNT);
     }
 
@@ -265,7 +252,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         setTemplateOnly(false);
         phraseModel.getPatternNeuron().setTemplateOnly(true);
         beginInputPN.setTemplateOnly(true);
-        beginEndInputPN.setTemplateOnly(true);
         endInputPN.setTemplateOnly(true);
     }
 
@@ -296,7 +282,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
         doc.addToken(beginInputPN, textSectionGR);
         doc.addToken(endInputPN, textSectionGR);
-        doc.addToken(beginEndInputPN, textSectionGR);
     }
 
     @Override
@@ -304,7 +289,10 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         super.write(out);
 
         headlineEntity.write(out);
+
+        out.writeLong(tsHeadlineBN.getId());
         out.writeLong(hintBN.getId());
+        out.writeLong(hintInputPN.getId());
         out.writeLong(tsBeginInhibitoryN.getId());
         out.writeLong(tsEndInhibitoryN.getId());
     }
@@ -316,7 +304,9 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         headlineEntity = new EntityInstance(entityModel);
         headlineEntity.readFields(in, m);
 
+        tsHeadlineBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         hintBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        hintInputPN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         tsBeginInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         tsEndInhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }

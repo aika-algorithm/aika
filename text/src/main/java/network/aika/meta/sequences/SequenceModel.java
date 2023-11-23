@@ -308,6 +308,7 @@ public abstract class SequenceModel implements Writable {
         out.writeLong(inhibitoryN.getId());
         out.writeLong(sequencePatternN.getId());
         out.writeLong(primaryBN.getId());
+        out.writeLong(subPhraseBN.getId());
     }
 
     @Override
@@ -318,5 +319,6 @@ public abstract class SequenceModel implements Writable {
         inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         sequencePatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         primaryBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        subPhraseBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

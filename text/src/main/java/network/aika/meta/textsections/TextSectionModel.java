@@ -76,10 +76,6 @@ public class TextSectionModel implements Writable {
 
     protected PatternNeuron endInputPN;
 
-    protected BindingNeuron beginEndBN;
-
-    protected PatternNeuron beginEndInputPN;
-
     protected double bindingNetTarget = 2.5;
 
     public TextSectionModel(PhraseModel phraseModel) {
@@ -93,10 +89,6 @@ public class TextSectionModel implements Writable {
 
     public PatternNeuron getEndInputPN() {
         return endInputPN;
-    }
-
-    public PatternNeuron getBeginEndInputPN() {
-        return beginEndInputPN;
     }
 
     public void initStaticNeurons() {
@@ -156,11 +148,6 @@ public class TextSectionModel implements Writable {
         endBN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT);
 
-        beginEndInputPN = createTextSectionInput("Begin/End");
-        beginEndBN = addBindingNeuron(beginEndInputPN, getAbstractLabel(BINDING, TEXT_SECTION_LABEL + "-BeginEnd"), 10.0, bindingNetTarget);
-        beginEndBN.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
-
         addRelation(
                 beginBN,
                 endBN,
@@ -181,15 +168,6 @@ public class TextSectionModel implements Writable {
 
         addPositiveFeedbackLoop(
                 endBN,
-                textSectionPatternN,
-                2.5,
-                0.0,
-                false,
-                false
-        );
-
-        addPositiveFeedbackLoop(
-                beginEndBN,
                 textSectionPatternN,
                 2.5,
                 0.0,
@@ -222,9 +200,10 @@ public class TextSectionModel implements Writable {
         out.writeLong(relationPT.getId());
         out.writeLong(relationNT.getId());
         out.writeLong(textSectionPatternN.getId());
+        out.writeLong(beginInputPN.getId());
         out.writeLong(beginBN.getId());
+        out.writeLong(endInputPN.getId());
         out.writeLong(endBN.getId());
-        out.writeLong(beginEndBN.getId());
     }
 
     @Override
@@ -233,8 +212,9 @@ public class TextSectionModel implements Writable {
         relationPT = m.lookupNeuronProvider(in.readLong()).getNeuron();
         relationNT = m.lookupNeuronProvider(in.readLong()).getNeuron();
         textSectionPatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        beginInputPN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         beginBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        endInputPN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         endBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        beginEndBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

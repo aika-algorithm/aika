@@ -196,6 +196,7 @@ public class EntityModel implements TemplateModel, Writable {
         out.writeLong(entityCategory.getId());
         out.writeLong(entityPattern.getId());
         out.writeLong(entityBN.getId());
+        targetInput.write(out);
         out.writeLong(targetInputBN.getId());
         out.writeLong(targetInputRelation.getId());
     }
@@ -205,6 +206,7 @@ public class EntityModel implements TemplateModel, Writable {
         entityCategory = m.lookupNeuronProvider(in.readLong()).getNeuron();
         entityPattern = m.lookupNeuronProvider(in.readLong()).getNeuron();
         entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        targetInput = TargetInput.read(in, m);
         targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         targetInputRelation = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }

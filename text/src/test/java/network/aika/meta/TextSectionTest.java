@@ -142,12 +142,13 @@ public class TextSectionTest extends TrainingParser<TestContext> {
                                 context.getTextSectionType()
                         );
             }
-            if(context.getCandidateRanges() != null) {
+/*            if(context.getCandidateRanges() != null) {
                 context.getCandidateRanges()
                         .forEach(gr ->
                                 doc.addToken(textSectionModel.getBeginEndInputPN(), gr)
                         );
             }
+ */
         }
     }
 

@@ -17,11 +17,17 @@
 package network.aika.meta;
 
 import network.aika.Model;
+import network.aika.TemplateModel;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
 import network.aika.Document;
 import network.aika.elements.neurons.types.PatternNeuron;
+import network.aika.utils.Writable;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import static network.aika.meta.NetworkMotifs.*;
 
@@ -29,7 +35,7 @@ import static network.aika.meta.NetworkMotifs.*;
  *
  * @author Lukas Molzberger
  */
-public class TargetInput {
+public class TargetInput implements Writable {
 
     public static String TARGET_INPUT_LABEL = "Target Input";
 
@@ -45,8 +51,12 @@ public class TargetInput {
 
     private String label;
 
-    public TargetInput(Model model, String label) {
+    private TargetInput(Model model) {
         this.model = model;
+    }
+
+    public TargetInput(Model model, String label) {
+        this(model);
         this.label = label;
     }
 
@@ -148,5 +158,26 @@ public class TargetInput {
         model.registerLabel(n, targetInput);
 
         return n;
+    }
+
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeUTF(label);
+        out.writeLong(targetInput.getId());
+        out.writeLong(targetInputBN.getId());
+    }
+
+    public static TargetInput read(DataInput in, Model m) throws Exception {
+        TargetInput ti = new TargetInput(m);
+        ti.readFields(in, m);
+        return ti;
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        label = in.readUTF();
+        targetInput = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }
