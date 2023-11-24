@@ -64,16 +64,11 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     }
 
     @Override
-    public PatternActivation getBindingSignal(Transition t) {
-        return getBSSlot(t)
-                .getBindingSignal();
+    public BindingSignalSlot[] getBindingSignalSlots() {
+        return new BindingSignalSlot[] {sameBS, inputBS};
     }
 
     @Override
-    public void registerBindingSignalSlot(ConjunctiveLink l) {
-        l.retrieveAndConnectBindingSignals(this, true);
-    }
-
     public BindingSignalSlot getBSSlot(Transition t) {
         return switch (t) {
             case SAME -> sameBS;

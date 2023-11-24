@@ -59,9 +59,6 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
             l.disableDummyLink();
     }
 
-    public void registerBindingSignalSlot(ConjunctiveLink l) {
-    }
-
     public SynapseOutputSlot registerInputSlot(ConjunctiveSynapse syn) {
         if(inputSlots == null)
             inputSlots = new TreeMap<>();

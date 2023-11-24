@@ -18,6 +18,7 @@ package network.aika.elements.activations.types;
 
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
 
 
@@ -31,6 +32,11 @@ public class LatentRelationActivation extends BindingActivation {
 
     public LatentRelationActivation(int id, Document doc, LatentRelationNeuron n) {
         super(id, doc, n);
+    }
+
+    @Override
+    public BindingSignalSlot[] getBindingSignalSlots() {
+        return new BindingSignalSlot[0];
     }
 
     public Activation getFromAct() {

@@ -60,11 +60,8 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     public void link() {
         super.link();
 
-        if (input != null) {
+        if (input != null)
             synInputSlot = input.registerOutputSlot(synapse);
-
-            output.registerBindingSignalSlot(this);
-        }
 
         synOutputSlot = output.registerInputSlot(synapse);
 
@@ -108,7 +105,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
             updateConnected(getInputValueLink(), state, true);
             //updateConnected(outputSlotFL, state, true);
 
-            retrieveAndConnectBindingSignals(output, state);
+            retrieveAndConnectBindingSignals(state);
         } else {
           //  updateConnected(inputSlotFL, state, true);
         }

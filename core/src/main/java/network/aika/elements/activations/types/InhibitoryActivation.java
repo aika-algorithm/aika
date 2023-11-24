@@ -17,6 +17,7 @@
 package network.aika.elements.activations.types;
 
 import network.aika.Document;
+import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.DisjunctiveActivation;
 import network.aika.elements.links.*;
@@ -25,14 +26,16 @@ import network.aika.elements.links.types.InhibitoryCategoryLink;
 import network.aika.elements.links.types.InhibitoryLink;
 import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
-import network.aika.queue.activation.LinkingOut;
-import network.aika.queue.activation.Propagate;
+import network.aika.enums.LinkingMode;
+import network.aika.enums.Transition;
+import network.aika.queue.activation.*;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import static network.aika.enums.LinkingMode.REGULAR;
+import static network.aika.enums.Transition.INPUT;
 
 
 /**
@@ -41,19 +44,48 @@ import static network.aika.enums.LinkingMode.REGULAR;
  */
 public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron> {
 
+    private BindingSignalSlot inputBS = new BindingSignalSlot(INPUT);
+
     public InhibitoryActivation(int id, Document doc, InhibitoryNeuron neuron) {
         super(id, doc, neuron);
+
+        inputBS.addListener((t, oBS, nBS, state) -> {
+            if(state) {
+                BSLinkingIn.add(this, nBS);
+                if(isFired()) {
+                    BSLinkingOut.add(this, nBS, LinkingMode.REGULAR);
+                }
+            }
+        });
     }
 
     @Override
     public void addLinkingSteps() {
+        getBindingSignals()
+                .forEach(bs ->
+                        BSLinkingOut.add(this, bs, LinkingMode.REGULAR)
+                );
+
         LinkingOut.add(this, REGULAR);
         Propagate.add(this, REGULAR);
     }
 
     @Override
+    public BindingSignalSlot[] getBindingSignalSlots() {
+        return new BindingSignalSlot[] {inputBS};
+    }
+
+    @Override
+    public BindingSignalSlot getBSSlot(Transition t) {
+        return switch (t) {
+            case INPUT -> inputBS;
+            default -> null;
+        };
+    }
+
+    @Override
     public boolean isActiveTemplateInstance() {
-        return true;
+        return inputBS.isSet();
     }
 
     public Stream<InhibitoryLink> getAllInhibitoryLinks() {

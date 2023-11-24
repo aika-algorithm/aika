@@ -55,7 +55,9 @@ public class LatentLinking extends ElementStep<Activation> {
         n.getOutputSynapsesAsStream(act.getDocument())
                 .filter(s ->
                         s.getLinkingMode() == mode
-                ).forEach(sourceSyn ->
+                )
+                .filter(Synapse::allowDeprecatedLinking)
+                .forEach(sourceSyn ->
                         expandTargetSynapses(act, sourceSyn)
                 );
     }
@@ -68,6 +70,7 @@ public class LatentLinking extends ElementStep<Activation> {
 
         targetNeuron.getInputSynapsesAsStream()
         .filter(ts -> sourceSyn != ts)
+        .filter(Synapse::allowDeprecatedLinking)
         .filter(ts -> ts.isLinkingAllowed(true))
         .filter(ts -> getNetUB(sourceSyn, ts) > 0.0)
         .forEach(ts ->

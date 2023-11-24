@@ -20,6 +20,7 @@ import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.BindingActivation;
+import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.text.TextReference;
 
@@ -89,6 +90,8 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
             return new PatternActivationPropertyPanel((PatternActivation) act);
         } else if(act instanceof BindingActivation) {
             return BindingActivationPropertyPanel.create((BindingActivation) act);
+        } else if(act instanceof InhibitoryActivation) {
+            return InhibitoryActivationPropertyPanel.create((InhibitoryActivation) act);
         }
 
         return new ActivationPropertyPanel(act);

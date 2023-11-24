@@ -58,6 +58,7 @@ public class LinkingIn extends ElementStep<Link> {
     public void linkAndPropagateIn(Link l) {
         Neuron<?, ?> n = l.getOutput().getNeuron();
         n.getInputSynapsesAsStream()
+                .filter(Synapse::allowDeprecatedLinking)
                 .filter(targetSyn -> targetSyn != l.getSynapse())
                 .forEach(targetSyn ->
                     linkIncoming(l, targetSyn)

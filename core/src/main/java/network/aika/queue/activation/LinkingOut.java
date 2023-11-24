@@ -65,6 +65,7 @@ public class LinkingOut extends ElementStep<Activation> {
                 .filter(s ->
                         s.getLinkingMode() == mode
                 )
+                .filter(Synapse::allowDeprecatedLinking)
                 .toList()
                 .forEach(s ->
                         linkOutgoing(s, act)

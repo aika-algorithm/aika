@@ -24,7 +24,8 @@ import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
 import network.aika.elements.activations.BindingSignalSlot;
-import network.aika.elements.activations.ConjunctiveActivation;
+import network.aika.elements.activations.types.PatternActivation;
+import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.queue.activation.LatentLinking;
@@ -229,20 +230,29 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void link() {
-        if(getInput() != null)
+        if(getInput() != null) {
             linkInput();
+            retrieveAndConnectBindingSignals(true);
+        }
 
         if(getOutput() != null)
             linkOutput();
     }
 
-    public void retrieveAndConnectBindingSignals(ConjunctiveActivation oAct, boolean state) {
+    public void retrieveAndConnectBindingSignals(boolean state) {
+        if(output.getBindingSignalSlots().length == 0)
+            return;
+
         retrieveBindingSignals(this, synapse.getTransition())
-                .forEach((t, bs) -> {
-                    BindingSignalSlot bsSlot = oAct.getBSSlot(t);
-                    if(bsSlot != null)
-                        bsSlot.connectBindingSignal(bs, state);
-                });
+                .forEach((t, bs) ->
+                    propagateBindingSignal(bs, t, state)
+                );
+    }
+
+    private void propagateBindingSignal(PatternActivation bs, Transition t, boolean state) {
+        BindingSignalSlot bsSlot = output.getBSSlot(t);
+        if(bsSlot != null)
+            bsSlot.connectBindingSignal(bs, state);
     }
 
     public FieldOutput getWeightedInput() {

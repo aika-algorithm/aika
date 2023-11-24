@@ -26,8 +26,8 @@ import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.Type.*;
+import static network.aika.enums.LinkingMode.REGULAR;
 import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.LinkingMode.FEEDBACK;
 import static network.aika.enums.Transition.SAME;
 import static network.aika.enums.direction.Direction.OUTPUT;
 
@@ -40,7 +40,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
         outputType = BINDING,
         transition = INPUT,
         forbidden = SAME,
-        linkingMode = FEEDBACK
+        linkingMode = REGULAR
 )
 public class NegativeFeedbackSynapse extends Synapse<
         NegativeFeedbackSynapse,
@@ -51,6 +51,11 @@ public class NegativeFeedbackSynapse extends Synapse<
         BindingActivation
         >
 {
+
+    @Override
+    public boolean allowDeprecatedLinking() {
+        return false;
+    }
 
     @Override
     public double[] getSumOfLowerWeights() {

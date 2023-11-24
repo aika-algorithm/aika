@@ -29,16 +29,14 @@ import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.enums.LinkingMode;
 import network.aika.enums.Transition;
-import network.aika.queue.activation.LatentLinking;
-import network.aika.queue.activation.Propagate;
+import network.aika.queue.activation.*;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
-import network.aika.queue.activation.Counting;
-import network.aika.queue.activation.LinkingOut;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -143,6 +141,17 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return null;
     }
 
+    public BindingSignalSlot[] getBindingSignalSlots() {
+        return new BindingSignalSlot[0];
+    }
+
+    public Stream<PatternActivation> getBindingSignals() {
+        return Arrays.stream(getBindingSignalSlots())
+                .filter(Objects::nonNull)
+                .filter(BindingSignalSlot::isSet)
+                .map(BindingSignalSlot::getBindingSignal);
+    }
+
     public SynapseInputSlot registerOutputSlot(Synapse syn) {
         if(outputSlots == null)
             outputSlots = new TreeMap<>();
@@ -185,6 +194,12 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void addLinkingSteps() {
+        getBindingSignals()
+                .forEach(bs -> {
+                    BSLinkingOut.add(this, bs, LinkingMode.REGULAR);
+                    BSLatentLinking.add(this, bs, REGULAR);
+                });
+
         LinkingOut.add(this, REGULAR);
         LatentLinking.add(this, REGULAR);
         Propagate.add(this, REGULAR);
@@ -194,7 +209,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public PatternActivation getBindingSignal(Transition t) {
-        return null;
+        BindingSignalSlot slot = getBSSlot(t);
+        return slot != null ?
+                slot.getBindingSignal() :
+                null;
     }
 
     public boolean isNewInstance() {
