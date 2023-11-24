@@ -19,16 +19,15 @@ package network.aika.elements.activations.types;
 import network.aika.Document;
 import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.types.InputObjectLink;
 import network.aika.enums.LinkingMode;
 import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.BindingNeuron;
-import network.aika.queue.activation.BSLatentLinking;
-import network.aika.queue.activation.BSLinkingIn;
-import network.aika.queue.activation.BSLinkingOut;
+import network.aika.queue.activation.LatentLinking;
+import network.aika.queue.activation.LinkingIn;
+import network.aika.queue.activation.LinkingOut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,11 +53,19 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
         sameBS.addListener((t, oBS, nBS, state) -> {
             if(state) {
-                BSLinkingIn.add(this, nBS);
-                if(isFired()) {
-                    BSLinkingOut.add(this, nBS, LinkingMode.REGULAR);
-                    BSLatentLinking.add(this, nBS, LinkingMode.REGULAR);
-                }
+                LinkingIn.add(this, nBS);
+
+                LinkingMode lm = isFired() ?
+                        LinkingMode.REGULAR :
+                        LinkingMode.FEEDBACK;
+
+                LinkingOut.add(this, nBS, lm);
+                LatentLinking.add(this, nBS, lm);
+
+                getOutputLinks()
+                        .forEach(l ->
+                                l.propagateBindingSignal(nBS, t, state)
+                        );
             }
         });
     }

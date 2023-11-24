@@ -28,14 +28,10 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
-import network.aika.queue.activation.LatentLinking;
-import network.aika.queue.activation.LinkingOut;
 import network.aika.queue.activation.Propagate;
-import network.aika.queue.link.LinkingIn;
 import network.aika.visitor.Visitor;
 
 import static network.aika.debugger.EventType.CREATE;
-import static network.aika.enums.LinkingMode.FEEDBACK;
 import static network.aika.fields.AbstractFieldLink.updateConnected;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
@@ -108,10 +104,6 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void addLinkingSteps() {
-        LinkingIn.add(this);
-        LinkingOut.add(output, FEEDBACK);
-        LatentLinking.add(output, FEEDBACK);
-        Propagate.add(output, FEEDBACK);
     }
 
     public void visit(Visitor v, int state, int depth) {
@@ -249,7 +241,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
                 );
     }
 
-    private void propagateBindingSignal(PatternActivation bs, Transition t, boolean state) {
+    public void propagateBindingSignal(PatternActivation bs, Transition t, boolean state) {
         BindingSignalSlot bsSlot = output.getBSSlot(t);
         if(bsSlot != null)
             bsSlot.connectBindingSignal(bs, state);

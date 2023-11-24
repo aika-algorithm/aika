@@ -36,8 +36,6 @@ import network.aika.text.TextReference;
 import network.aika.utils.BitUtils;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
-import network.aika.visitor.DownVisitor;
-import network.aika.visitor.operator.IncomingLinkingOperator;
 import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,8 +47,6 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
-import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 

@@ -16,10 +16,9 @@
  */
 package network.aika.visitor.operator;
 
-import network.aika.elements.neurons.Neuron;
-import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.UpVisitor;
 import network.aika.visitor.Visitor;
@@ -34,13 +33,11 @@ public class IncomingLinkingOperator extends LinkingOperator {
 
     protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
 
-    private Synapse sourceSyn;
-    private Link sourceLink; // null if latent
+    private Synapse sourceSyn; // Set only during latent linking
 
-    public IncomingLinkingOperator(Activation sourceAct, Synapse sourceSyn, Link sourceLink, Synapse targetSyn) {
+    public IncomingLinkingOperator(Activation sourceAct, Synapse sourceSyn, Synapse targetSyn) {
         super(sourceAct, targetSyn);
         this.sourceSyn = sourceSyn;
-        this.sourceLink = sourceLink;
     }
 
     public Synapse getStartSynapse() {
@@ -49,7 +46,7 @@ public class IncomingLinkingOperator extends LinkingOperator {
 
     @Override
     public boolean checkForbiddenTransitions(Link l, Direction dir) {
-        if(sourceLink == null && !sourceSyn.checkForbiddenTransitions(l, dir))
+        if(sourceSyn != null && !sourceSyn.checkForbiddenTransitions(l, dir))
             return false;
 
         return targetSyn.checkForbiddenTransitions(l, dir);
@@ -60,7 +57,7 @@ public class IncomingLinkingOperator extends LinkingOperator {
         if(!targetSyn.checkRequiredTransitions(state))
             return;
 
-        if(sourceLink == null && !sourceSyn.checkRequiredTransitions(state))
+        if(sourceSyn != null && !sourceSyn.checkRequiredTransitions(state))
             return;
 
         checkAndLink(act);
@@ -69,7 +66,7 @@ public class IncomingLinkingOperator extends LinkingOperator {
     @Override
     public Link checkAndLink(Activation act) {
         if(log.isDebugEnabled())
-            log.debug("IncomingLinkingOperator.check() startSynapse:" + getStartSynapse() + " sourceLink:" + sourceLink + " act:" + act);
+            log.debug("BSIncomingLinkingOperator.check() act:" + act);
 
         if (act.getNeuron() != targetSyn.getInput())
             return null;
@@ -80,11 +77,19 @@ public class IncomingLinkingOperator extends LinkingOperator {
         if (!targetSyn.getLinkingMode().check(act))
             return null;
 
-        Link sl = sourceLink != null ?
-                sourceLink :
-                latentLink(sourceAct, sourceSyn, act, targetSyn);
+        Activation targetAct;
 
-        return targetSyn.link(act, sl.getOutput());
+        if(sourceSyn == null)
+            targetAct = sourceAct;
+        else {
+            Link sl = latentLink(sourceAct, sourceSyn, act, targetSyn);
+            if(sl == null)
+                return null;
+
+            targetAct = sl.getOutput();
+        }
+
+        return targetSyn.link(act, targetAct);
     }
 
     public void relationCheck(Synapse relSyn, Activation relatedAct, Direction relDir) {

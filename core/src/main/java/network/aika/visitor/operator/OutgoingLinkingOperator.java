@@ -16,9 +16,9 @@
  */
 package network.aika.visitor.operator;
 
-import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.UpVisitor;
 import network.aika.visitor.Visitor;
@@ -36,10 +36,6 @@ public class OutgoingLinkingOperator extends LinkingOperator {
         super(sourceAct, targetSyn);
     }
 
-    public Synapse getStartSynapse() {
-        return targetSyn;
-    }
-
     @Override
     public boolean checkForbiddenTransitions(Link l, Direction dir) {
         return targetSyn.checkForbiddenTransitions(l, dir);
@@ -49,10 +45,7 @@ public class OutgoingLinkingOperator extends LinkingOperator {
     public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
         if(!targetSyn.checkRequiredTransitions(state))
             return;
-/*
-        if(lastLink == null)
-            return;
-*/
+
         assert lastLink == null || lastLink.getOutput() == act;
 
         checkAndLink(act);
@@ -61,7 +54,7 @@ public class OutgoingLinkingOperator extends LinkingOperator {
     @Override
     public Link checkAndLink(Activation act) {
         if(log.isDebugEnabled())
-            log.debug("OutgoingLinkingOperator.checkAndLink() startSynapse:" + getStartSynapse() + " act:" + act);
+            log.debug("OutgoingLinkingOperator.checkAndLink() act:" + act);
 
         if(act.getNeuron() != targetSyn.getOutput())
             return null;

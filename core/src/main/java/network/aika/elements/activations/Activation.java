@@ -45,6 +45,7 @@ import static network.aika.debugger.EventType.*;
 import static network.aika.elements.LinkKey.getFromLinkKey;
 import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
+import static network.aika.enums.LinkingMode.FEEDBACK;
 import static network.aika.enums.LinkingMode.REGULAR;
 import static network.aika.queue.Phase.PRE_ANNEAL;
 import static network.aika.fields.FieldLink.linkAndConnect;
@@ -191,17 +192,17 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                     }
                 }
         );
+
+        Propagate.add(this, FEEDBACK);
     }
 
     protected void addLinkingSteps() {
         getBindingSignals()
                 .forEach(bs -> {
-                    BSLinkingOut.add(this, bs, LinkingMode.REGULAR);
-                    BSLatentLinking.add(this, bs, REGULAR);
+                    LinkingOut.add(this, bs, LinkingMode.REGULAR);
+                    LatentLinking.add(this, bs, REGULAR);
                 });
 
-        LinkingOut.add(this, REGULAR);
-        LatentLinking.add(this, REGULAR);
         Propagate.add(this, REGULAR);
     }
 

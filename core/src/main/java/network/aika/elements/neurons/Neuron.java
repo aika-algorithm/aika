@@ -29,15 +29,10 @@ import network.aika.exceptions.NeuronExistsTwiceException;
 import network.aika.fields.*;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
-import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;
 import network.aika.elements.synapses.Synapse;
-import network.aika.visitor.DownVisitor;
-import network.aika.visitor.operator.IncomingLinkingOperator;
 import network.aika.queue.activation.Save;
 import network.aika.utils.Writable;
-import network.aika.visitor.operator.OutgoingLinkingOperator;
-import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

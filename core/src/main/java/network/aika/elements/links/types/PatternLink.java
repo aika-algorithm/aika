@@ -53,8 +53,6 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
 
     @Override
     public void addLinkingSteps() {
-        super.addLinkingSteps();
-
         input.getBSSlot(SAME)
                 .connectBindingSignal(output, true);
     }

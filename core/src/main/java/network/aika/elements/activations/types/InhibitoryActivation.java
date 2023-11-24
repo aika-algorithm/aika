@@ -37,7 +37,6 @@ import java.util.stream.Stream;
 import static network.aika.enums.LinkingMode.REGULAR;
 import static network.aika.enums.Transition.INPUT;
 
-
 /**
  *
  * @author Lukas Molzberger
@@ -51,9 +50,9 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
 
         inputBS.addListener((t, oBS, nBS, state) -> {
             if(state) {
-                BSLinkingIn.add(this, nBS);
+                LinkingIn.add(this, nBS);
                 if(isFired()) {
-                    BSLinkingOut.add(this, nBS, LinkingMode.REGULAR);
+                    LinkingOut.add(this, nBS, LinkingMode.REGULAR);
                 }
             }
         });
@@ -63,10 +62,9 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
     public void addLinkingSteps() {
         getBindingSignals()
                 .forEach(bs ->
-                        BSLinkingOut.add(this, bs, LinkingMode.REGULAR)
+                        LinkingOut.add(this, bs, LinkingMode.REGULAR)
                 );
 
-        LinkingOut.add(this, REGULAR);
         Propagate.add(this, REGULAR);
     }
 

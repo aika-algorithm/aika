@@ -16,18 +16,18 @@
  */
 package network.aika.queue.activation;
 
-import network.aika.elements.neurons.Neuron;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.types.PatternActivation;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.LinkingMode;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
-import network.aika.queue.link.LinkingIn;
-import network.aika.visitor.DownVisitor;
-import network.aika.visitor.operator.LinkingOperator;
+import network.aika.visitor.UpVisitor;
 import network.aika.visitor.operator.OutgoingLinkingOperator;
+import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,17 +40,20 @@ import static network.aika.queue.Phase.OUTPUT_LINKING;
  */
 public class LinkingOut extends ElementStep<Activation> {
 
-    protected static final Logger log = LoggerFactory.getLogger(LinkingIn.class);
+    protected static final Logger log = LoggerFactory.getLogger(LinkingOut.class);
 
     private LinkingMode mode;
+    private PatternActivation bindingSignal;
 
-    public static void add(Activation act, LinkingMode mode) {
-        Step.add(new LinkingOut(act, mode));
+
+    public static void add(Activation act, PatternActivation bs, LinkingMode mode) {
+        Step.add(new LinkingOut(act, bs, mode));
     }
 
-    public LinkingOut(Activation act, LinkingMode mode) {
+    public LinkingOut(Activation act, PatternActivation bs, LinkingMode mode) {
         super(act);
 
+        this.bindingSignal = bs;
         this.mode = mode;
     }
 
@@ -65,29 +68,29 @@ public class LinkingOut extends ElementStep<Activation> {
                 .filter(s ->
                         s.getLinkingMode() == mode
                 )
-                .filter(Synapse::allowDeprecatedLinking)
                 .toList()
                 .forEach(s ->
-                        linkOutgoing(s, act)
+                        linkOutgoing(s)
                 );
     }
 
+    private void linkOutgoing(Synapse targetSyn) {
+        Activation<?> act = getElement();
 
-    public void linkOutgoing(Synapse targetSyn, Activation iAct) {
         if(log.isDebugEnabled())
-            log.debug("linkOutgoing: targetSyn:" + targetSyn + " iAct:" + iAct);
+            log.debug("linkOutgoing: targetSyn:" + targetSyn + " iAct:" + act);
 
         Neuron to = targetSyn.getOutput();
-        LinkingOperator op = new OutgoingLinkingOperator(iAct, targetSyn);
+        LinkingOperator op = new OutgoingLinkingOperator(act, targetSyn);
 
         Relation rel = targetSyn.getRelation();
         if(rel != null)
             targetSyn.expandRelation(op, rel, to, OUTPUT);
         else {
-            new DownVisitor(
-                    iAct.getDocument(),
+            new UpVisitor(
+                    act.getDocument(),
                     op
-            ).start(iAct);
+            ).start(bindingSignal);
         }
     }
 
