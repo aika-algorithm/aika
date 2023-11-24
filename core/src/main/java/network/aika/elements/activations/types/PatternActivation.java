@@ -22,7 +22,12 @@ import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.enums.sign.Sign;
+import network.aika.queue.activation.LatentLinking;
+import network.aika.queue.activation.LinkingOut;
+import network.aika.queue.activation.Propagate;
 
+import static network.aika.enums.LinkingMode.FEEDBACK;
+import static network.aika.enums.LinkingMode.REGULAR;
 import static network.aika.fields.Fields.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -38,6 +43,18 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
     public PatternActivation(int id, Document doc, PatternNeuron patternNeuron) {
         super(id, doc, patternNeuron);
+
+        LinkingOut.add(this, this, FEEDBACK);
+        LatentLinking.add(this, this, FEEDBACK);
+        Propagate.add(this, FEEDBACK);
+    }
+
+    @Override
+    protected void initOnFiredListener() {
+        LinkingOut.add(this, this, REGULAR);
+        LatentLinking.add(this, this, REGULAR);
+
+        super.initOnFiredListener();
     }
 
     @Override

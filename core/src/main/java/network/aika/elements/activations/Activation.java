@@ -192,8 +192,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                     }
                 }
         );
-
-        Propagate.add(this, FEEDBACK);
     }
 
     protected void addLinkingSteps() {
