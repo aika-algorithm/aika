@@ -46,6 +46,12 @@ public class InhibitorySynapse extends DisjunctiveSynapse<
         BindingActivation,
         InhibitoryActivation
         > {
+
+    @Override
+    public boolean allowDeprecatedLinking() {
+        return false;
+    }
+
     @Override
     public boolean isLinkingAllowed(boolean latent) {
         return !latent;

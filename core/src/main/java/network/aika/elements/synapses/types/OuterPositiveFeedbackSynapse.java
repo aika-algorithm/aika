@@ -48,6 +48,12 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
+
+    @Override
+    public boolean allowDeprecatedLinking() {
+        return false;
+    }
+
     public OuterPositiveFeedbackLink createLink(PatternActivation input, BindingActivation output) {
         return new OuterPositiveFeedbackLink(this, input, output);
     }
