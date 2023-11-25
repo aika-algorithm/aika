@@ -58,7 +58,9 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
-    private final SynapseType synapseType = getClass().getAnnotation(SynapseType.class);
+    private final SynapseTypeHolder synapseType = new SynapseTypeHolder(
+            getClass().getAnnotation(SynapseType.class)
+    );
 
     protected static final double[] SULW_ZERO = new double[] {0.0, 0.0};
 
@@ -89,40 +91,27 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public Type getInputType() {
-        return synapseType.inputType();
+        return synapseType.getInputType();
     }
 
     public Type getOutputType() {
-        return synapseType.outputType();
+        return synapseType.getOutputType();
     }
 
     public Transition getTransition() {
-        return synapseType.transition();
-    }
-
-    public boolean isSecondaryRunRequired() {
-        return synapseType.requiredSecondary().length > 0;
+        return synapseType.getTransition();
     }
 
     public Transition[] getForbidden() {
-        return synapseType.forbidden();
+        return synapseType.getForbidden();
     }
 
     public Transition[] getRequired() {
-        return synapseType.required();
-    }
-
-
-    public Transition[] getForbiddenSecondary() {
-        return synapseType.forbiddenSecondary();
-    }
-
-    public Transition[] getRequiredSecondary() {
-        return synapseType.requiredSecondary();
+        return synapseType.getRequired();
     }
 
     public boolean checkForbiddenTransitions(Link l, Direction dir) {
-        for(Transition ft: synapseType.forbidden())
+        for(Transition ft: synapseType.getForbidden())
             if (l.getSynapse().isForbiddenTransition(ft))
                 return false;
 
@@ -134,11 +123,11 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public boolean checkUp(Activation bsAct) {
-        return synapseType.up() == bsAct.getNeuron().getClass();
+        return synapseType.getUp() == bsAct.getNeuron().getClass();
     }
 
     public boolean checkRequiredTransitions(int state) {
-        for(Transition rt: synapseType.required())
+        for(Transition rt: synapseType.getRequired())
             if(!BitUtils.isSet(state, rt))
                 return false;
 
@@ -157,7 +146,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public LinkingMode getLinkingMode() {
-        return synapseType.linkingMode();
+        return synapseType.getLinkingMode();
     }
 
     public boolean isLinkingAllowed(boolean latent) {

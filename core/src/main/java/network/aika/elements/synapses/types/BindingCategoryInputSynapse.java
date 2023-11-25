@@ -38,9 +38,7 @@ import static network.aika.enums.Transition.*;
         outputType = BINDING,
         transition = CATEGORY,
         forbidden = SAME,
-        required = {CATEGORY, INPUT},
-        forbiddenSecondary = INPUT,
-        requiredSecondary = {CATEGORY, SAME}
+        required = {CATEGORY, INPUT}
 )
 public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
         BindingCategoryInputSynapse,

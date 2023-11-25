@@ -14,38 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.neurons;
 
 import network.aika.elements.Type;
-import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.enums.LinkingMode;
-import network.aika.enums.Transition;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
 
 /**
  *
  * @author Lukas Molzberger
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface SynapseType {
+public class NeuronTypeHolder {
 
-    public Type inputType();
+    private Type type;
 
-    public Type outputType();
+    public NeuronTypeHolder(NeuronType typeAnnotation) {
+        this.type = typeAnnotation.type();
+    }
 
-    public Transition transition();
-
-    public Transition[] required() default {};
-
-    public Transition[] forbidden() default {};
-
-    public Class<? extends Neuron> up() default PatternNeuron.class;
-
-    public LinkingMode linkingMode() default LinkingMode.REGULAR;
+    public Type getType() {
+        return type;
+    }
 }

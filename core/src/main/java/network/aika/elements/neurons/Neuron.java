@@ -63,7 +63,9 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected static final String CATEGORY_LABEL = " Category";
 
-    private final NeuronType neuronType = getClass().getAnnotation(NeuronType.class);
+    private final NeuronTypeHolder neuronType = new NeuronTypeHolder(
+            getClass().getAnnotation(NeuronType.class)
+    );
 
     private int synapseIdCounter = 0;
 
@@ -93,7 +95,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public Type getType() {
-        return neuronType.type();
+        return neuronType.getType();
     }
 
     public Long getId() {
