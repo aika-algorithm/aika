@@ -20,7 +20,6 @@ import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.text.Range;
-import network.aika.elements.synapses.Synapse;
 import network.aika.fields.AbstractFunction;
 import network.aika.elements.synapses.types.PatternSynapse;
 import network.aika.fields.FieldOutput;
@@ -53,7 +52,7 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
 
     @Override
     public void addLinkingSteps() {
-        input.getBSSlot(SAME)
+        input.getBindingSignalSlot(SAME)
                 .connectBindingSignal(output, true);
     }
 

@@ -17,7 +17,6 @@
 package network.aika.elements.activations.types;
 
 import network.aika.Document;
-import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.DisjunctiveActivation;
 import network.aika.elements.links.*;
@@ -44,17 +43,9 @@ import static network.aika.enums.Transition.INPUT;
  */
 public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron> {
 
-    private BindingSignalSlot inputBS;
 
     public InhibitoryActivation(int id, Document doc, InhibitoryNeuron neuron) {
         super(id, doc, neuron);
-    }
-
-    @Override
-    protected void initBindingSignalSlots() {
-        inputBS = new BindingSignalSlot(INPUT);
-
-        super.initBindingSignalSlots();
     }
 
     @Override
@@ -74,21 +65,8 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
     }
 
     @Override
-    public BindingSignalSlot[] getBindingSignalSlots() {
-        return new BindingSignalSlot[] {inputBS};
-    }
-
-    @Override
-    public BindingSignalSlot getBSSlot(Transition t) {
-        return switch (t) {
-            case INPUT -> inputBS;
-            default -> null;
-        };
-    }
-
-    @Override
     public boolean isActiveTemplateInstance() {
-        return inputBS.isSet();
+        return getBindingSignalSlot(INPUT).isSet();
     }
 
     public Stream<InhibitoryLink> getAllInhibitoryLinks() {

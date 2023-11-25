@@ -145,7 +145,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         if (synInputSlot != null) {
             inputSlotFL = linkAndConnect(outputNet, synInputSlot);
 
-            BindingSignalSlot slot = output.getBSSlot(synapse.getTransition());
+            BindingSignalSlot slot = output.getBindingSignalSlot(synapse.getTransition());
             if(slot != null)
                 slot.addListener(this::updateInputSlotFieldLink);
         }

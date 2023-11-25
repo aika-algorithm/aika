@@ -24,11 +24,16 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.NeuronType;
 
 import static network.aika.elements.Type.INHIBITORY;
+import static network.aika.enums.Transition.INPUT;
+import static network.aika.enums.Transition.SAME;
 
 /**
  * @author Lukas Molzberger
  */
-@NeuronType(type = INHIBITORY)
+@NeuronType(
+        type = INHIBITORY,
+        bindingSignalSlots = INPUT
+)
 public class InhibitoryCategoryNeuron extends CategoryNeuron {
 
     public InhibitoryCategoryNeuron(Model m) {

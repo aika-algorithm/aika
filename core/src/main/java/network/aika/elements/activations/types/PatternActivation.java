@@ -28,6 +28,7 @@ import network.aika.queue.activation.Propagate;
 
 import static network.aika.enums.LinkingMode.FEEDBACK;
 import static network.aika.enums.LinkingMode.REGULAR;
+import static network.aika.enums.Transition.SAME;
 import static network.aika.fields.Fields.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -51,10 +52,10 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
     @Override
     protected void initBindingSignalSlots() {
-        LinkingOut.add(this, this, REGULAR);
-        LatentLinking.add(this, this, REGULAR);
-
         super.initBindingSignalSlots();
+
+        getBindingSignalSlot(SAME)
+                .connectBindingSignal(this, true);
     }
 
     @Override

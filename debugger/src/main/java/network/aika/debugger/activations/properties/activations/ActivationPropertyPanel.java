@@ -25,6 +25,8 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.text.TextReference;
 
 import static network.aika.debugger.AbstractConsole.NOT_SET_STR;
+import static network.aika.enums.Transition.INPUT;
+import static network.aika.enums.Transition.SAME;
 
 
 /**
@@ -50,6 +52,10 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
         addConstant("Id: ", "" + act.getId());
         addConstant("Type: ", "" + act.getType());
         addConstant("Label: ", act.getLabel());
+
+        act.getBindingSignalSlots().forEach(bsSlot ->
+                addConstant("BS-Slot ", "" + bsSlot)
+        );
 
         TextReference gr = act.getTextReference();
         if(gr != null) {

@@ -24,11 +24,16 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.NeuronType;
 
 import static network.aika.elements.Type.PATTERN;
+import static network.aika.enums.Transition.INPUT;
+import static network.aika.enums.Transition.SAME;
 
 /**
  * @author Lukas Molzberger
  */
-@NeuronType(type = PATTERN)
+@NeuronType(
+        type = PATTERN,
+        bindingSignalSlots = SAME
+)
 public class PatternCategoryNeuron extends CategoryNeuron {
 
     public PatternCategoryNeuron(Model m) {

@@ -33,8 +33,6 @@ public class InhibitoryActivationPropertyPanel<E extends InhibitoryActivation> e
     @Override
     public void initIdentitySection(E act) {
         super.initIdentitySection(act);
-
-        addConstant("BS-Slot ", "" + act.getBSSlot(INPUT));
     }
 
     public static InhibitoryActivationPropertyPanel create(InhibitoryActivation act) {

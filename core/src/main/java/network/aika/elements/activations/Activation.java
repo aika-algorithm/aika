@@ -91,6 +91,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected TextReference textReference;
 
+    protected BindingSignalSlot[] bindingSignalSlots = new BindingSignalSlot[2];
+
+
     public Activation(int id, Document doc, N n) {
         this.id = id;
         this.neuron = n;
@@ -138,17 +141,17 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected void connectWeightUpdate() {
     }
 
-    public BindingSignalSlot getBSSlot(Transition t) {
-        return null;
+    public BindingSignalSlot getBindingSignalSlot(Transition t) {
+        return bindingSignalSlots[t.ordinal()];
     }
 
-    public BindingSignalSlot[] getBindingSignalSlots() {
-        return new BindingSignalSlot[0];
+    public Stream<BindingSignalSlot> getBindingSignalSlots() {
+        return Arrays.stream(bindingSignalSlots)
+                .filter(Objects::nonNull);
     }
 
     public Stream<PatternActivation> getBindingSignals() {
-        return Arrays.stream(getBindingSignalSlots())
-                .filter(Objects::nonNull)
+        return getBindingSignalSlots()
                 .filter(BindingSignalSlot::isSet)
                 .map(BindingSignalSlot::getBindingSignal);
     }
@@ -184,6 +187,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void initBindingSignalSlots() {
+        Stream<Transition> bsSlots = neuron.getBindingSignalSlots();
+        bsSlots.forEach(bsSlot ->
+                bindingSignalSlots[bsSlot.ordinal()] = new BindingSignalSlot(bsSlot)
+        );
+
         net.addListener("onFired", (fl, nr, u) -> {
                     if(fl.getInput().exceedsThreshold() && fired == NOT_SET) {
                         fired = doc.getCurrentTimestamp();
@@ -193,19 +201,19 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 }
         );
 
-        for(BindingSignalSlot bsSlot : getBindingSignalSlots()) {
-            bsSlot.addListener((t, oBS, nBS, state) -> {
-                if(state) {
-                    addLinkingStepsOnBindingSignal(t, nBS, state);
-                }
-            });
-        }
+        getBindingSignalSlots().forEach(bsSlot ->
+                bsSlot.addListener((t, oBS, nBS, state) -> {
+                    if (state) {
+                        addLinkingStepsOnBindingSignal(t, nBS, state);
+                    }
+                })
+        );
     }
 
     protected void addLinkingStepsOnFired() {
         getBindingSignals()
                 .forEach(bs -> {
-                    LinkingOut.add(this, bs, LinkingMode.REGULAR);
+                    LinkingOut.add(this, bs, REGULAR);
                     LatentLinking.add(this, bs, REGULAR);
                 });
 
@@ -230,7 +238,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public PatternActivation getBindingSignal(Transition t) {
-        BindingSignalSlot slot = getBSSlot(t);
+        BindingSignalSlot slot = getBindingSignalSlot(t);
         return slot != null ?
                 slot.getBindingSignal() :
                 null;

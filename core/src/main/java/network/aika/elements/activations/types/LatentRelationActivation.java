@@ -34,11 +34,6 @@ public class LatentRelationActivation extends BindingActivation {
         super(id, doc, n);
     }
 
-    @Override
-    public BindingSignalSlot[] getBindingSignalSlots() {
-        return new BindingSignalSlot[0];
-    }
-
     public Activation getFromAct() {
         return fromAct;
     }

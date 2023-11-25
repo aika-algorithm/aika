@@ -24,15 +24,21 @@ import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.types.BindingCategorySynapse;
+import network.aika.enums.Transition;
 
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.enums.Transition.INPUT;
+import static network.aika.enums.Transition.SAME;
 
 
 /**
  * @author Lukas Molzberger
  */
-@NeuronType(type = BINDING)
+@NeuronType(
+        type = BINDING,
+        bindingSignalSlots = {INPUT, SAME}
+)
 public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActivation> {
 
 

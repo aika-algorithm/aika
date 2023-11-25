@@ -28,7 +28,6 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
-import network.aika.queue.activation.Propagate;
 import network.aika.visitor.Visitor;
 
 import static network.aika.debugger.EventType.CREATE;
@@ -232,7 +231,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void retrieveAndConnectBindingSignals(boolean state) {
-        if(output.getBindingSignalSlots().length == 0)
+        if(output.getBindingSignalSlots().findAny().isEmpty())
             return;
 
         retrieveBindingSignals(this, synapse.getTransition())
@@ -242,7 +241,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void propagateBindingSignal(PatternActivation bs, Transition t, boolean state) {
-        BindingSignalSlot bsSlot = output.getBSSlot(t);
+        BindingSignalSlot bsSlot = output.getBindingSignalSlot(t);
         if(bsSlot != null)
             bsSlot.connectBindingSignal(bs, state);
     }

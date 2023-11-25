@@ -28,6 +28,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.enums.Transition.INPUT;
+import static network.aika.enums.Transition.SAME;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -35,7 +37,10 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-@NeuronType(type = BINDING)
+@NeuronType(
+        type = BINDING,
+        bindingSignalSlots = {}
+)
 public class LatentRelationNeuron extends BindingNeuron {
 
     private Relation relation;

@@ -36,6 +36,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.PATTERN;
+import static network.aika.enums.Transition.INPUT;
+import static network.aika.enums.Transition.SAME;
 import static network.aika.enums.sign.Sign.POS;
 import static network.aika.text.Range.length;
 
@@ -43,7 +45,10 @@ import static network.aika.text.Range.length;
  *
  * @author Lukas Molzberger
  */
-@NeuronType(type = PATTERN)
+@NeuronType(
+        type = PATTERN,
+        bindingSignalSlots = SAME
+)
 public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActivation> {
 
     protected double frequency;

@@ -17,6 +17,7 @@
 package network.aika.elements.neurons;
 
 import network.aika.elements.Type;
+import network.aika.enums.Transition;
 
 /**
  *
@@ -26,11 +27,18 @@ public class NeuronTypeHolder {
 
     private Type type;
 
+    private Transition[] bindingSignalSlots;
+
     public NeuronTypeHolder(NeuronType typeAnnotation) {
         this.type = typeAnnotation.type();
+        this.bindingSignalSlots = typeAnnotation.bindingSignalSlots();
     }
 
     public Type getType() {
         return type;
+    }
+
+    public Transition[] getBindingSignalSlots() {
+        return bindingSignalSlots;
     }
 }

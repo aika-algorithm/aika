@@ -87,6 +87,6 @@ public class BindingSignalSlot {
     }
 
     public String toString() {
-        return "(" + bsType + ") : " + (bindingSignal != null ? bindingSignal : "--") + " (" + sourcesCount + ")";
+        return bsType + ": " + (bindingSignal != null ? bindingSignal : "--") + " (" + sourcesCount + ")";
     }
 }

@@ -17,9 +17,12 @@
 package network.aika.elements.activations.types;
 
 import network.aika.Document;
+import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.neurons.CategoryNeuron;
+import network.aika.enums.Transition;
 
+import static network.aika.enums.Transition.INPUT;
 
 /**
  *
@@ -30,4 +33,5 @@ public class InhibitoryCategoryActivation extends CategoryActivation {
     public InhibitoryCategoryActivation(int id, Document doc, CategoryNeuron neuron) {
         super(id, doc, neuron);
     }
+
 }
