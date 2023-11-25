@@ -37,7 +37,7 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
         addConstant("Label: ", n.getLabel());
 
         n.getBindingSignalSlots().forEach(bsSlot ->
-                addConstant("BS-Slot ", "" + bsSlot)
+                addConstant("BS-Slot-Type: ", "" + bsSlot)
         );
 
         addField(n.getBias());
