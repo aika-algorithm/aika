@@ -28,6 +28,12 @@ public enum LinkingMode {
     REGULAR(Activation::isFired),
     FEEDBACK(oAct -> true);
 
+    public static LinkingMode getLinkingMode(boolean isFired) {
+        return isFired ?
+                LinkingMode.REGULAR :
+                LinkingMode.FEEDBACK;
+    }
+
     LinkingMode(Predicate<Activation> check) {
         this.check = check;
     }

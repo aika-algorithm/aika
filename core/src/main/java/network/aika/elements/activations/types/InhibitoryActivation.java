@@ -35,6 +35,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static network.aika.enums.LinkingMode.REGULAR;
+import static network.aika.enums.LinkingMode.getLinkingMode;
 import static network.aika.enums.Transition.INPUT;
 
 /**
@@ -43,29 +44,33 @@ import static network.aika.enums.Transition.INPUT;
  */
 public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron> {
 
-    private BindingSignalSlot inputBS = new BindingSignalSlot(INPUT);
+    private BindingSignalSlot inputBS;
 
     public InhibitoryActivation(int id, Document doc, InhibitoryNeuron neuron) {
         super(id, doc, neuron);
-
-        inputBS.addListener((t, oBS, nBS, state) -> {
-            if(state) {
-                LinkingIn.add(this, nBS);
-                if(isFired()) {
-                    LinkingOut.add(this, nBS, LinkingMode.REGULAR);
-                }
-            }
-        });
     }
 
     @Override
-    public void addLinkingSteps() {
+    protected void initBindingSignalSlots() {
+        inputBS = new BindingSignalSlot(INPUT);
+
+        super.initBindingSignalSlots();
+    }
+
+    @Override
+    protected void addLinkingStepsOnFired() {
         getBindingSignals()
                 .forEach(bs ->
                         LinkingOut.add(this, bs, LinkingMode.REGULAR)
                 );
 
         Propagate.add(this, REGULAR);
+    }
+
+    @Override
+    protected void addLinkingStepsOnBindingSignal(Transition t, PatternActivation nBS, boolean state) {
+        LinkingIn.add(this, nBS);
+        LinkingOut.add(this, nBS, getLinkingMode(isFired()));
     }
 
     @Override

@@ -43,31 +43,21 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     protected static final Logger log = LoggerFactory.getLogger(BindingActivation.class);
 
-    private BindingSignalSlot inputBS = new BindingSignalSlot(INPUT);
-    private BindingSignalSlot sameBS = new BindingSignalSlot(SAME);
+    private BindingSignalSlot inputBS;
+    private BindingSignalSlot sameBS;
 
     private boolean isInput;
 
     public BindingActivation(int id, Document doc, BindingNeuron n) {
         super(id, doc, n);
+    }
 
-        sameBS.addListener((t, oBS, nBS, state) -> {
-            if(state) {
-                LinkingIn.add(this, nBS);
+    @Override
+    protected void initBindingSignalSlots() {
+        inputBS = new BindingSignalSlot(INPUT);
+        sameBS = new BindingSignalSlot(SAME);
 
-                LinkingMode lm = isFired() ?
-                        LinkingMode.REGULAR :
-                        LinkingMode.FEEDBACK;
-
-                LinkingOut.add(this, nBS, lm);
-                LatentLinking.add(this, nBS, lm);
-
-                getOutputLinks()
-                        .forEach(l ->
-                                l.propagateBindingSignal(nBS, t, state)
-                        );
-            }
-        });
+        super.initBindingSignalSlots();
     }
 
     @Override

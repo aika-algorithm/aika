@@ -50,11 +50,11 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
     }
 
     @Override
-    protected void initOnFiredListener() {
+    protected void initBindingSignalSlots() {
         LinkingOut.add(this, this, REGULAR);
         LatentLinking.add(this, this, REGULAR);
 
-        super.initOnFiredListener();
+        super.initBindingSignalSlots();
     }
 
     @Override

@@ -45,8 +45,8 @@ import static network.aika.debugger.EventType.*;
 import static network.aika.elements.LinkKey.getFromLinkKey;
 import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
-import static network.aika.enums.LinkingMode.FEEDBACK;
 import static network.aika.enums.LinkingMode.REGULAR;
+import static network.aika.enums.LinkingMode.getLinkingMode;
 import static network.aika.queue.Phase.PRE_ANNEAL;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
@@ -104,7 +104,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         net.setQueued(doc, INFERENCE);
         netPreAnneal.setQueued(doc, PRE_ANNEAL);
 
-        initOnFiredListener();
+        initBindingSignalSlots();
 
         value = func(
                 this,
@@ -183,18 +183,26 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         );
     }
 
-    protected void initOnFiredListener() {
+    protected void initBindingSignalSlots() {
         net.addListener("onFired", (fl, nr, u) -> {
                     if(fl.getInput().exceedsThreshold() && fired == NOT_SET) {
                         fired = doc.getCurrentTimestamp();
-                        addLinkingSteps();
+                        addLinkingStepsOnFired();
                         Counting.add(this);
                     }
                 }
         );
+
+        for(BindingSignalSlot bsSlot : getBindingSignalSlots()) {
+            bsSlot.addListener((t, oBS, nBS, state) -> {
+                if(state) {
+                    addLinkingStepsOnBindingSignal(t, nBS, state);
+                }
+            });
+        }
     }
 
-    protected void addLinkingSteps() {
+    protected void addLinkingStepsOnFired() {
         getBindingSignals()
                 .forEach(bs -> {
                     LinkingOut.add(this, bs, LinkingMode.REGULAR);
@@ -202,6 +210,20 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 });
 
         Propagate.add(this, REGULAR);
+    }
+
+    protected void addLinkingStepsOnBindingSignal(Transition t, PatternActivation nBS, boolean state) {
+        LinkingIn.add(this, nBS);
+
+        LinkingMode lm = getLinkingMode(isFired());
+
+        LinkingOut.add(this, nBS, lm);
+        LatentLinking.add(this, nBS, lm);
+
+        getOutputLinks()
+                .forEach(l ->
+                        l.propagateBindingSignal(nBS, t, state)
+                );
     }
 
     protected void initInactiveLinks() {
