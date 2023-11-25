@@ -29,7 +29,7 @@ public interface Operator {
 
     boolean checkForbiddenTransitions(Link l, Direction dir);
 
-    boolean checkUp(Activation bsAct, int state, int depth);
+    boolean check(Activation bsAct, int state, int depth);
 
     void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state);
 

@@ -73,7 +73,7 @@ public class DownVisitor extends Visitor {
         if(iAct != null) {
             next(iAct, l, state, nd);
 
-            if(operator.checkUp(iAct, state, nd))
+            if(operator.check(iAct, state, nd))
                 up(iAct, state, nd);
         }
     }

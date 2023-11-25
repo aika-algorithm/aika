@@ -51,7 +51,7 @@ public class BindingSignalCollector implements Operator {
     }
 
     @Override
-    public boolean checkUp(Activation bsAct, int state, int depth) {
+    public boolean check(Activation bsAct, int state, int depth) {
         if(!(bsAct instanceof PatternActivation))
             return false;
 

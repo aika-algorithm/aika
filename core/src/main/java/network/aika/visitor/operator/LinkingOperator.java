@@ -40,28 +40,11 @@ public abstract class LinkingOperator implements Operator {
         this.targetSyn = targetSyn;
     }
 
-    public PatternActivation getBindingSignal(Activation act) {
-        return act.getBindingSignal(targetSyn.getTransition());
-    }
-
     public abstract Link checkAndLink(Activation act);
 
     @Override
-    public boolean checkUp(Activation act, int state, int depth) {
-        if(!targetSyn.checkUp(act))
-            return false;
-
-        return checkBSSlotCompatibility(act, targetSyn.getTransition());
-    }
-
-    protected boolean checkBSSlotCompatibility(Activation act, Transition t) {
-        PatternActivation bsAct = getBindingSignal(act);
-        BindingSignalSlot bsSlot = sourceAct.getBSSlot(t);
-        if(bsSlot == null)
-            return true;
-
-        PatternActivation bs = bsSlot.getBindingSignal();
-        return bs == null || bs == bsAct;
+    public boolean check(Activation act, int state, int depth) {
+        return false;
     }
 
     public Activation getSourceAct() {
