@@ -122,10 +122,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return ft == getTransition();
     }
 
-    public boolean checkUp(Activation bsAct) {
-        return synapseType.getUp() == bsAct.getNeuron().getClass();
-    }
-
     public boolean checkRequiredTransitions(int state) {
         for(Transition rt: synapseType.getRequired())
             if(!BitUtils.isSet(state, rt))

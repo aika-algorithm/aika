@@ -36,8 +36,6 @@ public class SynapseTypeHolder {
 
     private Transition[] forbidden;
 
-    private Class<? extends Neuron> up;
-
     private LinkingMode linkingMode;
 
     public SynapseTypeHolder(SynapseType synTypeAnno) {
@@ -46,7 +44,6 @@ public class SynapseTypeHolder {
         transition = synTypeAnno.transition();
         required = synTypeAnno.required();
         forbidden = synTypeAnno.forbidden();
-        up = synTypeAnno.up();
         linkingMode = synTypeAnno.linkingMode();
     }
 
@@ -68,10 +65,6 @@ public class SynapseTypeHolder {
 
     public Transition[] getForbidden() {
         return forbidden;
-    }
-
-    public Class<? extends Neuron> getUp() {
-        return up;
     }
 
     public LinkingMode getLinkingMode() {

@@ -53,8 +53,7 @@ import static network.aika.enums.sign.Sign.POS;
         inputType = BINDING,
         outputType = PATTERN,
         transition = SAME,
-        forbidden = {INPUT, CATEGORY},
-        up = BindingNeuron.class
+        forbidden = {INPUT, CATEGORY}
 )
 public class PatternSynapse extends ConjunctiveSynapse<
         PatternSynapse,
