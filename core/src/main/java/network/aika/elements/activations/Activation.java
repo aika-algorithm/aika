@@ -91,7 +91,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected TextReference textReference;
 
-    protected BindingSignalSlot[] bindingSignalSlots = new BindingSignalSlot[2];
+    protected BindingSignalSlot[] bindingSignalSlots = new BindingSignalSlot[3];
 
 
     public Activation(int id, Document doc, N n) {
