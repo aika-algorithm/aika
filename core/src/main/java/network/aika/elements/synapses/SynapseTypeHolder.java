@@ -17,9 +17,10 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.Type;
-import network.aika.elements.neurons.Neuron;
 import network.aika.enums.LinkingMode;
 import network.aika.enums.Transition;
+
+import java.util.HashMap;
 
 /**
  *
@@ -38,7 +39,17 @@ public class SynapseTypeHolder {
 
     private LinkingMode linkingMode;
 
-    public SynapseTypeHolder(SynapseType synTypeAnno) {
+    public static SynapseTypeHolder getHolder(Class clazz) {
+        return cache.computeIfAbsent(clazz, c ->
+                new SynapseTypeHolder(
+                        c.getAnnotation(SynapseType.class)
+                )
+        );
+    }
+
+    private static HashMap<Class<Synapse>, SynapseTypeHolder> cache = new HashMap();
+
+    private SynapseTypeHolder(SynapseType synTypeAnno) {
         inputType = synTypeAnno.inputType();
         outputType = synTypeAnno.outputType();
         transition = synTypeAnno.transition();

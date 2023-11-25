@@ -46,9 +46,9 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static network.aika.elements.neurons.NeuronTypeHolder.getHolder;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.elements.synapses.Synapse.getNetUB;
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.queue.Phase.TRAINING;
@@ -64,9 +64,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected static final String CATEGORY_LABEL = " Category";
 
-    private final NeuronTypeHolder neuronType = new NeuronTypeHolder(
-            getClass().getAnnotation(NeuronType.class)
-    );
+    private final NeuronTypeHolder neuronType = getHolder(getClass());
 
     private int synapseIdCounter = 0;
 

@@ -19,6 +19,8 @@ package network.aika.elements.neurons;
 import network.aika.elements.Type;
 import network.aika.enums.Transition;
 
+import java.util.HashMap;
+
 /**
  *
  * @author Lukas Molzberger
@@ -29,7 +31,17 @@ public class NeuronTypeHolder {
 
     private Transition[] bindingSignalSlots;
 
-    public NeuronTypeHolder(NeuronType typeAnnotation) {
+    public static NeuronTypeHolder getHolder(Class clazz) {
+        return cache.computeIfAbsent(clazz, c ->
+                new NeuronTypeHolder(
+                        c.getAnnotation(NeuronType.class)
+                )
+        );
+    }
+
+    private static HashMap<Class<Neuron>, NeuronTypeHolder> cache = new HashMap();
+
+    private NeuronTypeHolder(NeuronType typeAnnotation) {
         this.type = typeAnnotation.type();
         this.bindingSignalSlots = typeAnnotation.bindingSignalSlots();
     }

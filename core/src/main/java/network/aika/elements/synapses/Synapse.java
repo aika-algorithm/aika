@@ -47,6 +47,7 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
+import static network.aika.elements.synapses.SynapseTypeHolder.getHolder;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -58,9 +59,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
-    private final SynapseTypeHolder synapseType = new SynapseTypeHolder(
-            getClass().getAnnotation(SynapseType.class)
-    );
+    private final SynapseTypeHolder synapseType = getHolder(getClass());
 
     protected static final double[] SULW_ZERO = new double[] {0.0, 0.0};
 
