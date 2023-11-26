@@ -91,9 +91,6 @@ public class EntityModel implements TemplateModel, Writable {
     }
 
     public void initStaticNeurons() {
-        targetInput = new TargetInput(model, ENTITY_LABEL);
-        targetInput.initTargetInput();
-
         entityPattern = new PatternNeuron(model)
                 .setLabel(getAbstractLabel(PATTERN, ENTITY_LABEL))
                 .setTargetNet(ENTITY_NET_TARGET)
@@ -138,6 +135,10 @@ public class EntityModel implements TemplateModel, Writable {
                 inhibitoryN,
                 NEG_MARGIN * -entityBN.getTargetNet()
         );
+
+
+        targetInput = new TargetInput(model, ENTITY_LABEL);
+        targetInput.initTargetInput();
 
         targetInputRelation = new LatentRelationNeuron(
                 model,

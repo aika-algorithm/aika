@@ -29,6 +29,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.meta.NetworkMotifs.*;
 
 /**
@@ -45,7 +46,7 @@ public class TargetInput implements Writable {
 
     protected BindingNeuron targetInputBN;
 
-    protected double targetInputNetTarget = 5.0;
+    protected double targetInputNetTarget = 2.0;
 
     public double bindingNetTarget = 2.5;
 
@@ -100,7 +101,8 @@ public class TargetInput implements Writable {
     public void initTargetInput() {
         targetInput = new PatternNeuron(model)
                 .setLabel(label + " " + TARGET_INPUT_LABEL)
-                .setTargetNet(targetInputNetTarget)
+                .setBias(targetInputNetTarget)
+                .setTargetNet(1.0 + LIMITED_RECTIFIED_LINEAR_UNIT.f(targetInputNetTarget))
                 .setPersistent(true);
 
         targetInput.makeAbstract()
