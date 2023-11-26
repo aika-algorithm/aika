@@ -19,19 +19,20 @@ package network.aika.elements.links.types;
 import network.aika.elements.Type;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.types.InhibitorySynapse;
-import network.aika.enums.Transition;
 import network.aika.fields.*;
 
 import java.util.stream.Stream;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.INHIBITORY;
+import static network.aika.enums.Transition.SAME;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.queue.Phase.NEGATIVE_FEEDBACK;
 import static network.aika.utils.Utils.TOLERANCE;
-import static network.aika.visitor.operator.SelfRefOperator.isSelfRef;
+import static network.aika.visitor.operator.SubsumesOperator.subsumes;
 
 /**
  * @author Lukas Molzberger
@@ -80,6 +81,18 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
             return;
 
         linkAndConnect(getNet(), out.getInputValue());
+    }
+
+    private boolean isSelfRef(BindingActivation input, BindingActivation output) {
+        if(!input.getBindingSignalSlot(SAME).isSet() ||
+                !output.getBindingSignalSlot(SAME).isSet())
+            return false;
+
+        PatternActivation inputBS = input.getBindingSignal(SAME);
+        PatternActivation outputBS = output.getBindingSignal(SAME);
+
+        return subsumes(SAME, inputBS, outputBS) ||
+                subsumes(SAME, outputBS, inputBS);
     }
 
     @Override
