@@ -54,10 +54,12 @@ public class LatentLinking extends ElementStep<Activation> {
 
         n.wakeupPropagable();
 
-        n.getOutputSynapsesAsStream(act.getDocument())
+        n.getOutputSynapsesAsStream()
                 .filter(s ->
                         s.getLinkingMode() == mode
-                ).forEach(sourceSyn ->
+                )
+                .toList()
+                .forEach(sourceSyn ->
                         expandTargetSynapses(act, bs, sourceSyn)
                 );
     }

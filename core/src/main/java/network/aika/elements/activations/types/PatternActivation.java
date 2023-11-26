@@ -44,10 +44,6 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
     public PatternActivation(int id, Document doc, PatternNeuron patternNeuron) {
         super(id, doc, patternNeuron);
-
-        LinkingOut.add(this, this, FEEDBACK);
-        LatentLinking.add(this, this, FEEDBACK);
-        Propagate.add(this, FEEDBACK);
     }
 
     @Override

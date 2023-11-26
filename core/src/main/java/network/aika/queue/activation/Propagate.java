@@ -51,7 +51,7 @@ public class Propagate extends ElementStep<Activation> {
 
         n.wakeupPropagable();
 
-        n.getOutputSynapsesAsStream(act.getDocument())
+        n.getOutputSynapsesAsStream()
                 .filter(s ->
                         s.getLinkingMode() == mode
                 )

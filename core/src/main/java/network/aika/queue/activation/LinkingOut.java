@@ -64,7 +64,7 @@ public class LinkingOut extends ElementStep<Activation> {
 
         n.wakeupPropagable();
 
-        n.getOutputSynapsesAsStream(act.getDocument())
+        n.getOutputSynapsesAsStream()
                 .filter(s ->
                         s.getLinkingMode() == mode
                 )

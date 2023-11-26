@@ -302,10 +302,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return provider.outputSynapses.values();
     }
 
-    public Stream<? extends Synapse> getOutputSynapsesAsStream(Document doc) {
-            return getOutputSynapsesAsStream();
-    }
-
     public Synapse getOutputSynapse(NeuronProvider n) {
         provider.lock.acquireReadLock();
         Synapse syn = getOutputSynapsesAsStream()

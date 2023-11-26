@@ -95,7 +95,6 @@ public class NeuronViewManager extends AbstractViewManager<Neuron, NeuronGraphMa
         drawOutputSynapses(n);
     }
 
-
     public void expandNeuron(Neuron<?, ?> n, boolean synapsesOnly) {
         List<? extends Synapse> outputSyns = n.getOutputSynapsesAsStream()
                 .limit(20)
