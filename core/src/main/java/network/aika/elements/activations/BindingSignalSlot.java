@@ -65,7 +65,7 @@ public class BindingSignalSlot {
             return;
 
         if(isSet() && bindingSignal != bs) {
-            log.warn(bsType + " Binding-Signal is reset from:" + bindingSignal + " to:" + bs);
+          //  log.warn(bsType + " Binding-Signal is reset from:" + bindingSignal + " to:" + bs);
         }
 
         boolean lastState = sourcesCount > 0;
