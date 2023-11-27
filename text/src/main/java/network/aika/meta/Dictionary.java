@@ -63,7 +63,7 @@ public class Dictionary implements Writable {
         inputToken = new PatternNeuron(model)
                 .setLabel("Input Token")
                 .setBias(INPUT_TOKEN_NET_TARGET)
-                .setTargetNet(1.0 + LIMITED_RECTIFIED_LINEAR_UNIT.f(INPUT_TOKEN_NET_TARGET))
+                .setTargetNet(INPUT_TOKEN_NET_TARGET)
                 .setPersistent(true);
 
         inputToken.makeAbstract()

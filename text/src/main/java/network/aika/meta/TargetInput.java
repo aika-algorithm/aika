@@ -102,7 +102,7 @@ public class TargetInput implements Writable {
         targetInput = new PatternNeuron(model)
                 .setLabel(label + " " + TARGET_INPUT_LABEL)
                 .setBias(targetInputNetTarget)
-                .setTargetNet(1.0 + LIMITED_RECTIFIED_LINEAR_UNIT.f(targetInputNetTarget))
+                .setTargetNet(targetInputNetTarget)
                 .setPersistent(true);
 
         targetInput.makeAbstract()
@@ -161,7 +161,6 @@ public class TargetInput implements Writable {
 
         return n;
     }
-
 
     @Override
     public void write(DataOutput out) throws IOException {
