@@ -28,6 +28,4 @@ public interface TemplateModel {
 
     void prepareExampleDoc(Document doc, String label);
 
-    void disconnectFeedbackTriggers(Document doc);
-
 }

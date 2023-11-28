@@ -62,7 +62,7 @@ public abstract class InstantiationUtil<I extends InstantiationUtil> {
 
             doc.process(MAX_ROUND, INFERENCE);
 
-            getTemplateModel().disconnectFeedbackTriggers(doc);
+            selectDominantPatterns(doc);
 
             doc.anneal();
             doc.process(MAX_ROUND, ANNEAL);
@@ -79,6 +79,10 @@ public abstract class InstantiationUtil<I extends InstantiationUtil> {
         }
 
         return (I) this;
+    }
+
+    protected void selectDominantPatterns(Document doc) {
+
     }
 
     protected abstract Document createDocument(String label);

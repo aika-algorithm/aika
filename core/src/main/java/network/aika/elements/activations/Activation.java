@@ -529,7 +529,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public boolean isActiveTemplateInstance() {
         return isNewInstance ||
-                (!isAbstract() && isTrue(net, 0.5));
+                isTrue(net, 0.5);
     }
 
     public CategoryInputLink getActiveCategoryInputLink() {

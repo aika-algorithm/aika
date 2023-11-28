@@ -104,6 +104,10 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         initTextSection();
     }
 
+    public EntityInstance getHeadlineEntity() {
+        return headlineEntity;
+    }
+
     private void initHeadline() {
         headlineEntity = new EntityInstance(entityModel)
                 .instantiate(HEADLINE_LABEL);
@@ -229,17 +233,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
         doc.addToken(beginInputPN, textSectionGR);
         doc.addToken(endInputPN, textSectionGR);
-    }
-
-    @Override
-    public void disconnectFeedbackTriggers(Document doc) {
-        doc.getFeedbackTrigger().getReceivers().forEach(afl -> {
-            FieldLink fl = (FieldLink) afl;
-            InnerPositiveFeedbackLink l = (InnerPositiveFeedbackLink) fl.getOutput().getReference();
-            if(l.getOutput().getNeuron() == entityModel.getEntityBN()) {
-                fl.disconnect(true);
-            }
-        });
     }
 
     @Override

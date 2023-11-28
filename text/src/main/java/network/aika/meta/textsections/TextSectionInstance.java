@@ -71,10 +71,7 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
 
         Document doc = new Document(getModel(), headline + " " + textSection);
 
-        boolean flag = false;
-
-        if (flag)
-            AIKADebugger.createAndShowGUI()
+        AIKADebugger.createAndShowGUI()
                     .setDocument(doc);
 
         doc.setInstantiationCallback((tAct, iAct) -> {
@@ -90,6 +87,19 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
         return doc;
     }
 
+    @Override
+    public void selectDominantPatterns(Document doc) {
+//        tsModel.getHeadlineEntity().getEntityBN().getActivations(doc).first()
+//                .getNet().receiveUpdate(null, false, 1.0);
+
+    /*    doc.getFeedbackTrigger().getReceivers().forEach(afl -> {
+            FieldLink fl = (FieldLink) afl;
+            InnerPositiveFeedbackLink l = (InnerPositiveFeedbackLink) fl.getOutput().getReference();
+            if(l.getOutput().getNeuron() == entityModel.getEntityBN()) {
+                fl.disconnect(true);
+            }
+        });*/
+    }
 
     @Override
     protected void mapResults(Document doc) {

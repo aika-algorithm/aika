@@ -142,11 +142,6 @@ public class EntityModel implements TemplateModel, Writable {
         doc.addToken(phraseModel.getPatternNeuron(), new TextReference(entityPosRange, entityCharRange));
     }
 
-    @Override
-    public void disconnectFeedbackTriggers(Document doc) {
-
-    }
-
     public PatternNeuron getInstancePattern(String entityType) {
         return getModel().getInputNeuron(entityType, entityPattern);
     }
