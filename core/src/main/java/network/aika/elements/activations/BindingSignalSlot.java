@@ -36,19 +36,23 @@ public class BindingSignalSlot {
 
     private PatternActivation bindingSignal;
 
-    private Transition bsType;
+    private Transition type;
 
     private ArrayList<BindingSignalUpdateListener> listeners = new ArrayList<>(2);
 
-    public BindingSignalSlot(Transition bsType) {
-        this.bsType = bsType;
+    public BindingSignalSlot(Transition type) {
+        this.type = type;
+    }
+
+    public Transition getType() {
+        return type;
     }
 
     public void addListener(BindingSignalUpdateListener l) {
         this.listeners.add(l);
 
         if(bindingSignal != null) {
-            l.onUpdate(bsType, null, bindingSignal, true);
+            l.onUpdate(type, null, bindingSignal, true);
         }
     }
 
@@ -81,12 +85,12 @@ public class BindingSignalSlot {
 
         if(state != lastState) {
             for (BindingSignalUpdateListener l : listeners.toArray(new BindingSignalUpdateListener[0])) {
-                l.onUpdate(bsType, bindingSignal, bs, state);
+                l.onUpdate(type, bindingSignal, bs, state);
             }
         }
     }
 
     public String toString() {
-        return bsType + ": " + (bindingSignal != null ? bindingSignal : "--") + " (" + sourcesCount + ")";
+        return type + ": " + (bindingSignal != null ? bindingSignal : "--") + " (" + sourcesCount + ")";
     }
 }

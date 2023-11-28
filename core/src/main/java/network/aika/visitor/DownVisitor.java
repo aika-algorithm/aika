@@ -73,14 +73,8 @@ public class DownVisitor extends Visitor {
         if(iAct != null) {
             next(iAct, l, state, nd);
 
-            if(operator.check(iAct, state, nd))
-                up(iAct, state, nd);
+            operator.check(iAct, state, nd);
         }
-    }
-
-    public void up(Activation bindingSource, int state, int depth) {
-        new UpVisitor(this)
-                .next(bindingSource, null, state, depth);
     }
 
     public boolean isDown() {

@@ -21,11 +21,7 @@ import network.aika.TemplateModel;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
-import network.aika.elements.neurons.types.LatentRelationNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.elements.relations.ContainsRelation;
-import network.aika.enums.direction.Direction;
-import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.Document;
 import network.aika.text.TextReference;
@@ -62,8 +58,6 @@ public class EntityModel implements TemplateModel, Writable {
     protected Model model;
     protected PhraseModel phraseModel;
 
-    protected TargetInput targetInput;
-
     protected CategoryNeuron entityCategory;
 
     protected PatternNeuron entityPattern;
@@ -71,11 +65,6 @@ public class EntityModel implements TemplateModel, Writable {
     protected BindingNeuron entityBN;
 
     protected InhibitoryNeuron inhibitoryN;
-
-    protected BindingNeuron targetInputBN;
-
-    protected LatentRelationNeuron targetInputRelation;
-
 
     public EntityModel(PhraseModel pm) {
         this.model = pm.getModel();
@@ -135,27 +124,10 @@ public class EntityModel implements TemplateModel, Writable {
                 inhibitoryN,
                 NEG_MARGIN * -entityBN.getTargetNet()
         );
-
-
-        targetInput = new TargetInput(model, ENTITY_LABEL);
-        targetInput.initTargetInput();
-
-        targetInputRelation = new LatentRelationNeuron(
-                model,
-                new ContainsRelation(Direction.OUTPUT)
-        )
-                .setBias(5.0)
-                .setLabel("Contains Rel.: ")
-                .setPersistent(true);
-
-        targetInputBN = targetInput.createTargetInputBindingNeuron(entityBN, entityPattern, targetInputRelation);
-
-        targetInput.setTemplateOnly(true);
     }
 
     public void prepareInstantiation() {
         setTemplateOnly(false);
-        targetInput.setTemplateOnly(false);
         phraseModel.getPatternNeuron().setTemplateOnly(true);
     }
 
@@ -164,7 +136,6 @@ public class EntityModel implements TemplateModel, Writable {
         Range entityCharRange = new Range(0, doc.length());
 
         doc.addToken(phraseModel.getPatternNeuron(), new TextReference(entityPosRange, entityCharRange));
-        doc.addToken(targetInput.getTargetInput(), new TextReference(entityPosRange, entityCharRange));
     }
 
     public PatternNeuron getInstancePattern(String entityType) {
@@ -174,18 +145,6 @@ public class EntityModel implements TemplateModel, Writable {
     public void setTemplateOnly(boolean templateOnly) {
         entityPattern.setTemplateOnly(templateOnly, true);
         entityBN.setTemplateOnly(templateOnly, true);
-        targetInputBN.setTemplateOnly(templateOnly, true);
-    }
-
-    public PatternNeuron addEntity(String entityLabel) {
-        return model.lookupInputNeuron(entityLabel, targetInput.getTargetInput());
-    }
-
-    public void addEntityTarget(Document doc, TextReference textReference, String entityLabel) {
-        doc.addToken(
-                addEntity(entityLabel),
-                textReference
-        );
     }
 
     public Model getModel() {
@@ -198,9 +157,6 @@ public class EntityModel implements TemplateModel, Writable {
         out.writeLong(entityPattern.getId());
         out.writeLong(entityBN.getId());
         out.writeLong(inhibitoryN.getId());
-        targetInput.write(out);
-        out.writeLong(targetInputBN.getId());
-        out.writeLong(targetInputRelation.getId());
     }
 
     @Override
@@ -209,8 +165,5 @@ public class EntityModel implements TemplateModel, Writable {
         entityPattern = m.lookupNeuronProvider(in.readLong()).getNeuron();
         entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        targetInput = TargetInput.read(in, m);
-        targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        targetInputRelation = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

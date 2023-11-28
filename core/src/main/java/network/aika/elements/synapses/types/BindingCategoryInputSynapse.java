@@ -51,7 +51,6 @@ public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
 {
     private double initialCategorySynapseWeight;
 
-
     @Override
     public BindingCategoryInputLink createLink(CategoryActivation input, BindingActivation output) {
         return new BindingCategoryInputLink(this, input, output);

@@ -43,8 +43,7 @@ public abstract class LinkingOperator implements Operator {
     public abstract Link checkAndLink(Activation act);
 
     @Override
-    public boolean check(Activation act, int state, int depth) {
-        return false;
+    public void check(Activation act, int state, int depth) {
     }
 
     public Activation getSourceAct() {

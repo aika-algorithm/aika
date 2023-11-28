@@ -23,7 +23,6 @@ import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.Document;
 import network.aika.utils.Writable;
@@ -43,8 +42,6 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
 
     public PatternNeuron entityPatternN;
     public BindingNeuron entityBN;
-    public BindingNeuron targetInputBN;
-    public PatternNeuron targetInputPN;
 
     EntityModel entityModel;
 
@@ -58,10 +55,6 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
 
     public PhraseModel getPhraseModel() {
         return entityModel.getPhraseModel();
-    }
-
-    public TargetInput getTargetInput() {
-        return entityModel.targetInput;
     }
 
     @Override
@@ -91,6 +84,10 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
         entityBN.setTemplateOnly(templateOnly, true);
     }
 
+    public BindingNeuron getEntityBN() {
+        return entityBN;
+    }
+
     @Override
     protected void mapResults(Document doc) {
         getPhraseModel().getPatternNeuron().setTemplateOnly(false);
@@ -100,27 +97,17 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
 
         entityBN = lookupInstance(doc, entityModel.entityBN);
         entityBN.setPersistent(true);
-
-        targetInputBN = lookupInstance(doc, entityModel.targetInputBN);
-        targetInputBN.setPersistent(true);
-
-        targetInputPN = lookupInstance(doc, entityModel.targetInput.getTargetInput());
-        targetInputBN.setPersistent(true);
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeLong(entityPatternN.getId());
         out.writeLong(entityBN.getId());
-        out.writeLong(targetInputBN.getId());
-        out.writeLong(targetInputPN.getId());
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         entityPatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        targetInputPN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

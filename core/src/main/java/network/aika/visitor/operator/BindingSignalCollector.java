@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package network.aika.visitor.operator;
 
 import network.aika.elements.activations.Activation;
@@ -10,57 +26,55 @@ import network.aika.utils.BitUtils;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.UpVisitor;
 
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * @author Lukas Molzberger
+ */
 public class BindingSignalCollector implements Operator {
 
-    private Transition forbidden;
+    private Transition type;
 
-    private Map<Transition, PatternActivation> bindingSignals = new HashMap<>(2);
+    private PatternActivation bindingSignal;
 
-    public static Map<Transition, PatternActivation> retrieveBindingSignals(Activation act, Transition t) {
-        BindingSignalCollector op = new BindingSignalCollector(t.getInverted());
+    public static PatternActivation retrieveBindingSignal(Activation act, Transition bsType) {
+        BindingSignalCollector op = new BindingSignalCollector(bsType);
         new DownVisitor(
                 act.getDocument(),
                 op
         ).start(act);
-        return op.getBindingSignals();
+        return op.bindingSignal;
     }
 
-    public static Map<Transition, PatternActivation> retrieveBindingSignals(Link l, Transition t) {
-        BindingSignalCollector op = new BindingSignalCollector(t.getInverted());
+    public static PatternActivation retrieveBindingSignal(Link l, Transition bsType) {
+        BindingSignalCollector op = new BindingSignalCollector(bsType);
         new DownVisitor(
                 l.getDocument(),
                 op
         ).start(l);
-        return op.getBindingSignals();
+        return op.bindingSignal;
     }
 
-    public BindingSignalCollector(Transition forbidden) {
-        this.forbidden = forbidden;
+    public BindingSignalCollector(Transition type) {
+        this.type = type;
     }
 
-    public Map<Transition, PatternActivation> getBindingSignals() {
-        return bindingSignals;
+    public PatternActivation getBindingSignal() {
+        return bindingSignal;
     }
 
     @Override
     public boolean checkForbiddenTransitions(Link l, Direction dir) {
-        return l.getSynapse().getTransition() != forbidden;
+        return l.getSynapse().getForbidden() == type;
     }
 
     @Override
-    public boolean check(Activation bsAct, int state, int depth) {
+    public void check(Activation bsAct, int state, int depth) {
         if(!(bsAct instanceof PatternActivation))
-            return false;
+            return;
 
         for(Transition t: Transition.values()) {
             if(BitUtils.isSet(state, t))
-                bindingSignals.put(t, (PatternActivation) bsAct);
+                bindingSignal = (PatternActivation) bsAct;
         }
-
-        return false;
     }
 
     @Override

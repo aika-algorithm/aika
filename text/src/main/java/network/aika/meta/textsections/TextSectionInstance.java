@@ -21,8 +21,8 @@ import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.meta.TargetInput;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.Document;
 import network.aika.utils.Writable;
@@ -43,7 +43,8 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
 
     private TypedTextSectionModel tsModel;
 
-    private PatternNeuron headlineTargetInputPN;
+    private BindingNeuron headlineBN;
+
     private PatternNeuron hintInputPN;
 
     public TextSectionInstance(TypedTextSectionModel tsModel) {
@@ -69,10 +70,10 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
         String textSection = label + " " + TEXT_SECTION_LABEL;
 
         Document doc = new Document(getModel(), headline + " " + textSection);
-/*
+
         AIKADebugger.createAndShowGUI()
                .setDocument(doc);
-*/
+
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(tAct, iAct, label);
 
@@ -86,18 +87,14 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
         return doc;
     }
 
+
     @Override
     protected void mapResults(Document doc) {
         getPhraseModel().getPatternNeuron().setTemplateOnly(false);
 
-        TargetInput.setTemplateOnly(
-                lookupInstance(doc, tsModel.headlineEntity.targetInputPN),
-                lookupInstance(doc, tsModel.headlineEntity.targetInputBN),
-                true
-        );
+        headlineBN = lookupInstance(doc, tsModel.tsHeadlineBN);
+        headlineBN.setPersistent(true);
 
-        headlineTargetInputPN = lookupInstance(doc, tsModel.headlineEntity.targetInputPN);
-        headlineTargetInputPN.setPersistent(true);
         hintInputPN = lookupInstance(doc, tsModel.hintInputPN);
         hintInputPN.setPersistent(true);
     }
@@ -119,8 +116,8 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
         return tAct.getLabel().contains("Hint");
     }
 
-    public PatternNeuron getHeadlineTargetInputPN() {
-        return headlineTargetInputPN;
+    public BindingNeuron getHeadlineBN() {
+        return headlineBN;
     }
 
     public PatternNeuron getHintInputPN() {
@@ -129,13 +126,13 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
 
     @Override
     public void write(DataOutput out) throws IOException {
-        out.writeLong(headlineTargetInputPN.getId());
+        out.writeLong(headlineBN.getId());
         out.writeLong(hintInputPN.getId());
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
-        headlineTargetInputPN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        headlineBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         hintInputPN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

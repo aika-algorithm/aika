@@ -36,13 +36,13 @@ import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.elements.Timestamp.FIRED_COMPARATOR;
 import static network.aika.fields.ThresholdOperator.Type.ABOVE;
-import static network.aika.visitor.operator.BindingSignalCollector.retrieveBindingSignals;
+import static network.aika.visitor.operator.BindingSignalCollector.retrieveBindingSignal;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class Link<S extends Synapse, I extends Activation<?>, O extends Activation> implements Element {
+public abstract class Link<S extends Synapse, I extends Activation<?>, O extends Activation<?>> implements Element {
 
     protected S synapse;
 
@@ -234,10 +234,16 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         if(output.getBindingSignalSlots().findAny().isEmpty())
             return;
 
-        retrieveBindingSignals(this, synapse.getTransition())
-                .forEach((t, bs) ->
-                    propagateBindingSignal(bs, t, state)
-                );
+        output.getBindingSignalSlots()
+                        .forEach(bsSlot ->
+                            propagateBindingSignal(state, bsSlot)
+                        );
+    }
+
+    private void propagateBindingSignal(boolean state, BindingSignalSlot bsSlot) {
+        PatternActivation bs = retrieveBindingSignal(this, bsSlot.getType());
+        if(bs != null)
+            bsSlot.connectBindingSignal(bs, state);
     }
 
     public void propagateBindingSignal(PatternActivation bs, Transition t, boolean state) {

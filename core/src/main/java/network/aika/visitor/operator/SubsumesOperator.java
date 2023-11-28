@@ -62,11 +62,9 @@ public class SubsumesOperator implements Operator {
     }
 
     @Override
-    public boolean check(Activation bsAct, int state, int depth) {
+    public void check(Activation bsAct, int state, int depth) {
         if(bsAct == target)
             subsumes = true;
-
-        return false;
     }
 
     @Override

@@ -33,7 +33,7 @@ public abstract class DisjunctiveSynapse<
         O extends Neuron<O, OA>,
         L extends Link<S, IA, OA>,
         IA extends Activation<?>,
-        OA extends Activation
+        OA extends Activation<?>
         > extends Synapse<S, I, O, L, IA, OA>
 {
 

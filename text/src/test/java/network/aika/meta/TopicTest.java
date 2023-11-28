@@ -61,6 +61,11 @@ public class TopicTest extends TrainingParser {
         );
     }
 
+    @Override
+    protected void prepareTargets(Document doc, Context context) {
+
+    }
+
     @Test
     public void testTopics() {
         process("a b", null, COUNTING);

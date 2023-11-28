@@ -43,7 +43,8 @@ import static network.aika.enums.Transition.SAME;
         inputType = BINDING,
         outputType = BINDING,
         transition = SAME,
-        required = INPUT
+        required = INPUT,
+        forbidden = INPUT
 )
 public class SameObjectSynapse extends ConjunctiveSynapse<
         SameObjectSynapse,

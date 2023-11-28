@@ -61,6 +61,10 @@ public class AnnealingTest extends TrainingParser {
         );
     }
 
+    @Override
+    protected void prepareTargets(Document doc, Context context) {
+    }
+
     @Test
     public void testAnnealing() {
         process("a b", null, COUNTING);

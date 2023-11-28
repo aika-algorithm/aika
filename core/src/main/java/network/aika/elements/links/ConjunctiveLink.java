@@ -30,7 +30,7 @@ import network.aika.visitor.Visitor;
 import static network.aika.fields.AbstractFieldLink.updateConnected;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
-import static network.aika.visitor.operator.BindingSignalCollector.retrieveBindingSignals;
+import static network.aika.visitor.operator.BindingSignalCollector.retrieveBindingSignal;
 import static network.aika.visitor.operator.SubsumesOperator.subsumes;
 
 
@@ -69,7 +69,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     private void updateInputSlotFieldLink(Transition t, PatternActivation oBS, PatternActivation nBS, boolean state) {
-        PatternActivation bs = retrieveBindingSignals(input, t).get(t);
+        PatternActivation bs = retrieveBindingSignal(input, t);
         if(bs == null)
             return;
 

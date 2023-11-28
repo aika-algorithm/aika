@@ -281,11 +281,7 @@ public class Document extends Queue implements Element {
     }
 
     public PatternActivation addToken(PatternNeuron n, TextReference textReference, double inputNet) {
-        PatternActivation act = new PatternActivation(
-                createActivationId(),
-                this,
-                n
-        );
+        PatternActivation act = n.createActivation(this);
 
         act.updateRanges(textReference);
 
