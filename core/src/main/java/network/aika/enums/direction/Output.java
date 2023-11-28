@@ -20,6 +20,8 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
+import network.aika.enums.Scope;
+import network.aika.enums.Transition;
 
 import java.io.DataOutput;
 import java.io.IOException;
@@ -58,6 +60,15 @@ public class Output implements Direction {
     @Override
     public Activation getActivation(Link l) {
         return l.getOutput();
+    }
+
+    @Override
+    public Scope transition(Scope s, Transition[] trns) {
+        for(Transition t: trns)
+            if(t.getFrom() == s)
+                return t.getTo();
+
+        return null;
     }
 
     @Override

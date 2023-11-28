@@ -36,7 +36,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static network.aika.enums.Transition.SAME;
 import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.parser.ParserPhase.TRAINING;
 
@@ -136,14 +135,14 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     protected void prepareTargets(Document doc, TestContext context) {
         if(context != null) {
             if(context.getTextSectionType() != null) {
-/*
+
                 TextSectionInstance tsInstance =
                         switch (context.getTextSectionType()) {
                             case PROFILE_LABEL -> profileTS;
                             case TASKS_LABEL -> tasksTS;
                             default -> null;
                         };
-*/
+
             }
 /*            if(context.getCandidateRanges() != null) {
                 context.getCandidateRanges()

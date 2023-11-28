@@ -19,6 +19,7 @@ package network.aika.elements.links;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
+import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.visitor.Visitor;
 
@@ -42,11 +43,11 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
     }
 
     @Override
-    public void visit(Visitor v, int state, int depth) {
+    public void visit(Visitor v, Scope s, int depth) {
         if(checkVisited(v))
             return;
 
-        super.visit(v, state, depth);
+        super.visit(v, s, depth);
     }
 
     private boolean checkVisited(Visitor v) {

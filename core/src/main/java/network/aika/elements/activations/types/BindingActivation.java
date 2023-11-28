@@ -25,7 +25,7 @@ import network.aika.elements.neurons.types.BindingNeuron;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.utils.Utils.TOLERANCE;
 

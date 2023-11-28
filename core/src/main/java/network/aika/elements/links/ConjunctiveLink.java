@@ -22,11 +22,13 @@ import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.enums.Transition;
+import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.*;
 import network.aika.visitor.Visitor;
 
+import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.AbstractFieldLink.updateConnected;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
@@ -68,15 +70,15 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         outputNet = sub(this, "outputNet", output.getNet(), synOutputSlot);
     }
 
-    private void updateInputSlotFieldLink(Transition t, PatternActivation oBS, PatternActivation nBS, boolean state) {
-        PatternActivation bs = retrieveBindingSignal(input, t);
+    private void updateInputSlotFieldLink(Scope s, PatternActivation oBS, PatternActivation nBS, boolean state) {
+        PatternActivation bs = retrieveBindingSignal(input, INPUT.transition(s, synapse.getTransition()));
         if(bs == null)
             return;
 
         updateConnected(
                 inputSlotFL,
                 state && (
-                        subsumes(t, nBS, bs) || subsumes(t, bs, nBS)
+                        subsumes(s, nBS, bs) || subsumes(s, bs, nBS)
                 ),
                 true
         );
@@ -130,12 +132,12 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
-    public void visit(Visitor v, int state, int depth) {
+    public void visit(Visitor v, Scope s, int depth) {
        if(input == null)
             return;
 
         if(isActive())
-            v.next(this, state, depth);
+            v.next(this, s, depth);
     }
 
     @Override
@@ -145,9 +147,10 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         if (synInputSlot != null) {
             inputSlotFL = linkAndConnect(outputNet, synInputSlot);
 
-            BindingSignalSlot slot = output.getBindingSignalSlot(synapse.getTransition());
-            if(slot != null)
-                slot.addListener(this::updateInputSlotFieldLink);
+            output.getBindingSignalSlots()
+                    .forEach(bsSlot ->
+                            bsSlot.addListener(this::updateInputSlotFieldLink)
+                    );
         }
 
         if(synapse.isOptional())

@@ -31,6 +31,7 @@ import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.queue.Phase.OUTPUT_LINKING;
 
@@ -90,7 +91,7 @@ public class LinkingOut extends ElementStep<Activation> {
             new UpVisitor(
                     act.getDocument(),
                     op
-            ).start(bindingSignal);
+            ).start(bindingSignal, SAME);
         }
     }
 

@@ -20,7 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
-import network.aika.enums.Transition;
+import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.UpVisitor;
@@ -31,44 +31,32 @@ import network.aika.visitor.UpVisitor;
  */
 public class SubsumesOperator implements Operator {
 
-    private Transition[] forbidden;
-
     private PatternActivation target;
 
     private boolean subsumes;
 
-    public SubsumesOperator(PatternActivation target, Transition[] forbidden) {
+    public SubsumesOperator(PatternActivation target) {
         this.target = target;
-        this.forbidden = forbidden;
     }
 
-    public static boolean subsumes(Transition bsType, PatternActivation a, PatternActivation b) {
-        SubsumesOperator op = new SubsumesOperator(b, new Transition[]{bsType.getInverted()});
+    public static boolean subsumes(Scope s, PatternActivation a, PatternActivation b) {
+        SubsumesOperator op = new SubsumesOperator(b);
         new DownVisitor(
                 a.getDocument(),
                 op
-        ).start(a);
+        ).start(a, s);
 
         return op.subsumes;
     }
 
     @Override
-    public boolean checkForbiddenTransitions(Link l, Direction dir) {
-        for(Transition ft: forbidden)
-            if (l.getSynapse().isForbiddenTransition(ft))
-                return false;
-
-        return true;
-    }
-
-    @Override
-    public void check(Activation bsAct, int state, int depth) {
+    public void check(Activation bsAct, Scope s, int depth) {
         if(bsAct == target)
             subsumes = true;
     }
 
     @Override
-    public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
+    public void visitorCheck(UpVisitor v, Link lastLink, Activation act, Scope s) {
     }
 
     @Override

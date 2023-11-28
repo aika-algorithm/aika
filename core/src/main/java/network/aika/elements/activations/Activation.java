@@ -30,7 +30,7 @@ import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.LinkingMode;
-import network.aika.enums.Transition;
+import network.aika.enums.Scope;
 import network.aika.queue.activation.*;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
@@ -141,7 +141,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected void connectWeightUpdate() {
     }
 
-    public BindingSignalSlot getBindingSignalSlot(Transition t) {
+    public BindingSignalSlot getBindingSignalSlot(Scope t) {
         return bindingSignalSlots[t.ordinal()];
     }
 
@@ -187,7 +187,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void initBindingSignalSlots() {
-        Stream<Transition> bsSlots = neuron.getBindingSignalSlots();
+        Stream<Scope> bsSlots = neuron.getBindingSignalSlots();
         bsSlots.forEach(bsSlot ->
                 bindingSignalSlots[bsSlot.ordinal()] = new BindingSignalSlot(bsSlot)
         );
@@ -220,7 +220,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         Propagate.add(this, REGULAR);
     }
 
-    protected void addLinkingStepsOnBindingSignal(Transition t, PatternActivation nBS, boolean state) {
+    protected void addLinkingStepsOnBindingSignal(Scope t, PatternActivation nBS, boolean state) {
         LinkingIn.add(this, nBS);
 
         LinkingMode lm = getLinkingMode(isFired());
@@ -237,7 +237,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected void initInactiveLinks() {
     }
 
-    public PatternActivation getBindingSignal(Transition t) {
+    public PatternActivation getBindingSignal(Scope t) {
         BindingSignalSlot slot = getBindingSignalSlot(t);
         return slot != null ?
                 slot.getBindingSignal() :

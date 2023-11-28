@@ -30,6 +30,7 @@ import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.queue.Phase.INPUT_LINKING;
 
@@ -70,7 +71,7 @@ public class LinkingIn extends ElementStep<Activation> {
             new UpVisitor(
                     bindingSignal.getDocument(),
                     op
-            ).start(bindingSignal);
+            ).start(bindingSignal, SAME);
         }
     }
 

@@ -25,7 +25,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
 import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.types.PatternActivation;
-import network.aika.enums.Transition;
+import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.visitor.Visitor;
@@ -105,8 +105,8 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     public void addLinkingSteps() {
     }
 
-    public void visit(Visitor v, int state, int depth) {
-        v.next(this, state, depth);
+    public void visit(Visitor v, Scope s, int depth) {
+        v.next(this, s, depth);
     }
 
     protected void connectGradientFields() {
@@ -246,7 +246,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
             bsSlot.connectBindingSignal(bs, state);
     }
 
-    public void propagateBindingSignal(PatternActivation bs, Transition t, boolean state) {
+    public void propagateBindingSignal(PatternActivation bs, Scope t, boolean state) {
         BindingSignalSlot bsSlot = output.getBindingSignalSlot(t);
         if(bsSlot != null)
             bsSlot.connectBindingSignal(bs, state);

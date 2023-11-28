@@ -27,8 +27,7 @@ import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
 
 import static network.aika.elements.Type.INHIBITORY;
-import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Scope.INPUT;
 
 /**
  *

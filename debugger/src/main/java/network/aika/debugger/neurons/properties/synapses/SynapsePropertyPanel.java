@@ -56,12 +56,6 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
                         .map(t -> "" + t)
                         .collect(Collectors.joining(", "))
         );
-        addConstant("Forbidden: ", "" +
-                Arrays.asList(s.getForbidden())
-                        .stream()
-                        .map(t -> "" + t)
-                        .collect(Collectors.joining(", "))
-        );
         addConstant("Required: ", "" +
                 Arrays.asList(s.getRequired())
                         .stream()

@@ -20,6 +20,7 @@ import network.aika.elements.Type;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.links.Link;
+import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
 import network.aika.visitor.Visitor;
@@ -91,7 +92,7 @@ public class NegativeFeedbackLink extends Link<NegativeFeedbackSynapse, Inhibito
     }
 
     @Override
-    public void visit(Visitor v, int state, int depth) {
+    public void visit(Visitor v, Scope s, int depth) {
     }
 
     @Override

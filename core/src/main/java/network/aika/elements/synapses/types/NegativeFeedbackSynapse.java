@@ -27,8 +27,10 @@ import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.Type.*;
 import static network.aika.enums.LinkingMode.REGULAR;
-import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Scope.SAME;
+import static network.aika.enums.Transition.INPUT_INPUT;
+import static network.aika.enums.Transition.SAME_INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 
 /**
@@ -38,8 +40,9 @@ import static network.aika.enums.direction.Direction.OUTPUT;
 @SynapseType(
         inputType = INHIBITORY,
         outputType = BINDING,
-        transition = INPUT,
-        forbidden = SAME,
+        transition = INPUT_INPUT,
+        required = INPUT_INPUT,
+//        forbidden = SAME,
         linkingMode = REGULAR
 )
 public class NegativeFeedbackSynapse extends Synapse<

@@ -19,10 +19,10 @@ package network.aika.visitor;
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.enums.direction.Direction;
-import network.aika.utils.BitUtils;
+import network.aika.enums.Scope;
 import network.aika.visitor.operator.Operator;
 
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.utils.Utils.depthToSpace;
 import static network.aika.utils.Utils.idToString;
 
@@ -42,34 +42,28 @@ public class UpVisitor extends Visitor {
     }
 
     @Override
-    public void next(Activation<?> act, Link lastLink, int state, int depth) {
-        operator.visitorCheck(this, lastLink, act, state);
+    public void next(Activation<?> act, Link lastLink, Scope s, int depth) {
+        operator.visitorCheck(this, lastLink, act, s);
 
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
 
         act.getOutputLinks()
                 .forEach(l ->
-                        l.visit(
-                                this,
-                                BitUtils.transition(
-                                        state,
-                                        l.getSynapse().getTransition()
-                                ),
-                                depth + 1
-                        )
+                        l.visit(this, s, depth + 1)
                 );
     }
 
     @Override
-    public void next(Link<?, ?, ?> l, int state, int depth) {
-        if(!operator.checkForbiddenTransitions(l, Direction.OUTPUT))
-            return;
-
+    public void next(Link<?, ?, ?> l, Scope s, int depth) {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
 
-        next(l.getOutput(), l, state, depth + 1);
+        Scope ts = OUTPUT.transition(s, l.getSynapse().getTransition());
+        if (ts == null)
+            return;
+
+        next(l.getOutput(), l, ts, depth + 1);
     }
 
     public boolean isDown() {

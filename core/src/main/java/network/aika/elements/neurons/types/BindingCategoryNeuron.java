@@ -24,8 +24,8 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.NeuronType;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Scope.SAME;
 
 /**
  * @author Lukas Molzberger

@@ -31,9 +31,11 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.*;
-import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.LinkingMode.FEEDBACK;
+import static network.aika.enums.Transition.INPUT_INPUT;
+import static network.aika.enums.Transition.SAME_SAME;
 
 /**
  *
@@ -42,9 +44,10 @@ import static network.aika.enums.LinkingMode.FEEDBACK;
 @SynapseType(
         inputType = PATTERN,
         outputType = BINDING,
-        transition = SAME,
-        linkingMode = FEEDBACK,
-        forbidden = INPUT
+        transition = SAME_SAME,
+        required = SAME_SAME,
+        linkingMode = FEEDBACK
+ //       forbidden = INPUT
 )
 public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         InnerPositiveFeedbackSynapse,

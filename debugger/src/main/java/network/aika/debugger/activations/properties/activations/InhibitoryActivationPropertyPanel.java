@@ -18,8 +18,6 @@ package network.aika.debugger.activations.properties.activations;
 
 import network.aika.elements.activations.types.InhibitoryActivation;
 
-import static network.aika.enums.Transition.INPUT;
-
 
 /**
  * @author Lukas Molzberger

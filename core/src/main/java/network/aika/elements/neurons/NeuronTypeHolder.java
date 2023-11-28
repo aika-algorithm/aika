@@ -17,7 +17,7 @@
 package network.aika.elements.neurons;
 
 import network.aika.elements.Type;
-import network.aika.enums.Transition;
+import network.aika.enums.Scope;
 
 import java.util.HashMap;
 
@@ -29,7 +29,7 @@ public class NeuronTypeHolder {
 
     private Type type;
 
-    private Transition[] bindingSignalSlots;
+    private Scope[] bindingSignalSlots;
 
     public static NeuronTypeHolder getHolder(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
@@ -50,7 +50,7 @@ public class NeuronTypeHolder {
         return type;
     }
 
-    public Transition[] getBindingSignalSlots() {
+    public Scope[] getBindingSignalSlots() {
         return bindingSignalSlots;
     }
 }

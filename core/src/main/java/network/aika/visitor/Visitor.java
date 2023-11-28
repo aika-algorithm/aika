@@ -17,9 +17,8 @@
 package network.aika.visitor;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
-import network.aika.utils.BitUtils;
+import network.aika.enums.Scope;
 import network.aika.visitor.operator.Operator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,28 +38,12 @@ public abstract class Visitor {
         return operator;
     }
 
-    public void start(Activation<?> act) {
-        next(
-                act,
-                null,
-                0,
-                0
-        );
+    public void start(Activation<?> act, Scope s) {
+        next(act,null, s, 0);
     }
 
-    public void start(Link l) {
-        l.visit(
-                this,
-                BitUtils.transition(
-                        0,
-                        l.getSynapse().getTransition()
-                ), 0
-        );
-    }
-
-
-    public void up(ConjunctiveActivation bindingSource, int state, int depth) {
-        // Nothing to do
+    public void start(Link l, Scope s) {
+        l.visit(this, s, 0);
     }
 
     public abstract int getDirectionIndex();
@@ -69,9 +52,9 @@ public abstract class Visitor {
         return v;
     }
 
-    public abstract void next(Activation<?> act, Link lastLink, int state, int depth);
+    public abstract void next(Activation<?> act, Link lastLink, Scope s, int depth);
 
-    public abstract void next(Link<?, ?, ?> l, int state, int depth);
+    public abstract void next(Link<?, ?, ?> l, Scope s, int depth);
 
     protected abstract String dirToString();
 

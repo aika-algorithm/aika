@@ -20,41 +20,41 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
-import network.aika.enums.Transition;
+import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
-import network.aika.utils.BitUtils;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.UpVisitor;
+
+import static network.aika.enums.Scope.SAME;
 
 /**
  * @author Lukas Molzberger
  */
 public class BindingSignalCollector implements Operator {
 
-    private Transition type;
+    private Scope type;
 
     private PatternActivation bindingSignal;
 
-    public static PatternActivation retrieveBindingSignal(Activation act, Transition bsType) {
-        BindingSignalCollector op = new BindingSignalCollector(bsType);
+    public static PatternActivation retrieveBindingSignal(Activation act, Scope s) {
+        BindingSignalCollector op = new BindingSignalCollector();
         new DownVisitor(
                 act.getDocument(),
                 op
-        ).start(act);
+        ).start(act, s);
         return op.bindingSignal;
     }
 
-    public static PatternActivation retrieveBindingSignal(Link l, Transition bsType) {
-        BindingSignalCollector op = new BindingSignalCollector(bsType);
+    public static PatternActivation retrieveBindingSignal(Link l, Scope s) {
+        BindingSignalCollector op = new BindingSignalCollector();
         new DownVisitor(
                 l.getDocument(),
                 op
-        ).start(l);
+        ).start(l, s);
         return op.bindingSignal;
     }
 
-    public BindingSignalCollector(Transition type) {
-        this.type = type;
+    public BindingSignalCollector() {
     }
 
     public PatternActivation getBindingSignal() {
@@ -62,23 +62,13 @@ public class BindingSignalCollector implements Operator {
     }
 
     @Override
-    public boolean checkForbiddenTransitions(Link l, Direction dir) {
-        return l.getSynapse().getForbidden() == type;
+    public void check(Activation bsAct, Scope s, int depth) {
+        if((bsAct instanceof PatternActivation) && s == SAME)
+            bindingSignal = (PatternActivation) bsAct;
     }
 
     @Override
-    public void check(Activation bsAct, int state, int depth) {
-        if(!(bsAct instanceof PatternActivation))
-            return;
-
-        for(Transition t: Transition.values()) {
-            if(BitUtils.isSet(state, t))
-                bindingSignal = (PatternActivation) bsAct;
-        }
-    }
-
-    @Override
-    public void visitorCheck(UpVisitor v, Link lastLink, Activation act, int state) {
+    public void visitorCheck(UpVisitor v, Link lastLink, Activation act, Scope s) {
     }
 
     @Override

@@ -18,17 +18,12 @@ package network.aika.elements.activations.types;
 
 import network.aika.Document;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.enums.Transition;
+import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.enums.sign.Sign;
-import network.aika.queue.activation.LatentLinking;
-import network.aika.queue.activation.LinkingOut;
-import network.aika.queue.activation.Propagate;
 
-import static network.aika.enums.LinkingMode.FEEDBACK;
-import static network.aika.enums.LinkingMode.REGULAR;
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.Fields.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -55,7 +50,7 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
     }
 
     @Override
-    public PatternActivation getBindingSignal(Transition t) {
+    public PatternActivation getBindingSignal(Scope t) {
         return this;
     }
 

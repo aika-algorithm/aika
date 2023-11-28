@@ -19,10 +19,10 @@ package network.aika.visitor;
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.enums.direction.Direction;
-import network.aika.utils.BitUtils;
+import network.aika.enums.Scope;
 import network.aika.visitor.operator.Operator;
 
+import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.utils.Utils.depthToSpace;
 import static network.aika.utils.Utils.idToString;
 
@@ -43,37 +43,31 @@ public class DownVisitor extends Visitor {
     }
 
     @Override
-    public void next(Activation<?> act, Link lastLink, int state, int depth) {
+    public void next(Activation<?> act, Link lastLink, Scope s, int depth) {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
 
         act.getInputLinks()
                 .forEach(l ->
-                        l.visit(
-                                this,
-                                BitUtils.transition(
-                                        state,
-                                        l.getSynapse().getTransition()
-                                ),
-                                depth + 1
-                        )
+                        l.visit(this, s, depth + 1)
                 );
     }
 
     @Override
-    public void next(Link<?, ?, ?> l, int state, int depth) {
-        if(!operator.checkForbiddenTransitions(l, Direction.INPUT))
-            return;
-
+    public void next(Link<?, ?, ?> l, Scope s, int depth) {
         if(log.isDebugEnabled())
             log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
+
+        Scope ts = INPUT.transition(s, l.getSynapse().getTransition());
+        if (ts == null)
+            return;
 
         int nd = depth + 1;
         Activation iAct = l.getInput();
         if(iAct != null) {
-            next(iAct, l, state, nd);
+            next(iAct, l, ts, nd);
 
-            operator.check(iAct, state, nd);
+            operator.check(iAct, ts, nd);
         }
     }
 

@@ -17,7 +17,7 @@
 package network.aika.elements.activations;
 
 import network.aika.elements.activations.types.PatternActivation;
-import network.aika.enums.Transition;
+import network.aika.enums.Scope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,15 +36,15 @@ public class BindingSignalSlot {
 
     private PatternActivation bindingSignal;
 
-    private Transition type;
+    private Scope type;
 
     private ArrayList<BindingSignalUpdateListener> listeners = new ArrayList<>(2);
 
-    public BindingSignalSlot(Transition type) {
+    public BindingSignalSlot(Scope type) {
         this.type = type;
     }
 
-    public Transition getType() {
+    public Scope getType() {
         return type;
     }
 

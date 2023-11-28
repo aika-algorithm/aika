@@ -21,11 +21,11 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.relations.Relation;
-import network.aika.enums.Transition;
 import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;
+import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.FieldOutput;
 import network.aika.fields.SumField;
@@ -33,7 +33,6 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.LinkingMode;
 import network.aika.text.TextReference;
-import network.aika.utils.BitUtils;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
 import network.aika.visitor.operator.LinkingOperator;
@@ -97,37 +96,14 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.getOutputType();
     }
 
-    public Transition getTransition() {
+    public Transition[] getTransition() {
         return synapseType.getTransition();
     }
 
-    public Transition[] getForbidden() {
-        return synapseType.getForbidden();
-    }
-
-    public Transition[] getRequired() {
+    public Transition getRequired() {
         return synapseType.getRequired();
     }
 
-    public boolean checkForbiddenTransitions(Link l, Direction dir) {
-        for(Transition ft: synapseType.getForbidden())
-            if (l.getSynapse().isForbiddenTransition(ft))
-                return false;
-
-        return true;
-    }
-
-    public boolean isForbiddenTransition(Transition ft) {
-        return ft == getTransition();
-    }
-
-    public boolean checkRequiredTransitions(int state) {
-        for(Transition rt: synapseType.getRequired())
-            if(!BitUtils.isSet(state, rt))
-                return false;
-
-        return true;
-    }
 
     public abstract double[] getSumOfLowerWeights();
 

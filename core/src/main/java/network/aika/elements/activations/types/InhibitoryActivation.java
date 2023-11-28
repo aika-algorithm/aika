@@ -26,7 +26,7 @@ import network.aika.elements.links.types.InhibitoryLink;
 import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.enums.LinkingMode;
-import network.aika.enums.Transition;
+import network.aika.enums.Scope;
 import network.aika.queue.activation.*;
 
 import java.util.List;
@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 
 import static network.aika.enums.LinkingMode.REGULAR;
 import static network.aika.enums.LinkingMode.getLinkingMode;
-import static network.aika.enums.Transition.INPUT;
+import static network.aika.enums.Scope.INPUT;
 
 /**
  *
@@ -59,7 +59,7 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
     }
 
     @Override
-    protected void addLinkingStepsOnBindingSignal(Transition t, PatternActivation nBS, boolean state) {
+    protected void addLinkingStepsOnBindingSignal(Scope t, PatternActivation nBS, boolean state) {
         LinkingIn.add(this, nBS);
         LinkingOut.add(this, nBS, getLinkingMode(isFired()));
     }

@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.INHIBITORY;
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.queue.Phase.NEGATIVE_FEEDBACK;
 import static network.aika.utils.Utils.TOLERANCE;

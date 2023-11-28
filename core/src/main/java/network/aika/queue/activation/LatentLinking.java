@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static network.aika.elements.synapses.Synapse.getNetUB;
+import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.queue.Phase.LATENT_LINKING;
@@ -117,7 +118,7 @@ public class LatentLinking extends ElementStep<Activation> {
             new UpVisitor(
                     bindingSignal.getDocument(),
                     op
-            ).start(bindingSignal);
+            ).start(bindingSignal, SAME);
         }
     }
 

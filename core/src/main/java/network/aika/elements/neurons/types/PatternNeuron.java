@@ -36,8 +36,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.sign.Sign.POS;
 import static network.aika.text.Range.length;
 

@@ -20,6 +20,7 @@ import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.LatentRelationActivation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.types.RelationInputSynapse;
+import network.aika.enums.Scope;
 import network.aika.visitor.Visitor;
 
 /**
@@ -36,6 +37,6 @@ public class RelationInputLink extends ConjunctiveLink<RelationInputSynapse, Lat
     }
 
     @Override
-    public void visit(Visitor v, int state, int depth) {
+    public void visit(Visitor v, Scope s, int depth) {
     }
 }

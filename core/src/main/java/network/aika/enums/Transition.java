@@ -16,33 +16,32 @@
  */
 package network.aika.enums;
 
+import network.aika.enums.direction.Direction;
+
+import static network.aika.enums.Scope.*;
+
 /**
  *
  * @author Lukas Molzberger
  */
 public enum Transition {
-    INPUT(1),
-    SAME(2),
-    CATEGORY(4);
+    SAME_INPUT(SAME, INPUT),
+    SAME_SAME(SAME, SAME),
+    INPUT_INPUT(INPUT, INPUT);
 
-    private int state;
+    private Scope from;
+    private Scope to;
 
-    private Transition inverted;
-
-    static {
-        INPUT.inverted = SAME;
-        SAME.inverted = INPUT;
+    Transition(Scope from, Scope to) {
+        this.from = from;
+        this.to = to;
     }
 
-    Transition(int state) {
-        this.state = state;
+    public Scope getFrom() {
+        return from;
     }
 
-    public int getState() {
-        return state;
-    }
-
-    public Transition getInverted() {
-        return inverted;
+    public Scope getTo() {
+        return to;
     }
 }

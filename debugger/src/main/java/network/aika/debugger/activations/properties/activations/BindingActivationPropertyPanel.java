@@ -19,9 +19,6 @@ package network.aika.debugger.activations.properties.activations;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.LatentRelationActivation;
 
-import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.Transition.SAME;
-
 
 /**
  * @author Lukas Molzberger

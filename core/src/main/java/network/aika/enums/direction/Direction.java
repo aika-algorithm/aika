@@ -20,6 +20,8 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
+import network.aika.enums.Scope;
+import network.aika.enums.Transition;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -44,6 +46,8 @@ public interface Direction {
     Neuron getNeuron(Synapse s);
 
     Activation getActivation(Link l);
+
+    Scope transition(Scope s, Transition[] t);
 
     void write(DataOutput out) throws IOException;
 

@@ -27,4 +27,7 @@ public interface TemplateModel {
     void prepareInstantiation();
 
     void prepareExampleDoc(Document doc, String label);
+
+    void disconnectFeedbackTriggers(Document doc);
+
 }

@@ -61,6 +61,9 @@ public abstract class InstantiationUtil<I extends InstantiationUtil> {
             getTemplateModel().prepareExampleDoc(doc, label);
 
             doc.process(MAX_ROUND, INFERENCE);
+
+            getTemplateModel().disconnectFeedbackTriggers(doc);
+
             doc.anneal();
             doc.process(MAX_ROUND, ANNEAL);
             doc.instantiateTemplates();

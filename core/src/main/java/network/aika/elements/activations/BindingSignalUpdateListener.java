@@ -17,7 +17,7 @@
 package network.aika.elements.activations;
 
 import network.aika.elements.activations.types.PatternActivation;
-import network.aika.enums.Transition;
+import network.aika.enums.Scope;
 
 /**
  *
@@ -25,5 +25,5 @@ import network.aika.enums.Transition;
  */
 public interface BindingSignalUpdateListener {
 
-    void onUpdate(Transition t, PatternActivation oldBS, PatternActivation newBS, boolean state);
+    void onUpdate(Scope t, PatternActivation oldBS, PatternActivation newBS, boolean state);
 }

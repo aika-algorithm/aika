@@ -18,6 +18,7 @@ package network.aika.elements.synapses;
 
 import network.aika.elements.Type;
 import network.aika.enums.LinkingMode;
+import network.aika.enums.Scope;
 import network.aika.enums.Transition;
 
 import java.util.HashMap;
@@ -31,11 +32,9 @@ public class SynapseTypeHolder {
 
     private Type outputType;
 
-    private Transition transition;
+    private Transition[] transition;
 
-    private Transition[] required;
-
-    private Transition[] forbidden;
+    private Transition required;
 
     private LinkingMode linkingMode;
 
@@ -54,7 +53,6 @@ public class SynapseTypeHolder {
         outputType = synTypeAnno.outputType();
         transition = synTypeAnno.transition();
         required = synTypeAnno.required();
-        forbidden = synTypeAnno.forbidden();
         linkingMode = synTypeAnno.linkingMode();
     }
 
@@ -66,16 +64,12 @@ public class SynapseTypeHolder {
         return outputType;
     }
 
-    public Transition getTransition() {
+    public Transition[] getTransition() {
         return transition;
     }
 
-    public Transition[] getRequired() {
+    public Transition getRequired() {
         return required;
-    }
-
-    public Transition[] getForbidden() {
-        return forbidden;
     }
 
     public LinkingMode getLinkingMode() {

@@ -24,8 +24,8 @@ import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.enums.Transition.SAME;
-import static network.aika.enums.Transition.CATEGORY;
+import static network.aika.enums.Transition.INPUT_INPUT;
+import static network.aika.enums.Transition.SAME_SAME;
 
 /**
  *
@@ -34,8 +34,9 @@ import static network.aika.enums.Transition.CATEGORY;
 @SynapseType(
         inputType = BINDING,
         outputType = BINDING,
-        transition = CATEGORY,
-        forbidden = SAME
+        transition = {INPUT_INPUT, SAME_SAME},
+        required = INPUT_INPUT
+//        forbidden = SAME
 )
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
 

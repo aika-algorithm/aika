@@ -25,8 +25,9 @@ import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.*;
-import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.Transition.SAME;
+import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Scope.SAME;
+import static network.aika.enums.Transition.INPUT_INPUT;
 
 /**
  *
@@ -35,8 +36,9 @@ import static network.aika.enums.Transition.SAME;
 @SynapseType(
         inputType = BINDING,
         outputType = INHIBITORY,
-        transition = INPUT,
-        forbidden = SAME
+        transition = INPUT_INPUT,
+        required = INPUT_INPUT
+//        forbidden = SAME
 )
 public class InhibitorySynapse extends DisjunctiveSynapse<
         InhibitorySynapse,

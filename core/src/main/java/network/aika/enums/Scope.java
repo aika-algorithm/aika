@@ -14,29 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.utils;
-
-import network.aika.enums.Transition;
-
-import java.util.function.BinaryOperator;
+package network.aika.enums;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class BitUtils {
+public enum Scope {
+    INPUT(1),
+    SAME(2);
 
-    public static BinaryOperator<Integer> or() {
-        return (a, b) -> a | b;
+    private int state;
+
+    private Scope inverted;
+
+    static {
+        INPUT.inverted = SAME;
+        SAME.inverted = INPUT;
     }
 
-    public static int transition(int state, Transition t) {
-        state = state | t.getState();
+    Scope(int state) {
+        this.state = state;
+    }
 
+    public int getState() {
         return state;
     }
 
-    public static boolean isSet(int state, Transition t) {
-        return (state & t.getState()) > 0;
+    public Scope getInverted() {
+        return inverted;
     }
 }

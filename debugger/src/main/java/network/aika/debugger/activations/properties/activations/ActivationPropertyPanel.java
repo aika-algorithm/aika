@@ -25,8 +25,6 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.text.TextReference;
 
 import static network.aika.debugger.AbstractConsole.NOT_SET_STR;
-import static network.aika.enums.Transition.INPUT;
-import static network.aika.enums.Transition.SAME;
 
 
 /**

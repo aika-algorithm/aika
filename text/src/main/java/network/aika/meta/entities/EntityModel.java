@@ -75,6 +75,10 @@ public class EntityModel implements TemplateModel, Writable {
         return entityPattern;
     }
 
+    public BindingNeuron getEntityBN() {
+        return entityBN;
+    }
+
     public PhraseModel getPhraseModel() {
         return phraseModel;
     }
@@ -136,6 +140,11 @@ public class EntityModel implements TemplateModel, Writable {
         Range entityCharRange = new Range(0, doc.length());
 
         doc.addToken(phraseModel.getPatternNeuron(), new TextReference(entityPosRange, entityCharRange));
+    }
+
+    @Override
+    public void disconnectFeedbackTriggers(Document doc) {
+
     }
 
     public PatternNeuron getInstancePattern(String entityType) {
