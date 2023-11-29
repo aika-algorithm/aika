@@ -21,6 +21,7 @@ import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.meta.sequences.PhraseModel;
@@ -71,7 +72,10 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
 
         Document doc = new Document(getModel(), headline + " " + textSection);
 
-        AIKADebugger.createAndShowGUI()
+        boolean flag = false;
+
+        if (flag)
+            AIKADebugger.createAndShowGUI()
                     .setDocument(doc);
 
         doc.setInstantiationCallback((tAct, iAct) -> {
@@ -89,9 +93,6 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
 
     @Override
     public void selectDominantPatterns(Document doc) {
-//        tsModel.getHeadlineEntity().getEntityBN().getActivations(doc).first()
-//                .getNet().receiveUpdate(null, false, 1.0);
-
     /*    doc.getFeedbackTrigger().getReceivers().forEach(afl -> {
             FieldLink fl = (FieldLink) afl;
             InnerPositiveFeedbackLink l = (InnerPositiveFeedbackLink) fl.getOutput().getReference();
@@ -99,6 +100,26 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
                 fl.disconnect(true);
             }
         });*/
+
+        suppressAllInstances(
+                tsModel.getHeadlineEntity()
+                        .getEntityPatternNeuron()
+                        .getActivations(doc)
+                        .first()
+        );
+
+        suppressAllInstances(
+                tsModel.getTextSectionPatternNeuron()
+                        .getActivations(doc)
+                        .first()
+        );
+    }
+
+    private static void suppressAllInstances(PatternActivation pAct) {
+        pAct.getTemplateInstances()
+                .forEach(tiAct ->
+                        tiAct.getNet().receiveUpdate(null, false, -10.0)
+                );
     }
 
     @Override

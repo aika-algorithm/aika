@@ -84,7 +84,11 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
         entityBN.setTemplateOnly(templateOnly, true);
     }
 
-    public BindingNeuron getEntityBN() {
+    public PatternNeuron getEntityPatternNeuron() {
+        return entityPatternN;
+    }
+
+    public BindingNeuron getEntityBindingNeuron() {
         return entityBN;
     }
 

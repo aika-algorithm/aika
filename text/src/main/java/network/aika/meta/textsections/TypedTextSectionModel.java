@@ -18,12 +18,10 @@ package network.aika.meta.textsections;
 
 import network.aika.Model;
 import network.aika.TemplateModel;
-import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.fields.FieldLink;
 import network.aika.meta.entities.EntityInstance;
 import network.aika.meta.entities.EntityModel;
 import network.aika.Document;

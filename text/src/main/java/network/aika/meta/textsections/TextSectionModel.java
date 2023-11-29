@@ -91,6 +91,10 @@ public class TextSectionModel implements Writable {
         return endInputPN;
     }
 
+    public PatternNeuron getTextSectionPatternNeuron() {
+        return textSectionPatternN;
+    }
+
     public void initStaticNeurons() {
         log.info(TEXT_SECTION_LABEL);
 
