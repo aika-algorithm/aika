@@ -36,8 +36,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     protected static final Logger log = LoggerFactory.getLogger(BindingActivation.class);
 
-    private boolean isInput;
-
     public BindingActivation(int id, Document doc, BindingNeuron n) {
         super(id, doc, n);
     }
@@ -61,14 +59,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         updateValue = new SumField(this, "updateValue", TOLERANCE);
 
         super.connectWeightUpdate();
-    }
-
-    public boolean isInput() {
-        return isInput;
-    }
-
-    public void setInput(boolean input) {
-        isInput = input;
     }
 
     public void updateBias(double u) {

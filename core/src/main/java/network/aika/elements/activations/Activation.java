@@ -291,10 +291,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return value;
     }
 
-    public boolean isInput() {
-        return false;
-    }
-
     public SumField getNet() {
         return net;
     }

@@ -84,6 +84,9 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
     }
 
     private boolean isSelfRef(BindingActivation input, BindingActivation output) {
+        if(input == output)
+            return true;
+
         if(!input.getBindingSignalSlot(SAME).isSet() ||
                 !output.getBindingSignalSlot(SAME).isSet())
             return false;
