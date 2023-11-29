@@ -48,7 +48,7 @@ public class EntityModel implements TemplateModel, Writable {
 
     public static final double ENTITY_NET_TARGET = 0.7;
 
-    protected static final double BINDING_NET_TARGET = 2.5;
+    public static final double BINDING_NET_TARGET = 2.5;
 
     public static final double NEG_MARGIN = 1.1;
 

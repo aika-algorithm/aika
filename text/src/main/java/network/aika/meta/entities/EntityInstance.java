@@ -16,7 +16,7 @@
  */
 package network.aika.meta.entities;
 
-import network.aika.InstantiationUtil;
+import network.aika.InstantiationModel;
 import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.debugger.AIKADebugger;
@@ -32,13 +32,14 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.meta.NetworkMotifs.getDefaultInputCategorySynapseWeight;
+import static network.aika.meta.entities.EntityModel.BINDING_NET_TARGET;
 import static network.aika.meta.entities.EntityModel.ENTITY_LABEL;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class EntityInstance extends InstantiationUtil<EntityInstance> implements Writable {
+public class EntityInstance extends InstantiationModel<EntityInstance> implements Writable {
 
     public PatternNeuron entityPatternN;
     public BindingNeuron entityBN;
@@ -60,10 +61,13 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
     @Override
     protected Document createDocument(String label) {
         Document doc = new Document(getModel(), label);
-/*
-        AIKADebugger.createAndShowGUI()
-               .setDocument(doc);
-*/
+
+        boolean flag = false;
+
+        if(flag)
+            AIKADebugger.createAndShowGUI()
+                    .setDocument(doc);
+
         doc.setInstantiationCallback((tAct, iAct) -> {
             generateLabel(tAct, iAct, label);
             iAct.getNeuron().makeAbstract()
@@ -84,12 +88,27 @@ public class EntityInstance extends InstantiationUtil<EntityInstance> implements
         entityBN.setTemplateOnly(templateOnly, true);
     }
 
+    @Override
+    public void enable() {
+        entityBN.setBias(BINDING_NET_TARGET);
+    }
+
+    @Override
+    public void disable() {
+        entityBN.setBias(-10.0);
+    }
+
     public PatternNeuron getEntityPatternNeuron() {
         return entityPatternN;
     }
 
     public BindingNeuron getEntityBindingNeuron() {
         return entityBN;
+    }
+
+    @Override
+    protected void selectDominantPatterns(Document doc, String label) {
+
     }
 
     @Override

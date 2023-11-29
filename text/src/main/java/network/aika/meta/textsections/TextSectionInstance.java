@@ -16,12 +16,11 @@
  */
 package network.aika.meta.textsections;
 
-import network.aika.InstantiationUtil;
+import network.aika.InstantiationModel;
 import network.aika.Model;
 import network.aika.TemplateModel;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.meta.sequences.PhraseModel;
@@ -33,6 +32,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.meta.NetworkMotifs.getDefaultInputCategorySynapseWeight;
+import static network.aika.meta.entities.EntityModel.BINDING_NET_TARGET;
 import static network.aika.meta.textsections.TextSectionModel.TEXT_SECTION_LABEL;
 import static network.aika.meta.textsections.TypedTextSectionModel.*;
 
@@ -40,11 +40,13 @@ import static network.aika.meta.textsections.TypedTextSectionModel.*;
  *
  * @author Lukas Molzberger
  */
-public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> implements Writable {
+public class TextSectionInstance extends InstantiationModel<TextSectionInstance> implements Writable {
 
     private TypedTextSectionModel tsModel;
 
     private BindingNeuron headlineBN;
+
+    private BindingNeuron tsHeadlineBN;
 
     private PatternNeuron hintInputPN;
 
@@ -63,6 +65,18 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
 
     public PhraseModel getPhraseModel() {
         return tsModel.phraseModel;
+    }
+
+    @Override
+    public void enable() {
+        headlineBN.setBias(BINDING_NET_TARGET);
+        tsHeadlineBN.setBias(tsModel.bindingNetTarget);
+    }
+
+    @Override
+    public void disable() {
+        headlineBN.setBias(-10.0);
+        tsHeadlineBN.setBias(-10.0);
     }
 
     @Override
@@ -92,7 +106,7 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
     }
 
     @Override
-    public void selectDominantPatterns(Document doc) {
+    public void selectDominantPatterns(Document doc, String label) {
     /*    doc.getFeedbackTrigger().getReceivers().forEach(afl -> {
             FieldLink fl = (FieldLink) afl;
             InnerPositiveFeedbackLink l = (InnerPositiveFeedbackLink) fl.getOutput().getReference();
@@ -100,7 +114,7 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
                 fl.disconnect(true);
             }
         });*/
-
+/*
         suppressAllInstances(
                 tsModel.getHeadlineEntity()
                         .getEntityPatternNeuron()
@@ -112,22 +126,18 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
                 tsModel.getTextSectionPatternNeuron()
                         .getActivations(doc)
                         .first()
-        );
-    }
-
-    private static void suppressAllInstances(PatternActivation pAct) {
-        pAct.getTemplateInstances()
-                .forEach(tiAct ->
-                        tiAct.getNet().receiveUpdate(null, false, -10.0)
-                );
+        );*/
     }
 
     @Override
     protected void mapResults(Document doc) {
         getPhraseModel().getPatternNeuron().setTemplateOnly(false);
 
-        headlineBN = lookupInstance(doc, tsModel.tsHeadlineBN);
+        headlineBN = lookupInstance(doc, tsModel.getHeadlineEntity().getEntityBindingNeuron());
         headlineBN.setPersistent(true);
+
+        tsHeadlineBN = lookupInstance(doc, tsModel.tsHeadlineBN);
+        tsHeadlineBN.setPersistent(true);
 
         hintInputPN = lookupInstance(doc, tsModel.hintInputPN);
         hintInputPN.setPersistent(true);
@@ -154,6 +164,10 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
         return headlineBN;
     }
 
+    public BindingNeuron getTsHeadlineBN() {
+        return tsHeadlineBN;
+    }
+
     public PatternNeuron getHintInputPN() {
         return hintInputPN;
     }
@@ -161,12 +175,14 @@ public class TextSectionInstance extends InstantiationUtil<TextSectionInstance> 
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeLong(headlineBN.getId());
+        out.writeLong(tsHeadlineBN.getId());
         out.writeLong(hintInputPN.getId());
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         headlineBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        tsHeadlineBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         hintInputPN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

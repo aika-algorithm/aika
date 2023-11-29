@@ -36,6 +36,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.Type.PATTERN;
 import static network.aika.meta.LabelUtil.*;
 import static network.aika.meta.NetworkMotifs.*;
 
@@ -163,6 +164,16 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
 
         sectionHintRelations(beginBN, relationPT);
         sectionHintRelations(endBN, relationNT);
+    }
+
+    public PatternNeuron getHeadlinePattern(String tsType) {
+        return getModel().getInputNeuron(
+                getAbstractLabel(
+                        PATTERN,
+                        getHeadlineLabel(tsType)
+                ),
+                headlineEntity.entityPatternN
+        );
     }
 
     private void sectionHintRelations(BindingNeuron fromBN, LatentRelationNeuron relN) {

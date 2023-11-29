@@ -16,6 +16,7 @@
  */
 package network.aika;
 
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.meta.exceptions.FailedInstantiationException;
 
@@ -27,7 +28,7 @@ import static network.aika.queue.keys.QueueKey.MAX_ROUND;
  *
  * @author Lukas Molzberger
  */
-public abstract class InstantiationUtil<I extends InstantiationUtil> {
+public abstract class InstantiationModel<I extends InstantiationModel> {
 
     public static <N extends ConjunctiveNeuron<?, ?>> N lookupInstance(Document doc, N templateN) {
         return (N) templateN.getActivations(doc)
@@ -43,6 +44,11 @@ public abstract class InstantiationUtil<I extends InstantiationUtil> {
     public Model getModel() {
         return getTemplateModel().getModel();
     }
+
+
+    public abstract void enable();
+
+    public abstract void disable();
 
     public I instantiate(String label) {
         getTemplateModel().prepareInstantiation();
@@ -62,7 +68,7 @@ public abstract class InstantiationUtil<I extends InstantiationUtil> {
 
             doc.process(MAX_ROUND, INFERENCE);
 
-            selectDominantPatterns(doc);
+            selectDominantPatterns(doc, label);
 
             doc.anneal();
             doc.process(MAX_ROUND, ANNEAL);
@@ -81,8 +87,13 @@ public abstract class InstantiationUtil<I extends InstantiationUtil> {
         return (I) this;
     }
 
-    protected void selectDominantPatterns(Document doc) {
+    protected abstract void selectDominantPatterns(Document doc, String label);
 
+    public static void suppressAllInstances(PatternActivation pAct) {
+        pAct.getTemplateInstances()
+                .forEach(tiAct ->
+                        tiAct.getNet().receiveUpdate(null, false, -10.0)
+                );
     }
 
     protected abstract Document createDocument(String label);
