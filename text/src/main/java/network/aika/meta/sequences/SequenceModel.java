@@ -123,7 +123,7 @@ public abstract class SequenceModel implements Writable {
         return relNT;
     }
 
-    public InhibitoryNeuron getOuterInhibitoryNeuron() {
+    public InhibitoryNeuron getInhibitoryNeuron() {
         return inhibitoryN;
     }
 

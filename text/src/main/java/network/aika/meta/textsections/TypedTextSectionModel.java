@@ -192,6 +192,9 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
                 .setLabel("Begin " + TEXT_SECTION_LABEL)
                 .setPersistent(true);
 
+        tsBeginInhibitoryN.makeAbstract()
+                .setWeight(1.0);
+
         addInhibitoryLoop(
                 beginBN,
                 tsBeginInhibitoryN,
@@ -201,6 +204,9 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         tsEndInhibitoryN = new InhibitoryNeuron(model)
                 .setLabel("End " + TEXT_SECTION_LABEL)
                 .setPersistent(true);
+
+        tsEndInhibitoryN.makeAbstract()
+                .setWeight(1.0);
 
         addInhibitoryLoop(
                 endBN,
