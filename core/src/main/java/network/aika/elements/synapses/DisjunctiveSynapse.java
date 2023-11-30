@@ -38,6 +38,11 @@ public abstract class DisjunctiveSynapse<
 {
 
     @Override
+    public void link() {
+        input.addOutputSynapse(this);
+    }
+
+    @Override
     public double[] getSumOfLowerWeights() {
         return SULW_ZERO;
     }
