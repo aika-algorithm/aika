@@ -365,6 +365,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return getNeuron().getLabel();
     }
 
+    public boolean checkVisited(long v) {
+        return false;
+    }
+
     public N getNeuron() {
         return neuron;
     }

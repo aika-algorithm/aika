@@ -40,8 +40,6 @@ import static network.aika.queue.Phase.INPUT_LINKING;
  */
 public class LinkingIn extends ElementStep<Activation> {
 
-    protected static final Logger log = LoggerFactory.getLogger(LinkingIn.class);
-
     private PatternActivation bindingSignal;
 
     public static void add(Activation act, PatternActivation bs) {
@@ -63,15 +61,13 @@ public class LinkingIn extends ElementStep<Activation> {
     }
 
     private void linkIncoming(Synapse targetSyn) {
-        LinkingOperator op = new IncomingLinkingOperator(getElement(), null, targetSyn);
+        LinkingOperator op = new IncomingLinkingOperator(getElement(), null, targetSyn, bindingSignal);
         Relation rel = targetSyn.getRelation();
         if(rel != null)
             targetSyn.expandRelation(op, rel, targetSyn.getOutput(), INPUT);
         else {
-            new UpVisitor(
-                    bindingSignal.getDocument(),
-                    op
-            ).start(bindingSignal, SAME);
+            new UpVisitor(bindingSignal.getDocument(), op)
+                    .start(bindingSignal, SAME);
         }
     }
 

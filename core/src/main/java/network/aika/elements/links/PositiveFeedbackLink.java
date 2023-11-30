@@ -19,9 +19,7 @@ package network.aika.elements.links;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
-import network.aika.enums.Scope;
 import network.aika.fields.*;
-import network.aika.visitor.Visitor;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
@@ -34,33 +32,10 @@ import static network.aika.utils.Utils.TOLERANCE;
 public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>>
         extends ConjunctiveLink<S, IA, OA> {
 
-    protected long[] visited;
-
     protected AbstractFunction inputGradient;
 
     public PositiveFeedbackLink(S s, IA input, OA output) {
         super(s, input, output);
-    }
-
-    @Override
-    public void visit(Visitor v, Scope s, int depth) {
-        if(checkVisited(v))
-            return;
-
-        super.visit(v, s, depth);
-    }
-
-    private boolean checkVisited(Visitor v) {
-        if(visited == null)
-            visited = new long[2];
-
-        int index = v.getDirectionIndex();
-
-        if(visited[index] == v.getV())
-            return true;
-
-        visited[index] = v.getV();
-        return false;
     }
 
     @Override

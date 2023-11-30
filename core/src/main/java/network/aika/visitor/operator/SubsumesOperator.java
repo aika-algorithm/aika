@@ -33,18 +33,24 @@ public class SubsumesOperator implements Operator {
 
     private PatternActivation target;
 
+    private PatternActivation startBS;
+
     private boolean subsumes;
 
-    public SubsumesOperator(PatternActivation target) {
+    public SubsumesOperator(PatternActivation target, PatternActivation startBS) {
         this.target = target;
+        this.startBS = startBS;
+    }
+
+    @Override
+    public PatternActivation getBindingSignal() {
+        return startBS;
     }
 
     public static boolean subsumes(Scope s, PatternActivation a, PatternActivation b) {
-        SubsumesOperator op = new SubsumesOperator(b);
-        new DownVisitor(
-                a.getDocument(),
-                op
-        ).start(a, s);
+        SubsumesOperator op = new SubsumesOperator(b, a);
+        new DownVisitor(a.getDocument(), op)
+                .start(a, s);
 
         return op.subsumes;
     }

@@ -17,14 +17,12 @@
 package network.aika.visitor.operator;
 
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.UpVisitor;
-import network.aika.visitor.Visitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -32,12 +30,10 @@ import org.slf4j.LoggerFactory;
  */
 public class IncomingLinkingOperator extends LinkingOperator {
 
-    protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
-
     private Synapse sourceSyn; // Set only during latent linking
 
-    public IncomingLinkingOperator(Activation sourceAct, Synapse sourceSyn, Synapse targetSyn) {
-        super(sourceAct, targetSyn);
+    public IncomingLinkingOperator(Activation sourceAct, Synapse sourceSyn, Synapse targetSyn, PatternActivation bindingSignal) {
+        super(sourceAct, targetSyn, bindingSignal);
         this.sourceSyn = sourceSyn;
     }
 
@@ -55,9 +51,6 @@ public class IncomingLinkingOperator extends LinkingOperator {
 
     @Override
     public Link checkAndLink(Activation act) {
-        if(log.isDebugEnabled())
-            log.debug("BSIncomingLinkingOperator.check() act:" + act);
-
         if (act.getNeuron() != targetSyn.getInput())
             return null;
 

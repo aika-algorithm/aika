@@ -32,31 +32,26 @@ import static network.aika.enums.Scope.SAME;
  */
 public class BindingSignalCollector implements Operator {
 
-    private Scope type;
-
     private PatternActivation bindingSignal;
 
     public static PatternActivation retrieveBindingSignal(Activation act, Scope s) {
         BindingSignalCollector op = new BindingSignalCollector();
-        new DownVisitor(
-                act.getDocument(),
-                op
-        ).start(act, s);
+        new DownVisitor(act.getDocument(), op)
+                .start(act, s);
         return op.bindingSignal;
     }
 
     public static PatternActivation retrieveBindingSignal(Link l, Scope s) {
         BindingSignalCollector op = new BindingSignalCollector();
-        new DownVisitor(
-                l.getDocument(),
-                op
-        ).start(l, s);
+        new DownVisitor(l.getDocument(), op)
+                .start(l, s);
         return op.bindingSignal;
     }
 
     public BindingSignalCollector() {
     }
 
+    @Override
     public PatternActivation getBindingSignal() {
         return bindingSignal;
     }

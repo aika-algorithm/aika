@@ -23,29 +23,20 @@ import network.aika.enums.Scope;
 import network.aika.visitor.operator.Operator;
 
 import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.utils.Utils.depthToSpace;
-import static network.aika.utils.Utils.idToString;
 
 /**
  * @author Lukas Molzberger
  */
 public class DownVisitor extends Visitor {
 
-    public DownVisitor(Document doc, Operator operator) {
-        this.v = doc.getNewVisitorId();
-
-        if(log.isDebugEnabled()) {
-            log.debug("");
-            log.debug(depthToSpace(0) + "Start: Visitor:" + getClass().getSimpleName() + " Operator:" + operator.getClass().getSimpleName());
-        }
-
-        this.operator = operator;
+    public DownVisitor(Document doc, Operator op) {
+        super(doc, op);
     }
 
     @Override
     public void next(Activation<?> act, Link lastLink, Scope s, int depth) {
-        if(log.isDebugEnabled())
-            log.debug(depthToSpace(depth) + dirToString() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
+        if(act.checkVisited(v))
+            return;
 
         act.getInputLinks()
                 .forEach(l ->
@@ -55,9 +46,6 @@ public class DownVisitor extends Visitor {
 
     @Override
     public void next(Link<?, ?, ?> l, Scope s, int depth) {
-        if(log.isDebugEnabled())
-            log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
-
         Scope ts = INPUT.transition(s, l.getSynapse().getTransition());
         if (ts == null)
             return;
@@ -65,18 +53,13 @@ public class DownVisitor extends Visitor {
         int nd = depth + 1;
         Activation iAct = l.getInput();
         if(iAct != null) {
-            next(iAct, l, ts, nd);
-
             operator.check(iAct, ts, nd);
+            next(iAct, l, ts, nd);
         }
     }
 
     public boolean isDown() {
         return true;
-    }
-
-    public int getDirectionIndex() {
-        return 0;
     }
 
     protected String dirToString() {

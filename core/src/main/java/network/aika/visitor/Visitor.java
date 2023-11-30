@@ -16,6 +16,7 @@
  */
 package network.aika.visitor;
 
+import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.enums.Scope;
@@ -28,11 +29,14 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Visitor {
 
-    protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
-
     protected long v;
 
     protected Operator operator;
+
+    public Visitor(Document doc, Operator op) {
+        this.operator = op;
+        this.v = doc.getNewVisitorId();
+    }
 
     public Operator getOperator() {
         return operator;
@@ -45,8 +49,6 @@ public abstract class Visitor {
     public void start(Link l, Scope s) {
         l.visit(this, s, 0);
     }
-
-    public abstract int getDirectionIndex();
 
     public long getV() {
         return v;

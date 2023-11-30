@@ -297,9 +297,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     public abstract L createLink(IA input, OA output);
 
     public L createAndInitLink(IA input, OA output) {
-        if(log.isDebugEnabled())
-            log.debug("createAndInitLink: synapse:" + this + " input:" + input + " output:" + output);
-
         L l = createLink(input, output);
         l.init();
         return l;

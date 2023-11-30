@@ -23,30 +23,22 @@ import network.aika.enums.Scope;
 import network.aika.visitor.operator.Operator;
 
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.utils.Utils.depthToSpace;
-import static network.aika.utils.Utils.idToString;
 
 /**
  * @author Lukas Molzberger
  */
 public class UpVisitor extends Visitor {
 
-    public UpVisitor(Document doc, Operator operator) {
-        this.operator = operator;
-        this.v = doc.getNewVisitorId();
-    }
-
-    protected UpVisitor(DownVisitor downVisitor) {
-        this.v = downVisitor.v;
-        this.operator = downVisitor.operator;
+    public UpVisitor(Document doc, Operator op) {
+        super(doc, op);
     }
 
     @Override
     public void next(Activation<?> act, Link lastLink, Scope s, int depth) {
         operator.visitorCheck(this, lastLink, act, s);
 
-        if(log.isDebugEnabled())
-            log.debug(depthToSpace(depth) + dirToString() + " " + act.getClass().getSimpleName() + " " + act.getId() + " " + act.getLabel());
+        if(act.checkVisited(v))
+            return;
 
         act.getOutputLinks()
                 .forEach(l ->
@@ -56,9 +48,6 @@ public class UpVisitor extends Visitor {
 
     @Override
     public void next(Link<?, ?, ?> l, Scope s, int depth) {
-        if(log.isDebugEnabled())
-            log.debug(depthToSpace(depth) + dirToString() + " " + l.getClass().getSimpleName() + " " + idToString(l.getInput()) + " " + idToString(l.getOutput()));
-
         Scope ts = OUTPUT.transition(s, l.getSynapse().getTransition());
         if (ts == null)
             return;
@@ -68,10 +57,6 @@ public class UpVisitor extends Visitor {
 
     public boolean isDown() {
         return false;
-    }
-
-    public int getDirectionIndex() {
-        return 1;
     }
 
     protected String dirToString() {

@@ -17,24 +17,20 @@
 package network.aika.visitor.operator;
 
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.UpVisitor;
-import network.aika.visitor.Visitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Lukas Molzberger
  */
 public class OutgoingLinkingOperator extends LinkingOperator {
 
-    protected static final Logger log = LoggerFactory.getLogger(Visitor.class);
-
-    public OutgoingLinkingOperator(Activation sourceAct, Synapse targetSyn) {
-        super(sourceAct, targetSyn);
+    public OutgoingLinkingOperator(Activation sourceAct, Synapse targetSyn, PatternActivation bindingSignal) {
+        super(sourceAct, targetSyn, bindingSignal);
     }
 
     @Override
@@ -49,9 +45,6 @@ public class OutgoingLinkingOperator extends LinkingOperator {
 
     @Override
     public Link checkAndLink(Activation act) {
-        if(log.isDebugEnabled())
-            log.debug("OutgoingLinkingOperator.checkAndLink() act:" + act);
-
         if(act.getNeuron() != targetSyn.getOutput())
             return null;
 

@@ -17,6 +17,7 @@
 package network.aika.visitor.operator;
 
 import network.aika.Document;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
@@ -29,13 +30,21 @@ import static network.aika.elements.synapses.Synapse.getLatentLink;
  */
 public abstract class LinkingOperator implements Operator {
 
+    protected PatternActivation bindingSignal;
+
     protected Activation sourceAct;
 
     protected Synapse targetSyn;
 
-    public LinkingOperator(Activation sourceAct, Synapse targetSyn) {
+    public LinkingOperator(Activation sourceAct, Synapse targetSyn, PatternActivation bindingSignal) {
         this.sourceAct = sourceAct;
         this.targetSyn = targetSyn;
+        this.bindingSignal = bindingSignal;
+    }
+
+    @Override
+    public PatternActivation getBindingSignal() {
+        return bindingSignal;
     }
 
     public abstract Link checkAndLink(Activation act);

@@ -44,8 +44,6 @@ import static network.aika.queue.Phase.LATENT_LINKING;
  */
 public class LatentLinking extends ElementStep<Activation> {
 
-    protected static final Logger log = LoggerFactory.getLogger(LatentLinking.class);
-
     private PatternActivation bindingSignal;
     private Synapse sourceSyn;
     private Synapse targetSyn;
@@ -104,10 +102,7 @@ public class LatentLinking extends ElementStep<Activation> {
     public void process() {
         Activation iAct = getElement();
 
-        if(log.isDebugEnabled())
-            log.debug("latentLinkOutgoing: sourceSyn:" + sourceSyn + " targetSyn:" + this + " iAct:" + iAct);
-
-        LinkingOperator op = new IncomingLinkingOperator(iAct, sourceSyn, targetSyn);
+        LinkingOperator op = new IncomingLinkingOperator(iAct, sourceSyn, targetSyn, bindingSignal);
         Neuron to = targetSyn.getInput();
 
         if(sourceSyn.getRelation() != null)
@@ -115,10 +110,8 @@ public class LatentLinking extends ElementStep<Activation> {
         else if(targetSyn.getRelation() != null)
             targetSyn.expandRelation(op, targetSyn.getRelation(), to, INPUT);
         else {
-            new UpVisitor(
-                    bindingSignal.getDocument(),
-                    op
-            ).start(bindingSignal, SAME);
+            new UpVisitor(bindingSignal.getDocument(), op)
+                    .start(bindingSignal, SAME);
         }
     }
 

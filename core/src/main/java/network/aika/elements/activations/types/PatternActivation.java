@@ -22,6 +22,7 @@ import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.enums.sign.Sign;
+import network.aika.visitor.Visitor;
 
 import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.Fields.*;
@@ -32,6 +33,8 @@ import static network.aika.utils.Utils.TOLERANCE;
  * @author Lukas Molzberger
  */
 public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
+
+    protected long visited;
 
     private FieldFunction entropy;
 
@@ -47,6 +50,13 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
         getBindingSignalSlot(SAME)
                 .connectBindingSignal(this, true);
+    }
+
+    @Override
+    public boolean checkVisited(long v) {
+        long lv = visited;
+        visited = v;
+        return visited == lv;
     }
 
     @Override

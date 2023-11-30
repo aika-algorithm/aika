@@ -41,11 +41,8 @@ import static network.aika.queue.Phase.OUTPUT_LINKING;
  */
 public class LinkingOut extends ElementStep<Activation> {
 
-    protected static final Logger log = LoggerFactory.getLogger(LinkingOut.class);
-
     private LinkingMode mode;
     private PatternActivation bindingSignal;
-
 
     public static void add(Activation act, PatternActivation bs, LinkingMode mode) {
         Step.add(new LinkingOut(act, bs, mode));
@@ -78,20 +75,15 @@ public class LinkingOut extends ElementStep<Activation> {
     private void linkOutgoing(Synapse targetSyn) {
         Activation<?> act = getElement();
 
-        if(log.isDebugEnabled())
-            log.debug("linkOutgoing: targetSyn:" + targetSyn + " iAct:" + act);
-
         Neuron to = targetSyn.getOutput();
-        LinkingOperator op = new OutgoingLinkingOperator(act, targetSyn);
+        LinkingOperator op = new OutgoingLinkingOperator(act, targetSyn, bindingSignal);
 
         Relation rel = targetSyn.getRelation();
         if(rel != null)
             targetSyn.expandRelation(op, rel, to, OUTPUT);
         else {
-            new UpVisitor(
-                    act.getDocument(),
-                    op
-            ).start(bindingSignal, SAME);
+            new UpVisitor(bindingSignal.getDocument(), op)
+                    .start(bindingSignal, SAME);
         }
     }
 
