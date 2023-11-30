@@ -26,7 +26,6 @@ import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
 
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Scope.*;
 import static network.aika.enums.Transition.SAME_SAME;
 
 /**
@@ -38,8 +37,7 @@ import static network.aika.enums.Transition.SAME_SAME;
         inputType = PATTERN,
         outputType = PATTERN,
         transition = SAME_SAME,
-//        forbidden = INPUT,
-        required = SAME_SAME //{SAME, CATEGORY}
+        required = SAME_SAME
 )
 public class PatternCategoryInputSynapse
         extends PositiveFeedbackSynapse<

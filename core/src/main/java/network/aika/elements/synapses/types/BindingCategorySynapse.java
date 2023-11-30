@@ -36,7 +36,6 @@ import static network.aika.enums.Transition.SAME_SAME;
         outputType = BINDING,
         transition = {INPUT_INPUT, SAME_SAME},
         required = INPUT_INPUT
-//        forbidden = SAME
 )
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
 

@@ -31,8 +31,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.enums.Scope.INPUT;
-import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_SAME;
 
@@ -46,7 +44,6 @@ import static network.aika.enums.Transition.SAME_SAME;
         outputType = BINDING,
         transition = SAME_SAME,
         required = INPUT_INPUT
- //       forbidden = INPUT
 )
 public class SameObjectSynapse extends ConjunctiveSynapse<
         SameObjectSynapse,

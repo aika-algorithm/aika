@@ -28,7 +28,6 @@ import network.aika.enums.direction.Direction;
 
 import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.Type.BINDING;
-import static network.aika.enums.Scope.INPUT;
 import static network.aika.enums.Transition.INPUT_INPUT;
 
 /**

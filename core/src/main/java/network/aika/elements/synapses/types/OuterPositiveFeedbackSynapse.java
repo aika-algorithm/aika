@@ -26,10 +26,8 @@ import network.aika.elements.synapses.PositiveFeedbackSynapse;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Scope.INPUT;
 import static network.aika.enums.LinkingMode.FEEDBACK;
 import static network.aika.enums.Transition.INPUT_INPUT;
-import static network.aika.enums.Transition.SAME_INPUT;
 
 /**
  *
