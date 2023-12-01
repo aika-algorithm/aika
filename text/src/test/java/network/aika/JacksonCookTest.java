@@ -22,7 +22,7 @@ import network.aika.elements.relations.BeforeRelation;
 import network.aika.elements.synapses.types.*;
 import network.aika.meta.Dictionary;
 import network.aika.text.Range;
-import network.aika.tokenizer.SimpleWordTokenizer;
+import network.aika.tokenizer.WordTokenizer;
 import org.junit.jupiter.api.Test;
 
 import static network.aika.TestUtils.*;
@@ -36,7 +36,7 @@ public class JacksonCookTest {
 
     protected static double PASSIVE_SYNAPSE_WEIGHT = 0.0;
 
-    private SimpleWordTokenizer tokenizer;
+    private WordTokenizer tokenizer;
 
     @Test
     public void testJacksonCook()  {
@@ -54,7 +54,7 @@ public class JacksonCookTest {
         Dictionary dict = new Dictionary(m);
         dict.initStaticNeurons();
 
-        SimpleWordTokenizer tokenizer = new SimpleWordTokenizer(dict);
+        WordTokenizer tokenizer = new WordTokenizer();
 
         PatternNeuron jacksonIN = dict.lookupInputToken("Jackson");
         PatternNeuron cookIN = dict.lookupInputToken("Cook");

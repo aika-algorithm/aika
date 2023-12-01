@@ -1,3 +1,4 @@
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -18,10 +19,9 @@ package network.aika.tokenizer;
 
 
 import network.aika.Document;
-import network.aika.meta.Dictionary;
 import network.aika.parser.Context;
-import network.aika.text.TextReference;
 import network.aika.text.Range;
+import network.aika.text.TextReference;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,28 +30,17 @@ import java.util.Set;
  *
  * @author Lukas Molzberger
  */
-public class SimpleWordTokenizer implements Tokenizer {
+public class WordTokenizer implements Tokenizer {
 
     public static final String DEFAULT_SEPARATOR_CHARS = " \n\r?!:;,.()[]-_\"/\\";
 
-    private Dictionary dict;
-
     private Set<Character> separatorCharSet = new HashSet<>();
 
-    public SimpleWordTokenizer() {
+    public WordTokenizer() {
+        this(DEFAULT_SEPARATOR_CHARS);
     }
 
-    public SimpleWordTokenizer(Dictionary dict) {
-        this(dict, DEFAULT_SEPARATOR_CHARS);
-    }
-
-    public void setDictionary(Dictionary dict) {
-        this.dict = dict;
-    }
-
-    public SimpleWordTokenizer(Dictionary dict, String separatorChars) {
-        this.dict = dict;
-
+    public WordTokenizer(String separatorChars) {
         setSeparators(separatorChars);
     }
 
@@ -63,7 +52,7 @@ public class SimpleWordTokenizer implements Tokenizer {
     }
 
     @Override
-    public void tokenize(Document doc, Context context, TokenConsumer tokenConsumer) {
+    public void tokenize(Document doc, Context context, TokenConsumer tc) {
         int pos = 0;
         int begin = 0;
 
@@ -78,20 +67,30 @@ public class SimpleWordTokenizer implements Tokenizer {
             if(!lastWithinToken && withinToken)
                 begin = i;
             else if(lastWithinToken && !withinToken) {
-                int end = i;
-
-                String w = content.substring(begin, end);
-                tokenConsumer.processToken(
-                        dict.lookupInputToken(w),
-                        new TextReference(
-                                new Range(pos, pos + 1),
-                                new Range(begin, end)
-                        )
-                );
+                processTokenIntern(tc, content, begin, i, pos);
+                pos++;
+            } else if(lastWithinToken && forcedSplit(i, context)) {
+                processTokenIntern(tc, content, begin, i, pos);
+                begin = i;
                 pos++;
             }
 
             lastWithinToken = withinToken;
         }
+    }
+
+    protected boolean forcedSplit(int i, Context context) {
+        return false;
+    }
+
+    private void processTokenIntern(TokenConsumer tc, String content, int begin, int end, int pos) {
+        String token = content.substring(begin, end);
+        tc.processToken(
+                token,
+                new TextReference(
+                        new Range(pos, pos + 1),
+                        new Range(begin, end)
+                )
+        );
     }
 }

@@ -29,7 +29,7 @@ import network.aika.parser.TrainingParser;
 import network.aika.Document;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
-import network.aika.tokenizer.SimpleWordTokenizer;
+import network.aika.tokenizer.WordTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,7 +90,7 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         dictionary = new Dictionary(model);
         dictionary.initStaticNeurons();
 
-        tokenizer = new SimpleWordTokenizer(dictionary);
+        tokenizer = new WordTokenizer();
 
         phraseModel = new PhraseModel(model, dictionary);
         phraseModel.initStaticNeurons();
@@ -125,7 +125,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
     protected void prepareInputs(Document doc, TestContext context) {
         int[] tokenCounter = new int[1];
         tokenizer.tokenize(doc, context, (n, ref) -> {
-                    doc.addToken(n, ref);
+                    doc.addToken(
+                            dictionary.lookupInputToken(n),
+                            ref
+                    );
                     tokenCounter[0]++;
                 }
         );

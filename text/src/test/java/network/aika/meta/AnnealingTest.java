@@ -22,7 +22,7 @@ import network.aika.meta.sequences.PhraseModel;
 import network.aika.parser.Context;
 import network.aika.parser.TrainingParser;
 import network.aika.Document;
-import network.aika.tokenizer.SimpleWordTokenizer;
+import network.aika.tokenizer.WordTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,13 +51,16 @@ public class AnnealingTest extends TrainingParser {
 
         model.setN(0);
 
-        tokenizer = new SimpleWordTokenizer(dict);
+        tokenizer = new WordTokenizer();
     }
 
     @Override
     protected void prepareInputs(Document doc, Context context) {
-        tokenizer.tokenize(doc, context, (n, ref) ->
-            doc.addToken(n, ref)
+        tokenizer.tokenize(doc, context, (token, ref) ->
+            doc.addToken(
+                    dict.lookupInputToken(token),
+                    ref
+            )
         );
     }
 

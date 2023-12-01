@@ -29,10 +29,7 @@ import network.aika.text.Range;
  */
 public class SimpleCharTokenizer implements Tokenizer {
 
-    private Dictionary dict;
-
-    public SimpleCharTokenizer(Dictionary dict) {
-        this.dict = dict;
+    public SimpleCharTokenizer() {
     }
 
     @Override
@@ -44,7 +41,7 @@ public class SimpleCharTokenizer implements Tokenizer {
             int j = i + 1;
 
             tokenConsumer.processToken(
-                    dict.lookupInputToken("" + c),
+                    "" + c,
                     new TextReference(
                             new Range(pos, pos + 1),
                             new Range(i, j)

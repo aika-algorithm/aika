@@ -25,6 +25,6 @@ import network.aika.text.TextReference;
  */
 public interface TokenConsumer {
 
-    void processToken(PatternNeuron n, TextReference ref);
+    void processToken(String token, TextReference ref);
 
 }
