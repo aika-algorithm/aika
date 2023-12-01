@@ -23,37 +23,64 @@ import network.aika.parser.Context;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  *
  * @author Lukas Molzberger
  */
 public class SimpleWordTokenizer implements Tokenizer {
 
+    public static final String DEFAULT_SEPARATOR_CHARS = " \n\r()[]-_\"/\\";
+
     private Dictionary dict;
 
+    private Set<Character> separatorCharSet = new HashSet<>();
+
     public SimpleWordTokenizer(Dictionary dict) {
+        this(dict, DEFAULT_SEPARATOR_CHARS);
+    }
+
+    public SimpleWordTokenizer(Dictionary dict, String separatorChars) {
         this.dict = dict;
+
+        char[] sc = separatorChars.toCharArray();
+        for(int i = 0; i < separatorChars.length(); i++) {
+            separatorCharSet.add(sc[i]);
+        }
     }
 
     @Override
     public void tokenize(Document doc, Context context, TokenConsumer tokenConsumer) {
-        int i = 0;
         int pos = 0;
+        int begin = 0;
 
-        for(String w: doc.getContent().split("[\\n\\r\\s]+")) {
-            int j = i + w.length();
+        boolean lastWithinToken = false;
+        String content = doc.getContent();
+        int l = content.length();
+        for(int i = 0; i <= l; i++) {
+            char c = i < l ? content.charAt(i) : ' ';
 
-            tokenConsumer.processToken(
-                    dict.lookupInputToken(w),
-                    new TextReference(
-                            new Range(pos, pos + 1),
-                            new Range(i, j)
-                    )
-            );
+            boolean withinToken = !separatorCharSet.contains(c);
 
-            pos++;
+            if(!lastWithinToken && withinToken)
+                begin = i;
+            else if(lastWithinToken && !withinToken) {
+                int end = i;
 
-            i = j + 1;
+                String w = content.substring(begin, end);
+                tokenConsumer.processToken(
+                        dict.lookupInputToken(w),
+                        new TextReference(
+                                new Range(pos, pos + 1),
+                                new Range(begin, end)
+                        )
+                );
+                pos++;
+            }
+
+            lastWithinToken = withinToken;
         }
     }
 }
