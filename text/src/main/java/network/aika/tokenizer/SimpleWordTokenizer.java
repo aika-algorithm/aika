@@ -32,19 +32,30 @@ import java.util.Set;
  */
 public class SimpleWordTokenizer implements Tokenizer {
 
-    public static final String DEFAULT_SEPARATOR_CHARS = " \n\r()[]-_\"/\\";
+    public static final String DEFAULT_SEPARATOR_CHARS = " \n\r?!:;,.()[]-_\"/\\";
 
     private Dictionary dict;
 
     private Set<Character> separatorCharSet = new HashSet<>();
 
+    public SimpleWordTokenizer() {
+    }
+
     public SimpleWordTokenizer(Dictionary dict) {
         this(dict, DEFAULT_SEPARATOR_CHARS);
+    }
+
+    public void setDictionary(Dictionary dict) {
+        this.dict = dict;
     }
 
     public SimpleWordTokenizer(Dictionary dict, String separatorChars) {
         this.dict = dict;
 
+        setSeparators(separatorChars);
+    }
+
+    public void setSeparators(String separatorChars) {
         char[] sc = separatorChars.toCharArray();
         for(int i = 0; i < separatorChars.length(); i++) {
             separatorCharSet.add(sc[i]);
