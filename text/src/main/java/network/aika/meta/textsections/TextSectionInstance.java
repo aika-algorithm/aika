@@ -106,30 +106,6 @@ public class TextSectionInstance extends InstantiationModel<TextSectionInstance>
     }
 
     @Override
-    public void selectDominantPatterns(Document doc, String label) {
-    /*    doc.getFeedbackTrigger().getReceivers().forEach(afl -> {
-            FieldLink fl = (FieldLink) afl;
-            InnerPositiveFeedbackLink l = (InnerPositiveFeedbackLink) fl.getOutput().getReference();
-            if(l.getOutput().getNeuron() == entityModel.getEntityBN()) {
-                fl.disconnect(true);
-            }
-        });*/
-/*
-        suppressAllInstances(
-                tsModel.getHeadlineEntity()
-                        .getEntityPatternNeuron()
-                        .getActivations(doc)
-                        .first()
-        );
-
-        suppressAllInstances(
-                tsModel.getTextSectionPatternNeuron()
-                        .getActivations(doc)
-                        .first()
-        );*/
-    }
-
-    @Override
     protected void mapResults(Document doc) {
         getPhraseModel().getPatternNeuron().setTemplateOnly(false);
 

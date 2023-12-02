@@ -82,7 +82,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
 
         model.setN(0);
 
-        charTokenizer = new SimpleCharTokenizer(dict);
+        charTokenizer = new SimpleCharTokenizer();
     }
 
     @Override
@@ -100,13 +100,11 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     @Override
     protected void prepareInputs(Document doc, Context context) {
         charTokenizer.tokenize(doc, context, (n, ref) ->
-                doc.addToken(n, ref)
+                doc.addToken(
+                        dict.lookupInputToken(n),
+                        ref
+                )
         );
-    }
-
-    @Override
-    protected void prepareTargets(Document doc, Context context) {
-
     }
 
     @Override

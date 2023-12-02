@@ -51,6 +51,8 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
     public abstract void disable();
 
     public I instantiate(String label) {
+        getTemplateModel().enable();
+
         getTemplateModel().prepareInstantiation();
 
         getModel()
@@ -68,8 +70,6 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
 
             doc.process(MAX_ROUND, INFERENCE);
 
-            selectDominantPatterns(doc, label);
-
             doc.anneal();
             doc.process(MAX_ROUND, ANNEAL);
             doc.instantiateTemplates();
@@ -78,16 +78,18 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
             doc.process(MAX_ROUND, null);
 
             mapResults(doc);
+
+            disable();
         } catch(Exception e) {
             throw new FailedInstantiationException(label, e);
         } finally {
             doc.disconnect();
         }
 
+        getTemplateModel().disable();
+
         return (I) this;
     }
-
-    protected abstract void selectDominantPatterns(Document doc, String label);
 
     public static void suppressAllInstances(PatternActivation pAct) {
         pAct.getTemplateInstances()

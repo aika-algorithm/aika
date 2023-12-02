@@ -107,11 +107,6 @@ public class EntityInstance extends InstantiationModel<EntityInstance> implement
     }
 
     @Override
-    protected void selectDominantPatterns(Document doc, String label) {
-
-    }
-
-    @Override
     protected void mapResults(Document doc) {
         getPhraseModel().getPatternNeuron().setTemplateOnly(false);
 

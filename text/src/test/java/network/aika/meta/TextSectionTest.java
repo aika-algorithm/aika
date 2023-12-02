@@ -101,11 +101,15 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         textSectionModel = new TypedTextSectionModel(entityModel);
         textSectionModel.initStaticNeurons();
 
+        textSectionModel.getHeadlineEntity().enable();
+
         profileTS = new TextSectionInstance(textSectionModel)
                 .instantiate(PROFILE_LABEL);
 
         tasksTS = new TextSectionInstance(textSectionModel)
                 .instantiate(TASKS_LABEL);
+
+        textSectionModel.getHeadlineEntity().disable();
 
         model.setN(0);
     }
@@ -134,29 +138,6 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         );
     }
 
-    @Override
-    protected void prepareTargets(Document doc, TestContext context) {
-        if(context != null) {
-            if(context.getTextSectionType() != null) {
-
-                TextSectionInstance tsInstance =
-                        switch (context.getTextSectionType()) {
-                            case PROFILE_LABEL -> profileTS;
-                            case TASKS_LABEL -> tasksTS;
-                            default -> null;
-                        };
-
-            }
-/*            if(context.getCandidateRanges() != null) {
-                context.getCandidateRanges()
-                        .forEach(gr ->
-                                doc.addToken(textSectionModel.getBeginEndInputPN(), gr)
-                        );
-            }
- */
-        }
-    }
-
     @Test
     public void testTextSections() {
         log.info("Start");
@@ -167,8 +148,14 @@ public class TextSectionTest extends TrainingParser<TestContext> {
 
         dictionary.initInputTokenWeights();
 
+        tasksTS.enable();
         process(tasksHeadline, new TestContext(TASKS_LABEL, null), TRAINING);
+        tasksTS.disable();
+
+        profileTS.enable();
         process(requirementsHeadline, new TestContext(PROFILE_LABEL, null), TRAINING);
+        profileTS.disable();
+
         process(exampleTxt,
                 new TestContext(
                         null,
