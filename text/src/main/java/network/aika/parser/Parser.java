@@ -72,10 +72,16 @@ public abstract class Parser<C extends Context> {
 
         doc.process(MAX_ROUND, INFERENCE);
 
+        prepareTargets(doc, context);
+
+        doc.process(MAX_ROUND, INFERENCE);
+
         anneal(doc);
     }
 
     protected abstract void prepareInputs(Document doc, C context);
+
+    protected abstract void prepareTargets(Document doc, C context);
 
     public void anneal(Document doc) {
         doc.anneal();

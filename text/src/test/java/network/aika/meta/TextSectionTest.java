@@ -138,6 +138,10 @@ public class TextSectionTest extends TrainingParser<TestContext> {
         );
     }
 
+    @Override
+    protected void prepareTargets(Document doc, TestContext context) {
+    }
+
     @Test
     public void testTextSections() {
         log.info("Start");
