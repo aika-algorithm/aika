@@ -47,7 +47,7 @@ public abstract class CategoryActivation extends DisjunctiveActivation<CategoryN
                 .filter(Activation::isActiveTemplateInstance)
                 .max(
                         Comparator.comparingDouble(act ->
-                                act.getNet().getValue()
+                                act.getValue().getValue()
                         )
                 )
                 .orElse(null);
