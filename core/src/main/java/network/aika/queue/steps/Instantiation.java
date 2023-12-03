@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.queue.activation;
+package network.aika.queue.steps;
 
 import network.aika.elements.activations.Activation;
 import network.aika.queue.ElementStep;

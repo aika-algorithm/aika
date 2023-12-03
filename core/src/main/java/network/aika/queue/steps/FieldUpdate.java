@@ -14,12 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.queue;
+package network.aika.queue.steps;
 
 import network.aika.Document;
 import network.aika.elements.Timestamp;
 import network.aika.elements.Element;
 import network.aika.fields.QueueInterceptor;
+import network.aika.queue.Phase;
+import network.aika.queue.Step;
 import network.aika.queue.keys.FieldQueueKey;
 import network.aika.utils.Utils;
 
@@ -30,7 +32,7 @@ import static network.aika.utils.Utils.*;
  *
  * @author Lukas Molzberger
  */
-public class FieldStep<E extends Element> extends Step<E> {
+public class FieldUpdate<E extends Element> extends Step<E> {
 
     private QueueInterceptor interceptor;
 
@@ -43,7 +45,7 @@ public class FieldStep<E extends Element> extends Step<E> {
     private double delta = 0.0;
 
 
-    public FieldStep(Document queue, Phase p, int round, QueueInterceptor qf) {
+    public FieldUpdate(Document queue, Phase p, int round, QueueInterceptor qf) {
         super(queue);
         this.phase = p;
         this.round = p.isDelayed() ?

@@ -20,7 +20,7 @@ import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.types.SameObjectSynapse;
-import network.aika.queue.link.PostInstantiation;
+import network.aika.queue.steps.PostInstantiation;
 
 /**
  * @author Lukas Molzberger

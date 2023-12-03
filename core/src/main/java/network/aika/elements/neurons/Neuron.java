@@ -31,7 +31,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
 import network.aika.elements.Timestamp;
 import network.aika.elements.synapses.Synapse;
-import network.aika.queue.activation.Save;
+import network.aika.queue.steps.Save;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

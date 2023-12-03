@@ -14,12 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.queue.link;
+package network.aika.queue.steps;
 
 import network.aika.elements.links.Link;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
-import network.aika.queue.Step;
 
 /**
  * Counts the number of activations a particular neuron has encountered.

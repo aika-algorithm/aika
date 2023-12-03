@@ -14,38 +14,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.queue.activation;
+package network.aika.queue.steps;
 
-import network.aika.elements.neurons.Neuron;
 import network.aika.elements.activations.Activation;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
 
+import static network.aika.queue.keys.QueueKey.MAX_ROUND;
+
 /**
+ * Counts the number of activations a particular neuron has encountered.
  *
  * @author Lukas Molzberger
  */
-public class InactiveLinks extends ElementStep<Activation> {
+public class Counting extends ElementStep<Activation> {
 
     public static void add(Activation act) {
-        Step.add(new InactiveLinks(act));
+        if (act.getConfig().isCountingEnabled() && !act.getNeuron().isAbstract())
+            Step.add(new Counting(act));
     }
 
-    public InactiveLinks(Activation act) {
+    private Counting(Activation act) {
         super(act);
     }
 
     @Override
+    public int getRound() {
+        return MAX_ROUND;
+    }
+
+    @Override
     public Phase getPhase() {
-        return Phase.INACTIVE_LINKS;
+        return Phase.COUNTING;
     }
 
     @Override
     public void process() {
         Activation act = getElement();
-        Neuron n = act.getNeuron();
 
-        n.addInactiveLinks(act);
+        if (act.isFired())
+            act.getNeuron()
+                    .count(act);
     }
 }

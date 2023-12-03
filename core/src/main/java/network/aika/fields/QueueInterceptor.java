@@ -19,7 +19,7 @@ package network.aika.fields;
 
 import network.aika.Document;
 import network.aika.debugger.FieldObserver;
-import network.aika.queue.FieldStep;
+import network.aika.queue.steps.FieldUpdate;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
 
@@ -35,7 +35,7 @@ public class QueueInterceptor {
 
     private Phase phase;
 
-    private FieldStep step;
+    private FieldUpdate step;
 
     private Field field;
 
@@ -49,7 +49,7 @@ public class QueueInterceptor {
         this.phase = p;
     }
 
-    public FieldStep getStep() {
+    public FieldUpdate getStep() {
         return step;
     }
 
@@ -57,9 +57,9 @@ public class QueueInterceptor {
         return field;
     }
 
-    private FieldStep getOrCreateStep(int r) {
+    private FieldUpdate getOrCreateStep(int r) {
         if(step == null || step.getRound() < r)
-            step = new FieldStep<>(queue, phase, r, this);
+            step = new FieldUpdate<>(queue, phase, r, this);
 
         return step;
     }
@@ -67,7 +67,7 @@ public class QueueInterceptor {
     public void receiveUpdate(boolean nextRound, double u, boolean replaceUpdate) {
         updateObservers();
 
-        FieldStep s = getOrCreateStep(getRound(nextRound));
+        FieldUpdate s = getOrCreateStep(getRound(nextRound));
         s.updateDelta(u, replaceUpdate);
 
         if(u != 0.0 && !s.isQueued()) {
@@ -82,7 +82,7 @@ public class QueueInterceptor {
         return doc != null ? doc.getRound(nextRound) : 0;
     }
 
-    public void process(FieldStep s) {
+    public void process(FieldUpdate s) {
         step = null;
         field.triggerUpdate(false, s.getDelta());
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.queue.document;
+package network.aika.queue.steps;
 
 import network.aika.Document;
 import network.aika.elements.Timestamp;

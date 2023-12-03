@@ -32,9 +32,9 @@ import network.aika.elements.neurons.NeuronProvider;
 import network.aika.queue.Queue;
 import network.aika.text.Range;
 import network.aika.queue.Step;
-import network.aika.queue.activation.InactiveLinks;
-import network.aika.queue.activation.Instantiation;
-import network.aika.queue.document.AnnealStep;
+import network.aika.queue.steps.InactiveLinks;
+import network.aika.queue.steps.Instantiation;
+import network.aika.queue.steps.AnnealStep;
 import network.aika.text.TextReference;
 
 import java.util.*;

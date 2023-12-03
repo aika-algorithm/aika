@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.queue.link;
+package network.aika.queue.steps;
 
 import network.aika.elements.links.Link;
 import network.aika.elements.links.types.SameObjectLink;

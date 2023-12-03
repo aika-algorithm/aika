@@ -18,13 +18,9 @@ package network.aika.elements.activations;
 
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.enums.Scope;
-import network.aika.enums.Trigger;
-import network.aika.queue.activation.Linking;
+import network.aika.queue.steps.Linking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.stream.Stream;
 
 import static network.aika.enums.Trigger.*;
 
