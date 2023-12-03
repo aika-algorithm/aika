@@ -68,7 +68,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected Timestamp created = NOT_SET;
     protected Timestamp fired = NOT_SET;
 
-    protected FieldOutput value;
+    protected FieldFunction value;
 
     protected SumField net;
 
@@ -104,10 +104,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         outputLinks = new TreeMap<>();
 
         initNet();
-        net.setQueued(doc, INFERENCE);
-        netPreAnneal.setQueued(doc, PRE_ANNEAL);
-
-        initBindingSignalSlots();
 
         value = func(
                 this,
@@ -116,6 +112,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 net,
                 x -> getActivationFunction().f(x)
         );
+        value.setQueued(doc, INFERENCE);
+        netPreAnneal.setQueued(doc, PRE_ANNEAL);
+
+        initBindingSignalSlots();
 
         gradient = new SumField(this, "gradient", TOLERANCE)
                 .setQueued(doc, TRAINING);
@@ -192,7 +192,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 bindingSignalSlots[bsSlot.ordinal()] = new BindingSignalSlot(bsSlot)
         );
 
-        net.addListener("onFired", (fl, nr, u) -> {
+        value.addListener("onFired", (fl, nr, u) -> {
                     if(fl.getInput().exceedsThreshold() && fired == NOT_SET) {
                         fired = doc.getCurrentTimestamp();
                         addLinkingStepsOnFired();
@@ -312,7 +312,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public boolean isFired() {
-        return isTrue(net, 0.0);
+        return isTrue(value);
     }
 
     public Document getDocument() {
@@ -529,7 +529,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public boolean isActiveTemplateInstance() {
         return isNewInstance ||
-                isTrue(net, 0.5);
+                isTrue(value);
     }
 
     public CategoryInputLink getActiveCategoryInputLink() {

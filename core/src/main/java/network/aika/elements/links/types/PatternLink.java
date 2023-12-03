@@ -112,6 +112,17 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
         return inputPatternAct.getNet();
     }
 
+    public FieldOutput getInputPatternValue() {
+        if(input == null)
+            return ZERO;
+
+        PatternActivation inputPatternAct = input.getInputPatternActivation();
+        if(inputPatternAct == null)
+            return ZERO;
+
+        return inputPatternAct.getValue();
+    }
+
     public AbstractFunction getOutputEntropy() {
         return outputEntropy;
     }

@@ -43,7 +43,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     @Override
     public boolean isActiveTemplateInstance() {
         return isNewInstance || (
-                isTrue(net, 0.5) && getBindingSignalSlot(SAME).isSet()
+                isTrue(value) && getBindingSignalSlot(SAME).isSet()
         );
     }
 

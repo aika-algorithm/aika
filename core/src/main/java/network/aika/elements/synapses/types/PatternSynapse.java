@@ -175,8 +175,8 @@ public class PatternSynapse extends ConjunctiveSynapse<
         if(l.getInput() == null)
             return; // TODO: fix
 
-        boolean inputActive = isTrue(l.getInputPatternNet(), 0.0);
-        boolean outputActive = isTrue(l.getOutput().getNet(), 0.0);
+        boolean inputActive = isTrue(l.getInputPatternValue());
+        boolean outputActive = isTrue(l.getOutput().getValue());
 
         Range absoluteRange = l.getInput().getAbsoluteCharRange();
         if(absoluteRange == null)
