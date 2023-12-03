@@ -17,7 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.Type;
-import network.aika.enums.LinkingMode;
+import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 
 import java.lang.annotation.Retention;
@@ -42,5 +42,5 @@ public @interface SynapseType {
 
     public Transition required();
 
-    public LinkingMode linkingMode() default LinkingMode.REGULAR;
+    public Trigger linkingMode() default Trigger.FIRED;
 }

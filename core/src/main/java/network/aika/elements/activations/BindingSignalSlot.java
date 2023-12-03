@@ -18,10 +18,15 @@ package network.aika.elements.activations;
 
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.enums.Scope;
+import network.aika.enums.Trigger;
+import network.aika.queue.activation.Linking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
+
+import static network.aika.enums.Trigger.*;
 
 /**
  *
@@ -31,6 +36,7 @@ public class BindingSignalSlot {
 
     protected static final Logger log = LoggerFactory.getLogger(BindingSignalSlot.class);
 
+    private Activation<?> act;
 
     private int sourcesCount;
 
@@ -38,22 +44,16 @@ public class BindingSignalSlot {
 
     private Scope type;
 
-    private ArrayList<BindingSignalUpdateListener> listeners = new ArrayList<>(2);
-
-    public BindingSignalSlot(Scope type) {
+    public BindingSignalSlot(Activation act, Scope type, boolean isFeedback) {
+        this.act = act;
         this.type = type;
+
+        if(isFeedback)
+            Linking.add(act, this, NOT_FIRED);
     }
 
     public Scope getType() {
         return type;
-    }
-
-    public void addListener(BindingSignalUpdateListener l) {
-        this.listeners.add(l);
-
-        if(bindingSignal != null) {
-            l.onUpdate(type, null, bindingSignal, true);
-        }
     }
 
     public boolean isSet() {
@@ -68,10 +68,6 @@ public class BindingSignalSlot {
         if(bs == null)
             return;
 
-        if(isSet() && bindingSignal != bs) {
-          //  log.warn(bsType + " Binding-Signal is reset from:" + bindingSignal + " to:" + bs);
-        }
-
         boolean lastState = sourcesCount > 0;
 
         if(state) {
@@ -83,11 +79,26 @@ public class BindingSignalSlot {
                 this.bindingSignal = null;
         }
 
-        if(state != lastState) {
-            for (BindingSignalUpdateListener l : listeners.toArray(new BindingSignalUpdateListener[0])) {
-                l.onUpdate(type, bindingSignal, bs, state);
-            }
+        if(state && !lastState) {
+            Linking.add(act, this, NOT_FIRED);
+
+            if(act.isFired())
+                Linking.add(act, this, FIRED);
+
+            act.propagateBindingSignal(type, bindingSignal, state);
         }
+
+        if(state != lastState)
+            act.getInputLinks()
+                    .filter(l -> l.getSynapse().getRequired().getTo() == type)
+                    .forEach(l ->
+                            l.onOutputBindingSignalChange(this, state)
+                    );
+    }
+
+    public void onFired() {
+        if(isSet())
+            Linking.add(act, this, FIRED);
     }
 
     public String toString() {

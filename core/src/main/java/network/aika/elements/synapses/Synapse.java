@@ -31,7 +31,7 @@ import network.aika.fields.FieldOutput;
 import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.enums.LinkingMode;
+import network.aika.enums.Trigger;
 import network.aika.text.TextReference;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
@@ -116,7 +116,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             delete();
     }
 
-    public LinkingMode getLinkingMode() {
+    public Trigger getLinkingMode() {
         return synapseType.getLinkingMode();
     }
 

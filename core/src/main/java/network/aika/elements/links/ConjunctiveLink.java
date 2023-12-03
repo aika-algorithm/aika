@@ -70,7 +70,14 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         outputNet = sub(this, "outputNet", output.getNet(), synOutputSlot);
     }
 
-    private void updateInputSlotFieldLink(Scope s, PatternActivation oBS, PatternActivation nBS, boolean state) {
+    @Override
+    public void onOutputBindingSignalChange(BindingSignalSlot bsSlot, boolean state) {
+        Scope s = bsSlot.getType();
+        PatternActivation nBS = bsSlot.getBindingSignal();
+
+        if(input == null)
+            return;
+
         PatternActivation bs = retrieveBindingSignal(input, INPUT.transition(s, synapse.getTransition()));
         if(bs == null)
             return;
@@ -144,14 +151,8 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     protected void initWeightInput() {
         super.initWeightInput();
 
-        if (synInputSlot != null) {
+        if (synInputSlot != null)
             inputSlotFL = linkAndConnect(outputNet, synInputSlot);
-
-            output.getBindingSignalSlots()
-                    .forEach(bsSlot ->
-                            bsSlot.addListener(this::updateInputSlotFieldLink)
-                    );
-        }
 
         if(synapse.isOptional())
             synapse.initBiasInput(output);

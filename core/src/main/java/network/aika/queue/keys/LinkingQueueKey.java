@@ -18,6 +18,8 @@ package network.aika.queue.keys;
 
 import network.aika.elements.Element;
 import network.aika.elements.Timestamp;
+import network.aika.enums.Trigger;
+import network.aika.enums.Scope;
 import network.aika.queue.Phase;
 
 import java.util.Comparator;
@@ -27,20 +29,22 @@ import static network.aika.elements.Timestamp.NOT_SET;
 /**
  * @author Lukas Molzberger
  */
-public class LatentLinkingQueueKey extends FiredQueueKey {
+public class LinkingQueueKey extends FiredQueueKey {
 
-    private static Comparator<LatentLinkingQueueKey> COMPARATOR = Comparator
-            .<LatentLinkingQueueKey>comparingLong(k -> k.sourceInputId)
-            .thenComparingLong(k -> k.targetInputId);
+    private Trigger trigger;
 
-    long sourceInputId;
-    long targetInputId;
+    private Scope bsType;
 
-    public LatentLinkingQueueKey(int round, Phase phase, Element element, long sourceInputId, long targetInputId, Timestamp currentTimestamp) {
+    private static Comparator<LinkingQueueKey> COMPARATOR = Comparator
+            .<LinkingQueueKey, Trigger>comparing(k -> k.trigger)
+            .thenComparing(k -> k.bsType);
+
+
+    public LinkingQueueKey(int round, Phase phase, Element element, Trigger lm, Scope bsType, Timestamp currentTimestamp) {
         super(round, phase, element, currentTimestamp);
 
-        this.sourceInputId = sourceInputId;
-        this.targetInputId = targetInputId;
+        this.trigger = lm;
+        this.bsType = bsType;
     }
 
     @Override
@@ -49,7 +53,7 @@ public class LatentLinkingQueueKey extends FiredQueueKey {
         if(r != 0)
             return r;
 
-        return COMPARATOR.compare(this, (LatentLinkingQueueKey) qk);
+        return COMPARATOR.compare(this, (LinkingQueueKey) qk);
     }
 
     @Override
@@ -63,8 +67,6 @@ public class LatentLinkingQueueKey extends FiredQueueKey {
                 ",f:" + firedStr +
                 ",c:" + getCreated() +
                 ",ts:" + getCurrentTimestamp() +
-                ",s-id:" + sourceInputId +
-                ",t-id:" + targetInputId +
                 "]";
     }
 }

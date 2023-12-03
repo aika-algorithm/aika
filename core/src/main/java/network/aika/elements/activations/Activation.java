@@ -29,7 +29,6 @@ import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.enums.LinkingMode;
 import network.aika.enums.Scope;
 import network.aika.queue.activation.*;
 import network.aika.text.TextReference;
@@ -45,8 +44,6 @@ import static network.aika.debugger.EventType.*;
 import static network.aika.elements.LinkKey.getFromLinkKey;
 import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
-import static network.aika.enums.LinkingMode.REGULAR;
-import static network.aika.enums.LinkingMode.getLinkingMode;
 import static network.aika.queue.Phase.PRE_ANNEAL;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
@@ -150,12 +147,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .filter(Objects::nonNull);
     }
 
-    public Stream<PatternActivation> getBindingSignals() {
-        return getBindingSignalSlots()
-                .filter(BindingSignalSlot::isSet)
-                .map(BindingSignalSlot::getBindingSignal);
-    }
-
     public SynapseInputSlot registerOutputSlot(Synapse syn) {
         if(outputSlots == null)
             outputSlots = new TreeMap<>();
@@ -189,48 +180,30 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected void initBindingSignalSlots() {
         Stream<Scope> bsSlots = neuron.getBindingSignalSlots();
         bsSlots.forEach(bsSlot ->
-                bindingSignalSlots[bsSlot.ordinal()] = new BindingSignalSlot(bsSlot)
+                bindingSignalSlots[bsSlot.ordinal()] = new BindingSignalSlot(this, bsSlot, isFeedback(bsSlot))
         );
 
         net.addListener("onFired", (fl, nr, u) -> {
                     if(fl.getInput().exceedsThreshold() && fired == NOT_SET) {
                         fired = doc.getCurrentTimestamp();
-                        addLinkingStepsOnFired();
+
+                        getBindingSignalSlots()
+                                .forEach(BindingSignalSlot::onFired);
+
                         Counting.add(this);
                     }
                 }
         );
-
-        getBindingSignalSlots().forEach(bsSlot ->
-                bsSlot.addListener((t, oBS, nBS, state) -> {
-                    if (state) {
-                        addLinkingStepsOnBindingSignal(t, nBS, state);
-                    }
-                })
-        );
     }
 
-    protected void addLinkingStepsOnFired() {
-        getBindingSignals()
-                .forEach(bs -> {
-                    LinkingOut.add(this, bs, REGULAR);
-                    LatentLinking.add(this, bs, REGULAR);
-                });
-
-        Propagate.add(this, REGULAR);
+    protected boolean isFeedback(Scope bsSlot) {
+        return false;
     }
 
-    protected void addLinkingStepsOnBindingSignal(Scope t, PatternActivation nBS, boolean state) {
-        LinkingIn.add(this, nBS);
-
-        LinkingMode lm = getLinkingMode(isFired());
-
-        LinkingOut.add(this, nBS, lm);
-        LatentLinking.add(this, nBS, lm);
-
+    public void propagateBindingSignal(Scope t, PatternActivation bs, boolean state) {
         getOutputLinks()
                 .forEach(l ->
-                        l.propagateBindingSignal(nBS, t, state)
+                        l.propagateBindingSignal(bs, t, state)
                 );
     }
 

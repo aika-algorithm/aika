@@ -17,6 +17,7 @@
 package network.aika.elements.activations.types;
 
 import network.aika.Document;
+import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.DisjunctiveActivation;
 import network.aika.elements.links.*;
@@ -25,16 +26,11 @@ import network.aika.elements.links.types.InhibitoryCategoryLink;
 import network.aika.elements.links.types.InhibitoryLink;
 import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
-import network.aika.enums.LinkingMode;
-import network.aika.enums.Scope;
-import network.aika.queue.activation.*;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static network.aika.enums.LinkingMode.REGULAR;
-import static network.aika.enums.LinkingMode.getLinkingMode;
 import static network.aika.enums.Scope.INPUT;
 
 /**
@@ -46,22 +42,6 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
 
     public InhibitoryActivation(int id, Document doc, InhibitoryNeuron neuron) {
         super(id, doc, neuron);
-    }
-
-    @Override
-    protected void addLinkingStepsOnFired() {
-        getBindingSignals()
-                .forEach(bs ->
-                        LinkingOut.add(this, bs, LinkingMode.REGULAR)
-                );
-
-        Propagate.add(this, REGULAR);
-    }
-
-    @Override
-    protected void addLinkingStepsOnBindingSignal(Scope t, PatternActivation nBS, boolean state) {
-        LinkingIn.add(this, nBS);
-        LinkingOut.add(this, nBS, getLinkingMode(isFired()));
     }
 
     @Override

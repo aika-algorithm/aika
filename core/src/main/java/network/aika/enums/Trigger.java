@@ -14,16 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.activations;
+package network.aika.enums;
 
-import network.aika.elements.activations.types.PatternActivation;
-import network.aika.enums.Scope;
+import network.aika.elements.activations.Activation;
+
+import java.util.function.Predicate;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public interface BindingSignalUpdateListener {
+public enum Trigger {
+    FIRED(Activation::isFired),
+    NOT_FIRED(oAct -> true);
 
-    void onUpdate(Scope t, PatternActivation oldBS, PatternActivation newBS, boolean state);
+    Trigger(Predicate<Activation> check) {
+        this.check = check;
+    }
+
+    private Predicate<Activation> check;
+
+    public boolean check(Activation oAct) {
+        return check.test(oAct);
+    }
 }

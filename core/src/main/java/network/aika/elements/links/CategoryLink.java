@@ -29,7 +29,4 @@ public abstract class CategoryLink<S extends CategorySynapse, IA extends Activat
         super(s, input, output);
     }
 
-    @Override
-    public void addLinkingSteps() {
-    }
 }

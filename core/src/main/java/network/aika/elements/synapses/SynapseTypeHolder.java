@@ -17,8 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.Type;
-import network.aika.enums.LinkingMode;
-import network.aika.enums.Scope;
+import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 
 import java.util.HashMap;
@@ -36,7 +35,7 @@ public class SynapseTypeHolder {
 
     private Transition required;
 
-    private LinkingMode linkingMode;
+    private Trigger trigger;
 
     public static SynapseTypeHolder getHolder(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
@@ -53,7 +52,7 @@ public class SynapseTypeHolder {
         outputType = synTypeAnno.outputType();
         transition = synTypeAnno.transition();
         required = synTypeAnno.required();
-        linkingMode = synTypeAnno.linkingMode();
+        trigger = synTypeAnno.linkingMode();
     }
 
     public Type getInputType() {
@@ -72,7 +71,7 @@ public class SynapseTypeHolder {
         return required;
     }
 
-    public LinkingMode getLinkingMode() {
-        return linkingMode;
+    public Trigger getLinkingMode() {
+        return trigger;
     }
 }

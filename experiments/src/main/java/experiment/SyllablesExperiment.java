@@ -108,6 +108,11 @@ public class SyllablesExperiment extends TrainingParser<Context> {
     }
 
     @Override
+    protected void prepareTargets(Document doc, Context context) {
+
+    }
+
+    @Override
     protected SequenceModel getPhraseModel() {
         return syllableModel;
     }

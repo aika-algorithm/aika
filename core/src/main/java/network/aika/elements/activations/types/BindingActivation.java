@@ -20,6 +20,7 @@ import network.aika.Document;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.types.InputObjectLink;
+import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.BindingNeuron;
 import org.slf4j.Logger;
@@ -41,9 +42,14 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     }
 
     @Override
+    protected boolean isFeedback(Scope bsSlot) {
+        return bsSlot == SAME;
+    }
+
+    @Override
     public boolean isActiveTemplateInstance() {
         return isNewInstance || (
-                isTrue(net, 0.5) && getBindingSignalSlot(SAME).isSet()
+                isTrue(net, 0.0) && getBindingSignalSlot(SAME).isSet()
         );
     }
 

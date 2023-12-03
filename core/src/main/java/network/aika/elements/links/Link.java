@@ -102,7 +102,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         return synapse.getOutputType();
     }
 
-    public void addLinkingSteps() {
+    public void onOutputBindingSignalChange(BindingSignalSlot bindingSignalSlot, boolean state) {
     }
 
     public void visit(Visitor v, Scope s, int depth) {
@@ -212,8 +212,6 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void init() {
-        if(input != null && synapse.isLinkingAllowed(false))
-            addLinkingSteps();
     }
 
     public void initFromTemplate(Link template) {
