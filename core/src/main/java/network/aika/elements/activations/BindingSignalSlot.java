@@ -36,6 +36,8 @@ public class BindingSignalSlot {
 
     private int sourcesCount;
 
+    private boolean isFeedback;
+
     private PatternActivation bindingSignal;
 
     private Scope type;
@@ -43,9 +45,7 @@ public class BindingSignalSlot {
     public BindingSignalSlot(Activation act, Scope type, boolean isFeedback) {
         this.act = act;
         this.type = type;
-
-        if(isFeedback)
-            Linking.add(act, this, NOT_FIRED);
+        this.isFeedback = isFeedback;
     }
 
     public Scope getType() {
@@ -93,11 +93,11 @@ public class BindingSignalSlot {
     }
 
     public void onFired() {
-        if(isSet())
+        if(isFeedback || isSet())
             Linking.add(act, this, FIRED);
     }
 
     public String toString() {
-        return type + ": " + (bindingSignal != null ? bindingSignal : "--") + " (" + sourcesCount + ")";
+        return type + (isFeedback ? "-fb" : "") + ": " + (bindingSignal != null ? bindingSignal : "--") + " (" + sourcesCount + ")";
     }
 }
