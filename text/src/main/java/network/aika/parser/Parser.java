@@ -21,6 +21,7 @@ import network.aika.debugger.AIKADebugger;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.queue.Phase;
 import network.aika.Document;
+import network.aika.queue.steps.FeedbackTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,7 @@ public abstract class Parser<C extends Context> {
     }
 
     protected void infer(Document doc, C context, ParserPhase phase) {
-        doc.setFeedbackTriggerRound();
+        FeedbackTrigger.add(doc, false);
 
         prepareInputs(doc, context);
 

@@ -32,15 +32,15 @@ import static network.aika.utils.Utils.doubleToString;
  *
  * @author Lukas Molzberger
  */
-public class AnnealStep extends ElementStep<Document> {
+public class Anneal extends ElementStep<Document> {
 
     double nextStep;
 
     public static void add(Document doc) {
-        add(new AnnealStep(doc));
+        add(new Anneal(doc));
     }
 
-    public AnnealStep(Document doc) {
+    public Anneal(Document doc) {
         super(doc);
     }
 
@@ -62,12 +62,11 @@ public class AnnealStep extends ElementStep<Document> {
         double nextAnnealValue = nextStep + av;
         nextAnnealValue = Math.min(nextAnnealValue, 1.0);
 
-        doc.incrementRound();
-        doc.setFeedbackTriggerRound();
+        FeedbackTrigger.add(doc, false);
         doc.getAnnealing().setValue(nextAnnealValue);
 
         if (nextAnnealValue < 1.0)
-            AnnealStep.add(doc);
+            Anneal.add(doc);
     }
 
     @Override

@@ -268,7 +268,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     protected SumField initBias() {
         return (SumField) new SumField(this, "bias", TOLERANCE)
                 .setQueued(getDocument(), TRAINING)
-                .addListener("onBiasModified", (fl, nr, u) ->
+                .addListener("onBiasModified", (fl, u) ->
                         setModified()
                 );
     }

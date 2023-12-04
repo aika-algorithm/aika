@@ -37,7 +37,7 @@ public class MaxField extends SumField {
     }
 
     @Override
-    public void receiveUpdate(FieldLink fl, boolean nextRound, double u) {
+    public void receiveUpdate(FieldLink fl, double u) {
         double update = getInputs().stream()
                 .mapToDouble(AbstractFieldLink::getUpdatedInputValue)
                 .max()
@@ -47,15 +47,15 @@ public class MaxField extends SumField {
             return;
 
         if(interceptor != null) {
-            interceptor.receiveUpdate(nextRound, update, true);
+            interceptor.receiveUpdate(update, true);
             return;
         }
 
-        triggerUpdate(nextRound, update);
+        triggerUpdate(update);
     }
 
     @Override
-    public void triggerUpdate(boolean nextRound, double u) {
+    public void triggerUpdate(double u) {
         FieldLink lastSelectedInput = selectedInput;
 
         selectedInput = getInputs().stream()
@@ -68,7 +68,7 @@ public class MaxField extends SumField {
             updateConnection(selectedInput, true);
         }
 
-        super.triggerUpdate(nextRound, u);
+        super.triggerUpdate(u);
     }
 
     protected void updateConnection(FieldLink si, boolean state) {

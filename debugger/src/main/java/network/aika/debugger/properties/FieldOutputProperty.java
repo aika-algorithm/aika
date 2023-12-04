@@ -39,24 +39,28 @@ public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty
     protected Boolean isConnected;
     protected Boolean isPropagateUpdate;
 
+    protected Boolean nextRound;
+
     protected boolean withinUpdate;
 
     protected JLabel fieldLabel;
     protected JFormattedTextField currentValueField;
 
-    public static FieldOutputProperty createFieldProperty(Container parent, FieldOutput f, boolean showReference, Boolean isConnected, Boolean isPropagateUpdates) {
+    public static FieldOutputProperty createFieldProperty(Container parent, FieldOutput f, boolean showReference, FieldLink fl) {
         if(f instanceof Field && ((Field) f).getInterceptor() != null) {
-            return new QueueFieldProperty(parent, (Field) f, showReference, isConnected, isPropagateUpdates);
+            return new QueueFieldProperty(parent, (Field) f, showReference, fl);
         } else {
-            return new FieldOutputProperty(parent, f, showReference, isConnected, isPropagateUpdates);
+            return new FieldOutputProperty(parent, f, showReference, fl);
         }
     }
 
-    public FieldOutputProperty(Container parent, F f, boolean showReference, Boolean isConnected, Boolean isPropagateUpdate) {
+    public FieldOutputProperty(Container parent, F f, boolean showReference, FieldLink fl) {
         super(parent);
         this.showReference = showReference;
-        this.isConnected = isConnected;
-        this.isPropagateUpdate = isPropagateUpdate;
+        if(fl != null) {
+            this.isConnected = fl.isConnected();
+            this.isPropagateUpdate = fl.isPropagateUpdates();
+        }
 
         Frame frame = (Frame) SwingUtilities.getWindowAncestor(parent);
         field = f;
@@ -96,7 +100,7 @@ public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty
     }
 
     @Override
-    public void receiveUpdate(ListenerFieldLink fl, boolean nextRound, double u) {
+    public void receiveUpdate(ListenerFieldLink fl, double u) {
         withinUpdate = true;
         currentValueField.setValue(field.getValue());
         withinUpdate = false;
@@ -107,7 +111,7 @@ public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty
         addGridEntry(currentValueField, 1, pos, 1, insets);
 
         showReference(2, pos, insets);
-        if(isConnected != null || isPropagateUpdate != null)
+        if(isConnected != null || isPropagateUpdate != null || nextRound != null)
             showConnected(3, pos, insets);
     }
 
@@ -133,6 +137,11 @@ public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty
 
         if(isPropagateUpdate != null)
             label += isPropagateUpdate ? "prop" : "no prop";
+
+        label += ", ";
+
+        if(nextRound != null)
+            label += nextRound ? "nextRound" : " ";
 
         JLabel jOutRef = new JLabel(label);
         addGridEntry(jOutRef, xPos, yPos, 1, insets);

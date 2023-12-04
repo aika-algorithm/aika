@@ -30,11 +30,12 @@ import network.aika.fields.*;
 import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.queue.Queue;
+import network.aika.queue.steps.FeedbackTrigger;
 import network.aika.text.Range;
 import network.aika.queue.Step;
 import network.aika.queue.steps.InactiveLinks;
 import network.aika.queue.steps.Instantiation;
-import network.aika.queue.steps.AnnealStep;
+import network.aika.queue.steps.Anneal;
 import network.aika.text.TextReference;
 
 import java.util.*;
@@ -90,10 +91,10 @@ public class Document extends Queue implements Element {
 
         annealing = new InputField(this, "anneal", 0.0);
         feedbackTrigger = new SumField(this, "feedback trigger", 0.0)
-                .setQueued(this, FEEDBACK_TRIGGER);
+                .setQueued(this, INFERENCE);
 
         instantiationFeedbackTrigger = new SumField(this, "instantiation feedback trigger", 0.0)
-                .setQueued(this, FEEDBACK_TRIGGER);
+                .setQueued(this, INFERENCE);
 
         if(m.getCurrentDocument() != null)
             throw new PreviousThoughtNotDisconnected(m.getCurrentDocument(), this);
@@ -127,18 +128,6 @@ public class Document extends Queue implements Element {
 
     public Field getInstantiationFeedbackTrigger() {
         return instantiationFeedbackTrigger;
-    }
-
-    public void setFeedbackTriggerRound() {
-        feedbackTrigger.receiveUpdate(null, false, 1.0);
-        feedbackTrigger.receiveUpdate(null, true, -1.0);
-    }
-
-    public void setInstantiationFeedbackTrigger(boolean state) {
-        if(state)
-            instantiationFeedbackTrigger.receiveUpdate(null, false, 1.0);
-        else
-            instantiationFeedbackTrigger.receiveUpdate(null, true, -1.0);
     }
 
     public Step getCurrentStep() {
@@ -215,7 +204,7 @@ public class Document extends Queue implements Element {
     }
 
     public void anneal() {
-        AnnealStep.add(this);
+        Anneal.add(this);
         process(MAX_ROUND, ANNEAL); // Anneal needs to be finished before instantiation can start.
     }
 
@@ -237,8 +226,7 @@ public class Document extends Queue implements Element {
 
         process(MAX_ROUND, ANNEAL);
 
-        incrementRound();
-        setFeedbackTriggerRound();
+        FeedbackTrigger.add(this, false);
     }
 
     public String activationsToString() {

@@ -59,7 +59,7 @@ public class AnnealingLogger {
         }
 
         doc.getAnnealing().addListener("Annealing Logger",
-                (l, nr, u) ->
+                (l, u) ->
                         log(doc),
                 true);
     }

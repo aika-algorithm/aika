@@ -26,6 +26,7 @@ import network.aika.visitor.Visitor;
 
 import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.Fields.*;
+import static network.aika.queue.Phase.INFERENCE;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -33,6 +34,8 @@ import static network.aika.utils.Utils.TOLERANCE;
  * @author Lukas Molzberger
  */
 public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
+
+    private NextRoundFunction nextRoundValue;
 
     protected long visited;
 
@@ -42,6 +45,20 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
     public PatternActivation(int id, Document doc, PatternNeuron patternNeuron) {
         super(id, doc, patternNeuron);
+    }
+
+    @Override
+    protected void initValue() {
+        super.initValue();
+
+        nextRoundValue = new NextRoundFunction(this, "nr value");
+        FieldLink.linkAndConnect(value, 0, nextRoundValue);
+        nextRoundValue.setQueued(doc, INFERENCE);
+    }
+
+    @Override
+    public NextRoundFunction getNextRoundValue() {
+        return nextRoundValue;
     }
 
     @Override

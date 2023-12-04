@@ -19,6 +19,7 @@ package network.aika;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.meta.exceptions.FailedInstantiationException;
+import network.aika.queue.steps.FeedbackTrigger;
 
 import static network.aika.queue.Phase.ANNEAL;
 import static network.aika.queue.Phase.INFERENCE;
@@ -63,8 +64,8 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
         Document doc = createDocument(label);
 
         try {
-            doc.setFeedbackTriggerRound();
-            doc.setInstantiationFeedbackTrigger(true);
+            FeedbackTrigger.add(doc, false);
+            FeedbackTrigger.add(doc, true, true);
 
             getTemplateModel().prepareExampleDoc(doc, label);
 
@@ -73,7 +74,7 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
             doc.anneal();
             doc.process(MAX_ROUND, ANNEAL);
             doc.instantiateTemplates();
-            doc.setInstantiationFeedbackTrigger(false);
+            FeedbackTrigger.add(doc, true, false);
 
             doc.process(MAX_ROUND, null);
 
@@ -94,7 +95,7 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
     public static void suppressAllInstances(PatternActivation pAct) {
         pAct.getTemplateInstances()
                 .forEach(tiAct ->
-                        tiAct.getNet().receiveUpdate(null, false, -10.0)
+                        tiAct.getNet().receiveUpdate(null, -10.0)
                 );
     }
 

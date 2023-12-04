@@ -21,5 +21,5 @@ package network.aika.fields;
  */
 public interface UpdateListener<F extends AbstractFieldLink> {
 
-    void receiveUpdate(F fl, boolean nextRound, double u);
+    void receiveUpdate(F fl, double u);
 }

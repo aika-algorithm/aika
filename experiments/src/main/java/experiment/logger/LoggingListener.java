@@ -21,7 +21,7 @@ import network.aika.debugger.EventType;
 import network.aika.elements.Element;
 import network.aika.queue.steps.FieldUpdate;
 import network.aika.queue.Step;
-import network.aika.queue.steps.AnnealStep;
+import network.aika.queue.steps.Anneal;
 
 /**
  * @author Lukas Molzberger
@@ -32,8 +32,8 @@ public class LoggingListener implements EventListener {
     public void onQueueEvent(EventType et, Step s) {
         if(s instanceof FieldUpdate<?>) {
             log((FieldUpdate) s);
-        } else if(s instanceof AnnealStep) {
-            log((AnnealStep) s);
+        } else if(s instanceof Anneal) {
+            log((Anneal) s);
         }
     }
 
@@ -46,7 +46,7 @@ public class LoggingListener implements EventListener {
         System.out.println();
     }
 
-    private static void log(AnnealStep as) {
+    private static void log(Anneal as) {
         System.out.println("" + as.getElement().getAnnealing().getValue());
 
         as.getElement().getAnnealing().getReceivers().forEach(fl ->

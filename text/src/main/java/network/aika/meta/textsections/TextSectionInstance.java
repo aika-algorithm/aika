@@ -88,7 +88,7 @@ public class TextSectionInstance extends InstantiationModel<TextSectionInstance>
 
         boolean flag = false;
 
-        if (flag)
+//        if (flag)
             AIKADebugger.createAndShowGUI()
                     .setDocument(doc);
 

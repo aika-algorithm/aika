@@ -42,9 +42,9 @@ public class FieldLinkProperty {
         this.parent = parent;
 
         if(dir == INPUT) {
-            fieldProperty = createFieldProperty(parent, fl.getInput(), true, fl.isConnected(), fl.isPropagateUpdates());
+            fieldProperty = createFieldProperty(parent, fl.getInput(), true, fl);
         } else {
-            fieldProperty = createFieldProperty(parent, (FieldOutput) fl.getOutput(), true, fl.isConnected(), fl.isPropagateUpdates());
+            fieldProperty = createFieldProperty(parent, (FieldOutput) fl.getOutput(), true, fl);
         }
     }
 

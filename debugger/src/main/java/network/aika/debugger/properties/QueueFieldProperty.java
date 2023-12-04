@@ -18,6 +18,7 @@ package network.aika.debugger.properties;
 
 import network.aika.debugger.FieldObserver;
 import network.aika.fields.Field;
+import network.aika.fields.FieldLink;
 import network.aika.fields.QueueInterceptor;
 
 import javax.swing.*;
@@ -28,8 +29,8 @@ import java.awt.*;
  */
 public class QueueFieldProperty extends FieldOutputProperty<Field> implements FieldObserver {
 
-    public QueueFieldProperty(Container parent, Field field, boolean showReference, Boolean isConnected, Boolean isPropagateUpdates) {
-        super(parent, field, showReference, isConnected, isPropagateUpdates);
+    public QueueFieldProperty(Container parent, Field field, boolean showReference, FieldLink fl) {
+        super(parent, field, showReference, fl);
 
         currentValueField.addPropertyChangeListener("value", e -> {
             if(withinUpdate)

@@ -48,7 +48,7 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
 
         bias.addListener(
                 "onBiasUpdate",
-                (fl, nr, u) ->
+                (fl, u) ->
                         updateSumOfLowerWeights(),
                 true
         );
@@ -129,7 +129,7 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
         super.addInputSynapse(s);
         s.getWeight().addListener(
                 "onWeightUpdate",
-                (fl, nr, u) ->
+                (fl, u) ->
                         updateSumOfLowerWeights(),
                 true
         );

@@ -55,17 +55,18 @@ public class FieldUpdate<E extends Element> extends Step<E> {
         this.interceptor = qf;
     }
 
-    private void updateSortValue(double newSortValue) {
-        if(Utils.belowTolerance(TOLERANCE, sortValue - newSortValue))
+    private void updateSortValue(double delta) {
+        int newSortValue = convertSortValue(delta);
+        if(Math.abs(sortValue - newSortValue) == 0)
             return;
 
         if(isQueued()) {
             Document q = interceptor.getQueue();
             q.removeStep(this);
-            sortValue = convertSortValue(newSortValue);
+            sortValue = newSortValue;
             q.addStep(this);
         } else
-            sortValue = convertSortValue(newSortValue);
+            sortValue = newSortValue;
     }
 
     private int convertSortValue(double newSortValue) {

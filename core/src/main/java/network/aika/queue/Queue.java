@@ -80,11 +80,6 @@ public class Queue {
             round = r;
     }
 
-    public void incrementRound() {
-        round++;
-    }
-
-
     public void process(int maxRound, Phase maxPhase) {
         while (!queue.isEmpty()) {
             if(checkMaxPhaseReached(maxRound, maxPhase, true))

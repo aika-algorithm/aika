@@ -64,10 +64,10 @@ public class QueueInterceptor {
         return step;
     }
 
-    public void receiveUpdate(boolean nextRound, double u, boolean replaceUpdate) {
+    public void receiveUpdate(double u, boolean replaceUpdate) {
         updateObservers();
 
-        FieldUpdate s = getOrCreateStep(getRound(nextRound));
+        FieldUpdate s = getOrCreateStep(getRound());
         s.updateDelta(u, replaceUpdate);
 
         if(u != 0.0 && !s.isQueued()) {
@@ -77,14 +77,14 @@ public class QueueInterceptor {
         }
     }
 
-    private int getRound(boolean nextRound) {
+    private int getRound() {
         Document doc = field.getReference().getDocument();
-        return doc != null ? doc.getRound(nextRound) : 0;
+        return doc != null ? doc.getRound(field.isNextRound()) : 0;
     }
 
     public void process(FieldUpdate s) {
         step = null;
-        field.triggerUpdate(false, s.getDelta());
+        field.triggerUpdate(s.getDelta());
 
         updateObservers();
     }

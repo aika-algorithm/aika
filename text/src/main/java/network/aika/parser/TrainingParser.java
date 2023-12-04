@@ -19,6 +19,7 @@ package network.aika.parser;
 import network.aika.callbacks.InstantiationCallback;
 import network.aika.elements.activations.Activation;
 import network.aika.Document;
+import network.aika.queue.steps.FeedbackTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,13 +57,13 @@ public abstract class TrainingParser<C extends Context> extends Parser<C> implem
 
         try {
             if(phase == TRAINING)
-                doc.setInstantiationFeedbackTrigger(true);
+                FeedbackTrigger.add(doc, true, true);
 
             infer(doc, context, phase);
 
             if(phase == TRAINING) {
                 train(doc);
-                doc.setInstantiationFeedbackTrigger(false);
+                FeedbackTrigger.add(doc, true, false);
             }
 
             doc.postProcessing();

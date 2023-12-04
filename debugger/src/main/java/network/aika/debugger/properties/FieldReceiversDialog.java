@@ -157,7 +157,7 @@ public class FieldReceiversDialog extends JDialog
         if (f == null)
             return;
 
-        FieldOutputProperty property = createFieldProperty(this, f, true, null, null);
+        FieldOutputProperty property = createFieldProperty(this, f, true, null);
         properties.add(property);
         property.addField(posCounter, insets);
 

@@ -102,14 +102,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         initNet();
 
-        value = func(
-                this,
-                "value = f(net)",
-                TOLERANCE,
-                net,
-                x -> getActivationFunction().f(x)
-        );
-        value.setQueued(doc, INFERENCE);
+        initValue();
+
         netPreAnneal.setQueued(doc, PRE_ANNEAL);
 
         initBindingSignalSlots();
@@ -165,13 +159,24 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         initNetPreAnneal();
     }
 
+    protected void initValue() {
+        value = func(
+                this,
+                "value = f(net)",
+                TOLERANCE,
+                net,
+                x -> getActivationFunction().f(x)
+        );
+        value.setQueued(doc, INFERENCE);
+    }
+
     protected void initNetPreAnneal() {
         netPreAnneal = new SumField(this, "netPreAnneal", TOLERANCE);
         linkAndConnect(net, netPreAnneal);
 
         netPreAnneal.addListener(
                 "disconnect listener",
-                (fl, nr, u) ->
+                (fl, u) ->
                         netPreAnneal.disconnectAndUnlinkInputs(false),
                 true
         );
@@ -183,7 +188,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 bindingSignalSlots[bsSlot.ordinal()] = new BindingSignalSlot(this, bsSlot, isFeedback(bsSlot))
         );
 
-        value.addListener("onFired", (fl, nr, u) -> {
+        value.addListener("onFired", (fl, u) -> {
                     if(fl.getInput().exceedsThreshold() && fired == NOT_SET) {
                         fired = doc.getCurrentTimestamp();
 
@@ -261,6 +266,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public FieldOutput getValue() {
+        return value;
+    }
+
+    public FieldOutput getNextRoundValue() {
         return value;
     }
 
