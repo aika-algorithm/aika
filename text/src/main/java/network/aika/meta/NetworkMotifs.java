@@ -115,7 +115,7 @@ public class NetworkMotifs {
 
         InnerPositiveFeedbackSynapse posFeedSyn = new InnerPositiveFeedbackSynapse(
                         allowRelaxedMatching ?
-                                new NearRelation(5) :
+                                new NearRelation(6) :
                                 null
                 )
                 .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), pn.getTargetValue()))
