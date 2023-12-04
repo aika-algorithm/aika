@@ -140,15 +140,11 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         if(neuron == null) return;
         assert model.getSuspensionCallback() != null;
 
-        if(persistent || !model.canBeSuspended(lastUsed)) {
-            if(sm == SAVE_ALL)
-                save();
-
-            return;
-        }
-
-        if(sm == SAVE_SUSPENDED || sm == SAVE_ALL)
+        if(sm.isSave())
             save();
+
+        if(persistent || !model.canBeSuspended(lastUsed))
+            return;
 
         neuron.suspend();
         neuron = null;
@@ -254,6 +250,10 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
                 neuron != null ||
                 !inputSynapses.isEmpty() ||
                 !outputSynapses.isEmpty();
+    }
+
+    public boolean isRegistered() {
+        return isRegistered;
     }
 
     @Override
