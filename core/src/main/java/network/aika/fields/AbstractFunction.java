@@ -81,6 +81,11 @@ public abstract class AbstractFunction extends Field implements FieldInput {
         if(update == 0.0)
             return;
 
+        if(interceptor != null) {
+            interceptor.receiveUpdate(nextRound, update, false);
+            return;
+        }
+
         triggerUpdate(nextRound, update);
     }
 }
