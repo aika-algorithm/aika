@@ -103,6 +103,7 @@ public class Linking extends ElementStep<Activation> {
                         linkOutgoing(s);
                         latentLinkingExpand(s);
                     }
+
                     s.propagate(act);
                 });
     }

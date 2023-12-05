@@ -78,13 +78,14 @@ public abstract class AbstractFunction extends Field implements FieldInput {
     @Override
     public void receiveUpdate(FieldLink fl, double u) {
         double update = computeUpdate(fl, u);
-        if(update == 0.0)
-            return;
 
         if(interceptor != null) {
-            interceptor.receiveUpdate(update, false);
+            interceptor.receiveUpdate(update, true);
             return;
         }
+
+        if(update == 0.0)
+            return;
 
         triggerUpdate(update);
     }
