@@ -45,6 +45,7 @@ public class LinkUpdate extends ElementStep<ConjunctiveLink> {
     public LinkUpdate(ConjunctiveLink l, Direction dir, boolean state) {
         super(l);
 
+        this.state = state;
         this.dir = dir;
     }
 
@@ -82,5 +83,10 @@ public class LinkUpdate extends ElementStep<ConjunctiveLink> {
     @Override
     public Phase getPhase() {
         return Phase.LINK_UPDATE;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " " + dir + " state:" + state;
     }
 }
