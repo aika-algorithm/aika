@@ -109,24 +109,6 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         return outputNet;
     }
 
-    public void updateLinkState(Direction dir, boolean state) {
-        if(dir == Direction.INPUT) {
-            updateConnected(getInputValueLink(), state, true);
-            //updateConnected(outputSlotFL, state, true);
-
-            retrieveAndConnectBindingSignals(state);
-        } else {
-          //  updateConnected(inputSlotFL, state, true);
-        }
-
-        boolean oppositeState = dir == Direction.INPUT ?
-                isOutputSideActive() :
-                isInputSideActive();
-
-        if(state == oppositeState)
-            getDocument().onElementEvent(EventType.UPDATE, this);
-    }
-
     public boolean isInputSideActive() {
         if(input == null)
             return true;

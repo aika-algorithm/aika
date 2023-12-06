@@ -14,39 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.queue;
+package network.aika.queue.keys;
+
+import network.aika.elements.Element;
+import network.aika.elements.Timestamp;
+import network.aika.enums.direction.Direction;
+import network.aika.queue.Phase;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public enum Phase {
-    INSTANTIATION(),
-    POST_INSTANTIATION(),
-    LINKING(),
-    LINK_UPDATE(),
-    PRE_FEEDBACK_TRIGGER(),
-    INFERENCE(),
-    POST_FEEDBACK_TRIGGER(true),
-    PRE_ANNEAL(),
-    NEGATIVE_FEEDBACK(true),
-    ANNEAL(true),
-    TRAINING(true),
-    INACTIVE_LINKS(),
-    COUNTING(true),
-    SAVE(true);
+public class LinkUpdateQueueKey extends FiredQueueKey {
 
+    private Direction dir;
 
-    boolean delayed;
+    public LinkUpdateQueueKey(int round, Phase phase, Element element, Direction dir, Timestamp currentTimestamp) {
+        super(round, phase, element, currentTimestamp);
 
-    Phase() {
+        this.dir = dir;
     }
 
-    Phase(boolean delayed) {
-        this.delayed = delayed;
-    }
+    @Override
+    public int compareTo(QueueKey qk) {
+        int r = FiredQueueKey.COMPARATOR.compare(this, (FiredQueueKey) qk);
+        if(r != 0)
+            return r;
 
-    public boolean isDelayed() {
-        return delayed;
+        return dir.getOrder();
     }
 }

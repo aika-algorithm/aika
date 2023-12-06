@@ -72,6 +72,11 @@ public class Output implements Direction {
     }
 
     @Override
+    public int getOrder() {
+        return 1;
+    }
+
+    @Override
     public void write(DataOutput out) throws IOException {
         out.writeBoolean(true);
     }

@@ -47,6 +47,8 @@ public interface Direction {
 
     Activation getActivation(Link l);
 
+    int getOrder();
+
     Scope transition(Scope s, Transition[] t);
 
     void write(DataOutput out) throws IOException;

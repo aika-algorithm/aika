@@ -19,6 +19,7 @@ package network.aika.fields;
 
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.Synapse;
+import network.aika.queue.steps.LinkUpdate;
 
 import static network.aika.enums.direction.Direction.OUTPUT;
 
@@ -35,8 +36,12 @@ public class SynapseOutputSlot extends MaxField {
     protected void updateConnection(FieldLink si, boolean state) {
         if(si == null)
             return;
-        ConjunctiveLink l = getLink(si);
-        l.updateLinkState(OUTPUT, state);
+
+        LinkUpdate.add(
+                getLink(si),
+                OUTPUT,
+                state
+        );
     }
 
     public ConjunctiveLink getSelectedLink() {
