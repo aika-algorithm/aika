@@ -79,6 +79,11 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
     }
 
     @Override
+    public boolean isWithinUpdate() {
+        return withinUpdate;
+    }
+
+    @Override
     public FieldObject getReference() {
         return reference;
     }

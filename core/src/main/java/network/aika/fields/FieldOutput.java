@@ -41,6 +41,7 @@ public interface FieldOutput {
 
     void disconnectAndUnlinkOutputs(boolean deinitialize);
 
+    boolean isWithinUpdate();
 
     default FieldOutput addListener(String listenerName, UpdateListener fieldListener) {
         return addListener(listenerName, fieldListener, false);

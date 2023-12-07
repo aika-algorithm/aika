@@ -67,7 +67,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
 
         synOutputSlot = output.registerInputSlot(synapse);
 
-        outputNet = sub(this, "outputNet", output.getNet(), synOutputSlot);
+        outputNet = excludeInput(this, "outputNet", output.getNet(), synOutputSlot);
     }
 
     @Override

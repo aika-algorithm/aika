@@ -83,4 +83,9 @@ public class ConstantField implements FieldOutput {
     public void disconnectAndUnlinkOutputs(boolean deinitialize) {
 
     }
+
+    @Override
+    public boolean isWithinUpdate() {
+        return false;
+    }
 }

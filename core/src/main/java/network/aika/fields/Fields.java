@@ -74,6 +74,18 @@ public class Fields {
         return sub;
     }
 
+    public static ExcludeInput excludeInput(FieldObject ref, String label, FieldOutput in1, FieldOutput in2) {
+        if(in1 == null || in2 == null)
+            return null;
+
+        ExcludeInput sub = new ExcludeInput(ref, label);
+        link(in1, 0, sub);
+        link(in2, 1, sub);
+        sub.connectInputs(true);
+
+        return sub;
+    }
+
     public static Multiplication mul(FieldObject ref, String label, FieldOutput in1, boolean propagateUpdates1, FieldOutput in2, boolean propagateUpdates2) {
         if(in1 == null || in2 == null)
             return null;
