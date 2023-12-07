@@ -64,7 +64,7 @@ public class EntityInstance extends InstantiationModel<EntityInstance> implement
 
         boolean flag = false;
 
-        //if(flag)
+        if(flag)
             AIKADebugger.createAndShowGUI()
                     .setDocument(doc);
 
