@@ -27,8 +27,7 @@ import org.slf4j.LoggerFactory;
 
 
 import static network.aika.parser.ParserPhase.COUNTING;
-import static network.aika.queue.Phase.ANNEAL;
-import static network.aika.queue.Phase.INFERENCE;
+import static network.aika.queue.Phase.*;
 import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
@@ -62,22 +61,20 @@ public abstract class Parser<C extends Context> {
     }
 
     protected void infer(Document doc, C context, ParserPhase phase) {
-        FeedbackTrigger.add(doc, false);
+        if(phase != COUNTING)
+            FeedbackTrigger.add(doc, false);
 
         prepareInputs(doc, context);
 
-        if(phase == COUNTING) {
-            doc.skip(Integer.MAX_VALUE, Phase.COUNTING);
-            return;
+        doc.process(MAX_ROUND, FIRED);
+
+        if(phase != COUNTING) {
+            prepareTargets(doc, context);
+
+            doc.process(MAX_ROUND, FIRED);
+
+            anneal(doc);
         }
-
-        doc.process(MAX_ROUND, INFERENCE);
-
-        prepareTargets(doc, context);
-
-        doc.process(MAX_ROUND, INFERENCE);
-
-        anneal(doc);
     }
 
     protected abstract void prepareInputs(Document doc, C context);

@@ -21,8 +21,7 @@ import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.meta.exceptions.FailedInstantiationException;
 import network.aika.queue.steps.FeedbackTrigger;
 
-import static network.aika.queue.Phase.ANNEAL;
-import static network.aika.queue.Phase.INFERENCE;
+import static network.aika.queue.Phase.*;
 import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
@@ -69,7 +68,7 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
 
             getTemplateModel().prepareExampleDoc(doc, label);
 
-            doc.process(MAX_ROUND, INFERENCE);
+            doc.process(MAX_ROUND, FIRED);
 
             doc.anneal();
             doc.process(MAX_ROUND, ANNEAL);
