@@ -31,6 +31,7 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.Scope;
 import network.aika.queue.steps.Counting;
+import network.aika.queue.steps.Fired;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.elements.synapses.CategoryInputSynapse;
@@ -64,6 +65,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected Timestamp created = NOT_SET;
     protected Timestamp fired = NOT_SET;
+    protected Fired firedStep;
 
     protected FieldFunction value;
 
@@ -157,6 +159,34 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .setPropagateUpdates(false);
 
         initNetPreAnneal();
+
+        net.addListener("onFired", (fl, u) ->
+                updateFiredStep(fl)
+        );
+    }
+
+    private void updateFiredStep(AbstractFieldLink fl) {
+        if(!fl.getInput().exceedsThreshold() || fired != NOT_SET)
+            return;
+
+        Document doc = getDocument();
+
+        if(firedStep != null)
+            doc.removeStep(firedStep);
+        else
+            firedStep = new Fired(this);
+
+        firedStep.updateNet(net.getUpdatedValue());
+        doc.addStep(firedStep);
+    }
+
+    public void onFired() {
+        fired = doc.getCurrentTimestamp();
+
+        getBindingSignalSlots()
+                .forEach(BindingSignalSlot::onFired);
+
+        Counting.add(this);
     }
 
     protected void initValue() {
@@ -186,18 +216,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         Stream<Scope> bsSlots = neuron.getBindingSignalSlots();
         bsSlots.forEach(bsSlot ->
                 bindingSignalSlots[bsSlot.ordinal()] = new BindingSignalSlot(this, bsSlot, isFeedback(bsSlot))
-        );
-
-        value.addListener("onFired", (fl, u) -> {
-                    if(fl.getInput().exceedsThreshold() && fired == NOT_SET) {
-                        fired = doc.getCurrentTimestamp();
-
-                        getBindingSignalSlots()
-                                .forEach(BindingSignalSlot::onFired);
-
-                        Counting.add(this);
-                    }
-                }
         );
     }
 
@@ -630,4 +648,5 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     public String toKeyString() {
         return "id:" + getId() + " n:[" + getNeuron().toKeyString() + "]";
     }
+
 }
