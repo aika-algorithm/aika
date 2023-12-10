@@ -24,8 +24,8 @@ import network.aika.meta.sequences.SequenceModel;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.meta.textsections.TextSectionInstance;
 import network.aika.meta.textsections.TypedTextSectionModel;
+import network.aika.parser.Parser;
 import network.aika.parser.ParserPhase;
-import network.aika.parser.TrainingParser;
 import network.aika.Document;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
@@ -43,7 +43,7 @@ import static network.aika.parser.ParserPhase.TRAINING;
  *
  * @author Lukas Molzberger
  */
-public class TextSectionTest extends TrainingParser<TestContext> {
+public class TextSectionTest extends Parser<TestContext> {
 
     public static final String PROFILE_LABEL = "Profile";
     public static final String TASKS_LABEL = "Tasks";
@@ -136,10 +136,6 @@ public class TextSectionTest extends TrainingParser<TestContext> {
                     tokenCounter[0]++;
                 }
         );
-    }
-
-    @Override
-    protected void prepareTargets(Document doc, TestContext context) {
     }
 
     @Test

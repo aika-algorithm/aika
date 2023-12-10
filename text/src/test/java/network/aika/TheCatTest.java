@@ -60,8 +60,7 @@ public class TheCatTest {
 
         processTokens(dict, doc, "the", "cat");
 
-        doc.postProcessing();
-        doc.updateModel();
+        doc.process();
 
         doc.disconnect();
     }

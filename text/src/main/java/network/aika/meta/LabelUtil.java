@@ -69,7 +69,7 @@ public class LabelUtil {
     }
 
     private static String extractContext(Activation<?> act) {
-        Document doc = (Document) act.getDocument();
+        Document doc = act.getDocument();
 
         Activation<?> tAct = act.getTemplate();
         if(tAct == null)

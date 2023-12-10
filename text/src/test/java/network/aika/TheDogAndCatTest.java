@@ -58,8 +58,7 @@ public class TheDogAndCatTest {
 
         processTokens(dict, doc, "the", "dog", "and", "the", "cat");
 
-        doc.postProcessing();
-        doc.updateModel();
+        doc.process();
 
         doc.disconnect();
     }

@@ -32,8 +32,9 @@ public enum Phase {
     PRE_ANNEAL(),
     NEGATIVE_FEEDBACK(true),
     ANNEAL(true),
+    INSTANTIATION_TRIGGER(true),
     TRAINING(true),
-    INACTIVE_LINKS(),
+    INACTIVE_LINKS(true),
     COUNTING(true),
     SAVE(true);
 

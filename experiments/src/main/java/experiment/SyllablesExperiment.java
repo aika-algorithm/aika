@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 package experiment;
-
+/*
 import network.aika.Config;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.BindingActivation;
@@ -49,9 +49,7 @@ import static network.aika.parser.ParserPhase.TRAINING;
 import static network.aika.utils.Utils.doubleToString;
 
 
-/**
- * @author Lukas Molzberger
- */
+
 public class SyllablesExperiment extends TrainingParser<Context> {
 
     Model model;
@@ -150,6 +148,7 @@ public class SyllablesExperiment extends TrainingParser<Context> {
 
         experimentLogger.close();
     }
+
 
     @Override
     public Document process(String txt, Context context, ParserPhase phase) {
@@ -295,3 +294,4 @@ public class SyllablesExperiment extends TrainingParser<Context> {
         return inputs;
     }
 }
+*/

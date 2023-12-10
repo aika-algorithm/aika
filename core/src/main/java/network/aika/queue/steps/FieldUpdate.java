@@ -16,14 +16,13 @@
  */
 package network.aika.queue.steps;
 
-import network.aika.Document;
 import network.aika.elements.Timestamp;
 import network.aika.elements.Element;
 import network.aika.fields.QueueInterceptor;
 import network.aika.queue.Phase;
+import network.aika.queue.Queue;
 import network.aika.queue.Step;
 import network.aika.queue.keys.FieldQueueKey;
-import network.aika.utils.Utils;
 
 import static network.aika.queue.keys.FieldQueueKey.SORT_VALUE_PRECISION;
 import static network.aika.utils.Utils.*;
@@ -44,9 +43,7 @@ public class FieldUpdate<E extends Element> extends Step<E> {
 
     private double delta = 0.0;
 
-
-    public FieldUpdate(Document queue, Phase p, int round, QueueInterceptor qf) {
-        super(queue);
+    public FieldUpdate(Phase p, int round, QueueInterceptor qf) {
         this.phase = p;
         this.round = p.isDelayed() ?
                 Integer.MAX_VALUE :
@@ -61,7 +58,7 @@ public class FieldUpdate<E extends Element> extends Step<E> {
             return;
 
         if(isQueued()) {
-            Document q = interceptor.getQueue();
+            Queue q = getQueue();
             q.removeStep(this);
             sortValue = newSortValue;
             q.addStep(this);
@@ -90,6 +87,11 @@ public class FieldUpdate<E extends Element> extends Step<E> {
 
     public void reset() {
         delta = 0.0;
+    }
+
+    @Override
+    public Queue getQueue() {
+        return interceptor.getQueue();
     }
 
     @Override

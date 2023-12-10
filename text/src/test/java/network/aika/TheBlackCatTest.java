@@ -52,8 +52,7 @@ public class TheBlackCatTest {
 
         processTokens(dict, doc, "the", "black", "cat");
 
-        doc.postProcessing();
-        doc.updateModel();
+        doc.process();
 
         doc.disconnect();
     }

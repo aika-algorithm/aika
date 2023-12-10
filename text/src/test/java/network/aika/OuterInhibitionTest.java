@@ -77,8 +77,7 @@ public class OuterInhibitionTest {
         Document doc = new Document(m, "test");
         doc.addToken(in, new TextReference(new Range(0, 1), new Range(0, 4)), 5.0);
 
-        doc.postProcessing();
-        doc.updateModel();
+        doc.process();
 
         log.info("" + doc);
 

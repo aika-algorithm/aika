@@ -19,16 +19,15 @@ package network.aika.parser;
 
 import network.aika.debugger.AIKADebugger;
 import network.aika.meta.sequences.SequenceModel;
-import network.aika.queue.Phase;
 import network.aika.Document;
+import network.aika.queue.steps.Anneal;
 import network.aika.queue.steps.FeedbackTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
 import static network.aika.parser.ParserPhase.COUNTING;
-import static network.aika.queue.Phase.*;
-import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
  *
@@ -39,18 +38,34 @@ public abstract class Parser<C extends Context> {
     protected static final Logger log = LoggerFactory.getLogger(Parser.class);
 
     protected Document initDocument(String txt, C context, ParserPhase phase) {
-        return new Document(getPhraseModel().getModel(), txt);
+        Document doc = new Document(getPhraseModel().getModel(), txt);
+
+        doc.setInstantiationCallback((tAct, iAct) ->
+                generateTemplateInstanceLabels(iAct)
+        );
+
+        return doc;
     }
 
     protected abstract SequenceModel getPhraseModel();
 
     protected AIKADebugger debugger = null;
 
+    protected abstract void prepareInputs(Document doc, C context);
+
     public Document process(String txt, C context, ParserPhase phase) {
         Document doc = initDocument(txt, context, phase);
 
         try {
-            infer(doc, context, phase);
+            if(phase != COUNTING) {
+                FeedbackTrigger.add(doc, false);
+                Anneal.add(doc);
+            }
+
+            prepareInputs(doc, context);
+
+            doc.process();
+
         } catch(Exception e) {
             log.warn("Error while training:", e);
         } finally {
@@ -58,36 +73,5 @@ public abstract class Parser<C extends Context> {
         }
 
         return doc;
-    }
-
-    protected void infer(Document doc, C context, ParserPhase phase) {
-        if(phase != COUNTING)
-            FeedbackTrigger.add(doc, false);
-
-        prepareInputs(doc, context);
-
-        doc.process(MAX_ROUND, FIRED);
-
-        if(phase != COUNTING) {
-            prepareTargets(doc, context);
-
-            doc.process(MAX_ROUND, FIRED);
-
-            anneal(doc);
-        }
-    }
-
-    protected abstract void prepareInputs(Document doc, C context);
-
-    protected abstract void prepareTargets(Document doc, C context);
-
-    public void anneal(Document doc) {
-        doc.anneal();
-        doc.process(MAX_ROUND, ANNEAL);
-    }
-
-    protected static void waitForClick(AIKADebugger debugger) {
-        if(debugger != null)
-            debugger.getStepManager().waitForClick();
     }
 }

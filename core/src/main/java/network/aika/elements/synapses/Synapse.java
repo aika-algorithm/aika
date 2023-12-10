@@ -367,16 +367,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             return;
 
         rel.evaluateLatentRelation(ref, from, toPreAct, relDir.invert())
-                .forEach(relAct -> {
-                            if (log.isDebugEnabled())
-                                log.debug(
-                                        "REL " +
-                                                "downBS:" + from.getClass().getSimpleName() + " " + from.getId() + " " + from.getLabel() + "  " +
-                                                "upBS:" + relAct.getClass().getSimpleName() + " " + relAct.getId() + " " + relAct.getLabel()
-                                );
-
-                            op.relationCheck(this, relAct, relDir);
-                        }
+                .forEach(relAct ->
+                        op.relationCheck(this, relAct, relDir)
                 );
     }
 

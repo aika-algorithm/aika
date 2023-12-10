@@ -29,9 +29,12 @@ public abstract class ElementStep<E extends Element> extends Step<E> {
     private E element;
 
     public ElementStep(E element) {
-        super(element.getDocument());
-
         this.element = element;
+    }
+
+    @Override
+    public Queue getQueue() {
+        return element.getDocument();
     }
 
     @Override

@@ -59,7 +59,7 @@ public class QueueInterceptor {
 
     private FieldUpdate getOrCreateStep(int r) {
         if(step == null || step.getRound() < r)
-            step = new FieldUpdate<>(queue, phase, r, this);
+            step = new FieldUpdate<>(phase, r, this);
 
         return step;
     }

@@ -17,7 +17,6 @@
 package network.aika;
 
 import network.aika.meta.Dictionary;
-import network.aika.Document;
 import network.aika.text.TextReference;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -84,8 +83,7 @@ public class SimplePhraseTest {
                 i = j + 1;
             }
 
-            doc.postProcessing();
-            doc.updateModel();
+            doc.process();
 
             log.info("" + doc);
 

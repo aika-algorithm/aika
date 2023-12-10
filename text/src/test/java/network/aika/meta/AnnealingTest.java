@@ -20,7 +20,7 @@ import network.aika.Model;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.parser.Context;
-import network.aika.parser.TrainingParser;
+import network.aika.parser.Parser;
 import network.aika.Document;
 import network.aika.tokenizer.WordTokenizer;
 import network.aika.tokenizer.Tokenizer;
@@ -34,7 +34,7 @@ import static network.aika.parser.ParserPhase.TRAINING;
  *
  * @author Lukas Molzberger
  */
-public class AnnealingTest extends TrainingParser {
+public class AnnealingTest extends Parser {
 
     private Dictionary dict;
     private Tokenizer tokenizer;
@@ -62,10 +62,6 @@ public class AnnealingTest extends TrainingParser {
                     ref
             )
         );
-    }
-
-    @Override
-    protected void prepareTargets(Document doc, Context context) {
     }
 
     @Test

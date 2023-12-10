@@ -18,6 +18,7 @@ package network.aika.queue.steps;
 
 import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.keys.FieldQueueKey;
@@ -39,11 +40,21 @@ public class Fired extends ElementStep<Activation> {
         super(act);
     }
 
-
     @Override
     public void process() {
-        getElement()
-                .onFired();
+        Activation<?> act = getElement();
+
+        act.setFired();
+
+        act.getBindingSignalSlots()
+                .forEach(BindingSignalSlot::onFired);
+
+        Counting.add(act);
+/*
+        if (act.getNeuron().isAbstract() &&
+                act.getModel().getConfig().isMetaInstantiationEnabled())
+            Instantiation.add(act);
+ */
     }
 
     public void updateNet(double net) {
@@ -61,11 +72,9 @@ public class Fired extends ElementStep<Activation> {
         );
     }
 
-
     private int convertSortValue(double newSortValue) {
         return (int) (SORT_VALUE_PRECISION * newSortValue);
     }
-
 
     @Override
     public Phase getPhase() {

@@ -23,6 +23,7 @@ import network.aika.queue.keys.QueueKey;
 import java.util.Collection;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 
 import static network.aika.debugger.EventType.*;
 import static network.aika.queue.keys.QueueKey.MAX_ROUND;
@@ -80,11 +81,12 @@ public class Queue {
             round = r;
     }
 
-    public void process(int maxRound, Phase maxPhase) {
-        while (!queue.isEmpty()) {
-            if(checkMaxPhaseReached(maxRound, maxPhase, true))
-                break;
+    public void process() {
+        process(null);
+    }
 
+    public void process(Predicate<Step> filter) {
+        while (!queue.isEmpty()) {
             currentStep = queue.pollFirstEntry().getValue();
             currentStep.removeQueueKey();
 
@@ -92,47 +94,17 @@ public class Queue {
 
             queueEvent(BEFORE, currentStep);
 
-            updateRound(currentStep.getRound());
+            if(filter == null || filter.test(currentStep)) {
+                updateRound(currentStep.getRound());
+                currentStep.process();
+            }
 
-            currentStep.process();
             queueEvent(AFTER, currentStep);
             currentStep = null;
         }
     }
 
-    public void skip(int maxRound, Phase maxPhase) {
-        while (!queue.isEmpty()) {
-            if(checkMaxPhaseReached(maxRound, maxPhase, false))
-                break;
-
-            currentStep = queue.pollFirstEntry().getValue();
-            currentStep.removeQueueKey();
-        }
-    }
-
     public void queueEvent(EventType et, Step s) {
 
-    }
-
-    /**
-     * The postprocessing steps such as counting, cleanup or save are executed.
-     */
-    public void postProcessing() {
-        process(MAX_ROUND, null);
-    }
-
-
-    private boolean checkMaxPhaseReached(int maxRound, Phase maxPhase, boolean incl) {
-        QueueKey fe = queue.firstEntry().getKey();
-        if(fe.getRound() > maxRound)
-            return true;
-
-        if(maxPhase == null)
-            return false;
-
-        int r = maxPhase.compareTo(fe.getPhase());
-        return incl ?
-                r < 0 :
-                r <= 0;
     }
 }

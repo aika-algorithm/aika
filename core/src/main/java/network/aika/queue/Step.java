@@ -16,7 +16,6 @@
  */
 package network.aika.queue;
 
-import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.Timestamp;
 import network.aika.queue.keys.QueueKey;
@@ -29,13 +28,7 @@ import static network.aika.queue.keys.QueueKey.MAX_ROUND;
  */
 public abstract class Step<E extends Element> {
 
-    protected Document queue;
-
     protected QueueKey queueKey;
-
-    public Step(Document queue) {
-        this.queue = queue;
-    }
 
     public boolean isQueued() {
         return queueKey != null;
@@ -45,12 +38,14 @@ public abstract class Step<E extends Element> {
         return queueKey;
     }
 
+    public abstract Queue getQueue();
+
     public abstract void createQueueKey(Timestamp timestamp);
 
     public int getRound() {
         return getPhase().isDelayed() ?
                 MAX_ROUND :
-                queue.getRound(false);
+                getQueue().getRound(false);
     }
 
     public void removeQueueKey() {
@@ -66,10 +61,11 @@ public abstract class Step<E extends Element> {
     public abstract Phase getPhase();
 
     public static boolean add(Step s) {
-        if(s.queue == null)
+        Queue q = s.getQueue();
+        if(q == null)
             return false;
 
-        s.queue.addStep(s);
+        q.addStep(s);
         return true;
     }
 

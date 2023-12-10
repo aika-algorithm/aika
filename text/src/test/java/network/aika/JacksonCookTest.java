@@ -239,8 +239,7 @@ public class JacksonCookTest {
 
         processTokens(dict, doc, "Jackson", "Cook");
 
-        doc.postProcessing();
-        doc.updateModel();
+        doc.process();
         doc.disconnect();
     }
 }

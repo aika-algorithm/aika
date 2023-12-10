@@ -165,8 +165,7 @@ public class ABCDTest {
 
         processTokens(dict, doc, "a", "b", "c", "d");
 
-        doc.postProcessing();
-        doc.updateModel();
+        doc.process();
 
         Thread.sleep(100);
     }

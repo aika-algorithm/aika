@@ -19,10 +19,9 @@ package network.aika;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.meta.exceptions.FailedInstantiationException;
+import network.aika.queue.steps.Anneal;
 import network.aika.queue.steps.FeedbackTrigger;
-
-import static network.aika.queue.Phase.*;
-import static network.aika.queue.keys.QueueKey.MAX_ROUND;
+import network.aika.queue.steps.InstantiationTrigger;
 
 /**
  *
@@ -63,19 +62,14 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
         Document doc = createDocument(label);
 
         try {
+            InstantiationTrigger.add(doc);
             FeedbackTrigger.add(doc, false);
             FeedbackTrigger.add(doc, true, true);
+            Anneal.add(doc);
 
             getTemplateModel().prepareExampleDoc(doc, label);
 
-            doc.process(MAX_ROUND, FIRED);
-
-            doc.anneal();
-            doc.process(MAX_ROUND, ANNEAL);
-            doc.instantiateTemplates();
-            FeedbackTrigger.add(doc, true, false);
-
-            doc.process(MAX_ROUND, null);
+            doc.process();
 
             mapResults(doc);
 

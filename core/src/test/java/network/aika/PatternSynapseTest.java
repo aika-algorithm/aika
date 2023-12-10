@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PatternSynapseTest {
 
-
     @Test
     public void testUpdateFrequencyForIandO_bothActive_InitialState() {
         PatternSynapse patternSynapse = new PatternSynapse();

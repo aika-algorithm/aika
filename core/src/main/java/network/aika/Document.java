@@ -30,22 +30,18 @@ import network.aika.fields.*;
 import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.queue.Queue;
-import network.aika.queue.steps.FeedbackTrigger;
 import network.aika.text.Range;
 import network.aika.queue.Step;
-import network.aika.queue.steps.InactiveLinks;
-import network.aika.queue.steps.Instantiation;
-import network.aika.queue.steps.Anneal;
 import network.aika.text.TextReference;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.queue.Phase.*;
-import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
  * The {@code Document} class represents a single document which may be either used for processing a text or as
@@ -110,8 +106,11 @@ public class Document extends Queue implements Element {
         return id;
     }
 
-    public void updateModel() {
-        model.addToN(length());
+    public void process(Predicate<Step> filter) {
+        super.process(filter);
+
+        if(model.getConfig().isCountingEnabled())
+            model.addToN(length());
     }
 
     public Model getModel() {
@@ -201,32 +200,6 @@ public class Document extends Queue implements Element {
                 .forEach(act ->
                         act.disconnect()
                 );
-    }
-
-    public void anneal() {
-        Anneal.add(this);
-        process(MAX_ROUND, ANNEAL); // Anneal needs to be finished before instantiation can start.
-    }
-
-    public void train() {
-        getActivations()
-                .forEach(InactiveLinks::add);
-
-        process(MAX_ROUND, TRAINING);
-    }
-
-    public void instantiateTemplates() {
-        if (!getConfig().isMetaInstantiationEnabled())
-            return;
-
-        getActivations().stream()
-                .filter(act -> act.getNeuron().isAbstract())
-                .filter(Activation::isFired)
-                .forEach(Instantiation::add);
-
-        process(MAX_ROUND, ANNEAL);
-
-        FeedbackTrigger.add(this, false);
     }
 
     public String activationsToString() {

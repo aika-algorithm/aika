@@ -55,7 +55,7 @@ public class Anneal extends ElementStep<Document> {
 
     @Override
     public void process() {
-        Document doc = queue;
+        Document doc = getElement();
 
         double av = doc.getAnnealing().getValue();
         nextStep = doc.getConfig().getAnnealStepSize() / ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT.outerGrad(av);
@@ -76,8 +76,9 @@ public class Anneal extends ElementStep<Document> {
 
     @Override
     public String toString() {
-        return "docId:" + queue.getId() +
+        Document doc = getElement();
+        return "docId:" + doc.getId() +
                 " NextStep:" + doubleToString(nextStep, "#.######") +
-                " NextAnnealValue:" + doubleToString(queue.getAnnealing().getValue(), "#.######");
+                " NextAnnealValue:" + doubleToString(doc.getAnnealing().getValue(), "#.######");
     }
 }

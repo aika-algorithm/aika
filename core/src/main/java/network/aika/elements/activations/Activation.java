@@ -30,8 +30,8 @@ import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.Scope;
-import network.aika.queue.steps.Counting;
 import network.aika.queue.steps.Fired;
+import network.aika.queue.steps.InactiveLinks;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import network.aika.elements.synapses.CategoryInputSynapse;
@@ -65,7 +65,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected Timestamp created = NOT_SET;
     protected Timestamp fired = NOT_SET;
-    protected Fired firedStep;
+    protected Fired firedStep = new Fired(this);
 
     protected FieldFunction value;
 
@@ -116,6 +116,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         if (getModel().getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
             connectGradientFields();
             connectWeightUpdate();
+            InactiveLinks.add(this);
         }
 
         initInactiveLinks();
@@ -170,23 +171,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
             return;
 
         Document doc = getDocument();
-
-        if(firedStep != null)
+        if(firedStep.isQueued())
             doc.removeStep(firedStep);
-        else
-            firedStep = new Fired(this);
 
         firedStep.updateNet(net.getUpdatedValue());
         doc.addStep(firedStep);
-    }
-
-    public void onFired() {
-        fired = doc.getCurrentTimestamp();
-
-        getBindingSignalSlots()
-                .forEach(BindingSignalSlot::onFired);
-
-        Counting.add(this);
     }
 
     protected void initValue() {
@@ -309,6 +298,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public Timestamp getFired() {
         return fired;
+    }
+
+    public void setFired() {
+        fired = doc.getCurrentTimestamp();
     }
 
     public boolean isFired() {
@@ -648,5 +641,4 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     public String toKeyString() {
         return "id:" + getId() + " n:[" + getNeuron().toKeyString() + "]";
     }
-
 }
