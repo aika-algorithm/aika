@@ -104,6 +104,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         initNet();
 
+        net.addListener("onFired", (fl, u) ->
+                updateFiredStep(fl)
+        );
+
         initValue();
 
         netPreAnneal.setQueued(doc, PRE_ANNEAL);
@@ -118,8 +122,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
             connectWeightUpdate();
             InactiveLinks.add(this);
         }
-
-        initInactiveLinks();
 
         doc.register(this);
         neuron.register(this);
@@ -160,10 +162,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .setPropagateUpdates(false);
 
         initNetPreAnneal();
-
-        net.addListener("onFired", (fl, u) ->
-                updateFiredStep(fl)
-        );
     }
 
     private void updateFiredStep(AbstractFieldLink fl) {
@@ -217,9 +215,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .forEach(l ->
                         l.propagateBindingSignal(bs, t, state)
                 );
-    }
-
-    protected void initInactiveLinks() {
     }
 
     public PatternActivation getBindingSignal(Scope t) {
@@ -276,7 +271,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return value;
     }
 
-    public FieldOutput getNextRoundValue() {
+    public FieldOutput getFeedbackValue() {
         return value;
     }
 

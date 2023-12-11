@@ -47,8 +47,6 @@ public class InstantiationTrigger extends ElementStep<Document> {
                 .filter(act -> act.getNeuron().isAbstract())
                 .filter(Activation::isFired)
                 .forEach(Instantiation::add);
-
-        FeedbackTrigger.add(doc, true, false);
     }
 
     @Override

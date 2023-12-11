@@ -39,11 +39,6 @@ public class Save extends ElementStep<Neuron> {
     }
 
     @Override
-    public int getRound() {
-        return MAX_ROUND;
-    }
-
-    @Override
     public Phase getPhase() {
         return Phase.SAVE;
     }

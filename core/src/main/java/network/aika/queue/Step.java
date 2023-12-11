@@ -28,10 +28,15 @@ import static network.aika.queue.keys.QueueKey.MAX_ROUND;
  */
 public abstract class Step<E extends Element> {
 
+    protected boolean isQueued;
     protected QueueKey queueKey;
 
+    public void setQueued(boolean queued) {
+        isQueued = queued;
+    }
+
     public boolean isQueued() {
-        return queueKey != null;
+        return isQueued;
     }
 
     public QueueKey getQueueKey() {
@@ -40,17 +45,11 @@ public abstract class Step<E extends Element> {
 
     public abstract Queue getQueue();
 
-    public abstract void createQueueKey(Timestamp timestamp);
-
-    public int getRound() {
-        return getPhase().isDelayed() ?
-                MAX_ROUND :
-                getQueue().getRound(false);
+    public boolean incrementRound() {
+        return false;
     }
 
-    public void removeQueueKey() {
-        queueKey = null;
-    }
+    public abstract void createQueueKey(Timestamp timestamp, int round);
 
     public String getStepName() {
         return getClass().getSimpleName();

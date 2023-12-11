@@ -29,15 +29,12 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.INHIBITORY;
-import static network.aika.fields.Fields.mul;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
  */
 public class NegativeFeedbackLink extends Link<NegativeFeedbackSynapse, InhibitoryActivation, BindingActivation> {
-
-    private Multiplication innerWeightedInput;
 
     public NegativeFeedbackLink(NegativeFeedbackSynapse s, InhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
@@ -75,30 +72,11 @@ public class NegativeFeedbackLink extends Link<NegativeFeedbackSynapse, Inhibito
     }
 
     @Override
-    protected void initWeightedInput() {
-        super.initWeightedInput();
-        innerWeightedInput = weightedInput;
-        weightedInput = mul(
-                this,
-                "annealing * iAct(" + getInputKeyString() + ").value * weight",
-                getDocument().getAnnealing(),
-                innerWeightedInput
-        );
-    }
-
-    @Override
     public void connectWeightUpdate() {
         // TODO!
     }
 
     @Override
     public void visit(Visitor v, Scope s, int depth) {
-    }
-
-    @Override
-    public void disconnect() {
-        super.disconnect();
-
-        innerWeightedInput.disconnectAndUnlinkInputs(false);
     }
 }

@@ -14,36 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties.activations;
+package network.aika.elements.synapses;
 
-import network.aika.elements.activations.types.PatternActivation;
-
+import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.ConjunctiveActivation;
+import network.aika.elements.links.InstantiationFeedbackLink;
+import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.neurons.Neuron;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class PatternActivationPropertyPanel<A extends PatternActivation> extends ConjunctiveActivationPropertyPanel<A> {
+public abstract class InstantiationFeedbackSynapse<S extends InstantiationFeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends InstantiationFeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<O>> extends
+        PositiveFeedbackSynapse<S, I, O, L, IA, OA> {
 
-
-    public PatternActivationPropertyPanel(A act) {
-        super(act);
-    }
-
-    @Override
-    public void initIdentitySection(A act) {
-        super.initIdentitySection(act);
-    }
-
-    @Override
-    public void initInferenceSection(A act) {
-        addField(act.getFeedbackTrigger());
-        addField(act.getFeedbackValue());
-        super.initInferenceSection(act);
-    }
-
-    @Override
-    public void initTrainingSection(A act) {
-        addField(act.getEntropy());
-        super.initTrainingSection(act);
-    }
 }

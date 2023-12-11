@@ -25,6 +25,8 @@ public class Config {
 
     private double annealStepSize = 0.05;
 
+    private double annealStart = 5.0;
+
     private double learnRate;
 
     private double learnRateForAbstract;
@@ -54,6 +56,15 @@ public class Config {
 
     public Config setLearnRateForAbstract(double learnRate) {
         this.learnRateForAbstract = learnRateForAbstract;
+        return this;
+    }
+
+    public double getAnnealStart() {
+        return annealStart;
+    }
+
+    public Config setAnnealStart(double annealStart) {
+        this.annealStart = annealStart;
         return this;
     }
 

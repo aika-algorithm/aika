@@ -50,9 +50,9 @@ public class LinkUpdate extends ElementStep<ConjunctiveLink> {
     }
 
     @Override
-    public void createQueueKey(Timestamp timestamp) {
+    public void createQueueKey(Timestamp timestamp, int round) {
         queueKey = new LinkUpdateQueueKey(
-                getRound(),
+                round,
                 getPhase(),
                 getElement(),
                 dir,

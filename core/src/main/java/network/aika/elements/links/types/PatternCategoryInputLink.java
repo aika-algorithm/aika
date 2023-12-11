@@ -19,25 +19,25 @@ package network.aika.elements.links.types;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.CategoryInputLink;
+import network.aika.elements.links.InstantiationFeedbackLink;
 import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.types.PatternCategoryInputSynapse;
 import network.aika.elements.synapses.types.PatternCategorySynapse;
 import network.aika.fields.Field;
+import network.aika.fields.MaxField;
+
+import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.utils.Utils.TOLERANCE;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class PatternCategoryInputLink extends PositiveFeedbackLink<PatternCategoryInputSynapse, CategoryActivation, PatternActivation> implements CategoryInputLink {
+public class PatternCategoryInputLink extends InstantiationFeedbackLink<PatternCategoryInputSynapse, CategoryActivation, PatternActivation> implements CategoryInputLink {
 
     public PatternCategoryInputLink(PatternCategoryInputSynapse s, CategoryActivation input, PatternActivation output) {
         super(s, input, output);
-    }
-
-    @Override
-    protected Field getFeedbackTrigger() {
-        return getDocument().getInstantiationFeedbackTrigger();
     }
 
     @Override

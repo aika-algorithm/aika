@@ -47,12 +47,12 @@ public class LoggingListener implements EventListener {
     }
 
     private static void log(Anneal as) {
-        System.out.println("" + as.getElement().getAnnealing().getValue());
+      /*  System.out.println("" + as.getElement().getAnnealing().getValue());
 
         as.getElement().getAnnealing().getReceivers().forEach(fl ->
                 System.out.println("     " + fl)
         );
-        System.out.println();
+        System.out.println();*/
     }
 
     @Override

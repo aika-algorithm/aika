@@ -18,46 +18,36 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
-import network.aika.fields.*;
+import network.aika.elements.synapses.InstantiationFeedbackSynapse;
+import network.aika.fields.Field;
+import network.aika.fields.InputField;
+import network.aika.fields.MaxField;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>>
-        extends ConjunctiveLink<S, IA, OA> {
+public abstract class InstantiationFeedbackLink<S extends InstantiationFeedbackSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>> extends
+        PositiveFeedbackLink<S, IA, OA> {
 
-    protected AbstractFunction inputGradient;
+    protected Field feedbackTrigger;
 
-    public PositiveFeedbackLink(S s, IA input, OA output) {
+    public InstantiationFeedbackLink(S s, IA input, OA output) {
         super(s, input, output);
     }
 
     @Override
-    protected void connectGradientFields() {
-        super.connectGradientFields();
+    protected void initInputValue() {
+        feedbackTrigger = new InputField(this, "instantiation feedback trigger", 1.0);
+        inputValue = new MaxField(this, "input-value-ft", TOLERANCE);
 
-        inputGradient = new IdentityFunction(this, "input gradient");
+        linkAndConnect(feedbackTrigger, 0, inputValue);
+    }
 
-        scale(
-                this,
-                "updateValue = lr * in.grad * f'(out.net)",
-                getConfig().getLearnRate(output.getNeuron().isAbstract()),
-                mul(
-                        this,
-                        "in.gradient * f'(out.net)",
-                        inputGradient,
-                        output.getNetOuterGradient()
-                ),
-                output.getUpdateValue()
-        );
-
-        if(input != null)
-            linkAndConnect(input.getGradient(), 0, inputGradient);
+    public Field getFeedbackTrigger() {
+        return feedbackTrigger;
     }
 }

@@ -40,11 +40,6 @@ public class Counting extends ElementStep<Activation> {
     }
 
     @Override
-    public int getRound() {
-        return MAX_ROUND;
-    }
-
-    @Override
     public Phase getPhase() {
         return Phase.COUNTING;
     }

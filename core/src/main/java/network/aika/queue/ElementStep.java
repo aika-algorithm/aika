@@ -38,9 +38,9 @@ public abstract class ElementStep<E extends Element> extends Step<E> {
     }
 
     @Override
-    public void createQueueKey(Timestamp timestamp) {
+    public void createQueueKey(Timestamp timestamp, int round) {
         queueKey = new FiredQueueKey(
-                getRound(),
+                round,
                 getPhase(),
                 element,
                 timestamp

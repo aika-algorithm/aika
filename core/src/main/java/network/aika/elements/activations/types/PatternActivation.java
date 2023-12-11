@@ -22,7 +22,7 @@ import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.enums.sign.Sign;
-import network.aika.visitor.Visitor;
+import network.aika.queue.steps.Anneal;
 
 import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.Fields.*;
@@ -35,7 +35,9 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
-    private NextRoundFunction nextRoundValue;
+    protected Field feedbackValue;
+
+    private InputField feedbackTrigger;
 
     protected long visited;
 
@@ -51,14 +53,23 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
     protected void initValue() {
         super.initValue();
 
-        nextRoundValue = new NextRoundFunction(this, "nr value");
+        NextRoundFunction nextRoundValue = new NextRoundFunction(this, "nr value");
         FieldLink.linkAndConnect(value, 0, nextRoundValue);
         nextRoundValue.setQueued(doc, INFERENCE);
+
+        feedbackTrigger = new InputField(this, "feedback trigger", 0.0);
+        feedbackValue = max(this, "feedback value", nextRoundValue, feedbackTrigger);
+
+        Anneal.add(this, getModel().getConfig().getAnnealStart());
     }
 
     @Override
-    public NextRoundFunction getNextRoundValue() {
-        return nextRoundValue;
+    public Field getFeedbackValue() {
+        return feedbackValue;
+    }
+
+    public InputField getFeedbackTrigger() {
+        return feedbackTrigger;
     }
 
     @Override

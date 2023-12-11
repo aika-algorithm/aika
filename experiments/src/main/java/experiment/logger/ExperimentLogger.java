@@ -53,14 +53,14 @@ public class ExperimentLogger {
     }
 
     public void annealingLogInit(Document doc) {
-        annealingLogger.open(
+   /*     annealingLogger.open(
                 new File(experimentPath, "annealing-" + doc.getId() + "-" + doc.getContent() + ".csv"),
                 doc
-        );
+        );*/
     }
 
     public void log(Document doc) {
-        annealingLogger.close();
+     //   annealingLogger.close();
 
         statLogger.log(doc);
 

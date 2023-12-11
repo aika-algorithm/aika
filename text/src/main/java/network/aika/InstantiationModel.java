@@ -20,7 +20,6 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.meta.exceptions.FailedInstantiationException;
 import network.aika.queue.steps.Anneal;
-import network.aika.queue.steps.FeedbackTrigger;
 import network.aika.queue.steps.InstantiationTrigger;
 
 /**
@@ -63,9 +62,7 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
 
         try {
             InstantiationTrigger.add(doc);
-            FeedbackTrigger.add(doc, false);
-            FeedbackTrigger.add(doc, true, true);
-            Anneal.add(doc);
+          //  Anneal.add(doc);
 
             getTemplateModel().prepareExampleDoc(doc, label);
 

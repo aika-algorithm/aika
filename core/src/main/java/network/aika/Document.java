@@ -59,10 +59,6 @@ public class Document extends Queue implements Element {
 
     private long absoluteBeginChar;
 
-    private Field annealing;
-    private Field feedbackTrigger;
-    private Field instantiationFeedbackTrigger;
-
     private int activationIdCounter = 0;
 
     private long visitorCounter = 0;
@@ -84,13 +80,6 @@ public class Document extends Queue implements Element {
         }
 
         absoluteBeginChar = m.getN();
-
-        annealing = new InputField(this, "anneal", 0.0);
-        feedbackTrigger = new SumField(this, "feedback trigger", 0.0)
-                .setQueued(this, INFERENCE);
-
-        instantiationFeedbackTrigger = new SumField(this, "instantiation feedback trigger", 0.0)
-                .setQueued(this, INFERENCE);
 
         if(m.getCurrentDocument() != null)
             throw new PreviousThoughtNotDisconnected(m.getCurrentDocument(), this);
@@ -115,18 +104,6 @@ public class Document extends Queue implements Element {
 
     public Model getModel() {
         return model;
-    }
-
-    public Field getAnnealing() {
-        return annealing;
-    }
-
-    public Field getFeedbackTrigger() {
-        return feedbackTrigger;
-    }
-
-    public Field getInstantiationFeedbackTrigger() {
-        return instantiationFeedbackTrigger;
     }
 
     public Step getCurrentStep() {

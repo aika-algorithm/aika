@@ -37,7 +37,7 @@ import static network.aika.utils.Utils.doubleToString;
 public class AnnealingLogger {
 
     CSVPrinter printer;
-
+/*
     public void open(File f, Document doc)  {
         try {
             if(f.exists())
@@ -121,5 +121,5 @@ public class AnnealingLogger {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 }

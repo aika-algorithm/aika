@@ -38,8 +38,6 @@ public class Queue {
 
     private final NavigableMap<QueueKey, Step> queue = new TreeMap<>(QueueKey.COMPARATOR);
 
-    int round = 0;
-
     private long timestampCounter = 0;
 
     private Timestamp timestampOnProcess = new Timestamp(0);
@@ -57,28 +55,42 @@ public class Queue {
     }
 
     public void addStep(Step s) {
-        s.createQueueKey(getNextTimestamp());
+        s.createQueueKey(
+                getNextTimestamp(),
+                getRound(s)
+        );
         queue.put(s.getQueueKey(), s);
+        s.setQueued(true);
         queueEvent(ADDED, s);
+    }
+
+    private int getRound(Step s) {
+        int round;
+        if(s.getPhase().isDelayed())
+            round = MAX_ROUND;
+        else
+            round = getCurrentRound();
+
+        if(s.incrementRound())
+            round++;
+
+        return round;
+    }
+
+    public int getCurrentRound() {
+        return currentStep != null ?
+                currentStep.getQueueKey().getRound() :
+                0;
     }
 
     public void removeStep(Step s) {
         Step removedStep = queue.remove(s.getQueueKey());
         assert removedStep != null;
-        s.removeQueueKey();
+        s.setQueued(false);
     }
 
     public Collection<Step> getQueue() {
         return queue.values();
-    }
-
-    public int getRound(boolean nextRound) {
-        return round + (nextRound ? 1 : 0);
-    }
-
-    public void updateRound(int r) {
-        if(currentStep.getRound() != MAX_ROUND && round < r)
-            round = r;
     }
 
     public void process() {
@@ -88,16 +100,11 @@ public class Queue {
     public void process(Predicate<Step> filter) {
         while (!queue.isEmpty()) {
             currentStep = queue.pollFirstEntry().getValue();
-            currentStep.removeQueueKey();
-
-            timestampOnProcess = getCurrentTimestamp();
-
             queueEvent(BEFORE, currentStep);
 
-            if(filter == null || filter.test(currentStep)) {
-                updateRound(currentStep.getRound());
+            timestampOnProcess = getCurrentTimestamp();
+            if(filter == null || filter.test(currentStep))
                 currentStep.process();
-            }
 
             queueEvent(AFTER, currentStep);
             currentStep = null;

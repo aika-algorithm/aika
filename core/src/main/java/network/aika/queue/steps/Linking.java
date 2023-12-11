@@ -65,9 +65,9 @@ public class Linking extends ElementStep<Activation> {
     }
 
     @Override
-    public void createQueueKey(Timestamp timestamp) {
+    public void createQueueKey(Timestamp timestamp, int round) {
         queueKey = new LinkingQueueKey(
-                getRound(),
+                round,
                 getPhase(),
                 getElement(),
                 mode,

@@ -17,14 +17,13 @@
 package network.aika.queue.steps;
 
 import network.aika.Document;
-import network.aika.elements.Timestamp;
 import network.aika.ActivationFunction;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
-import network.aika.queue.keys.DocQueueKey;
 
 import static network.aika.queue.Phase.*;
-import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 import static network.aika.utils.Utils.doubleToString;
 
 
@@ -32,41 +31,36 @@ import static network.aika.utils.Utils.doubleToString;
  *
  * @author Lukas Molzberger
  */
-public class Anneal extends ElementStep<Document> {
+public class Anneal extends ElementStep<PatternActivation> {
 
-    double nextStep;
+    private double nextStep;
 
-    public static void add(Document doc) {
-        add(new Anneal(doc));
+    public static void add(PatternActivation act, double nv) {
+        add(new Anneal(act, nv));
     }
 
-    public Anneal(Document doc) {
-        super(doc);
+    public Anneal(PatternActivation act, double nv) {
+        super(act);
+
+        nextStep = nv;
     }
 
     @Override
-    public void createQueueKey(Timestamp timestamp) {
-        queueKey = new DocQueueKey(
-                MAX_ROUND,
-                getPhase(),
-                timestamp
-        );
+    public boolean incrementRound() {
+        return true;
     }
 
     @Override
     public void process() {
-        Document doc = getElement();
+        PatternActivation act = getElement();
+        Document doc = act.getDocument();
 
-        double av = doc.getAnnealing().getValue();
-        nextStep = doc.getConfig().getAnnealStepSize() / ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT.outerGrad(av);
-        double nextAnnealValue = nextStep + av;
-        nextAnnealValue = Math.min(nextAnnealValue, 1.0);
+        nextStep -= doc.getConfig().getAnnealStepSize();
 
-        FeedbackTrigger.add(doc, false);
-        doc.getAnnealing().setValue(nextAnnealValue);
+        act.getFeedbackTrigger().setValue(ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT.f(nextStep));
 
-        if (nextAnnealValue < 1.0)
-            Anneal.add(doc);
+        if (nextStep > 0.0)
+            Anneal.add(this);
     }
 
     @Override
@@ -76,9 +70,8 @@ public class Anneal extends ElementStep<Document> {
 
     @Override
     public String toString() {
-        Document doc = getElement();
-        return "docId:" + doc.getId() +
-                " NextStep:" + doubleToString(nextStep, "#.######") +
-                " NextAnnealValue:" + doubleToString(doc.getAnnealing().getValue(), "#.######");
+        Activation act = getElement();
+        return "actId:" + act.getId() +
+                " NextStep:" + doubleToString(nextStep, "#.######");
     }
 }

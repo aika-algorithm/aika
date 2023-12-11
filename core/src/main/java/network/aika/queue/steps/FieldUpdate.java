@@ -37,19 +37,18 @@ public class FieldUpdate<E extends Element> extends Step<E> {
 
     private Phase phase;
 
-    private int round;
-
     private int sortValue = Integer.MAX_VALUE;
 
     private double delta = 0.0;
 
-    public FieldUpdate(Phase p, int round, QueueInterceptor qf) {
+    public FieldUpdate(Phase p, QueueInterceptor qf) {
         this.phase = p;
-        this.round = p.isDelayed() ?
-                Integer.MAX_VALUE :
-                round;
-
         this.interceptor = qf;
+    }
+
+    @Override
+    public boolean incrementRound() {
+        return interceptor.getField().isNextRound();
     }
 
     private void updateSortValue(double delta) {
@@ -95,17 +94,13 @@ public class FieldUpdate<E extends Element> extends Step<E> {
     }
 
     @Override
-    public void createQueueKey(Timestamp timestamp) {
+    public void createQueueKey(Timestamp timestamp, int round) {
         queueKey = new FieldQueueKey(round, getPhase(), sortValue, timestamp);
     }
 
     @Override
     public void process() {
         interceptor.process(this);
-    }
-
-    public int getRound() {
-        return round;
     }
 
     @Override
@@ -127,7 +122,7 @@ public class FieldUpdate<E extends Element> extends Step<E> {
     }
 
     public String toShortString() {
-        return " Round:" + roundToString(round) +
+        return " Round:" + roundToString(getQueueKey().getRound()) +
                 " Delta:" + doubleToString(delta);
     }
 

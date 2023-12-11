@@ -22,8 +22,8 @@ import network.aika.elements.links.types.BindingCategoryInputLink;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
+import network.aika.elements.synapses.InstantiationFeedbackSynapse;
 import network.aika.elements.synapses.SynapseType;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.enums.Transition.INPUT_INPUT;
@@ -40,7 +40,7 @@ import static network.aika.enums.Transition.SAME_SAME;
         transition = {INPUT_INPUT, SAME_SAME},
         required = INPUT_INPUT
 )
-public class BindingCategoryInputSynapse extends PositiveFeedbackSynapse<
+public class BindingCategoryInputSynapse extends InstantiationFeedbackSynapse<
         BindingCategoryInputSynapse,
         CategoryNeuron,
         BindingNeuron,

@@ -37,9 +37,6 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
 
     public InnerPositiveFeedbackLink(InnerPositiveFeedbackSynapse s, PatternActivation input, BindingActivation output) {
         super(s, input, output);
-
-        if(input != null)
-            output.removeDummyLink(s);
     }
 
     @Override

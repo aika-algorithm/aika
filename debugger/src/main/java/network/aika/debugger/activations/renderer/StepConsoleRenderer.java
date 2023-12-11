@@ -65,12 +65,8 @@ public class StepConsoleRenderer implements ConsoleRenderer {
 
     private String stepToPrefix(Step s) {
         QueueKey qk = s.getQueueKey();
-        if(qk != null)
-            return s.getStepName() +
+        return s.getStepName() +
                     " " + Utils.roundToString(qk.getRound()) + " " + qk.getPhase() + " " +
                 (sortKey == Visible.SHOW ? " " + s.getQueueKey() : "");
-        else
-            return s.getStepName() + " " +
-                    Utils.roundToString(s.getRound()) + " " + s.getPhase() + " ";
     }
 }

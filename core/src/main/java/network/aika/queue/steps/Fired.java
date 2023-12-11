@@ -63,9 +63,9 @@ public class Fired extends ElementStep<Activation> {
     }
 
     @Override
-    public void createQueueKey(Timestamp timestamp) {
+    public void createQueueKey(Timestamp timestamp, int round) {
         queueKey = new FieldQueueKey(
-                getElement().getDocument().getRound(false),
+                round,
                 getPhase(),
                 sortValue,
                 timestamp

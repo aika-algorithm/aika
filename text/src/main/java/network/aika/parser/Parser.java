@@ -20,14 +20,11 @@ package network.aika.parser;
 import network.aika.debugger.AIKADebugger;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.Document;
-import network.aika.queue.steps.Anneal;
-import network.aika.queue.steps.FeedbackTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
-import static network.aika.parser.ParserPhase.COUNTING;
 
 /**
  *
@@ -57,11 +54,6 @@ public abstract class Parser<C extends Context> {
         Document doc = initDocument(txt, context, phase);
 
         try {
-            if(phase != COUNTING) {
-                FeedbackTrigger.add(doc, false);
-                Anneal.add(doc);
-            }
-
             prepareInputs(doc, context);
 
             doc.process();

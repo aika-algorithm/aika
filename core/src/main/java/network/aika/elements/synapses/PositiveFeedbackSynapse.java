@@ -31,12 +31,7 @@ public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse,
         extends ConjunctiveSynapse<S, I, O, L, IA, OA>
 {
     public FieldOutput getInputValue(IA input) {
-        return input.getNextRoundValue();
-    }
-
-    public void initDummyLink(OA oAct) {
-        if(!linkExists(oAct, true))
-            createAndInitLink(null, oAct);
+        return input.getFeedbackValue();
     }
 
     @Override

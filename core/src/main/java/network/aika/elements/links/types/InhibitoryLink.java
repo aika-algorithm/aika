@@ -46,8 +46,7 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
     public InhibitoryLink(InhibitorySynapse inhibitorySynapse, BindingActivation input, InhibitoryActivation output) {
         super(inhibitorySynapse, input, output);
 
-        net = new SumField(this, "net", null)
-                .setQueued(getDocument(), NEGATIVE_FEEDBACK);
+        net = new SumField(this, "net", null);
         linkAndConnect(weightedInput, net);
         linkAndConnect(output.getNeuron().getBias(), net)
                 .setPropagateUpdates(false);
@@ -58,7 +57,7 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
                 TOLERANCE,
                 net,
                 x -> output.getActivationFunction().f(x)
-        );
+        ).setQueued(getDocument(), NEGATIVE_FEEDBACK);
 
         InhibitoryActivation.connectFields(
                 Stream.of(this),

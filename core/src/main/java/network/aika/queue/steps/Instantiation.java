@@ -17,6 +17,7 @@
 package network.aika.queue.steps;
 
 import network.aika.elements.activations.Activation;
+import network.aika.elements.links.InstantiationFeedbackLink;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 
@@ -47,10 +48,15 @@ public class Instantiation extends ElementStep<Activation> {
 
     @Override
     public void process() {
-        getElement()
-                .instantiateTemplateNode();
+        Activation<?> act = getElement();
+        act.instantiateTemplateNode();
 
-        getElement().instantiationIsQueued = false;
+        act.getInputLinksByType(InstantiationFeedbackLink.class)
+                .forEach(l ->
+                        l.getFeedbackTrigger().setValue(0.0)
+                );
+
+        act.instantiationIsQueued = false;
     }
 
     @Override

@@ -263,10 +263,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return templateOnly;
     }
 
-    public boolean allowDeprecatedLinking() {
-        return true;
-    }
-
     public S link(Neuron input, Neuron output) {
         input.verifyNeuronExistsOnlyOnce();
         output.verifyNeuronExistsOnlyOnce();

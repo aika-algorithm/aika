@@ -50,12 +50,6 @@ public class NegativeFeedbackSynapse extends Synapse<
         BindingActivation
         >
 {
-
-    @Override
-    public boolean allowDeprecatedLinking() {
-        return false;
-    }
-
     @Override
     public double[] getSumOfLowerWeights() {
         return SULW_ZERO;
