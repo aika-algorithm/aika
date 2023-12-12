@@ -68,8 +68,8 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
 
     public void initInferenceSection(E act) {
         addField(act.getValue());
-        addField(act.getNet());
-        addField(act.getNetPreAnneal());
+        addField(act.getNet(false));
+        addField(act.getNet(true));
         addConstant("CreationTS: ", "" + act.getCreated());
         addConstant("FiredTS: ", "" + act.getFired());
         addConstant("isNewInstance: ", "" + act.isNewInstance());

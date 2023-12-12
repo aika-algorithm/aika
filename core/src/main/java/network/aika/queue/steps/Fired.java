@@ -34,6 +34,9 @@ import static network.aika.queue.keys.FieldQueueKey.SORT_VALUE_PRECISION;
 public class Fired extends ElementStep<Activation> {
 
     private double net;
+
+    private boolean withFeedback;
+
     private int sortValue;
 
     public Fired(Activation act) {
@@ -57,8 +60,11 @@ public class Fired extends ElementStep<Activation> {
  */
     }
 
-    public void updateNet(double net) {
+    public void updateNet(double net, boolean withFeedback) {
+        assert !this.withFeedback || withFeedback;
+
         this.net = net;
+        this.withFeedback = withFeedback;
         sortValue = convertSortValue(net);
     }
 

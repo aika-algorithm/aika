@@ -38,7 +38,8 @@ import static network.aika.enums.Transition.SAME_SAME;
         inputType = BINDING,
         outputType = BINDING,
         transition = {INPUT_INPUT, SAME_SAME},
-        required = INPUT_INPUT
+        required = INPUT_INPUT,
+        isFeedback = true
 )
 public class BindingCategoryInputSynapse extends InstantiationFeedbackSynapse<
         BindingCategoryInputSynapse,

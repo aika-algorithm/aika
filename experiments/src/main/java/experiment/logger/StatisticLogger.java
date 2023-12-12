@@ -85,7 +85,7 @@ public class StatisticLogger  {
     }
 
     private void count(Activation act) {
-        count(ACTS);
+ /*       count(ACTS);
         if(act.getNet().getValue() > 0.0)
             count(FIRED_ACTS);
         else
@@ -112,7 +112,7 @@ public class StatisticLogger  {
             count(NEW_INSTANCES);
 
         if(act.getNeuron().isAbstract())
-            count(ABSTRACT_ACTS);
+            count(ABSTRACT_ACTS);*/
     }
 
     public void count(Key key) {

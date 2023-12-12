@@ -37,7 +37,8 @@ import static network.aika.enums.Transition.SAME_SAME;
         inputType = PATTERN,
         outputType = PATTERN,
         transition = SAME_SAME,
-        required = SAME_SAME
+        required = SAME_SAME,
+        isFeedback = true
 )
 public class PatternCategoryInputSynapse
         extends InstantiationFeedbackSynapse<

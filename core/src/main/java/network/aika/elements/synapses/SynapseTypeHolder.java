@@ -36,6 +36,8 @@ public class SynapseTypeHolder {
     private Transition required;
 
     private Trigger trigger;
+    
+    private boolean isFeedback;
 
     public static SynapseTypeHolder getHolder(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
@@ -53,6 +55,7 @@ public class SynapseTypeHolder {
         transition = synTypeAnno.transition();
         required = synTypeAnno.required();
         trigger = synTypeAnno.linkingMode();
+        isFeedback = synTypeAnno.isFeedback();
     }
 
     public Type getInputType() {
@@ -73,5 +76,9 @@ public class SynapseTypeHolder {
 
     public Trigger getLinkingMode() {
         return trigger;
+    }
+
+    public boolean isFeedback() {
+        return isFeedback;
     }
 }

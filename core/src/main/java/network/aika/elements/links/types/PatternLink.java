@@ -70,7 +70,7 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
                 this,
                 "Information-Gain",
                 getInputPatternNet(),
-                output.getNet(),
+                output.getNet(false),
                 (x1, x2) ->
                         getSurprisal(
                                 Sign.getSign(x1),
@@ -110,7 +110,7 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
         if(inputPatternAct == null)
             return ZERO;
 
-        return inputPatternAct.getNet();
+        return inputPatternAct.getNet(false);
     }
 
     public FieldOutput getInputPatternValue() {

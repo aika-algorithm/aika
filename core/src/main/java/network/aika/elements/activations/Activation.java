@@ -71,8 +71,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected SumField net;
 
-    protected SumField netPreAnneal;
-
     protected FieldFunction netOuterGradient;
     protected SumField gradient;
 
@@ -104,13 +102,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         initNet();
 
-        net.addListener("onFired", (fl, u) ->
-                updateFiredStep(fl)
-        );
+        registerFiredListener(false);
+        registerFiredListener(true);
 
         initValue();
-
-        netPreAnneal.setQueued(doc, PRE_ANNEAL);
 
         initBindingSignalSlots();
 
@@ -127,6 +122,13 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         neuron.register(this);
 
         doc.onElementEvent(CREATE, this);
+    }
+
+    private void registerFiredListener(boolean withFeedback) {
+        getNet(withFeedback)
+                .addListener("onFired-" + (withFeedback ? "wf" : ""), (fl, u) ->
+                        updateFiredStep(fl, withFeedback)
+                );
     }
 
     public Type getType() {
@@ -160,19 +162,18 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         linkAndConnect(getNeuron().getBias(), net)
                 .setPropagateUpdates(false);
-
-        initNetPreAnneal();
     }
 
-    private void updateFiredStep(AbstractFieldLink fl) {
-        if(!fl.getInput().exceedsThreshold() || fired != NOT_SET)
+    private void updateFiredStep(AbstractFieldLink fl, boolean withFeedback) {
+        FieldOutput net = fl.getInput();
+        if(!net.exceedsThreshold() || fired != NOT_SET)
             return;
 
         Document doc = getDocument();
         if(firedStep.isQueued())
             doc.removeStep(firedStep);
 
-        firedStep.updateNet(net.getUpdatedValue());
+        firedStep.updateNet(net.getUpdatedValue(), withFeedback);
         doc.addStep(firedStep);
     }
 
@@ -181,22 +182,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 this,
                 "value = f(net)",
                 TOLERANCE,
-                net,
+                getNet(true),
                 x -> getActivationFunction().f(x)
         );
         value.setQueued(doc, INFERENCE);
-    }
-
-    protected void initNetPreAnneal() {
-        netPreAnneal = new SumField(this, "netPreAnneal", TOLERANCE);
-        linkAndConnect(net, netPreAnneal);
-
-        netPreAnneal.addListener(
-                "disconnect listener",
-                (fl, u) ->
-                        netPreAnneal.disconnectAndUnlinkInputs(false),
-                true
-        );
     }
 
     protected void initBindingSignalSlots() {
@@ -232,17 +221,13 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return neuron.isAbstract();
     }
 
-    public void setNet(double v) {
-        net.setValue(v);
-    }
-
     protected void connectGradientFields() {
         netOuterGradient =
                 func(
                         this,
-                        "f'(netPreAnneal)",
+                        "f'(net)",
                         TOLERANCE,
-                        netPreAnneal,
+                        getNet(false),
                         x -> getNeuron().getActivationFunction().outerGrad(x)
         );
     }
@@ -275,12 +260,12 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return value;
     }
 
-    public SumField getNet() {
+    public SumField getNet(boolean feedback) {
         return net;
     }
 
-    public SumField getNetPreAnneal() {
-        return netPreAnneal;
+    public void setNet(boolean feedback, double v) {
+        getNet(feedback).setValue(v);
     }
 
     public Timestamp getCreated() {

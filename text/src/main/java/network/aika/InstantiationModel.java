@@ -82,13 +82,6 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
         return (I) this;
     }
 
-    public static void suppressAllInstances(PatternActivation pAct) {
-        pAct.getTemplateInstances()
-                .forEach(tiAct ->
-                        tiAct.getNet().receiveUpdate(null, -10.0)
-                );
-    }
-
     protected abstract Document createDocument(String label);
 
     protected abstract void mapResults(Document doc);

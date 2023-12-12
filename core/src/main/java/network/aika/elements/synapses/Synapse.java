@@ -58,7 +58,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
-    private final SynapseTypeHolder synapseType = getHolder(getClass());
+    protected final SynapseTypeHolder synapseType = getHolder(getClass());
 
     protected static final double[] SULW_ZERO = new double[] {0.0, 0.0};
 
@@ -384,6 +384,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public boolean isNegative() {
         return weight.getUpdatedValue() < 0.0;
+    }
+
+    public SynapseTypeHolder getSynapseType() {
+        return synapseType;
     }
 
     @Override

@@ -25,6 +25,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 import network.aika.fields.SumField;
+import network.aika.fields.SynapseOutputSlot;
 import network.aika.utils.Utils;
 
 import java.io.DataInput;
@@ -70,8 +71,14 @@ public abstract class ConjunctiveSynapse<
         synapseBias.setValue(0.0);
     }
 
+    public SynapseOutputSlot connectOutputSlot(ConjunctiveActivation act, Long nId) {
+        SynapseOutputSlot slot = new SynapseOutputSlot(this, "out-slot-" + nId, TOLERANCE);
+        linkAndConnect(slot, act.getNet(getSynapseType().isFeedback()));
+        return slot;
+    }
+
     public void initBiasInput(OA act) {
-        linkAndConnect(synapseBias, act.getNet())
+        linkAndConnect(synapseBias, act.getNet(synapseType.isFeedback()))
                 .setPropagateUpdates(false);
     }
 

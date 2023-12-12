@@ -72,7 +72,7 @@ public class LinkPropertyPanel<E extends Link> extends AbstractPropertyPanel {
         Activation oAct = l.getOutput();
 
         addField(oAct.getValue());
-        addField(oAct.getNet());
+        addField(oAct.getNet(l.getSynapse().getSynapseType().isFeedback()));
     }
 
     public void initTrainingSection(E l) {

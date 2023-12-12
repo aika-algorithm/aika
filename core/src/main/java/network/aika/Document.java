@@ -223,8 +223,9 @@ public class Document extends Queue implements Element {
 
         act.updateRanges(textReference);
 
-        act.getNet().disconnectInputs(false);
-        act.setNet(inputNet);
+        act.getNet(false).disconnectInputs(false);
+        act.getNet(true).disconnectInputs(false);
+        act.setNet(true, inputNet);
         return act;
     }
 

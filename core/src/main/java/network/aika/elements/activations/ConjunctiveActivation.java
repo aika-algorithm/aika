@@ -19,7 +19,8 @@ package network.aika.elements.activations;
 import network.aika.Document;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.fields.FieldInput;
+import network.aika.fields.Field;
+import network.aika.fields.SumField;
 import network.aika.fields.SynapseOutputSlot;
 
 import java.util.NavigableMap;
@@ -36,21 +37,28 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> extends Activation<N> {
 
+    private SumField netWithFeedback;
+
     protected NavigableMap<Long, SynapseOutputSlot> inputSlots;
 
     public ConjunctiveActivation(int id, Document doc, N n) {
         super(id, doc, n);
     }
 
+    @Override
+    public SumField getNet(boolean feedback) {
+        return feedback ?
+                netWithFeedback :
+                net;
+    }
+
     public SynapseOutputSlot registerInputSlot(ConjunctiveSynapse syn) {
         if(inputSlots == null)
             inputSlots = new TreeMap<>();
 
-        return inputSlots.computeIfAbsent(syn.getInput().getId(), nId -> {
-            SynapseOutputSlot slot = new SynapseOutputSlot(syn, "out-slot-" + nId, TOLERANCE);
-            linkAndConnect(slot, getNet());
-            return slot;
-        });
+        return inputSlots.computeIfAbsent(syn.getInput().getId(), nId ->
+                syn.connectOutputSlot(this, nId)
+        );
     }
 
     @Override
@@ -71,6 +79,9 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
     @Override
     protected void initNet() {
         super.initNet();
+
+        netWithFeedback = new SumField(this, "net (with feedback)", null);
+        linkAndConnect(net, netWithFeedback);
 
         neuron.getSynapseBiasSynapses()
                 .forEach(s ->

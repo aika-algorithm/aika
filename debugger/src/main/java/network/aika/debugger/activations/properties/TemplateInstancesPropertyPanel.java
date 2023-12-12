@@ -35,7 +35,7 @@ public class TemplateInstancesPropertyPanel extends AbstractPropertyPanel {
     public TemplateInstancesPropertyPanel(Stream<? extends Activation> instances) {
         List<? extends Activation> sortedInstances = instances.collect(Collectors.toList());
 
-        Collections.sort(sortedInstances, Comparator.comparingDouble(inst -> -inst.getNet().getValue()));
+        Collections.sort(sortedInstances, Comparator.comparingDouble(inst -> -inst.getNet(true).getValue()));
         sortedInstances.stream()
                 .limit(10)
                 .forEach(inst -> {

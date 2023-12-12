@@ -43,4 +43,6 @@ public @interface SynapseType {
     public Transition required();
 
     public Trigger linkingMode() default Trigger.FIRED;
+
+    public boolean isFeedback() default false;
 }

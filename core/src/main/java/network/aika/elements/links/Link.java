@@ -172,7 +172,14 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     protected void initWeightedOutput() {
-        linkAndConnect(weightedInput, output.getNet());
+        linkAndConnect(
+                weightedInput,
+                output.getNet(isFeedback())
+        );
+    }
+
+    protected boolean isFeedback() {
+        return getSynapse().getSynapseType().isFeedback();
     }
 
     protected void initInputValue() {
