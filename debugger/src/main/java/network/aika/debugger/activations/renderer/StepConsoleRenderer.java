@@ -19,8 +19,8 @@ package network.aika.debugger.activations.renderer;
 import network.aika.Document;
 import network.aika.debugger.ConsoleRenderer;
 import network.aika.debugger.Visible;
-import network.aika.elements.Element;
 import network.aika.elements.Timestamp;
+import network.aika.fields.FieldObject;
 import network.aika.queue.Step;
 import network.aika.queue.keys.QueueKey;
 import network.aika.utils.Utils;
@@ -38,7 +38,7 @@ public class StepConsoleRenderer implements ConsoleRenderer {
 
     private Visible sortKey;
 
-    public StepConsoleRenderer(Document doc, Step step, Element highlightedElement, Visible sortKey) {
+    public StepConsoleRenderer(Document doc, Step step, FieldObject highlightedElement, Visible sortKey) {
         this.doc = doc;
         this.sortKey = sortKey;
         this.selected = step.getElement() == highlightedElement;

@@ -24,6 +24,7 @@ import network.aika.debugger.ElementPanel;
 import network.aika.elements.Element;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.queue.ElementStep;
 import network.aika.queue.Step;
 
 import javax.swing.*;
@@ -173,34 +174,38 @@ public class ActivationConsoleManager extends JSplitPane implements AbstractCons
 
     @Override
     public void onQueueEvent(EventType et, Step s) {
-        if(!within(activationViewManager.getTokenRange(), s.getElement()))
+        if(!(s instanceof ElementStep<?>))
+            return;
+
+        ElementStep es = (ElementStep) s;
+        if(!within(activationViewManager.getTokenRange(), es.getElement()))
             return;
 
         switch (et) {
             case ADDED:
-                queueEntryAddedEvent(s);
+                queueEntryAddedEvent(es);
                 break;
             case BEFORE:
-                beforeProcessedEvent(s);
+                beforeProcessedEvent(es);
                 break;
             case AFTER:
-                afterProcessedEvent(s);
+                afterProcessedEvent(es);
                 break;
         }
     }
 
-    public void queueEntryAddedEvent(Step s) {
+    public void queueEntryAddedEvent(ElementStep s) {
         updateQueue(null);
     }
 
 
-    public void beforeProcessedEvent(Step s) {
+    public void beforeProcessedEvent(ElementStep s) {
         updateQueue(s);
         update(s.getElement());
     }
 
 
-    public void afterProcessedEvent(Step s) {
+    public void afterProcessedEvent(ElementStep s) {
         updateQueue(s);
         update(s.getElement());
     }

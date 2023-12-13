@@ -26,6 +26,7 @@ import network.aika.elements.synapses.InstantiationFeedbackSynapse;
 import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_SAME;
 
@@ -39,7 +40,7 @@ import static network.aika.enums.Transition.SAME_SAME;
         outputType = BINDING,
         transition = {INPUT_INPUT, SAME_SAME},
         required = INPUT_INPUT,
-        isFeedback = true
+        feedbackMode = WITH_FEEDBACK
 )
 public class BindingCategoryInputSynapse extends InstantiationFeedbackSynapse<
         BindingCategoryInputSynapse,

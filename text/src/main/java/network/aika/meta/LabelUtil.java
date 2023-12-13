@@ -34,6 +34,8 @@ import network.aika.Document;
 
 import java.util.function.Predicate;
 
+import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
+import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
 import static network.aika.enums.direction.Direction.INPUT;
 
 
@@ -97,8 +99,8 @@ public class LabelUtil {
 
             BindingActivation act = (BindingActivation) l.getInput();
             return act != null &&
-                    (!fired || act.isFired()) &&
-                    (!netPreAnneal || act.getNet(false).getValue() > 0.0);
+                    (!fired || act.isFired(WITH_FEEDBACK)) &&
+                    (!netPreAnneal || act.getNet(PRE_FEEDBACK).getValue() > 0.0);
         });
     }
 

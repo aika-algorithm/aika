@@ -17,6 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.Type;
+import network.aika.elements.activations.StateType;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 
@@ -42,7 +43,7 @@ public @interface SynapseType {
 
     public Transition required();
 
-    public Trigger linkingMode() default Trigger.FIRED;
+    public Trigger linkingMode() default Trigger.FIRED_PRE_FEEDBACK;
 
-    public boolean isFeedback() default false;
+    public StateType feedbackMode() default StateType.PRE_FEEDBACK;
 }

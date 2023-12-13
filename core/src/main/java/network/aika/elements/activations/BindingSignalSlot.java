@@ -22,6 +22,7 @@ import network.aika.queue.steps.Linking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
 import static network.aika.enums.Trigger.*;
 
 /**
@@ -78,8 +79,8 @@ public class BindingSignalSlot {
         if(state && !lastState) {
             Linking.add(act, this, NOT_FIRED);
 
-            if(act.isFired())
-                Linking.add(act, this, FIRED);
+            if(act.isFired(PRE_FEEDBACK))
+                Linking.add(act, this, FIRED_PRE_FEEDBACK);
 
             act.propagateBindingSignal(type, bindingSignal, state);
         }
@@ -92,9 +93,9 @@ public class BindingSignalSlot {
                     );
     }
 
-    public void onFired() {
+    public void onFired(State s) {
         if(isFeedback || isSet())
-            Linking.add(act, this, FIRED);
+            Linking.add(act, this, FIRED_PRE_FEEDBACK);
     }
 
     public String toString() {

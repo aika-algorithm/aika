@@ -14,31 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.enums.sign;
-
-import network.aika.fields.FieldObject;
-import network.aika.elements.activations.Activation;
-import network.aika.fields.FieldOutput;
-
+package network.aika.elements.activations;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public interface Sign {
-
-    Positive POS = new Positive();
-    Negative NEG = new Negative();
-
-    Sign[] SIGNS = new Sign[] {POS, NEG};
-
-    Sign invert();
-
-    static Sign getSign(double x) {
-        return x >= 0.0 ? POS : NEG;
-    }
-
-    FieldOutput getValue(FieldObject ref, FieldOutput v);
-
-    int index();
+public enum StateType {
+    PRE_FEEDBACK,
+    WITH_FEEDBACK
 }

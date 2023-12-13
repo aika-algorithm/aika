@@ -74,6 +74,26 @@ public class Fields {
         return sub;
     }
 
+    public static MixFunction mix(FieldObject ref, String label, FieldOutput x, FieldOutput in1, FieldOutput in2) {
+        if(in1 == null || in2 == null)
+            return null;
+
+        MixFunction mix = new MixFunction(ref, label);
+
+        link(x, 0, mix);
+        link(in1, 1, mix);
+        link(in2, 2, mix);
+        mix.connectInputs(true);
+
+        return mix;
+    }
+
+    public static MixFunction mix(FieldObject ref, String label, FieldOutput x, FieldOutput in1, FieldOutput in2, FieldInput... out) {
+        MixFunction mix = mix(ref, label, x, in1, in2);
+        linkAndConnectAll(mix, out);
+        return mix;
+    }
+
     public static ExcludeInput excludeInput(FieldObject ref, String label, FieldOutput in1, FieldOutput in2) {
         if(in1 == null || in2 == null)
             return null;

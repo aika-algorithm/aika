@@ -26,6 +26,7 @@ import network.aika.elements.synapses.PositiveFeedbackSynapse;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
+import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
 import static network.aika.enums.Trigger.NOT_FIRED;
 import static network.aika.enums.Transition.INPUT_INPUT;
 
@@ -39,7 +40,7 @@ import static network.aika.enums.Transition.INPUT_INPUT;
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
         linkingMode = NOT_FIRED,
-        isFeedback = true
+        feedbackMode = WITH_FEEDBACK
 )
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         OuterPositiveFeedbackSynapse,

@@ -36,8 +36,6 @@ public class PatternActivationPropertyPanel<A extends PatternActivation> extends
 
     @Override
     public void initInferenceSection(A act) {
-        addField(act.getFeedbackTrigger());
-        addField(act.getFeedbackValue());
         super.initInferenceSection(act);
     }
 

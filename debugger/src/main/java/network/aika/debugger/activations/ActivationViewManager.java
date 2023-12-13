@@ -25,6 +25,7 @@ import network.aika.debugger.stepmanager.StepManager;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
+import network.aika.queue.ElementStep;
 import network.aika.queue.Step;
 import network.aika.Document;
 import network.aika.text.TextReference;
@@ -208,18 +209,23 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
 
     @Override
     public void onQueueEvent(EventType et, Step s) {
-        if(!within(tokenRange, s.getElement()))
+        if(!(s instanceof ElementStep))
+            return;
+
+        ElementStep es = (ElementStep) s;
+
+        if(!within(tokenRange, es.getElement()))
             return;
 
         switch (et) {
             case ADDED:
-                queueEntryAddedEvent(s);
+                queueEntryAddedEvent(es);
                 break;
             case BEFORE:
-                beforeProcessedEvent(s);
+                beforeProcessedEvent(es);
                 break;
             case AFTER:
-                afterProcessedEvent(s);
+                afterProcessedEvent(es);
                 break;
         }
     }
@@ -250,11 +256,11 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
                 within(tokenRange, l.getOutput());
     }
 
-    public void queueEntryAddedEvent(Step s) {
+    public void queueEntryAddedEvent(ElementStep s) {
 
     }
 
-    public void beforeProcessedEvent(Step s) {
+    public void beforeProcessedEvent(ElementStep s) {
         if(s.getElement() instanceof Activation) {
             beforeActivationProcessedEvent((Activation) s.getElement());
         } else if(s.getElement() instanceof Link) {
@@ -267,7 +273,7 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
         pumpAndWaitForUserAction();
     }
 
-    public void afterProcessedEvent(Step s) {
+    public void afterProcessedEvent(ElementStep s) {
         if(s.getElement() instanceof Activation) {
             afterActivationProcessedEvent((Activation) s.getElement());
         }

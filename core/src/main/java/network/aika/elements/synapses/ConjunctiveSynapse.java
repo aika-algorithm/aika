@@ -73,12 +73,12 @@ public abstract class ConjunctiveSynapse<
 
     public SynapseOutputSlot connectOutputSlot(ConjunctiveActivation act, Long nId) {
         SynapseOutputSlot slot = new SynapseOutputSlot(this, "out-slot-" + nId, TOLERANCE);
-        linkAndConnect(slot, act.getNet(getSynapseType().isFeedback()));
+        linkAndConnect(slot, act.getNet(synapseType.feedbackMode()));
         return slot;
     }
 
     public void initBiasInput(OA act) {
-        linkAndConnect(synapseBias, act.getNet(synapseType.isFeedback()))
+        linkAndConnect(synapseBias, act.getNet(synapseType.feedbackMode()))
                 .setPropagateUpdates(false);
     }
 

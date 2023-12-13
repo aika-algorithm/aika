@@ -16,19 +16,16 @@
  */
 package network.aika.elements.links;
 
-import network.aika.debugger.EventType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.Scope;
-import network.aika.enums.direction.Direction;
 import network.aika.fields.*;
 import network.aika.visitor.Visitor;
 
 import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.AbstractFieldLink.updateConnected;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
@@ -67,7 +64,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
 
         synOutputSlot = output.registerInputSlot(synapse);
 
-        outputNet = excludeInput(this, "outputNet", output.getNet(isFeedback()), synOutputSlot);
+        outputNet = excludeInput(this, "outputNet", output.getNet(feedbackMode()), synOutputSlot);
     }
 
     @Override

@@ -62,6 +62,14 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
                 actPropertyPanel
         );
 
+        StatesPropertyPanel statesPanel = StatesPropertyPanel.create(act);
+        statesPanel.addFinal();
+        addTab(
+                "States",
+                "The inner states of this activation",
+                statesPanel
+        );
+
         AbstractPropertyPanel neuronPropertyPanel = AbstractPropertyPanel.createNeuralElement(act);
         neuronPropertyPanel.addFinal();
         addTab(
@@ -73,6 +81,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         {
             AbstractPropertyPanel linksPropertyPanel = LinksPropertyPanel.create(act, Direction.INPUT);
             if (linksPropertyPanel != null)
+                linksPropertyPanel.addFinal();
                 addTab(
                         "Input-Links",
                         "Shows the Input-Links",
@@ -83,6 +92,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         {
             AbstractPropertyPanel linksPropertyPanel = LinksPropertyPanel.create(act, Direction.OUTPUT);
             if (linksPropertyPanel != null)
+                linksPropertyPanel.addFinal();
                 addTab(
                         "Output-Links",
                         "Shows the Output-Links",
@@ -93,6 +103,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         {
             AbstractPropertyPanel synapsesPropertyPanel = SynapsesPropertyPanel.create(act, Direction.INPUT);
             if (synapsesPropertyPanel != null)
+                synapsesPropertyPanel.addFinal();
                 addTab(
                         "Input-Synapses",
                         "Shows the Input-Synapses",
@@ -102,6 +113,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         {
             AbstractPropertyPanel synapsesPropertyPanel = SynapsesPropertyPanel.create(act, Direction.OUTPUT);
             if (synapsesPropertyPanel != null)
+                synapsesPropertyPanel.addFinal();
                 addTab(
                         "Output-Synapses",
                         "Shows the Output-Synapses",
@@ -112,6 +124,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         if(act.isAbstract()) {
             AbstractPropertyPanel templateInstancesPropertyPanel = TemplateInstancesPropertyPanel.create(act);
             if (templateInstancesPropertyPanel != null)
+                templateInstancesPropertyPanel.addFinal();
                 addTab(
                         "Template-Instances",
                         "Shows the Template-Instances",
@@ -120,7 +133,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         }
 
         ActivationsPropertyPanel activationsPanel = ActivationsPropertyPanel.create(act.getNeuron());
-
+        activationsPanel.addFinal();
         addTab(
                 "Activations",
                 "Activations of this Neurons",
@@ -128,7 +141,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         );
 
         TextReferencesPropertyPanel preActivationPanel = TextReferencesPropertyPanel.create(act.getNeuron());
-
+        preActivationPanel.addFinal();
         addTab(
                 "Text-References",
                 "Text-References of the Activations of this Neuron",

@@ -21,6 +21,7 @@ import network.aika.debugger.AbstractParticle;
 import network.aika.debugger.activations.ActivationGraphManager;
 import network.aika.debugger.activations.LayoutState;
 import network.aika.debugger.activations.layout.ParticleLink;
+import network.aika.elements.activations.StateType;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.BindingActivation;
@@ -83,8 +84,11 @@ public class ActivationParticle<E extends Activation> extends AbstractParticle<A
     }
 
     private String getActivationStrokeColor(Activation act) {
-        if(act.isFired())
+        if(act.isFired(StateType.WITH_FEEDBACK))
             return "stroke-color: black;";
+
+        if(act.isFired(StateType.PRE_FEEDBACK))
+            return "stroke-color: rgb(60, 60, 60);";
 
         return "stroke-color: rgb(200, 200, 200);";
     }

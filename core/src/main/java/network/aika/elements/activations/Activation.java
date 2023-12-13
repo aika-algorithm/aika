@@ -30,7 +30,6 @@ import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.Scope;
-import network.aika.queue.steps.Fired;
 import network.aika.queue.steps.InactiveLinks;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
@@ -45,7 +44,8 @@ import static network.aika.debugger.EventType.*;
 import static network.aika.elements.LinkKey.getFromLinkKey;
 import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
-import static network.aika.queue.Phase.PRE_ANNEAL;
+import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
+import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.queue.Phase.*;
@@ -64,12 +64,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected Document doc;
 
     protected Timestamp created = NOT_SET;
-    protected Timestamp fired = NOT_SET;
-    protected Fired firedStep = new Fired(this);
 
-    protected FieldFunction value;
+    protected Field value;
 
-    protected SumField net;
+    protected State[] state = new State[numberOfStates()];
 
     protected FieldFunction netOuterGradient;
     protected SumField gradient;
@@ -102,8 +100,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         initNet();
 
-        registerFiredListener(false);
-        registerFiredListener(true);
+        initSynapseBiases();
 
         initValue();
 
@@ -124,12 +121,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         doc.onElementEvent(CREATE, this);
     }
 
-    private void registerFiredListener(boolean withFeedback) {
-        getNet(withFeedback)
-                .addListener("onFired-" + (withFeedback ? "wf" : ""), (fl, u) ->
-                        updateFiredStep(fl, withFeedback)
-                );
-    }
 
     public Type getType() {
         return neuron.getType();
@@ -158,34 +149,17 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void initNet() {
-        net = new SumField(this, "net", null);
+        state[PRE_FEEDBACK.ordinal()] = new State(this, PRE_FEEDBACK);
 
-        linkAndConnect(getNeuron().getBias(), net)
+        linkAndConnect(getNeuron().getBias(), getNet(PRE_FEEDBACK))
                 .setPropagateUpdates(false);
     }
 
-    private void updateFiredStep(AbstractFieldLink fl, boolean withFeedback) {
-        FieldOutput net = fl.getInput();
-        if(!net.exceedsThreshold() || fired != NOT_SET)
-            return;
-
-        Document doc = getDocument();
-        if(firedStep.isQueued())
-            doc.removeStep(firedStep);
-
-        firedStep.updateNet(net.getUpdatedValue(), withFeedback);
-        doc.addStep(firedStep);
+    protected void initSynapseBiases() {
     }
 
     protected void initValue() {
-        value = func(
-                this,
-                "value = f(net)",
-                TOLERANCE,
-                getNet(true),
-                x -> getActivationFunction().f(x)
-        );
-        value.setQueued(doc, INFERENCE);
+        value = getValue(PRE_FEEDBACK);
     }
 
     protected void initBindingSignalSlots() {
@@ -227,7 +201,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                         this,
                         "f'(net)",
                         TOLERANCE,
-                        getNet(false),
+                        getNet(PRE_FEEDBACK),
                         x -> getNeuron().getActivationFunction().outerGrad(x)
         );
     }
@@ -252,22 +226,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return id;
     }
 
-    public FieldOutput getValue() {
-        return value;
-    }
-
-    public FieldOutput getFeedbackValue() {
-        return value;
-    }
-
-    public SumField getNet(boolean feedback) {
-        return net;
-    }
-
-    public void setNet(boolean feedback, double v) {
-        getNet(feedback).setValue(v);
-    }
-
     public Timestamp getCreated() {
         return created;
     }
@@ -276,16 +234,48 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         this.created = ts;
     }
 
+    protected int numberOfStates() {
+        return 1;
+    }
+
+    public Field getValue() {
+        return value;
+    }
+
+    public State getState(StateType st) {
+        if(st.ordinal() >= state.length)
+            return state[state.length - 1];
+
+        return state[st.ordinal()];
+    }
+
+    public Field getValue(StateType st) {
+        return getState(st).value;
+    }
+
+    public void setNet(StateType st, double v) {
+        getNet(st).setValue(v);
+    }
+
+    public SumField getNet(StateType st) {
+        return getState(st).net;
+    }
+
+    public void setFired(StateType st, Timestamp fired) {
+        getState(st).fired = fired;
+    }
+
+    public Timestamp getFired(StateType st) {
+        return getState(st).fired;
+    }
+
+    @Override
     public Timestamp getFired() {
-        return fired;
+        return getFired(WITH_FEEDBACK);
     }
 
-    public void setFired() {
-        fired = doc.getCurrentTimestamp();
-    }
-
-    public boolean isFired() {
-        return isTrue(value);
+    public boolean isFired(StateType st) {
+        return getState(st).isFired();
     }
 
     public Document getDocument() {
@@ -348,6 +338,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public void setNeuron(N n) {
         this.neuron = n;
+    }
+
+    public State[] getStates() {
+        return state;
     }
 
     public ActivationFunction getActivationFunction() {
@@ -454,7 +448,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     @Override
     public void disconnect() {
-        net.disconnectAndUnlinkInputs(false);
+        for(State s: state)
+            s.disconnect();
 
         if(updateValue != null)
             updateValue.disconnectAndUnlinkOutputs(false);
@@ -502,7 +497,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public boolean isActiveTemplateInstance() {
         return isNewInstance ||
-                isTrue(value);
+                isFired(WITH_FEEDBACK);
     }
 
     public CategoryInputLink getActiveCategoryInputLink() {
@@ -539,7 +534,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         ti.textReference = textReference;
         ti.isNewInstance = true;
-        ti.fired = fired;
+        ti.setFired(WITH_FEEDBACK, getFired(WITH_FEEDBACK));
 
         doc.onElementEvent(TOKEN_POSITION, ti);
 
@@ -585,8 +580,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         getOutputLinks()
                 .filter(l -> !(l instanceof CategoryLink))
-
-                .filter(l -> l.getOutput().isFired())
+                .filter(l -> l.getOutput().isFired(WITH_FEEDBACK))
                 .forEach(l ->
                         l.instantiateTemplate(
                                 instanceAct,
@@ -596,7 +590,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public void initFromTemplate(Activation templateAct) {
-        fired = templateAct.fired;
+        setFired(WITH_FEEDBACK, templateAct.getFired(WITH_FEEDBACK));
         doc.onElementEvent(UPDATE, this);
     }
 

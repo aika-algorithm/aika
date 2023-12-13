@@ -17,6 +17,7 @@
 package experiment.logger;
 
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.*;
@@ -145,8 +146,8 @@ public class PatternLogger {
                             LabelUtil.generateLabel(pAct, true, false),
                             pAct.getId(),
                             pn.getId() + (pn.isAbstract() ? "-abstr" : ""),
-                            print(pAct.getNet(false)),
-                            print(pAct.getNet(true)),
+                            print(pAct.getNet(StateType.PRE_FEEDBACK)),
+                            print(pAct.getNet(StateType.WITH_FEEDBACK)),
                             print(pAct.getNetOuterGradient()),
                             print(pAct.getGradient()),
                             print(pAct.getUpdateValue()),
@@ -188,8 +189,8 @@ public class PatternLogger {
                 iAct.getLabel(),
                 iAct.getId(),
                 bn.getId() + (bn.isAbstract() ? "-abstr" : ""),
-                print(iAct.getNet(false)),
-                print(iAct.getNet(true)),
+                print(iAct.getNet(StateType.PRE_FEEDBACK)),
+                print(iAct.getNet(StateType.WITH_FEEDBACK)),
                 print(iAct.getNetOuterGradient()),
                 print(iAct.getGradient()),
                 print(iAct.getUpdateValue()),
@@ -221,7 +222,7 @@ public class PatternLogger {
                 .map(Link::getInput)
                 .flatMap(inhibAct -> inhibAct.getInputLinksByType(InhibitoryLink.class))
                 .map(Link::getInput)
-                .filter(supprAct -> supprAct.getNet(false).getUpdatedValue() > 0.0)
+                .filter(supprAct -> supprAct.getNet(StateType.PRE_FEEDBACK).getUpdatedValue() > 0.0)
                 .map(Activation::getLabel)
                 .findFirst()
                 .orElse("--");
@@ -239,7 +240,7 @@ public class PatternLogger {
     private static String getDominantBindingActLabel(PatternActivation tAct) {
         return tAct.getOutputLinksByType(InputObjectLink.class).map(Link::getOutput)
                 .filter(act -> !act.isAbstract())
-                .filter(supprAct -> supprAct.getNet(false).getUpdatedValue() > 0.0)
+                .filter(supprAct -> supprAct.getNet(StateType.PRE_FEEDBACK).getUpdatedValue() > 0.0)
                 .map(act -> act.getTextReference().getTokenPosRange() + "-" + act.getLabel())
                 .findFirst()
                 .orElse(tAct.getTextReference().getTokenPosRange() + "-BLANK");

@@ -16,17 +16,15 @@
  */
 package network.aika.queue;
 
-import network.aika.elements.Element;
 import network.aika.elements.Timestamp;
+import network.aika.fields.FieldObject;
 import network.aika.queue.keys.QueueKey;
-
-import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class Step<E extends Element> {
+public abstract class Step<E extends FieldObject> {
 
     protected boolean isQueued;
     protected QueueKey queueKey;

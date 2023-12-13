@@ -14,42 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.queue.steps;
+package network.aika.fields;
 
-import network.aika.elements.activations.Activation;
-import network.aika.queue.ElementStep;
-import network.aika.queue.Phase;
-import network.aika.queue.Step;
-
-import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
 
 /**
- * Counts the number of activations a particular neuron has encountered.
- *
  * @author Lukas Molzberger
  */
-public class Counting extends ElementStep<Activation> {
+public class MixFunction extends AbstractFunction implements FieldInput, FieldOutput {
 
-    public static void add(Activation act) {
-        if (act.getConfig().isCountingEnabled() && !act.getNeuron().isAbstract())
-            Step.add(new Counting(act));
-    }
-
-    private Counting(Activation act) {
-        super(act);
+    public MixFunction(FieldObject ref, String label) {
+        super(ref, label);
     }
 
     @Override
-    public Phase getPhase() {
-        return Phase.COUNTING;
+    protected int getNumberOfFunctionArguments() {
+        return 3;
     }
 
     @Override
-    public void process() {
-        Activation act = getElement();
+    protected double computeUpdate(FieldLink fl, double u) {
+        int arg = fl.getArgument();
+        if(arg == 0) {
+            double a = getInputValueByArg(1);
+            double b = getInputValueByArg(2);
 
-        if (act.isFired(WITH_FEEDBACK))
-            act.getNeuron()
-                    .count(act);
+            return (u * a + -u * b);
+        } else {
+            double x = getInputValueByArg(0);
+
+            return (arg == 1 ? x : 1 - x) * u;
+        }
     }
 }

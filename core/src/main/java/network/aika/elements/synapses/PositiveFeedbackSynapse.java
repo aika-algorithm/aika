@@ -21,7 +21,6 @@ import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.Neuron;
-import network.aika.fields.FieldOutput;
 
 /**
  *
@@ -30,10 +29,6 @@ import network.aika.fields.FieldOutput;
 public abstract class PositiveFeedbackSynapse<S extends PositiveFeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends PositiveFeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<O>>
         extends ConjunctiveSynapse<S, I, O, L, IA, OA>
 {
-    public FieldOutput getInputValue(IA input) {
-        return input.getFeedbackValue();
-    }
-
     @Override
     public double getWeightForNetUB() {
         return 0.0;

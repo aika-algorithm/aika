@@ -18,6 +18,7 @@ package network.aika.queue.steps;
 
 import network.aika.elements.Timestamp;
 import network.aika.elements.Element;
+import network.aika.fields.FieldObject;
 import network.aika.fields.QueueInterceptor;
 import network.aika.queue.Phase;
 import network.aika.queue.Queue;
@@ -31,7 +32,7 @@ import static network.aika.utils.Utils.*;
  *
  * @author Lukas Molzberger
  */
-public class FieldUpdate<E extends Element> extends Step<E> {
+public class FieldUpdate<E extends FieldObject> extends Step<E> {
 
     private QueueInterceptor interceptor;
 

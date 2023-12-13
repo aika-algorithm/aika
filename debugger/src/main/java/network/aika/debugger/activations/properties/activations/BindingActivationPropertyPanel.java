@@ -34,6 +34,13 @@ public class BindingActivationPropertyPanel<E extends BindingActivation> extends
         super.initIdentitySection(act);
     }
 
+    @Override
+    public void initInferenceSection(E act) {
+        addField(act.getFeedbackTrigger());
+
+        super.initInferenceSection(act);
+    }
+
     public static BindingActivationPropertyPanel create(BindingActivation act) {
         if(act instanceof LatentRelationActivation) {
             return LatentRelationActivationPropertyPanel.create((LatentRelationActivation) act);

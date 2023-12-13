@@ -19,8 +19,6 @@ package network.aika.elements.activations;
 import network.aika.Document;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.fields.Field;
-import network.aika.fields.SumField;
 import network.aika.fields.SynapseOutputSlot;
 
 import java.util.NavigableMap;
@@ -28,7 +26,6 @@ import java.util.TreeMap;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.scale;
-import static network.aika.utils.Utils.TOLERANCE;
 
 
 /**
@@ -37,19 +34,10 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> extends Activation<N> {
 
-    private SumField netWithFeedback;
-
     protected NavigableMap<Long, SynapseOutputSlot> inputSlots;
 
     public ConjunctiveActivation(int id, Document doc, N n) {
         super(id, doc, n);
-    }
-
-    @Override
-    public SumField getNet(boolean feedback) {
-        return feedback ?
-                netWithFeedback :
-                net;
     }
 
     public SynapseOutputSlot registerInputSlot(ConjunctiveSynapse syn) {
@@ -77,12 +65,7 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
     }
 
     @Override
-    protected void initNet() {
-        super.initNet();
-
-        netWithFeedback = new SumField(this, "net (with feedback)", null);
-        linkAndConnect(net, netWithFeedback);
-
+    protected void initSynapseBiases() {
         neuron.getSynapseBiasSynapses()
                 .forEach(s ->
                         s.initBiasInput(this)

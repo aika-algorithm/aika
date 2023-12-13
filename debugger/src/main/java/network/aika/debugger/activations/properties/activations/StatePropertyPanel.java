@@ -14,31 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.enums.sign;
+package network.aika.debugger.activations.properties.activations;
 
-import network.aika.fields.FieldObject;
-import network.aika.elements.activations.Activation;
-import network.aika.fields.FieldOutput;
-
+import network.aika.debugger.properties.AbstractPropertyPanel;
+import network.aika.elements.activations.ConjunctiveActivation;
+import network.aika.elements.activations.State;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public interface Sign {
+public class StatePropertyPanel<E extends ConjunctiveActivation> extends AbstractPropertyPanel {
 
-    Positive POS = new Positive();
-    Negative NEG = new Negative();
 
-    Sign[] SIGNS = new Sign[] {POS, NEG};
+    public StatePropertyPanel(State s) {
+        super();
 
-    Sign invert();
-
-    static Sign getSign(double x) {
-        return x >= 0.0 ? POS : NEG;
+        addConstant("Type: ", "" + s.getType());
+        addField(s.getValue());
+        addField(s.getNet());
+        addConstant("FiredTS: ", "" + s.getFired());
     }
 
-    FieldOutput getValue(FieldObject ref, FieldOutput v);
-
-    int index();
 }

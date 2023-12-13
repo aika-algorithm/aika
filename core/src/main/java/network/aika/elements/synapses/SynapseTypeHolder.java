@@ -17,6 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.elements.Type;
+import network.aika.elements.activations.StateType;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 
@@ -37,7 +38,7 @@ public class SynapseTypeHolder {
 
     private Trigger trigger;
     
-    private boolean isFeedback;
+    private StateType feedbackMode;
 
     public static SynapseTypeHolder getHolder(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
@@ -55,7 +56,7 @@ public class SynapseTypeHolder {
         transition = synTypeAnno.transition();
         required = synTypeAnno.required();
         trigger = synTypeAnno.linkingMode();
-        isFeedback = synTypeAnno.isFeedback();
+        feedbackMode = synTypeAnno.feedbackMode();
     }
 
     public Type getInputType() {
@@ -78,7 +79,7 @@ public class SynapseTypeHolder {
         return trigger;
     }
 
-    public boolean isFeedback() {
-        return isFeedback;
+    public StateType feedbackMode() {
+        return feedbackMode;
     }
 }

@@ -24,6 +24,7 @@ import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
 import network.aika.elements.activations.BindingSignalSlot;
+import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
@@ -174,12 +175,12 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     protected void initWeightedOutput() {
         linkAndConnect(
                 weightedInput,
-                output.getNet(isFeedback())
+                output.getNet(feedbackMode())
         );
     }
 
-    protected boolean isFeedback() {
-        return getSynapse().getSynapseType().isFeedback();
+    public StateType feedbackMode() {
+        return getSynapse().getSynapseType().feedbackMode();
     }
 
     protected void initInputValue() {

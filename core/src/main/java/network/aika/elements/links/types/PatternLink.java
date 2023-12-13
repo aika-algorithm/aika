@@ -27,6 +27,7 @@ import network.aika.fields.SumField;
 import network.aika.enums.sign.Sign;
 import network.aika.queue.steps.LinkCounting;
 
+import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
 import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.ConstantField.ZERO;
 import static network.aika.fields.FieldLink.linkAndConnect;
@@ -70,7 +71,7 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
                 this,
                 "Information-Gain",
                 getInputPatternNet(),
-                output.getNet(false),
+                output.getNet(PRE_FEEDBACK),
                 (x1, x2) ->
                         getSurprisal(
                                 Sign.getSign(x1),
@@ -110,7 +111,7 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
         if(inputPatternAct == null)
             return ZERO;
 
-        return inputPatternAct.getNet(false);
+        return inputPatternAct.getNet(PRE_FEEDBACK);
     }
 
     public FieldOutput getInputPatternValue() {

@@ -16,32 +16,22 @@
  */
 package network.aika.debugger.activations.properties;
 
-import network.aika.debugger.activations.properties.activations.ActivationPropertyPanel;
+import network.aika.debugger.activations.properties.activations.StatePropertyPanel;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.Activation;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
+import java.util.Arrays;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class TemplateInstancesPropertyPanel extends AbstractPropertyPanel {
+public class StatesPropertyPanel extends AbstractPropertyPanel {
 
-    public TemplateInstancesPropertyPanel(Stream<? extends Activation> instances) {
-        List<? extends Activation> sortedInstances = instances.collect(Collectors.toList());
-
-        Collections.sort(sortedInstances, Comparator.comparingDouble(inst -> -inst.getNet(WITH_FEEDBACK).getValue()));
-        sortedInstances.stream()
-                .limit(10)
-                .forEach(inst -> {
-                    addEntry(ActivationPropertyPanel.create(inst));
+    public StatesPropertyPanel(Activation act) {
+        Arrays.asList(act.getStates())
+                .forEach(s -> {
+                    addEntry(new StatePropertyPanel(s));
                     addSeparator();
                 }
         );
@@ -49,7 +39,7 @@ public class TemplateInstancesPropertyPanel extends AbstractPropertyPanel {
         addFinal();
     }
 
-    public static TemplateInstancesPropertyPanel create(Activation act) {
-        return new TemplateInstancesPropertyPanel(act.getTemplateInstances());
+    public static StatesPropertyPanel create(Activation act) {
+        return new StatesPropertyPanel(act);
     }
 }

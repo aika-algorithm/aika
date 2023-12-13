@@ -26,6 +26,7 @@ import network.aika.elements.synapses.InstantiationFeedbackSynapse;
 import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.PATTERN;
+import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
 import static network.aika.enums.Transition.SAME_SAME;
 
 /**
@@ -38,7 +39,7 @@ import static network.aika.enums.Transition.SAME_SAME;
         outputType = PATTERN,
         transition = SAME_SAME,
         required = SAME_SAME,
-        isFeedback = true
+        feedbackMode = WITH_FEEDBACK
 )
 public class PatternCategoryInputSynapse
         extends InstantiationFeedbackSynapse<

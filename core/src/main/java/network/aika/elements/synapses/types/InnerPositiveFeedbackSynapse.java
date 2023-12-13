@@ -31,6 +31,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.*;
+import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
 import static network.aika.enums.Trigger.NOT_FIRED;
 import static network.aika.enums.Transition.SAME_SAME;
 
@@ -44,7 +45,7 @@ import static network.aika.enums.Transition.SAME_SAME;
         transition = SAME_SAME,
         required = SAME_SAME,
         linkingMode = NOT_FIRED,
-        isFeedback = true
+        feedbackMode = WITH_FEEDBACK
 )
 public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         InnerPositiveFeedbackSynapse,

@@ -20,12 +20,16 @@ import network.aika.elements.activations.Activation;
 
 import java.util.function.Predicate;
 
+import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
+import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
+
 /**
  *
  * @author Lukas Molzberger
  */
 public enum Trigger {
-    FIRED(Activation::isFired),
+    FIRED_PRE_FEEDBACK(act -> act.isFired(PRE_FEEDBACK)),
+    FIRED_WITH_FEEDBACK(act -> act.isFired(WITH_FEEDBACK)),
     NOT_FIRED(oAct -> true);
 
     Trigger(Predicate<Activation> check) {

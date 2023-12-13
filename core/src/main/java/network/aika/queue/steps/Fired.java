@@ -17,10 +17,10 @@
 package network.aika.queue.steps;
 
 import network.aika.elements.Timestamp;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.BindingSignalSlot;
-import network.aika.queue.ElementStep;
+import network.aika.elements.activations.State;
 import network.aika.queue.Phase;
+import network.aika.queue.Queue;
+import network.aika.queue.Step;
 import network.aika.queue.keys.FieldQueueKey;
 import network.aika.utils.Utils;
 
@@ -31,41 +31,16 @@ import static network.aika.queue.keys.FieldQueueKey.SORT_VALUE_PRECISION;
  *
  * @author Lukas Molzberger
  */
-public class Fired extends ElementStep<Activation> {
+public class Fired extends Step<State> {
+
+    private State state;
 
     private double net;
 
-    private boolean withFeedback;
-
     private int sortValue;
 
-    public Fired(Activation act) {
-        super(act);
-    }
-
-    @Override
-    public void process() {
-        Activation<?> act = getElement();
-
-        act.setFired();
-
-        act.getBindingSignalSlots()
-                .forEach(BindingSignalSlot::onFired);
-
-        Counting.add(act);
-/*
-        if (act.getNeuron().isAbstract() &&
-                act.getModel().getConfig().isMetaInstantiationEnabled())
-            Instantiation.add(act);
- */
-    }
-
-    public void updateNet(double net, boolean withFeedback) {
-        assert !this.withFeedback || withFeedback;
-
-        this.net = net;
-        this.withFeedback = withFeedback;
-        sortValue = convertSortValue(net);
+    public Fired(State s) {
+        this.state = s;
     }
 
     @Override
@@ -78,6 +53,29 @@ public class Fired extends ElementStep<Activation> {
         );
     }
 
+
+    @Override
+    public void process() {
+        State s = getElement();
+
+        s.setFired();
+
+        s.getActivation().getBindingSignalSlots()
+                .forEach(bsSlot -> bsSlot.onFired(s));
+
+        Counting.add(s.getActivation());
+/*
+        if (act.getNeuron().isAbstract() &&
+                act.getModel().getConfig().isMetaInstantiationEnabled())
+            Instantiation.add(act);
+ */
+    }
+
+    public void updateNet(double net) {
+        this.net = net;
+        sortValue = convertSortValue(net);
+    }
+
     private int convertSortValue(double newSortValue) {
         return (int) (SORT_VALUE_PRECISION * newSortValue);
     }
@@ -85,6 +83,16 @@ public class Fired extends ElementStep<Activation> {
     @Override
     public Phase getPhase() {
         return FIRED;
+    }
+
+    @Override
+    public State getElement() {
+        return state;
+    }
+
+    @Override
+    public Queue getQueue() {
+        return state.getDocument();
     }
 
     @Override
