@@ -19,8 +19,8 @@ package network.aika.elements.activations.types;
 import network.aika.Document;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.State;
-import network.aika.elements.activations.StateType;
 import network.aika.elements.links.Link;
+import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.links.types.InputObjectLink;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
@@ -83,6 +83,21 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         return feedbackTrigger;
     }
 
+    public PatternActivation getSamePatternActivation() {
+        return getInputLinksByType(InnerPositiveFeedbackLink.class)
+                .filter(Link::isActive)
+                .map(Link::getInput)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public PatternActivation getInputPatternActivation() {
+        return getInputLinksByType(InputObjectLink.class)
+                .map(Link::getInput)
+                .findFirst()
+                .orElse(null);
+    }
+
     @Override
     protected boolean isFeedback(Scope bsSlot) {
         return bsSlot == SAME;
@@ -93,13 +108,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         return isNewInstance || (
                 isFired(WITH_FEEDBACK) && getBindingSignalSlot(SAME).isSet()
         );
-    }
-
-    public PatternActivation getInputPatternActivation() {
-        return getInputLinksByType(InputObjectLink.class)
-                .map(Link::getInput)
-                .findFirst()
-                .orElse(null);
     }
 
     @Override

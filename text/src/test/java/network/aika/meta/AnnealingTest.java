@@ -22,10 +22,13 @@ import network.aika.meta.sequences.PhraseModel;
 import network.aika.parser.Context;
 import network.aika.parser.Parser;
 import network.aika.Document;
+import network.aika.queue.Step;
 import network.aika.tokenizer.WordTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.function.Predicate;
 
 import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.parser.ParserPhase.TRAINING;
@@ -75,4 +78,5 @@ public class AnnealingTest extends Parser {
     protected SequenceModel getPhraseModel() {
         return templateModel;
     }
+
 }

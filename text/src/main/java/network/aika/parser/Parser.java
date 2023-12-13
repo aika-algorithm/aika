@@ -20,9 +20,12 @@ package network.aika.parser;
 import network.aika.debugger.AIKADebugger;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.Document;
+import network.aika.queue.Step;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+import java.util.function.Predicate;
 
 import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
 
@@ -48,6 +51,10 @@ public abstract class Parser<C extends Context> {
 
     protected AIKADebugger debugger = null;
 
+    protected Predicate<Step> getStepFilter(C context) {
+        return null;
+    }
+
     protected abstract void prepareInputs(Document doc, C context);
 
     public Document process(String txt, C context, ParserPhase phase) {
@@ -56,7 +63,7 @@ public abstract class Parser<C extends Context> {
         try {
             prepareInputs(doc, context);
 
-            doc.process();
+            doc.process(getStepFilter(context));
 
         } catch(Exception e) {
             log.warn("Error while training:", e);
