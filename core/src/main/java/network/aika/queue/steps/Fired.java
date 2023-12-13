@@ -97,6 +97,6 @@ public class Fired extends Step<State> {
 
     @Override
     public String toString() {
-        return super.toString() + " net:" + Utils.doubleToString(net);
+        return "stateType:" + state.getType() + " net:" + Utils.doubleToString(net);
     }
 }

@@ -42,7 +42,7 @@ public class MixFunction extends AbstractFunction implements FieldInput, FieldOu
         } else {
             double x = getInputValueByArg(0);
 
-            return (arg == 1 ? x : 1 - x) * u;
+            return (arg == 2 ? x : 1 - x) * u;
         }
     }
 }
