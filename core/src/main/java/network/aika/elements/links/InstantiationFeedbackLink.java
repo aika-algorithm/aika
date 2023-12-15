@@ -41,7 +41,7 @@ public abstract class InstantiationFeedbackLink<S extends InstantiationFeedbackS
 
     @Override
     protected void initInputValue() {
-        feedbackTrigger = new InputField(this, "instantiation feedback trigger", 1.0);
+        feedbackTrigger = new InputField(this, "instantiation feedback trigger", 0.0);
         inputValue = new MaxField(this, "input-value-ft", TOLERANCE);
 
         linkAndConnect(feedbackTrigger, 0, inputValue);
