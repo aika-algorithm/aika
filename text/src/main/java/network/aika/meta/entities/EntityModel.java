@@ -71,16 +71,6 @@ public class EntityModel implements TemplateModel, Writable {
         this.phraseModel = pm;
     }
 
-    @Override
-    public void enable() {
-        entityBN.setBias(BINDING_NET_TARGET);
-    }
-
-    @Override
-    public void disable() {
-        entityBN.setBias(-10.0);
-    }
-
     public PatternNeuron getEntityPattern() {
         return entityPattern;
     }
@@ -138,8 +128,6 @@ public class EntityModel implements TemplateModel, Writable {
                 inhibitoryN,
                 NEG_MARGIN * -entityBN.getTargetNet()
         );
-
-        disable();
     }
 
     public void prepareInstantiation() {

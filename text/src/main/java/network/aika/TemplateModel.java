@@ -22,11 +22,6 @@ package network.aika;
  */
 public interface TemplateModel {
 
-
-    void enable();
-
-    void disable();
-
     Model getModel();
 
     void prepareInstantiation();

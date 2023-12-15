@@ -101,15 +101,11 @@ public class TextSectionTest extends Parser<TestContext> {
         textSectionModel = new TypedTextSectionModel(entityModel);
         textSectionModel.initStaticNeurons();
 
-        textSectionModel.getHeadlineEntity().enable();
-
         profileTS = new TextSectionInstance(textSectionModel)
                 .instantiate(PROFILE_LABEL);
 
         tasksTS = new TextSectionInstance(textSectionModel)
                 .instantiate(TASKS_LABEL);
-
-        textSectionModel.getHeadlineEntity().disable();
 
         model.setN(0);
     }
@@ -148,13 +144,8 @@ public class TextSectionTest extends Parser<TestContext> {
 
         dictionary.initInputTokenWeights();
 
-        tasksTS.enable();
         process(tasksHeadline, new TestContext(TASKS_LABEL, null), TRAINING);
-        tasksTS.disable();
-
-        profileTS.enable();
         process(requirementsHeadline, new TestContext(PROFILE_LABEL, null), TRAINING);
-        profileTS.disable();
 
         process(exampleTxt,
                 new TestContext(

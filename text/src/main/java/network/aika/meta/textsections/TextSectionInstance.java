@@ -68,18 +68,6 @@ public class TextSectionInstance extends InstantiationModel<TextSectionInstance>
     }
 
     @Override
-    public void enable() {
-        headlineBN.setBias(BINDING_NET_TARGET);
-        tsHeadlineBN.setBias(tsModel.bindingNetTarget);
-    }
-
-    @Override
-    public void disable() {
-        headlineBN.setBias(-10.0);
-        tsHeadlineBN.setBias(-10.0);
-    }
-
-    @Override
     protected Document createDocument(String label) {
         String headline = label + " " + HEADLINE_LABEL;
         String textSection = label + " " + TEXT_SECTION_LABEL;

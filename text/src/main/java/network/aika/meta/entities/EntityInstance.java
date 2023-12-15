@@ -88,16 +88,6 @@ public class EntityInstance extends InstantiationModel<EntityInstance> implement
         entityBN.setTemplateOnly(templateOnly, true);
     }
 
-    @Override
-    public void enable() {
-        entityBN.setBias(BINDING_NET_TARGET);
-    }
-
-    @Override
-    public void disable() {
-        entityBN.setBias(-10.0);
-    }
-
     public PatternNeuron getEntityPatternNeuron() {
         return entityPatternN;
     }

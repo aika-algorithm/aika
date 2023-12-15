@@ -71,22 +71,9 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         this.entityModel = entityModel;
     }
 
-    @Override
-    public void enable() {
-        headlineEntity.enable();
-        tsHeadlineBN.setBias(bindingNetTarget);
-    }
-
-    @Override
-    public void disable() {
-        headlineEntity.disable();
-        tsHeadlineBN.setBias(-10.0);
-    }
-
     public Model getModel() {
         return phraseModel.getModel();
     }
-
 
     public static String getHeadlineLabel(String label) {
         return label + "-HL";
@@ -113,8 +100,6 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         initHeadline();
         initHint();
         initTextSection();
-
-        disable();
     }
 
     public EntityInstance getHeadlineEntity() {

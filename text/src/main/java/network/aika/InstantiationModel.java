@@ -43,14 +43,7 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
         return getTemplateModel().getModel();
     }
 
-
-    public abstract void enable();
-
-    public abstract void disable();
-
     public I instantiate(String label) {
-        getTemplateModel().enable();
-
         getTemplateModel().prepareInstantiation();
 
         getModel()
@@ -69,15 +62,11 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
             doc.process();
 
             mapResults(doc);
-
-            disable();
         } catch(Exception e) {
             throw new FailedInstantiationException(label, e);
         } finally {
             doc.disconnect();
         }
-
-        getTemplateModel().disable();
 
         return (I) this;
     }
