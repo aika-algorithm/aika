@@ -20,6 +20,7 @@ import network.aika.Document;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.fields.SynapseOutputSlot;
+import network.aika.queue.steps.FeedbackTrigger;
 
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -38,6 +39,10 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
 
     public ConjunctiveActivation(int id, Document doc, N n) {
         super(id, doc, n);
+
+        if(getConfig().isMetaInstantiationEnabled()) {
+            FeedbackTrigger.add(this, true);
+        }
     }
 
     public SynapseOutputSlot registerInputSlot(ConjunctiveSynapse syn) {

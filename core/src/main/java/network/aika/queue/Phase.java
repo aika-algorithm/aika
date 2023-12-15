@@ -25,7 +25,7 @@ public enum Phase {
     POST_INSTANTIATION(),
     LINKING(),
     LINK_UPDATE(),
-    PRE_FEEDBACK_TRIGGER(),
+    FEEDBACK_TRIGGER(),
     INFERENCE(),
     FIRED(),
     PRE_ANNEAL(),

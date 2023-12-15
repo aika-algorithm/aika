@@ -109,7 +109,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         gradient = new SumField(this, "gradient", TOLERANCE)
                 .setQueued(doc, TRAINING);
 
-        if (getModel().getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
+        if (getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
             connectGradientFields();
             connectWeightUpdate();
             InactiveLinks.add(this);
@@ -555,14 +555,14 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         cl.instantiateTemplate(cl.getInput(), ti, (Link) cl);
     }
 
-    private CategoryInputLink createCategoryInputLink() {
-        CategoryInputSynapse catSyn = getNeuron().getCategoryInputSynapse();
-        if(catSyn == null)
+    public CategoryInputLink createCategoryInputLink() {
+        CategoryInputSynapse cis = getNeuron().getCategoryInputSynapse();
+        if(cis == null)
             return null;
 
-        CategoryActivation catAct = catSyn.getInput().createActivation(doc);
+        CategoryActivation catAct = cis.getInput().createActivation(doc);
 
-        Synapse s = ((Synapse)catSyn);
+        Synapse s = ((Synapse)cis);
         return (CategoryInputLink) s.createAndInitLink(catAct, this);
     }
 

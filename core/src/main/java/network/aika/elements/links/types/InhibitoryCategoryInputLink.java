@@ -24,6 +24,7 @@ import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
+import network.aika.fields.Field;
 
 import static network.aika.elements.Type.*;
 import static network.aika.elements.activations.types.InhibitoryActivation.crossConnectFields;
@@ -51,6 +52,11 @@ public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCateg
     @Override
     public Type getOutputType() {
         return BINDING;
+    }
+
+    @Override
+    public Field getFeedbackTrigger() {
+        return null;
     }
 
     @Override

@@ -19,12 +19,15 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.Synapse;
+import network.aika.fields.Field;
 
 /**
  *
  * @author Lukas Molzberger
  */
 public interface CategoryInputLink {
+
+    Field getFeedbackTrigger();
 
     CategoryActivation getInput();
 

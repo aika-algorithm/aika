@@ -78,9 +78,11 @@ public class Queue {
     }
 
     public int getCurrentRound() {
-        return currentStep != null ?
-                currentStep.getQueueKey().getRound() :
-                0;
+        if(currentStep == null)
+            return 0;
+
+        int r = currentStep.getQueueKey().getRound();
+        return r == MAX_ROUND ? 0 : r;
     }
 
     public void removeStep(Step s) {
