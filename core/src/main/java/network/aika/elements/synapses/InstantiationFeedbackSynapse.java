@@ -32,16 +32,4 @@ import static network.aika.utils.Utils.TOLERANCE;
 public abstract class InstantiationFeedbackSynapse<S extends InstantiationFeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends InstantiationFeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<O>> extends
         PositiveFeedbackSynapse<S, I, O, L, IA, OA> {
 
-
-    @Override
-    public void initBiasInput(OA act) {
-
-    }
-
-    @Override
-    public SynapseOutputSlot connectOutputSlot(ConjunctiveActivation act, Long nId) {
-        SynapseOutputSlot slot = new SynapseOutputSlot(this, "out-slot-" + nId, TOLERANCE);
-       // linkAndConnect(slot, act.getNet(getSynapseType().isFeedback()));
-        return slot;
-    }
 }

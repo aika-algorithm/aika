@@ -27,6 +27,7 @@ import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.Type.*;
+import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
 import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
@@ -41,7 +42,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
         outputType = BINDING,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        feedbackMode = WITH_FEEDBACK
+        feedbackMode = PRE_FEEDBACK
 )
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InhibitoryCategoryInputSynapse,
