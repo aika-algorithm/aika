@@ -83,6 +83,11 @@ public class EntityModel implements TemplateModel, Writable {
         return phraseModel;
     }
 
+    @Override
+    public boolean stepFilter(Neuron n) {
+        return n == entityBN || n == entityPattern || n == phraseModel.getPatternNeuron();
+    }
+
     public void initStaticNeurons() {
         entityPattern = new PatternNeuron(model)
                 .setLabel(getAbstractLabel(PATTERN, ENTITY_LABEL))

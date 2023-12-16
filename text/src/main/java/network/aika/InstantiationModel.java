@@ -16,10 +16,10 @@
  */
 package network.aika;
 
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.meta.exceptions.FailedInstantiationException;
-import network.aika.queue.steps.Anneal;
+import network.aika.queue.Step;
+import network.aika.queue.steps.FeedbackTrigger;
 import network.aika.queue.steps.InstantiationTrigger;
 
 /**
@@ -55,11 +55,10 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
 
         try {
             InstantiationTrigger.add(doc);
-          //  Anneal.add(doc);
 
             getTemplateModel().prepareExampleDoc(doc, label);
 
-            doc.process();
+            doc.process(this::stepFilter);
 
             mapResults(doc);
         } catch(Exception e) {
@@ -69,6 +68,15 @@ public abstract class InstantiationModel<I extends InstantiationModel> {
         }
 
         return (I) this;
+    }
+
+    protected boolean stepFilter(Step s) {
+        if(!(s instanceof FeedbackTrigger))
+            return true;
+
+        FeedbackTrigger ft = (FeedbackTrigger) s;
+
+        return getTemplateModel().stepFilter(ft.getElement().getNeuron());
     }
 
     protected abstract Document createDocument(String label);

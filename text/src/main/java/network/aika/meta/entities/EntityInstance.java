@@ -32,7 +32,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.meta.NetworkMotifs.getDefaultInputCategorySynapseWeight;
-import static network.aika.meta.entities.EntityModel.BINDING_NET_TARGET;
 import static network.aika.meta.entities.EntityModel.ENTITY_LABEL;
 
 /**

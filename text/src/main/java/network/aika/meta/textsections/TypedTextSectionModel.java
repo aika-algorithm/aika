@@ -18,6 +18,7 @@ package network.aika.meta.textsections;
 
 import network.aika.Model;
 import network.aika.TemplateModel;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
@@ -90,6 +91,18 @@ public class TypedTextSectionModel extends TextSectionModel implements TemplateM
         beginBN.setTemplateOnly(templateOnly, true);
         endBN.setTemplateOnly(templateOnly, true);
         hintBN.setTemplateOnly(templateOnly, true);
+    }
+
+    @Override
+    public boolean stepFilter(Neuron n) {
+        return n == headlineEntity.entityPatternN ||
+                n == headlineEntity.entityBN ||
+                n == phraseModel.getPatternNeuron() ||
+                n == textSectionPatternN ||
+                n == tsHeadlineBN ||
+                n == beginBN ||
+                n == endBN ||
+                n == hintBN;
     }
 
     public void initStaticNeurons() {

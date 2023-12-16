@@ -16,11 +16,15 @@
  */
 package network.aika;
 
+import network.aika.elements.neurons.Neuron;
+
 /**
  *
  * @author Lukas Molzberger
  */
 public interface TemplateModel {
+
+    boolean stepFilter(Neuron n);
 
     Model getModel();
 
