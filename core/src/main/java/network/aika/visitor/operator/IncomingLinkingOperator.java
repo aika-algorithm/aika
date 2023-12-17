@@ -57,7 +57,7 @@ public class IncomingLinkingOperator extends LinkingOperator {
         if (act == sourceAct)
             return null;
 
-        if (!targetSyn.getLinkingMode().check(act))
+        if (!targetSyn.getTrigger().check(act))
             return null;
 
         Activation targetAct;

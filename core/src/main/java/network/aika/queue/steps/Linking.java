@@ -94,7 +94,7 @@ public class Linking extends ElementStep<Activation> {
 
         n.getOutputSynapsesAsStream()
                 .filter(s ->
-                        s.getLinkingMode() == mode &&
+                        s.getTrigger() == mode &&
                                 s.getRequired().getFrom() == bsType
                 )
                 .toList()

@@ -38,7 +38,7 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         outputType = BINDING,
         transition = SAME_INPUT,
         required = SAME_INPUT,
-        linkingMode = FIRED_PRE_FEEDBACK
+        trigger = FIRED_PRE_FEEDBACK
 )
 public class InputObjectSynapse extends ConjunctiveSynapse<
         InputObjectSynapse,

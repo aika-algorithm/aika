@@ -39,7 +39,7 @@ import static network.aika.enums.Transition.INPUT_INPUT;
         outputType = BINDING,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        linkingMode = NOT_FIRED,
+        trigger = NOT_FIRED,
         feedbackMode = WITH_FEEDBACK
 )
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<

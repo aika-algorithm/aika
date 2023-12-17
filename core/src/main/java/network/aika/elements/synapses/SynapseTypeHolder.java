@@ -55,7 +55,7 @@ public class SynapseTypeHolder {
         outputType = synTypeAnno.outputType();
         transition = synTypeAnno.transition();
         required = synTypeAnno.required();
-        trigger = synTypeAnno.linkingMode();
+        trigger = synTypeAnno.trigger();
         feedbackMode = synTypeAnno.feedbackMode();
     }
 
@@ -75,7 +75,7 @@ public class SynapseTypeHolder {
         return required;
     }
 
-    public Trigger getLinkingMode() {
+    public Trigger getTrigger() {
         return trigger;
     }
 

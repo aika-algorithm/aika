@@ -104,7 +104,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.getRequired();
     }
 
-
     public abstract double[] getSumOfLowerWeights();
 
     public FieldOutput getInputValue(IA input) {
@@ -116,8 +115,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             delete();
     }
 
-    public Trigger getLinkingMode() {
-        return synapseType.getLinkingMode();
+    public Trigger getTrigger() {
+        return synapseType.getTrigger();
     }
 
     public boolean isLinkingAllowed(boolean latent) {

@@ -35,7 +35,7 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         inputType = PATTERN,
         outputType = PATTERN,
         transition = SAME_SAME,
-        linkingMode = FIRED_PRE_FEEDBACK,
+        trigger = FIRED_PRE_FEEDBACK,
         required = SAME_SAME
 )
 public class PatternCategorySynapse extends CategorySynapse<PatternCategorySynapse, PatternNeuron, PatternActivation> {

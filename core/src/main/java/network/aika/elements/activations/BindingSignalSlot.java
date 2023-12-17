@@ -95,7 +95,7 @@ public class BindingSignalSlot {
 
     public void onFired(State s) {
         if(isFeedback || isSet())
-            Linking.add(act, this, FIRED_PRE_FEEDBACK);
+            Linking.add(act, this, s.getType().getTrigger());
     }
 
     public String toString() {

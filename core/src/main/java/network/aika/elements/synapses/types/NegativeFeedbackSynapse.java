@@ -40,7 +40,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
         outputType = BINDING,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        linkingMode = FIRED_PRE_FEEDBACK,
+        trigger = FIRED_PRE_FEEDBACK,
         feedbackMode = WITH_FEEDBACK
 )
 public class NegativeFeedbackSynapse extends Synapse<

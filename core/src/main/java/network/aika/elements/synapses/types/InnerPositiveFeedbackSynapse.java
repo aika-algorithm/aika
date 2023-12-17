@@ -44,7 +44,7 @@ import static network.aika.enums.Transition.SAME_SAME;
         outputType = BINDING,
         transition = SAME_SAME,
         required = SAME_SAME,
-        linkingMode = NOT_FIRED,
+        trigger = NOT_FIRED,
         feedbackMode = WITH_FEEDBACK
 )
 public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
