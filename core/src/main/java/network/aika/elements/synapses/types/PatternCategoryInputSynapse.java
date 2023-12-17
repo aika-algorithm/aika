@@ -29,6 +29,7 @@ import static network.aika.elements.Type.PATTERN;
 import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
 import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
 import static network.aika.enums.Transition.SAME_SAME;
+import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 
 /**
  * The Same Pattern Binding Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
@@ -40,6 +41,7 @@ import static network.aika.enums.Transition.SAME_SAME;
         outputType = PATTERN,
         transition = SAME_SAME,
         required = SAME_SAME,
+        linkingMode = FIRED_PRE_FEEDBACK,
         feedbackMode = PRE_FEEDBACK
 )
 public class PatternCategoryInputSynapse

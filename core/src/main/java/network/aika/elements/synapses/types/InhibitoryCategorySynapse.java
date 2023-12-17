@@ -25,6 +25,7 @@ import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.enums.Transition.INPUT_INPUT;
+import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 
 /**
  *
@@ -34,7 +35,8 @@ import static network.aika.enums.Transition.INPUT_INPUT;
         inputType = INHIBITORY,
         outputType = INHIBITORY,
         transition = INPUT_INPUT,
-        required = INPUT_INPUT
+        required = INPUT_INPUT,
+        linkingMode = FIRED_PRE_FEEDBACK
 )
 public class InhibitoryCategorySynapse extends CategorySynapse<InhibitoryCategorySynapse, Neuron, InhibitoryActivation> {
 
