@@ -43,7 +43,7 @@ public @interface SynapseType {
 
     public Transition required();
 
-    public Trigger linkingMode() default Trigger.FIRED_PRE_FEEDBACK;
+    public Trigger linkingMode() default Trigger.FIRED_WITH_FEEDBACK;
 
     public StateType feedbackMode() default StateType.PRE_FEEDBACK;
 }

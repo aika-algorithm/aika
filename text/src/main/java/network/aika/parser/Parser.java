@@ -51,7 +51,7 @@ public abstract class Parser<C extends Context> {
 
     protected AIKADebugger debugger = null;
 
-    protected Predicate<Step> getStepFilter(C context) {
+    protected Predicate<Step> getStepFilter(C context, ParserPhase phase) {
         return null;
     }
 
@@ -63,7 +63,7 @@ public abstract class Parser<C extends Context> {
         try {
             prepareInputs(doc, context);
 
-            doc.process(getStepFilter(context));
+            doc.process(getStepFilter(context, phase));
 
         } catch(Exception e) {
             log.warn("Error while training:", e);
