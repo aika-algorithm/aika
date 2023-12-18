@@ -70,10 +70,12 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
     }
 
     @Override
-    protected void initSynapseBiases() {
+    protected void initBiases() {
         neuron.getSynapseBiasSynapses()
                 .forEach(s ->
                         s.initBiasInput(this)
                 );
+
+        super.initBiases();
     }
 }

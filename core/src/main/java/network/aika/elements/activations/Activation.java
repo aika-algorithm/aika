@@ -100,7 +100,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         initNet();
 
-        initSynapseBiases();
+        initBiases();
 
         initValue();
 
@@ -150,12 +150,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected void initNet() {
         state[PRE_FEEDBACK.ordinal()] = new State(this, PRE_FEEDBACK);
-
-        linkAndConnect(getNeuron().getBias(), getNet(PRE_FEEDBACK))
-                .setPropagateUpdates(false);
     }
 
-    protected void initSynapseBiases() {
+    protected void initBiases() {
+        linkAndConnect(getNeuron().getBias(), getNet(PRE_FEEDBACK))
+                .setPropagateUpdates(false);
     }
 
     protected void initValue() {
