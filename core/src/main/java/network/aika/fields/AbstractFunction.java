@@ -17,13 +17,12 @@
 package network.aika.fields;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractFunction extends Field implements FieldInput {
+public abstract class AbstractFunction extends Field {
 
     private FieldLink[] inputs;
 

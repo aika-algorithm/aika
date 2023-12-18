@@ -84,6 +84,9 @@ public class FieldReceiversDialog extends JDialog
         addConstant("Operator", field.getClass().getSimpleName());
         addField(field);
 
+        if(field instanceof Field)
+            addConstant("isBlocked", "" + ((Field)field).isBlocked());
+
         if(field instanceof QueueInterceptor) {
             QueueInterceptor qsf = (QueueInterceptor) field;
 

@@ -88,12 +88,6 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         );
     }
 
-    @Override
-    protected void checkConnectInputValueLink() {
-        if (input == null)
-            super.checkConnectInputValueLink();
-    }
-
     public SynapseInputSlot getSynInputSlot() {
         return synInputSlot;
     }

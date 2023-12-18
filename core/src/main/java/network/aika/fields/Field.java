@@ -43,6 +43,8 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
 
     protected double value;
 
+    private boolean blocked;
+
     private boolean withinUpdate;
     private double updatedValue;
 
@@ -76,6 +78,14 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
 
     public void setValue(double v) {
         triggerUpdate(v - value);
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
     @Override
@@ -163,6 +173,9 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
 
     @Override
     public void receiveUpdate(FieldLink fl, double u) {
+        if(blocked)
+            return;
+
         if(interceptor != null) {
             interceptor.receiveUpdate(u, false);
             return;

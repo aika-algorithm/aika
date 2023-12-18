@@ -29,8 +29,7 @@ import network.aika.queue.steps.Anneal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
-import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
+import static network.aika.elements.activations.StateType.*;
 import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mix;
@@ -52,7 +51,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     @Override
     protected int numberOfStates() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -61,9 +60,11 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
         super.initNet();
 
-        state[WITH_FEEDBACK.ordinal()] = new State(this, WITH_FEEDBACK);
+        states[NEGATIVE_FEEDBACK.ordinal()] = new State(this, NEGATIVE_FEEDBACK);
+        linkAndConnect(getNet(PRE_FEEDBACK), getNet(NEGATIVE_FEEDBACK));
 
-        linkAndConnect(getNet(PRE_FEEDBACK), getNet(WITH_FEEDBACK));
+        states[POSITIVE_FEEDBACK.ordinal()] = new State(this, POSITIVE_FEEDBACK);
+        linkAndConnect(getNet(NEGATIVE_FEEDBACK), getNet(POSITIVE_FEEDBACK));
 
         Anneal.add(this, getModel().getConfig().getAnnealStart());
     }
@@ -75,7 +76,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
                 "value",
                 feedbackTrigger,
                 getValue(PRE_FEEDBACK),
-                getValue(WITH_FEEDBACK)
+                getValue(POSITIVE_FEEDBACK)
         );
     }
 
@@ -106,7 +107,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     @Override
     public boolean isActiveTemplateInstance() {
         return isNewInstance || (
-                isFired(WITH_FEEDBACK) && getBindingSignalSlot(SAME).isSet()
+                isFired(POSITIVE_FEEDBACK) && getBindingSignalSlot(SAME).isSet()
         );
     }
 

@@ -28,6 +28,7 @@ import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.exceptions.PreviousThoughtNotDisconnected;
 import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.fields.Field;
 import network.aika.queue.Queue;
 import network.aika.text.Range;
 import network.aika.queue.Step;
@@ -40,8 +41,7 @@ import java.util.stream.Collectors;
 
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.elements.Timestamp.NOT_SET;
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
-import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
+import static network.aika.elements.activations.StateType.*;
 
 /**
  * The {@code Document} class represents a single document which may be either used for processing a text or as
@@ -223,9 +223,18 @@ public class Document extends Queue implements Element {
 
         act.updateRanges(textReference);
 
-        act.getNet(PRE_FEEDBACK).disconnectInputs(false);
-        act.setNet(WITH_FEEDBACK, inputNet);
+        disconnectAndBlock(act.getNet(PRE_FEEDBACK));
+        disconnectAndBlock(act.getNet(NEGATIVE_FEEDBACK));
+        disconnectAndBlock(act.getNet(POSITIVE_FEEDBACK));
+
+        act.setNet(POSITIVE_FEEDBACK, inputNet);
+
         return act;
+    }
+
+    private void disconnectAndBlock(Field f) {
+        f.disconnectInputs(false);
+        f.setBlocked(true);
     }
 
     @Override

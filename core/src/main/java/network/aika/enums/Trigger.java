@@ -20,8 +20,7 @@ import network.aika.elements.activations.Activation;
 
 import java.util.function.Predicate;
 
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
-import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
+import static network.aika.elements.activations.StateType.*;
 
 /**
  *
@@ -29,7 +28,8 @@ import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
  */
 public enum Trigger {
     FIRED_PRE_FEEDBACK(act -> act.isFired(PRE_FEEDBACK)),
-    FIRED_WITH_FEEDBACK(act -> act.isFired(WITH_FEEDBACK)),
+    FIRED_NEGATIVE_FEEDBACK(act -> act.isFired(NEGATIVE_FEEDBACK)),
+    FIRED_POSITIVE_FEEDBACK(act -> act.isFired(POSITIVE_FEEDBACK)),
     NOT_FIRED(oAct -> true);
 
     Trigger(Predicate<Activation> check) {

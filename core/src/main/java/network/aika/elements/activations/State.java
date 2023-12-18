@@ -125,6 +125,6 @@ public class State implements FieldObject {
     }
 
     public String toString() {
-        return act.toKeyString() + " - " + type;
+        return act.toString() + " type:" + type;
     }
 }

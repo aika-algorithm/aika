@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class InputField extends Field implements FieldOutput {
+public class InputField extends Field {
 
     public InputField(FieldObject ref, String label, double value) {
         super(ref, label, null);

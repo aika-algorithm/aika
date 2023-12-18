@@ -21,15 +21,18 @@ import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
+import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.Type.*;
-import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
+import static network.aika.elements.activations.StateType.NEGATIVE_FEEDBACK;
+import static network.aika.elements.activations.StateType.POSITIVE_FEEDBACK;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 import static network.aika.enums.direction.Direction.OUTPUT;
+import static network.aika.fields.FieldLink.linkAndConnect;
 
 /**
  *
@@ -41,9 +44,9 @@ import static network.aika.enums.direction.Direction.OUTPUT;
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
         trigger = FIRED_PRE_FEEDBACK,
-        feedbackMode = WITH_FEEDBACK
+        feedbackMode = NEGATIVE_FEEDBACK
 )
-public class NegativeFeedbackSynapse extends Synapse<
+public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
         NegativeFeedbackSynapse,
         InhibitoryNeuron,
         BindingNeuron,
@@ -52,6 +55,13 @@ public class NegativeFeedbackSynapse extends Synapse<
         BindingActivation
         >
 {
+
+    @Override
+    public void initBiasInput(BindingActivation act) {
+        linkAndConnect(weight, act.getNet(synapseType.feedbackMode()))
+                .setPropagateUpdates(false);
+    }
+
     @Override
     public double[] getSumOfLowerWeights() {
         return SULW_ZERO;

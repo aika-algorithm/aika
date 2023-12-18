@@ -71,7 +71,7 @@ public class Anneal extends ElementStep<BindingActivation> {
     @Override
     public String toString() {
         Activation act = getElement();
-        return "actId:" + act.getId() +
+        return getElement() +
                 " NextStep:" + doubleToString(nextStep, "#.######");
     }
 }

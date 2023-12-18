@@ -18,8 +18,7 @@ package network.aika.elements.activations;
 
 import network.aika.enums.Trigger;
 
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
-import static network.aika.enums.Trigger.FIRED_WITH_FEEDBACK;
+import static network.aika.enums.Trigger.*;
 
 /**
  *
@@ -27,7 +26,8 @@ import static network.aika.enums.Trigger.FIRED_WITH_FEEDBACK;
  */
 public enum StateType {
     PRE_FEEDBACK(FIRED_PRE_FEEDBACK),
-    WITH_FEEDBACK(FIRED_WITH_FEEDBACK);
+    NEGATIVE_FEEDBACK(FIRED_NEGATIVE_FEEDBACK),
+    POSITIVE_FEEDBACK(FIRED_POSITIVE_FEEDBACK);
 
     private Trigger trigger;
 

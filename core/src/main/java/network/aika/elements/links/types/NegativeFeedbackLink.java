@@ -19,7 +19,7 @@ package network.aika.elements.links.types;
 import network.aika.elements.Type;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
-import network.aika.elements.links.Link;
+import network.aika.elements.links.ConjunctiveLink;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
@@ -29,12 +29,15 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.INHIBITORY;
+import static network.aika.fields.Fields.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
  */
-public class NegativeFeedbackLink extends Link<NegativeFeedbackSynapse, InhibitoryActivation, BindingActivation> {
+public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynapse, InhibitoryActivation, BindingActivation> {
+
+    protected Field invertedInputValue;
 
     public NegativeFeedbackLink(NegativeFeedbackSynapse s, InhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
@@ -65,10 +68,21 @@ public class NegativeFeedbackLink extends Link<NegativeFeedbackSynapse, Inhibito
     @Override
     protected void initInputValue() {
         inputValue = new MaxField(this, "max-input-value", TOLERANCE);
+        invertedInputValue = invert(this, "inverted-input-value", inputValue);
     }
 
     @Override
     protected void connectInputValue() {
+    }
+
+    @Override
+    protected void initWeightedInput() {
+        weightedInput = mul(
+                this,
+                "iAct(" + getInputKeyString() + ").value * s.weight",
+                invertedInputValue, true,
+                scale(this, "weight", -1, synapse.getWeight()), false
+        );
     }
 
     @Override

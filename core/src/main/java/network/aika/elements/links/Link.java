@@ -196,19 +196,12 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     protected void initWeightedInput() {
-        weightedInput = new Multiplication(this, "iAct(" + getInputKeyString() + ").value * s.weight");
-
-        FieldLink.link(inputValue, 0, weightedInput);
-
-        FieldLink.link(synapse.getWeight(), 1, weightedInput)
-                .setPropagateUpdates(false);
-
-        checkConnectInputValueLink();
-        weightedInput.getInputLinkByArg(1).connect(true);
-    }
-
-    protected void checkConnectInputValueLink() {
-        updateConnected(getInputValueLink(), true, true);
+        weightedInput = mul(
+                this,
+                "iAct(" + getInputKeyString() + ").value * s.weight",
+                inputValue, true,
+                synapse.getWeight(), false
+        );
     }
 
     public FieldLink getInputValueLink() {

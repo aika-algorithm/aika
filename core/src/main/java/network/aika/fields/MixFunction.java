@@ -20,7 +20,7 @@ package network.aika.fields;
 /**
  * @author Lukas Molzberger
  */
-public class MixFunction extends AbstractFunction implements FieldInput, FieldOutput {
+public class MixFunction extends AbstractFunction {
 
     public MixFunction(FieldObject ref, String label) {
         super(ref, label);

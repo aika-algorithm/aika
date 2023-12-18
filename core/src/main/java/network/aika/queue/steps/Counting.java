@@ -21,7 +21,7 @@ import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
 
-import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
+import static network.aika.elements.activations.StateType.POSITIVE_FEEDBACK;
 
 /**
  * Counts the number of activations a particular neuron has encountered.
@@ -48,7 +48,7 @@ public class Counting extends ElementStep<Activation> {
     public void process() {
         Activation act = getElement();
 
-        if (act.isFired(WITH_FEEDBACK))
+        if (act.isFired(POSITIVE_FEEDBACK))
             act.getNeuron()
                     .count(act);
     }

@@ -128,7 +128,7 @@ public class FieldUpdate<E extends FieldObject> extends Step<E> {
     }
 
     public String toString() {
-        return " Delta:" + doubleToString(delta) +
+        return getElement() + " Delta:" + doubleToString(delta) +
                 " Field: " + interceptor.getField() +
                 " Ref:" + interceptor.getField().getReference();
     }

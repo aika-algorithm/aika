@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.enums.Transition.SAME_SAME;
+import static network.aika.enums.Trigger.FIRED_NEGATIVE_FEEDBACK;
 import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.enums.sign.Sign.NEG;
@@ -55,7 +56,7 @@ import static network.aika.enums.sign.Sign.POS;
         outputType = PATTERN,
         transition = SAME_SAME,
         required = SAME_SAME,
-        trigger = FIRED_PRE_FEEDBACK
+        trigger = FIRED_NEGATIVE_FEEDBACK
 )
 public class PatternSynapse extends ConjunctiveSynapse<
         PatternSynapse,

@@ -20,7 +20,7 @@ import network.aika.Document;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 
-import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
+import static network.aika.elements.activations.StateType.POSITIVE_FEEDBACK;
 import static network.aika.queue.Phase.INSTANTIATION_TRIGGER;
 
 
@@ -45,7 +45,7 @@ public class InstantiationTrigger extends ElementStep<Document> {
 
         doc.getActivations().stream()
                 .filter(act -> act.getNeuron().isAbstract())
-                .filter(act -> act.isFired(WITH_FEEDBACK))
+                .filter(act -> act.isFired(POSITIVE_FEEDBACK))
                 .forEach(Instantiation::add);
     }
 

@@ -144,7 +144,10 @@ public class EntityModel implements TemplateModel, Writable {
         Range entityPosRange = new Range(0, 1);
         Range entityCharRange = new Range(0, doc.length());
 
-        doc.addToken(phraseModel.getPatternNeuron(), new TextReference(entityPosRange, entityCharRange));
+        doc.addToken(
+                phraseModel.getPatternNeuron(),
+                new TextReference(entityPosRange, entityCharRange)
+        );
     }
 
     public PatternNeuron getInstancePattern(String entityType) {

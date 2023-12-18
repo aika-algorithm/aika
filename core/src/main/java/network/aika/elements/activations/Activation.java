@@ -45,7 +45,7 @@ import static network.aika.elements.LinkKey.getFromLinkKey;
 import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
-import static network.aika.elements.activations.StateType.WITH_FEEDBACK;
+import static network.aika.elements.activations.StateType.POSITIVE_FEEDBACK;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.queue.Phase.*;
@@ -67,7 +67,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected Field value;
 
-    protected State[] state = new State[numberOfStates()];
+    protected State[] states = new State[numberOfStates()];
 
     protected FieldFunction netOuterGradient;
     protected SumField gradient;
@@ -149,7 +149,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void initNet() {
-        state[PRE_FEEDBACK.ordinal()] = new State(this, PRE_FEEDBACK);
+        states[PRE_FEEDBACK.ordinal()] = new State(this, PRE_FEEDBACK);
     }
 
     protected void initBiases() {
@@ -242,10 +242,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public State getState(StateType st) {
-        if(st.ordinal() >= state.length)
-            return state[state.length - 1];
+        if(st.ordinal() >= states.length)
+            return states[states.length - 1];
 
-        return state[st.ordinal()];
+        return states[st.ordinal()];
     }
 
     public Field getValue(StateType st) {
@@ -270,7 +270,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     @Override
     public Timestamp getFired() {
-        return getFired(WITH_FEEDBACK);
+        return getFired(POSITIVE_FEEDBACK);
     }
 
     public boolean isFired(StateType st) {
@@ -340,7 +340,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public State[] getStates() {
-        return state;
+        return states;
     }
 
     public ActivationFunction getActivationFunction() {
@@ -447,7 +447,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     @Override
     public void disconnect() {
-        for(State s: state)
+        for(State s: states)
             s.disconnect();
 
         if(updateValue != null)
@@ -496,7 +496,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public boolean isActiveTemplateInstance() {
         return isNewInstance ||
-                isFired(WITH_FEEDBACK);
+                isFired(POSITIVE_FEEDBACK);
     }
 
     public CategoryInputLink getActiveCategoryInputLink() {
@@ -533,7 +533,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         ti.textReference = textReference;
         ti.isNewInstance = true;
-        ti.setFired(WITH_FEEDBACK, getFired(WITH_FEEDBACK));
+        ti.setFired(POSITIVE_FEEDBACK, getFired(POSITIVE_FEEDBACK));
 
         doc.onElementEvent(TOKEN_POSITION, ti);
 
@@ -579,7 +579,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         getOutputLinks()
                 .filter(l -> !(l instanceof CategoryLink))
-                .filter(l -> l.getOutput().isFired(WITH_FEEDBACK))
+                .filter(l -> l.getOutput().isFired(POSITIVE_FEEDBACK))
                 .forEach(l ->
                         l.instantiateTemplate(
                                 instanceAct,
@@ -589,7 +589,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public void initFromTemplate(Activation templateAct) {
-        setFired(WITH_FEEDBACK, templateAct.getFired(WITH_FEEDBACK));
+        setFired(POSITIVE_FEEDBACK, templateAct.getFired(POSITIVE_FEEDBACK));
         doc.onElementEvent(UPDATE, this);
     }
 
