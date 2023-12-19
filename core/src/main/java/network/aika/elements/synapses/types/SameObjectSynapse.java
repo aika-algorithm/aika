@@ -33,6 +33,7 @@ import java.io.IOException;
 import static network.aika.elements.Type.BINDING;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_SAME;
+import static network.aika.enums.Trigger.FIRED_NEGATIVE_FEEDBACK;
 
 /**
  * The Same Object Binding Neuron Synapse is an inner synapse between two binding neurons of the same object.
@@ -43,7 +44,8 @@ import static network.aika.enums.Transition.SAME_SAME;
         inputType = BINDING,
         outputType = BINDING,
         transition = SAME_SAME,
-        required = INPUT_INPUT
+        required = INPUT_INPUT,
+        trigger = FIRED_NEGATIVE_FEEDBACK
 )
 public class SameObjectSynapse extends ConjunctiveSynapse<
         SameObjectSynapse,

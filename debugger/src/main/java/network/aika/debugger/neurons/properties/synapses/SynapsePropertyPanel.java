@@ -63,6 +63,7 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
                         .collect(Collectors.joining(", "))
         );
 
+        addConstant("Trigger: ", "" + s.getTrigger());
         addConstant("Net UB: ", doubleToString(s.getNetUB()));
         addConstant("Is Training Allowed: ", "" + s.isTrainingAllowed());
         addConstant("Stored At: ", "" + s.getStoredAt());
