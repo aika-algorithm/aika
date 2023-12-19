@@ -46,7 +46,7 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
 
     @Override
     public boolean isActiveTemplateInstance() {
-        return getBindingSignalSlot(INPUT).isSet();
+        return isNewInstance || getBindingSignalSlot(INPUT).isSet();
     }
 
     public Stream<InhibitoryLink> getAllInhibitoryLinks() {
