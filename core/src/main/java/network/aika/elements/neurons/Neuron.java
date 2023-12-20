@@ -499,11 +499,13 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         while (in.readBoolean()) {
             Synapse syn = Synapse.read(in, m);
             syn.link();
+            assert provider == syn.getPOutput();
         }
 
         while (in.readBoolean()) {
             Synapse syn = Synapse.read(in, m);
             syn.link();
+            assert provider == syn.getPInput();
         }
 
         if(in.readBoolean()) {
