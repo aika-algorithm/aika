@@ -20,6 +20,7 @@ import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.PatternCategoryInputSynapse;
@@ -57,8 +58,8 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
     private AverageCoveredSpace averageCoveredSpace;
 
 
-    protected PatternNeuron() {
-        super();
+    public PatternNeuron(NeuronProvider np) {
+        super(np);
     }
 
     public PatternNeuron(Model m) {

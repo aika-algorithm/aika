@@ -18,6 +18,7 @@ package network.aika.elements.neurons.types;
 
 import network.aika.Model;
 import network.aika.Document;
+import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.relations.Relation;
 import network.aika.fields.SumField;
@@ -43,8 +44,8 @@ public class LatentRelationNeuron extends BindingNeuron {
 
     private Relation relation;
 
-    protected LatentRelationNeuron() {
-        super();
+    public LatentRelationNeuron(NeuronProvider np) {
+        super(np);
     }
 
     public LatentRelationNeuron(Model m) {

@@ -21,6 +21,7 @@ import network.aika.Document;
 import network.aika.elements.activations.types.BindingCategoryActivation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.neurons.CategoryNeuron;
+import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 
 import static network.aika.elements.Type.BINDING;
@@ -36,8 +37,8 @@ import static network.aika.enums.Scope.SAME;
 )
 public class BindingCategoryNeuron extends CategoryNeuron {
 
-    protected BindingCategoryNeuron() {
-        super();
+    public BindingCategoryNeuron(NeuronProvider np) {
+        super(np);
     }
 
     public BindingCategoryNeuron(Model m) {

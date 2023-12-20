@@ -21,6 +21,7 @@ import network.aika.Document;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.PatternCategoryActivation;
 import network.aika.elements.neurons.CategoryNeuron;
+import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 
 import static network.aika.elements.Type.PATTERN;
@@ -35,8 +36,8 @@ import static network.aika.enums.Scope.SAME;
 )
 public class PatternCategoryNeuron extends CategoryNeuron {
 
-    protected PatternCategoryNeuron() {
-        super();
+    public PatternCategoryNeuron(NeuronProvider np) {
+        super(np);
     }
 
     public PatternCategoryNeuron(Model m) {

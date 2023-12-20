@@ -228,11 +228,11 @@ public class Model implements Writable {
         suspensionCallback.close();
     }
 
-    public <N extends Neuron> N createNeuronByClass(String clazzName) {
+    public <N extends Neuron> N createNeuronByClass(String clazzName, NeuronProvider np) {
         try {
             Class clazz = getClass().getClassLoader().loadClass(clazzName);
-            return (N) clazz.getConstructor()
-                    .newInstance();
+            return (N) clazz.getConstructor(NeuronProvider.class)
+                    .newInstance(np);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

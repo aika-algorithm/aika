@@ -87,7 +87,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     private final WeakHashMap<Long, WeakReference<PreActivation<A>>> activations = new WeakHashMap<>();
 
-    protected Neuron() {
+    public Neuron(NeuronProvider np) {
+        provider = np;
         setModified();
         setBias(0.0);
     }
@@ -476,8 +477,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     public static Neuron read(DataInput in, NeuronProvider np) throws Exception {
         String neuronClazz = in.readUTF();
         Model m = np.getModel();
-        Neuron n = m.createNeuronByClass(neuronClazz);
-        n.provider = np;
+        Neuron n = m.createNeuronByClass(neuronClazz, np);
         n.readFields(in, m);
         return n;
     }

@@ -20,6 +20,7 @@ import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.BindingCategoryInputSynapse;
@@ -40,8 +41,8 @@ import static network.aika.enums.Scope.SAME;
 )
 public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActivation> {
 
-    protected BindingNeuron() {
-        super();
+    public BindingNeuron(NeuronProvider np) {
+        super(np);
     }
 
     public BindingNeuron(Model m) {

@@ -21,6 +21,7 @@ import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.neurons.DisjunctiveNeuron;
+import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
@@ -39,8 +40,8 @@ import static network.aika.enums.Scope.INPUT;
 )
 public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, InhibitoryActivation> {
 
-    protected InhibitoryNeuron() {
-        super();
+    public InhibitoryNeuron(NeuronProvider np) {
+        super(np);
     }
 
     public InhibitoryNeuron(Model m) {

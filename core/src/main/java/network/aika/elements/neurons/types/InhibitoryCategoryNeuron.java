@@ -21,6 +21,7 @@ import network.aika.Document;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.InhibitoryCategoryActivation;
 import network.aika.elements.neurons.CategoryNeuron;
+import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 
 import static network.aika.elements.Type.INHIBITORY;
@@ -35,8 +36,8 @@ import static network.aika.enums.Scope.INPUT;
 )
 public class InhibitoryCategoryNeuron extends CategoryNeuron {
 
-    protected InhibitoryCategoryNeuron() {
-        super();
+    public InhibitoryCategoryNeuron(NeuronProvider np) {
+        super(np);
     }
 
     public InhibitoryCategoryNeuron(Model m) {
