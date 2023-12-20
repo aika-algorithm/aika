@@ -41,14 +41,6 @@ public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynaps
 
     public NegativeFeedbackLink(NegativeFeedbackSynapse s, InhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
-
-        if(input == null)
-            return;
-
-        InhibitoryActivation.connectFields(
-                input.getAllInhibitoryLinks(),
-                Stream.of(this)
-        );
     }
 
     @Override
@@ -68,6 +60,14 @@ public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynaps
     @Override
     protected void initInputValue() {
         inputValue = new MaxField(this, "max-input-value", TOLERANCE);
+
+        if(input != null) {
+            InhibitoryActivation.connectFields(
+                    input.getAllInhibitoryLinks(),
+                    Stream.of(this)
+            );
+        }
+
         invertedInputValue = invert(this, "inverted-input-value", inputValue);
     }
 
