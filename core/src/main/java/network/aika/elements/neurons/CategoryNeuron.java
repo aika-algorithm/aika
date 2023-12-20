@@ -27,6 +27,9 @@ import network.aika.elements.synapses.CategorySynapse;
  */
 public abstract class CategoryNeuron extends DisjunctiveNeuron<CategoryNeuron, CategoryActivation> {
 
+    protected CategoryNeuron() {
+        super();
+    }
 
     public CategoryNeuron(Model m) {
         super(m);

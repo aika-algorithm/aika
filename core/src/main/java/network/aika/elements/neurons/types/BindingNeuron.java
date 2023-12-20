@@ -40,6 +40,9 @@ import static network.aika.enums.Scope.SAME;
 )
 public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActivation> {
 
+    protected BindingNeuron() {
+        super();
+    }
 
     public BindingNeuron(Model m) {
         super(m);

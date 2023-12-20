@@ -39,6 +39,10 @@ import static network.aika.enums.Scope.INPUT;
 )
 public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, InhibitoryActivation> {
 
+    protected InhibitoryNeuron() {
+        super();
+    }
+
     public InhibitoryNeuron(Model m) {
         super(m);
     }

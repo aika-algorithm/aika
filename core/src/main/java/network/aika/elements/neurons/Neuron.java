@@ -87,7 +87,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     private final WeakHashMap<Long, WeakReference<PreActivation<A>>> activations = new WeakHashMap<>();
 
-    private Neuron() {
+    protected Neuron() {
         setModified();
         setBias(0.0);
     }

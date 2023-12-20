@@ -43,6 +43,10 @@ public class LatentRelationNeuron extends BindingNeuron {
 
     private Relation relation;
 
+    protected LatentRelationNeuron() {
+        super();
+    }
+
     public LatentRelationNeuron(Model m) {
         super(m);
 

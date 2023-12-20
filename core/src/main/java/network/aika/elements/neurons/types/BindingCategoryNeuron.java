@@ -36,6 +36,10 @@ import static network.aika.enums.Scope.SAME;
 )
 public class BindingCategoryNeuron extends CategoryNeuron {
 
+    protected BindingCategoryNeuron() {
+        super();
+    }
+
     public BindingCategoryNeuron(Model m) {
         super(m);
     }

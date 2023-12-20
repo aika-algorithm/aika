@@ -43,6 +43,10 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
 
     private static final Logger log = LoggerFactory.getLogger(ConjunctiveNeuron.class);
 
+    protected ConjunctiveNeuron() {
+        super();
+    }
+
     public ConjunctiveNeuron(Model m) {
         super(m);
 

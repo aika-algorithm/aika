@@ -57,6 +57,10 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
     private AverageCoveredSpace averageCoveredSpace;
 
 
+    protected PatternNeuron() {
+        super();
+    }
+
     public PatternNeuron(Model m) {
         super(m);
     }

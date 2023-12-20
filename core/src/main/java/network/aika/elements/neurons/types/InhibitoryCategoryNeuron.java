@@ -35,6 +35,10 @@ import static network.aika.enums.Scope.INPUT;
 )
 public class InhibitoryCategoryNeuron extends CategoryNeuron {
 
+    protected InhibitoryCategoryNeuron() {
+        super();
+    }
+
     public InhibitoryCategoryNeuron(Model m) {
         super(m);
     }
