@@ -87,8 +87,14 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     private final WeakHashMap<Long, WeakReference<PreActivation<A>>> activations = new WeakHashMap<>();
 
+    private Neuron() {
+        setModified();
+        setBias(0.0);
+    }
+
     public Neuron(Model m) {
-        addProvider(m);
+        provider = new NeuronProvider(m, this);
+        setModified();
         setBias(0.0);
     }
 
@@ -132,12 +138,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     public int getNewSynapseId() {
         return synapseIdCounter++;
-    }
-
-    private void addProvider(Model m) {
-        if (provider == null)
-            provider = new NeuronProvider(m, this);
-        setModified();
     }
 
     public void register(A act) {
@@ -202,8 +202,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     protected void initFromTemplate(Neuron templateN) {
-        addProvider(templateN.getModel());
-
         bias.setInitialValue(
                 templateN.getBias().getUpdatedValue()
         );
@@ -475,10 +473,11 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         out.writeBoolean(getProvider().isPersistent());
     }
 
-    public static Neuron read(DataInput in, Model m) throws Exception {
+    public static Neuron read(DataInput in, NeuronProvider np) throws Exception {
         String neuronClazz = in.readUTF();
+        Model m = np.getModel();
         Neuron n = m.createNeuronByClass(neuronClazz);
-
+        n.provider = np;
         n.readFields(in, m);
         return n;
     }

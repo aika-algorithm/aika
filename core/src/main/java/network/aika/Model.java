@@ -231,8 +231,8 @@ public class Model implements Writable {
     public <N extends Neuron> N createNeuronByClass(String clazzName) {
         try {
             Class clazz = getClass().getClassLoader().loadClass(clazzName);
-            return (N) clazz.getConstructor(Model.class)
-                    .newInstance(this);
+            return (N) clazz.getConstructor()
+                    .newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -181,7 +181,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
                         model.getSuspensionCallback().retrieve(id)
                 )
         )) {
-            n = Neuron.read(dis, model);
+            n = Neuron.read(dis, this);
         } catch (Exception e) {
             throw new NeuronSerializationException(id, e);
         }
