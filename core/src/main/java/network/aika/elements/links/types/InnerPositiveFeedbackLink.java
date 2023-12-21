@@ -40,6 +40,14 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     }
 
     @Override
+    protected void initWeightInput() {
+        super.initWeightInput();
+
+        if(!isInputSideActive())
+            output.getFeedbackTrigger().setValue(1.0);
+    }
+
+    @Override
     public void propagateRanges() {
     }
 

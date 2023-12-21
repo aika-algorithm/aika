@@ -75,7 +75,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
                 this,
                 "value",
                 feedbackTrigger,
-                getValue(isAbstract() ? NEGATIVE_FEEDBACK : PRE_FEEDBACK),
+                getValue(PRE_FEEDBACK),
                 getValue(POSITIVE_FEEDBACK)
         );
     }

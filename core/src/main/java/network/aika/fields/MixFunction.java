@@ -38,7 +38,7 @@ public class MixFunction extends AbstractFunction {
             double a = getInputValueByArg(1);
             double b = getInputValueByArg(2);
 
-            return (u * a + -u * b);
+            return (-u * a + u * b);
         } else {
             double x = getInputValueByArg(0);
 
