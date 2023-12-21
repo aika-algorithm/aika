@@ -17,28 +17,32 @@
 package network.aika.enums;
 
 import network.aika.elements.activations.Activation;
-
-import java.util.function.Predicate;
-
-import static network.aika.elements.activations.StateType.*;
+import network.aika.elements.activations.StateType;
 
 /**
  *
  * @author Lukas Molzberger
  */
 public enum Trigger {
-    FIRED_PRE_FEEDBACK(act -> act.isFired(PRE_FEEDBACK)),
-    FIRED_NEGATIVE_FEEDBACK(act -> act.isFired(NEGATIVE_FEEDBACK)),
-    FIRED_POSITIVE_FEEDBACK(act -> act.isFired(POSITIVE_FEEDBACK)),
-    NOT_FIRED(oAct -> true);
+    FIRED_PRE_FEEDBACK,
+    FIRED_NEGATIVE_FEEDBACK,
+    FIRED_POSITIVE_FEEDBACK,
+    NOT_FIRED;
 
-    Trigger(Predicate<Activation> check) {
-        this.check = check;
+    private StateType type;
+
+    public void setType(StateType type) {
+        this.type = type;
     }
 
-    private Predicate<Activation> check;
+    public StateType getType() {
+        return type;
+    }
 
     public boolean check(Activation oAct) {
-        return check.test(oAct);
+        if(type == null)
+            return true;
+
+        return oAct.isFired(type);
     }
 }

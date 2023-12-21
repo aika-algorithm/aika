@@ -20,6 +20,7 @@ import network.aika.Model;
 import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.StateType;
 import network.aika.elements.relations.Relation;
 import network.aika.Document;
 import network.aika.elements.Element;
@@ -110,6 +111,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return input.getValue();
     }
 
+    public FieldOutput getInputValue(IA input, StateType t) {
+        return input.getValue(t);
+    }
+
     protected void checkWeight() {
         if(isNegative())
             delete();
@@ -129,7 +134,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     protected boolean isPropagable(IA act) {
         return getRelation() == null &&
-                getNetUB(act) > 0.0;
+                getNetUB(act, getTrigger().getType()) > 0.0;
     }
 
     public void propagate(IA iAct) {
@@ -165,8 +170,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                 getSumOfLowerWeights()[isLinkingAllowed(true) ? 1 : 0];
     }
 
-    public double getNetUB(IA iAct) {
-        return (getInputValue(iAct).getUpdatedValue() * getWeightForNetUB()) +
+    public double getNetUB(IA iAct, StateType t) {
+        return (getInputValue(iAct, t).getUpdatedValue() * getWeightForNetUB()) +
                 getSumOfLowerWeights()[isLinkingAllowed(true) ? 1 : 0];
     }
 

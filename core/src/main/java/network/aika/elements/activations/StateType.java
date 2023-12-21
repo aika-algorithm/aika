@@ -33,6 +33,7 @@ public enum StateType {
 
     StateType(Trigger trigger) {
         this.trigger = trigger;
+        trigger.setType(this);
     }
 
     public Trigger getTrigger() {
