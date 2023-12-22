@@ -22,7 +22,7 @@ import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.links.types.PatternCategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
-import network.aika.elements.synapses.InstantiationFeedbackSynapse;
+import network.aika.elements.synapses.ConjunctiveCategoryInputSynapse;
 import network.aika.elements.synapses.SynapseType;
 
 import static network.aika.elements.Type.PATTERN;
@@ -44,14 +44,14 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         feedbackMode = PRE_FEEDBACK
 )
 public class PatternCategoryInputSynapse
-        extends InstantiationFeedbackSynapse<
-                    PatternCategoryInputSynapse,
-                    CategoryNeuron,
-                    PatternNeuron,
-                    PatternCategoryInputLink,
-                    CategoryActivation,
-                    PatternActivation
-                >
+        extends ConjunctiveCategoryInputSynapse<
+                            PatternCategoryInputSynapse,
+                            CategoryNeuron,
+                            PatternNeuron,
+                            PatternCategoryInputLink,
+                            CategoryActivation,
+                            PatternActivation
+                        >
         implements CategoryInputSynapse<PatternCategoryInputSynapse> {
 
     private double initialCategorySynapseWeight;

@@ -18,18 +18,22 @@ package network.aika.elements.synapses;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.links.InstantiationFeedbackLink;
+import network.aika.elements.links.ConjunctiveCategoryInputLink;
+import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.Neuron;
-import network.aika.fields.SynapseOutputSlot;
-
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class InstantiationFeedbackSynapse<S extends InstantiationFeedbackSynapse, I extends Neuron, O extends ConjunctiveNeuron<O, OA>, L extends InstantiationFeedbackLink<S, IA, OA>, IA extends Activation<?>, OA extends ConjunctiveActivation<O>> extends
-        PositiveFeedbackSynapse<S, I, O, L, IA, OA> {
+public abstract class ConjunctiveCategoryInputSynapse<
+        S extends ConjunctiveCategoryInputSynapse,
+        I extends CategoryNeuron,
+        O extends ConjunctiveNeuron<O, OA>,
+        L extends ConjunctiveCategoryInputLink<S, IA, OA>,
+        IA extends Activation<?>,
+        OA extends ConjunctiveActivation<O>
+        > extends PositiveFeedbackSynapse<S, I, O, L, IA, OA> implements CategoryInputSynapse<S> {
 
 }

@@ -18,7 +18,7 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.synapses.InstantiationFeedbackSynapse;
+import network.aika.elements.synapses.ConjunctiveCategoryInputSynapse;
 import network.aika.fields.Field;
 import network.aika.fields.InputField;
 import network.aika.fields.MaxField;
@@ -30,12 +30,12 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public abstract class InstantiationFeedbackLink<S extends InstantiationFeedbackSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>> extends
+public abstract class ConjunctiveCategoryInputLink<S extends ConjunctiveCategoryInputSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>> extends
         PositiveFeedbackLink<S, IA, OA> {
 
     protected Field feedbackTrigger;
 
-    public InstantiationFeedbackLink(S s, IA input, OA output) {
+    public ConjunctiveCategoryInputLink(S s, IA input, OA output) {
         super(s, input, output);
     }
 

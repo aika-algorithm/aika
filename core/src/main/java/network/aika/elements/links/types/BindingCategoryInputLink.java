@@ -19,7 +19,7 @@ package network.aika.elements.links.types;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.links.CategoryInputLink;
-import network.aika.elements.links.InstantiationFeedbackLink;
+import network.aika.elements.links.ConjunctiveCategoryInputLink;
 import network.aika.elements.synapses.types.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.types.BindingCategorySynapse;
 import network.aika.elements.synapses.CategorySynapse;
@@ -28,7 +28,7 @@ import network.aika.elements.synapses.CategorySynapse;
 /**
  * @author Lukas Molzberger
  */
-public class BindingCategoryInputLink extends InstantiationFeedbackLink<BindingCategoryInputSynapse, CategoryActivation, BindingActivation> implements CategoryInputLink {
+public class BindingCategoryInputLink extends ConjunctiveCategoryInputLink<BindingCategoryInputSynapse, CategoryActivation, BindingActivation> implements CategoryInputLink {
 
     public BindingCategoryInputLink(BindingCategoryInputSynapse s, CategoryActivation input, BindingActivation output) {
         super(s, input, output);
