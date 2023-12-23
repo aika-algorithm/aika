@@ -21,6 +21,7 @@ import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
+import network.aika.elements.relations.LatentProxyRelation;
 import network.aika.elements.relations.NearRelation;
 import network.aika.elements.synapses.types.*;
 import org.slf4j.Logger;
@@ -113,12 +114,13 @@ public class NetworkMotifs {
 
         log.info("  " + pSyn + " targetNetContr:" + -pSyn.getSynapseBias().getValue());
 
-        InnerPositiveFeedbackSynapse posFeedSyn = new InnerPositiveFeedbackSynapse(
+        InnerPositiveFeedbackSynapse posFeedSyn = new InnerPositiveFeedbackSynapse()
+                .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), pn.getTargetValue()))
+                .setRelation(
                         allowRelaxedMatching ?
                                 new NearRelation(6) :
                                 null
                 )
-                .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), pn.getTargetValue()))
                 .link(pn, bn)
                 .setTemplateOnly(isTemplateOnly)
                 .adjustBias();
@@ -137,7 +139,7 @@ public class NetworkMotifs {
     public static void addRelation(
             BindingNeuron lastBN,
             BindingNeuron bn,
-            LatentRelationNeuron rel,
+            LatentRelationNeuron relN,
             double relWeight,
             double spsWeight,
             boolean templateOnly
@@ -145,20 +147,22 @@ public class NetworkMotifs {
         RelationInputSynapse relSyn = new RelationInputSynapse()
                 .setWeight(relWeight)
                 .setTemplateOnly(templateOnly)
-                .link(rel, bn)
+                .link(relN, bn)
                 .adjustBias();
 
         double prevNetTarget = lastBN.getBias().getValue();
         double prevValueTarget = lastBN.getActivationFunction()
                 .f(prevNetTarget);
 
+        LatentProxyRelation rel = new LatentProxyRelation();
         SameObjectSynapse spSyn = new SameObjectSynapse()
                 .setWeight(spsWeight)
+                .setRelation(rel)
                 .setTemplateOnly(templateOnly)
                 .link(lastBN, bn)
                 .adjustBias(prevValueTarget);
 
-        spSyn.setRelationSynId(relSyn.getSynapseId());
+        rel.linkRelation(spSyn, relSyn);
 
         log.info("  " + spSyn + " targetNetContr:" + -spSyn.getSynapseBias().getValue());
     }

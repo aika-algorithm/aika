@@ -19,6 +19,7 @@ package network.aika.visitor.operator;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
+import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
@@ -66,7 +67,7 @@ public class SubsumesOperator implements Operator {
     }
 
     @Override
-    public void relationCheck(Synapse relSyn, Activation toAct, Direction relDir) {
+    public void relationCheck(Relation rel, Synapse relSyn, Activation toAct, Direction relDir) {
         throw new UnsupportedOperationException();
     }
 }

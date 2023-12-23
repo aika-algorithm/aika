@@ -19,6 +19,7 @@ package network.aika.visitor.operator;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
+import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
@@ -55,12 +56,12 @@ public class OutgoingLinkingOperator extends LinkingOperator {
     }
 
     @Override
-    public void relationCheck(Synapse relSyn, Activation relatedAct, Direction relDir) {
+    public void relationCheck(Relation rel, Synapse relSyn, Activation relatedAct, Direction relDir) {
         assert relDir == Direction.OUTPUT;
 
         Link l = checkAndLink(relatedAct);
         if (l != null)
-            relSyn.createLatentRelation(
+            rel.createLatentRelation(
                     relatedAct,
                     sourceAct,
                     relatedAct

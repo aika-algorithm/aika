@@ -26,13 +26,13 @@ import network.aika.elements.Timestamp;
 import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.types.PatternActivation;
+import network.aika.elements.relations.Relation;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.visitor.Visitor;
 
 import static network.aika.debugger.EventType.CREATE;
-import static network.aika.fields.AbstractFieldLink.updateConnected;
 import static network.aika.fields.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.elements.Timestamp.FIRED_COMPARATOR;
@@ -57,8 +57,6 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
     protected SumField gradient;
 
-    protected Integer instanceSynapseId;
-
     public Link(S s, I input, O output) {
         this.synapse = s;
         this.input = input;
@@ -77,10 +75,6 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
         propagateRanges();
         getDocument().onElementEvent(CREATE, this);
-    }
-
-    public Integer getInstanceSynapseId() {
-        return instanceSynapseId;
     }
 
     public boolean isActive() {
@@ -135,11 +129,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
                 oAct.getNeuron()
         );
 
-        Link newInstance = s.createLinkFromTemplate(iAct, oAct, this);
-        postInstantiation(newInstance);
-    }
-
-    protected void postInstantiation(Link newInstance) {
+        s.createLinkFromTemplate(iAct, oAct, this);
     }
 
     public LinkKey getInputLinkKey() {
@@ -211,8 +201,19 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     public void init() {
     }
 
-    public void initFromTemplate(Link template) {
-        template.instanceSynapseId = synapse.getSynapseId();
+    public void initFromTemplate(Link<S, ?, ?> template) {
+        template.output.resisterTemplateInstanceSynapse(
+                template.synapse.getSynapseId(),
+                synapse.getSynapseId()
+        );
+
+        linkRelationFromTemplate(template);
+    }
+
+    protected void linkRelationFromTemplate(Link<S, ?, ?> template) {
+        Relation rel = synapse.getRelation();
+        if(rel != null)
+            rel.linkRelationFromTemplate(synapse, template);
     }
 
     public void link() {

@@ -37,9 +37,6 @@ public class LinkPropertyPanel<E extends Link> extends AbstractPropertyPanel {
         addTitle("Output:",SUB_TITLE_SIZE);
         initOutputIdentitySection(l);
 
-        if(l.getInstanceSynapseId() != null)
-            addConstant("Instance Synapse Id: ", "" + l.getInstanceSynapseId());
-
         addTitle("Inference:",SUB_TITLE_SIZE);
         initInferenceSection(l);
 

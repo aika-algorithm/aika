@@ -56,74 +56,8 @@ public class SameObjectSynapse extends ConjunctiveSynapse<
         BindingActivation
         >
 {
-    private Integer relationSynId;
-
-    public Integer getRelationSynId() {
-        return relationSynId;
-    }
-
-    public void setRelationSynId(Integer relationSynId) {
-        this.relationSynId = relationSynId;
-    }
-
-    @Override
-    public Relation getRelation() {
-        RelationInputSynapse ris = getRelationInputSynapse();
-        if(ris == null)
-            return null;
-
-        return ris.getInput().getRelation();
-    }
-
-    @Override
-    public void createLatentRelation(BindingActivation oAct, Activation fromOriginAct, Activation toOriginAct) {
-        RelationInputSynapse ris = getRelationInputSynapse();
-        if(ris.linkExists(oAct, true))
-            return;
-
-        LatentRelationActivation latentRelAct = ris.createOrLookupLatentActivation(
-                fromOriginAct,
-                toOriginAct
-        );
-
-        ris.createAndInitLink(latentRelAct, oAct);
-    }
-
-    @Override
-    public RelationInputSynapse getRelationInputSynapse() {
-        return (RelationInputSynapse) output.getSynapseBySynId(relationSynId);
-    }
-
-    @Override
-    public SameObjectSynapse setTemplateOnly(boolean templateOnly) {
-        super.setTemplateOnly(templateOnly);
-
-        if(relationSynId != null)
-            output.getSynapseBySynId(relationSynId)
-                    .setTemplateOnly(templateOnly);
-
-        return this;
-    }
-
     @Override
     public SameObjectLink createLink(BindingActivation input, BindingActivation output) {
         return new SameObjectLink(this, input, output);
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        super.write(out);
-
-        out.writeBoolean(relationSynId != null);
-        if(relationSynId != null)
-            out.writeInt(relationSynId);
-    }
-
-    @Override
-    public void readFields(DataInput in, Model m) throws IOException {
-        super.readFields(in, m);
-
-        if(in.readBoolean())
-            relationSynId = in.readInt();
     }
 }

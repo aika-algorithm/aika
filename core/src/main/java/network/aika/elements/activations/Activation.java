@@ -88,6 +88,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected BindingSignalSlot[] bindingSignalSlots = new BindingSignalSlot[3];
 
+    protected HashMap<Integer, Integer> templateSynIdMap;
 
     public Activation(int id, Document doc, N n) {
         this.id = id;
@@ -128,6 +129,20 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
 
     protected void connectWeightUpdate() {
+    }
+
+    public void resisterTemplateInstanceSynapse(int templateSynId, int instanceSynId) {
+        if(templateSynIdMap == null)
+            templateSynIdMap = new HashMap<>();
+
+        templateSynIdMap.put(templateSynId, instanceSynId);
+    }
+
+    public Integer getInstanceSynapseId(int templateSynId) {
+        if(templateSynIdMap == null)
+            return null;
+
+        return templateSynIdMap.get(templateSynId);
     }
 
     public BindingSignalSlot getBindingSignalSlot(Scope t) {

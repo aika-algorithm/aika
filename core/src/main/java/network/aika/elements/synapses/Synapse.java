@@ -67,6 +67,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     protected NeuronProvider input;
     protected NeuronProvider output;
 
+    private Relation relation;
+
     private boolean templateOnly;
 
     protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
@@ -248,10 +250,14 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
         link();
 
+        if(templateSyn.relation != null)
+            relation = templateSyn.relation.instantiate();
+
         weight.setValue(
                 templateSyn.getInitialInstanceWeight()
         );
     }
+
 
     public double getInitialInstanceWeight() {
         return weight.getUpdatedValue();
@@ -354,25 +360,34 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return output.getNeuron();
     }
 
-    public Relation getRelation() {
-        return null;
+    public S setRelation(Relation rel) {
+        this.relation = rel;
+
+        return (S) this;
     }
 
-    public void expandRelation(LinkingOperator op, Relation rel, Neuron to, Direction relDir) {
+    public Relation getRelation() {
+        return relation;
+    }
+
+    public boolean expandRelation(LinkingOperator op, Neuron to, Direction relDir) {
+        Relation rel = getRelation();
+        if(rel == null)
+            return false;
+
         Activation from = op.getSourceAct();
         PreActivation<?> toPreAct = to.getOrCreatePreActivation(from.getDocument());
 
         TextReference ref = from.getTextReference();
         if(ref == null)
-            return;
+            return true;
 
-        rel.evaluateLatentRelation(ref, from, toPreAct, relDir.invert())
+        rel.evaluateLatentRelation(this, ref, from, toPreAct, relDir.invert())
                 .forEach(relAct ->
-                        op.relationCheck(this, relAct, relDir)
+                        op.relationCheck(rel, this, relAct, relDir)
                 );
-    }
 
-    public void createLatentRelation(OA oAct, Activation fromOriginAct, Activation toOriginAct) {
+        return true;
     }
 
     @Override
@@ -404,6 +419,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
         weight.write(out);
         out.writeBoolean(templateOnly);
+
+        out.writeBoolean(relation != null);
+        if(relation != null)
+            relation.write(out);
     }
 
     public static Synapse read(DataInput in, Model m) throws IOException {
@@ -422,6 +441,9 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
         weight.readFields(in, m);
         templateOnly = in.readBoolean();
+
+        if(in.readBoolean())
+            relation = Relation.read(in, m);
     }
 
     @Override

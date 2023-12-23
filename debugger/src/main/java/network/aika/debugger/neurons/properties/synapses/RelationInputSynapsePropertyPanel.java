@@ -14,22 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links.types;
+package network.aika.debugger.neurons.properties.synapses;
 
-import network.aika.elements.activations.types.BindingActivation;
-import network.aika.elements.links.ConjunctiveLink;
-import network.aika.elements.synapses.types.SameObjectSynapse;
+import network.aika.elements.links.Link;
+import network.aika.elements.synapses.types.RelationInputSynapse;
 
 /**
  * @author Lukas Molzberger
  */
-public class SameObjectLink extends ConjunctiveLink<SameObjectSynapse, BindingActivation, BindingActivation> {
+public class RelationInputSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel<RelationInputSynapse> {
 
-    public SameObjectLink(SameObjectSynapse s, BindingActivation input, BindingActivation output) {
-        super(s, input, output);
+    public RelationInputSynapsePropertyPanel(RelationInputSynapse s, Link ref) {
+        super(s, ref);
     }
 
     @Override
-    public void propagateRanges() {
+    public void initSynapseProperties(RelationInputSynapse s) {
+        super.initSynapseProperties(s);
+
+        addConstant("Latent-Proxy-Synapse-Id: ", "" + s.getLatentProxySynapseId());
     }
 }

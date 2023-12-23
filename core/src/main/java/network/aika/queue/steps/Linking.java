@@ -110,13 +110,12 @@ public class Linking extends ElementStep<Activation> {
 
     private void linkIncoming(Synapse targetSyn) {
         LinkingOperator op = new IncomingLinkingOperator(getElement(), null, targetSyn, bindingSignal);
-        Relation rel = targetSyn.getRelation();
-        if(rel != null)
-            targetSyn.expandRelation(op, rel, targetSyn.getOutput(), INPUT);
-        else {
-            new UpVisitor(bindingSignal.getDocument(), op)
-                    .start(bindingSignal, SAME);
-        }
+
+        if(targetSyn.expandRelation(op, targetSyn.getOutput(), INPUT))
+            return;
+
+        new UpVisitor(bindingSignal.getDocument(), op)
+                .start(bindingSignal, SAME);
     }
 
     private void linkOutgoing(Synapse targetSyn) {
@@ -125,13 +124,11 @@ public class Linking extends ElementStep<Activation> {
         Neuron to = targetSyn.getOutput();
         LinkingOperator op = new OutgoingLinkingOperator(act, targetSyn, bindingSignal);
 
-        Relation rel = targetSyn.getRelation();
-        if(rel != null)
-            targetSyn.expandRelation(op, rel, to, OUTPUT);
-        else {
-            new UpVisitor(bindingSignal.getDocument(), op)
+        if(targetSyn.expandRelation(op, to, OUTPUT))
+            return;
+
+        new UpVisitor(bindingSignal.getDocument(), op)
                     .start(bindingSignal, SAME);
-        }
     }
 
     private void latentLinkingExpand(Synapse sourceSyn) {
@@ -155,14 +152,14 @@ public class Linking extends ElementStep<Activation> {
         LinkingOperator op = new IncomingLinkingOperator(iAct, sourceSyn, targetSyn, bindingSignal);
         Neuron to = targetSyn.getInput();
 
-        if(sourceSyn.getRelation() != null)
-            sourceSyn.expandRelation(op, sourceSyn.getRelation(), to, OUTPUT);
-        else if(targetSyn.getRelation() != null)
-            targetSyn.expandRelation(op, targetSyn.getRelation(), to, INPUT);
-        else {
-            new UpVisitor(bindingSignal.getDocument(), op)
+        if(sourceSyn.expandRelation(op, to, OUTPUT))
+            return;
+
+        if(targetSyn.expandRelation(op, to, INPUT))
+            return;
+
+        new UpVisitor(bindingSignal.getDocument(), op)
                     .start(bindingSignal, SAME);
-        }
     }
 
     @Override

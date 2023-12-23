@@ -22,13 +22,11 @@ package network.aika.queue;
  */
 public enum Phase {
     INSTANTIATION(),
-    POST_INSTANTIATION(),
     LINKING(),
     LINK_UPDATE(),
     FEEDBACK_TRIGGER(),
     INFERENCE(),
     FIRED(),
-    PRE_ANNEAL(),
     NEGATIVE_FEEDBACK(),
     ANNEAL(),
     INSTANTIATION_TRIGGER(true),

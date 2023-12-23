@@ -56,42 +56,11 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
-    private Relation relation;
-
-    public InnerPositiveFeedbackSynapse() {
-    }
-
-    public InnerPositiveFeedbackSynapse(Relation rel) {
-        this.relation = rel;
-    }
-
-    @Override
-    public Relation getRelation() {
-        return relation;
-    }
-
     public InnerPositiveFeedbackLink createLink(PatternActivation input, BindingActivation output) {
         return new InnerPositiveFeedbackLink(this, input, output);
     }
 
     @Override
     public void setPropagable(boolean propagable) {
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        super.write(out);
-
-        out.writeBoolean(relation != null);
-        if(relation != null)
-            relation.write(out);
-    }
-
-    @Override
-    public void readFields(DataInput in, Model m) throws IOException {
-        super.readFields(in, m);
-
-        if(in.readBoolean())
-            relation = Relation.read(in, m);
     }
 }

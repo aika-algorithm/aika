@@ -57,11 +57,4 @@ public class InhibitorySynapse extends DisjunctiveSynapse<
     public InhibitoryLink createLink(BindingActivation input, InhibitoryActivation output) {
         return new InhibitoryLink(this, input, output);
     }
-
-    @Override
-    public InhibitorySynapse instantiateTemplate(BindingNeuron input, InhibitoryNeuron output) {
-        InhibitorySynapse s = new InhibitorySynapse();
-        s.initFromTemplate(input, output, this);
-        return s;
-    }
 }

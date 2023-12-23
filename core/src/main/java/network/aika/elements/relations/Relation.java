@@ -19,6 +19,8 @@ package network.aika.elements.relations;
 import network.aika.Model;
 import network.aika.elements.PreActivation;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.links.Link;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
 import network.aika.text.TextReference;
 import network.aika.utils.Writable;
@@ -34,33 +36,35 @@ import java.util.stream.Stream;
  */
 public abstract class Relation implements Writable {
 
-    public abstract Stream<Activation> evaluateLatentRelation(TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir);
+    public abstract Relation instantiate();
+
+    public void linkRelationFromTemplate(Synapse instanceSyn, Link templateLink) {
+    }
 
     public abstract int getRelationType();
 
+    public abstract Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir);
+
+    public void createLatentRelation(Activation oAct, Activation fromOriginAct, Activation toOriginAct) {
+
+    }
+
     public static Relation read(DataInput in, Model m) throws IOException {
-        Relation rel = null;
-        switch (in.readInt()) {
-            case 1:
-                rel = new BeforeRelation();
-                break;
-            case 2:
-                rel = new ContainsRelation();
-                break;
-            case 3:
-                rel = new EqualsRelation();
-                break;
-            case 4:
-                rel = new NearRelation();
-                break;
-        }
+        Relation rel = switch (in.readByte()) {
+            case 1 -> new BeforeRelation();
+            case 2 -> new ContainsRelation();
+            case 3 -> new EqualsRelation();
+            case 4 -> new NearRelation();
+            case 5 -> new LatentProxyRelation();
+            default -> null;
+        };
         rel.readFields(in, m);
         return rel;
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
-        out.writeInt(getRelationType());
+        out.writeByte(getRelationType());
     }
 
     @Override

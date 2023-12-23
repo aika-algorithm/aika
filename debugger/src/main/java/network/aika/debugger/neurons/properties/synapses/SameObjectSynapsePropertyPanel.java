@@ -28,9 +28,8 @@ public class SameObjectSynapsePropertyPanel extends ConjunctiveSynapsePropertyPa
         super(s, ref);
     }
 
+    @Override
     public void initSynapseProperties(SameObjectSynapse s) {
         super.initSynapseProperties(s);
-
-        addConstant("Relation-SynapseId: ", "" + s.getRelationSynId());
     }
 }

@@ -19,6 +19,7 @@ package network.aika.elements.relations;
 import network.aika.Model;
 import network.aika.elements.PreActivation;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
@@ -47,12 +48,17 @@ public class ContainsRelation extends Relation {
     }
 
     @Override
+    public Relation instantiate() {
+        return new ContainsRelation(relationDir);
+    }
+
+    @Override
     public int getRelationType() {
         return 2;
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction vDir) {
+    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction vDir) {
         Range r = ref.getTokenPosRange();
         Direction dir = relationDir.combine(vDir);
 

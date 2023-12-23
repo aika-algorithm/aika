@@ -17,11 +17,13 @@
 package network.aika.elements.activations.types;
 
 import network.aika.Document;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.State;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.links.types.InputObjectLink;
+import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.BindingNeuron;
@@ -97,6 +99,19 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
                 .map(Link::getInput)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void createLatentRelation(int relationSynId, Activation fromOriginAct, Activation toOriginAct) {
+        RelationInputSynapse ris = (RelationInputSynapse) getNeuronProvider().getSynapseBySynId(relationSynId);
+        if(ris.linkExists(this, true))
+            return;
+
+        LatentRelationActivation latentRelAct = ris.createOrLookupLatentActivation(
+                fromOriginAct,
+                toOriginAct
+        );
+
+        ris.createAndInitLink(latentRelAct, this);
     }
 
     @Override

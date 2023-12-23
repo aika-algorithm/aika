@@ -40,7 +40,6 @@ public class LinkKey implements Comparable<LinkKey> {
         this.synapseId = synapseId;
     }
 
-
     public static LinkKey getFromLinkKey(long nId) {
         return new LinkKey(nId, null, Integer.MIN_VALUE);
     }
