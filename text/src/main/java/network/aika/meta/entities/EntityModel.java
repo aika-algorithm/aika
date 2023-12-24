@@ -55,7 +55,6 @@ public class EntityModel implements TemplateModel, Writable {
     public static final String ENTITY_LABEL = "Entity";
 
 
-    protected Model model;
     protected PhraseModel phraseModel;
 
     protected CategoryNeuron entityCategory;
@@ -67,7 +66,6 @@ public class EntityModel implements TemplateModel, Writable {
     protected InhibitoryNeuron inhibitoryN;
 
     public EntityModel(PhraseModel pm) {
-        this.model = pm.getModel();
         this.phraseModel = pm;
     }
 
@@ -88,8 +86,9 @@ public class EntityModel implements TemplateModel, Writable {
         return n == entityBN || n == entityPattern || n == phraseModel.getPatternNeuron();
     }
 
+    @Override
     public void initStaticNeurons() {
-        entityPattern = new PatternNeuron(model)
+        entityPattern = new PatternNeuron(getModel())
                 .setLabel(getAbstractLabel(PATTERN, ENTITY_LABEL))
                 .setTargetNet(ENTITY_NET_TARGET)
                 .setBias(ENTITY_NET_TARGET)
@@ -121,7 +120,7 @@ public class EntityModel implements TemplateModel, Writable {
                 false
         );
 
-        inhibitoryN = new InhibitoryNeuron(model)
+        inhibitoryN = new InhibitoryNeuron(getModel())
                 .setLabel(getAbstractLabel(INHIBITORY, ENTITY_LABEL))
                 .setPersistent(true);
 
@@ -136,8 +135,8 @@ public class EntityModel implements TemplateModel, Writable {
     }
 
     public void prepareInstantiation() {
-        setTemplateOnly(false);
-        phraseModel.getPatternNeuron().setTemplateOnly(true);
+        setNotInstantiable(false);
+        phraseModel.getPatternNeuron().setNotInstantiable(true);
     }
 
     public void prepareExampleDoc(Document doc, String label) {
@@ -154,9 +153,9 @@ public class EntityModel implements TemplateModel, Writable {
         return getModel().getInputNeuron(entityType, entityPattern);
     }
 
-    public void setTemplateOnly(boolean templateOnly) {
-        entityPattern.setTemplateOnly(templateOnly, true);
-        entityBN.setTemplateOnly(templateOnly, true);
+    public void setNotInstantiable(boolean notInstantiable) {
+        entityPattern.setNotInstantiable(notInstantiable, true);
+        entityBN.setNotInstantiable(notInstantiable, true);
     }
 
     public Model getModel() {

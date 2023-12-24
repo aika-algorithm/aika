@@ -24,6 +24,8 @@ import network.aika.elements.neurons.Neuron;
  */
 public interface TemplateModel {
 
+    void initStaticNeurons();
+
     boolean stepFilter(Neuron n);
 
     Model getModel();
@@ -31,5 +33,4 @@ public interface TemplateModel {
     void prepareInstantiation();
 
     void prepareExampleDoc(Document doc, String label);
-
 }

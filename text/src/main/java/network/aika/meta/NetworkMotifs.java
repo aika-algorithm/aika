@@ -109,7 +109,7 @@ public class NetworkMotifs {
                 .setWeight(weight)
                 .setOptional(isOptional)
                 .link(bn, pn)
-                .setTemplateOnly(isTemplateOnly)
+                .setNotInstantiable(isTemplateOnly)
                 .adjustBias(bn.getTargetValue() + weakInputMargin);
 
         log.info("  " + pSyn + " targetNetContr:" + -pSyn.getSynapseBias().getValue());
@@ -122,7 +122,7 @@ public class NetworkMotifs {
                                 null
                 )
                 .link(pn, bn)
-                .setTemplateOnly(isTemplateOnly)
+                .setNotInstantiable(isTemplateOnly)
                 .adjustBias();
 
         log.info("  " + posFeedSyn + " targetNetContr:" + -posFeedSyn.getSynapseBias().getValue());
@@ -146,7 +146,7 @@ public class NetworkMotifs {
     ) {
         RelationInputSynapse relSyn = new RelationInputSynapse()
                 .setWeight(relWeight)
-                .setTemplateOnly(templateOnly)
+                .setNotInstantiable(templateOnly)
                 .link(relN, bn)
                 .adjustBias();
 
@@ -158,7 +158,7 @@ public class NetworkMotifs {
         SameObjectSynapse spSyn = new SameObjectSynapse()
                 .setWeight(spsWeight)
                 .setRelation(rel)
-                .setTemplateOnly(templateOnly)
+                .setNotInstantiable(templateOnly)
                 .link(lastBN, bn)
                 .adjustBias(prevValueTarget);
 

@@ -116,7 +116,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         if(iAct == null || oAct == null)
             return;
 
-        if(synapse.isTemplateOnly())
+        if(synapse.isNotInstantiable())
             return;
 
         Link l = oAct.getInputLink(iAct, synapse.getSynapseId());

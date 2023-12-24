@@ -17,11 +17,16 @@
 package network.aika.meta.topics;
 
 import network.aika.Model;
+import network.aika.TemplateModel;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.CategoryNeuron;
+import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.meta.entities.EntityModel;
 import network.aika.Document;
+import network.aika.text.Range;
+import network.aika.text.TextReference;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,19 +37,25 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static network.aika.elements.Type.INHIBITORY;
+import static network.aika.meta.LabelUtil.getAbstractLabel;
 import static network.aika.meta.NetworkMotifs.*;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class TopicModel implements Writable {
+public class TopicModel implements TemplateModel, Writable {
 
     private static final Logger log = LoggerFactory.getLogger(TopicModel.class);
+
+    public static final String TOPIC_LABEL = "Topic";
 
     public static final double TOPIC_NET_TARGET = 0.7;
 
     protected static final double BINDING_NET_TARGET = 2.5;
+
+    public static final double NEG_MARGIN = 1.1;
 
     protected EntityModel entityModel;
 
@@ -58,16 +69,55 @@ public class TopicModel implements Writable {
 
     protected BindingNeuron targetInputBN;
 
+    protected InhibitoryNeuron inhibitoryN;
+
 
     public TopicModel(EntityModel entityModel) {
         this.entityModel = entityModel;
         model = entityModel.getModel();
     }
 
+    public EntityModel getEntityModel() {
+        return entityModel;
+    }
+
     public void addTargetTopics(Document doc, Set<String> tsLabels) {
         log.info(doc.getContent() + " : " + tsLabels.stream().collect(Collectors.joining(", ")));
     }
 
+    @Override
+    public boolean stepFilter(Neuron n) {
+        return n == topicBN || n == topicPatternN || n == entityModel.getEntityPattern();
+    }
+
+    @Override
+    public Model getModel() {
+        return entityModel.getModel();
+    }
+
+    @Override
+    public void prepareInstantiation() {
+        setNotInstantiable(false);
+        entityModel.getEntityPattern().setNotInstantiable(false);
+    }
+
+    @Override
+    public void prepareExampleDoc(Document doc, String label) {
+        Range entityPosRange = new Range(0, 1);
+        Range entityCharRange = new Range(0, doc.length());
+
+        doc.addToken(
+                entityModel.getEntityPattern(),
+                new TextReference(entityPosRange, entityCharRange)
+        );
+    }
+
+    public void setNotInstantiable(boolean notInstantiable) {
+        topicPatternN.setNotInstantiable(notInstantiable, true);
+        topicBN.setNotInstantiable(notInstantiable, true);
+    }
+
+    @Override
     public void initStaticNeurons() {
         topicPatternN = new PatternNeuron(model)
                 .setLabel("Abstract Topic")
@@ -81,7 +131,7 @@ public class TopicModel implements Writable {
 
         topicBN = addBindingNeuron(
                 entityModel.getEntityPattern(),
-                "Abstract Entity",
+                "Abstract Topic",
                 10.0,
                 BINDING_NET_TARGET
         );
@@ -95,7 +145,20 @@ public class TopicModel implements Writable {
                 2.5,
                 0.0,
                 false,
-                false
+                true
+        );
+
+        inhibitoryN = new InhibitoryNeuron(getModel())
+                .setLabel(getAbstractLabel(INHIBITORY, TOPIC_LABEL))
+                .setPersistent(true);
+
+        inhibitoryN.makeAbstract()
+                .setWeight(1.0);
+
+        addInhibitoryLoop(
+                topicBN,
+                inhibitoryN,
+                NEG_MARGIN * -topicBN.getTargetNet()
         );
     }
 

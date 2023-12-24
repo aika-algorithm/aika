@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.meta.entities;
+package network.aika.meta.topics;
 
+import network.aika.Document;
 import network.aika.InstantiationModel;
 import network.aika.Model;
 import network.aika.TemplateModel;
@@ -23,8 +24,7 @@ import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.meta.sequences.PhraseModel;
-import network.aika.Document;
+import network.aika.meta.entities.EntityModel;
 import network.aika.utils.Writable;
 
 import java.io.DataInput;
@@ -33,28 +33,25 @@ import java.io.IOException;
 
 import static network.aika.meta.NetworkMotifs.getDefaultInputCategorySynapseWeight;
 import static network.aika.meta.entities.EntityModel.ENTITY_LABEL;
+import static network.aika.meta.topics.TopicModel.TOPIC_LABEL;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class EntityInstance extends InstantiationModel<EntityInstance> implements Writable {
+public class TopicInstance extends InstantiationModel<TopicInstance> implements Writable {
 
-    public PatternNeuron entityPatternN;
-    public BindingNeuron entityBN;
+    public PatternNeuron topicPatternN;
+    public BindingNeuron topicBN;
 
-    EntityModel entityModel;
+    TopicModel topicModel;
 
-    public EntityInstance(EntityModel entityModel) {
-        this.entityModel = entityModel;
+    public TopicInstance(TopicModel topicModel) {
+        this.topicModel = topicModel;
     }
 
     public TemplateModel getTemplateModel() {
-        return this.entityModel;
-    }
-
-    public PhraseModel getPhraseModel() {
-        return entityModel.getPhraseModel();
+        return this.topicModel;
     }
 
     @Override
@@ -63,7 +60,7 @@ public class EntityInstance extends InstantiationModel<EntityInstance> implement
 
         boolean flag = false;
 
-        if(flag)
+//        if(flag)
             AIKADebugger.createAndShowGUI()
                     .setDocument(doc);
 
@@ -79,42 +76,49 @@ public class EntityInstance extends InstantiationModel<EntityInstance> implement
 
     private void generateLabel(Activation tAct, Activation iAct, String label) {
         iAct.getNeuron().setLabel(
-                tAct.getLabel().replace(ENTITY_LABEL, label)
+                tAct.getLabel()
+                        .replace(TOPIC_LABEL, label + " " + TOPIC_LABEL)
+                        .replace(ENTITY_LABEL, label + " " + ENTITY_LABEL)
         );
     }
 
+    public EntityModel getEntityModel() {
+        return topicModel.getEntityModel();
+    }
+
+
     public void setNotInstantiable(boolean notInstantiable) {
-        entityBN.setNotInstantiable(notInstantiable, true);
+        topicBN.setNotInstantiable(notInstantiable, true);
     }
 
-    public PatternNeuron getEntityPatternNeuron() {
-        return entityPatternN;
+    public PatternNeuron getTopicPatternNeuron() {
+        return topicPatternN;
     }
 
-    public BindingNeuron getEntityBindingNeuron() {
-        return entityBN;
+    public BindingNeuron getTopicBindingNeuron() {
+        return topicBN;
     }
 
     @Override
     protected void mapResults(Document doc) {
-        getPhraseModel().getPatternNeuron().setNotInstantiable(false);
+        getEntityModel().getEntityPattern().setNotInstantiable(false);
 
-        entityPatternN = lookupInstance(doc, entityModel.entityPattern);
-        entityPatternN.setPersistent(true);
+        topicPatternN = lookupInstance(doc, topicModel.topicPatternN);
+        topicPatternN.setPersistent(true);
 
-        entityBN = lookupInstance(doc, entityModel.entityBN);
-        entityBN.setPersistent(true);
+        topicBN = lookupInstance(doc, topicModel.topicBN);
+        topicBN.setPersistent(true);
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
-        out.writeLong(entityPatternN.getId());
-        out.writeLong(entityBN.getId());
+        out.writeLong(topicPatternN.getId());
+        out.writeLong(topicBN.getId());
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
-        entityPatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        topicPatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        topicBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

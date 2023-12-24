@@ -22,8 +22,8 @@ import network.aika.debugger.AIKADebugger;
 import network.aika.meta.entities.EntityModel;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.meta.sequences.PhraseModel;
-import network.aika.meta.textsections.TextSectionInstance;
-import network.aika.meta.textsections.TypedTextSectionModel;
+import network.aika.meta.topics.TopicInstance;
+import network.aika.meta.topics.TopicModel;
 import network.aika.parser.Parser;
 import network.aika.parser.ParserPhase;
 import network.aika.Document;
@@ -56,11 +56,11 @@ public class TextSectionTest extends Parser<TestContext> {
     private Tokenizer tokenizer;
     private PhraseModel phraseModel;
     private EntityModel entityModel;
-    private TypedTextSectionModel textSectionModel;
+    private TopicModel topicModel;
 
-    private TextSectionInstance profileTS;
+    private TopicInstance profileTopic;
 
-    private TextSectionInstance tasksTS;
+    private TopicInstance tasksTopic;
 
 /*    private String exampleTxt = "Java Softwaredeveloper\n" +
             " \n" +
@@ -98,13 +98,13 @@ public class TextSectionTest extends Parser<TestContext> {
         entityModel = new EntityModel(phraseModel);
         entityModel.initStaticNeurons();
 
-        textSectionModel = new TypedTextSectionModel(entityModel);
-        textSectionModel.initStaticNeurons();
+        topicModel = new TopicModel(entityModel);
+        topicModel.initStaticNeurons();
 
-        profileTS = new TextSectionInstance(textSectionModel)
+        profileTopic = new TopicInstance(topicModel)
                 .instantiate(PROFILE_LABEL);
 
-        tasksTS = new TextSectionInstance(textSectionModel)
+        tasksTopic = new TopicInstance(topicModel)
                 .instantiate(TASKS_LABEL);
 
         model.setN(0);

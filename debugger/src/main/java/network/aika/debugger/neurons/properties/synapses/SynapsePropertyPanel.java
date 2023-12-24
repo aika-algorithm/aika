@@ -45,7 +45,7 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addField(s.getWeight());
         initSynapseProperties(s);
 
-        addConstant("Is Template Only: ", "" + s.isTemplateOnly());
+        addConstant("Not Instantiable: ", "" + s.isNotInstantiable());
         addConstant("Initial Instance Weight: ", "" + Utils.doubleToString(s.getInitialInstanceWeight()));
     }
 

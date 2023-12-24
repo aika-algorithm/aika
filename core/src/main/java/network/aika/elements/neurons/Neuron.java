@@ -79,7 +79,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected boolean allowTraining = true;
 
-    private boolean templateOnly;
+    private boolean notInstantiable;
 
     protected InitParams initParams;
 
@@ -221,22 +221,23 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                 .link(this, cis.getInput());
     }
 
-    public N setTemplateOnly(boolean templateOnly) {
-        this.templateOnly = templateOnly;
+    public N setNotInstantiable(boolean notInstantiable) {
+        this.notInstantiable = notInstantiable;
 
         return (N) this;
     }
 
-    public N setTemplateOnly(boolean templateOnly, boolean includeSyns) {
-        getInputSynapses().forEach(s ->
-                s.setTemplateOnly(templateOnly)
-        );
+    public N setNotInstantiable(boolean notInstantiable, boolean includeSyns) {
+        if (includeSyns)
+            getInputSynapses().forEach(s ->
+                    s.setNotInstantiable(notInstantiable)
+            );
 
-        return setTemplateOnly(templateOnly);
+        return setNotInstantiable(notInstantiable);
     }
 
-    public boolean isTemplateOnly() {
-        return templateOnly;
+    public boolean isNotInstantiable() {
+        return notInstantiable;
     }
 
     public abstract CategorySynapse createCategorySynapse();
@@ -464,7 +465,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         if(customData != null)
             customData.write(out);
 
-        out.writeBoolean(templateOnly);
+        out.writeBoolean(notInstantiable);
         out.writeInt(synapseIdCounter);
 
         out.writeBoolean(initParams != null);
@@ -512,7 +513,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
             customData.readFields(in, m);
         }
 
-        templateOnly = in.readBoolean();
+        notInstantiable = in.readBoolean();
         synapseIdCounter = in.readInt();
 
         if(in.readBoolean())
