@@ -87,7 +87,10 @@ public class TopicModel implements TemplateModel, Writable {
 
     @Override
     public boolean stepFilter(Neuron n) {
-        return n == topicBN || n == topicPatternN || n == entityModel.getEntityPattern();
+        return n == topicBN ||
+                n == topicPatternN ||
+                n == entityModel.getEntityPattern() ||
+                n == entityModel.getEntityBN();
     }
 
     @Override
@@ -99,6 +102,7 @@ public class TopicModel implements TemplateModel, Writable {
     public void prepareInstantiation() {
         setNotInstantiable(false);
         entityModel.getEntityPattern().setNotInstantiable(false);
+        entityModel.getPhraseModel().getPatternNeuron().setNotInstantiable(true);
     }
 
     @Override
@@ -107,7 +111,7 @@ public class TopicModel implements TemplateModel, Writable {
         Range entityCharRange = new Range(0, doc.length());
 
         doc.addToken(
-                entityModel.getEntityPattern(),
+                entityModel.getPhraseModel().getPatternNeuron(),
                 new TextReference(entityPosRange, entityCharRange)
         );
     }
