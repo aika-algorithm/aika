@@ -115,6 +115,10 @@ public abstract class SequenceModel implements Writable {
         return model;
     }
 
+    public Dictionary getDictionary() {
+        return dictionary;
+    }
+
     public LatentRelationNeuron getRelationPreviousToken() {
         return relPT;
     }

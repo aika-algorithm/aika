@@ -18,9 +18,14 @@ package network.aika.parser;
 
 
 import network.aika.debugger.AIKADebugger;
+import network.aika.elements.activations.types.BindingActivation;
+import network.aika.elements.activations.types.PatternActivation;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.Document;
 import network.aika.queue.Step;
+import network.aika.queue.steps.Anneal;
+import network.aika.queue.steps.Fired;
+import network.aika.text.TextReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +57,41 @@ public abstract class Parser<C extends Context> {
     protected AIKADebugger debugger = null;
 
     protected Predicate<Step> getStepFilter(C context, ParserPhase phase) {
-        return null;
+        return switch(phase) {
+            case COUNTING -> getCountingStepFilter(context);
+            case TRAINING -> getTrainingStepFilter(context);
+            case INFERENCE -> null;
+        };
+    }
+
+    private Predicate<Step> getCountingStepFilter(C context) {
+        return s ->
+                !(s instanceof Fired &&
+                        ((Fired)s).getElement().getActivation().getNeuron() == getPhraseModel().getDictionary().getInputToken());
+    }
+
+    private Predicate<Step> getTrainingStepFilter(C context) {
+        return s ->
+                !(s instanceof Anneal &&
+                        isTargetActivation(
+                                context,
+                                ((Anneal) s).getElement()
+                        ));
+    }
+
+    private boolean isTargetActivation(C context, BindingActivation act) {
+        PatternActivation pAct = act.getSamePatternActivation();
+        if(pAct == null)
+            return false;
+
+        TextReference tr = pAct.getTextReference();
+        if(tr == null)
+            return false;
+
+        Document doc = act.getDocument();
+
+        return tr.getCharRange().getBegin() == 0 &&
+                tr.getCharRange().getEnd() == doc.length();
     }
 
     protected abstract void prepareInputs(Document doc, C context);
