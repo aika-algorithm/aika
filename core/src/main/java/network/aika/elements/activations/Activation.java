@@ -19,7 +19,6 @@ package network.aika.elements.activations;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.Element;
-import network.aika.elements.LinkKey;
 import network.aika.elements.Timestamp;
 import network.aika.elements.Type;
 import network.aika.elements.activations.types.PatternActivation;
@@ -29,20 +28,17 @@ import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.elements.synapses.*;
 import network.aika.enums.Scope;
 import network.aika.queue.steps.InactiveLinks;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
-import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.fields.*;
-import network.aika.elements.synapses.Synapse;
 
 import java.util.*;
 import java.util.stream.Stream;
 
 import static network.aika.debugger.EventType.*;
-import static network.aika.elements.LinkKey.getFromLinkKey;
-import static network.aika.elements.LinkKey.getToLinkKey;
 import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
 import static network.aika.elements.activations.StateType.POSITIVE_FEEDBACK;
@@ -76,10 +72,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected FieldOutput negUpdateValue;
 
-    protected NavigableMap<LinkKey, Link> inputLinks;
-    protected NavigableMap<LinkKey, Link> outputLinks;
-
-    protected NavigableMap<Long, SynapseInputSlot> outputSlots;
+    protected NavigableMap<Integer, SynapseOutputSlot> inputSlots = new TreeMap<>();
+    protected NavigableMap<Long, SynapseInputSlot> outputSlots = new TreeMap<>();
 
     public boolean instantiationIsQueued;
     protected boolean isNewInstance;
@@ -95,9 +89,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         this.neuron = n;
         this.doc = doc;
         setCreated(doc.getCurrentTimestamp());
-
-        inputLinks = new TreeMap<>();
-        outputLinks = new TreeMap<>();
 
         initNet();
 
@@ -155,11 +146,17 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public SynapseInputSlot registerOutputSlot(Synapse syn) {
-        if(outputSlots == null)
-            outputSlots = new TreeMap<>();
-
         return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId ->
-                new SynapseInputSlot(syn, "in-slot-" + nId, TOLERANCE)
+                new SynapseInputSlot(this, syn)
+        );
+    }
+
+    public SynapseOutputSlot registerInputSlot(Synapse syn) {
+        return inputSlots.computeIfAbsent(syn.getSynapseId(), nId -> {
+                    SynapseOutputSlot slot = new SynapseOutputSlot(this, syn);
+                    slot.connectToActivation();
+                    return slot;
+                }
         );
     }
 
@@ -325,7 +322,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void propagateRanges() {
-        outputLinks.values()
+        getOutputLinks()
                 .forEach(Link::propagateRanges);
     }
 
@@ -374,22 +371,37 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return neuron.getProvider();
     }
 
-    public Link getInputLink(Activation iAct, int synapseId) {
-        return inputLinks.get(new LinkKey(iAct, synapseId));
-    }
-
-    public Link getInputLink(Activation iAct, Synapse syn) {
-        return inputLinks.get(
-                new LinkKey(
-                        syn.getInput().getId(),
-                        iAct != null ? iAct.getId() : null,
-                        syn.getSynapseId())
-        );
-    }
-
     public <IL extends Link> Optional<IL> getInputLinkByType(Class<IL> linkType) {
         return getInputLinksByType(linkType)
                 .findAny();
+    }
+
+    public Stream<Link> getInputLinks() {
+        return inputSlots.values()
+                .stream()
+                .flatMap(sl -> sl.getLinks())
+                .toList().stream();
+    }
+
+    public Stream<Link> getOutputLinks() {
+        return outputSlots.values()
+                .stream()
+                .flatMap(sl -> sl.getLinks())
+                .toList().stream();
+    }
+
+    public Link getInputLink(Activation iAct, int synapseId) {
+        SynapseOutputSlot synSlot = inputSlots.get(synapseId);
+        return synSlot != null ?
+                synSlot.getLink(iAct) :
+                null;
+    }
+
+    public Stream<Link> getInputLinks(Synapse s) {
+        SynapseOutputSlot synSlot = inputSlots.get(s.getSynapseId());
+        return synSlot != null ?
+                synSlot.getLinks() :
+                null;
     }
 
     public <IL> Stream<IL> getInputLinksByType(Class<IL> linkType) {
@@ -404,63 +416,16 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .map(linkType::cast);
     }
 
-    public Stream<Link> getInputLinks(Neuron n) {
-        return inputLinks
-                .subMap(
-                        getFromLinkKey(n.getId()),
-                        true,
-                        getToLinkKey(n.getId()),
-                        true
-                ).values()
-                .stream();
-    }
-
     public Stream<Link> getOutputLinks(Neuron n) {
-        return outputLinks
-                .subMap(
-                        getFromLinkKey(n.getId()),
-                        true,
-                        getToLinkKey(n.getId()),
-                        true
-                ).values()
-                .stream();
-    }
-
-    public Stream<Link> getInputLinks(Synapse s) {
-        return getInputLinks(s.getInput())
-                .filter(l -> l.getSynapse() == s);
+        SynapseInputSlot synSlot = outputSlots.get(n.getId());
+        return synSlot != null ?
+                synSlot.getLinks() :
+                Stream.empty();
     }
 
     public Stream<Link> getOutputLinks(Synapse s) {
         return getOutputLinks(s.getOutput())
                 .filter(l -> l.getSynapse() == s);
-    }
-
-    public void linkInputs() {
-        inputLinks
-                .values()
-                .forEach(Link::linkInput);
-    }
-
-    public void linkOutputs() {
-        outputLinks
-                .values()
-                .forEach(Link::linkOutput);
-    }
-
-    public void linkOutputLink(Link l) {
-        Link el = outputLinks.put(l.getOutputLinkKey(), l);
-        assert el == null;
-    }
-
-    public void linkInputLink(Link l) {
-        Link el = inputLinks.put(l.getInputLinkKey(), l);
-        assert el == null;
-    }
-
-    public void link() {
-        linkInputs();
-        linkOutputs();
     }
 
     @Override
@@ -477,16 +442,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         getInputLinks().forEach(l ->
                 l.disconnect()
         );
-    }
-
-    public Stream<Link> getInputLinks() {
-        return new ArrayList<>(inputLinks.values())
-                .stream();
-    }
-
-    public Stream<Link> getOutputLinks() {
-        return new ArrayList<>(outputLinks.values())
-                .stream();
     }
 
     public Activation getTemplate() {

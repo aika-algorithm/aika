@@ -19,17 +19,22 @@ package network.aika.fields;
 
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.Synapse;
+import network.aika.enums.direction.Direction;
 import network.aika.queue.steps.LinkUpdate;
 
+import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 
 /**
  * @author Lukas Molzberger
  */
-public class SynapseOutputSlot extends MaxField {
+public class SynapseSlotMax extends MaxField {
 
-    public SynapseOutputSlot(Synapse ref, String label, Double tolerance) {
+    private Direction dir;
+
+    public SynapseSlotMax(Synapse ref, String label, Direction dir, Double tolerance) {
         super(ref, label, tolerance);
+        this.dir = dir;
     }
 
     @Override
@@ -39,7 +44,7 @@ public class SynapseOutputSlot extends MaxField {
 
         LinkUpdate.add(
                 getLink(si),
-                OUTPUT,
+                dir,
                 state
         );
     }
@@ -57,6 +62,6 @@ public class SynapseOutputSlot extends MaxField {
 
     @Override
     protected boolean isCandidate(FieldLink fl) {
-        return getLink(fl).getInput() != null;
+        return dir == INPUT || getLink(fl).getInput() != null;
     }
 }

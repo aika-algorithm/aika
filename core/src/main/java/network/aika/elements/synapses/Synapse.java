@@ -48,6 +48,7 @@ import java.util.stream.Stream;
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.elements.synapses.SynapseTypeHolder.getHolder;
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 

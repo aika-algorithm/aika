@@ -34,13 +34,13 @@ public class ConjunctiveLinkPropertyPanel<E extends ConjunctiveLink> extends Lin
     public void initInputIdentitySection(E l) {
         super.initInputIdentitySection(l);
 
-        addField(l.getSynInputSlot());
+        addField(l.getSynInputSlot().getOutputField());
 
         if(l.getSynInputSlot() != null)
             addConstant("Slot Selection: ", "" + l.getSynInputSlot().getSelectedLink());
 
-        addField(l.getOutputNet());
-        addField(l.getSynOutputSlot());
+        addField(l.getSynOutputSlot().getOutputNet());
+        addField(l.getSynOutputSlot().getOutputField());
 
         if(l.getSynOutputSlot() != null)
             addConstant("Slot Selection: ", "" + l.getSynOutputSlot().getSelectedLink());

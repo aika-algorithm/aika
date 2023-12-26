@@ -54,8 +54,7 @@ public abstract class CategoryActivation extends DisjunctiveActivation<CategoryN
     }
 
     public Stream<Activation> getCategoryInputs() {
-        return inputLinks.values()
-                .stream()
+        return getInputLinks()
                 .map(Link::getInput);
     }
 

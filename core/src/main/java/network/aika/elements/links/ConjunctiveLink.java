@@ -21,6 +21,8 @@ import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.elements.synapses.SynapseInputSlot;
+import network.aika.elements.synapses.SynapseOutputSlot;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.visitor.Visitor;
@@ -39,12 +41,7 @@ import static network.aika.visitor.operator.SubsumesOperator.subsumes;
 public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>>
         extends Link<S, IA, OA> {
 
-    protected SynapseInputSlot synInputSlot;
     protected FieldLink inputSlotFL;
-
-    protected Subtraction outputNet;
-
-    protected SynapseOutputSlot synOutputSlot;
 
     private FieldOutput weightUpdatePosCase;
     private FieldOutput weightUpdateNegCase;
@@ -56,15 +53,17 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
-    public void link() {
-        super.link();
+    public void linkInput() {
+        super.linkInput();
+        synInputSlot = input.registerOutputSlot(synapse);
+    }
 
-        if (input != null)
-            synInputSlot = input.registerOutputSlot(synapse);
+    @Override
+    public void linkOutput() {
+        super.linkOutput();
 
         synOutputSlot = output.registerInputSlot(synapse);
-
-        outputNet = excludeInput(this, "outputNet", output.getNet(feedbackMode()), synOutputSlot);
+        synOutputSlot.addLink(this);
     }
 
     @Override
@@ -96,9 +95,6 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         return synOutputSlot;
     }
 
-    public Subtraction getOutputNet() {
-        return outputNet;
-    }
 
     public boolean isInputSideActive() {
         if(input == null)
@@ -125,7 +121,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         super.initWeightInput();
 
         if (synInputSlot != null)
-            inputSlotFL = linkAndConnect(outputNet, synInputSlot);
+            inputSlotFL = linkAndConnect(synOutputSlot.getOutputNet(), synInputSlot.getInputField());
 
         if(synapse.isOptional())
             synapse.initBiasInput(output);
@@ -137,7 +133,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     protected void initWeightedOutput() {
-        linkAndConnect(weightedInput, synOutputSlot);
+        linkAndConnect(weightedInput, synOutputSlot.getInputField());
     }
 
     @Override

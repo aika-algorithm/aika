@@ -14,53 +14,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.activations;
+package network.aika.elements.synapses;
 
 import network.aika.Document;
-import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.queue.steps.FeedbackTrigger;
+import network.aika.elements.activations.Activation;
+import network.aika.enums.direction.Direction;
+import network.aika.fields.Subtraction;
 
 import static network.aika.fields.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.scale;
-
+import static network.aika.fields.Fields.excludeInput;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> extends Activation<N> {
+public class SynapseOutputSlot extends SynapseSlot {
 
-    public ConjunctiveActivation(int id, Document doc, N n) {
-        super(id, doc, n);
+    protected Subtraction outputNet;
 
-        if(getConfig().isMetaInstantiationEnabled()) {
-            FeedbackTrigger.add(this, true);
-        }
-    }
+    public SynapseOutputSlot(Activation act, Synapse synapse) {
+        super(act, synapse, Direction.OUTPUT);
 
-
-    @Override
-    protected void connectWeightUpdate() {
-        negUpdateValue = scale(
+        outputNet = excludeInput(
                 this,
-                "-updateValue",
-                -1.0,
-                updateValue
-        );
-
-        linkAndConnect(
-                updateValue,
-                getNeuron().getBias()
+                "outputNet",
+                act.getNet(synapse.getSynapseType().feedbackMode()),
+                maxField
         );
     }
 
-    @Override
-    protected void initBiases() {
-        neuron.getSynapseBiasSynapses()
-                .forEach(s ->
-                        s.initBiasInput(this)
-                );
+    public Subtraction getOutputNet() {
+        return outputNet;
+    }
 
-        super.initBiases();
+    public void connectToActivation() {
+        linkAndConnect(maxField, act.getNet(synapse.synapseType.feedbackMode()));
+    }
+
+    @Override
+    protected String getLabel() {
+        return "out-slot-" + synapse.input.getId();
     }
 }

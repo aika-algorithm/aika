@@ -163,7 +163,10 @@ public class PatternLogger {
                 PatternSynapse s = inputSynapses.get(i);
                 BindingNeuron bn = s.getInput();
 
-                PatternLink il = (PatternLink) pAct.getInputLinks(bn).findAny().orElse(null);
+                PatternLink il = (PatternLink) pAct.getInputLinks()
+                        .filter(l -> l.getInput().getNeuron() == bn)
+                        .findAny()
+                        .orElse(null);
                 BindingActivation iAct = il != null ? il.getInput() : null;
 
                 entry.addAll(

@@ -90,7 +90,8 @@ public class LabelUtil {
     public static String generateLabel(PatternActivation pAct, boolean fired, boolean netPreAnneal) {
         PatternNeuron pn = pAct.getNeuron();
         return generateLabel(pn, bn -> {
-            Link l = pAct.getInputLinks(bn)
+            Link l = pAct.getInputLinks()
+                    .filter(il -> il.getInput().getNeuron() == bn)
                     .findAny()
                     .orElse(null);
 

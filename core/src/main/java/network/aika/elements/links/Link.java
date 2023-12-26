@@ -19,7 +19,6 @@ package network.aika.elements.links;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.Element;
-import network.aika.elements.LinkKey;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
@@ -27,6 +26,8 @@ import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
+import network.aika.elements.synapses.SynapseInputSlot;
+import network.aika.elements.synapses.SynapseOutputSlot;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
@@ -49,6 +50,10 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
 
     protected I input;
     protected O output;
+
+    protected SynapseInputSlot synInputSlot;
+
+    protected SynapseOutputSlot synOutputSlot;
 
     protected Field inputValue;
     protected AbstractFunction inputIsFired;
@@ -132,21 +137,6 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         s.createLinkFromTemplate(iAct, oAct, this);
     }
 
-    public LinkKey getInputLinkKey() {
-        int synId = synapse.getSynapseId();
-        return input != null ?
-                new LinkKey(input, synId) :
-                new LinkKey(
-                        synapse.getPInput().getId(),
-                        null,
-                        synId
-                );
-    }
-
-    public LinkKey getOutputLinkKey() {
-        return new LinkKey(output, synapse.getSynapseId());
-    }
-
     public abstract void connectWeightUpdate();
 
     protected void initWeightInput() {
@@ -217,12 +207,10 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void link() {
-        if(getInput() != null) {
+        if(input != null)
             linkInput();
-            retrieveAndConnectBindingSignals(true);
-        }
 
-        if(getOutput() != null)
+        if(output != null)
             linkOutput();
     }
 
@@ -303,12 +291,13 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void linkInput() {
-        if(input != null)
-            input.linkOutputLink(this);
+        synInputSlot = input.registerOutputSlot(synapse);
+        retrieveAndConnectBindingSignals(true);
     }
 
     public void linkOutput() {
-        output.linkInputLink(this);
+        synOutputSlot = output.registerInputSlot(synapse);
+        synOutputSlot.addLink(this);
     }
 
     public void propagateRanges() {
