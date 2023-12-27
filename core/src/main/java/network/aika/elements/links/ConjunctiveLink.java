@@ -53,20 +53,6 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
-    public void linkInput() {
-        super.linkInput();
-        synInputSlot = input.registerOutputSlot(synapse);
-    }
-
-    @Override
-    public void linkOutput() {
-        super.linkOutput();
-
-        synOutputSlot = output.registerInputSlot(synapse);
-        synOutputSlot.addLink(this);
-    }
-
-    @Override
     public void onOutputBindingSignalChange(BindingSignalSlot bsSlot, boolean state) {
         Scope s = bsSlot.getType();
         PatternActivation nBS = bsSlot.getBindingSignal();
