@@ -18,7 +18,7 @@ package network.aika.debugger.properties;
 
 import network.aika.debugger.FieldObserver;
 import network.aika.fields.Field;
-import network.aika.fields.FieldLink;
+import network.aika.fields.link.FieldLink;
 import network.aika.fields.QueueInterceptor;
 
 import javax.swing.*;

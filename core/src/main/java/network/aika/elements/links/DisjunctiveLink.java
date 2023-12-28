@@ -18,14 +18,17 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.DisjunctiveSynapse;
+import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
+import network.aika.elements.synapses.slots.SynapseSlot;
 
-import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class DisjunctiveLink<S extends DisjunctiveSynapse, IA extends Activation<?>, OA extends Activation<?>> extends Link<S, IA, OA> {
+public abstract class DisjunctiveLink<S extends DisjunctiveSynapse, IA extends Activation<?>, OA extends Activation<?>>
+        extends Link<S, IA, OA, DisjunctiveSynapseSlot, DisjunctiveSynapseSlot> {
 
     public DisjunctiveLink(S s, IA input, OA output) {
         super(s, input, output);

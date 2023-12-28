@@ -17,6 +17,9 @@
 package network.aika.debugger.properties;
 
 import network.aika.fields.*;
+import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.ListenerFieldLink;
 
 import javax.swing.*;
 import java.awt.*;

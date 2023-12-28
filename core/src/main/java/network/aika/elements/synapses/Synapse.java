@@ -26,6 +26,7 @@ import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;
+import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.FieldOutput;
@@ -48,7 +49,6 @@ import java.util.stream.Stream;
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.elements.synapses.SynapseTypeHolder.getHolder;
-import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -56,7 +56,7 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neuron<O, OA>, L extends Link<S, IA, OA>, IA extends Activation<?>, OA extends Activation<?>> implements Element, Writable {
+public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neuron<O, OA>, L extends Link<S, IA, OA, ?, ?>, IA extends Activation<?>, OA extends Activation<?>> implements Element, Writable {
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
@@ -109,6 +109,14 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public abstract double[] getSumOfLowerWeights();
+
+    public abstract SynapseSlot createInputSlot(Activation iAct);
+
+    public abstract SynapseSlot createOutputSlot(Activation oAct);
+
+    public SumField getOutputNet(Activation act) {
+        return act.getNet(synapseType.feedbackMode());
+    }
 
     public FieldOutput getInputValue(IA input) {
         return input.getValue();

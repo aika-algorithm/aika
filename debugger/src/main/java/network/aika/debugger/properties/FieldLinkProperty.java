@@ -17,8 +17,8 @@
 package network.aika.debugger.properties;
 
 import network.aika.enums.direction.Direction;
-import network.aika.fields.AbstractFieldLink;
-import network.aika.fields.FieldLink;
+import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fields.link.FieldLink;
 import network.aika.fields.FieldOutput;
 
 import java.awt.*;

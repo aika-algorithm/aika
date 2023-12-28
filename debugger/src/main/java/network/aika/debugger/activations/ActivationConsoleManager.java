@@ -165,9 +165,9 @@ public class ActivationConsoleManager extends JSplitPane implements AbstractCons
 
     @Override
     public void onElementEvent(EventType et, Element e) {
-        if(e instanceof Activation<?>)
+        if(e instanceof Activation)
             onActivationEvent(et, (Activation) e);
-        else if(e instanceof Link<?,?,?>)
+        else if(e instanceof Link)
             onLinkEvent(et, (Link) e);
     }
 

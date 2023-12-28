@@ -173,9 +173,9 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
 
     @Override
     public void onElementEvent(EventType et, network.aika.elements.Element e) {
-        if(e instanceof Activation<?>)
+        if(e instanceof Activation)
             onActivationEvent(et, (Activation) e);
-        else if(e instanceof Link<?,?,?>)
+        else if(e instanceof Link)
             onLinkEvent(et, (Link) e);
     }
 

@@ -18,6 +18,8 @@ package network.aika.fields;
 
 import network.aika.Model;
 import network.aika.Document;
+import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fields.link.FieldLink;
 import network.aika.queue.Phase;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;

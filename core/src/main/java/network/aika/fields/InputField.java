@@ -16,7 +16,8 @@
  */
 package network.aika.fields;
 
-import java.util.Collection;
+import network.aika.fields.link.FieldLink;
+
 import java.util.Collections;
 import java.util.List;
 

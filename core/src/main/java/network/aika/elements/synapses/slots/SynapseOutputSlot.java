@@ -14,31 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.synapses.slots;
 
-import network.aika.Document;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.Subtraction;
 
-import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.excludeInput;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class SynapseOutputSlot extends SynapseSlot {
+public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends ConjunctiveLink> extends ConjunctiveSynapseSlot<S, L> {
 
     protected Subtraction outputNet;
 
-    public SynapseOutputSlot(Activation act, Synapse synapse) {
+    public SynapseOutputSlot(Activation act, S synapse) {
         super(act, synapse, Direction.OUTPUT);
 
         outputNet = excludeInput(
                 this,
                 "outputNet",
-                act.getNet(synapse.getSynapseType().feedbackMode()),
+                synapse.getOutputNet(act),
                 maxField
         );
     }
@@ -48,11 +49,12 @@ public class SynapseOutputSlot extends SynapseSlot {
     }
 
     public void connectToActivation() {
-        linkAndConnect(maxField, act.getNet(synapse.synapseType.feedbackMode()));
+        linkAndConnect(maxField, synapse.getOutputNet(act));
     }
 
     @Override
     protected String getLabel() {
-        return "out-slot-" + synapse.input.getId();
+        return "out-slot-" + synapse.getPInput().getId();
     }
+
 }

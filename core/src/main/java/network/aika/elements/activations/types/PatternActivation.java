@@ -23,6 +23,7 @@ import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.enums.sign.Sign;
+import network.aika.fields.link.FieldLink;
 
 import static network.aika.elements.activations.StateType.POSITIVE_FEEDBACK;
 import static network.aika.enums.Scope.SAME;

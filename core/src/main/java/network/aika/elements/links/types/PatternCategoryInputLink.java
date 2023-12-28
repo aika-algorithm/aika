@@ -24,9 +24,6 @@ import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.types.PatternCategoryInputSynapse;
 import network.aika.elements.synapses.types.PatternCategorySynapse;
 
-import static network.aika.fields.FieldLink.linkAndConnect;
-
-
 /**
  * @author Lukas Molzberger
  */

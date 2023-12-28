@@ -14,21 +14,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.elements.synapses.slots;
 
-import network.aika.fields.link.FieldLink;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.enums.direction.Direction;
+
+import static network.aika.fields.link.FieldLink.linkAndConnect;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class IdentityFunction extends AbstractFunction {
+public class SynapseInputSlot extends ConjunctiveSynapseSlot {
 
-    public IdentityFunction(FieldObject ref, String label) {
-        super(ref, label);
+    public SynapseInputSlot(Activation act, ConjunctiveSynapse synapse) {
+        super(act, synapse, Direction.INPUT);
     }
 
     @Override
-    protected double computeUpdate(FieldLink fl, double u) {
-        return u;
+    protected String getLabel() {
+        return "in-slot-" + synapse.getPOutput().getId();
+    }
+
+    @Override
+    public void addLink(ConjunctiveLink l) {
+        super.addLink(l);
+
+//        l.inputSlotFL = linkAndConnect(l.getSynOutputSlot().getOutputNet(), l, maxField);
     }
 }

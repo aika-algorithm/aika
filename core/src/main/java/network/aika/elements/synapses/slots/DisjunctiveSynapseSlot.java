@@ -14,79 +14,66 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.synapses.slots;
 
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.enums.direction.Direction;
-import network.aika.fields.FieldObject;
-import network.aika.fields.SynapseSlotMax;
+import network.aika.elements.synapses.DisjunctiveSynapse;
+import network.aika.fields.Field;
 
-import java.util.NavigableMap;
-import java.util.TreeMap;
 import java.util.stream.Stream;
-
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class SynapseSlot implements FieldObject {
+public class DisjunctiveSynapseSlot implements SynapseSlot {
 
     protected Activation act;
 
-    protected Synapse synapse;
+    protected DisjunctiveSynapse synapse;
 
-    protected Direction dir;
+    private Link link;
 
-    protected SynapseSlotMax maxField;
-
-    protected NavigableMap<Activation, Link> links;
-
-    public SynapseSlot(Activation act, Synapse synapse, Direction dir) {
+    public DisjunctiveSynapseSlot(Activation act, DisjunctiveSynapse syn) {
         this.act = act;
-        this.synapse = synapse;
-        this.dir = dir;
-
-        links = new TreeMap<>();
-        maxField = new SynapseSlotMax(synapse, getLabel(), dir, TOLERANCE);
+        this.synapse = syn;
     }
 
+    @Override
     public void addLink(Link l) {
-        Link el = links.put(
-                dir.invert().getActivation(l),
-                l
-        );
-        assert el == null;
+        link = l;
     }
 
+    @Override
     public Stream<Link> getLinks() {
-        return links.values().stream();
+        return Stream.of(link);
     }
 
+    @Override
     public Link getLink(Activation act) {
-        return links.get(act);
+        return link;
     }
 
-    protected abstract String getLabel();
-
-    public SynapseSlotMax getInputField() {
-        return maxField;
+    @Override
+    public Field getInputField() {
+        return link.getSynapse().getOutputNet(link.getOutput());
     }
 
-    public SynapseSlotMax getOutputField() {
-        return maxField;
+    @Override
+    public Field getOutputField() {
+        return link.getWeightedInput();
     }
 
+    @Override
     public Link getSelectedLink() {
-        return maxField.getSelectedLink();
+        return link;
     }
 
     @Override
     public void disconnect() {
-        maxField.disconnectAndUnlinkOutputs(false);
+
     }
 
     @Override

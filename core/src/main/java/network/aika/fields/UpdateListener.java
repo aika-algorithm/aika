@@ -16,6 +16,8 @@
  */
 package network.aika.fields;
 
+import network.aika.fields.link.AbstractFieldLink;
+
 /**
  * @author Lukas Molzberger
  */

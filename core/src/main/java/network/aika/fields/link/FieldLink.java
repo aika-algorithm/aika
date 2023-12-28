@@ -14,12 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.link;
+
+import network.aika.fields.FieldInput;
+import network.aika.fields.FieldOutput;
 
 /**
  * @author Lukas Molzberger
  */
 public class FieldLink extends AbstractFieldLink<FieldInput> {
+
+    public static FieldLink linkAndConnect(FieldOutput in, Object argRef, FieldInput out) {
+        FieldLink fl = link(in, out.getNextArg(), argRef, out);
+
+        fl.connect(true);
+        return fl;
+    }
 
     public static FieldLink linkAndConnect(FieldOutput in, FieldInput out) {
         FieldLink fl = link(in, out.getNextArg(), out);
@@ -40,6 +50,13 @@ public class FieldLink extends AbstractFieldLink<FieldInput> {
 
     public static FieldLink link(FieldOutput in, int arg, FieldInput out) {
         FieldLink fl = new FieldLink(in, arg, out);
+        out.addInput(fl);
+        in.addOutput(fl);
+        return fl;
+    }
+
+    public static FieldLink link(FieldOutput in, int arg, Object argRef, FieldInput out) {
+        ArgumentFieldLink fl = new ArgumentFieldLink(in, arg, argRef, out);
         out.addInput(fl);
         in.addOutput(fl);
         return fl;

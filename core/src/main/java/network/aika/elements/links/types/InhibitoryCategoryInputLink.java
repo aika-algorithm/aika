@@ -55,11 +55,6 @@ public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCateg
     }
 
     @Override
-    public Field getFeedbackTrigger() {
-        return null;
-    }
-
-    @Override
     public CategorySynapse createCategorySynapse() {
         return new InhibitoryCategorySynapse();
     }

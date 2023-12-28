@@ -14,23 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.fields.link;
 
-import network.aika.elements.activations.Activation;
-import network.aika.enums.direction.Direction;
+import network.aika.fields.FieldInput;
+import network.aika.fields.FieldOutput;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public class SynapseInputSlot extends SynapseSlot {
+public class ArgumentFieldLink extends FieldLink {
 
-    public SynapseInputSlot(Activation act, Synapse synapse) {
-        super(act, synapse, Direction.INPUT);
+    private final Object argumentRef;
+
+    public ArgumentFieldLink(FieldOutput input, int arg, Object argRef, FieldInput output) {
+        super(input, arg, output);
+
+        argumentRef = argRef;
     }
 
-    @Override
-    protected String getLabel() {
-        return "in-slot-" + synapse.output.getId();
+    public Object getArgumentRef() {
+        return argumentRef;
     }
 }

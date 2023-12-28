@@ -24,14 +24,14 @@ import network.aika.elements.links.types.PatternLink;
 /**
  * @author Lukas Molzberger
  */
-public class ConjunctiveLinkPropertyPanel<E extends ConjunctiveLink> extends LinkPropertyPanel<E> {
+public class ConjunctiveLinkPropertyPanel<L extends ConjunctiveLink<?, ?, ?>> extends LinkPropertyPanel<L> {
 
-    public ConjunctiveLinkPropertyPanel(E l) {
+    public ConjunctiveLinkPropertyPanel(L l) {
         super(l);
     }
 
     @Override
-    public void initInputIdentitySection(E l) {
+    public void initInputIdentitySection(L l) {
         super.initInputIdentitySection(l);
 
         addField(l.getSynInputSlot().getOutputField());
@@ -46,7 +46,7 @@ public class ConjunctiveLinkPropertyPanel<E extends ConjunctiveLink> extends Lin
             addConstant("Slot Selection: ", "" + l.getSynOutputSlot().getSelectedLink());
     }
 
-    public void initTrainingSection(E l) {
+    public void initTrainingSection(L l) {
         addField(l.getWeightUpdatePosCase());
         addField(l.getWeightUpdateNegCase());
         addField(l.getBiasUpdateNegCase());

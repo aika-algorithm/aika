@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.enums.Scope.SAME;
-import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mix;
 import static network.aika.utils.Utils.TOLERANCE;
 

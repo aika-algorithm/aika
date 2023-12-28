@@ -14,20 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links;
+package network.aika.elements.synapses.slots;
 
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.ConjunctiveActivation;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.links.ConjunctiveCategoryInputLink;
 import network.aika.elements.synapses.ConjunctiveCategoryInputSynapse;
+import network.aika.fields.Field;
+import network.aika.fields.InputField;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveCategoryInputLink<S extends ConjunctiveCategoryInputSynapse, IA extends CategoryActivation, OA extends ConjunctiveActivation<?>> extends
-        PositiveFeedbackLink<S, IA, OA> implements CategoryInputLink {
+public class CategoryInputSynapseOutputSlot extends SynapseOutputSlot<ConjunctiveCategoryInputSynapse, ConjunctiveCategoryInputLink> {
 
-    public ConjunctiveCategoryInputLink(S s, IA input, OA output) {
-        super(s, input, output);
+    protected Field feedbackTrigger;
+
+    public CategoryInputSynapseOutputSlot(Activation act, ConjunctiveCategoryInputSynapse synapse) {
+        super(act, synapse);
+    }
+
+    protected void initFeedbackTrigger() {
+        feedbackTrigger = new InputField(this, "instantiation feedback trigger", 0.0);
+
+//        linkAndConnect(feedbackTrigger, 0, inputValue);
+    }
+
+    public Field getFeedbackTrigger() {
+        return feedbackTrigger;
     }
 }

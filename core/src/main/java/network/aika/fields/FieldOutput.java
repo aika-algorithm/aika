@@ -16,6 +16,9 @@
  */
 package network.aika.fields;
 
+import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fields.link.ListenerFieldLink;
+
 import java.util.Collection;
 
 /**

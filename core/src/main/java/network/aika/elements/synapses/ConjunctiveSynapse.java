@@ -17,6 +17,9 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.synapses.slots.SynapseInputSlot;
+import network.aika.elements.synapses.slots.SynapseOutputSlot;
+import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.neurons.Neuron;
@@ -32,7 +35,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -45,7 +48,7 @@ public abstract class ConjunctiveSynapse<
             S extends ConjunctiveSynapse,
             I extends Neuron,
             O extends ConjunctiveNeuron<O, OA>,
-            L extends Link<S, IA, OA>,
+            L extends Link<S, IA, OA, SynapseInputSlot, SynapseOutputSlot>,
             IA extends Activation<?>,
             OA extends ConjunctiveActivation<?>
         >
@@ -68,6 +71,18 @@ public abstract class ConjunctiveSynapse<
 
     public ConjunctiveSynapse() {
         synapseBias.setValue(0.0);
+    }
+
+    @Override
+    public SynapseSlot createInputSlot(Activation iAct) {
+        return new SynapseInputSlot(iAct, this);
+    }
+
+    @Override
+    public SynapseSlot createOutputSlot(Activation oAct) {
+        SynapseOutputSlot slot = new SynapseOutputSlot(oAct, this);
+        slot.connectToActivation();
+        return slot;
     }
 
     public void initBiasInput(OA act) {

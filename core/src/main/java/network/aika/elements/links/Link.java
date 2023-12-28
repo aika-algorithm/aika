@@ -26,15 +26,15 @@ import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
-import network.aika.elements.synapses.SynapseInputSlot;
-import network.aika.elements.synapses.SynapseOutputSlot;
+import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
+import network.aika.fields.link.FieldLink;
 import network.aika.visitor.Visitor;
 
 import static network.aika.debugger.EventType.CREATE;
-import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.elements.Timestamp.FIRED_COMPARATOR;
 import static network.aika.fields.ThresholdOperator.Type.ABOVE;
@@ -44,16 +44,22 @@ import static network.aika.visitor.operator.BindingSignalCollector.retrieveBindi
  *
  * @author Lukas Molzberger
  */
-public abstract class Link<S extends Synapse, I extends Activation<?>, O extends Activation<?>> implements Element {
+public abstract class Link<
+        S extends Synapse,
+        I extends Activation<?>,
+        O extends Activation<?>,
+        SI extends SynapseSlot,
+        SO extends SynapseSlot
+        > implements Element {
 
     protected S synapse;
 
     protected I input;
     protected O output;
 
-    protected SynapseInputSlot synInputSlot;
+    protected SI synInputSlot;
 
-    protected SynapseOutputSlot synOutputSlot;
+    protected SO synOutputSlot;
 
     protected Field inputValue;
     protected AbstractFunction inputIsFired;
@@ -153,10 +159,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     protected void initWeightedOutput() {
-        linkAndConnect(
-                weightedInput,
-                output.getNet(feedbackMode())
-        );
+        linkAndConnect(weightedInput, this, synOutputSlot.getInputField());
     }
 
     public StateType feedbackMode() {
@@ -191,7 +194,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     public void init() {
     }
 
-    public void initFromTemplate(Link<S, ?, ?> template) {
+    public void initFromTemplate(Link<S, ?, ?, SI, SO> template) {
         template.output.resisterTemplateInstanceSynapse(
                 template.synapse.getSynapseId(),
                 synapse.getSynapseId()
@@ -200,7 +203,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
         linkRelationFromTemplate(template);
     }
 
-    protected void linkRelationFromTemplate(Link<S, ?, ?> template) {
+    protected void linkRelationFromTemplate(Link<S, ?, ?, SI, SO> template) {
         Relation rel = synapse.getRelation();
         if(rel != null)
             rel.linkRelationFromTemplate(synapse, template);
@@ -236,7 +239,7 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
             bsSlot.connectBindingSignal(bs, state);
     }
 
-    public FieldOutput getWeightedInput() {
+    public Field getWeightedInput() {
         return weightedInput;
     }
 
@@ -291,13 +294,22 @@ public abstract class Link<S extends Synapse, I extends Activation<?>, O extends
     }
 
     public void linkInput() {
-        synInputSlot = input.registerOutputSlot(synapse);
+        synInputSlot = (SI) input.registerOutputSlot(synapse);
+        synInputSlot.addLink(this);
         retrieveAndConnectBindingSignals(true);
     }
 
     public void linkOutput() {
-        synOutputSlot = output.registerInputSlot(synapse);
+        synOutputSlot = (SO) output.registerInputSlot(synapse);
         synOutputSlot.addLink(this);
+    }
+
+    public SI getSynInputSlot() {
+        return synInputSlot;
+    }
+
+    public SO getSynOutputSlot() {
+        return synOutputSlot;
     }
 
     public void propagateRanges() {

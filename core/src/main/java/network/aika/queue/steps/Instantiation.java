@@ -17,7 +17,7 @@
 package network.aika.queue.steps;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.links.ConjunctiveCategoryInputLink;
+import network.aika.elements.synapses.slots.CategoryInputSynapseOutputSlot;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 
@@ -51,7 +51,7 @@ public class Instantiation extends ElementStep<Activation> {
         Activation<?> act = getElement();
         act.instantiateTemplateNode();
 
-        act.getInputLinksByType(ConjunctiveCategoryInputLink.class)
+        act.getInputSlotsByType(CategoryInputSynapseOutputSlot.class)
                 .forEach(l ->
                         l.getFeedbackTrigger().setValue(0.0)
                 );

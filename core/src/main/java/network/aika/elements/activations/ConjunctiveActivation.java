@@ -20,7 +20,7 @@ import network.aika.Document;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.queue.steps.FeedbackTrigger;
 
-import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.scale;
 
 

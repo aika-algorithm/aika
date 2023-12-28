@@ -47,7 +47,7 @@ public class UpVisitor extends Visitor {
     }
 
     @Override
-    public void next(Link<?, ?, ?> l, Scope s, int depth) {
+    public void next(Link l, Scope s, int depth) {
         Scope ts = OUTPUT.transition(s, l.getSynapse().getTransition());
         if (ts == null)
             return;

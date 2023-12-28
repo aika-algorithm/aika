@@ -18,6 +18,7 @@ package network.aika.queue.steps;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.CategoryInputLink;
+import network.aika.elements.synapses.slots.CategoryInputSynapseOutputSlot;
 import network.aika.fields.Field;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
@@ -43,14 +44,9 @@ public class FeedbackTrigger extends ElementStep<Activation> {
     @Override
     public void process() {
         Activation<?> act = getElement();
-        CategoryInputLink cil = act.getActiveCategoryInputLink();
-        if(cil == null)
-            cil = act.createCategoryInputLink();
+        CategoryInputSynapseOutputSlot ciSlot = act.getActiveCategoryInputSlot();
 
-        if(cil == null)
-            return;
-
-        Field ft = cil.getFeedbackTrigger();
+        Field ft = ciSlot.getFeedbackTrigger();
         if(ft == null)
             return;
 

@@ -16,10 +16,12 @@
  */
 package network.aika.fields;
 
+import network.aika.fields.link.FieldLink;
+
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleFunction;
 
-import static network.aika.fields.FieldLink.*;
+import static network.aika.fields.link.FieldLink.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**

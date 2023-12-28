@@ -21,9 +21,8 @@ import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.fields.*;
 
-import static network.aika.fields.FieldLink.linkAndConnect;
+import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *

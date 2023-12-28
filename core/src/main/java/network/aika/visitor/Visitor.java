@@ -21,8 +21,6 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.enums.Scope;
 import network.aika.visitor.operator.Operator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Lukas Molzberger
@@ -56,7 +54,7 @@ public abstract class Visitor {
 
     public abstract void next(Activation<?> act, Link lastLink, Scope s, int depth);
 
-    public abstract void next(Link<?, ?, ?> l, Scope s, int depth);
+    public abstract void next(Link l, Scope s, int depth);
 
     protected abstract String dirToString();
 

@@ -14,34 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.elements.synapses.slots;
+
+import network.aika.elements.activations.Activation;
+import network.aika.elements.links.Link;
+import network.aika.elements.synapses.Synapse;
+import network.aika.fields.Field;
+import network.aika.fields.FieldObject;
+
+import java.util.stream.Stream;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class ListenerFieldLink extends AbstractFieldLink<UpdateListener> {
+public interface SynapseSlot<S extends Synapse, L extends Link> extends FieldObject {
 
-    private String listenerName;
+    void addLink(L l);
 
-    public ListenerFieldLink(FieldOutput input, String listenerName, UpdateListener output) {
-        super(input, 0, output);
-        this.listenerName = listenerName;
-    }
+    Stream<L> getLinks();
 
-    public void setInput(FieldOutput input) {
-        this.input = input;
-    }
+    L getLink(Activation act);
 
-    @Override
-    public void unlinkOutput() {
-    }
+    Field getInputField();
 
-    public String getListenerName() {
-        return listenerName;
-    }
+    Field getOutputField();
 
-    @Override
-    public String toString() {
-        return input + " --> listener: " + listenerName;
-    }
+    L getSelectedLink();
+
 }

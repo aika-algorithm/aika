@@ -19,6 +19,7 @@ package network.aika.elements.activations;
 import network.aika.Document;
 import network.aika.elements.Timestamp;
 import network.aika.fields.*;
+import network.aika.fields.link.AbstractFieldLink;
 import network.aika.queue.steps.Fired;
 
 import static network.aika.elements.Timestamp.NOT_SET;

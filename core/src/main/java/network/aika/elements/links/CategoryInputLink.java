@@ -27,8 +27,6 @@ import network.aika.fields.Field;
  */
 public interface CategoryInputLink {
 
-    Field getFeedbackTrigger();
-
     CategoryActivation getInput();
 
     Activation getOutput();

@@ -45,7 +45,7 @@ public class DownVisitor extends Visitor {
     }
 
     @Override
-    public void next(Link<?, ?, ?> l, Scope s, int depth) {
+    public void next(Link l, Scope s, int depth) {
         Scope ts = INPUT.transition(s, l.getSynapse().getTransition());
         if (ts == null)
             return;

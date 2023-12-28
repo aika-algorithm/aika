@@ -16,6 +16,8 @@
  */
 package network.aika.fields;
 
+import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fields.link.FieldLink;
 import network.aika.utils.Utils;
 
 import java.util.Comparator;
@@ -64,14 +66,14 @@ public class MaxField extends SumField {
                 .orElse(null);
 
         if(lastSelectedInput != selectedInput) {
-            updateConnection(lastSelectedInput, false);
-            updateConnection(selectedInput, true);
+            updateSelectedInput(lastSelectedInput, false);
+            updateSelectedInput(selectedInput, true);
         }
 
         super.triggerUpdate(u);
     }
 
-    protected void updateConnection(FieldLink si, boolean state) {
+    protected void updateSelectedInput(FieldLink si, boolean state) {
     }
 
     protected boolean isCandidate(FieldLink fl) {

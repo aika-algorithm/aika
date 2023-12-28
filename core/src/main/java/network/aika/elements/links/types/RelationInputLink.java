@@ -21,6 +21,8 @@ import network.aika.elements.activations.types.LatentRelationActivation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.slots.SynapseInputSlot;
+import network.aika.elements.synapses.slots.SynapseOutputSlot;
 import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.enums.Scope;
 import network.aika.visitor.Visitor;
@@ -35,7 +37,7 @@ public class RelationInputLink extends ConjunctiveLink<RelationInputSynapse, Lat
     }
 
     @Override
-    protected void linkRelationFromTemplate(Link<RelationInputSynapse, ?, ?> template) {
+    protected void linkRelationFromTemplate(Link<RelationInputSynapse, ?, ?, SynapseInputSlot, SynapseOutputSlot> template) {
         RelationInputSynapse templateSyn = template.getSynapse();
 
         Integer instanceLatentProxySynapseId = template.getOutput().getInstanceSynapseId(templateSyn.getLatentProxySynapseId());

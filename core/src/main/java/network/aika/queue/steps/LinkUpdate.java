@@ -18,31 +18,31 @@ package network.aika.queue.steps;
 
 import network.aika.debugger.EventType;
 import network.aika.elements.Timestamp;
-import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.Link;
 import network.aika.enums.direction.Direction;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
 import network.aika.queue.keys.LinkUpdateQueueKey;
 
-import static network.aika.fields.AbstractFieldLink.updateConnected;
+import static network.aika.fields.link.AbstractFieldLink.updateConnected;
 
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class LinkUpdate extends ElementStep<ConjunctiveLink> {
+public class LinkUpdate extends ElementStep<Link> {
 
     private Direction dir;
 
     private boolean state;
 
-    public static void add(ConjunctiveLink l, Direction dir, boolean state) {
+    public static void add(Link l, Direction dir, boolean state) {
         Step.add(new LinkUpdate(l, dir, state));
     }
 
-    public LinkUpdate(ConjunctiveLink l, Direction dir, boolean state) {
+    public LinkUpdate(Link l, Direction dir, boolean state) {
         super(l);
 
         this.state = state;
@@ -62,7 +62,7 @@ public class LinkUpdate extends ElementStep<ConjunctiveLink> {
 
     @Override
     public void process() {
-        ConjunctiveLink l = getElement();
+        Link l = getElement();
         if(dir == Direction.INPUT) {
             updateConnected(l.getInputValueLink(), state, true);
             //updateConnected(outputSlotFL, state, true);

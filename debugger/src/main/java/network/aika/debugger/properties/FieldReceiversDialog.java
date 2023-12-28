@@ -18,6 +18,7 @@ package network.aika.debugger.properties;
 
 import network.aika.enums.direction.Direction;
 import network.aika.fields.*;
+import network.aika.fields.link.FieldLink;
 
 import javax.swing.*;
 import java.awt.*;

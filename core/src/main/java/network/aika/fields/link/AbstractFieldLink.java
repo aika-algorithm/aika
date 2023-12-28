@@ -14,7 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.link;
+
+import network.aika.fields.FieldOutput;
+import network.aika.fields.UpdateListener;
 
 /**
  * @author Lukas Molzberger
@@ -50,12 +53,6 @@ public abstract class AbstractFieldLink<O extends UpdateListener> {
 
     public void setInput(FieldOutput input) {
         this.input = input;
-    }
-
-    public void relinkInput(FieldOutput inputValue) {
-        input.removeOutput(this);
-        input = inputValue;
-        input.addOutput(this);
     }
 
     public void receiveUpdate(double u) {

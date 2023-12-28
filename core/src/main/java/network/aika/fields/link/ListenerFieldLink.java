@@ -14,12 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.link;
+
+import network.aika.fields.FieldOutput;
+import network.aika.fields.UpdateListener;
 
 /**
  * @author Lukas Molzberger
  */
-public interface MaxFieldListener {
+public class ListenerFieldLink extends AbstractFieldLink<UpdateListener> {
 
-    void onSelectionChanged(FieldLink lastSelectedInput, FieldLink selectedInput);
+    private String listenerName;
+
+    public ListenerFieldLink(FieldOutput input, String listenerName, UpdateListener output) {
+        super(input, 0, output);
+        this.listenerName = listenerName;
+    }
+
+    public void setInput(FieldOutput input) {
+        this.input = input;
+    }
+
+    @Override
+    public void unlinkOutput() {
+    }
+
+    public String getListenerName() {
+        return listenerName;
+    }
+
+    @Override
+    public String toString() {
+        return input + " --> listener: " + listenerName;
+    }
 }
