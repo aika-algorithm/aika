@@ -16,15 +16,7 @@
  */
 package network.aika.debugger.properties;
 
-import network.aika.debugger.activations.properties.activations.ActivationPropertyPanel;
-import network.aika.debugger.activations.properties.links.LinkPropertyPanel;
-import network.aika.debugger.neurons.properties.neurons.NeuronPropertyPanel;
-import network.aika.debugger.neurons.properties.synapses.SynapsePropertyPanel;
-import network.aika.elements.Element;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.links.Link;
-import network.aika.elements.neurons.Neuron;
-import network.aika.elements.synapses.Synapse;
 import network.aika.fields.FieldOutput;
 
 import javax.swing.*;
@@ -60,32 +52,6 @@ public class AbstractPropertyPanel extends JPanel {
     public void removeNotify(){
         super.removeNotify();
         properties.deregister();
-    }
-
-    public static AbstractPropertyPanel create(Element element) {
-        if(element instanceof Activation<?>) {
-            return ActivationPropertyPanel.create((Activation) element);
-        } else if(element instanceof Link) {
-            return LinkPropertyPanel.create((Link) element);
-        } else if(element instanceof Neuron) {
-            Neuron n = (Neuron) element;
-            return NeuronPropertyPanel.create(n, null);
-        } else if(element instanceof Synapse) {
-            Synapse syn = (Synapse) element;
-            return SynapsePropertyPanel.create(syn, null);
-        }
-        return null;
-    }
-
-    public static AbstractPropertyPanel createNeuralElement(Element element) {
-        if(element instanceof Activation) {
-             Activation act = (Activation) element;
-            return NeuronPropertyPanel.create(act.getNeuron(), act);
-        } else if(element instanceof Link) {
-            Link l = (Link) element;
-            return SynapsePropertyPanel.create(l.getSynapse(), l);
-        }
-        return null;
     }
 
     public void addTitle(String title) {

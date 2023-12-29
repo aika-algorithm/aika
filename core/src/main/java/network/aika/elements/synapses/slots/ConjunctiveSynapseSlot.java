@@ -21,7 +21,10 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.SynapseSlotMax;
+import network.aika.fields.MaxField;
+import network.aika.fields.link.ArgumentFieldLink;
+import network.aika.fields.link.FieldLink;
+import network.aika.queue.steps.LinkUpdate;
 
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -41,7 +44,7 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
 
     protected Direction dir;
 
-    protected SynapseSlotMax<L> maxField;
+    protected MaxField maxField;
 
     protected NavigableMap<Activation, L> links;
 
@@ -51,9 +54,33 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
         this.dir = dir;
 
         links = new TreeMap<>();
-        maxField = new SynapseSlotMax(this, getLabel(), dir, TOLERANCE);
+        maxField = new MaxField(this, getLabel(), TOLERANCE, (si, state) -> {
+            if(si == null)
+                return;
+
+            LinkUpdate.add(
+                    getLink(si),
+                    dir,
+                    state
+            );
+        });
     }
 
+    public MaxField getMaxField() {
+        return maxField;
+    }
+
+    @Override
+    public MaxField getInputField() {
+        return maxField;
+    }
+
+    @Override
+    public MaxField getOutputField() {
+        return maxField;
+    }
+
+    @Override
     public void addLink(L l) {
         L el = links.put(
                 dir.invert().getActivation(l),
@@ -62,26 +89,41 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
         assert el == null;
     }
 
+    @Override
     public Stream<L> getLinks() {
         return links.values().stream();
     }
 
+    @Override
     public L getLink(Activation act) {
         return links.get(act);
     }
 
+    @Override
+    public S getSynapse() {
+        return synapse;
+    }
+
+    @Override
+    public Activation getActivation() {
+        return act;
+    }
+
+    @Override
+    public Direction getDirection() {
+        return dir;
+    }
+
     protected abstract String getLabel();
 
-    public SynapseSlotMax getInputField() {
-        return maxField;
-    }
-
-    public SynapseSlotMax getOutputField() {
-        return maxField;
-    }
-
+    @Override
     public L getSelectedLink() {
-        return maxField.getSelectedLink();
+        return getLink(maxField.getSelectedInput());
+    }
+
+    private L getLink(FieldLink fl) {
+        ArgumentFieldLink afl = (ArgumentFieldLink) fl;
+        return (L) afl.getArgumentRef();
     }
 
     @Override

@@ -17,9 +17,10 @@
 package network.aika.debugger.neurons;
 
 import network.aika.debugger.ElementPanel;
-import network.aika.debugger.neurons.properties.synapses.SynapsePropertyPanel;
+import network.aika.debugger.neurons.properties.slots.SynapseSlotPropertyPanel;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.slots.SynapseSlot;
 
 import javax.swing.*;
 
@@ -27,9 +28,9 @@ import javax.swing.*;
 /**
  * @author Lukas Molzberger
  */
-public class SynapsePanel extends ElementPanel {
+public class SynapseSlotPanel extends ElementPanel {
 
-    public SynapsePanel(Synapse s) {
+    public SynapseSlotPanel(SynapseSlot s) {
         super();
 
         //The following line enables to use scrolling tabs.
@@ -40,17 +41,17 @@ public class SynapsePanel extends ElementPanel {
         initTabs(s);
     }
 
-    private void initTabs(Synapse s) {
+    private void initTabs(SynapseSlot s) {
         if(s == null)
             return;
 
-        SynapsePropertyPanel neuronPropertyPanel = SynapsePropertyPanel.create(s, null);
+        AbstractPropertyPanel synapseSlotPropertyPanel = SynapseSlotPropertyPanel.create(s);
 
-        neuronPropertyPanel.addFinal();
+        synapseSlotPropertyPanel.addFinal();
         addTab(
-                "Synapse",
-                "Shows the Neuron or Synapse",
-                neuronPropertyPanel
+                s.getDirection() + " Synapse Slot",
+                "Shows the " + s.getDirection() + " Synapse",
+                synapseSlotPropertyPanel
         );
     }
 }

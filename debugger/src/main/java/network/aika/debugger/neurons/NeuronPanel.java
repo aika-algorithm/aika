@@ -21,6 +21,7 @@ import network.aika.debugger.activations.properties.ActivationsPropertyPanel;
 import network.aika.debugger.activations.properties.TextReferencesPropertyPanel;
 import network.aika.debugger.activations.properties.PropagablePropertyPanel;
 import network.aika.debugger.activations.properties.SynapsesPropertyPanel;
+import network.aika.debugger.neurons.properties.neurons.NeuronPropertyPanel;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.neurons.Neuron;
@@ -50,7 +51,7 @@ public class NeuronPanel extends ElementPanel {
         if(n == null)
             return;
 
-        AbstractPropertyPanel neuronPropertyPanel = AbstractPropertyPanel.create(n);
+        NeuronPropertyPanel neuronPropertyPanel = NeuronPropertyPanel.create(n, null);
 
         neuronPropertyPanel.addFinal();
         addTab(
@@ -58,7 +59,6 @@ public class NeuronPanel extends ElementPanel {
                 "Shows the Neuron",
                 neuronPropertyPanel
         );
-
 
         ActivationsPropertyPanel activationsPanel = ActivationsPropertyPanel.create(n);
 

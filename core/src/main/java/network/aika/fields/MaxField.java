@@ -30,8 +30,16 @@ public class MaxField extends SumField {
 
     private FieldLink selectedInput;
 
+    private MaxFieldListener sectionChangeListener;
+
     public MaxField(FieldObject ref, String label, Double tolerance) {
         super(ref, label, tolerance);
+    }
+
+    public MaxField(FieldObject ref, String label, Double tolerance, MaxFieldListener scl) {
+        super(ref, label, tolerance);
+
+        this.sectionChangeListener = scl;
     }
 
     public FieldLink getSelectedInput() {
@@ -61,22 +69,14 @@ public class MaxField extends SumField {
         FieldLink lastSelectedInput = selectedInput;
 
         selectedInput = getInputs().stream()
-                .filter(this::isCandidate)
                 .max(Comparator.comparingDouble(AbstractFieldLink::getUpdatedInputValue))
                 .orElse(null);
 
-        if(lastSelectedInput != selectedInput) {
-            updateSelectedInput(lastSelectedInput, false);
-            updateSelectedInput(selectedInput, true);
+        if(sectionChangeListener != null && lastSelectedInput != selectedInput) {
+            sectionChangeListener.updateSelectedInput(lastSelectedInput, false);
+            sectionChangeListener.updateSelectedInput(selectedInput, true);
         }
 
         super.triggerUpdate(u);
-    }
-
-    protected void updateSelectedInput(FieldLink si, boolean state) {
-    }
-
-    protected boolean isCandidate(FieldLink fl) {
-        return true;
     }
 }

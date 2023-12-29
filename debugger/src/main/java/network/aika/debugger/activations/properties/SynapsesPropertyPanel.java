@@ -41,7 +41,7 @@ public class SynapsesPropertyPanel extends AbstractPropertyPanel {
         sortedSynapses.stream()
                 .limit(15)
                 .forEach(s -> {
-                    addEntry(SynapsePropertyPanel.create(s));
+                    addEntry(SynapsePropertyPanel.create(s, null));
                     addSeparator();
                 }
         );

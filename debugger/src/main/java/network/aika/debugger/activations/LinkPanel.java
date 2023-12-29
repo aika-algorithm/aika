@@ -18,7 +18,9 @@ package network.aika.debugger.activations;
 
 import network.aika.debugger.AbstractConsoleManager;
 import network.aika.debugger.ElementPanel;
-import network.aika.debugger.properties.AbstractPropertyPanel;
+import network.aika.debugger.activations.properties.links.LinkPropertyPanel;
+import network.aika.debugger.neurons.properties.slots.SynapseSlotPropertyPanel;
+import network.aika.debugger.neurons.properties.synapses.SynapsePropertyPanel;
 import network.aika.elements.links.Link;
 
 import javax.swing.*;
@@ -44,7 +46,7 @@ public class LinkPanel extends ElementPanel {
         if(l == null)
             return;
 
-        AbstractPropertyPanel actPropertyPanel = AbstractPropertyPanel.create(l);
+        LinkPropertyPanel actPropertyPanel = LinkPropertyPanel.create(l);
         actPropertyPanel.addFinal();
         addTab(
                 "Link",
@@ -52,12 +54,28 @@ public class LinkPanel extends ElementPanel {
                 actPropertyPanel
         );
 
-        AbstractPropertyPanel neuronPropertyPanel = AbstractPropertyPanel.createNeuralElement(l);
-        neuronPropertyPanel.addFinal();
+        SynapseSlotPropertyPanel inputSynapseSlotPropertyPanel = SynapseSlotPropertyPanel.create(l.getSynInputSlot());
+        inputSynapseSlotPropertyPanel.addFinal();
+        addTab(
+                "Input Synapse Slot",
+                "Shows the Input Synapse Slot",
+                inputSynapseSlotPropertyPanel
+        );
+
+        SynapseSlotPropertyPanel outputSynapseSlotPropertyPanel = SynapseSlotPropertyPanel.create(l.getSynOutputSlot());
+        outputSynapseSlotPropertyPanel.addFinal();
+        addTab(
+                "Output Synapse Slot",
+                "Shows the Output Synapse Slot",
+                outputSynapseSlotPropertyPanel
+        );
+
+        SynapsePropertyPanel synapsePropertyPanel = SynapsePropertyPanel.create(l.getSynapse(), l);
+        synapsePropertyPanel.addFinal();
         addTab(
                 "Synapse",
-                "Shows the Neuron or Synapse",
-                neuronPropertyPanel
+                "Shows the Synapse",
+                synapsePropertyPanel
         );
     }
 

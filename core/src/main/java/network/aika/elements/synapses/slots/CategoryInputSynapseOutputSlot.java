@@ -21,6 +21,10 @@ import network.aika.elements.links.ConjunctiveCategoryInputLink;
 import network.aika.elements.synapses.ConjunctiveCategoryInputSynapse;
 import network.aika.fields.Field;
 import network.aika.fields.InputField;
+import network.aika.fields.MaxField;
+
+import static network.aika.fields.Fields.max;
+import static network.aika.fields.link.FieldLink.linkAndConnect;
 
 /**
  *
@@ -30,17 +34,33 @@ public class CategoryInputSynapseOutputSlot extends SynapseOutputSlot<Conjunctiv
 
     protected Field feedbackTrigger;
 
+    protected MaxField ftMax;
+
     public CategoryInputSynapseOutputSlot(Activation act, ConjunctiveCategoryInputSynapse synapse) {
         super(act, synapse);
+
+        initFeedbackTrigger();
     }
 
     protected void initFeedbackTrigger() {
         feedbackTrigger = new InputField(this, "instantiation feedback trigger", 0.0);
 
-//        linkAndConnect(feedbackTrigger, 0, inputValue);
+        ftMax = max(this, "ft-max", maxField, feedbackTrigger);
+    }
+
+    @Override
+    public void connectToActivation() {
+        linkAndConnect(ftMax, synapse.getOutputNet(act));
     }
 
     public Field getFeedbackTrigger() {
         return feedbackTrigger;
+    }
+
+    @Override
+    public void disconnect() {
+        super.disconnect();
+        feedbackTrigger.disconnectAndUnlinkInputs(false);
+        ftMax.disconnectAndUnlinkOutputs(false);
     }
 }

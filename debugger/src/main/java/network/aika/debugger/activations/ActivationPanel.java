@@ -20,6 +20,8 @@ import network.aika.debugger.AbstractConsoleManager;
 import network.aika.debugger.ElementPanel;
 import network.aika.debugger.activations.properties.*;
 import network.aika.debugger.activations.properties.LinksPropertyPanel;
+import network.aika.debugger.activations.properties.activations.ActivationPropertyPanel;
+import network.aika.debugger.neurons.properties.neurons.NeuronPropertyPanel;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.activations.Activation;
@@ -54,7 +56,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         if(act == null)
             return;
 
-        AbstractPropertyPanel actPropertyPanel = AbstractPropertyPanel.create(act);
+        ActivationPropertyPanel actPropertyPanel = ActivationPropertyPanel.create(act);
         actPropertyPanel.addFinal();
         addTab(
                 "Activation",
@@ -70,7 +72,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
                 statesPanel
         );
 
-        AbstractPropertyPanel neuronPropertyPanel = AbstractPropertyPanel.createNeuralElement(act);
+        NeuronPropertyPanel neuronPropertyPanel = NeuronPropertyPanel.create(act.getNeuron(), act);
         neuronPropertyPanel.addFinal();
         addTab(
                 "Neuron",
@@ -79,7 +81,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         );
 
         {
-            AbstractPropertyPanel linksPropertyPanel = LinksPropertyPanel.create(act, Direction.INPUT);
+            LinksPropertyPanel linksPropertyPanel = LinksPropertyPanel.create(act, Direction.INPUT);
             if (linksPropertyPanel != null)
                 linksPropertyPanel.addFinal();
                 addTab(
@@ -90,7 +92,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         }
 
         {
-            AbstractPropertyPanel linksPropertyPanel = LinksPropertyPanel.create(act, Direction.OUTPUT);
+            LinksPropertyPanel linksPropertyPanel = LinksPropertyPanel.create(act, Direction.OUTPUT);
             if (linksPropertyPanel != null)
                 linksPropertyPanel.addFinal();
                 addTab(
@@ -101,7 +103,29 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         }
 
         {
-            AbstractPropertyPanel synapsesPropertyPanel = SynapsesPropertyPanel.create(act, Direction.INPUT);
+            SynapseSlotsPropertyPanel synapseSlotsPropertyPanel = SynapseSlotsPropertyPanel.create(act.getInputSlots());
+            if (synapseSlotsPropertyPanel != null)
+                synapseSlotsPropertyPanel.addFinal();
+            addTab(
+                    "Input-Synapse-Slots",
+                    "Shows the Input-Synapse-Slots",
+                    synapseSlotsPropertyPanel
+            );
+        }
+
+        {
+            SynapseSlotsPropertyPanel synapseSlotsPropertyPanel = SynapseSlotsPropertyPanel.create(act.getOutputSlots());
+            if (synapseSlotsPropertyPanel != null)
+                synapseSlotsPropertyPanel.addFinal();
+            addTab(
+                    "Output-Synapse-Slots",
+                    "Shows the Output-Synapse-Slots",
+                    synapseSlotsPropertyPanel
+            );
+        }
+
+        {
+            SynapsesPropertyPanel synapsesPropertyPanel = SynapsesPropertyPanel.create(act, Direction.INPUT);
             if (synapsesPropertyPanel != null)
                 synapsesPropertyPanel.addFinal();
                 addTab(
@@ -111,7 +135,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
                 );
         }
         {
-            AbstractPropertyPanel synapsesPropertyPanel = SynapsesPropertyPanel.create(act, Direction.OUTPUT);
+            SynapsesPropertyPanel synapsesPropertyPanel = SynapsesPropertyPanel.create(act, Direction.OUTPUT);
             if (synapsesPropertyPanel != null)
                 synapsesPropertyPanel.addFinal();
                 addTab(
@@ -122,7 +146,7 @@ public class ActivationPanel extends ElementPanel implements MouseListener {
         }
 
         if(act.isAbstract()) {
-            AbstractPropertyPanel templateInstancesPropertyPanel = TemplateInstancesPropertyPanel.create(act);
+            TemplateInstancesPropertyPanel templateInstancesPropertyPanel = TemplateInstancesPropertyPanel.create(act);
             if (templateInstancesPropertyPanel != null)
                 templateInstancesPropertyPanel.addFinal();
                 addTab(

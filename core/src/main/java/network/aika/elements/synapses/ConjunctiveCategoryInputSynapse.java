@@ -44,4 +44,11 @@ public abstract class ConjunctiveCategoryInputSynapse<
         slot.connectToActivation();
         return slot;
     }
+
+    @Override
+    public void initBiasInput(OA act) {
+        super.initBiasInput(act);
+
+        act.registerInputSlot(this);
+    }
 }

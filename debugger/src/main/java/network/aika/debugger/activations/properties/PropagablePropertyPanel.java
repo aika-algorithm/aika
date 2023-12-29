@@ -40,7 +40,7 @@ public class PropagablePropertyPanel extends AbstractPropertyPanel {
         sortedPropagatable.stream()
                 .limit(10)
                 .forEach(np -> {
-                    addEntry(NeuronPropertyPanel.create(np.getNeuron()));
+                    addEntry(NeuronPropertyPanel.create(np.getNeuron(), null));
                     addSeparator();
                 }
         );

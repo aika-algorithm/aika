@@ -381,7 +381,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .toList().stream();
     }
 
-    private Stream<SynapseSlot> getInputSlots() {
+    public Stream<SynapseSlot> getInputSlots() {
         return inputSlots.values()
                 .stream();
     }
@@ -398,7 +398,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .toList().stream();
     }
 
-    private Stream<SynapseSlot> getOutputSlots() {
+    public Stream<SynapseSlot> getOutputSlots() {
         return outputSlots.values()
                 .stream();
     }

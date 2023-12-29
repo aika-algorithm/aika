@@ -23,6 +23,7 @@ import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
 import network.aika.enums.direction.Direction;
 
 import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 
 /**
  *
@@ -40,12 +41,12 @@ public abstract class DisjunctiveSynapse<
 
     @Override
     public DisjunctiveSynapseSlot createInputSlot(Activation iAct) {
-        return new DisjunctiveSynapseSlot(iAct, this);
+        return new DisjunctiveSynapseSlot(INPUT);
     }
 
     @Override
     public DisjunctiveSynapseSlot createOutputSlot(Activation oAct) {
-        return new DisjunctiveSynapseSlot(oAct, this);
+        return new DisjunctiveSynapseSlot(OUTPUT);
     }
 
     @Override

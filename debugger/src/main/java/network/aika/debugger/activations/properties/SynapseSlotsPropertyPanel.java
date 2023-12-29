@@ -14,38 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses.slots;
+package network.aika.debugger.activations.properties;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.links.Link;
-import network.aika.elements.synapses.Synapse;
-import network.aika.enums.direction.Direction;
-import network.aika.fields.Field;
-import network.aika.fields.FieldObject;
-
+import network.aika.debugger.neurons.properties.slots.SynapseSlotPropertyPanel;
+import network.aika.debugger.properties.AbstractPropertyPanel;
+import network.aika.elements.synapses.slots.SynapseSlot;
 import java.util.stream.Stream;
 
+
 /**
- *
  * @author Lukas Molzberger
  */
-public interface SynapseSlot<S extends Synapse, L extends Link> extends FieldObject {
+public class SynapseSlotsPropertyPanel extends AbstractPropertyPanel {
 
-    void addLink(L l);
+    public SynapseSlotsPropertyPanel(Stream<? extends SynapseSlot> synapseSlots) {
+        synapseSlots
+                .limit(15)
+                .forEach(s -> {
+                    addEntry(SynapseSlotPropertyPanel.create(s));
+                    addSeparator();
+                }
+        );
 
-    Stream<L> getLinks();
+        addFinal();
+    }
 
-    L getLink(Activation act);
-
-    Field getInputField();
-
-    Field getOutputField();
-
-    L getSelectedLink();
-
-    S getSynapse();
-
-    Activation getActivation();
-
-    Direction getDirection();
+    public static SynapseSlotsPropertyPanel create(Stream<SynapseSlot> synapseSlots) {
+        return new SynapseSlotsPropertyPanel(synapseSlots);
+    }
 }

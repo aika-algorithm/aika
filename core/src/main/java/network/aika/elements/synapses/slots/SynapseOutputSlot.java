@@ -56,5 +56,4 @@ public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends Conjuncti
     protected String getLabel() {
         return "out-slot-" + synapse.getPInput().getId();
     }
-
 }

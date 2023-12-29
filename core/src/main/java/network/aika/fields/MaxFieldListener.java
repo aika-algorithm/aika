@@ -14,38 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses.slots;
+package network.aika.fields;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.links.Link;
-import network.aika.elements.synapses.Synapse;
-import network.aika.enums.direction.Direction;
-import network.aika.fields.Field;
-import network.aika.fields.FieldObject;
-
-import java.util.stream.Stream;
+import network.aika.fields.link.FieldLink;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public interface SynapseSlot<S extends Synapse, L extends Link> extends FieldObject {
+public interface MaxFieldListener {
 
-    void addLink(L l);
-
-    Stream<L> getLinks();
-
-    L getLink(Activation act);
-
-    Field getInputField();
-
-    Field getOutputField();
-
-    L getSelectedLink();
-
-    S getSynapse();
-
-    Activation getActivation();
-
-    Direction getDirection();
+    void updateSelectedInput(FieldLink si, boolean state);
 }

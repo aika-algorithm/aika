@@ -18,8 +18,9 @@ package network.aika.elements.synapses.slots;
 
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.links.Link;
+import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.DisjunctiveSynapse;
+import network.aika.enums.direction.Direction;
 import network.aika.fields.Field;
 
 import java.util.stream.Stream;
@@ -28,32 +29,44 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public class DisjunctiveSynapseSlot implements SynapseSlot {
+public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, DisjunctiveLink> {
 
-    protected Activation act;
+    private Direction dir;
 
-    protected DisjunctiveSynapse synapse;
+    private DisjunctiveLink<DisjunctiveSynapse, ?, ?> link;
 
-    private Link link;
-
-    public DisjunctiveSynapseSlot(Activation act, DisjunctiveSynapse syn) {
-        this.act = act;
-        this.synapse = syn;
+    public DisjunctiveSynapseSlot(Direction dir) {
+        this.dir = dir;
     }
 
     @Override
-    public void addLink(Link l) {
+    public void addLink(DisjunctiveLink l) {
         link = l;
     }
 
     @Override
-    public Stream<Link> getLinks() {
+    public Stream<DisjunctiveLink> getLinks() {
         return Stream.of(link);
     }
 
     @Override
-    public Link getLink(Activation act) {
+    public DisjunctiveLink getLink(Activation act) {
         return link;
+    }
+
+    @Override
+    public DisjunctiveSynapse getSynapse() {
+        return link.getSynapse();
+    }
+
+    @Override
+    public Activation getActivation() {
+        return dir.getActivation(link);
+    }
+
+    @Override
+    public Direction getDirection() {
+        return dir;
     }
 
     @Override
@@ -67,17 +80,16 @@ public class DisjunctiveSynapseSlot implements SynapseSlot {
     }
 
     @Override
-    public Link getSelectedLink() {
+    public DisjunctiveLink getSelectedLink() {
         return link;
     }
 
     @Override
-    public void disconnect() {
-
+    public Document getDocument() {
+        return link.getDocument();
     }
 
     @Override
-    public Document getDocument() {
-        return act.getDocument();
+    public void disconnect() {
     }
 }
