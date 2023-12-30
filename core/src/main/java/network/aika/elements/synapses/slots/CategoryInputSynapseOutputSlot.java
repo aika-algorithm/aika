@@ -22,8 +22,10 @@ import network.aika.elements.synapses.ConjunctiveCategoryInputSynapse;
 import network.aika.fields.Field;
 import network.aika.fields.InputField;
 import network.aika.fields.MaxField;
+import network.aika.fields.Multiplication;
 
 import static network.aika.fields.Fields.max;
+import static network.aika.fields.Fields.mul;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 
 /**
@@ -44,8 +46,9 @@ public class CategoryInputSynapseOutputSlot extends SynapseOutputSlot<Conjunctiv
 
     protected void initFeedbackTrigger() {
         feedbackTrigger = new InputField(this, "instantiation feedback trigger", 0.0);
+        Multiplication weightedFT = mul(this, "weighted-ft", feedbackTrigger, synapse.getWeight());
 
-        ftMax = max(this, "ft-max", maxField, feedbackTrigger);
+        ftMax = max(this, "ft-max", maxField, weightedFT);
     }
 
     @Override

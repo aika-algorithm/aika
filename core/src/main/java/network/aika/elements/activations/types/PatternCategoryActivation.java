@@ -18,6 +18,7 @@ package network.aika.elements.activations.types;
 
 import network.aika.Document;
 import network.aika.elements.activations.CategoryActivation;
+import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
 
 /**
@@ -29,4 +30,5 @@ public class PatternCategoryActivation extends CategoryActivation {
     public PatternCategoryActivation(int id, Document doc, CategoryNeuron neuron) {
         super(id, doc, neuron);
     }
+
 }

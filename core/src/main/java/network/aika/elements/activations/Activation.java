@@ -386,6 +386,13 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .stream();
     }
 
+    public SynapseSlot getInputSlotBySynapseType(Class<? extends Synapse> synType) {
+        return getInputSlots()
+                .filter(s -> synType.isInstance(s.getSynapse()))
+                .findFirst()
+                .orElse(null);
+    }
+
     public <IS extends SynapseSlot> Stream<IS> getInputSlotsByType(Class<IS> slotType) {
         return getInputSlots()
                 .filter(slotType::isInstance)
@@ -420,7 +427,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         SynapseSlot synSlot = inputSlots.get(s.getSynapseId());
         return synSlot != null ?
                 synSlot.getLinks() :
-                null;
+                Stream.empty();
     }
 
     public <IL> Stream<IL> getInputLinksByType(Class<IL> linkType) {
@@ -491,15 +498,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 isFired(POSITIVE_FEEDBACK);
     }
 
-    public CategoryInputSynapseOutputSlot getActiveCategoryInputSlot() {
-        return getInputSlotsByType(CategoryInputSynapseOutputSlot.class)
-                .findFirst()
-                .orElse(null);
-    }
-
-    public CategoryInputLink getActiveCategoryInputLink() {
-        return getActiveCategoryInputSlot().getSelectedLink();
-    }
+    public abstract CategoryInputLink getActiveCategoryInputLink();
 
     public Activation<N> resolveAbstractInputActivation() {
         return isInstantiable() ?

@@ -23,9 +23,9 @@ import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 /**
  * @author Lukas Molzberger
  */
-public class ConjunctiveSynapseSlotPropertyPanel<S extends ConjunctiveSynapseSlot> extends SynapseSlotPropertyPanel<S> {
+public class ConjunctiveCategoryInputSynapseSlotPropertyPanel<S extends CategoryInputSynapseOutputSlot> extends ConjunctiveSynapseSlotPropertyPanel<S> {
 
-    public ConjunctiveSynapseSlotPropertyPanel(S s) {
+    public ConjunctiveCategoryInputSynapseSlotPropertyPanel(S s) {
         super(s);
     }
 
@@ -33,14 +33,11 @@ public class ConjunctiveSynapseSlotPropertyPanel<S extends ConjunctiveSynapseSlo
     public void initSlotProperties(S s) {
         super.initSlotProperties(s);
 
-        addField(s.getMaxField());
+        addField(s.getFeedbackTrigger());
     }
 
-    public static ConjunctiveSynapseSlotPropertyPanel create(ConjunctiveSynapseSlot s) {
-        if(s instanceof CategoryInputSynapseOutputSlot) {
-            return ConjunctiveCategoryInputSynapseSlotPropertyPanel.create((CategoryInputSynapseOutputSlot) s);
-        }
+    public static ConjunctiveCategoryInputSynapseSlotPropertyPanel create(CategoryInputSynapseOutputSlot s) {
 
-        return new ConjunctiveSynapseSlotPropertyPanel(s);
+        return new ConjunctiveCategoryInputSynapseSlotPropertyPanel(s);
     }
 }

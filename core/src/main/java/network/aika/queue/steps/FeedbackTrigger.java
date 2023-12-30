@@ -17,6 +17,7 @@
 package network.aika.queue.steps;
 
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.synapses.slots.CategoryInputSynapseOutputSlot;
 import network.aika.fields.Field;
@@ -28,22 +29,22 @@ import network.aika.queue.Step;
  *
  * @author Lukas Molzberger
  */
-public class FeedbackTrigger extends ElementStep<Activation> {
+public class FeedbackTrigger extends ElementStep<ConjunctiveActivation> {
 
     boolean state;
 
-    public static void add(Activation act, boolean state) {
+    public static void add(ConjunctiveActivation act, boolean state) {
         Step.add(new FeedbackTrigger(act, state));
     }
 
-    public FeedbackTrigger(Activation act, boolean state) {
+    public FeedbackTrigger(ConjunctiveActivation act, boolean state) {
         super(act);
         this.state = state;
     }
 
     @Override
     public void process() {
-        Activation<?> act = getElement();
+        ConjunctiveActivation<?> act = getElement();
         CategoryInputSynapseOutputSlot ciSlot = act.getActiveCategoryInputSlot();
 
         Field ft = ciSlot.getFeedbackTrigger();

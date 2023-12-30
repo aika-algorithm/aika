@@ -26,6 +26,8 @@ import network.aika.elements.links.types.InhibitoryCategoryLink;
 import network.aika.elements.links.types.InhibitoryLink;
 import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
+import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +44,12 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
 
     public InhibitoryActivation(int id, Document doc, InhibitoryNeuron neuron) {
         super(id, doc, neuron);
+    }
+
+    @Override
+    public CategoryInputLink getActiveCategoryInputLink() {
+        SynapseSlot<InhibitoryCategoryInputSynapse, InhibitoryCategoryInputLink> sl = getInputSlotBySynapseType(InhibitoryCategoryInputSynapse.class);
+        return sl != null ? sl.getSelectedLink() : null;
     }
 
     @Override

@@ -16,7 +16,6 @@
  */
 package network.aika.debugger.neurons.properties.slots;
 
-import network.aika.debugger.activations.properties.links.LinkPropertyPanel;
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
@@ -43,11 +42,10 @@ public class SynapseSlotPropertyPanel<S extends SynapseSlot> extends AbstractPro
     protected void initLinks(S s) {
         Stream<? extends Link> links = s.getLinks();
 
+        addConstant("Links: ", "");
         links.limit(10)
-                .forEach(l -> {
-                            addEntry(LinkPropertyPanel.create(l));
-                            addSeparator();
-                        }
+                .forEach(l ->
+                        addConstant("", l.toString())
                 );
 
         addFinal();

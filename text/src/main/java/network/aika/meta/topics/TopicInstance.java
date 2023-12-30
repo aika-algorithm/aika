@@ -60,7 +60,7 @@ public class TopicInstance extends InstantiationModel<TopicInstance> implements 
 
         boolean flag = false;
 
-        if(flag)
+//        if(flag)
             AIKADebugger.createAndShowGUI()
                     .setDocument(doc);
 

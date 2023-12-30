@@ -17,7 +17,9 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
+import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.synapses.slots.CategoryInputSynapseOutputSlot;
 import network.aika.queue.steps.FeedbackTrigger;
 
 import static network.aika.fields.link.FieldLink.linkAndConnect;
@@ -38,6 +40,17 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
         }
     }
 
+    public CategoryInputSynapseOutputSlot getActiveCategoryInputSlot() {
+        return getInputSlotsByType(CategoryInputSynapseOutputSlot.class)
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public CategoryInputLink getActiveCategoryInputLink() {
+        CategoryInputSynapseOutputSlot sl = getActiveCategoryInputSlot();
+        return sl != null ? sl.getSelectedLink() : null;
+    }
 
     @Override
     protected void connectWeightUpdate() {

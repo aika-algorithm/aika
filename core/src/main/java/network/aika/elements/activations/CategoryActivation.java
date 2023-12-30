@@ -34,6 +34,11 @@ public abstract class CategoryActivation extends DisjunctiveActivation<CategoryN
     }
 
     @Override
+    public CategoryInputLink getActiveCategoryInputLink() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Activation getTemplate() {
         return getOutputLinksByType(CategoryInputLink.class)
                 .map(CategoryInputLink::getOutput)

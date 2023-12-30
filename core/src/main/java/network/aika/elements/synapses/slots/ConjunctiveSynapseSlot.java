@@ -82,10 +82,11 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
 
     @Override
     public void addLink(L l) {
-        L el = links.put(
-                dir.invert().getActivation(l),
-                l
-        );
+        Activation keyAct = dir.invert().getActivation(l);
+        if(keyAct == null)
+            return;
+
+        L el = links.put(keyAct, l);
         assert el == null;
     }
 
@@ -123,6 +124,9 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
 
     private L getLink(FieldLink fl) {
         ArgumentFieldLink afl = (ArgumentFieldLink) fl;
+        if(afl == null)
+            return null;
+
         return (L) afl.getArgumentRef();
     }
 
@@ -134,5 +138,10 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
     @Override
     public Document getDocument() {
         return act.getDocument();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " Act-Id:" + act.getId() + " Act-Label:" + act.getLabel() + " Syn:" + synapse;
     }
 }
