@@ -54,13 +54,15 @@ public class LinkPanel extends ElementPanel {
                 actPropertyPanel
         );
 
-        SynapseSlotPropertyPanel inputSynapseSlotPropertyPanel = SynapseSlotPropertyPanel.create(l.getSynInputSlot());
-        inputSynapseSlotPropertyPanel.addFinal();
-        addTab(
-                "Input Synapse Slot",
-                "Shows the Input Synapse Slot",
-                inputSynapseSlotPropertyPanel
-        );
+        if (l.getSynInputSlot() != null) {
+            SynapseSlotPropertyPanel inputSynapseSlotPropertyPanel = SynapseSlotPropertyPanel.create(l.getSynInputSlot());
+            inputSynapseSlotPropertyPanel.addFinal();
+            addTab(
+                    "Input Synapse Slot",
+                    "Shows the Input Synapse Slot",
+                    inputSynapseSlotPropertyPanel
+            );
+        }
 
         SynapseSlotPropertyPanel outputSynapseSlotPropertyPanel = SynapseSlotPropertyPanel.create(l.getSynOutputSlot());
         outputSynapseSlotPropertyPanel.addFinal();

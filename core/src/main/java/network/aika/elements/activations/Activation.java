@@ -508,7 +508,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public Activation getActiveTemplateInstance() {
         CategoryInputLink l = getActiveCategoryInputLink();
-        return l != null ?
+        return l != null && l.getInput() != null ?
                 l.getInput().getActiveTemplateInstance() :
                 null;
     }

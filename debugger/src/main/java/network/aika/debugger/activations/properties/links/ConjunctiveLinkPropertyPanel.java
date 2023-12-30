@@ -19,6 +19,7 @@ package network.aika.debugger.activations.properties.links;
 import network.aika.elements.links.*;
 import network.aika.elements.links.types.InputObjectLink;
 import network.aika.elements.links.types.PatternLink;
+import network.aika.elements.synapses.slots.SynapseInputSlot;
 
 
 /**
@@ -34,7 +35,9 @@ public class ConjunctiveLinkPropertyPanel<L extends ConjunctiveLink<?, ?, ?>> ex
     public void initInputIdentitySection(L l) {
         super.initInputIdentitySection(l);
 
-        addField(l.getSynInputSlot().getOutputField());
+        SynapseInputSlot sl = l.getSynInputSlot();
+        if(sl != null)
+            addField(l.getSynInputSlot().getOutputField());
 
         if(l.getSynInputSlot() != null)
             addConstant("Slot Selection: ", "" + l.getSynInputSlot().getSelectedLink());
