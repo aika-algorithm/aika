@@ -24,10 +24,9 @@ import network.aika.utils.ReadWriteLock;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
-
-import static network.aika.suspension.SuspensionMode.SAVE_ALL;
-import static network.aika.suspension.SuspensionMode.SAVE_SUSPENDED;
 
 /**
  * The {@code NeuronProvider} class is a proxy implementation for the real neuron implementation in the class {@code Neuron}.
@@ -47,6 +46,8 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
 
     HashMap<Integer, Synapse> inputSynapses = new HashMap<>();
     HashMap<Long, Synapse> outputSynapses = new HashMap<>();
+
+    private Set<NeuronProvider> propagableRefs = new HashSet<>();
 
     protected final ReadWriteLock lock = new ReadWriteLock();
 
@@ -231,6 +232,22 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         lock.releaseWriteLock();
     }
 
+    public void addPropagableRef(NeuronProvider np) {
+        lock.acquireWriteLock();
+        propagableRefs.add(np);
+
+        checkRegister();
+        lock.releaseWriteLock();
+    }
+
+    public void removePropagableRef(NeuronProvider np) {
+        lock.acquireWriteLock();
+        propagableRefs.remove(np);
+
+        checkUnregister();
+        lock.releaseWriteLock();
+    }
+
     private void checkRegister() {
         if(!isRegistered && isReferenced()) {
             model.register(this);
@@ -249,7 +266,8 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return persistent ||
                 neuron != null ||
                 !inputSynapses.isEmpty() ||
-                !outputSynapses.isEmpty();
+                !outputSynapses.isEmpty() ||
+                !propagableRefs.isEmpty();
     }
 
     public boolean isRegistered() {

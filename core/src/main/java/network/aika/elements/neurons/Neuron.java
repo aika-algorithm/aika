@@ -116,17 +116,25 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public void updatePropagable(NeuronProvider np, boolean isPropagable) {
-        if(isPropagable)
-            propagable.add(np);
-        else
-            propagable.remove(np);
+        if(isPropagable) {
+            addPropagable(np);
+        } else {
+            removePropagable(np);
+        }
+    }
+
+    private void addPropagable(NeuronProvider np) {
+        propagable.add(np);
+        np.addPropagableRef(provider);
+    }
+
+    private void removePropagable(NeuronProvider np) {
+        propagable.remove(np);
+        np.removePropagableRef(provider);
     }
 
     public void wakeupPropagable() {
-        propagable
-                .forEach(np ->
-                        np.getNeuron()
-                );
+        propagable.forEach(NeuronProvider::getNeuron);
     }
 
     public Collection<NeuronProvider> getPropagable() {
@@ -424,6 +432,10 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
             provider.removeOutputSynapse(s);
             s.getPOutput().removeInputSynapse(s);
         }
+
+        for(NeuronProvider np: propagable) {
+            np.removePropagableRef(provider);
+        }
     }
 
     public void reactivate(Model m) {
@@ -491,9 +503,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         bias.readFields(in, m);
 
         while (in.readBoolean()) {
-            propagable.add(
-                    m.lookupNeuronProvider(in.readLong())
-            );
+            NeuronProvider np = m.lookupNeuronProvider(in.readLong());
+            addPropagable(np);
         }
 
         while (in.readBoolean()) {
