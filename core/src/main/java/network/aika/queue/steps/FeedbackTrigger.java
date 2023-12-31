@@ -46,6 +46,8 @@ public class FeedbackTrigger extends ElementStep<ConjunctiveActivation> {
     public void process() {
         ConjunctiveActivation<?> act = getElement();
         CategoryInputSynapseOutputSlot ciSlot = act.getActiveCategoryInputSlot();
+        if(ciSlot == null)
+            return;
 
         Field ft = ciSlot.getFeedbackTrigger();
         if(ft == null)
