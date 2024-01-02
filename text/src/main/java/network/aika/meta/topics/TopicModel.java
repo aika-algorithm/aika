@@ -22,14 +22,12 @@ import network.aika.elements.activations.Activation;
 import network.aika.meta.TemplateModel;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.BindingNeuron;
-import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.meta.entities.EntityModel;
 import network.aika.Document;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
-import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,16 +88,10 @@ public class TopicModel extends TemplateModel<TopicModel> {
         topicBN.setBias(-10.0);
     }
 
-    public void addTargetTopics(Document doc, Set<String> tsLabels) {
-        log.info(doc.getContent() + " : " + tsLabels.stream().collect(Collectors.joining(", ")));
-    }
-
     @Override
     public boolean stepFilter(Neuron n) {
         return n == topicBN ||
-                n == topicPatternN ||
-                n == entityModel.getEntityPattern() ||
-                n == entityModel.getEntityBN();
+                n == topicPatternN;
     }
 
     @Override
@@ -110,8 +102,6 @@ public class TopicModel extends TemplateModel<TopicModel> {
     @Override
     public void prepareInstantiation() {
         setNotInstantiable(false);
-        entityModel.getEntityPattern().setNotInstantiable(false);
-        entityModel.getPhraseModel().getPatternNeuron().setNotInstantiable(true);
     }
 
     @Override
@@ -119,8 +109,8 @@ public class TopicModel extends TemplateModel<TopicModel> {
         Range entityPosRange = new Range(0, 1);
         Range entityCharRange = new Range(0, doc.length());
 
-        doc.addToken(
-                entityModel.getPhraseModel().getPatternNeuron(),
+        doc.addBindingActivation(
+                topicBN,
                 new TextReference(entityPosRange, entityCharRange)
         );
     }
@@ -179,7 +169,6 @@ public class TopicModel extends TemplateModel<TopicModel> {
         iAct.getNeuron().setLabel(
                 tAct.getLabel()
                         .replace(TOPIC_LABEL, label + " " + TOPIC_LABEL)
-                        .replace(ENTITY_LABEL, label + " " + ENTITY_LABEL)
         );
     }
 

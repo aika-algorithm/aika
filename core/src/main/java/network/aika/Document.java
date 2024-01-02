@@ -23,7 +23,9 @@ import network.aika.callbacks.InstantiationCallback;
 import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
+import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.exceptions.PreviousThoughtNotDisconnected;
 import network.aika.elements.PreActivation;
@@ -223,13 +225,35 @@ public class Document extends Queue implements Element {
 
         act.updateRanges(textReference);
 
-        disconnectAndBlock(act.getNet(PRE_FEEDBACK));
-        disconnectAndBlock(act.getNet(NEGATIVE_FEEDBACK));
-        disconnectAndBlock(act.getNet(POSITIVE_FEEDBACK));
+        disconnectNetFields(act);
 
         act.setNet(POSITIVE_FEEDBACK, inputNet);
 
         return act;
+    }
+
+    public BindingActivation addBindingActivation(BindingNeuron n, TextReference textReference) {
+        return addBindingActivation(n, textReference, n.getTargetNet());
+    }
+
+    public BindingActivation addBindingActivation(BindingNeuron n, TextReference textReference, double inputNet) {
+        BindingActivation act = n.createActivation(this);
+
+        act.updateRanges(textReference);
+
+        disconnectNetFields(act);
+
+        act.setNet(PRE_FEEDBACK, inputNet);
+        act.setNet(NEGATIVE_FEEDBACK, inputNet);
+        act.setNet(POSITIVE_FEEDBACK, inputNet);
+
+        return act;
+    }
+
+    private void disconnectNetFields(Activation act) {
+        disconnectAndBlock(act.getNet(PRE_FEEDBACK));
+        disconnectAndBlock(act.getNet(NEGATIVE_FEEDBACK));
+        disconnectAndBlock(act.getNet(POSITIVE_FEEDBACK));
     }
 
     private void disconnectAndBlock(Field f) {

@@ -48,23 +48,32 @@ public class TextSectionTest extends Parser<TestContext> {
 
 
     public static final String PROFILE_LABEL = "Profile";
+    public static final String SKILL_LABEL = "Skill";
     public static final String TASKS_LABEL = "Tasks";
 
-    String tasksHeadline = "Your Tasks";
-    String requirementsHeadline = "Your Profile";
+    String tasksHeadlineLabel = "Your Tasks";
+    String profileHeadlineLabel = "Your Profile";
 
     private Dictionary dictionary;
 
     private Tokenizer tokenizer;
     private PhraseModel phraseModel;
     private EntityModel entityModel;
+
     protected EntityModel headlineEntity;
 
     private TopicModel topicModel;
 
     private TopicModel profileTopic;
 
+    private EntityModel profileHeadline;
+
+    private EntityModel skillEntity;
+
     private TopicModel tasksTopic;
+
+    private EntityModel tasksHeadline;
+
 
 /*    private String exampleTxt = "Java Softwaredeveloper\n" +
             " \n" +
@@ -110,8 +119,11 @@ public class TextSectionTest extends Parser<TestContext> {
         headlineEntity.enable();
 
         profileTopic = topicModel.instantiate(PROFILE_LABEL);
+        skillEntity = entityModel.instantiate(SKILL_LABEL);
+        profileHeadline = headlineEntity.instantiate(PROFILE_LABEL);
 
         tasksTopic = topicModel.instantiate(TASKS_LABEL);
+        tasksHeadline = headlineEntity.instantiate(TASKS_LABEL);
 
         headlineEntity.disable();
 
@@ -146,14 +158,14 @@ public class TextSectionTest extends Parser<TestContext> {
     public void testTextSections() {
         log.info("Start");
 
-        process(tasksHeadline, null, COUNTING);
-        process(requirementsHeadline, null, COUNTING);
+        process(tasksHeadlineLabel, null, COUNTING);
+        process(profileHeadlineLabel, null, COUNTING);
         process(exampleTxt, null, COUNTING);
 
         dictionary.initInputTokenWeights();
 
-        process(tasksHeadline, new TestContext(TASKS_LABEL, null), TRAINING);
-        process(requirementsHeadline, new TestContext(PROFILE_LABEL, null), TRAINING);
+        process(tasksHeadlineLabel, new TestContext(TASKS_LABEL, null), TRAINING);
+        process(profileHeadlineLabel, new TestContext(PROFILE_LABEL, null), TRAINING);
 
         process(exampleTxt,
                 new TestContext(
