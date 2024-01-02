@@ -17,7 +17,9 @@
 package network.aika.meta.topics;
 
 import network.aika.Model;
-import network.aika.TemplateModel;
+import network.aika.debugger.AIKADebugger;
+import network.aika.elements.activations.Activation;
+import network.aika.meta.TemplateModel;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.CategoryNeuron;
@@ -40,12 +42,13 @@ import java.util.stream.Collectors;
 import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.meta.LabelUtil.getAbstractLabel;
 import static network.aika.meta.NetworkMotifs.*;
+import static network.aika.meta.entities.EntityModel.ENTITY_LABEL;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class TopicModel implements TemplateModel, Writable {
+public class TopicModel extends TemplateModel<TopicModel> {
 
     private static final Logger log = LoggerFactory.getLogger(TopicModel.class);
 
@@ -63,11 +66,7 @@ public class TopicModel implements TemplateModel, Writable {
 
     protected PatternNeuron topicPatternN;
 
-    protected CategoryNeuron topicPatternCategory;
-
     protected BindingNeuron topicBN;
-
-    protected BindingNeuron targetInputBN;
 
     protected InhibitoryNeuron inhibitoryN;
 
@@ -79,6 +78,16 @@ public class TopicModel implements TemplateModel, Writable {
 
     public EntityModel getEntityModel() {
         return entityModel;
+    }
+
+    @Override
+    public void enable() {
+        topicBN.setBias(BINDING_NET_TARGET);
+    }
+
+    @Override
+    public void disable() {
+        topicBN.setBias(-10.0);
     }
 
     public void addTargetTopics(Document doc, Set<String> tsLabels) {
@@ -95,7 +104,7 @@ public class TopicModel implements TemplateModel, Writable {
 
     @Override
     public Model getModel() {
-        return entityModel.getModel();
+        return model;
     }
 
     @Override
@@ -122,13 +131,13 @@ public class TopicModel implements TemplateModel, Writable {
     }
 
     @Override
-    public void initStaticNeurons() {
+    public void initTemplateNeurons() {
         topicPatternN = new PatternNeuron(model)
                 .setLabel("Abstract Topic")
                 .setBias(TOPIC_NET_TARGET)
                 .setPersistent(true);
 
-        topicPatternCategory = topicPatternN.makeAbstract()
+        topicPatternN.makeAbstract()
                 .setWeight(PASSIVE_SYNAPSE_WEIGHT)
                 .getInput()
                 .setPersistent(true);
@@ -166,19 +175,61 @@ public class TopicModel implements TemplateModel, Writable {
         );
     }
 
+    private void generateLabel(Activation tAct, Activation iAct, String label) {
+        iAct.getNeuron().setLabel(
+                tAct.getLabel()
+                        .replace(TOPIC_LABEL, label + " " + TOPIC_LABEL)
+                        .replace(ENTITY_LABEL, label + " " + ENTITY_LABEL)
+        );
+    }
+
+    @Override
+    public Document createDocument(String label) {
+        Document doc = new Document(getModel(), label);
+
+        boolean flag = false;
+
+        if(flag)
+            AIKADebugger.createAndShowGUI()
+                    .setDocument(doc);
+
+        doc.setInstantiationCallback((tAct, iAct) -> {
+            generateLabel(tAct, iAct, label);
+            iAct.getNeuron().makeAbstract()
+                    .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
+                    .adjustBias();
+        });
+
+        return doc;
+    }
+
+    @Override
+    public TopicModel createInstanceModel() {
+        return new TopicModel(entityModel);
+    }
+
+    @Override
+    public void mapResults(TopicModel templateModel, Document doc) {
+        getEntityModel().getEntityPattern().setNotInstantiable(false);
+
+        topicPatternN = lookupInstance(doc, templateModel.topicPatternN);
+        topicPatternN.setPersistent(true);
+
+        topicBN = lookupInstance(doc, templateModel.topicBN);
+        topicBN.setPersistent(true);
+    }
+
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeLong(topicPatternN.getId());
-        out.writeLong(topicPatternCategory.getId());
         out.writeLong(topicBN.getId());
-        out.writeLong(targetInputBN.getId());
+        out.writeLong(inhibitoryN.getId());
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         topicPatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        topicPatternCategory = m.lookupNeuronProvider(in.readLong()).getNeuron();
         topicBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        targetInputBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

@@ -17,16 +17,17 @@
 package network.aika.meta.entities;
 
 import network.aika.Model;
-import network.aika.TemplateModel;
+import network.aika.debugger.AIKADebugger;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
+import network.aika.meta.TemplateModel;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.Document;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
-import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +43,7 @@ import static network.aika.meta.NetworkMotifs.*;
  *
  * @author Lukas Molzberger
  */
-public class EntityModel implements TemplateModel, Writable {
+public class EntityModel extends TemplateModel<EntityModel> {
 
     private static final Logger log = LoggerFactory.getLogger(EntityModel.class);
 
@@ -57,8 +58,6 @@ public class EntityModel implements TemplateModel, Writable {
 
     protected PhraseModel phraseModel;
 
-    protected CategoryNeuron entityCategory;
-
     protected PatternNeuron entityPattern;
 
     protected BindingNeuron entityBN;
@@ -67,6 +66,16 @@ public class EntityModel implements TemplateModel, Writable {
 
     public EntityModel(PhraseModel pm) {
         this.phraseModel = pm;
+    }
+
+    @Override
+    public void enable() {
+        entityBN.setBias(BINDING_NET_TARGET);
+    }
+
+    @Override
+    public void disable() {
+        entityBN.setBias(-10.0);
     }
 
     public PatternNeuron getEntityPattern() {
@@ -87,14 +96,14 @@ public class EntityModel implements TemplateModel, Writable {
     }
 
     @Override
-    public void initStaticNeurons() {
+    public void initTemplateNeurons() {
         entityPattern = new PatternNeuron(getModel())
                 .setLabel(getAbstractLabel(PATTERN, ENTITY_LABEL))
                 .setTargetNet(ENTITY_NET_TARGET)
                 .setBias(ENTITY_NET_TARGET)
                 .setPersistent(true);
 
-        entityCategory = entityPattern.makeAbstract()
+        CategoryNeuron entityCategory = entityPattern.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(entityPattern.getType()))
                 .adjustBias()
                 .getInput()
@@ -132,6 +141,51 @@ public class EntityModel implements TemplateModel, Writable {
                 inhibitoryN,
                 NEG_MARGIN * -entityBN.getTargetNet()
         );
+
+        disable();
+    }
+
+
+    private void generateLabel(Activation tAct, Activation iAct, String label) {
+        iAct.getNeuron().setLabel(
+                tAct.getLabel().replace(ENTITY_LABEL, label)
+        );
+    }
+
+    @Override
+    public Document createDocument(String label) {
+        Document doc = new Document(getModel(), label);
+
+        boolean flag = false;
+
+        if(flag)
+            AIKADebugger.createAndShowGUI()
+                    .setDocument(doc);
+
+        doc.setInstantiationCallback((tAct, iAct) -> {
+            generateLabel(tAct, iAct, label);
+            iAct.getNeuron().makeAbstract()
+                    .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
+                    .adjustBias();
+        });
+
+        return doc;
+    }
+
+    @Override
+    public void mapResults(EntityModel templateModel, Document doc) {
+        getPhraseModel().getPatternNeuron().setNotInstantiable(false);
+
+        entityPattern = lookupInstance(doc, templateModel.entityPattern);
+        entityPattern.setPersistent(true);
+
+        entityBN = lookupInstance(doc, templateModel.entityBN);
+        entityBN.setPersistent(true);
+    }
+
+    @Override
+    public EntityModel createInstanceModel() {
+        return new EntityModel(phraseModel);
     }
 
     public void prepareInstantiation() {
@@ -164,7 +218,6 @@ public class EntityModel implements TemplateModel, Writable {
 
     @Override
     public void write(DataOutput out) throws IOException {
-        out.writeLong(entityCategory.getId());
         out.writeLong(entityPattern.getId());
         out.writeLong(entityBN.getId());
         out.writeLong(inhibitoryN.getId());
@@ -172,7 +225,6 @@ public class EntityModel implements TemplateModel, Writable {
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
-        entityCategory = m.lookupNeuronProvider(in.readLong()).getNeuron();
         entityPattern = m.lookupNeuronProvider(in.readLong()).getNeuron();
         entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();

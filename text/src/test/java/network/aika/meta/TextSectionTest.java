@@ -22,7 +22,6 @@ import network.aika.debugger.AIKADebugger;
 import network.aika.meta.entities.EntityModel;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.meta.sequences.PhraseModel;
-import network.aika.meta.topics.TopicInstance;
 import network.aika.meta.topics.TopicModel;
 import network.aika.parser.Parser;
 import network.aika.parser.ParserPhase;
@@ -45,6 +44,9 @@ import static network.aika.parser.ParserPhase.TRAINING;
  */
 public class TextSectionTest extends Parser<TestContext> {
 
+    public static final String HEADLINE_LABEL = "Headline";
+
+
     public static final String PROFILE_LABEL = "Profile";
     public static final String TASKS_LABEL = "Tasks";
 
@@ -56,11 +58,13 @@ public class TextSectionTest extends Parser<TestContext> {
     private Tokenizer tokenizer;
     private PhraseModel phraseModel;
     private EntityModel entityModel;
+    protected EntityModel headlineEntity;
+
     private TopicModel topicModel;
 
-    private TopicInstance profileTopic;
+    private TopicModel profileTopic;
 
-    private TopicInstance tasksTopic;
+    private TopicModel tasksTopic;
 
 /*    private String exampleTxt = "Java Softwaredeveloper\n" +
             " \n" +
@@ -96,16 +100,20 @@ public class TextSectionTest extends Parser<TestContext> {
         phraseModel.initStaticNeurons();
 
         entityModel = new EntityModel(phraseModel);
-        entityModel.initStaticNeurons();
+        entityModel.initTemplateNeurons();
+
+        headlineEntity = entityModel.instantiate(HEADLINE_LABEL);
 
         topicModel = new TopicModel(entityModel);
-        topicModel.initStaticNeurons();
+        topicModel.initTemplateNeurons();
 
-        profileTopic = new TopicInstance(topicModel)
-                .instantiate(PROFILE_LABEL);
+        headlineEntity.enable();
 
-        tasksTopic = new TopicInstance(topicModel)
-                .instantiate(TASKS_LABEL);
+        profileTopic = topicModel.instantiate(PROFILE_LABEL);
+
+        tasksTopic = topicModel.instantiate(TASKS_LABEL);
+
+        headlineEntity.disable();
 
         model.setN(0);
     }
