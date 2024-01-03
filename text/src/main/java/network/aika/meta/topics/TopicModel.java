@@ -58,7 +58,6 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
     public static final double NEG_MARGIN = 1.1;
 
-    protected EntityModel entityModel;
 
     protected Model model;
 
@@ -69,28 +68,30 @@ public class TopicModel extends TemplateModel<TopicModel> {
     protected InhibitoryNeuron inhibitoryN;
 
 
-    public TopicModel(EntityModel entityModel) {
-        this.entityModel = entityModel;
-        model = entityModel.getModel();
-    }
-
-    public EntityModel getEntityModel() {
-        return entityModel;
+    public TopicModel(String label, Model m) {
+        this.label = label;
+        model = m;
     }
 
     @Override
     public void enable() {
-        topicBN.setBias(BINDING_NET_TARGET);
+        if(topicBN != null)
+            topicBN.setBias(BINDING_NET_TARGET);
     }
 
     @Override
     public void disable() {
-        topicBN.setBias(-10.0);
+        if(topicBN != null)
+            topicBN.setBias(-10.0);
     }
 
     @Override
     public Model getModel() {
         return model;
+    }
+
+    public BindingNeuron getTopicBindingNeuron() {
+        return topicBN;
     }
 
     @Override
@@ -127,9 +128,8 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 .setPersistent(true);
 
         topicBN = addBindingNeuron(
-                entityModel.getEntityPattern(),
+                model,
                 "Abstract Topic",
-                10.0,
                 BINDING_NET_TARGET
         );
 
@@ -146,7 +146,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
         );
 
         inhibitoryN = new InhibitoryNeuron(getModel())
-                .setLabel(getAbstractLabel(INHIBITORY, TOPIC_LABEL))
+                .setLabel(getAbstractLabel(INHIBITORY, label))
                 .setPersistent(true);
 
         inhibitoryN.makeAbstract()
@@ -159,15 +159,15 @@ public class TopicModel extends TemplateModel<TopicModel> {
         );
     }
 
-    private void generateLabel(Activation tAct, Activation iAct, String label) {
+    private void generateLabel(Activation tAct, Activation iAct, String l) {
         iAct.getNeuron().setLabel(
                 tAct.getLabel()
-                        .replace(TOPIC_LABEL, label + " " + TOPIC_LABEL)
+                        .replace(label, l + " " + TOPIC_LABEL)
         );
     }
 
     @Override
-    public Document createDocument(String label) {
+    public Document createDocument(TopicModel templateModel, String label) {
         Document doc = new Document(getModel(), label);
 
         boolean flag = false;
@@ -177,7 +177,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
                     .setDocument(doc);
 
         doc.setInstantiationCallback((tAct, iAct) -> {
-            generateLabel(tAct, iAct, label);
+            templateModel.generateLabel(tAct, iAct, label);
             iAct.getNeuron().makeAbstract()
                     .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
                     .adjustBias();
@@ -187,14 +187,12 @@ public class TopicModel extends TemplateModel<TopicModel> {
     }
 
     @Override
-    public TopicModel createInstanceModel() {
-        return new TopicModel(entityModel);
+    public TopicModel createInstanceModel(String label, TemplateModel instM) {
+        return new TopicModel(label, model);
     }
 
     @Override
     public void mapResults(TopicModel templateModel, Document doc) {
-        getEntityModel().getEntityPattern().setNotInstantiable(false);
-
         topicPatternN = lookupInstance(doc, templateModel.topicPatternN);
         topicPatternN.setPersistent(true);
 

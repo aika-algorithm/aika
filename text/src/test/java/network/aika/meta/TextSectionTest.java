@@ -35,6 +35,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static network.aika.meta.entities.EntityModel.ENTITY_LABEL;
+import static network.aika.meta.topics.TopicModel.TOPIC_LABEL;
 import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.parser.ParserPhase.TRAINING;
 
@@ -49,6 +51,8 @@ public class TextSectionTest extends Parser<TestContext> {
 
     public static final String PROFILE_LABEL = "Profile";
     public static final String SKILL_LABEL = "Skill";
+    public static final String PROFILE_HEADLINE_LABEL = "Profile-HL";
+
     public static final String TASKS_LABEL = "Tasks";
 
     String tasksHeadlineLabel = "Your Tasks";
@@ -105,23 +109,22 @@ public class TextSectionTest extends Parser<TestContext> {
 
         tokenizer = new WordTokenizer();
 
+        topicModel = new TopicModel(TOPIC_LABEL, model);
         phraseModel = new PhraseModel(model, dictionary);
-        phraseModel.initStaticNeurons();
+        entityModel = new EntityModel(ENTITY_LABEL, phraseModel, topicModel);
 
-        entityModel = new EntityModel(phraseModel);
+        topicModel.initTemplateNeurons();
+        phraseModel.initStaticNeurons();
         entityModel.initTemplateNeurons();
 
-        headlineEntity = entityModel.instantiate(HEADLINE_LABEL);
+        headlineEntity = entityModel.instantiate(HEADLINE_LABEL, topicModel);
 
-        topicModel = new TopicModel(entityModel);
-        topicModel.initTemplateNeurons();
+        profileTopic = topicModel.instantiate(PROFILE_LABEL, null);
+        skillEntity = entityModel.instantiate(SKILL_LABEL, profileTopic);
+        profileHeadline = headlineEntity.instantiate(PROFILE_HEADLINE_LABEL, profileTopic);
 
-        profileTopic = topicModel.instantiate(PROFILE_LABEL);
-        skillEntity = entityModel.instantiate(SKILL_LABEL);
-        tasksHeadline = headlineEntity.instantiate(TASKS_LABEL);
-
-        tasksTopic = topicModel.instantiate(TASKS_LABEL);
-        profileHeadline = headlineEntity.instantiate(PROFILE_LABEL);
+        tasksTopic = topicModel.instantiate(TASKS_LABEL, null);
+        tasksHeadline = headlineEntity.instantiate(TASKS_LABEL, tasksTopic);
 
         model.setN(0);
     }

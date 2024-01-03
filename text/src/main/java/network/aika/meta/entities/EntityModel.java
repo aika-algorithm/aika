@@ -19,13 +19,13 @@ package network.aika.meta.entities;
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.*;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.meta.TemplateModel;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.Document;
+import network.aika.meta.topics.TopicModel;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
 import org.slf4j.Logger;
@@ -58,24 +58,38 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
     protected PhraseModel phraseModel;
 
+    protected TopicModel topicModel;
+
     protected PatternNeuron entityPattern;
 
     protected BindingNeuron entityBN;
 
     protected InhibitoryNeuron inhibitoryN;
 
-    public EntityModel(PhraseModel pm) {
+    public EntityModel(String label, PhraseModel pm, TopicModel tm) {
+        this.label = label;
         this.phraseModel = pm;
+        this.topicModel = tm;
+    }
+
+    public TopicModel getTopicModel() {
+        return topicModel;
     }
 
     @Override
     public void enable() {
-        entityBN.setBias(BINDING_NET_TARGET);
+        topicModel.enable();
+
+        if(entityBN != null)
+            entityBN.setBias(BINDING_NET_TARGET);
     }
 
     @Override
     public void disable() {
-        entityBN.setBias(-10.0);
+        topicModel.disable();
+
+        if(entityBN != null)
+            entityBN.setBias(-10.0);
     }
 
     public PatternNeuron getEntityPattern() {
@@ -93,7 +107,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
     @Override
     public void initTemplateNeurons() {
         entityPattern = new PatternNeuron(getModel())
-                .setLabel(getAbstractLabel(PATTERN, ENTITY_LABEL))
+                .setLabel(getAbstractLabel(PATTERN, label))
                 .setTargetNet(ENTITY_NET_TARGET)
                 .setBias(ENTITY_NET_TARGET)
                 .setPersistent(true);
@@ -104,9 +118,11 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 .getInput()
                 .setPersistent(true);
 
+        addInputObjectSynapse(entityPattern, topicModel.getTopicBindingNeuron(), 10.0);
+
         entityBN = addBindingNeuron(
                 phraseModel.getPatternNeuron(),
-                getAbstractLabel(BINDING, ENTITY_LABEL),
+                getAbstractLabel(BINDING, label),
                 10.0,
                 BINDING_NET_TARGET
         );
@@ -125,7 +141,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
         );
 
         inhibitoryN = new InhibitoryNeuron(getModel())
-                .setLabel(getAbstractLabel(INHIBITORY, ENTITY_LABEL))
+                .setLabel(getAbstractLabel(INHIBITORY, label))
                 .setPersistent(true);
 
         inhibitoryN.makeAbstract()
@@ -140,16 +156,15 @@ public class EntityModel extends TemplateModel<EntityModel> {
         disable();
     }
 
-
-    private void generateLabel(Activation tAct, Activation iAct, String label) {
+    private void generateLabel(Activation tAct, Activation iAct, String l) {
         iAct.getNeuron().setLabel(
-                tAct.getLabel().replace(ENTITY_LABEL, label)
+                tAct.getLabel().replace(label, l)
         );
     }
 
     @Override
-    public Document createDocument(String label) {
-        Document doc = new Document(getModel(), label);
+    public Document createDocument(EntityModel templateModel, String l) {
+        Document doc = new Document(getModel(), l);
 
         boolean flag = false;
 
@@ -158,7 +173,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
                     .setDocument(doc);
 
         doc.setInstantiationCallback((tAct, iAct) -> {
-            generateLabel(tAct, iAct, label);
+            templateModel.generateLabel(tAct, iAct, l);
             iAct.getNeuron().makeAbstract()
                     .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
                     .adjustBias();
@@ -179,8 +194,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
     }
 
     @Override
-    public EntityModel createInstanceModel() {
-        return new EntityModel(phraseModel);
+    public EntityModel createInstanceModel(String label, TemplateModel instM) {
+        return new EntityModel(label, phraseModel, (TopicModel) instM);
     }
 
     public void prepareInstantiation() {
@@ -196,10 +211,6 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 phraseModel.getPatternNeuron(),
                 new TextReference(entityPosRange, entityCharRange)
         );
-    }
-
-    public PatternNeuron getInstancePattern(String entityType) {
-        return getModel().getInputNeuron(entityType, entityPattern);
     }
 
     public void setNotInstantiable(boolean notInstantiable) {

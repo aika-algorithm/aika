@@ -19,10 +19,7 @@ package network.aika.meta;
 import network.aika.Document;
 import network.aika.Model;
 import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.neurons.Neuron;
 import network.aika.meta.exceptions.FailedInstantiationException;
-import network.aika.queue.Step;
-import network.aika.queue.steps.FeedbackTrigger;
 import network.aika.queue.steps.InstantiationTrigger;
 import network.aika.utils.Writable;
 
@@ -32,11 +29,13 @@ import network.aika.utils.Writable;
  */
 public abstract class TemplateModel<T extends TemplateModel> implements Writable {
 
+    protected String label;
+
     public abstract Model getModel();
 
     public abstract void initTemplateNeurons();
 
-    public abstract T createInstanceModel();
+    public abstract T createInstanceModel(String label, TemplateModel instM);
 
     public abstract void prepareInstantiation();
 
@@ -46,11 +45,11 @@ public abstract class TemplateModel<T extends TemplateModel> implements Writable
 
     public abstract void prepareExampleDoc(Document doc, String label);
 
-    public abstract Document createDocument(String label);
+    public abstract Document createDocument(T templateModel, String label);
 
     public abstract void mapResults(T templateModel, Document doc);
 
-    public T instantiate(String label) {
+    public T instantiate(String l, TemplateModel instM) {
         enable();
 
         prepareInstantiation();
@@ -60,14 +59,14 @@ public abstract class TemplateModel<T extends TemplateModel> implements Writable
                 .setTrainingEnabled(true)
                 .setMetaInstantiationEnabled(true);
 
-        TemplateModel im = createInstanceModel();
+        TemplateModel im = createInstanceModel(l, instM);
 
-        Document doc = im.createDocument(label);
+        Document doc = im.createDocument(this, l);
 
         try {
             InstantiationTrigger.add(doc);
 
-            prepareExampleDoc(doc, label);
+            prepareExampleDoc(doc, l);
 
             doc.process();
 

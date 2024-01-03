@@ -16,6 +16,7 @@
  */
 package network.aika.meta;
 
+import network.aika.Model;
 import network.aika.elements.Type;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
@@ -66,6 +67,24 @@ public class NetworkMotifs {
         bn.setTargetNet(netTarget);
 
         return bn;
+    }
+
+    public static BindingNeuron addBindingNeuron(Model m, String label, double netTarget) {
+        BindingNeuron bn = new BindingNeuron(m)
+                .setLabel(label)
+                .setPersistent(true);
+
+        bn.setBias(netTarget);
+        bn.setTargetNet(netTarget);
+
+        return bn;
+    }
+
+    public static void addInputObjectSynapse(PatternNeuron input, BindingNeuron bn, double weight) {
+        new InputObjectSynapse()
+                .setWeight(weight)
+                .link(input, bn)
+                .adjustBias();
     }
 
     public static void addInhibitoryLoop(BindingNeuron bn, InhibitoryNeuron in, double weight) {

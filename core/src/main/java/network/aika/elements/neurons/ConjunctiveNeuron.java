@@ -117,9 +117,13 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
         for(ConjunctiveSynapse s: inputSynapses) {
             s.setSumOfLowerWeights(new double[] {sum, lastSum});
 
+            double w = s.getWeight().getUpdatedValue();
+            if(w <= 0.0)
+                continue;
+
             lastSum = sum;
             if(!s.isOptional() && !(s instanceof PositiveFeedbackSynapse))
-                sum += s.getWeight().getUpdatedValue();
+                sum += w;
 
             if(!s.isLinkingAllowed(true))
                 lastSum = sum;
