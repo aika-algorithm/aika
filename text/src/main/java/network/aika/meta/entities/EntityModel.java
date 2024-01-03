@@ -91,11 +91,6 @@ public class EntityModel extends TemplateModel<EntityModel> {
     }
 
     @Override
-    public boolean stepFilter(Neuron n) {
-        return n == entityBN || n == entityPattern || n == phraseModel.getPatternNeuron();
-    }
-
-    @Override
     public void initTemplateNeurons() {
         entityPattern = new PatternNeuron(getModel())
                 .setLabel(getAbstractLabel(PATTERN, ENTITY_LABEL))
@@ -103,7 +98,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 .setBias(ENTITY_NET_TARGET)
                 .setPersistent(true);
 
-        CategoryNeuron entityCategory = entityPattern.makeAbstract()
+        entityPattern.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(entityPattern.getType()))
                 .adjustBias()
                 .getInput()

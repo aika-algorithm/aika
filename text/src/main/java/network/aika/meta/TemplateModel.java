@@ -38,8 +38,6 @@ public abstract class TemplateModel<T extends TemplateModel> implements Writable
 
     public abstract T createInstanceModel();
 
-    public abstract boolean stepFilter(Neuron n);
-
     public abstract void prepareInstantiation();
 
     public abstract void enable();
@@ -51,15 +49,6 @@ public abstract class TemplateModel<T extends TemplateModel> implements Writable
     public abstract Document createDocument(String label);
 
     public abstract void mapResults(T templateModel, Document doc);
-
-    protected boolean stepFilter(Step s) {
-        if(!(s instanceof FeedbackTrigger))
-            return true;
-
-        FeedbackTrigger ft = (FeedbackTrigger) s;
-
-        return stepFilter(ft.getElement().getNeuron());
-    }
 
     public T instantiate(String label) {
         enable();
@@ -80,11 +69,11 @@ public abstract class TemplateModel<T extends TemplateModel> implements Writable
 
             prepareExampleDoc(doc, label);
 
-            doc.process(this::stepFilter);
+            doc.process();
 
             im.mapResults(this, doc);
 
-            disable();
+            im.disable();
         } catch(Exception e) {
             throw new FailedInstantiationException(label, e);
         } finally {

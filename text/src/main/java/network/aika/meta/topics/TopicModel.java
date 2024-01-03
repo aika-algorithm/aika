@@ -89,12 +89,6 @@ public class TopicModel extends TemplateModel<TopicModel> {
     }
 
     @Override
-    public boolean stepFilter(Neuron n) {
-        return n == topicBN ||
-                n == topicPatternN;
-    }
-
-    @Override
     public Model getModel() {
         return model;
     }

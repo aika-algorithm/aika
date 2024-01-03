@@ -116,16 +116,12 @@ public class TextSectionTest extends Parser<TestContext> {
         topicModel = new TopicModel(entityModel);
         topicModel.initTemplateNeurons();
 
-        headlineEntity.enable();
-
         profileTopic = topicModel.instantiate(PROFILE_LABEL);
         skillEntity = entityModel.instantiate(SKILL_LABEL);
-        profileHeadline = headlineEntity.instantiate(PROFILE_LABEL);
-
-        tasksTopic = topicModel.instantiate(TASKS_LABEL);
         tasksHeadline = headlineEntity.instantiate(TASKS_LABEL);
 
-        headlineEntity.disable();
+        tasksTopic = topicModel.instantiate(TASKS_LABEL);
+        profileHeadline = headlineEntity.instantiate(PROFILE_LABEL);
 
         model.setN(0);
     }
