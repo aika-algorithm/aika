@@ -18,18 +18,25 @@ package network.aika.meta;
 
 import network.aika.Document;
 import network.aika.Model;
+import network.aika.callbacks.InstantiationCallback;
+import network.aika.debugger.AIKADebugger;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.meta.exceptions.FailedInstantiationException;
 import network.aika.queue.steps.InstantiationTrigger;
 import network.aika.utils.Writable;
 
+import static network.aika.meta.NetworkMotifs.getDefaultInputCategorySynapseWeight;
+
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class TemplateModel<T extends TemplateModel> implements Writable {
+public abstract class TemplateModel<T extends TemplateModel> implements InstantiationCallback, Writable {
 
     protected String label;
+
+    protected T parent;
 
     public abstract Model getModel();
 
@@ -45,9 +52,21 @@ public abstract class TemplateModel<T extends TemplateModel> implements Writable
 
     public abstract void prepareExampleDoc(Document doc, String label);
 
-    public abstract Document createDocument(T templateModel, String label);
+    public Document createDocument(String l) {
+        Document doc = new Document(getModel(), l);
 
-    public abstract void mapResults(T templateModel, Document doc);
+        boolean flag = false;
+
+        if(flag)
+            AIKADebugger.createAndShowGUI()
+                    .setDocument(doc);
+
+
+        doc.setInstantiationCallback(this);
+        return doc;
+    }
+
+    public abstract void mapResults(Document doc);
 
     public T instantiate(String l, TemplateModel instM) {
         enable();
@@ -60,8 +79,9 @@ public abstract class TemplateModel<T extends TemplateModel> implements Writable
                 .setMetaInstantiationEnabled(true);
 
         TemplateModel im = createInstanceModel(l, instM);
+        im.parent = this;
 
-        Document doc = im.createDocument(this, l);
+        Document doc = im.createDocument(l);
 
         try {
             InstantiationTrigger.add(doc);
@@ -70,7 +90,7 @@ public abstract class TemplateModel<T extends TemplateModel> implements Writable
 
             doc.process();
 
-            im.mapResults(this, doc);
+            im.mapResults(doc);
 
             im.disable();
         } catch(Exception e) {
@@ -83,6 +103,22 @@ public abstract class TemplateModel<T extends TemplateModel> implements Writable
 
         return (T) im;
     }
+
+    @Override
+    public void onInstantiation(Activation tAct, Activation iAct) {
+        parent.generateLabel(tAct, iAct, label);
+        iAct.getNeuron().makeAbstract()
+                .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
+                .adjustBias();
+    }
+
+    protected void generateLabel(Activation tAct, Activation iAct, String l) {
+        iAct.getNeuron().setLabel(
+                tAct.getLabel().replace(label, l + getLabelPostfix())
+        );
+    }
+
+    protected abstract String getLabelPostfix();
 
     protected static <N extends ConjunctiveNeuron<?, ?>> N lookupInstance(Document doc, N templateN) {
         return (N) templateN.getActivations(doc)

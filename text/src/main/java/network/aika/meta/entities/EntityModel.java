@@ -18,7 +18,7 @@ package network.aika.meta.entities;
 
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
-import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
@@ -156,40 +156,24 @@ public class EntityModel extends TemplateModel<EntityModel> {
         disable();
     }
 
-    private void generateLabel(Activation tAct, Activation iAct, String l) {
-        iAct.getNeuron().setLabel(
-                tAct.getLabel().replace(label, l)
-        );
+    @Override
+    protected String getLabelPostfix() {
+        return " " + ENTITY_LABEL;
     }
 
     @Override
-    public Document createDocument(EntityModel templateModel, String l) {
-        Document doc = new Document(getModel(), l);
-
-        boolean flag = false;
-
-        if(flag)
-            AIKADebugger.createAndShowGUI()
-                    .setDocument(doc);
-
-        doc.setInstantiationCallback((tAct, iAct) -> {
-            templateModel.generateLabel(tAct, iAct, l);
-            iAct.getNeuron().makeAbstract()
-                    .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
-                    .adjustBias();
-        });
-
-        return doc;
+    public Neuron resolveInstance(Neuron template) {
+        return topicModel.resolveInstance(template);
     }
 
     @Override
-    public void mapResults(EntityModel templateModel, Document doc) {
+    public void mapResults(Document doc) {
         getPhraseModel().getPatternNeuron().setNotInstantiable(false);
 
-        entityPattern = lookupInstance(doc, templateModel.entityPattern);
+        entityPattern = lookupInstance(doc, parent.entityPattern);
         entityPattern.setPersistent(true);
 
-        entityBN = lookupInstance(doc, templateModel.entityBN);
+        entityBN = lookupInstance(doc, parent.entityBN);
         entityBN.setPersistent(true);
     }
 

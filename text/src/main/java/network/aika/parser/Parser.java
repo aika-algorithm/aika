@@ -17,9 +17,12 @@
 package network.aika.parser;
 
 
+import network.aika.callbacks.InstantiationCallback;
 import network.aika.debugger.AIKADebugger;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
+import network.aika.elements.neurons.Neuron;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.Document;
 import network.aika.queue.Step;
@@ -38,18 +41,24 @@ import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
  *
  * @author Lukas Molzberger
  */
-public abstract class Parser<C extends Context> {
+public abstract class Parser<C extends Context> implements InstantiationCallback {
 
     protected static final Logger log = LoggerFactory.getLogger(Parser.class);
 
     protected Document initDocument(String txt, C context, ParserPhase phase) {
         Document doc = new Document(getPhraseModel().getModel(), txt);
-
-        doc.setInstantiationCallback((tAct, iAct) ->
-                generateTemplateInstanceLabels(iAct)
-        );
-
+        doc.setInstantiationCallback(this);
         return doc;
+    }
+
+    @Override
+    public Neuron resolveInstance(Neuron template) {
+        return null;
+    }
+
+    @Override
+    public void onInstantiation(Activation tAct, Activation iAct) {
+        generateTemplateInstanceLabels(iAct);
     }
 
     protected abstract SequenceModel getPhraseModel();

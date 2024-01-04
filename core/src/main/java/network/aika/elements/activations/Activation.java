@@ -30,7 +30,6 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.elements.synapses.slots.CategoryInputSynapseOutputSlot;
 import network.aika.enums.Scope;
 import network.aika.queue.steps.InactiveLinks;
 import network.aika.text.TextReference;
@@ -521,7 +520,12 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         if(neuron.isNotInstantiable())
             return null;
 
-        N n = (N) neuron.instantiateTemplate();
+        N n = null;
+        if(doc.getInstantiationCallback() != null)
+            n = (N) doc.getInstantiationCallback().resolveInstance(neuron);
+
+        if(n == null)
+            n = (N) neuron.instantiateTemplate();
 
         Activation<N> ti = n.createActivation(getDocument());
 

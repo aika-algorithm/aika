@@ -159,32 +159,11 @@ public class TopicModel extends TemplateModel<TopicModel> {
         );
     }
 
-    private void generateLabel(Activation tAct, Activation iAct, String l) {
-        iAct.getNeuron().setLabel(
-                tAct.getLabel()
-                        .replace(label, l + " " + TOPIC_LABEL)
-        );
-    }
-
     @Override
-    public Document createDocument(TopicModel templateModel, String label) {
-        Document doc = new Document(getModel(), label);
-
-        boolean flag = false;
-
-        if(flag)
-            AIKADebugger.createAndShowGUI()
-                    .setDocument(doc);
-
-        doc.setInstantiationCallback((tAct, iAct) -> {
-            templateModel.generateLabel(tAct, iAct, label);
-            iAct.getNeuron().makeAbstract()
-                    .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
-                    .adjustBias();
-        });
-
-        return doc;
+    protected String getLabelPostfix() {
+        return " " + TOPIC_LABEL;
     }
+
 
     @Override
     public TopicModel createInstanceModel(String label, TemplateModel instM) {
@@ -192,11 +171,25 @@ public class TopicModel extends TemplateModel<TopicModel> {
     }
 
     @Override
-    public void mapResults(TopicModel templateModel, Document doc) {
-        topicPatternN = lookupInstance(doc, templateModel.topicPatternN);
+    public Neuron resolveInstance(Neuron template) {
+        if(parent == null)
+            return null;
+
+        if(parent.topicPatternN == template)
+            return topicPatternN;
+
+        if(parent.topicBN == template)
+            return topicBN;
+
+        return null;
+    }
+
+    @Override
+    public void mapResults(Document doc) {
+        topicPatternN = lookupInstance(doc, parent.topicPatternN);
         topicPatternN.setPersistent(true);
 
-        topicBN = lookupInstance(doc, templateModel.topicBN);
+        topicBN = lookupInstance(doc, parent.topicBN);
         topicBN.setPersistent(true);
     }
 
