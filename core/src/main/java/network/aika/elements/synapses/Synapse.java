@@ -241,7 +241,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public S instantiateTemplate(I input, O output) {
-        S s;
+        S s = (S) output.getInputSynapse(input.getProvider());
+        if(s != null)
+            return s;
+
         try {
             s = (S) getClass().getConstructor().newInstance();
         } catch (Exception e) {

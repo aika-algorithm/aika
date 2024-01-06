@@ -41,24 +41,24 @@ import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
  *
  * @author Lukas Molzberger
  */
-public abstract class Parser<C extends Context> implements InstantiationCallback {
+public abstract class Parser<C extends Context> {
 
     protected static final Logger log = LoggerFactory.getLogger(Parser.class);
 
     protected Document initDocument(String txt, C context, ParserPhase phase) {
         Document doc = new Document(getPhraseModel().getModel(), txt);
-        doc.setInstantiationCallback(this);
+        doc.setInstantiationCallback(new InstantiationCallback() {
+            @Override
+            public Neuron resolveInstance(Neuron template) {
+                return null;
+            }
+
+            @Override
+            public void onInstantiation(Activation tAct, Activation iAct) {
+                generateTemplateInstanceLabels(iAct);
+            }
+        });
         return doc;
-    }
-
-    @Override
-    public Neuron resolveInstance(Neuron template) {
-        return null;
-    }
-
-    @Override
-    public void onInstantiation(Activation tAct, Activation iAct) {
-        generateTemplateInstanceLabels(iAct);
     }
 
     protected abstract SequenceModel getPhraseModel();
