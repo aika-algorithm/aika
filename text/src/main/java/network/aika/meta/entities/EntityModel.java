@@ -18,6 +18,7 @@ package network.aika.meta.entities;
 
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
@@ -82,6 +83,9 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         if(entityBN != null)
             entityBN.setBias(BINDING_NET_TARGET);
+
+        if(entityPattern != null)
+            entityPattern.setBias(ENTITY_NET_TARGET);
     }
 
     @Override
@@ -90,6 +94,9 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         if(entityBN != null)
             entityBN.setBias(-10.0);
+
+        if(entityPattern != null)
+            entityPattern.setBias(-10.0);
     }
 
     public PatternNeuron getEntityPattern() {
@@ -159,6 +166,14 @@ public class EntityModel extends TemplateModel<EntityModel> {
     @Override
     protected String getLabelPostfix() {
         return " " + ENTITY_LABEL;
+    }
+
+    @Override
+    public void onInstantiation(Activation tAct, Activation iAct) {
+        parent.generateLabel(tAct, iAct, label);
+        iAct.getNeuron().makeAbstract()
+                .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
+                .adjustBias();
     }
 
     @Override

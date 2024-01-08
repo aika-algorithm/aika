@@ -524,8 +524,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         if(doc.getInstantiationCallback() != null)
             n = (N) doc.getInstantiationCallback().resolveInstance(neuron);
 
-        if(n == null)
+        boolean newNeuronInstance = false;
+        if(n == null) {
             n = (N) neuron.instantiateTemplate();
+            newNeuronInstance = true;
+        }
 
         Activation<N> ti = n.createActivation(getDocument());
 
@@ -538,7 +541,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         linkTemplateAndInstance(ti);
         instantiateTemplateEdges(ti);
 
-        if(doc.getInstantiationCallback() != null)
+        if(newNeuronInstance && doc.getInstantiationCallback() != null)
             doc.getInstantiationCallback().onInstantiation(this, ti);
 
         return ti;

@@ -34,6 +34,8 @@ import java.text.NumberFormat;
  */
 public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty implements UpdateListener<ListenerFieldLink> {
 
+    public final static int MAX_REFERENCE_LENGTH = 80;
+
     protected F field;
     protected AbstractFieldLink listenerLink;
 
@@ -122,8 +124,8 @@ public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty
         if(showReference) {
             Object outRef = field.getReference();
             String outRefStr = outRef != null ? "" + outRef : "";
-            if(outRefStr.length() > 80) {
-                outRefStr = outRefStr.substring(0, 37) + "...";
+            if(outRefStr.length() > MAX_REFERENCE_LENGTH) {
+                outRefStr = outRefStr.substring(0, MAX_REFERENCE_LENGTH - 3) + "...";
             }
             JLabel jOutRef = new JLabel(outRefStr);
             addGridEntry(jOutRef, xPos, yPos, 1, insets);
