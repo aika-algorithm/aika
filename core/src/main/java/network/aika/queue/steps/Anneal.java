@@ -35,14 +35,16 @@ public class Anneal extends ElementStep<BindingActivation> {
 
     private double nextStep;
 
-    public static void add(BindingActivation act, double nv) {
-        add(new Anneal(act, nv));
+    public static void add(BindingActivation act) {
+        double v = act.getFeedbackTrigger().getValue();
+        if (v < 1.0)
+            add(new Anneal(act, v));
     }
 
-    public Anneal(BindingActivation act, double nv) {
+    public Anneal(BindingActivation act, double v) {
         super(act);
 
-        nextStep = nv;
+        nextStep = v;
     }
 
     @Override
@@ -55,12 +57,11 @@ public class Anneal extends ElementStep<BindingActivation> {
         BindingActivation act = getElement();
         Document doc = act.getDocument();
 
-        nextStep -= doc.getConfig().getAnnealStepSize();
+        nextStep += doc.getConfig().getAnnealStepSize();
 
-        act.getFeedbackTrigger().setValue(ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT.f(nextStep));
+        act.getFeedbackTrigger().setValue(nextStep);
 
-        if (nextStep > 0.0)
-            Anneal.add(this);
+        Anneal.add(this);
     }
 
     @Override
@@ -70,7 +71,6 @@ public class Anneal extends ElementStep<BindingActivation> {
 
     @Override
     public String toString() {
-        Activation act = getElement();
         return getElement() +
                 " NextStep:" + doubleToString(nextStep, "#.######");
     }

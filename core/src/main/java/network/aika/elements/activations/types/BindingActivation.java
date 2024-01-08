@@ -68,7 +68,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         states[POSITIVE_FEEDBACK.ordinal()] = new State(this, POSITIVE_FEEDBACK);
         linkAndConnect(getNet(NEGATIVE_FEEDBACK), getNet(POSITIVE_FEEDBACK));
 
-        Anneal.add(this, getModel().getConfig().getAnnealStart());
+        Anneal.add(this);
     }
 
     @Override
