@@ -17,8 +17,6 @@
 package network.aika.queue.steps;
 
 import network.aika.Document;
-import network.aika.ActivationFunction;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
@@ -33,7 +31,7 @@ import static network.aika.utils.Utils.doubleToString;
  */
 public class Anneal extends ElementStep<BindingActivation> {
 
-    private double nextStep;
+    private double lastValue;
 
     public static void add(BindingActivation act) {
         double v = act.getFeedbackTrigger().getValue();
@@ -44,7 +42,7 @@ public class Anneal extends ElementStep<BindingActivation> {
     public Anneal(BindingActivation act, double v) {
         super(act);
 
-        nextStep = v;
+        lastValue = v;
     }
 
     @Override
@@ -57,11 +55,11 @@ public class Anneal extends ElementStep<BindingActivation> {
         BindingActivation act = getElement();
         Document doc = act.getDocument();
 
-        nextStep += doc.getConfig().getAnnealStepSize();
+        lastValue += doc.getConfig().getAnnealStepSize();
 
-        act.getFeedbackTrigger().setValue(nextStep);
+        act.getFeedbackTrigger().setValue(lastValue);
 
-        Anneal.add(this);
+        Anneal.add(act);
     }
 
     @Override
@@ -72,6 +70,6 @@ public class Anneal extends ElementStep<BindingActivation> {
     @Override
     public String toString() {
         return getElement() +
-                " NextStep:" + doubleToString(nextStep, "#.######");
+                " LastValue:" + doubleToString(lastValue, "#.######");
     }
 }
