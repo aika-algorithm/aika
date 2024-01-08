@@ -31,18 +31,15 @@ import static network.aika.utils.Utils.doubleToString;
  */
 public class Anneal extends ElementStep<BindingActivation> {
 
-    private double lastValue;
 
     public static void add(BindingActivation act) {
         double v = act.getFeedbackTrigger().getValue();
-        if (v < 1.0)
-            add(new Anneal(act, v));
+        if (v <= 1.0)
+            add(new Anneal(act));
     }
 
-    public Anneal(BindingActivation act, double v) {
+    public Anneal(BindingActivation act) {
         super(act);
-
-        lastValue = v;
     }
 
     @Override
@@ -55,9 +52,16 @@ public class Anneal extends ElementStep<BindingActivation> {
         BindingActivation act = getElement();
         Document doc = act.getDocument();
 
-        lastValue += doc.getConfig().getAnnealStepSize();
+        double v = act.getFeedbackTrigger().getValue();
+        if(v >= 1.0)
+            return;
 
-        act.getFeedbackTrigger().setValue(lastValue);
+        act.getFeedbackTrigger().setValue(
+                Math.min(
+                        v + doc.getConfig().getAnnealStepSize(),
+                        1.0
+                )
+        );
 
         Anneal.add(act);
     }
@@ -70,6 +74,6 @@ public class Anneal extends ElementStep<BindingActivation> {
     @Override
     public String toString() {
         return getElement() +
-                " LastValue:" + doubleToString(lastValue, "#.######");
+                " LastValue:" + doubleToString(getElement().getFeedbackTrigger().getValue(), "#.######");
     }
 }
