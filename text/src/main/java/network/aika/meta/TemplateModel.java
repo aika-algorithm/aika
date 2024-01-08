@@ -107,9 +107,6 @@ public abstract class TemplateModel<T extends TemplateModel> implements Instanti
     @Override
     public void onInstantiation(Activation tAct, Activation iAct) {
         parent.generateLabel(tAct, iAct, label);
-        iAct.getNeuron().makeAbstract()
-                .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
-                .adjustBias();
     }
 
     protected void generateLabel(Activation tAct, Activation iAct, String l) {

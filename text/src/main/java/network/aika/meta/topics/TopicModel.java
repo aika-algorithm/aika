@@ -77,12 +77,18 @@ public class TopicModel extends TemplateModel<TopicModel> {
     public void enable() {
         if(topicBN != null)
             topicBN.setBias(BINDING_NET_TARGET);
+
+        if(topicPatternN != null)
+            topicPatternN.setBias(TOPIC_NET_TARGET);
     }
 
     @Override
     public void disable() {
         if(topicBN != null)
             topicBN.setBias(-10.0);
+
+        if(topicPatternN != null)
+            topicPatternN.setBias(-10.0);
     }
 
     @Override
