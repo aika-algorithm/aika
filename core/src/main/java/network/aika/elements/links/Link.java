@@ -322,6 +322,9 @@ public abstract class Link<
             );
     }
 
+    public void checkPrimarySuppression() {
+    }
+
     public boolean isNegative() {
         return synapse.isNegative();
     }

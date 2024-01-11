@@ -30,6 +30,8 @@ public class BindingNeuronPropertyPanel<E extends BindingNeuron> extends Conjunc
 
     public BindingNeuronPropertyPanel(E n, Activation ref) {
         super(n, ref);
+
+        addConstant("Is Primary: ", "" + n.isPrimary());
     }
 
     public static BindingNeuronPropertyPanel create(BindingNeuron n, Activation ref) {

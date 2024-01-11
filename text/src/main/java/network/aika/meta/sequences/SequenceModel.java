@@ -212,7 +212,8 @@ public abstract class SequenceModel implements Writable {
     }
 
     protected BindingNeuron createPrimaryBindingNeuron() {
-        return createBindingNeuron(PRIMARY_BN_PARAMS, 0, true, false);
+        return createBindingNeuron(PRIMARY_BN_PARAMS, 0, true, false)
+                .setPrimary(true);
     }
 
     protected void expandContinueBindingNeurons(

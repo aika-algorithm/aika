@@ -68,6 +68,8 @@ public class LinkUpdate extends ElementStep<Link> {
             //updateConnected(outputSlotFL, state, true);
 
             l.retrieveAndConnectBindingSignals(state);
+
+            l.checkPrimarySuppression();
         } else {
             //  updateConnected(inputSlotFL, state, true);
         }

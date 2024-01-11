@@ -25,7 +25,13 @@ import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.types.BindingCategorySynapse;
+import network.aika.statistic.AverageCoveredSpace;
+import network.aika.statistic.SampleSpace;
 
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.enums.Scope.INPUT;
@@ -41,12 +47,23 @@ import static network.aika.enums.Scope.SAME;
 )
 public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActivation> {
 
+    private boolean isPrimary;
+
     public BindingNeuron(NeuronProvider np) {
         super(np);
     }
 
     public BindingNeuron(Model m) {
         super(m);
+    }
+
+    public BindingNeuron setPrimary(boolean isPrimary) {
+        this.isPrimary = isPrimary;
+        return this;
+    }
+
+    public boolean isPrimary() {
+        return isPrimary;
     }
 
     public static BindingNeuron create(Model m, String label) {
@@ -86,5 +103,20 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     @Override
     public BindingCategorySynapse getCategoryOutputSynapse() {
         return getOutputSynapseByType(BindingCategorySynapse.class);
+    }
+
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+
+        out.writeBoolean(isPrimary);
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws Exception {
+        super.readFields(in, m);
+
+        isPrimary = in.readBoolean();
     }
 }

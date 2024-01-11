@@ -42,7 +42,12 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     protected void initWeightInput() {
         super.initWeightInput();
 
-        if(!isInputSideActive())
+        checkPrimarySuppression();
+    }
+
+    @Override
+    public void checkPrimarySuppression() {
+        if(output.getNeuron().isPrimary() && !isInputSideActive())
             output.getAnnealingValue().setValue(1.0);
     }
 
