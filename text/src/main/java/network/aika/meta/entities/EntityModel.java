@@ -225,13 +225,18 @@ public class EntityModel extends TemplateModel<EntityModel> {
     public void write(DataOutput out) throws IOException {
         out.writeLong(entityPattern.getId());
         out.writeLong(entityBN.getId());
-        out.writeLong(inhibitoryN.getId());
+
+        out.writeBoolean(inhibitoryN != null);
+        if(inhibitoryN != null)
+            out.writeLong(inhibitoryN.getId());
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         entityPattern = m.lookupNeuronProvider(in.readLong()).getNeuron();
         entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+
+        if(in.readBoolean())
+            inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }

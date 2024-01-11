@@ -204,13 +204,18 @@ public class TopicModel extends TemplateModel<TopicModel> {
     public void write(DataOutput out) throws IOException {
         out.writeLong(topicPatternN.getId());
         out.writeLong(topicBN.getId());
-        out.writeLong(inhibitoryN.getId());
+
+        out.writeBoolean(inhibitoryN != null);
+        if(inhibitoryN != null)
+            out.writeLong(inhibitoryN.getId());
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         topicPatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
         topicBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+
+        if(in.readBoolean())
+            inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }
