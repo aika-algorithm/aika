@@ -30,7 +30,25 @@ import static network.aika.utils.Utils.TOLERANCE;
 public class Fields {
 
     public static boolean isTrue(FieldOutput f) {
-        return f != null && f.getValue() > 0.0;
+        if(f == null)
+            return false;
+
+        return isTrue(f.getValue());
+    }
+
+    public static boolean isTrue(FieldOutput f, boolean updatedValue) {
+        if(f == null)
+            return false;
+
+        return isTrue(
+                updatedValue ?
+                        f.getUpdatedValue() :
+                        f.getValue()
+        );
+    }
+
+    private static boolean isTrue(double v) {
+        return v > 0.0;
     }
 
     public static MaxField max(FieldObject ref, String label, FieldOutput... in) {

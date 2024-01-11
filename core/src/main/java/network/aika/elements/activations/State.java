@@ -22,6 +22,7 @@ import network.aika.fields.*;
 import network.aika.fields.link.AbstractFieldLink;
 import network.aika.queue.steps.Fired;
 
+import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.fields.Fields.func;
 import static network.aika.fields.Fields.isTrue;
@@ -68,6 +69,11 @@ public class State implements FieldObject {
                 x -> act.getActivationFunction().f(x)
         );
         value.setQueued(act.getDocument(), INFERENCE);
+
+        value.addListener("onFired", (fl, u) -> {
+            if (isTrue(value, false) != isTrue(value, true))
+                getDocument().onElementEvent(UPDATE, act);
+        });
     }
 
     private void updateFiredStep(AbstractFieldLink fl) {
@@ -108,7 +114,7 @@ public class State implements FieldObject {
     }
 
     public boolean isFired() {
-        return isTrue(value);
+        return isTrue(value, true);
     }
 
     @Override

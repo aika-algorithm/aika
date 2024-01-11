@@ -125,6 +125,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
     public void initTemplateNeurons() {
         topicPatternN = new PatternNeuron(model)
                 .setLabel("Abstract Topic")
+                .setTargetNet(TOPIC_NET_TARGET)
                 .setBias(TOPIC_NET_TARGET)
                 .setPersistent(true);
 

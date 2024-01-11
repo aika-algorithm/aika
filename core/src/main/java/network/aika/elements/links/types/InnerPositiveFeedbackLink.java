@@ -43,7 +43,7 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
         super.initWeightInput();
 
         if(!isInputSideActive())
-            output.getFeedbackTrigger().setValue(1.0);
+            output.getAnnealingValue().setValue(1.0);
     }
 
     @Override
