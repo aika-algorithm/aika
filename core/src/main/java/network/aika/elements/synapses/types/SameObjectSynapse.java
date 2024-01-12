@@ -16,21 +16,15 @@
  */
 package network.aika.elements.synapses.types;
 
-import network.aika.Model;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.BindingActivation;
-import network.aika.elements.activations.types.LatentRelationActivation;
-import network.aika.elements.relations.Relation;
 import network.aika.elements.links.types.SameObjectLink;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import network.aika.fields.FieldOutput;
 
 import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.activations.StateType.NEGATIVE_FEEDBACK;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_SAME;
 import static network.aika.enums.Trigger.FIRED_NEGATIVE_FEEDBACK;
@@ -59,5 +53,10 @@ public class SameObjectSynapse extends ConjunctiveSynapse<
     @Override
     public SameObjectLink createLink(BindingActivation input, BindingActivation output) {
         return new SameObjectLink(this, input, output);
+    }
+
+    @Override
+    public FieldOutput getInputValue(BindingActivation input) {
+        return input.getValue(NEGATIVE_FEEDBACK);
     }
 }

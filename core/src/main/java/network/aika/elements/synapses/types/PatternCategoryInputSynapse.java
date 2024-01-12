@@ -40,8 +40,8 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         outputType = PATTERN,
         transition = SAME_SAME,
         required = SAME_SAME,
-        trigger = FIRED_PRE_FEEDBACK,
-        feedbackMode = PRE_FEEDBACK
+        feedbackMode = PRE_FEEDBACK,
+        trigger = FIRED_PRE_FEEDBACK
 )
 public class PatternCategoryInputSynapse
         extends ConjunctiveCategoryInputSynapse<

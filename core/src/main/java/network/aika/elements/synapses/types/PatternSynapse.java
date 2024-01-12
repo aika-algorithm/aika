@@ -25,6 +25,7 @@ import network.aika.elements.links.types.PatternLink;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
+import network.aika.fields.FieldOutput;
 import network.aika.text.Range;
 import network.aika.statistic.SampleSpace;
 import network.aika.elements.neurons.types.BindingNeuron;
@@ -39,9 +40,9 @@ import java.util.stream.Collectors;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
+import static network.aika.elements.activations.StateType.NEGATIVE_FEEDBACK;
 import static network.aika.enums.Transition.SAME_SAME;
 import static network.aika.enums.Trigger.FIRED_NEGATIVE_FEEDBACK;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.enums.sign.Sign.NEG;
 import static network.aika.enums.sign.Sign.POS;
@@ -74,6 +75,10 @@ public class PatternSynapse extends ConjunctiveSynapse<
 
     protected SampleSpace sampleSpace = new SampleSpace();
 
+    @Override
+    public FieldOutput getInputValue(BindingActivation input) {
+        return input.getValue(NEGATIVE_FEEDBACK);
+    }
 
     protected boolean isPropagable(BindingActivation act) {
         return true;
