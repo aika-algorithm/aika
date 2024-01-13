@@ -16,6 +16,7 @@
  */
 package network.aika.elements.synapses.types;
 
+import network.aika.Model;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.activations.CategoryActivation;
@@ -24,6 +25,10 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveCategoryInputSynapse;
 import network.aika.elements.synapses.SynapseType;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
@@ -74,5 +79,19 @@ public class PatternCategoryInputSynapse
     @Override
     public double getInitialInstanceWeight() {
         return initialCategorySynapseWeight;
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+
+        out.writeDouble(initialCategorySynapseWeight);
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws IOException {
+        super.readFields(in, m);
+
+        initialCategorySynapseWeight = in.readDouble();
     }
 }

@@ -16,6 +16,7 @@
  */
 package network.aika.elements.synapses.types;
 
+import network.aika.Model;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.links.types.InhibitoryCategoryInputLink;
@@ -25,6 +26,10 @@ import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.Direction;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import static network.aika.elements.Type.*;
 import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
@@ -90,5 +95,19 @@ public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
     @Override
     public double getInitialInstanceWeight() {
         return initialCategorySynapseWeight;
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+
+        out.writeDouble(initialCategorySynapseWeight);
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws IOException {
+        super.readFields(in, m);
+
+        initialCategorySynapseWeight = in.readDouble();
     }
 }
