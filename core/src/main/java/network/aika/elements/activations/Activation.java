@@ -251,6 +251,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Field getValue(StateType st) {
+        if(st == null)
+            return getValue();
+
         return getState(st).value;
     }
 

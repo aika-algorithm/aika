@@ -28,7 +28,7 @@ import network.aika.enums.direction.Direction;
 import static network.aika.elements.Type.*;
 import static network.aika.elements.activations.StateType.NEGATIVE_FEEDBACK;
 import static network.aika.enums.Transition.INPUT_INPUT;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
+import static network.aika.enums.Trigger.NOT_FIRED;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 
@@ -41,7 +41,7 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
         outputType = BINDING,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        trigger = FIRED_PRE_FEEDBACK,
+        trigger = NOT_FIRED,
         feedbackMode = NEGATIVE_FEEDBACK
 )
 public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
