@@ -71,11 +71,6 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
 
         if(s.getRelation() != null)
             addConstant("Relation: ", "" + s.getRelation());
-
-        if(s instanceof CategoryInputSynapse<?>) {
-            CategoryInputSynapse cis = (CategoryInputSynapse) s;
-            addConstant("Initial Instance Weight: ", "" + s.getInitialInstanceWeight());
-        }
     }
 
     public static SynapsePropertyPanel create(Synapse s, Link ref) {
