@@ -46,9 +46,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     private InputField annealingValue;
 
-    protected Field internalValue;
-
-
     public BindingActivation(int id, Document doc, BindingNeuron n) {
         super(id, doc, n);
     }
@@ -73,27 +70,9 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         Anneal.add(this);
     }
 
-    public Field getInternalValue() {
-        return internalValue;
-    }
-
     @Override
-    protected void initValue() {
-        value = mix(
-                this,
-                "value",
-                annealingValue,
-                getValue(PRE_FEEDBACK),
-                getValue(POSITIVE_FEEDBACK)
-        );
-
-        internalValue = mix(
-                this,
-                "internal value",
-                annealingValue,
-                getValue(PRE_FEEDBACK),
-                getValue(NEGATIVE_FEEDBACK)
-        );
+    public Field getValue() {
+        return getValue(POSITIVE_FEEDBACK);
     }
 
     public InputField getAnnealingValue() {

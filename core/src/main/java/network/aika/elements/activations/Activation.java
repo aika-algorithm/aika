@@ -62,8 +62,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected Timestamp created = NOT_SET;
 
-    protected Field value;
-
     protected State[] states = new State[numberOfStates()];
 
     protected FieldFunction netOuterGradient;
@@ -94,8 +92,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         initNet();
 
         initBiases();
-
-        initValue();
 
         initBindingSignalSlots();
 
@@ -165,10 +161,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected void initBiases() {
         linkAndConnect(getNeuron().getBias(), getNet(PRE_FEEDBACK))
                 .setPropagateUpdates(false);
-    }
-
-    protected void initValue() {
-        value = getValue(PRE_FEEDBACK);
     }
 
     protected void initBindingSignalSlots() {
@@ -248,7 +240,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Field getValue() {
-        return value;
+        return getValue(PRE_FEEDBACK);
     }
 
     public State getState(StateType st) {
@@ -259,9 +251,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Field getValue(StateType st) {
-        if(st == null)
-            return value;
-
         return getState(st).value;
     }
 

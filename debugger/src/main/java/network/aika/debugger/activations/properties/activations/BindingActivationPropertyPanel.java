@@ -37,7 +37,6 @@ public class BindingActivationPropertyPanel<E extends BindingActivation> extends
     @Override
     public void initInferenceSection(E act) {
         addField(act.getAnnealingValue());
-        addField(act.getInternalValue());
 
         super.initInferenceSection(act);
     }

@@ -37,7 +37,7 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynapse, InhibitoryActivation, BindingActivation> {
 
-    protected Field invertedInputValue;
+    protected Field annealedInputValue;
 
     public NegativeFeedbackLink(NegativeFeedbackSynapse s, InhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
@@ -68,7 +68,13 @@ public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynaps
             );
         }
 
-        invertedInputValue = invert(this, "inverted-input-value", inputValue);
+        annealedInputValue = mix(
+                this,
+                "annealed input value",
+                output.getAnnealingValue(),
+                ConstantField.ONE,
+                invert(this, "inverted-input-value", inputValue)
+        );
     }
 
     @Override
@@ -80,7 +86,7 @@ public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynaps
         weightedInput = mul(
                 this,
                 "iAct(" + getInputKeyString() + ").value * s.weight",
-                invertedInputValue, true,
+                annealedInputValue, true,
                 scale(this, "weight", -1, synapse.getWeight()), false
         );
     }

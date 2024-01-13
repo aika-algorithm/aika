@@ -77,7 +77,7 @@ public class PatternSynapse extends ConjunctiveSynapse<
 
     @Override
     public FieldOutput getInputValue(BindingActivation input) {
-        return input.getInternalValue();
+        return input.getValue(NEGATIVE_FEEDBACK);
     }
 
     protected boolean isPropagable(BindingActivation act) {
