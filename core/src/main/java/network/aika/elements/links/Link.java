@@ -182,8 +182,8 @@ public abstract class Link<
         weightedInput = mul(
                 this,
                 "iAct(" + getInputKeyString() + ").value * s.weight",
-                inputValue, true,
-                synapse.getWeight(), false
+                inputValue, isInputSideActive(), true,
+                synapse.getWeight(), true, false
         );
     }
 
