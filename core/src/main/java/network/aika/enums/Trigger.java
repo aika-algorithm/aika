@@ -19,17 +19,32 @@ package network.aika.enums;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
 
+import static network.aika.elements.activations.StateType.*;
+
 /**
  *
  * @author Lukas Molzberger
  */
 public enum Trigger {
-    FIRED_PRE_FEEDBACK,
-    FIRED_NEGATIVE_FEEDBACK,
-    FIRED_POSITIVE_FEEDBACK,
-    NOT_FIRED;
+    FIRED_PRE_FEEDBACK(PRE_FEEDBACK),
+    FIRED_NEGATIVE_FEEDBACK(NEGATIVE_FEEDBACK),
+    PRIMARY_CHECKED_FIRED_NEGATIVE_FEEDBACK(NEGATIVE_FEEDBACK, true),
+    FIRED_POSITIVE_FEEDBACK(POSITIVE_FEEDBACK),
+    NOT_FIRED(null);
 
+    private boolean checkPrimary;
     private StateType type;
+
+    Trigger(StateType type) {
+        this.type = type;
+        if(type != null)
+            type.addTrigger(this);
+    }
+
+    Trigger(StateType type, boolean checkPrimary) {
+        this(type);
+        this.checkPrimary = checkPrimary;
+    }
 
     public void setType(StateType type) {
         this.type = type;
@@ -39,10 +54,17 @@ public enum Trigger {
         return type;
     }
 
-    public boolean check(Activation oAct) {
+    public boolean check(Activation act) {
+        if(!checkPrimary(act))
+            return false;
+
         if(type == null)
             return true;
 
-        return oAct.isFired(type);
+        return act.isFired(type);
+    }
+
+    public boolean checkPrimary(Activation act) {
+        return !checkPrimary || act.checkPrimary();
     }
 }

@@ -42,7 +42,7 @@ import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.elements.activations.StateType.NEGATIVE_FEEDBACK;
 import static network.aika.enums.Transition.SAME_SAME;
-import static network.aika.enums.Trigger.FIRED_NEGATIVE_FEEDBACK;
+import static network.aika.enums.Trigger.PRIMARY_CHECKED_FIRED_NEGATIVE_FEEDBACK;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.enums.sign.Sign.NEG;
 import static network.aika.enums.sign.Sign.POS;
@@ -57,7 +57,7 @@ import static network.aika.enums.sign.Sign.POS;
         outputType = PATTERN,
         transition = SAME_SAME,
         required = SAME_SAME,
-        trigger = FIRED_NEGATIVE_FEEDBACK
+        trigger = PRIMARY_CHECKED_FIRED_NEGATIVE_FEEDBACK
 )
 public class PatternSynapse extends ConjunctiveSynapse<
         PatternSynapse,
@@ -80,14 +80,8 @@ public class PatternSynapse extends ConjunctiveSynapse<
         return input.getValue(NEGATIVE_FEEDBACK);
     }
 
+    @Override
     protected boolean isPropagable(BindingActivation act) {
-        return true;
-    }
-
-    public void setPropagable(boolean propagable) {
-    }
-
-    public boolean isPropagable() {
         return true;
     }
 

@@ -42,7 +42,8 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
         trigger = NOT_FIRED,
-        feedbackMode = NEGATIVE_FEEDBACK
+        feedbackMode = NEGATIVE_FEEDBACK,
+        latentLinkingAllowed = false
 )
 public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
         NegativeFeedbackSynapse,
@@ -69,11 +70,6 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
     protected void checkWeight() {
         if(!isNegative())
             delete();
-    }
-
-    @Override
-    public boolean isLinkingAllowed(boolean latent) {
-        return false;
     }
 
     @Override

@@ -40,6 +40,8 @@ public class SynapseTypeHolder {
     
     private StateType feedbackMode;
 
+    private boolean latentLinkingAllowed;
+
     public static SynapseTypeHolder getHolder(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
                 new SynapseTypeHolder(
@@ -57,6 +59,7 @@ public class SynapseTypeHolder {
         required = synTypeAnno.required();
         trigger = synTypeAnno.trigger();
         feedbackMode = synTypeAnno.feedbackMode();
+        latentLinkingAllowed = synTypeAnno.latentLinkingAllowed();
     }
 
     public Type getInputType() {
@@ -81,5 +84,9 @@ public class SynapseTypeHolder {
 
     public StateType feedbackMode() {
         return feedbackMode;
+    }
+
+    public boolean latentLinkingAllowed() {
+        return latentLinkingAllowed;
     }
 }

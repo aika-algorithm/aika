@@ -23,6 +23,8 @@ import network.aika.elements.activations.State;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.links.types.InputObjectLink;
+import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.elements.synapses.types.InnerPositiveFeedbackSynapse;
 import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
@@ -34,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.mix;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -128,5 +129,23 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     public void updateBias(double u) {
         getNet(PRE_FEEDBACK).receiveUpdate(null, u);
+    }
+
+    @Override
+    public boolean checkPrimary() {
+        return !getNeuron().isPrimary() || !isPosFeedbackSlotBlocked();
+    }
+
+    private boolean isPosFeedbackSlotBlocked() {
+        SynapseSlot<InnerPositiveFeedbackSynapse, InnerPositiveFeedbackLink> slot = getInputSlotBySynapseType(InnerPositiveFeedbackSynapse.class);
+
+        if(slot == null)
+            return false;
+
+        InnerPositiveFeedbackLink l = slot.getSelectedLink();
+        if(l == null)
+            return false;
+
+        return !l.isActive();
     }
 }

@@ -361,6 +361,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return neuron.getProvider();
     }
 
+    public boolean checkPrimary() {
+        return true;
+    }
+
     public <IL extends Link> Optional<IL> getInputLinkByType(Class<IL> linkType) {
         return getInputLinksByType(linkType)
                 .findAny();

@@ -48,7 +48,8 @@ import static network.aika.enums.direction.Direction.OUTPUT;
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
         feedbackMode = PRE_FEEDBACK,
-        trigger = FIRED_PRE_FEEDBACK
+        trigger = FIRED_PRE_FEEDBACK,
+        latentLinkingAllowed = false
 )
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InhibitoryCategoryInputSynapse,
@@ -70,11 +71,6 @@ public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
     public void link() {
         input.addOutputSynapse(this);
         output.addInputSynapse(this);
-    }
-
-    @Override
-    public boolean isLinkingAllowed(boolean latent) {
-        return !latent;
     }
 
     @Override

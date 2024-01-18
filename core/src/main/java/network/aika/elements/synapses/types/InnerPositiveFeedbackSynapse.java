@@ -59,8 +59,4 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
     public InnerPositiveFeedbackLink createLink(PatternActivation input, BindingActivation output) {
         return new InnerPositiveFeedbackLink(this, input, output);
     }
-
-    @Override
-    public void setPropagable(boolean propagable) {
-    }
 }

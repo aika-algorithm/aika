@@ -37,7 +37,8 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         outputType = INHIBITORY,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        trigger = FIRED_PRE_FEEDBACK
+        trigger = FIRED_PRE_FEEDBACK,
+        latentLinkingAllowed = false
 )
 public class InhibitorySynapse extends DisjunctiveSynapse<
         InhibitorySynapse,
@@ -47,11 +48,6 @@ public class InhibitorySynapse extends DisjunctiveSynapse<
         BindingActivation,
         InhibitoryActivation
         > {
-
-    @Override
-    public boolean isLinkingAllowed(boolean latent) {
-        return !latent;
-    }
 
     @Override
     public InhibitoryLink createLink(BindingActivation input, InhibitoryActivation output) {

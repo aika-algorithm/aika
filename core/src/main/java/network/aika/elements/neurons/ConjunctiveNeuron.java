@@ -128,10 +128,8 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
             if(!s.isOptional() && !(s instanceof PositiveFeedbackSynapse))
                 sum += w;
 
-            if(!s.isLinkingAllowed(true))
+            if(!s.isLatentLinkingAllowed())
                 lastSum = sum;
-
-            s.setPropagable(sum >= 0);
         }
     }
 

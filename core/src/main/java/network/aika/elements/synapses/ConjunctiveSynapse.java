@@ -67,7 +67,6 @@ public abstract class ConjunctiveSynapse<
     private boolean optional;
 
     private double[] sumOfLowerWeights = SULW_ZERO;
-    protected boolean propagable;
 
     public ConjunctiveSynapse() {
         synapseBias.setValue(0.0);
@@ -124,22 +123,6 @@ public abstract class ConjunctiveSynapse<
                 getWeight().getUpdatedValue();
     }
 
-    public void setPropagable(boolean propagable) {
-        if(this.propagable != propagable)
-            input.getNeuron().setModified();
-
-        getInput().updatePropagable(output, propagable);
-        this.propagable = propagable;
-    }
-
-    public boolean isPropagable() {
-        return propagable;
-    }
-
-    public RelationInputSynapse getRelationInputSynapse() {
-        return null;
-    }
-
     @Override
     public void setModified() {
         O no = getOutput();
@@ -184,7 +167,6 @@ public abstract class ConjunctiveSynapse<
         synapseBias.write(out);
         out.writeDouble(sumOfLowerWeights[0]);
         out.writeDouble(sumOfLowerWeights[1]);
-        out.writeBoolean(propagable);
         out.writeBoolean(optional);
     }
 
@@ -197,7 +179,6 @@ public abstract class ConjunctiveSynapse<
                 in.readDouble(),
                 in.readDouble()
         };
-        propagable = in.readBoolean();
         optional = in.readBoolean();
     }
 }

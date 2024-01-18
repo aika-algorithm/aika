@@ -21,7 +21,6 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
@@ -46,20 +45,20 @@ import static network.aika.queue.Phase.LINKING;
  */
 public class Linking extends ElementStep<Activation> {
 
-    protected Trigger mode;
+    protected Trigger trigger;
 
     protected Scope bsType;
 
     protected PatternActivation bindingSignal;
 
 
-    public static void add(Activation act, BindingSignalSlot bsSlot, Trigger mode) {
-        Step.add(new Linking(act, bsSlot, mode));
+    public static void add(Activation act, BindingSignalSlot bsSlot, Trigger trigger) {
+        Step.add(new Linking(act, bsSlot, trigger));
     }
 
-    public Linking(Activation act, BindingSignalSlot bsSlot, Trigger mode) {
+    public Linking(Activation act, BindingSignalSlot bsSlot, Trigger trigger) {
         super(act);
-        this.mode = mode;
+        this.trigger = trigger;
         this.bsType = bsSlot.getType();
         this.bindingSignal = bsSlot.getBindingSignal();
     }
@@ -70,7 +69,7 @@ public class Linking extends ElementStep<Activation> {
                 round,
                 getPhase(),
                 getElement(),
-                mode,
+                trigger,
                 bsType,
                 timestamp
         );
@@ -94,7 +93,7 @@ public class Linking extends ElementStep<Activation> {
 
         n.getOutputSynapsesAsStream()
                 .filter(s ->
-                        s.getTrigger() == mode &&
+                        s.getTrigger() == trigger &&
                                 s.getRequired().getFrom() == bsType
                 )
                 .toList()
@@ -132,14 +131,14 @@ public class Linking extends ElementStep<Activation> {
     }
 
     private void latentLinkingExpand(Synapse sourceSyn) {
-        if(!sourceSyn.isLinkingAllowed(true))
+        if(!sourceSyn.isLatentLinkingAllowed())
             return;
 
         Neuron<?, ?> targetNeuron = sourceSyn.getOutput();
 
         targetNeuron.getInputSynapsesAsStream()
                 .filter(ts -> sourceSyn != ts)
-                .filter(ts -> ts.isLinkingAllowed(true))
+                .filter(ts -> ts.isLatentLinkingAllowed())
                 .filter(ts -> getNetUB(sourceSyn, ts) > 0.0)
                 .forEach(ts ->
                         latentLink(sourceSyn, ts)
@@ -169,6 +168,6 @@ public class Linking extends ElementStep<Activation> {
 
     @Override
     public String toString() {
-        return super.toString() + " BS-Type:" + bsType + " Trigger:" + mode + " BS:" + (bindingSignal != null ? "" + bindingSignal : "--");
+        return super.toString() + " BS-Type:" + bsType + " Trigger:" + trigger + " BS:" + (bindingSignal != null ? "" + bindingSignal : "--");
     }
 }

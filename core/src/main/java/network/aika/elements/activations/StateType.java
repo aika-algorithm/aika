@@ -18,25 +18,26 @@ package network.aika.elements.activations;
 
 import network.aika.enums.Trigger;
 
-import static network.aika.enums.Trigger.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Lukas Molzberger
  */
 public enum StateType {
-    PRE_FEEDBACK(FIRED_PRE_FEEDBACK),
-    NEGATIVE_FEEDBACK(FIRED_NEGATIVE_FEEDBACK),
-    POSITIVE_FEEDBACK(FIRED_POSITIVE_FEEDBACK);
+    PRE_FEEDBACK(),
+    NEGATIVE_FEEDBACK(),
+    POSITIVE_FEEDBACK();
 
-    private Trigger trigger;
+    private List<Trigger> triggers = new ArrayList();
 
-    StateType(Trigger trigger) {
-        this.trigger = trigger;
-        trigger.setType(this);
+    public void addTrigger(Trigger t) {
+        triggers.add(t);
     }
 
-    public Trigger getTrigger() {
-        return trigger;
+    public Stream<Trigger> getTriggers() {
+        return triggers.stream();
     }
 }

@@ -46,4 +46,6 @@ public @interface SynapseType {
     public Trigger trigger() default Trigger.FIRED_POSITIVE_FEEDBACK;
 
     public StateType feedbackMode() default StateType.PRE_FEEDBACK;
+
+    public boolean latentLinkingAllowed() default true;
 }

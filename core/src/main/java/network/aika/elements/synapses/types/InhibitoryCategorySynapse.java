@@ -36,14 +36,11 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         outputType = INHIBITORY,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        trigger = FIRED_PRE_FEEDBACK
+        trigger = FIRED_PRE_FEEDBACK,
+        latentLinkingAllowed = false
 )
 public class InhibitoryCategorySynapse extends CategorySynapse<InhibitoryCategorySynapse, Neuron, InhibitoryActivation> {
 
-    @Override
-    public boolean isLinkingAllowed(boolean latent) {
-        return !latent;
-    }
 
     @Override
     public InhibitoryCategoryLink createLink(InhibitoryActivation input, CategoryActivation output) {

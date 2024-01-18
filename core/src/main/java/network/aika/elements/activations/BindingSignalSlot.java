@@ -94,8 +94,13 @@ public class BindingSignalSlot {
     }
 
     public void onFired(State s) {
-        if(isFeedback || isSet())
-            Linking.add(act, this, s.getType().getTrigger());
+        if(isFeedback || isSet()) {
+            s.getType().getTriggers()
+                    .filter(t -> t.checkPrimary(act))
+                    .forEach(t ->
+                            Linking.add(act, this, t)
+                    );
+        }
     }
 
     public String toString() {

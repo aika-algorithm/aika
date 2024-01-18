@@ -40,10 +40,10 @@ public class LinkingQueueKey extends FiredQueueKey {
             .thenComparing(k -> k.bsType);
 
 
-    public LinkingQueueKey(int round, Phase phase, Element element, Trigger lm, Scope bsType, Timestamp currentTimestamp) {
+    public LinkingQueueKey(int round, Phase phase, Element element, Trigger tr, Scope bsType, Timestamp currentTimestamp) {
         super(round, phase, element, currentTimestamp);
 
-        this.trigger = lm;
+        this.trigger = tr;
         this.bsType = bsType;
     }
 
