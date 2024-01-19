@@ -110,6 +110,9 @@ public class ParticleLink<L extends Link> extends AbstractParticleLink<L> {
         if(outputParticle.isManuallyMoved())
             return;
 
+        if(link.getInput().getTextReference() == null)
+            return;
+
         outputNode.setAttribute(
                 "x",
                 inputParticle.x
