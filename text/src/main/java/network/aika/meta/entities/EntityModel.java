@@ -23,6 +23,7 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
+import network.aika.elements.synapses.Synapse;
 import network.aika.meta.TemplateModel;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.Document;
@@ -187,6 +188,10 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         entityPattern = lookupInstance(doc, parent.entityPattern);
         entityPattern.setPersistent(true);
+
+        Synapse s = entityPattern.getOutputSynapse(getTopicModel().getTopicBindingNeuron().getProvider());
+        if(s != null)
+            s.setNotInstantiable(true);
 
         entityBN = lookupInstance(doc, parent.entityBN);
         entityBN.setPersistent(true);
