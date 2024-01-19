@@ -35,18 +35,16 @@ public class ConjunctiveLinkPropertyPanel<L extends ConjunctiveLink<?, ?, ?>> ex
     public void initInputIdentitySection(L l) {
         super.initInputIdentitySection(l);
 
-        SynapseInputSlot sl = l.getSynInputSlot();
-        if(sl != null)
-            addField(l.getSynInputSlot().getOutputField());
-
         if(l.getSynInputSlot() != null)
-            addConstant("Slot Selection: ", "" + l.getSynInputSlot().getSelectedLink());
+            addConstant("Slot Selection: ", "" + l.getSynInputSlot().getSelectedLink().getOutput());
+    }
 
-        addField(l.getSynOutputSlot().getOutputNet());
-        addField(l.getSynOutputSlot().getOutputField());
+    @Override
+    public void initOutputIdentitySection(L l) {
+        super.initOutputIdentitySection(l);
 
         if(l.getSynOutputSlot() != null)
-            addConstant("Slot Selection: ", "" + l.getSynOutputSlot().getSelectedLink());
+            addConstant("Slot Selection: ", "" + l.getSynOutputSlot().getSelectedLink().getInput());
     }
 
     public void initTrainingSection(L l) {

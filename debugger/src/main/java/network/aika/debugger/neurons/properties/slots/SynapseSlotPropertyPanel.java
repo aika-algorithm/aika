@@ -18,8 +18,8 @@ package network.aika.debugger.neurons.properties.slots;
 
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
-import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.elements.synapses.slots.*;
+
 import java.util.stream.Stream;
 
 /**
@@ -34,9 +34,17 @@ public class SynapseSlotPropertyPanel<S extends SynapseSlot> extends AbstractPro
 
     public void initSlotProperties(S s) {
         addTitle(s.getClass().getSimpleName());
-        addConstant("Activation Id: ", "" + s.getActivation().getId());
-        addConstant("Activation Label: ", "" + s.getActivation().getLabel());
         addConstant("Synapse Id: ", "" + s.getSynapse().getSynapseId());
+        addConstant("Activation: ", "" + s.getActivation());
+        addConstant("Slot Selection: ", "" + s.getDirection().invert().getActivation(s.getSelectedLink()));
+
+        if(s instanceof SynapseOutputSlot)
+            addField(((SynapseOutputSlot)s).getOutputNet());
+
+        addField(s.getOutputField());
+
+        if(s instanceof CategoryInputSynapseOutputSlot)
+            addField(((CategoryInputSynapseOutputSlot)s).getFeedbackTrigger());
     }
 
     protected void initLinks(S s) {

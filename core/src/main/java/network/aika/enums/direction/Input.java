@@ -59,7 +59,9 @@ public class Input implements Direction {
 
     @Override
     public Activation getActivation(Link l) {
-        return l.getInput();
+        return l != null ?
+                l.getInput() :
+                null;
     }
 
     @Override

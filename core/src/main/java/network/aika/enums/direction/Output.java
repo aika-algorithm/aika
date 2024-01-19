@@ -59,7 +59,9 @@ public class Output implements Direction {
 
     @Override
     public Activation getActivation(Link l) {
-        return l.getOutput();
+        return l != null ?
+                l.getOutput() :
+                null;
     }
 
     @Override
