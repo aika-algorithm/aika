@@ -17,7 +17,6 @@
 package network.aika.debugger.activations.particles;
 
 import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.debugger.activations.LayoutState;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.LatentRelationActivation;
 import org.graphstream.graph.Node;
@@ -31,11 +30,11 @@ public class BindingActivationParticle<E extends BindingActivation> extends Acti
     public BindingActivationParticle(E act, Node n, ActivationGraphManager gm) {
         super(act, n, gm);
 
-        processLayout(null);
+        processLayout();
     }
 
     @Override
-    public void processLayout(LayoutState ls) {
+    public void processLayout() {
     }
 
     public static ActivationParticle create(BindingActivation act, Node n, ActivationGraphManager gm) {

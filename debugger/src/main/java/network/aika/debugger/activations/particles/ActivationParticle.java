@@ -19,7 +19,6 @@ package network.aika.debugger.activations.particles;
 import network.aika.debugger.EventType;
 import network.aika.debugger.AbstractParticle;
 import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.debugger.activations.LayoutState;
 import network.aika.debugger.activations.layout.ParticleLink;
 import network.aika.elements.activations.StateType;
 import network.aika.enums.direction.Direction;
@@ -80,7 +79,7 @@ public class ActivationParticle<E extends Activation> extends AbstractParticle<A
     }
 
     @Override
-    public void processLayout(LayoutState ls) {
+    public void processLayout() {
     }
 
     private String getActivationStrokeColor(Activation act) {

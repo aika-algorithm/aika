@@ -17,7 +17,6 @@
 package network.aika.debugger.activations.particles;
 
 import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.debugger.activations.LayoutState;
 import network.aika.elements.activations.types.LatentRelationActivation;
 import org.graphstream.graph.Node;
 
@@ -34,7 +33,7 @@ public class LatentRelationActivationParticle extends BindingActivationParticle<
     }
 
     @Override
-    public void processLayout(LayoutState ls) {
+    public void processLayout() {
         if(act.getFromAct() != null && act.getToAct() != null) {
             node.setAttribute(
                     "x",

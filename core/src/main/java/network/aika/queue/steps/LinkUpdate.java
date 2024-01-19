@@ -74,12 +74,7 @@ public class LinkUpdate extends ElementStep<Link> {
             //  updateConnected(inputSlotFL, state, true);
         }
 
-        boolean oppositeState = dir == Direction.INPUT ?
-                l.isOutputSideActive() :
-                l.isInputSideActive();
-
-        if(state == oppositeState)
-            l.getDocument().onElementEvent(EventType.UPDATE, l);
+        l.getDocument().onElementEvent(EventType.UPDATE, l);
     }
 
     @Override

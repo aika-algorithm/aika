@@ -68,8 +68,6 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
 
     protected StepManager stepManager;
 
-    protected LayoutState layoutState = new LayoutState();
-
     public ActivationViewManager(Document doc, ActivationConsoleManager consoleManager, AIKADebugManager debugger) {
         super(doc.getModel());
 
@@ -184,7 +182,7 @@ public class ActivationViewManager extends AbstractViewManager<Activation, Activ
             return;
 
         ActivationParticle p = graphManager.lookupParticle(act);
-        p.processLayout(layoutState);
+        p.processLayout();
         p.onEvent(et);
 
         if(!stepManager.stopHere(NEW))

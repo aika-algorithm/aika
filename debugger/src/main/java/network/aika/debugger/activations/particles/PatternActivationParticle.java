@@ -17,9 +17,13 @@
 package network.aika.debugger.activations.particles;
 
 import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.debugger.activations.LayoutState;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
+import network.aika.text.Range;
+import network.aika.text.TextReference;
 import org.graphstream.graph.Node;
+
+import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_X;
 
 /**
  * @author Lukas Molzberger
@@ -31,14 +35,22 @@ public class PatternActivationParticle<E extends PatternActivation> extends Acti
     }
 
     @Override
-    public void processLayout(LayoutState ls) {
+    public void processLayout() {
         if(!act.getNeuron().getInputSynapses().isEmpty())
+            return;
+
+        TextReference ref = act.getTextReference();
+        if(ref == null)
+            return;
+
+        Range r = ref.getTokenPosRange();
+        if(r == null)
             return;
 
         if(!act.getNeuron().isAbstract())
             node.setAttribute("layout.frozen");
 
-        Double x = ls.getInitialXPos(act);
+        Double x = STANDARD_DISTANCE_X * r.getBegin();
 
         node.setAttribute("x", x);
     }

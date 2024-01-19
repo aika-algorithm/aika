@@ -16,8 +16,7 @@
  */
 package network.aika.debugger;
 
-import network.aika.debugger.activations.LayoutState;
-import network.aika.elements.neurons.*;
+import network.aika.elements.Element;
 import org.graphstream.graph.Node;
 import org.graphstream.ui.geom.Vector3;
 import org.graphstream.ui.layout.springbox.EdgeSpring;
@@ -29,11 +28,9 @@ import org.miv.pherd.Particle;
 import org.miv.pherd.geom.Point3;
 import org.miv.pherd.ntree.Cell;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.function.Consumer;
 
 /**
  * @author Lukas Molzberger
@@ -100,7 +97,7 @@ public abstract class AbstractParticle<G extends AbstractGraphManager> extends S
         return node;
     }
 
-    public abstract void processLayout(LayoutState ls);
+    public abstract void processLayout();
 
     public abstract void onEvent(EventType et);
 

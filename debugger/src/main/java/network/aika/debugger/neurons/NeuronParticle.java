@@ -19,7 +19,6 @@ package network.aika.debugger.neurons;
 
 import network.aika.debugger.EventType;
 import network.aika.debugger.AbstractParticle;
-import network.aika.debugger.activations.LayoutState;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 import org.graphstream.graph.Node;
@@ -77,7 +76,7 @@ public class NeuronParticle extends AbstractParticle<NeuronGraphManager> {
     }
 
     @Override
-    public void processLayout(LayoutState ls) {
+    public void processLayout() {
 
     }
 
