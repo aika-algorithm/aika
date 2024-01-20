@@ -38,13 +38,10 @@ public class SynapseSlotPropertyPanel<S extends SynapseSlot> extends AbstractPro
         addConstant("Activation: ", "" + s.getActivation());
         addConstant("Slot Selection: ", "" + s.getDirection().invert().getActivation(s.getSelectedLink()));
 
-        if(s instanceof SynapseOutputSlot)
-            addField(((SynapseOutputSlot)s).getOutputNet());
-
         addField(s.getOutputField());
 
-        if(s instanceof CategoryInputSynapseOutputSlot)
-            addField(((CategoryInputSynapseOutputSlot)s).getFeedbackTrigger());
+        if(s instanceof SynapseOutputSlot)
+            addField(((SynapseOutputSlot)s).getOutputNet());
     }
 
     protected void initLinks(S s) {

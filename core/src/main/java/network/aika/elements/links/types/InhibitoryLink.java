@@ -86,6 +86,9 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
         if(input == output)
             return true;
 
+        if(input.getTemplate() == output || output.getTemplate() == input)
+            return true;
+
         if(!input.getBindingSignalSlot(SAME).isSet() ||
                 !output.getBindingSignalSlot(SAME).isSet())
             return false;

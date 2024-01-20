@@ -53,7 +53,7 @@ public class Instantiation extends ElementStep<Activation> {
 
         act.getInputSlotsByType(CategoryInputSynapseOutputSlot.class)
                 .forEach(l ->
-                        l.getFeedbackTrigger().setValue(0.0)
+                        l.getFeedbackTrigger().setValue(1.0)
                 );
 
         act.instantiationIsQueued = false;
