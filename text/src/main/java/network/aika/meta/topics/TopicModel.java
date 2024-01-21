@@ -17,14 +17,12 @@
 package network.aika.meta.topics;
 
 import network.aika.Model;
-import network.aika.debugger.AIKADebugger;
-import network.aika.elements.activations.Activation;
+import network.aika.elements.synapses.types.InputObjectSynapse;
 import network.aika.meta.TemplateModel;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.meta.entities.EntityModel;
 import network.aika.Document;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
@@ -110,10 +108,14 @@ public class TopicModel extends TemplateModel<TopicModel> {
         Range entityPosRange = new Range(0, 1);
         Range entityCharRange = new Range(0, doc.length());
 
-        doc.addBindingActivation(
-                topicBN,
+        InputObjectSynapse s = topicBN.getInputSynapseByType(InputObjectSynapse.class);
+        PatternNeuron ip = s.getInput();
+        ip.setNotInstantiable(true);
+        doc.addToken(
+                ip,
                 new TextReference(entityPosRange, entityCharRange)
         );
+        ip.setNotInstantiable(false);
     }
 
     public void setNotInstantiable(boolean notInstantiable) {
@@ -188,6 +190,10 @@ public class TopicModel extends TemplateModel<TopicModel> {
         if(parent.topicBN == template)
             return topicBN;
 
+
+        if(parent.inhibitoryN == template)
+            return inhibitoryN;
+
         return null;
     }
 
@@ -198,6 +204,10 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
         topicBN = lookupInstance(doc, parent.topicBN);
         topicBN.setPersistent(true);
+
+        inhibitoryN = lookupInstance(doc, parent.inhibitoryN);
+        inhibitoryN.setPersistent(true);
+        inhibitoryN.setNotInstantiable(true);
     }
 
     @Override

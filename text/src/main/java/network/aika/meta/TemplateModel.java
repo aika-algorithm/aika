@@ -21,12 +21,10 @@ import network.aika.Model;
 import network.aika.callbacks.InstantiationCallback;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.neurons.Neuron;
 import network.aika.meta.exceptions.FailedInstantiationException;
 import network.aika.queue.steps.InstantiationTrigger;
 import network.aika.utils.Writable;
-
-import static network.aika.meta.NetworkMotifs.getDefaultInputCategorySynapseWeight;
 
 /**
  *
@@ -117,7 +115,7 @@ public abstract class TemplateModel<T extends TemplateModel> implements Instanti
 
     protected abstract String getLabelPostfix();
 
-    protected static <N extends ConjunctiveNeuron<?, ?>> N lookupInstance(Document doc, N templateN) {
+    protected static <N extends Neuron<?, ?>> N lookupInstance(Document doc, N templateN) {
         return (N) templateN.getActivations(doc)
                 .stream()
                 .findFirst()
