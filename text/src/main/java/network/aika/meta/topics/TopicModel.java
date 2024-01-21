@@ -190,7 +190,6 @@ public class TopicModel extends TemplateModel<TopicModel> {
         if(parent.topicBN == template)
             return topicBN;
 
-
         if(parent.inhibitoryN == template)
             return inhibitoryN;
 
