@@ -217,6 +217,10 @@ public class EntityModel extends TemplateModel<EntityModel> {
         );
     }
 
+    @Override
+    public void postProcess(Document doc) {
+    }
+
     public void setNotInstantiable(boolean notInstantiable) {
         entityPattern.setNotInstantiable(notInstantiable, true);
         entityBN.setNotInstantiable(notInstantiable, true);

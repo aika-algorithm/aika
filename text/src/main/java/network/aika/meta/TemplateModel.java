@@ -64,6 +64,8 @@ public abstract class TemplateModel<T extends TemplateModel> implements Instanti
         return doc;
     }
 
+    public abstract void postProcess(Document doc);
+
     public abstract void mapResults(Document doc);
 
     public T instantiate(String l, TemplateModel instM) {
@@ -87,6 +89,8 @@ public abstract class TemplateModel<T extends TemplateModel> implements Instanti
             prepareExampleDoc(doc, l);
 
             doc.process();
+
+            postProcess(doc);
 
             im.mapResults(doc);
 
