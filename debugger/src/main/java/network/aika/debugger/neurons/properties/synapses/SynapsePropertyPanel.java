@@ -18,9 +18,9 @@ package network.aika.debugger.neurons.properties.synapses;
 
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.SynapseTypeHolder;
 import network.aika.utils.Utils;
 
 import java.util.Arrays;
@@ -44,10 +44,12 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addConstant("Output: ", s.getOutput().toString());
 
         addField(s.getWeight());
+
+        addTitle("Synapse Properties", SUB_TITLE_SIZE);
         initSynapseProperties(s);
 
-        addConstant("Not Instantiable: ", "" + s.isNotInstantiable());
-        addConstant("Initial Instance Weight: ", "" + Utils.doubleToString(s.getInitialInstanceWeight()));
+        addTitle("Synapse-Type Properties", SUB_TITLE_SIZE);
+        initSynapseTypeProperties(s.getSynapseType());
     }
 
     protected void initSynapseProperties(E s) {
@@ -64,13 +66,26 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
                         .collect(Collectors.joining(", "))
         );
 
-        addConstant("Trigger: ", "" + s.getTrigger());
         addConstant("Net UB: ", doubleToString(s.getNetUB()));
         addConstant("Is Training Allowed: ", "" + s.isTrainingAllowed());
         addConstant("Stored At: ", "" + s.getStoredAt());
 
         if(s.getRelation() != null)
             addConstant("Relation: ", "" + s.getRelation());
+
+        addConstant("Not Instantiable: ", "" + s.isNotInstantiable());
+        addConstant("Initial Instance Weight: ", "" + Utils.doubleToString(s.getInitialInstanceWeight()));
+    }
+
+    protected void initSynapseTypeProperties(SynapseTypeHolder st) {
+        addConstant("InputType: ", "" + st.getInputType());
+        addConstant("OutputType: ", "" + st.getOutputType());
+        addConstant("Transition: ", "" + st.getTransition());
+        addConstant("Required: ", "" + st.getRequired());
+        addConstant("Trigger: ", "" + st.getTrigger());
+        addConstant("FeedbackMode: ", "" + st.feedbackMode());
+        addConstant("Propagable: ", "" + st.isPropagable());
+        addConstant("LatentLinkingAllowed: ", "" + st.latentLinkingAllowed());
     }
 
     public static SynapsePropertyPanel create(Synapse s, Link ref) {

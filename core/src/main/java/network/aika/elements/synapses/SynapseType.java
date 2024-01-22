@@ -47,5 +47,7 @@ public @interface SynapseType {
 
     public StateType feedbackMode() default StateType.PRE_FEEDBACK;
 
+    public boolean propagable() default true;
+
     public boolean latentLinkingAllowed() default true;
 }

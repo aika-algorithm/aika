@@ -144,8 +144,17 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     protected boolean isPropagable(IA act) {
-        return getRelation() == null &&
-                getNetUB(act, getTrigger().getType()) > 0.0;
+        if(!synapseType.isPropagable())
+            return false;
+
+        if(getRelation() != null)
+            return false;
+
+        StateType st = getTrigger().getType();
+        if(st == null)
+            return true;
+
+        return getNetUB(act, st) > 0.0;
     }
 
     public void propagate(IA iAct) {

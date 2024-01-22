@@ -40,6 +40,8 @@ public class SynapseTypeHolder {
     
     private StateType feedbackMode;
 
+    private boolean propagable;
+
     private boolean latentLinkingAllowed;
 
     public static SynapseTypeHolder getHolder(Class clazz) {
@@ -59,6 +61,7 @@ public class SynapseTypeHolder {
         required = synTypeAnno.required();
         trigger = synTypeAnno.trigger();
         feedbackMode = synTypeAnno.feedbackMode();
+        propagable = synTypeAnno.propagable();
         latentLinkingAllowed = synTypeAnno.latentLinkingAllowed();
     }
 
@@ -84,6 +87,10 @@ public class SynapseTypeHolder {
 
     public StateType feedbackMode() {
         return feedbackMode;
+    }
+
+    public boolean isPropagable() {
+        return propagable;
     }
 
     public boolean latentLinkingAllowed() {

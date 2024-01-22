@@ -108,23 +108,21 @@ public class TopicModel extends TemplateModel<TopicModel> {
         Range entityPosRange = new Range(0, 1);
         Range entityCharRange = new Range(0, doc.length());
 
-        PatternNeuron iep = getInputEntityPattern();
-        iep.setNotInstantiable(true);
+        InputObjectSynapse ios = topicBN.getInputSynapseByType(InputObjectSynapse.class);
+        ios.setNotInstantiable(true);
+        ios.getInput().setNotInstantiable(true);
 
         doc.addToken(
-                iep,
+                ios.getInput(),
                 new TextReference(entityPosRange, entityCharRange)
         );
     }
 
     @Override
     public void postProcess(Document doc) {
-        getInputEntityPattern().setNotInstantiable(false);
-    }
-
-    private PatternNeuron getInputEntityPattern() {
-        InputObjectSynapse s = topicBN.getInputSynapseByType(InputObjectSynapse.class);
-        return s.getInput();
+        InputObjectSynapse ios = topicBN.getInputSynapseByType(InputObjectSynapse.class);
+        ios.setNotInstantiable(false);
+        ios.getInput().setNotInstantiable(false);
     }
 
     public void setNotInstantiable(boolean notInstantiable) {

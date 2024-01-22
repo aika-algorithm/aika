@@ -26,10 +26,6 @@ import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
 import static network.aika.elements.Type.*;
 import static network.aika.elements.activations.StateType.POSITIVE_FEEDBACK;
 import static network.aika.enums.Trigger.NOT_FIRED;
@@ -45,7 +41,8 @@ import static network.aika.enums.Transition.SAME_SAME;
         transition = SAME_SAME,
         required = SAME_SAME,
         trigger = NOT_FIRED,
-        feedbackMode = POSITIVE_FEEDBACK
+        feedbackMode = POSITIVE_FEEDBACK,
+        propagable = false
 )
 public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         InnerPositiveFeedbackSynapse,
