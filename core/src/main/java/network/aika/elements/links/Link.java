@@ -130,15 +130,14 @@ public abstract class Link<
         if(synapse.isNotInstantiable())
             return;
 
-        Link l = oAct.getInputLink(iAct, synapse.getSynapseId());
-
-        if(l != null)
-            return;
-
         S s = (S) synapse.instantiateTemplate(
                 iAct.getNeuron(),
                 oAct.getNeuron()
         );
+
+        Link l = oAct.getInputLink(iAct, s.getSynapseId());
+        if(l != null)
+            return;
 
         s.createLinkFromTemplate(iAct, oAct, this);
     }
