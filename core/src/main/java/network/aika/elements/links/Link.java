@@ -194,7 +194,7 @@ public abstract class Link<
     }
 
     public void initFromTemplate(Link<S, ?, ?, SI, SO> template) {
-        template.output.resisterTemplateInstanceSynapse(
+        output.registerTemplateInstanceSynapse(
                 template.synapse.getSynapseId(),
                 synapse.getSynapseId()
         );
@@ -205,7 +205,7 @@ public abstract class Link<
     protected void linkRelationFromTemplate(Link<S, ?, ?, SI, SO> template) {
         Relation rel = synapse.getRelation();
         if(rel != null)
-            rel.linkRelationFromTemplate(synapse, template);
+            rel.linkRelationFromTemplate(output, synapse, template);
     }
 
     public void link() {

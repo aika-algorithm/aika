@@ -119,7 +119,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected void connectWeightUpdate() {
     }
 
-    public void resisterTemplateInstanceSynapse(int templateSynId, int instanceSynId) {
+    public void registerTemplateInstanceSynapse(int templateSynId, int instanceSynId) {
         if(templateSynIdMap == null)
             templateSynIdMap = new HashMap<>();
 

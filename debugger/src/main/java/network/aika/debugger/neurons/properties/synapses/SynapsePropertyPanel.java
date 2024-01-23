@@ -80,7 +80,10 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
     protected void initSynapseTypeProperties(SynapseTypeHolder st) {
         addConstant("InputType: ", "" + st.getInputType());
         addConstant("OutputType: ", "" + st.getOutputType());
-        addConstant("Transition: ", "" + st.getTransition());
+        addConstant("Transitions: ", "" +
+                Arrays.stream(st.getTransition())
+                .map(t -> "" + t).collect(Collectors.joining(", "))
+        );
         addConstant("Required: ", "" + st.getRequired());
         addConstant("Trigger: ", "" + st.getTrigger());
         addConstant("FeedbackMode: ", "" + st.feedbackMode());

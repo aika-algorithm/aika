@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  */
 public class LatentProxyRelation extends Relation {
 
-    private int relationSynId;
+    private Integer relationSynId;
 
     public LatentProxyRelation() {
     }
@@ -48,16 +48,21 @@ public class LatentProxyRelation extends Relation {
     }
 
     @Override
-    public void linkRelationFromTemplate(Synapse instanceSyn, Link templateLink) {
+    public void linkRelationFromTemplate(Activation instanceOAct, Synapse instanceSyn, Link templateLink) {
         Synapse templateSyn = templateLink.getSynapse();
         LatentProxyRelation templateRel = (LatentProxyRelation) templateSyn.getRelation();
-        Integer relSynId = templateLink.getOutput().getInstanceSynapseId(templateRel.relationSynId);
+        Integer relSynId = instanceOAct.getInstanceSynapseId(templateRel.relationSynId);
         if(relSynId != null) {
-            relationSynId = relSynId;
-
             RelationInputSynapse ris = (RelationInputSynapse) instanceSyn.getPOutput().getSynapseBySynId(relSynId);
-            ris.setLatentProxySynapseId(instanceSyn.getSynapseId());
+            assert ris.getSynapseId() == relSynId;
+
+            linkRelation(instanceSyn, ris);
         }
+    }
+
+    public void linkRelation(Synapse syn, RelationInputSynapse relSyn) {
+        relationSynId = relSyn.getSynapseId();
+        relSyn.setLatentProxySynapseId(syn.getSynapseId());
     }
 
     public void setRelationSynId(int relationSynId) {
@@ -75,6 +80,8 @@ public class LatentProxyRelation extends Relation {
 
     @Override
     public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
+        assert relationSynId != null;
+
         RelationInputSynapse ris = (RelationInputSynapse) s.getPOutput().getSynapseBySynId(relationSynId);
         return ris.getInput().getRelation()
                 .evaluateLatentRelation(s, ref, fromAct, toPreAct, dir);
@@ -96,11 +103,6 @@ public class LatentProxyRelation extends Relation {
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
         relationSynId = in.readInt();
-    }
-
-    public void linkRelation(Synapse syn, RelationInputSynapse relSyn) {
-        relationSynId = relSyn.getSynapseId();
-        relSyn.setLatentProxySynapseId(syn.getSynapseId());
     }
 
     @Override

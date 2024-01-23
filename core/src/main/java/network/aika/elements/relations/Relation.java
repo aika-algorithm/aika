@@ -38,7 +38,7 @@ public abstract class Relation implements Writable {
 
     public abstract Relation instantiate();
 
-    public void linkRelationFromTemplate(Synapse instanceSyn, Link templateLink) {
+    public void linkRelationFromTemplate(Activation instanceOAct, Synapse instanceSyn, Link templateLink) {
     }
 
     public abstract int getRelationType();

@@ -20,6 +20,7 @@ import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.LatentRelationActivation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
+import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.slots.SynapseInputSlot;
 import network.aika.elements.synapses.slots.SynapseOutputSlot;
@@ -40,10 +41,12 @@ public class RelationInputLink extends ConjunctiveLink<RelationInputSynapse, Lat
     protected void linkRelationFromTemplate(Link<RelationInputSynapse, ?, ?, SynapseInputSlot, SynapseOutputSlot> template) {
         RelationInputSynapse templateSyn = template.getSynapse();
 
-        Integer instanceLatentProxySynapseId = template.getOutput().getInstanceSynapseId(templateSyn.getLatentProxySynapseId());
+        Integer instanceLatentProxySynapseId = getOutput().getInstanceSynapseId(templateSyn.getLatentProxySynapseId());
         if(instanceLatentProxySynapseId != null) {
             Synapse instanceLatentProxySyn = output.getNeuronProvider().getSynapseBySynId(instanceLatentProxySynapseId);
-            instanceLatentProxySyn.getRelation().linkRelationFromTemplate(instanceLatentProxySyn, template);
+            Relation instanceRel = instanceLatentProxySyn.getRelation();
+
+            instanceRel.linkRelationFromTemplate(output, instanceLatentProxySyn, template);
         }
     }
 
