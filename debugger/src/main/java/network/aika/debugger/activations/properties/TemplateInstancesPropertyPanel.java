@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static network.aika.elements.activations.StateType.POSITIVE_FEEDBACK;
+import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 
 
 /**
@@ -37,7 +37,7 @@ public class TemplateInstancesPropertyPanel extends AbstractPropertyPanel {
     public TemplateInstancesPropertyPanel(Stream<? extends Activation> instances) {
         List<? extends Activation> sortedInstances = instances.collect(Collectors.toList());
 
-        Collections.sort(sortedInstances, Comparator.comparingDouble(inst -> -inst.getNet(POSITIVE_FEEDBACK).getValue()));
+        Collections.sort(sortedInstances, Comparator.comparingDouble(inst -> -inst.getNet(INNER_FEEDBACK).getValue()));
         sortedInstances.stream()
                 .limit(10)
                 .forEach(inst -> {

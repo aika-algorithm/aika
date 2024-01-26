@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.elements.activations.StateType.NEGATIVE_FEEDBACK;
+import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
 import static network.aika.enums.Transition.SAME_SAME;
 import static network.aika.enums.Trigger.PRIMARY_CHECKED_FIRED_NEGATIVE_FEEDBACK;
 import static network.aika.fields.Fields.isTrue;
@@ -77,7 +77,7 @@ public class PatternSynapse extends ConjunctiveSynapse<
 
     @Override
     public FieldOutput getInputValue(BindingActivation input) {
-        return input.getValue(NEGATIVE_FEEDBACK);
+        return input.getValue(OUTER_FEEDBACK);
     }
 
     @Override

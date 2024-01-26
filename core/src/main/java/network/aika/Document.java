@@ -225,15 +225,15 @@ public class Document extends Queue implements Element {
 
         disconnectNetFields(act);
 
-        act.setNet(POSITIVE_FEEDBACK, inputNet);
+        act.setNet(INNER_FEEDBACK, inputNet);
 
         return act;
     }
 
     private void disconnectNetFields(Activation act) {
         disconnectAndBlock(act.getNet(PRE_FEEDBACK));
-        disconnectAndBlock(act.getNet(NEGATIVE_FEEDBACK));
-        disconnectAndBlock(act.getNet(POSITIVE_FEEDBACK));
+        disconnectAndBlock(act.getNet(OUTER_FEEDBACK));
+        disconnectAndBlock(act.getNet(INNER_FEEDBACK));
     }
 
     private void disconnectAndBlock(Field f) {

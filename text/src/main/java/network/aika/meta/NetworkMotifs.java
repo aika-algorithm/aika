@@ -122,13 +122,13 @@ public class NetworkMotifs {
             double weakInputMargin,
             boolean allowRelaxedMatching,
             boolean isOptional,
-            boolean isTemplateOnly
+            boolean notInstantiable
     ) {
         PatternSynapse pSyn = new PatternSynapse()
                 .setWeight(weight)
                 .setOptional(isOptional)
                 .link(bn, pn)
-                .setNotInstantiable(isTemplateOnly)
+                .setNotInstantiable(notInstantiable)
                 .adjustBias(bn.getTargetValue() + weakInputMargin);
 
         log.info("  " + pSyn + " targetNetContr:" + -pSyn.getSynapseBias().getValue());
@@ -141,7 +141,7 @@ public class NetworkMotifs {
                                 null
                 )
                 .link(pn, bn)
-                .setNotInstantiable(isTemplateOnly)
+                .setNotInstantiable(notInstantiable)
                 .adjustBias();
 
         log.info("  " + posFeedSyn + " targetNetContr:" + -posFeedSyn.getSynapseBias().getValue());

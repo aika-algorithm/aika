@@ -83,10 +83,10 @@ public class ActivationParticle<E extends Activation> extends AbstractParticle<A
     }
 
     private String getActivationStrokeColor(Activation act) {
-        if(act.isFired(StateType.POSITIVE_FEEDBACK))
+        if(act.isFired(StateType.INNER_FEEDBACK))
             return "stroke-color: black;";
 
-        if(act.isFired(StateType.NEGATIVE_FEEDBACK))
+        if(act.isFired(StateType.OUTER_FEEDBACK))
             return "stroke-color: rgb(80, 80, 80);";
 
         if(act.isFired(StateType.PRE_FEEDBACK))

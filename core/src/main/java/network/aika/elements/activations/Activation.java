@@ -42,7 +42,7 @@ import java.util.stream.Stream;
 import static network.aika.debugger.EventType.*;
 import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
-import static network.aika.elements.activations.StateType.POSITIVE_FEEDBACK;
+import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.queue.Phase.*;
@@ -275,7 +275,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     @Override
     public Timestamp getFired() {
-        return getFired(POSITIVE_FEEDBACK);
+        return getFired(INNER_FEEDBACK);
     }
 
     public boolean isFired(StateType st) {
@@ -490,7 +490,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public boolean isActiveTemplateInstance() {
         return isNewInstance ||
-                isFired(POSITIVE_FEEDBACK);
+                isFired(INNER_FEEDBACK);
     }
 
     public abstract CategoryInputLink getActiveCategoryInputLink();
@@ -530,7 +530,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         ti.textReference = textReference;
         ti.isNewInstance = true;
-        ti.setFired(POSITIVE_FEEDBACK, getFired(POSITIVE_FEEDBACK));
+        ti.setFired(INNER_FEEDBACK, getFired(INNER_FEEDBACK));
 
         doc.onElementEvent(TOKEN_POSITION, ti);
 
@@ -576,7 +576,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         getOutputLinks()
                 .filter(l -> !(l instanceof CategoryLink))
-                .filter(l -> l.getOutput().isFired(POSITIVE_FEEDBACK))
+                .filter(l -> l.getOutput().isFired(INNER_FEEDBACK))
                 .forEach(l ->
                         l.instantiateTemplate(
                                 instanceAct,
@@ -586,7 +586,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public void initFromTemplate(Activation templateAct) {
-        setFired(POSITIVE_FEEDBACK, templateAct.getFired(POSITIVE_FEEDBACK));
+        setFired(INNER_FEEDBACK, templateAct.getFired(INNER_FEEDBACK));
         doc.onElementEvent(UPDATE, this);
     }
 

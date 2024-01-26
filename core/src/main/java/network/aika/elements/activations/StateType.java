@@ -28,8 +28,8 @@ import java.util.stream.Stream;
  */
 public enum StateType {
     PRE_FEEDBACK(),
-    NEGATIVE_FEEDBACK(),
-    POSITIVE_FEEDBACK();
+    OUTER_FEEDBACK(),
+    INNER_FEEDBACK();
 
     private List<Trigger> triggers = new ArrayList();
 

@@ -62,18 +62,18 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
         super.initNet();
 
-        states[NEGATIVE_FEEDBACK.ordinal()] = new State(this, NEGATIVE_FEEDBACK);
-        linkAndConnect(getNet(PRE_FEEDBACK), getNet(NEGATIVE_FEEDBACK));
+        states[OUTER_FEEDBACK.ordinal()] = new State(this, OUTER_FEEDBACK);
+        linkAndConnect(getNet(PRE_FEEDBACK), getNet(OUTER_FEEDBACK));
 
-        states[POSITIVE_FEEDBACK.ordinal()] = new State(this, POSITIVE_FEEDBACK);
-        linkAndConnect(getNet(NEGATIVE_FEEDBACK), getNet(POSITIVE_FEEDBACK));
+        states[INNER_FEEDBACK.ordinal()] = new State(this, INNER_FEEDBACK);
+        linkAndConnect(getNet(OUTER_FEEDBACK), getNet(INNER_FEEDBACK));
 
         Anneal.add(this);
     }
 
     @Override
     public Field getValue() {
-        return getValue(POSITIVE_FEEDBACK);
+        return getValue(INNER_FEEDBACK);
     }
 
     public InputField getAnnealingValue() {
@@ -116,7 +116,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     @Override
     public boolean isActiveTemplateInstance() {
         return isNewInstance || (
-                isFired(POSITIVE_FEEDBACK) && getBindingSignalSlot(SAME).isSet()
+                isFired(INNER_FEEDBACK) && getBindingSignalSlot(SAME).isSet()
         );
     }
 

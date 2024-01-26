@@ -17,12 +17,18 @@
 package network.aika.elements.links.types;
 
 import network.aika.elements.activations.types.BindingActivation;
+import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.elements.synapses.types.OuterPositiveFeedbackSynapse;
-import network.aika.fields.AbstractFunction;
-import network.aika.fields.Fields;
+import network.aika.fields.*;
+
+import java.util.stream.Stream;
+
+import static network.aika.fields.Fields.*;
+import static network.aika.fields.Fields.scale;
+import static network.aika.utils.Utils.TOLERANCE;
 
 
 /**
@@ -31,10 +37,35 @@ import network.aika.fields.Fields;
  */
 public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiveFeedbackSynapse, PatternActivation, BindingActivation> {
 
+    protected Field annealedInputValue;
+
     private AbstractFunction inputEntropy;
 
     public OuterPositiveFeedbackLink(OuterPositiveFeedbackSynapse s, PatternActivation input, BindingActivation output) {
         super(s, input, output);
+    }
+
+    @Override
+    protected void initInputValue() {
+        super.initInputValue();
+
+        annealedInputValue = mix(
+                this,
+                "annealed input value",
+                output.getAnnealingValue(),
+                ConstantField.ONE,
+                inputValue
+        );
+    }
+
+    @Override
+    protected void initWeightedInput() {
+        weightedInput = mul(
+                this,
+                "iAct(" + getInputKeyString() + ").value * s.weight",
+                annealedInputValue, true,
+                synapse.getWeight(), false
+        );
     }
 
     public AbstractFunction getInputEntropy() {

@@ -16,9 +16,7 @@
  */
 package network.aika.elements.synapses.types;
 
-import network.aika.Model;
 import network.aika.elements.neurons.types.BindingNeuron;
-import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
@@ -27,7 +25,7 @@ import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
 
 import static network.aika.elements.Type.*;
-import static network.aika.elements.activations.StateType.POSITIVE_FEEDBACK;
+import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.enums.Trigger.NOT_FIRED;
 import static network.aika.enums.Transition.SAME_SAME;
 
@@ -41,7 +39,7 @@ import static network.aika.enums.Transition.SAME_SAME;
         transition = SAME_SAME,
         required = SAME_SAME,
         trigger = NOT_FIRED,
-        feedbackMode = POSITIVE_FEEDBACK,
+        feedbackMode = INNER_FEEDBACK,
         propagable = false
 )
 public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
