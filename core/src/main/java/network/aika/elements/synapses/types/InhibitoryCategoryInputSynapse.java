@@ -48,8 +48,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
         stateType = PRE_FEEDBACK,
-        trigger = FIRED_PRE_FEEDBACK,
-        latentLinkingAllowed = false
+        trigger = FIRED_PRE_FEEDBACK
 )
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InhibitoryCategoryInputSynapse,

@@ -36,8 +36,7 @@ import static network.aika.enums.Trigger.NOT_FIRED;
         outputType = INHIBITORY,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        trigger = NOT_FIRED,
-        latentLinkingAllowed = false
+        trigger = NOT_FIRED
 )
 public class InhibitoryCategorySynapse extends CategorySynapse<InhibitoryCategorySynapse, Neuron, InhibitoryActivation> {
 

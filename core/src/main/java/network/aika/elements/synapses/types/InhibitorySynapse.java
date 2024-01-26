@@ -37,8 +37,7 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         outputType = INHIBITORY,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        trigger = FIRED_PRE_FEEDBACK,
-        latentLinkingAllowed = false
+        trigger = FIRED_PRE_FEEDBACK
 )
 public class InhibitorySynapse extends DisjunctiveSynapse<
         InhibitorySynapse,

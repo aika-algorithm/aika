@@ -42,8 +42,7 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
         trigger = NOT_FIRED,
-        stateType = OUTER_FEEDBACK,
-        latentLinkingAllowed = false
+        stateType = OUTER_FEEDBACK
 )
 public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
         NegativeFeedbackSynapse,

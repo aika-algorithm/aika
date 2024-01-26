@@ -133,10 +133,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.getTrigger();
     }
 
-    public boolean isLatentLinkingAllowed() {
-        return synapseType.latentLinkingAllowed();
-    }
-
     @Override
     public void disconnect() {
     }
