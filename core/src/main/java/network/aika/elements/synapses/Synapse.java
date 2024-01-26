@@ -108,14 +108,12 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.getRequired();
     }
 
-    public abstract double[] getSumOfLowerWeights();
-
     public abstract SynapseSlot createInputSlot(Activation iAct);
 
     public abstract SynapseSlot createOutputSlot(Activation oAct);
 
     public SumField getOutputNet(Activation act) {
-        return act.getNet(synapseType.feedbackMode());
+        return act.getNet(synapseType.stateType());
     }
 
     public FieldOutput getInputValue(IA input) {
@@ -143,22 +141,15 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     public void disconnect() {
     }
 
-    protected boolean isPropagable(IA act) {
-        if(!synapseType.isPropagable())
-            return false;
-
-        if(getRelation() != null)
-            return false;
-
-        StateType st = getTrigger().getType();
-        if(st == null)
-            return true;
-
-        return getNetUB(act, st) > 0.0;
+    public boolean isPropagable() {
+        return true;
     }
 
     public void propagate(IA iAct) {
-        if(!isPropagable(iAct))
+        if(!isPropagable())
+            return;
+
+        if(getRelation() != null)
             return;
 
         if(propagateLinkExists(iAct))
@@ -170,29 +161,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         createAndInitLink(iAct, oAct);
     }
 
-    public double getWeightForNetUB() {
-        return getWeight().getUpdatedValue();
-    }
-
-    public static double getNetUB(Synapse synA, Synapse synB) {
-        if(synB != null)
-            return synA.getWeightForNetUB() + synB.getWeightForNetUB() +
-                    Math.min(
-                            synA.getSumOfLowerWeights()[0],
-                            synB.getSumOfLowerWeights()[0]
-                    );
-         else
-            return synA.getNetUB();
-    }
-
-    public double getNetUB() {
-        return getWeightForNetUB() +
-                getSumOfLowerWeights()[isLatentLinkingAllowed() ? 1 : 0];
-    }
-
-    public double getNetUB(IA iAct, StateType t) {
-        return (getInputValue(iAct, t).getUpdatedValue() * getWeightForNetUB()) +
-                getSumOfLowerWeights()[isLatentLinkingAllowed() ? 1 : 0];
+    public boolean isWeak() {
+        return false;
     }
 
     public static Link getLatentLink(Synapse synA, Synapse synB, Activation iActA, Activation iActB) {

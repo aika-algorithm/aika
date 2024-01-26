@@ -162,7 +162,7 @@ public abstract class Link<
     }
 
     public StateType feedbackMode() {
-        return getSynapse().getSynapseType().feedbackMode();
+        return getSynapse().getSynapseType().stateType();
     }
 
     protected void initInputValue() {

@@ -39,8 +39,7 @@ import static network.aika.enums.Transition.SAME_SAME;
         transition = SAME_SAME,
         required = SAME_SAME,
         trigger = NOT_FIRED,
-        feedbackMode = INNER_FEEDBACK,
-        propagable = false
+        stateType = INNER_FEEDBACK
 )
 public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         InnerPositiveFeedbackSynapse,
@@ -53,5 +52,9 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
 {
     public InnerPositiveFeedbackLink createLink(PatternActivation input, BindingActivation output) {
         return new InnerPositiveFeedbackLink(this, input, output);
+    }
+
+    @Override
+    public void setPropagable(boolean propagable) {
     }
 }

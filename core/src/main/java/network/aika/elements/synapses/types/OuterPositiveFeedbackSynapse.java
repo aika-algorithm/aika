@@ -40,7 +40,7 @@ import static network.aika.enums.Transition.INPUT_INPUT;
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
         trigger = FIRED_NEGATIVE_FEEDBACK,
-        feedbackMode = OUTER_FEEDBACK
+        stateType = OUTER_FEEDBACK
 )
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         OuterPositiveFeedbackSynapse,

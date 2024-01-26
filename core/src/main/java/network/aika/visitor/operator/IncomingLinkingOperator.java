@@ -61,19 +61,8 @@ public class IncomingLinkingOperator extends LinkingOperator {
         if (!targetSyn.getTrigger().check(act))
             return null;
 
-        Activation targetAct;
-
-        if(sourceSyn == null)
-            targetAct = sourceAct;
-        else {
-            Link sl = latentLink(sourceAct, sourceSyn, act, targetSyn);
-            if(sl == null)
-                return null;
-
-            targetAct = sl.getOutput();
-        }
-
-        return targetSyn.link(act, targetAct);
+        assert sourceSyn != null;
+        return targetSyn.link(act, sourceAct);
     }
 
     @Override

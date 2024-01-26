@@ -81,7 +81,11 @@ public class PatternSynapse extends ConjunctiveSynapse<
     }
 
     @Override
-    protected boolean isPropagable(BindingActivation act) {
+    public void setPropagable(boolean propagable) {
+    }
+
+    @Override
+    public boolean isPropagable() {
         return true;
     }
 

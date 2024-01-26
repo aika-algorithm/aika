@@ -42,8 +42,7 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
         trigger = NOT_FIRED,
-        feedbackMode = OUTER_FEEDBACK,
-        propagable = false,
+        stateType = OUTER_FEEDBACK,
         latentLinkingAllowed = false
 )
 public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
@@ -58,13 +57,8 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
 
     @Override
     public void initBiasInput(BindingActivation act) {
-        linkAndConnect(weight, act.getNet(synapseType.feedbackMode()))
+        linkAndConnect(weight, act.getNet(synapseType.stateType()))
                 .setPropagateUpdates(false);
-    }
-
-    @Override
-    public double[] getSumOfLowerWeights() {
-        return SULW_ZERO;
     }
 
     @Override

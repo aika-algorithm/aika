@@ -55,18 +55,12 @@ public abstract class ConjunctiveSynapse<
         extends Synapse<S, I, O, L, IA, OA>
 {
 
-    protected SumField synapseBias = (SumField) new SumField(this, "synapseBias", TOLERANCE)
-            .setQueued(getDocument(), TRAINING)
-            .addListener("onSynapseBiasModified", (fl, u) -> {
-                        setModified();
-                        getOutput().updateSumOfLowerWeights();
-                    },
-                    true
-            );
+    protected SumField synapseBias = new SumField(this, "synapseBias", TOLERANCE)
+            .setQueued(getDocument(), TRAINING);
 
     private boolean optional;
 
-    private double[] sumOfLowerWeights = SULW_ZERO;
+    protected boolean propagable;
 
     public ConjunctiveSynapse() {
         synapseBias.setValue(0.0);
@@ -85,7 +79,7 @@ public abstract class ConjunctiveSynapse<
     }
 
     public void initBiasInput(OA act) {
-        linkAndConnect(synapseBias, act.getNet(synapseType.feedbackMode()))
+        linkAndConnect(synapseBias, act.getNet(synapseType.stateType()))
                 .setPropagateUpdates(false);
     }
 
@@ -123,6 +117,18 @@ public abstract class ConjunctiveSynapse<
                 getWeight().getUpdatedValue();
     }
 
+    public void setPropagable(boolean propagable) {
+        if(this.propagable != propagable)
+            input.getNeuron().setModified();
+
+        getInput().updatePropagable(output, propagable);
+        this.propagable = propagable;
+    }
+
+    public boolean isPropagable() {
+        return propagable;
+    }
+
     @Override
     public void setModified() {
         O no = getOutput();
@@ -135,16 +141,10 @@ public abstract class ConjunctiveSynapse<
         return OUTPUT;
     }
 
+
     @Override
-    public double[] getSumOfLowerWeights() {
-        return sumOfLowerWeights;
-    }
-
-    public void setSumOfLowerWeights(double[] sumOfLowerWeights) {
-        if(!Utils.belowTolerance(TOLERANCE, this.sumOfLowerWeights[0] - sumOfLowerWeights[0]))
-            setModified();
-
-        this.sumOfLowerWeights = sumOfLowerWeights;
+    public boolean isWeak() {
+        return getOutput().getBias().getUpdatedValue() > -synapseBias.getUpdatedValue();
     }
 
     public S adjustBias() {
@@ -165,8 +165,7 @@ public abstract class ConjunctiveSynapse<
         super.write(out);
 
         synapseBias.write(out);
-        out.writeDouble(sumOfLowerWeights[0]);
-        out.writeDouble(sumOfLowerWeights[1]);
+        out.writeBoolean(propagable);
         out.writeBoolean(optional);
     }
 
@@ -175,10 +174,7 @@ public abstract class ConjunctiveSynapse<
         super.readFields(in, m);
 
         synapseBias.readFields(in, m);
-        sumOfLowerWeights = new double[] {
-                in.readDouble(),
-                in.readDouble()
-        };
+        propagable = in.readBoolean();
         optional = in.readBoolean();
     }
 }

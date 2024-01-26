@@ -33,7 +33,6 @@ import network.aika.visitor.operator.IncomingLinkingOperator;
 import network.aika.visitor.operator.OutgoingLinkingOperator;
 import network.aika.visitor.operator.LinkingOperator;
 
-import static network.aika.elements.synapses.Synapse.getNetUB;
 import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
@@ -98,10 +97,8 @@ public class Linking extends ElementStep<Activation> {
                 )
                 .toList()
                 .forEach(s -> {
-                    if(bindingSignal != null) {
+                    if(bindingSignal != null)
                         linkOutgoing(s);
-                        latentLinkingExpand(s);
-                    }
 
                     s.propagate(act);
                 });
@@ -124,37 +121,6 @@ public class Linking extends ElementStep<Activation> {
         LinkingOperator op = new OutgoingLinkingOperator(act, targetSyn, bindingSignal);
 
         if(targetSyn.expandRelation(op, to, OUTPUT))
-            return;
-
-        new UpVisitor(bindingSignal.getDocument(), op)
-                    .start(bindingSignal, SAME);
-    }
-
-    private void latentLinkingExpand(Synapse sourceSyn) {
-        if(!sourceSyn.isLatentLinkingAllowed())
-            return;
-
-        Neuron<?, ?> targetNeuron = sourceSyn.getOutput();
-
-        targetNeuron.getInputSynapsesAsStream()
-                .filter(ts -> sourceSyn != ts)
-                .filter(ts -> ts.isLatentLinkingAllowed())
-                .filter(ts -> getNetUB(sourceSyn, ts) > 0.0)
-                .forEach(ts ->
-                        latentLink(sourceSyn, ts)
-                );
-    }
-
-    private void latentLink(Synapse sourceSyn, Synapse targetSyn) {
-        Activation iAct = getElement();
-
-        LinkingOperator op = new IncomingLinkingOperator(iAct, sourceSyn, targetSyn, bindingSignal);
-        Neuron to = targetSyn.getInput();
-
-        if(sourceSyn.expandRelation(op, to, OUTPUT))
-            return;
-
-        if(targetSyn.expandRelation(op, to, INPUT))
             return;
 
         new UpVisitor(bindingSignal.getDocument(), op)

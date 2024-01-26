@@ -40,7 +40,6 @@ import java.util.stream.Stream;
  */
 public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends ConjunctiveActivation> extends Neuron<N, A> {
 
-
     private static final Logger log = LoggerFactory.getLogger(ConjunctiveNeuron.class);
 
     public ConjunctiveNeuron(NeuronProvider np) {
@@ -49,13 +48,6 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
 
     public ConjunctiveNeuron(Model m) {
         super(m);
-
-        bias.addListener(
-                "onBiasUpdate",
-                (fl, u) ->
-                        updateSumOfLowerWeights(),
-                true
-        );
     }
 
     @Override
@@ -106,53 +98,5 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
 
     public ActivationFunction getActivationFunction() {
         return ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
-    }
-
-    public void updateSumOfLowerWeights() {
-        ConjunctiveSynapse[] inputSynapses = sortInputSynapses();
-
-        double sum = getCurrentCompleteBias();
-        sum += getInputSynapsesByType(PositiveFeedbackSynapse.class)
-                .mapToDouble(s -> s.getWeight().getUpdatedValue())
-                .sum();
-
-        double lastSum = sum;
-        for(ConjunctiveSynapse s: inputSynapses) {
-            s.setSumOfLowerWeights(new double[] {sum, lastSum});
-
-            double w = s.getWeight().getUpdatedValue();
-            if(w <= 0.0)
-                continue;
-
-            lastSum = sum;
-            if(!s.isOptional() && !(s instanceof PositiveFeedbackSynapse))
-                sum += w;
-
-            if(!s.isLatentLinkingAllowed())
-                lastSum = sum;
-        }
-    }
-
-    @Override
-    public void addInputSynapse(Synapse s) {
-        super.addInputSynapse(s);
-        s.getWeight().addListener(
-                "onWeightUpdate",
-                (fl, u) ->
-                        updateSumOfLowerWeights(),
-                true
-        );
-    }
-
-    private ConjunctiveSynapse[] sortInputSynapses() {
-        ConjunctiveSynapse[] inputsSynapses = getInputSynapsesByType(ConjunctiveSynapse.class)
-                .toList()
-                .toArray(new ConjunctiveSynapse[0]);
-
-        Arrays.sort(
-                inputsSynapses,
-                Comparator.comparingDouble(s -> s.getSortingWeight())
-        );
-        return inputsSynapses;
     }
 }

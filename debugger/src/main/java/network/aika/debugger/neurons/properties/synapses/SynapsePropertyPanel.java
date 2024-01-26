@@ -66,9 +66,9 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
                         .collect(Collectors.joining(", "))
         );
 
-        addConstant("Net UB: ", doubleToString(s.getNetUB()));
         addConstant("Is Training Allowed: ", "" + s.isTrainingAllowed());
         addConstant("Stored At: ", "" + s.getStoredAt());
+        addConstant("Propagable: ", "" + s.isPropagable());
 
         if(s.getRelation() != null)
             addConstant("Relation: ", "" + s.getRelation());
@@ -86,8 +86,7 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         );
         addConstant("Required: ", "" + st.getRequired());
         addConstant("Trigger: ", "" + st.getTrigger());
-        addConstant("FeedbackMode: ", "" + st.feedbackMode());
-        addConstant("Propagable: ", "" + st.isPropagable());
+        addConstant("FeedbackMode: ", "" + st.stateType());
         addConstant("LatentLinkingAllowed: ", "" + st.latentLinkingAllowed());
     }
 

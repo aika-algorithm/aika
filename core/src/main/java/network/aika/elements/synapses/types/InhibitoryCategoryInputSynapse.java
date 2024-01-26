@@ -47,7 +47,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
         outputType = BINDING,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        feedbackMode = PRE_FEEDBACK,
+        stateType = PRE_FEEDBACK,
         trigger = FIRED_PRE_FEEDBACK,
         latentLinkingAllowed = false
 )
