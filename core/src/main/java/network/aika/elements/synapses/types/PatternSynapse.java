@@ -69,6 +69,10 @@ public class PatternSynapse extends ConjunctiveSynapse<
         >
 {
 
+    public PatternSynapse() {
+        setPropagable(true);
+    }
+
     protected double frequencyIPosOPos;
     protected double frequencyIPosONeg;
     protected double frequencyINegOPos;
@@ -78,15 +82,6 @@ public class PatternSynapse extends ConjunctiveSynapse<
     @Override
     public FieldOutput getInputValue(BindingActivation input) {
         return input.getValue(OUTER_FEEDBACK);
-    }
-
-    @Override
-    public void setPropagable(boolean propagable) {
-    }
-
-    @Override
-    public boolean isPropagable() {
-        return true;
     }
 
     @Override
@@ -176,6 +171,8 @@ public class PatternSynapse extends ConjunctiveSynapse<
 
     @Override
     public void count(PatternLink l) {
+        super.count(l);
+
         double oldN = sampleSpace.getN();
 
         if(l.getInput() == null)

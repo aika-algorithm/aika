@@ -121,6 +121,8 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
 
     @Override
     public void count(PatternActivation act) {
+        super.count(act);
+
         double oldN = sampleSpace.getN();
 
         Range absoluteRange = act.getAbsoluteCharRange();

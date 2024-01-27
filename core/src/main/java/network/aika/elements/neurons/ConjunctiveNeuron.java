@@ -23,14 +23,10 @@ import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.elements.synapses.Synapse;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.fields.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.stream.Stream;
 
 

@@ -25,13 +25,11 @@ import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.types.BindingCategorySynapse;
-import network.aika.statistic.AverageCoveredSpace;
-import network.aika.statistic.SampleSpace;
-
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Comparator;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.enums.Scope.INPUT;
@@ -55,6 +53,22 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
 
     public BindingNeuron(Model m) {
         super(m);
+    }
+
+    @Override
+    public void count(BindingActivation act) {
+        super.count(act);
+//        updateSynapseRanking();
+    }
+
+    public void updateSynapseRanking() {
+        getInputSynapsesByType(ConjunctiveSynapse.class)
+                .forEach(s -> s.setPropagable(false));
+
+        getInputSynapsesByType(ConjunctiveSynapse.class)
+                .filter(s -> !s.isWeak())
+                .min(Comparator.comparingDouble(ConjunctiveSynapse::getAvgRelActTime))
+                .ifPresent(s -> s.setPropagable(true));
     }
 
     public BindingNeuron setPrimary(boolean isPrimary) {

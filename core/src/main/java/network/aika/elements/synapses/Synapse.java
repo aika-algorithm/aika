@@ -62,8 +62,6 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     protected final SynapseTypeHolder synapseType = getHolder(getClass());
 
-    protected static final double[] SULW_ZERO = new double[] {0.0, 0.0};
-
     protected int synapseId;
     protected NeuronProvider input;
     protected NeuronProvider output;

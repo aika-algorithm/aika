@@ -17,10 +17,11 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.Timestamp;
+import network.aika.elements.activations.StateType;
 import network.aika.elements.synapses.slots.SynapseInputSlot;
 import network.aika.elements.synapses.slots.SynapseOutputSlot;
 import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.ConjunctiveNeuron;
@@ -28,7 +29,6 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 import network.aika.fields.SumField;
-import network.aika.utils.Utils;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -62,6 +62,10 @@ public abstract class ConjunctiveSynapse<
 
     protected boolean propagable;
 
+    protected int relActTimeSum;
+    protected int relActTimeN;
+
+
     public ConjunctiveSynapse() {
         synapseBias.setValue(0.0);
     }
@@ -87,6 +91,31 @@ public abstract class ConjunctiveSynapse<
         synapseBias.setValue(b);
 
         return (S) this;
+    }
+
+    @Override
+    public void count(L l) {
+        super.count(l);
+
+        Timestamp inFired = l.getInput().getFired(StateType.PRE_FEEDBACK);
+        Timestamp outFired = l.getOutput().getFired(StateType.PRE_FEEDBACK);
+
+        if(inFired != null && outFired != null) {
+            relActTimeSum += inFired.getTimestamp() - outFired.getTimestamp();
+            relActTimeN++;
+            setModified();
+        }
+    }
+
+    public S setRelativeActivationTime(int relActTimeSum, int relActTimeN) {
+        this.relActTimeSum = relActTimeSum;
+        this.relActTimeN = relActTimeN;
+
+        return (S) this;
+    }
+
+    public float getAvgRelActTime() {
+        return ((float) relActTimeSum) / ((float) relActTimeN);
     }
 
     public SumField getSynapseBias() {
@@ -117,14 +146,17 @@ public abstract class ConjunctiveSynapse<
                 getWeight().getUpdatedValue();
     }
 
-    public void setPropagable(boolean propagable) {
+    public S setPropagable(boolean propagable) {
         if(this.propagable != propagable)
             input.getNeuron().setModified();
 
         getInput().updatePropagable(output, propagable);
         this.propagable = propagable;
+
+        return (S) this;
     }
 
+    @Override
     public boolean isPropagable() {
         return propagable;
     }
@@ -167,6 +199,8 @@ public abstract class ConjunctiveSynapse<
         synapseBias.write(out);
         out.writeBoolean(propagable);
         out.writeBoolean(optional);
+        out.writeInt(relActTimeSum);
+        out.writeInt(relActTimeN);
     }
 
     @Override
@@ -176,5 +210,7 @@ public abstract class ConjunctiveSynapse<
         synapseBias.readFields(in, m);
         propagable = in.readBoolean();
         optional = in.readBoolean();
+        relActTimeSum = in.readInt();
+        relActTimeN = in.readInt();
     }
 }

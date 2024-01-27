@@ -38,8 +38,9 @@ public class ConjunctiveSynapsePropertyPanel<E extends ConjunctiveSynapse> exten
         addField(s.getSynapseBias());
 
         super.initSynapseProperties(s);
-        addConstant("isOptional", "" + s.isOptional());
-        addConstant("Sorting Weight:", "" + doubleToString(s.getSortingWeight(), "#.######"));
+        addConstant("AvgRelActTime: ", "" + doubleToString((double) s.getAvgRelActTime(), "#.###"));
+        addConstant("isOptional: ", "" + s.isOptional());
+        addConstant("Sorting Weight: ", "" + doubleToString(s.getSortingWeight(), "#.######"));
     }
 
     public static ConjunctiveSynapsePropertyPanel create(ConjunctiveSynapse s, Link ref) {
