@@ -299,6 +299,10 @@ public abstract class SequenceModel implements Writable {
         return bn;
     }
 
+    public void initOuterSynapses() {
+
+    }
+
     private double getNegMargin(int pos) {
         return pos >= 0 ?
                 NEG_MARGIN_RIGHT :

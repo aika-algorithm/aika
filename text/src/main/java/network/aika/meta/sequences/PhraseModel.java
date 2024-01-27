@@ -17,14 +17,20 @@
 package network.aika.meta.sequences;
 
 import network.aika.Model;
+import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternCategoryNeuron;
+import network.aika.elements.synapses.types.OuterPositiveFeedbackSynapse;
 import network.aika.meta.Dictionary;
+import network.aika.meta.entities.EntityModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+
+import static network.aika.meta.NetworkMotifs.addPositiveFeedbackLoop;
+import static network.aika.meta.NetworkMotifs.getPositiveFeedbackWeight;
 
 /**
  *
@@ -34,10 +40,17 @@ public class PhraseModel extends SequenceModel {
 
     private static final Logger log = LoggerFactory.getLogger(PhraseModel.class);
 
+    EntityModel entityModel;
+
     PatternCategoryNeuron upperCaseN;
 
-    public PhraseModel(Model m, Dictionary dict) {
+    BindingNeuron entityBN;
+
+
+    public PhraseModel(Model m, Dictionary dict, EntityModel entityModel) {
         super(m, dict);
+
+        this.entityModel = entityModel;
     }
 
     @Override
@@ -52,6 +65,28 @@ public class PhraseModel extends SequenceModel {
         upperCaseN = new PatternCategoryNeuron(model)
                 .setLabel("Upper Case")
                 .setPersistent(true);
+
+        entityBN = new BindingNeuron(model)
+                .setLabel("Entity")
+                .setPersistent(true);
+
+        addPositiveFeedbackLoop(
+                entityBN,
+                sequencePatternN,
+                p.pfWeight,
+                p.weakInputMargin,
+                allowRelaxedMatching,
+                isOptional
+        );
+    }
+
+    @Override
+    public void initOuterSynapses() {
+        OuterPositiveFeedbackSynapse outerPosFeedSyn = new OuterPositiveFeedbackSynapse()
+                .setWeight(getPositiveFeedbackWeight(entityBN.getTargetNet(), entityBN.getTargetValue()))
+                .link(entityModel.getEntityPattern(), entityBN)
+                .setNotInstantiable(false)
+                .adjustBias();
     }
 
     @Override
@@ -79,6 +114,7 @@ public class PhraseModel extends SequenceModel {
         super.write(out);
 
         out.writeLong(upperCaseN.getId());
+        out.writeLong(entityBN.getId());
     }
 
     @Override
@@ -86,5 +122,6 @@ public class PhraseModel extends SequenceModel {
         super.readFields(in, m);
 
         upperCaseN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }
