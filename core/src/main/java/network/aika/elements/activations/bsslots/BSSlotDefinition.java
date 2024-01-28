@@ -14,25 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.neurons;
+package network.aika.elements.activations.bsslots;
 
-import network.aika.elements.Type;
-import network.aika.elements.activations.bsslots.BSSlotDefinition;
+import network.aika.enums.Scope;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.lang.annotation.ElementType;
+import static network.aika.enums.Scope.INPUT;
+import static network.aika.enums.Scope.SAME;
 
 /**
  *
  * @author Lukas Molzberger
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface NeuronType {
+public enum BSSlotDefinition {
+    SINGLE_SAME(SAME, false),
+    SINGLE_INPUT(INPUT, false),
+    MULTI_INPUT(INPUT, true);
 
-    public Type type();
+    private Scope scope;
+    private boolean multi;
 
-    public BSSlotDefinition[] bindingSignalSlots();
+    BSSlotDefinition(Scope scope, boolean multi) {
+        this.scope = scope;
+        this.multi = multi;
+    }
+
+    public Scope getScope() {
+        return scope;
+    }
+
+    public boolean isMulti() {
+        return multi;
+    }
 }

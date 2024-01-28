@@ -25,14 +25,14 @@ import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Scope.SAME;
+import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
 
 /**
  * @author Lukas Molzberger
  */
 @NeuronType(
         type = PATTERN,
-        bindingSignalSlots = SAME
+        bindingSignalSlots = SINGLE_SAME
 )
 public class PatternCategoryNeuron extends CategoryNeuron {
 

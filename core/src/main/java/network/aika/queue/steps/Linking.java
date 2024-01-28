@@ -18,7 +18,6 @@ package network.aika.queue.steps;
 
 import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
@@ -51,15 +50,15 @@ public class Linking extends ElementStep<Activation> {
     protected PatternActivation bindingSignal;
 
 
-    public static void add(Activation act, BindingSignalSlot bsSlot, Trigger trigger) {
-        Step.add(new Linking(act, bsSlot, trigger));
+    public static void add(Activation act, Scope bsType, PatternActivation bindingSignal, Trigger trigger) {
+        Step.add(new Linking(act, bsType, bindingSignal, trigger));
     }
 
-    public Linking(Activation act, BindingSignalSlot bsSlot, Trigger trigger) {
+    public Linking(Activation act, Scope bsType, PatternActivation bindingSignal, Trigger trigger) {
         super(act);
         this.trigger = trigger;
-        this.bsType = bsSlot.getType();
-        this.bindingSignal = bsSlot.getBindingSignal();
+        this.bsType = bsType;
+        this.bindingSignal = bindingSignal;
     }
 
     @Override
@@ -92,7 +91,7 @@ public class Linking extends ElementStep<Activation> {
 
         n.getOutputSynapsesAsStream()
                 .filter(s ->
-                        s.getTrigger() == trigger &&
+                        s.getTrigger().match(trigger) &&
                                 s.getRequired().getFrom() == bsType
                 )
                 .toList()

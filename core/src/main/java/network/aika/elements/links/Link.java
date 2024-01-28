@@ -22,7 +22,7 @@ import network.aika.elements.Element;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
-import network.aika.elements.activations.BindingSignalSlot;
+import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
@@ -108,7 +108,7 @@ public abstract class Link<
         return synapse.getOutputType();
     }
 
-    public void onOutputBindingSignalChange(BindingSignalSlot bindingSignalSlot, boolean state) {
+    public void onOutputBindingSignalChange(Scope bsType, PatternActivation nBS, boolean state) {
     }
 
     public void visit(Visitor v, Scope s, int depth) {

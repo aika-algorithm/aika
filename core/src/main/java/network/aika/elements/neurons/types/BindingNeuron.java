@@ -32,8 +32,8 @@ import java.io.IOException;
 import java.util.Comparator;
 
 import static network.aika.elements.Type.BINDING;
-import static network.aika.enums.Scope.INPUT;
-import static network.aika.enums.Scope.SAME;
+import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
+import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
 
 
 /**
@@ -41,7 +41,7 @@ import static network.aika.enums.Scope.SAME;
  */
 @NeuronType(
         type = BINDING,
-        bindingSignalSlots = {INPUT, SAME}
+        bindingSignalSlots = {SINGLE_INPUT, SINGLE_SAME}
 )
 public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActivation> {
 

@@ -14,45 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.activations;
+package network.aika.elements.activations.bsslots;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.enums.Scope;
-import network.aika.queue.steps.Linking;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
-import static network.aika.enums.Trigger.*;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class BindingSignalSlot {
-
-    protected static final Logger log = LoggerFactory.getLogger(BindingSignalSlot.class);
-
-    private Activation<?> act;
-
-    private int sourcesCount;
-
-    private boolean isFeedback;
+public class SingleBSSlot extends BindingSignalSlot {
 
     private PatternActivation bindingSignal;
 
-    private Scope type;
+    private int sourcesCount;
 
-    public BindingSignalSlot(Activation act, Scope type, boolean isFeedback) {
-        this.act = act;
-        this.type = type;
-        this.isFeedback = isFeedback;
+    public SingleBSSlot(Activation act, Scope type, boolean isFeedback) {
+        super(act, type, isFeedback);
     }
 
-    public Scope getType() {
-        return type;
-    }
-
+    @Override
     public boolean isSet() {
         return bindingSignal != null;
     }
@@ -61,6 +45,14 @@ public class BindingSignalSlot {
         return bindingSignal;
     }
 
+    @Override
+    public Stream<PatternActivation> getBindingSignals() {
+        return bindingSignal != null ?
+                Stream.of(bindingSignal) :
+                Stream.empty();
+    }
+
+    @Override
     public void connectBindingSignal(PatternActivation bs, boolean state) {
         if(bs == null)
             return;
@@ -76,34 +68,19 @@ public class BindingSignalSlot {
                 this.bindingSignal = null;
         }
 
-        if(state && !lastState) {
-            Linking.add(act, this, NOT_FIRED);
-
-            if(act.isFired(PRE_FEEDBACK))
-                Linking.add(act, this, FIRED_PRE_FEEDBACK);
-
-            act.propagateBindingSignal(type, bindingSignal, state);
-        }
+        if(state && !lastState)
+            onBindingSignalSlotFilled(bindingSignal);
 
         if(state != lastState)
             act.getInputLinks()
                     .filter(l -> l.getSynapse().getRequired().getTo() == type)
                     .forEach(l ->
-                            l.onOutputBindingSignalChange(this, state)
+                            l.onOutputBindingSignalChange(type, bindingSignal, state)
                     );
     }
 
-    public void onFired(State s) {
-        if(isFeedback || isSet()) {
-            s.getType().getTriggers()
-                    .filter(t -> t.checkPrimary(act))
-                    .forEach(t ->
-                            Linking.add(act, this, t)
-                    );
-        }
-    }
-
+    @Override
     public String toString() {
-        return type + (isFeedback ? "-fb" : "") + ": " + (bindingSignal != null ? bindingSignal : "--") + " (" + sourcesCount + ")";
+        return super.toString() + " (" + sourcesCount + ")";
     }
 }

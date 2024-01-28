@@ -47,6 +47,7 @@ public class TypeMapper {
 
 
         synapseTypeModifiers.put(InputObjectSynapse.class, "fill-color: rgb(0,150,00);");
+        synapseTypeModifiers.put(OuterPositiveFeedbackSynapse.class, "fill-color: rgb(90,200,20); ");
         synapseTypeModifiers.put(RelationInputSynapse.class, "fill-color: rgb(50,230,50);");
         synapseTypeModifiers.put(NegativeFeedbackSynapse.class, "fill-color: rgb(185,0,0);");
         synapseTypeModifiers.put(SameObjectSynapse.class, "fill-color: rgb(50,200,120);");

@@ -14,38 +14,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.activations.types;
+package network.aika.elements.activations.bsslots;
 
-import network.aika.Document;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.types.LatentRelationNeuron;
+import network.aika.elements.activations.types.PatternActivation;
+import network.aika.enums.Scope;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Stream;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class LatentRelationActivation extends BindingActivation {
+public class MultiBSSlot extends BindingSignalSlot {
 
-    private Activation fromAct;
-    private Activation toAct;
+    private Set<PatternActivation> bindingSignals = new HashSet<>();
 
-    public LatentRelationActivation(int id, Document doc, LatentRelationNeuron n) {
-        super(id, doc, n);
+    public MultiBSSlot(Activation act, Scope type, boolean isFeedback) {
+        super(act, type, isFeedback);
     }
 
-    public Activation getFromAct() {
-        return fromAct;
+    @Override
+    public boolean isSet() {
+        return !bindingSignals.isEmpty();
     }
 
-    public void setFromAct(Activation fromAct) {
-        this.fromAct = fromAct;
+    @Override
+    public Stream<PatternActivation> getBindingSignals() {
+        return bindingSignals.stream();
     }
 
-    public Activation getToAct() {
-        return toAct;
-    }
-
-    public void setToAct(Activation toAct) {
-        this.toAct = toAct;
+    @Override
+    public void connectBindingSignal(PatternActivation bs, boolean state) {
+        if (state) {
+            bindingSignals.add(bs);
+            onBindingSignalSlotFilled(bs);
+        } else
+            bindingSignals.remove(bs);
     }
 }

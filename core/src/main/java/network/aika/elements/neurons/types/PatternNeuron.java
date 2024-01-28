@@ -37,7 +37,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.PATTERN;
-import static network.aika.enums.Scope.SAME;
+import static network.aika.elements.activations.bsslots.BSSlotDefinition.MULTI_INPUT;
+import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
 import static network.aika.enums.sign.Sign.POS;
 import static network.aika.text.Range.length;
 
@@ -47,7 +48,7 @@ import static network.aika.text.Range.length;
  */
 @NeuronType(
         type = PATTERN,
-        bindingSignalSlots = SAME
+        bindingSignalSlots = {SINGLE_SAME, MULTI_INPUT}
 )
 public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActivation> {
 

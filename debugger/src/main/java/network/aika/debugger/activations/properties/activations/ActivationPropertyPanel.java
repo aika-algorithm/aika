@@ -51,9 +51,10 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
         addConstant("Type: ", "" + act.getType());
         addConstant("Label: ", act.getLabel());
 
-        act.getBindingSignalSlots().forEach(bsSlot ->
-                addConstant("BS-Slot: ", "" + bsSlot)
-        );
+        act.getBindingSignalSlots()
+                .forEach(bsSlot ->
+                        addConstant("BS-Slot: ", "" + bsSlot)
+                );
 
         TextReference gr = act.getTextReference();
         if(gr != null) {

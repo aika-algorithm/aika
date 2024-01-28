@@ -17,7 +17,6 @@
 package network.aika.elements.activations.types;
 
 import network.aika.Document;
-import network.aika.elements.activations.BindingSignalSlot;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.DisjunctiveActivation;
 import network.aika.elements.links.*;

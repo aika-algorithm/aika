@@ -28,7 +28,7 @@ import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
 
 import static network.aika.elements.Type.INHIBITORY;
-import static network.aika.enums.Scope.INPUT;
+import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
 
 /**
  *
@@ -36,7 +36,7 @@ import static network.aika.enums.Scope.INPUT;
  */
 @NeuronType(
         type = INHIBITORY,
-        bindingSignalSlots = INPUT
+        bindingSignalSlots = SINGLE_INPUT
 )
 public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, InhibitoryActivation> {
 

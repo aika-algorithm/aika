@@ -16,8 +16,6 @@
  */
 package network.aika.enums;
 
-import network.aika.enums.direction.Direction;
-
 import static network.aika.enums.Scope.*;
 
 /**
@@ -27,7 +25,8 @@ import static network.aika.enums.Scope.*;
 public enum Transition {
     SAME_INPUT(SAME, INPUT),
     SAME_SAME(SAME, SAME),
-    INPUT_INPUT(INPUT, INPUT);
+    INPUT_INPUT(INPUT, INPUT),
+    INPUT_SAME(INPUT, SAME);
 
     private Scope from;
     private Scope to;

@@ -25,14 +25,14 @@ import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 
 import static network.aika.elements.Type.INHIBITORY;
-import static network.aika.enums.Scope.INPUT;
+import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
 
 /**
  * @author Lukas Molzberger
  */
 @NeuronType(
         type = INHIBITORY,
-        bindingSignalSlots = INPUT
+        bindingSignalSlots = SINGLE_INPUT
 )
 public class InhibitoryCategoryNeuron extends CategoryNeuron {
 

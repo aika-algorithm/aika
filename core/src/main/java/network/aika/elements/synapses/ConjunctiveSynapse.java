@@ -137,9 +137,9 @@ public abstract class ConjunctiveSynapse<
         synapseBias.setInitialValue(
                 ((ConjunctiveSynapse)templateSyn).synapseBias.getUpdatedValue()
         );
-        setPropagable(templateSyn.isPropagable());
 
         super.initFromTemplate(input, output, templateSyn);
+        setPropagable(templateSyn.isPropagable());
     }
 
     public double getSortingWeight() {

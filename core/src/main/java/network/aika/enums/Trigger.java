@@ -64,6 +64,10 @@ public enum Trigger {
         return act.isFired(type);
     }
 
+    public boolean match(Trigger t) {
+        return type == t.type;
+    }
+
     public boolean checkPrimary(Activation act) {
         return !checkPrimary || act.checkPrimary();
     }

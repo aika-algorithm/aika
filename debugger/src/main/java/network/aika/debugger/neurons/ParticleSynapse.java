@@ -37,7 +37,6 @@ public class ParticleSynapse<S extends Synapse> extends AbstractParticleLink<S> 
         applyEdgeStyle(syn, e);
     }
 
-
     public void applyEdgeStyle(Synapse s, Edge edge) {
         String synapseTypeModifier = synapseTypeModifiers.get(s.getClass());
         if(synapseTypeModifier == null)
@@ -65,28 +64,6 @@ public class ParticleSynapse<S extends Synapse> extends AbstractParticleLink<S> 
 
     public static ParticleLink create(Link l, Edge e, ActivationGraphManager gm) {
         return new ParticleLink(l, e, gm);
-    }
-
-    public void calculateForce(Vector3 delta, Point3 pos, Direction dir, ActivationParticle other) {
-        double targetDistance = getInitialYDistance();
-
-        Point3 opos = other.getPosition();
-        double dy = 0.0;
-
-        if(dir == INPUT) {
-            dy = (opos.y + targetDistance) - pos.y;
-            dy = Math.max(0.0, dy);
-        } else if(dir == OUTPUT) {
-            dy = opos.y - (pos.y + targetDistance);
-            dy = Math.min(0.0, dy);
-        }
-
-        delta.set(0.0, dy, 0.0);
-    }
-
-
-    public double getInitialYDistance() {
-        return STANDARD_DISTANCE_Y;
     }
 
     @Override

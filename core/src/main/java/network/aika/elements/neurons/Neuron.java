@@ -21,9 +21,9 @@ import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
+import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
-import network.aika.enums.Scope;
 import network.aika.exceptions.MissingInputCategoryNeuron;
 import network.aika.exceptions.NeuronExistsTwiceException;
 import network.aika.fields.*;
@@ -103,7 +103,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return neuronType.getType();
     }
 
-    public Stream<Scope> getBindingSignalSlots() {
+    public Stream<BSSlotDefinition> getBindingSignalSlots() {
         return Arrays.stream(neuronType.getBindingSignalSlots());
     }
 

@@ -21,6 +21,10 @@ import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.Timestamp;
 import network.aika.elements.Type;
+import network.aika.elements.activations.bsslots.BSSlotDefinition;
+import network.aika.elements.activations.bsslots.BindingSignalSlot;
+import network.aika.elements.activations.bsslots.MultiBSSlot;
+import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.links.CategoryLink;
@@ -79,7 +83,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected TextReference textReference;
 
-    protected BindingSignalSlot[] bindingSignalSlots = new BindingSignalSlot[3];
+    protected BindingSignalSlot[] bindingSignalSlots = new BindingSignalSlot[2];
 
     protected HashMap<Integer, Integer> templateSynIdMap;
 
@@ -164,9 +168,12 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void initBindingSignalSlots() {
-        Stream<Scope> bsSlots = neuron.getBindingSignalSlots();
+        Stream<BSSlotDefinition> bsSlots = neuron.getBindingSignalSlots();
         bsSlots.forEach(bsSlot ->
-                bindingSignalSlots[bsSlot.ordinal()] = new BindingSignalSlot(this, bsSlot, isFeedback(bsSlot))
+                bindingSignalSlots[bsSlot.getScope().ordinal()] =
+                        bsSlot.isMulti() ?
+                                new MultiBSSlot(this, bsSlot.getScope(), isFeedback(bsSlot.getScope())) :
+                                new SingleBSSlot(this, bsSlot.getScope(), isFeedback(bsSlot.getScope()))
         );
     }
 
@@ -182,7 +189,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public PatternActivation getBindingSignal(Scope t) {
-        BindingSignalSlot slot = getBindingSignalSlot(t);
+        SingleBSSlot slot = (SingleBSSlot) getBindingSignalSlot(t);
+
         return slot != null ?
                 slot.getBindingSignal() :
                 null;

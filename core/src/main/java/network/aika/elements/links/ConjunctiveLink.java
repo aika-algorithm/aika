@@ -17,13 +17,12 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.BindingSignalSlot;
+import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.slots.SynapseInputSlot;
 import network.aika.elements.synapses.slots.SynapseOutputSlot;
-import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.fields.link.FieldLink;
@@ -55,21 +54,22 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
-    public void onOutputBindingSignalChange(BindingSignalSlot bsSlot, boolean state) {
-        Scope s = bsSlot.getType();
-        PatternActivation nBS = bsSlot.getBindingSignal();
-
+    public void onOutputBindingSignalChange(Scope bsType, PatternActivation nBS, boolean state) {
         if(input == null)
             return;
 
-        PatternActivation bs = retrieveBindingSignal(input, INPUT.transition(s, synapse.getTransition()));
+        PatternActivation bs = retrieveBindingSignal(
+                input,
+                INPUT.transition(bsType, synapse.getTransition())
+        );
+
         if(bs == null)
             return;
 
         updateConnected(
                 inputSlotFL,
                 state && (
-                        subsumes(s, nBS, bs) || subsumes(s, bs, nBS)
+                        subsumes(bsType, nBS, bs) || subsumes(bsType, bs, nBS)
                 ),
                 true
         );
