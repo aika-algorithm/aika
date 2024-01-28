@@ -105,7 +105,7 @@ public class Linking extends ElementStep<Activation> {
     }
 
     private void linkIncoming(Synapse targetSyn) {
-        LinkingOperator op = new IncomingLinkingOperator(getElement(), null, targetSyn, bindingSignal);
+        LinkingOperator op = new IncomingLinkingOperator(getElement(), targetSyn, bindingSignal);
 
         if(targetSyn.expandRelation(op, targetSyn.getOutput(), INPUT))
             return;

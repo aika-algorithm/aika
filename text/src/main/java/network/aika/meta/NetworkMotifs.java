@@ -53,7 +53,7 @@ public class NetworkMotifs {
         };
     }
 
-    public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double netTarget) {
+    public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double netTarget, boolean isPrimary) {
         BindingNeuron bn = new BindingNeuron(input.getModel())
                 .setLabel(label)
                 .setPersistent(true);
@@ -61,6 +61,7 @@ public class NetworkMotifs {
         new InputObjectSynapse()
                 .setWeight(weight)
                 .link(input, bn)
+                .setPropagable(isPrimary)
                 .adjustBias();
 
         bn.setBias(netTarget);
@@ -80,10 +81,33 @@ public class NetworkMotifs {
         return bn;
     }
 
-    public static void addInputObjectSynapse(PatternNeuron input, BindingNeuron bn, double weight) {
+    public static void addInputObjectSynapse(PatternNeuron input, BindingNeuron bn, double weight, boolean propagable) {
         new InputObjectSynapse()
                 .setWeight(weight)
                 .link(input, bn)
+                .setPropagable(propagable)
+                .adjustBias();
+    }
+
+    public static OuterPositiveFeedbackSynapse addOuterPositiveFeedbackLoop(
+            PatternNeuron pn,
+            BindingNeuron bn,
+            PatternNeuron feedbackPN,
+            double psWeight
+    ) {
+        addPositiveFeedbackLoop(
+                bn,
+                pn,
+                psWeight,
+                0.0,
+                false,
+                false,
+                false
+        ).setPropagable(true);
+
+        return new OuterPositiveFeedbackSynapse()
+                .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), bn.getTargetValue()))
+                .link(feedbackPN, bn)
                 .adjustBias();
     }
 
@@ -104,7 +128,7 @@ public class NetworkMotifs {
                 SAME_OBJECT_MARGIN;
     }
 
-    public static void addPositiveFeedbackLoop(
+    public static InnerPositiveFeedbackSynapse addPositiveFeedbackLoop(
             BindingNeuron bn,
             PatternNeuron pn,
             double weight,
@@ -112,10 +136,18 @@ public class NetworkMotifs {
             boolean allowRelaxedMatching,
             boolean isOptional
     ) {
-        addPositiveFeedbackLoop(bn, pn, weight, weakInputMargin, allowRelaxedMatching, isOptional, false);
+        return addPositiveFeedbackLoop(
+                bn,
+                pn,
+                weight,
+                weakInputMargin,
+                allowRelaxedMatching,
+                isOptional,
+                false
+        );
     }
 
-    public static void addPositiveFeedbackLoop(
+    public static InnerPositiveFeedbackSynapse addPositiveFeedbackLoop(
             BindingNeuron bn,
             PatternNeuron pn,
             double weight,
@@ -129,6 +161,7 @@ public class NetworkMotifs {
                 .setOptional(isOptional)
                 .link(bn, pn)
                 .setNotInstantiable(notInstantiable)
+                .setPropagable(true)
                 .adjustBias(bn.getTargetValue() + weakInputMargin);
 
         log.info("  " + pSyn + " targetNetContr:" + -pSyn.getSynapseBias().getValue());
@@ -145,6 +178,8 @@ public class NetworkMotifs {
                 .adjustBias();
 
         log.info("  " + posFeedSyn + " targetNetContr:" + -posFeedSyn.getSynapseBias().getValue());
+
+        return posFeedSyn;
     }
 
     public static double getPosFeedbackMargin(double bindingNetTarget, double patternValueTarget) {
@@ -179,6 +214,7 @@ public class NetworkMotifs {
                 .setRelation(rel)
                 .setNotInstantiable(templateOnly)
                 .link(lastBN, bn)
+                .setPropagable(true)
                 .adjustBias(prevValueTarget);
 
         rel.linkRelation(spSyn, relSyn);

@@ -33,8 +33,8 @@ public class SyllableModel extends SequenceModel {
 
     private static final Logger log = LoggerFactory.getLogger(SyllableModel.class);
 
-    public SyllableModel(Model m, Dictionary dict) {
-        super(m, dict);
+    public SyllableModel(Model m) {
+        super(m);
     }
 
     @Override

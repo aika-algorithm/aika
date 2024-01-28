@@ -49,7 +49,8 @@ public class AnnealingTest extends Parser {
         dict = new Dictionary(model);
         dict.initStaticNeurons();
 
-        templateModel = new PhraseModel(model, dict);
+        templateModel = new PhraseModel(model);
+        templateModel.initModelDependencies(dict);
         templateModel.initStaticNeurons();
 
         model.setN(0);

@@ -110,12 +110,19 @@ public class TextSectionTest extends Parser<TestContext> {
         tokenizer = new WordTokenizer();
 
         topicModel = new TopicModel(TOPIC_LABEL, model);
-        phraseModel = new PhraseModel(model, dictionary);
-        entityModel = new EntityModel(ENTITY_LABEL, phraseModel, topicModel);
+        phraseModel = new PhraseModel(model);
+        entityModel = new EntityModel(ENTITY_LABEL);
+
+        phraseModel.initModelDependencies(dictionary, entityModel);
+        entityModel.initModelDependencies(phraseModel, topicModel);
 
         topicModel.initTemplateNeurons();
         phraseModel.initStaticNeurons();
         entityModel.initTemplateNeurons();
+
+        topicModel.initOuterSynapses();
+        phraseModel.initOuterSynapses();
+        entityModel.initOuterSynapses();
 
         headlineEntity = entityModel.instantiate(HEADLINE_LABEL, topicModel);
 

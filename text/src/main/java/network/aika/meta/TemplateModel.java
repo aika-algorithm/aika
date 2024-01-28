@@ -40,6 +40,8 @@ public abstract class TemplateModel<T extends TemplateModel> implements Instanti
 
     public abstract void initTemplateNeurons();
 
+    public abstract void initOuterSynapses();
+
     public abstract T createInstanceModel(String label, TemplateModel instM);
 
     public abstract void prepareInstantiation();

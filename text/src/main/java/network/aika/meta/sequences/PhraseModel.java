@@ -29,8 +29,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.meta.NetworkMotifs.addPositiveFeedbackLoop;
-import static network.aika.meta.NetworkMotifs.getPositiveFeedbackWeight;
+import static network.aika.meta.NetworkMotifs.*;
 
 /**
  *
@@ -47,9 +46,12 @@ public class PhraseModel extends SequenceModel {
     BindingNeuron entityBN;
 
 
-    public PhraseModel(Model m, Dictionary dict, EntityModel entityModel) {
-        super(m, dict);
+    public PhraseModel(Model m) {
+        super(m);
+    }
 
+    public void initModelDependencies(Dictionary dict, EntityModel entityModel) {
+        this.dictionary = dict;
         this.entityModel = entityModel;
     }
 
@@ -66,27 +68,17 @@ public class PhraseModel extends SequenceModel {
                 .setLabel("Upper Case")
                 .setPersistent(true);
 
-        entityBN = new BindingNeuron(model)
-                .setLabel("Entity")
-                .setPersistent(true);
-
-        addPositiveFeedbackLoop(
-                entityBN,
-                sequencePatternN,
-                p.pfWeight,
-                p.weakInputMargin,
-                allowRelaxedMatching,
-                isOptional
-        );
+        entityBN = addBindingNeuron(model, "Entity (Phrase)", 2.5);
     }
 
     @Override
     public void initOuterSynapses() {
-        OuterPositiveFeedbackSynapse outerPosFeedSyn = new OuterPositiveFeedbackSynapse()
-                .setWeight(getPositiveFeedbackWeight(entityBN.getTargetNet(), entityBN.getTargetValue()))
-                .link(entityModel.getEntityPattern(), entityBN)
-                .setNotInstantiable(false)
-                .adjustBias();
+        addOuterPositiveFeedbackLoop(
+                sequencePatternN,
+                entityBN,
+                entityModel.getEntityPattern(),
+                2.5
+        );
     }
 
     @Override

@@ -70,7 +70,6 @@ public class PatternSynapse extends ConjunctiveSynapse<
 {
 
     public PatternSynapse() {
-        setPropagable(true);
     }
 
     protected double frequencyIPosOPos;

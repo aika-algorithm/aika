@@ -98,6 +98,10 @@ public class TopicModel extends TemplateModel<TopicModel> {
         return topicBN;
     }
 
+    public PatternNeuron getTopicPatternNeuron() {
+        return topicPatternN;
+    }
+
     @Override
     public void prepareInstantiation() {
         setNotInstantiable(false);
@@ -173,6 +177,11 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 inhibitoryN,
                 NEG_MARGIN * -topicBN.getTargetNet()
         );
+    }
+
+    @Override
+    public void initOuterSynapses() {
+
     }
 
     @Override

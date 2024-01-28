@@ -33,8 +33,8 @@ public class WordModel extends SequenceModel {
 
     private static final Logger log = LoggerFactory.getLogger(WordModel.class);
 
-    public WordModel(Model m, Dictionary dict) {
-        super(m, dict);
+    public WordModel(Model m) {
+        super(m);
     }
 
     @Override

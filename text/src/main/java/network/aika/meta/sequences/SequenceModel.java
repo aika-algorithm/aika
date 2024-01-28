@@ -73,7 +73,8 @@ public abstract class SequenceModel implements Writable {
             double sosRelWeight,
             double pfWeight,
             double weakInputMargin,
-            String labelPrefix
+            String labelPrefix,
+            boolean isPrimary
     ) {}
 
     public static BindingNeuronParameters PRIMARY_BN_PARAMS = new BindingNeuronParameters(
@@ -83,7 +84,8 @@ public abstract class SequenceModel implements Writable {
             0.0,
             2.5,
             0.0,
-            "Primary"
+            "Primary",
+            true
     );
 
     public static BindingNeuronParameters STRONG_BN_PARAMS = new BindingNeuronParameters(
@@ -93,7 +95,8 @@ public abstract class SequenceModel implements Writable {
             10.0,
             2.5,
             0.0,
-            "Strong"
+            "Strong",
+            false
     );
 
     public static BindingNeuronParameters WEAK_BN_PARAMS = new BindingNeuronParameters(
@@ -103,12 +106,16 @@ public abstract class SequenceModel implements Writable {
             5.0,
             0.5,
             -0.05,
-            "Weak"
+            "Weak",
+            false
     );
 
-    public SequenceModel(Model m, Dictionary dict) {
+    public SequenceModel(Model m) {
         model = m;
-        dictionary = dict;
+    }
+
+    public void initModelDependencies(Dictionary dict) {
+        this.dictionary = dict;
     }
 
     public Model getModel() {
@@ -193,7 +200,8 @@ public abstract class SequenceModel implements Writable {
                 sequencePatternN,
                 "Abstract SubPhrase",
                 10.0,
-                2.5
+                2.5,
+                true
         );
         bn.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(bn.getType()))
@@ -275,7 +283,8 @@ public abstract class SequenceModel implements Writable {
                 dictionary.getInputToken(),
                 "Abstract (" + p.labelPrefix + ") Pos:" + pos,
                 p.iosWeight,
-                p.netTarget
+                p.netTarget,
+                p.isPrimary
         );
         bn.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(bn.getType()))

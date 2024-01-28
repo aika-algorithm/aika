@@ -68,8 +68,13 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
     protected InhibitoryNeuron inhibitoryN;
 
-    public EntityModel(String label, PhraseModel pm, TopicModel tm) {
+    protected BindingNeuron topicBN;
+
+    public EntityModel(String label) {
         this.label = label;
+    }
+
+    public void initModelDependencies(PhraseModel pm, TopicModel tm) {
         this.phraseModel = pm;
         this.topicModel = tm;
     }
@@ -126,13 +131,19 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 .getInput()
                 .setPersistent(true);
 
-        addInputObjectSynapse(entityPattern, topicModel.getTopicBindingNeuron(), 10.0);
+        addInputObjectSynapse(
+                entityPattern,
+                topicModel.getTopicBindingNeuron(),
+                10.0,
+                true
+        );
 
         entityBN = addBindingNeuron(
                 phraseModel.getPatternNeuron(),
                 getAbstractLabel(BINDING, label),
                 10.0,
-                BINDING_NET_TARGET
+                BINDING_NET_TARGET,
+                true
         );
 
         entityBN.makeAbstract()
@@ -161,7 +172,19 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 NEG_MARGIN * -entityBN.getTargetNet()
         );
 
+        topicBN = addBindingNeuron(getModel(), "Topic (Entity)", 2.5);
+
         disable();
+    }
+
+    @Override
+    public void initOuterSynapses() {
+        addOuterPositiveFeedbackLoop(
+                entityPattern,
+                topicBN,
+                topicModel.getTopicPatternNeuron(),
+                2.5
+        );
     }
 
     @Override
@@ -199,7 +222,9 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
     @Override
     public EntityModel createInstanceModel(String label, TemplateModel instM) {
-        return new EntityModel(label, phraseModel, (TopicModel) instM);
+        EntityModel em = new EntityModel(label);
+        em.initModelDependencies(phraseModel, (TopicModel) instM);
+        return em;
     }
 
     public void prepareInstantiation() {
@@ -238,6 +263,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
         out.writeBoolean(inhibitoryN != null);
         if(inhibitoryN != null)
             out.writeLong(inhibitoryN.getId());
+
+        out.writeLong(topicBN.getId());
     }
 
     @Override
@@ -247,5 +274,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         if(in.readBoolean())
             inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+
+        topicBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
     }
 }
