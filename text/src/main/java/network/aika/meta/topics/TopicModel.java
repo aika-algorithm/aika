@@ -24,6 +24,7 @@ import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.Document;
+import network.aika.meta.entities.EntityModel;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
 import org.slf4j.Logger;
@@ -32,13 +33,10 @@ import org.slf4j.LoggerFactory;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.meta.LabelUtil.getAbstractLabel;
 import static network.aika.meta.NetworkMotifs.*;
-import static network.aika.meta.entities.EntityModel.ENTITY_LABEL;
 
 /**
  *
@@ -65,10 +63,15 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
     protected InhibitoryNeuron inhibitoryN;
 
+    private EntityModel entityModel;
 
     public TopicModel(String label, Model m) {
         this.label = label;
         model = m;
+    }
+
+    public void initModelDependencies(EntityModel em) {
+        this.entityModel = em;
     }
 
     @Override
@@ -112,21 +115,24 @@ public class TopicModel extends TemplateModel<TopicModel> {
         Range entityPosRange = new Range(0, 1);
         Range entityCharRange = new Range(0, doc.length());
 
-        InputObjectSynapse ios = topicBN.getInputSynapseByType(InputObjectSynapse.class);
-        ios.setNotInstantiable(true);
-        ios.getInput().setNotInstantiable(true);
+        setNotInstantiableForInputEntity(topicBN, true);
 
         doc.addToken(
-                ios.getInput(),
+                entityModel.getEntityPattern(),
                 new TextReference(entityPosRange, entityCharRange)
         );
     }
 
     @Override
     public void postProcess(Document doc) {
+        setNotInstantiableForInputEntity(topicBN, false);
+    }
+
+    private void setNotInstantiableForInputEntity(BindingNeuron topicBN, boolean notInstantiable) {
         InputObjectSynapse ios = topicBN.getInputSynapseByType(InputObjectSynapse.class);
-        ios.setNotInstantiable(false);
-        ios.getInput().setNotInstantiable(false);
+        ios.setNotInstantiable(notInstantiable);
+
+        entityModel.setNotInstantiable(notInstantiable);
     }
 
     public void setNotInstantiable(boolean notInstantiable) {
@@ -188,7 +194,6 @@ public class TopicModel extends TemplateModel<TopicModel> {
     protected String getLabelPostfix() {
         return " " + TOPIC_LABEL;
     }
-
 
     @Override
     public TopicModel createInstanceModel(String label, TemplateModel instM) {

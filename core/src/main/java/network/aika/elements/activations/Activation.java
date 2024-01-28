@@ -573,6 +573,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     public void instantiateTemplateEdges(Activation<N> instanceAct) {
         getInputLinks()
                 .filter(l -> l.getInput() != null)
+                .filter(l -> l.getInput().isFired(INNER_FEEDBACK))
                 .forEach(l ->
                         l.instantiateTemplate(
                                 l.getInput().resolveAbstractInputActivation(),

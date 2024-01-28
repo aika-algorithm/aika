@@ -69,6 +69,10 @@ public class PhraseModel extends SequenceModel {
                 .setPersistent(true);
 
         entityBN = addBindingNeuron(model, "Entity (Phrase)", 2.5);
+
+        entityBN.makeAbstract()
+                .setWeight(getDefaultInputCategorySynapseWeight(entityBN.getType()))
+                .adjustBias();
     }
 
     @Override

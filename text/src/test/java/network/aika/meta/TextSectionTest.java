@@ -115,6 +115,7 @@ public class TextSectionTest extends Parser<TestContext> {
 
         phraseModel.initModelDependencies(dictionary, entityModel);
         entityModel.initModelDependencies(phraseModel, topicModel);
+        topicModel.initModelDependencies(entityModel);
 
         topicModel.initTemplateNeurons();
         phraseModel.initStaticNeurons();

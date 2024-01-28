@@ -174,6 +174,10 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         topicBN = addBindingNeuron(getModel(), "Topic (Entity)", 2.5);
 
+        topicBN.makeAbstract()
+                .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()))
+                .adjustBias();
+
         disable();
     }
 
@@ -249,6 +253,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
     public void setNotInstantiable(boolean notInstantiable) {
         entityPattern.setNotInstantiable(notInstantiable, true);
         entityBN.setNotInstantiable(notInstantiable, true);
+        topicBN.setNotInstantiable(notInstantiable, true);
     }
 
     public Model getModel() {
