@@ -90,6 +90,9 @@ public class EntityModel extends TemplateModel<EntityModel> {
         if(entityBN != null)
             entityBN.setBias(BINDING_NET_TARGET);
 
+        if(topicBN != null)
+            topicBN.setBias(BINDING_NET_TARGET);
+
         if(entityPattern != null)
             entityPattern.setBias(ENTITY_NET_TARGET);
     }
@@ -101,6 +104,9 @@ public class EntityModel extends TemplateModel<EntityModel> {
         if(entityBN != null)
             entityBN.setBias(-10.0);
 
+        if(topicBN != null)
+            topicBN.setBias(-10.0);
+
         if(entityPattern != null)
             entityPattern.setBias(-10.0);
     }
@@ -110,6 +116,10 @@ public class EntityModel extends TemplateModel<EntityModel> {
     }
 
     public BindingNeuron getEntityBN() {
+        return entityBN;
+    }
+
+    public BindingNeuron getTopicBN() {
         return entityBN;
     }
 
@@ -206,6 +216,18 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
     @Override
     public Neuron resolveInstance(Neuron template) {
+        if(parent.entityPattern == template)
+            return entityPattern;
+
+        if(parent.entityBN == template)
+            return entityBN;
+
+        if(parent.topicBN == template)
+            return topicBN;
+
+        if(parent.inhibitoryN == template)
+            return inhibitoryN;
+
         return topicModel.resolveInstance(template);
     }
 
@@ -222,6 +244,12 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         entityBN = lookupInstance(doc, parent.entityBN);
         entityBN.setPersistent(true);
+
+        topicBN = lookupInstance(doc, parent.topicBN);
+        topicBN.setPersistent(true);
+
+        inhibitoryN = lookupInstance(doc, parent.inhibitoryN);
+        inhibitoryN.setPersistent(true);
     }
 
     @Override
