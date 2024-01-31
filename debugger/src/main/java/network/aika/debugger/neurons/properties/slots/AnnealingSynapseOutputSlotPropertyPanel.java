@@ -14,27 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.activations.properties.activations;
+package network.aika.debugger.neurons.properties.slots;
 
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.synapses.slots.AnnealingType;
+import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
+
 
 /**
  * @author Lukas Molzberger
  */
-public class ConjunctiveActivationPropertyPanel<E extends ConjunctiveActivation> extends ActivationPropertyPanel<E> {
+public class AnnealingSynapseOutputSlotPropertyPanel extends ConjunctiveSynapseSlotPropertyPanel<AnnealingSynapseOutputSlot> {
 
-
-    public ConjunctiveActivationPropertyPanel(E act) {
-        super(act);
+    public AnnealingSynapseOutputSlotPropertyPanel(AnnealingSynapseOutputSlot s) {
+        super(s);
     }
 
-
     @Override
-    public void initInferenceSection(E act) {
-        addField(act.getOuterFeedbackAnnealingValue());
-        addField(act.getInstantiationAnnealingValue());
+    public void initSlotProperties(AnnealingSynapseOutputSlot s) {
+        super.initSlotProperties(s);
 
-        super.initInferenceSection(act);
+        addConstant("Annealing-Type: ", "" + s.getAnnealingType());
+        addField(
+                ((ConjunctiveActivation)s.getActivation()).getAnnealingValue(s.getAnnealingType())
+        );
+    }
+
+    public static AnnealingSynapseOutputSlotPropertyPanel create(AnnealingSynapseOutputSlot s) {
+        return new AnnealingSynapseOutputSlotPropertyPanel(s);
     }
 }

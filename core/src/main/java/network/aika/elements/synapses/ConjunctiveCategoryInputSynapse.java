@@ -16,14 +16,14 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.ConjunctiveCategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
+import network.aika.elements.synapses.slots.AnnealingType;
 import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.elements.synapses.slots.CategoryInputSynapseOutputSlot;
 
 /**
  *
@@ -39,8 +39,8 @@ public abstract class ConjunctiveCategoryInputSynapse<
         > extends PositiveFeedbackSynapse<S, I, O, L, IA, OA> implements CategoryInputSynapse<S> {
 
     @Override
-    public SynapseSlot createOutputSlot(Activation oAct) {
-        CategoryInputSynapseOutputSlot slot = new CategoryInputSynapseOutputSlot(oAct, this);
+    public SynapseSlot createOutputSlot(OA oAct) {
+        AnnealingSynapseOutputSlot slot = new AnnealingSynapseOutputSlot(oAct, this, AnnealingType.CATEGORY_INPUT);
         slot.connectToActivation();
         return slot;
     }

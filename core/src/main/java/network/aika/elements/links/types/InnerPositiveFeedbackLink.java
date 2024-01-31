@@ -19,6 +19,7 @@ package network.aika.elements.links.types;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.PositiveFeedbackLink;
+import network.aika.elements.synapses.slots.AnnealingType;
 import network.aika.elements.synapses.types.InnerPositiveFeedbackSynapse;
 import network.aika.fields.*;
 
@@ -48,7 +49,7 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     @Override
     public void checkPrimarySuppression() {
         if(output.getNeuron().isPrimary() && !isInputSideActive())
-            output.getAnnealingValue().setValue(1.0);
+            output.getOuterFeedbackAnnealingValue().setValue(1.0);
     }
 
     @Override

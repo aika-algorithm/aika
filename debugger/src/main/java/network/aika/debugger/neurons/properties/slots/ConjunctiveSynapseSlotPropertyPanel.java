@@ -16,7 +16,7 @@
  */
 package network.aika.debugger.neurons.properties.slots;
 
-import network.aika.elements.synapses.slots.CategoryInputSynapseOutputSlot;
+import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
 import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 
 
@@ -37,8 +37,8 @@ public class ConjunctiveSynapseSlotPropertyPanel<S extends ConjunctiveSynapseSlo
     }
 
     public static ConjunctiveSynapseSlotPropertyPanel create(ConjunctiveSynapseSlot s) {
-        if(s instanceof CategoryInputSynapseOutputSlot) {
-            return ConjunctiveCategoryInputSynapseSlotPropertyPanel.create((CategoryInputSynapseOutputSlot) s);
+        if(s instanceof AnnealingSynapseOutputSlot) {
+            return AnnealingSynapseOutputSlotPropertyPanel.create((AnnealingSynapseOutputSlot) s);
         }
 
         return new ConjunctiveSynapseSlotPropertyPanel(s);

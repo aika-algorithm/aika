@@ -33,7 +33,7 @@ public class Anneal extends ElementStep<BindingActivation> {
 
 
     public static void add(BindingActivation act) {
-        double v = act.getAnnealingValue().getValue();
+        double v = act.getOuterFeedbackAnnealingValue().getValue();
         if (v <= 1.0)
             add(new Anneal(act));
     }
@@ -52,11 +52,11 @@ public class Anneal extends ElementStep<BindingActivation> {
         BindingActivation act = getElement();
         Document doc = act.getDocument();
 
-        double v = act.getAnnealingValue().getValue();
+        double v = act.getOuterFeedbackAnnealingValue().getValue();
         if(v >= 1.0)
             return;
 
-        act.getAnnealingValue().setValue(
+        act.getOuterFeedbackAnnealingValue().setValue(
                 Math.min(
                         v + doc.getConfig().getAnnealStepSize(),
                         1.0
@@ -74,6 +74,6 @@ public class Anneal extends ElementStep<BindingActivation> {
     @Override
     public String toString() {
         return getElement() +
-                " LastValue:" + doubleToString(getElement().getAnnealingValue().getValue(), "#.######");
+                " LastValue:" + doubleToString(getElement().getOuterFeedbackAnnealingValue().getValue(), "#.######");
     }
 }

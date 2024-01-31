@@ -19,7 +19,10 @@ package network.aika.elements.activations;
 import network.aika.Document;
 import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.synapses.slots.CategoryInputSynapseOutputSlot;
+import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
+import network.aika.elements.synapses.slots.AnnealingType;
+import network.aika.fields.Field;
+import network.aika.fields.InputField;
 import network.aika.queue.steps.FeedbackTrigger;
 
 import static network.aika.fields.link.FieldLink.linkAndConnect;
@@ -32,6 +35,9 @@ import static network.aika.fields.Fields.scale;
  */
 public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> extends Activation<N> {
 
+    protected InputField outerFeedbackAnnealingValue;
+    protected InputField instantiationAnnealingValue;
+
     public ConjunctiveActivation(int id, Document doc, N n) {
         super(id, doc, n);
 
@@ -40,16 +46,38 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
         }
     }
 
-    public CategoryInputSynapseOutputSlot getActiveCategoryInputSlot() {
-        return getInputSlotsByType(CategoryInputSynapseOutputSlot.class)
+    @Override
+    protected void initNet() {
+        instantiationAnnealingValue = new InputField(this, "instantiation annealing value", 0.0);
+        super.initNet();
+    }
+
+    public Field getAnnealingValue(AnnealingType at) {
+        return switch (at) {
+            case CATEGORY_INPUT -> instantiationAnnealingValue;
+            case OUTER_FEEDBACK -> outerFeedbackAnnealingValue;
+        };
+    }
+
+    public InputField getInstantiationAnnealingValue() {
+        return outerFeedbackAnnealingValue;
+    }
+
+    public InputField getOuterFeedbackAnnealingValue() {
+        return outerFeedbackAnnealingValue;
+    }
+
+    public AnnealingSynapseOutputSlot getActiveCategoryInputSlot() {
+        return getInputSlotsByType(AnnealingSynapseOutputSlot.class)
+                .filter(as -> as.getAnnealingType() == AnnealingType.CATEGORY_INPUT)
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
     public CategoryInputLink getActiveCategoryInputLink() {
-        CategoryInputSynapseOutputSlot sl = getActiveCategoryInputSlot();
-        return sl != null ? sl.getSelectedLink() : null;
+        AnnealingSynapseOutputSlot sl = getActiveCategoryInputSlot();
+        return sl != null ? (CategoryInputLink) sl.getSelectedLink() : null;
     }
 
     @Override

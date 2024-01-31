@@ -14,30 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.debugger.neurons.properties.slots;
-
-import network.aika.elements.synapses.slots.CategoryInputSynapseOutputSlot;
-import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
-
+package network.aika.elements.synapses.slots;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-public class ConjunctiveCategoryInputSynapseSlotPropertyPanel<S extends CategoryInputSynapseOutputSlot> extends ConjunctiveSynapseSlotPropertyPanel<S> {
-
-    public ConjunctiveCategoryInputSynapseSlotPropertyPanel(S s) {
-        super(s);
-    }
-
-    @Override
-    public void initSlotProperties(S s) {
-        super.initSlotProperties(s);
-
-        addField(s.getFeedbackTrigger());
-    }
-
-    public static ConjunctiveCategoryInputSynapseSlotPropertyPanel create(CategoryInputSynapseOutputSlot s) {
-
-        return new ConjunctiveCategoryInputSynapseSlotPropertyPanel(s);
-    }
+public enum AnnealingType {
+    OUTER_FEEDBACK,
+    CATEGORY_INPUT
 }

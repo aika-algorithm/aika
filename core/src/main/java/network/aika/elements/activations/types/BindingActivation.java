@@ -45,8 +45,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     protected static final Logger log = LoggerFactory.getLogger(BindingActivation.class);
 
-    private InputField annealingValue;
-
     public BindingActivation(int id, Document doc, BindingNeuron n) {
         super(id, doc, n);
     }
@@ -58,7 +56,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
     @Override
     protected void initNet() {
-        annealingValue = new InputField(this, "annealing value", 0.0);
+        outerFeedbackAnnealingValue = new InputField(this, "annealing value", 0.0);
 
         super.initNet();
 
@@ -74,10 +72,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     @Override
     public Field getValue() {
         return getValue(INNER_FEEDBACK);
-    }
-
-    public InputField getAnnealingValue() {
-        return annealingValue;
     }
 
     public PatternActivation getSamePatternActivation() {

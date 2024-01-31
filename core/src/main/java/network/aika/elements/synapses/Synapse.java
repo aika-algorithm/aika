@@ -29,6 +29,7 @@ import network.aika.elements.Timestamp;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
+import network.aika.fields.Field;
 import network.aika.fields.FieldOutput;
 import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
@@ -106,9 +107,9 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.getRequired();
     }
 
-    public abstract SynapseSlot createInputSlot(Activation iAct);
+    public abstract SynapseSlot createInputSlot(IA iAct);
 
-    public abstract SynapseSlot createOutputSlot(Activation oAct);
+    public abstract SynapseSlot createOutputSlot(OA oAct);
 
     public SumField getOutputNet(Activation act) {
         return act.getNet(synapseType.stateType());
@@ -309,6 +310,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public SumField getWeight() {
+        return weight;
+    }
+
+    public Field getWeightForAnnealing() {
         return weight;
     }
 

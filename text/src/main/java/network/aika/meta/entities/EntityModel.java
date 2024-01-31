@@ -182,7 +182,11 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 NEG_MARGIN * -entityBN.getTargetNet()
         );
 
-        topicBN = addBindingNeuron(getModel(), "Topic (Entity)", 2.5);
+        topicBN = addBindingNeuron(
+                getModel(),
+                "Topic (Entity)",
+                BINDING_NET_TARGET
+        );
 
         topicBN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()))

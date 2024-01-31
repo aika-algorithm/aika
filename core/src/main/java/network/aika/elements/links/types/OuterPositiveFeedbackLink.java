@@ -17,18 +17,13 @@
 package network.aika.elements.links.types;
 
 import network.aika.elements.activations.types.BindingActivation;
-import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.activations.types.PatternActivation;
-import network.aika.elements.links.Link;
 import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.elements.synapses.types.OuterPositiveFeedbackSynapse;
 import network.aika.fields.*;
 
-import java.util.stream.Stream;
-
 import static network.aika.fields.Fields.*;
 import static network.aika.fields.Fields.scale;
-import static network.aika.utils.Utils.TOLERANCE;
 
 
 /**
@@ -52,7 +47,7 @@ public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiv
         annealedInputValue = mix(
                 this,
                 "annealed input value",
-                output.getAnnealingValue(),
+                output.getOuterFeedbackAnnealingValue(),
                 ConstantField.ONE,
                 inputValue
         );
