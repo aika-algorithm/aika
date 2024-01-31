@@ -60,7 +60,7 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
     }
 
     public InputField getInstantiationAnnealingValue() {
-        return outerFeedbackAnnealingValue;
+        return instantiationAnnealingValue;
     }
 
     public InputField getOuterFeedbackAnnealingValue() {

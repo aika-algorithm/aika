@@ -54,7 +54,7 @@ public class FeedbackTrigger extends ElementStep<ConjunctiveActivation> {
 
         ft.receiveUpdate(
                 null,
-                state ? 1.0 : -1.0
+                state ? -1.0 : 1.0
         );
     }
 

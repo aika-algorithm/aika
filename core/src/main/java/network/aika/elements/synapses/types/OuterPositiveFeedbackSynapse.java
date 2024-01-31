@@ -23,6 +23,9 @@ import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
+import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
+import network.aika.elements.synapses.slots.AnnealingType;
+import network.aika.elements.synapses.slots.SynapseSlot;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
@@ -51,7 +54,22 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
+    @Override
     public OuterPositiveFeedbackLink createLink(PatternActivation input, BindingActivation output) {
         return new OuterPositiveFeedbackLink(this, input, output);
+    }
+
+    @Override
+    public void initBiasInput(BindingActivation act) {
+        super.initBiasInput(act);
+
+        act.registerInputSlot(this);
+    }
+
+    @Override
+    public SynapseSlot createOutputSlot(BindingActivation oAct) {
+        AnnealingSynapseOutputSlot slot = new AnnealingSynapseOutputSlot(oAct, this, AnnealingType.OUTER_FEEDBACK);
+        slot.connectToActivation();
+        return slot;
     }
 }

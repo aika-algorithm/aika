@@ -18,7 +18,7 @@ package network.aika.queue.steps;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.synapses.slots.AnnealingType;
+import network.aika.fields.Field;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 
@@ -54,7 +54,10 @@ public class Instantiation extends ElementStep<Activation> {
 
         if(act instanceof ConjunctiveActivation) {
             ConjunctiveActivation cAct = (ConjunctiveActivation) act;
-            cAct.getInstantiationAnnealingValue().setValue(1.0);
+            Field av = cAct.getInstantiationAnnealingValue();
+
+            if(av != null)
+                av.setValue(0.0);
         }
 
         act.instantiationIsQueued = false;

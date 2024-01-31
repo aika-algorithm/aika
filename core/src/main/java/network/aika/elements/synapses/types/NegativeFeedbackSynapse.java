@@ -81,6 +81,8 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
     public void initBiasInput(BindingActivation act) {
         linkAndConnect(weight, act.getNet(synapseType.stateType()))
                 .setPropagateUpdates(false);
+
+        act.registerInputSlot(this);
     }
 
     @Override
