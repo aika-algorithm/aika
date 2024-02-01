@@ -68,6 +68,7 @@ public class Dictionary implements Writable {
 
         inputToken.makeAbstract()
                 .setWeight(3.0)
+                .setPropagable(true)
                 .adjustBias();
 
         log.info("Input Token: netTarget:" + INPUT_TOKEN_NET_TARGET);

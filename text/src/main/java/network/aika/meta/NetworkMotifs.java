@@ -196,11 +196,11 @@ public class NetworkMotifs {
             LatentRelationNeuron relN,
             double relWeight,
             double spsWeight,
-            boolean templateOnly
+            boolean notInstantiable
     ) {
         RelationInputSynapse relSyn = new RelationInputSynapse()
                 .setWeight(relWeight)
-                .setNotInstantiable(templateOnly)
+                .setNotInstantiable(notInstantiable)
                 .link(relN, bn)
                 .adjustBias();
 
@@ -212,7 +212,7 @@ public class NetworkMotifs {
         SameObjectSynapse spSyn = new SameObjectSynapse()
                 .setWeight(spsWeight)
                 .setRelation(rel)
-                .setNotInstantiable(templateOnly)
+                .setNotInstantiable(notInstantiable)
                 .link(lastBN, bn)
                 .setPropagable(true)
                 .adjustBias(prevValueTarget);
