@@ -48,7 +48,7 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
 
     @Override
     protected void initNet() {
-        instantiationAnnealingValue = new InputField(this, "instantiation annealing value", 0.0);
+        instantiationAnnealingValue = new InputField(this, "instantiation annealing value", 1.0);
         super.initNet();
     }
 

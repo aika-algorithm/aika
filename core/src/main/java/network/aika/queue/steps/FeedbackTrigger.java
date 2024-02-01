@@ -18,7 +18,6 @@ package network.aika.queue.steps;
 
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
-import network.aika.elements.synapses.slots.AnnealingType;
 import network.aika.fields.Field;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;

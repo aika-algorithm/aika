@@ -76,7 +76,7 @@ public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynaps
         weightedInput = mul(
                 this,
                 "iAct(" + getInputKeyString() + ").value * s.weight",
-                inputValue, true,
+                invert(this, "inverted-input-value", inputValue), true,
                 synapse.getWeightForAnnealing(), false
         );
     }
