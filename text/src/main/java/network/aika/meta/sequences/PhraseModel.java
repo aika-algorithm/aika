@@ -55,6 +55,10 @@ public class PhraseModel extends SequenceModel {
         this.entityModel = entityModel;
     }
 
+    public BindingNeuron getEntityBN() {
+        return entityBN;
+    }
+
     @Override
     public String getPatternType() {
         return "Phrase";
@@ -82,7 +86,7 @@ public class PhraseModel extends SequenceModel {
                 entityBN,
                 entityModel.getEntityPattern(),
                 2.5
-        );
+        ).setOptional(true);
     }
 
     @Override

@@ -236,8 +236,16 @@ public class EntityModel extends TemplateModel<EntityModel> {
     }
 
     @Override
+    public void prepareInstantiation() {
+        setNotInstantiable(false);
+        phraseModel.getEntityBN().setNotInstantiable(true);
+        phraseModel.getPatternNeuron().setNotInstantiable(true);
+    }
+
+    @Override
     public void mapResults(Document doc) {
-        getPhraseModel().getPatternNeuron().setNotInstantiable(false);
+        phraseModel.getEntityBN().setNotInstantiable(true);
+        phraseModel.getPatternNeuron().setNotInstantiable(false);
 
         entityPattern = lookupInstance(doc, parent.entityPattern);
         entityPattern.setPersistent(true);
@@ -261,11 +269,6 @@ public class EntityModel extends TemplateModel<EntityModel> {
         EntityModel em = new EntityModel(label);
         em.initModelDependencies(phraseModel, (TopicModel) instM);
         return em;
-    }
-
-    public void prepareInstantiation() {
-        setNotInstantiable(false);
-        phraseModel.getPatternNeuron().setNotInstantiable(true);
     }
 
     public void prepareExampleDoc(Document doc, String label) {
