@@ -39,7 +39,8 @@ import static network.aika.enums.Trigger.PRIMARY_CHECKED_FIRED_NEGATIVE_FEEDBACK
         outputType = BINDING,
         transition = SAME_SAME,
         required = INPUT_INPUT,
-        trigger = PRIMARY_CHECKED_FIRED_NEGATIVE_FEEDBACK
+        trigger = PRIMARY_CHECKED_FIRED_NEGATIVE_FEEDBACK,
+        propagateRange = false
 )
 public class SameObjectSynapse extends ConjunctiveSynapse<
         SameObjectSynapse,

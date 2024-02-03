@@ -40,6 +40,8 @@ public class SynapseTypeHolder {
     
     private StateType stateType;
 
+    private boolean propagateRange;
+
     public static SynapseTypeHolder getHolder(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
                 new SynapseTypeHolder(
@@ -57,6 +59,7 @@ public class SynapseTypeHolder {
         required = synTypeAnno.required();
         trigger = synTypeAnno.trigger();
         stateType = synTypeAnno.stateType();
+        propagateRange = synTypeAnno.propagateRange();
     }
 
     public Type getInputType() {
@@ -81,5 +84,9 @@ public class SynapseTypeHolder {
 
     public StateType stateType() {
         return stateType;
+    }
+
+    public boolean isPropagateRange() {
+        return propagateRange;
     }
 }

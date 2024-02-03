@@ -28,8 +28,4 @@ public class SameObjectLink extends ConjunctiveLink<SameObjectSynapse, BindingAc
     public SameObjectLink(SameObjectSynapse s, BindingActivation input, BindingActivation output) {
         super(s, input, output);
     }
-
-    @Override
-    public void propagateRanges() {
-    }
 }
