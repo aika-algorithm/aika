@@ -53,10 +53,6 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
     }
 
     @Override
-    public void propagateRanges() {
-    }
-
-    @Override
     protected void connectGradientFields() {
         super.connectGradientFields();
 

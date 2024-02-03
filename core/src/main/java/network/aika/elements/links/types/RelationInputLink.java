@@ -51,10 +51,6 @@ public class RelationInputLink extends ConjunctiveLink<RelationInputSynapse, Lat
     }
 
     @Override
-    public void propagateRanges() {
-    }
-
-    @Override
     public void visit(Visitor v, Scope s, int depth) {
     }
 }

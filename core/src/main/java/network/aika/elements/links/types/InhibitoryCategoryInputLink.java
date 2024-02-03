@@ -45,16 +45,6 @@ public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCateg
     }
 
     @Override
-    public Type getInputType() {
-        return INHIBITORY;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
-    @Override
     public CategorySynapse createCategorySynapse() {
         return new InhibitoryCategorySynapse();
     }

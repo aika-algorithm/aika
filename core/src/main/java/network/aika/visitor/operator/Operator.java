@@ -35,6 +35,4 @@ public interface Operator {
     void check(Activation bsAct, Scope s, int depth);
 
     void visitorCheck(UpVisitor v, Link lastLink, Activation act, Scope s);
-
-    void relationCheck(Relation rel, Synapse relSyn, Activation toAct, Direction relDir);
 }

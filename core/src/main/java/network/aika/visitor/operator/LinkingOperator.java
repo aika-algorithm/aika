@@ -16,14 +16,13 @@
  */
 package network.aika.visitor.operator;
 
-import network.aika.Document;
 import network.aika.elements.activations.types.PatternActivation;
+import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.enums.Scope;
-
-import static network.aika.elements.synapses.Synapse.getLatentLink;
+import network.aika.enums.direction.Direction;
 
 /**
  * @author Lukas Molzberger
@@ -60,4 +59,6 @@ public abstract class LinkingOperator implements Operator {
     public Synapse getTargetSyn() {
         return targetSyn;
     }
+
+    public abstract void relationCheck(Relation rel, Synapse relSyn, Activation toAct, Direction relDir);
 }

@@ -43,7 +43,8 @@ import static network.aika.enums.Transition.INPUT_INPUT;
         inputType = BINDING,
         outputType = BINDING,
         transition = INPUT_INPUT,
-        required = INPUT_INPUT
+        required = INPUT_INPUT,
+        propagateRange = false
 )
 public class RelationInputSynapse extends ConjunctiveSynapse<
         RelationInputSynapse,

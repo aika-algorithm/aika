@@ -42,20 +42,6 @@ public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynaps
     }
 
     @Override
-    public void propagateRanges() {
-    }
-
-    @Override
-    public Type getInputType() {
-        return INHIBITORY;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return BINDING;
-    }
-
-    @Override
     protected void initInputValue() {
         inputValue = new MaxField(this, "max-input-value", TOLERANCE);
 

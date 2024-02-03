@@ -35,14 +35,4 @@ public class InhibitoryCategoryLink extends CategoryLink<InhibitoryCategorySynap
 
         crossConnectFields(input, (InhibitoryActivation) output.getTemplate());
     }
-
-    @Override
-    public Type getInputType() {
-        return INHIBITORY;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return INHIBITORY;
-    }
 }

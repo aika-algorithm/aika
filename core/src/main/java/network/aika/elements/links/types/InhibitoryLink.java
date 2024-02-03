@@ -65,16 +65,6 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
         );
     }
 
-    @Override
-    public Type getInputType() {
-        return BINDING;
-    }
-
-    @Override
-    public Type getOutputType() {
-        return INHIBITORY;
-    }
-
     public void connectFields(NegativeFeedbackLink out) {
         if(isSelfRef(getInput(), out.getOutput()))
             return;

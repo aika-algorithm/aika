@@ -66,8 +66,4 @@ public class BindingSignalCollector implements Operator {
     @Override
     public void visitorCheck(UpVisitor v, Link lastLink, Activation act, Scope s) {
     }
-
-    @Override
-    public void relationCheck(Relation rel, Synapse relSyn, Activation toAct, Direction relDir) {
-    }
 }

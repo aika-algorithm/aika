@@ -111,7 +111,6 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         synapse.initBiasInput(output);
     }
 
-
     @Override
     public void connectWeightUpdate() {
         weightUpdatePosCase = mul(
