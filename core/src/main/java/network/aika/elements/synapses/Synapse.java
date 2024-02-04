@@ -107,6 +107,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.getRequired();
     }
 
+    public boolean isPropagateRange() {
+        return synapseType.isPropagateRange();
+    }
+
     public abstract SynapseSlot createInputSlot(IA iAct);
 
     public abstract SynapseSlot createOutputSlot(OA oAct);
@@ -359,26 +363,24 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return relation;
     }
 
-    public boolean expandRelation(LinkingOperator op, Neuron to, Direction relDir) {
+    public void expandRelation(LinkingOperator op, Neuron to, Direction relDir) {
         Relation rel = getRelation();
         if(rel == null)
-            return false;
+            return;
 
         Activation from = op.getSourceAct();
         PreActivation<?> toPreAct = to.getPreActivation(from.getDocument());
         if(toPreAct == null)
-            return false;
+            return;
 
         TextReference ref = from.getTextReference();
         if(ref == null)
-            return true;
+            return;
 
         rel.evaluateLatentRelation(this, ref, from, toPreAct, relDir.invert())
                 .forEach(relAct ->
                         op.relationCheck(rel, this, relAct, relDir)
                 );
-
-        return true;
     }
 
     @Override

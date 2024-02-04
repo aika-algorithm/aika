@@ -31,8 +31,15 @@ import network.aika.visitor.UpVisitor;
  */
 public class IncomingLinkingOperator extends LinkingOperator {
 
-    public IncomingLinkingOperator(Activation sourceAct, Synapse targetSyn, PatternActivation bindingSignal) {
+    private Synapse sourceSyn; // Set only during latent linking
+
+    public IncomingLinkingOperator(Activation sourceAct, Synapse sourceSyn, Synapse targetSyn, PatternActivation bindingSignal) {
         super(sourceAct, targetSyn, bindingSignal);
+        this.sourceSyn = sourceSyn;
+    }
+
+    public Synapse getStartSynapse() {
+        return sourceSyn;
     }
 
     @Override
@@ -54,7 +61,19 @@ public class IncomingLinkingOperator extends LinkingOperator {
         if (!targetSyn.getTrigger().check(act))
             return null;
 
-        return targetSyn.link(act, sourceAct);
+        Activation targetAct;
+
+        if(sourceSyn == null)
+            targetAct = sourceAct;
+        else {
+            Link sl = latentLink(sourceAct, sourceSyn, act, targetSyn);
+            if(sl == null)
+                return null;
+
+            targetAct = sl.getOutput();
+        }
+
+        return targetSyn.link(act, targetAct);
     }
 
     @Override

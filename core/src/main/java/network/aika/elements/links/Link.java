@@ -312,7 +312,7 @@ public abstract class Link<
     }
 
     public void propagateRanges() {
-        if(!synapse.getSynapseType().isPropagateRange())
+        if(!synapse.isPropagateRange())
             return;
 
         if(input == null)

@@ -96,18 +96,22 @@ public class Linking extends ElementStep<Activation> {
                 )
                 .toList()
                 .forEach(s -> {
-                    if(bindingSignal != null)
+                    if(bindingSignal != null) {
                         linkOutgoing(s);
+                        latentLinkingExpand(s);
+                    }
 
                     s.propagate(act);
                 });
     }
 
     private void linkIncoming(Synapse targetSyn) {
-        LinkingOperator op = new IncomingLinkingOperator(getElement(), targetSyn, bindingSignal);
+        LinkingOperator op = new IncomingLinkingOperator(getElement(), null, targetSyn, bindingSignal);
 
-        if(targetSyn.expandRelation(op, targetSyn.getOutput(), INPUT))
+        if(targetSyn.getRelation() != null) {
+            targetSyn.expandRelation(op, targetSyn.getOutput(), INPUT);
             return;
+        }
 
         new UpVisitor(bindingSignal.getDocument(), op)
                 .start(bindingSignal, SAME);
@@ -119,11 +123,43 @@ public class Linking extends ElementStep<Activation> {
         Neuron to = targetSyn.getOutput();
         LinkingOperator op = new OutgoingLinkingOperator(act, targetSyn, bindingSignal);
 
-        if(targetSyn.expandRelation(op, to, OUTPUT))
+        if(targetSyn.getRelation() != null) {
+            targetSyn.expandRelation(op, to, OUTPUT);
             return;
+        }
 
         new UpVisitor(bindingSignal.getDocument(), op)
                     .start(bindingSignal, SAME);
+    }
+
+    private void latentLinkingExpand(Synapse sourceSyn) {
+        if(!sourceSyn.isPropagateRange() && sourceSyn.getRelation() == null)
+            return;
+
+        Neuron<?, ?> targetNeuron = sourceSyn.getOutput();
+        targetNeuron.getInputSynapsesAsStream()
+                .filter(ts -> sourceSyn != ts)
+                .filter(ts ->
+                        checkLLPreCondition(sourceSyn, ts) ||
+                                checkLLPreCondition(ts, sourceSyn)
+                )
+                .forEach(ts ->
+                        latentLink(sourceSyn, ts)
+                );
+    }
+
+    private boolean checkLLPreCondition(Synapse synA, Synapse synB) {
+        return synA.isPropagateRange() && synB.getRelation() != null;
+    }
+
+    private void latentLink(Synapse sourceSyn, Synapse targetSyn) {
+        Activation iAct = getElement();
+
+        LinkingOperator op = new IncomingLinkingOperator(iAct, sourceSyn, targetSyn, bindingSignal);
+        Neuron to = targetSyn.getInput();
+
+        sourceSyn.expandRelation(op, to, OUTPUT);
+        targetSyn.expandRelation(op, to, INPUT);
     }
 
     @Override
