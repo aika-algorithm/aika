@@ -171,8 +171,17 @@ public class TextSectionTest extends Parser<TestContext> {
 
         dictionary.initInputTokenWeights();
 
+        tasksHeadline.enable();
+        tasksTopic.enable();
         process(tasksHeadlineLabel, new TestContext(TASKS_LABEL, null), TRAINING);
+        tasksHeadline.disable();
+        tasksTopic.disable();
+
+        profileHeadline.enable();
+        profileTopic.enable();
         process(profileHeadlineLabel, new TestContext(PROFILE_LABEL, null), TRAINING);
+        profileHeadline.disable();
+        profileTopic.disable();
 
         process(exampleTxt,
                 new TestContext(

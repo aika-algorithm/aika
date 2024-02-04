@@ -76,20 +76,16 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
     @Override
     public void enable() {
-        if(topicBN != null)
-            topicBN.setBias(BINDING_NET_TARGET);
-
-        if(topicPatternN != null)
-            topicPatternN.setBias(TOPIC_NET_TARGET);
+        InputObjectSynapse s = topicBN.getInputSynapseByType(InputObjectSynapse.class);
+        if(s != null)
+            s.setPropagable(true);
     }
 
     @Override
     public void disable() {
-        if(topicBN != null)
-            topicBN.setBias(-10.0);
-
-        if(topicPatternN != null)
-            topicPatternN.setBias(-10.0);
+        InputObjectSynapse s = topicBN.getInputSynapseByType(InputObjectSynapse.class);
+        if(s != null)
+            s.setPropagable(false);
     }
 
     @Override

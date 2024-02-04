@@ -24,6 +24,7 @@ import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.types.InputObjectSynapse;
 import network.aika.meta.TemplateModel;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.Document;
@@ -87,28 +88,16 @@ public class EntityModel extends TemplateModel<EntityModel> {
     public void enable() {
         topicModel.enable();
 
-        if(entityBN != null)
-            entityBN.setBias(BINDING_NET_TARGET);
-
-        if(topicBN != null)
-            topicBN.setBias(BINDING_NET_TARGET);
-
-        if(entityPattern != null)
-            entityPattern.setBias(ENTITY_NET_TARGET);
+        entityBN.getInputSynapseByType(InputObjectSynapse.class)
+                .setPropagable(true);
     }
 
     @Override
     public void disable() {
         topicModel.disable();
 
-        if(entityBN != null)
-            entityBN.setBias(-10.0);
-
-        if(topicBN != null)
-            topicBN.setBias(-10.0);
-
-        if(entityPattern != null)
-            entityPattern.setBias(-10.0);
+        entityBN.getInputSynapseByType(InputObjectSynapse.class)
+                .setPropagable(false);
     }
 
     public PatternNeuron getEntityPattern() {
