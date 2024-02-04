@@ -37,6 +37,8 @@ import static network.aika.text.TextReference.getTPEnd;
  */
 public class PreActivation<A extends Activation> {
 
+    private Document doc;
+
     private SortedSet<A> activations = new TreeSet<>();
 
     private NavigableMap<TokenPositionKey, Activation> tokenPosBeginIndex = new TreeMap<>();
@@ -45,6 +47,7 @@ public class PreActivation<A extends Activation> {
 
 
     public PreActivation(Document doc, NeuronProvider provider) {
+        this.doc = doc;
         doc.register(provider, this);
     }
 
@@ -95,5 +98,9 @@ public class PreActivation<A extends Activation> {
         return slot == Direction.OUTPUT ?
                 tokenPosEndIndex :
                 tokenPosBeginIndex;
+    }
+
+    public Document getDocument() {
+        return doc;
     }
 }

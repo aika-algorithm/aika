@@ -181,19 +181,22 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public SortedSet<A> getActivations(Document doc) {
+    public PreActivation<A> getPreActivation(Document doc) {
         if(doc == null)
-            return Collections.emptySortedSet();
+            return null;
 
         WeakReference<PreActivation<A>> weakRef = activations.get(doc.getId());
-        if(weakRef == null)
-            return Collections.emptyNavigableSet();
+        return weakRef != null ?
+                weakRef.get() :
+                null;
+    }
 
-        PreActivation<A> acts = weakRef.get();
-        if(acts == null)
-            return Collections.emptyNavigableSet();
+    public SortedSet<A> getActivations(Document doc) {
+        PreActivation<A> preAct = getPreActivation(doc);
 
-        return acts.getActivations();
+        return preAct != null ?
+                preAct.getActivations() :
+                Collections.emptyNavigableSet();
     }
 
     public <R extends N> R instantiateTemplate() {

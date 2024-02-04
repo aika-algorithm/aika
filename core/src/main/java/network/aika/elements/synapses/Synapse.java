@@ -144,6 +144,9 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         if(!isPropagable())
             return;
 
+        if(getRelation() != null)
+            return;
+
         if(propagateLinkExists(iAct))
             return;
 
@@ -362,7 +365,9 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             return false;
 
         Activation from = op.getSourceAct();
-        PreActivation<?> toPreAct = to.getOrCreatePreActivation(from.getDocument());
+        PreActivation<?> toPreAct = to.getPreActivation(from.getDocument());
+        if(toPreAct == null)
+            return false;
 
         TextReference ref = from.getTextReference();
         if(ref == null)
