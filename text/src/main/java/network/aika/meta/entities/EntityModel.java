@@ -25,6 +25,7 @@ import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.types.InputObjectSynapse;
+import network.aika.elements.synapses.types.OuterPositiveFeedbackSynapse;
 import network.aika.meta.TemplateModel;
 import network.aika.meta.sequences.PhraseModel;
 import network.aika.Document;
@@ -238,6 +239,9 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         entityPattern = lookupInstance(doc, parent.entityPattern);
         entityPattern.setPersistent(true);
+
+        entityPattern.getOutputSynapseByType(OuterPositiveFeedbackSynapse.class)
+                .setOptional(true);
 
         Synapse s = entityPattern.getOutputSynapse(getTopicModel().getTopicBindingNeuron().getProvider());
         if(s != null)
