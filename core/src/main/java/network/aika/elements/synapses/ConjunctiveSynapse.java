@@ -97,6 +97,9 @@ public abstract class ConjunctiveSynapse<
     public void count(L l) {
         super.count(l);
 
+        if(l.getInput() == null)
+            return;
+
         Timestamp inFired = l.getInput().getFired(StateType.PRE_FEEDBACK);
         Timestamp outFired = l.getOutput().getFired(StateType.PRE_FEEDBACK);
 
