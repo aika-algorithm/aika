@@ -37,6 +37,13 @@ public class SingleBSSlot extends BindingSignalSlot {
     }
 
     @Override
+    protected void onBindingSignalSlotFilled(PatternActivation bs) {
+        super.onBindingSignalSlotFilled(bs);
+
+        act.propagateBindingSignal(type, bs, true);
+    }
+
+    @Override
     public boolean isSet() {
         return bindingSignal != null;
     }

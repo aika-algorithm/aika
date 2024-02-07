@@ -65,8 +65,6 @@ public abstract class BindingSignalSlot {
 
         if(act.isFired(PRE_FEEDBACK))
             Linking.add(act, type, bs, FIRED_PRE_FEEDBACK);
-
-        act.propagateBindingSignal(type, bs, true);
     }
 
     public void onFired(State s) {

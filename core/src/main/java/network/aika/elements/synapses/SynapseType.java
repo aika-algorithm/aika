@@ -42,7 +42,7 @@ public @interface SynapseType {
 
     public Transition required();
 
-    public Trigger trigger() default Trigger.FIRED_POSITIVE_FEEDBACK;
+    public Trigger trigger() default Trigger.FIRED_INNER_FEEDBACK;
 
     public StateType stateType() default StateType.PRE_FEEDBACK;
 
