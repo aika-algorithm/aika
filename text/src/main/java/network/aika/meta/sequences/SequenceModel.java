@@ -101,7 +101,7 @@ public abstract class SequenceModel implements Writable {
 
     public static BindingNeuronParameters WEAK_BN_PARAMS = new BindingNeuronParameters(
             PATTERN_NET_TARGET,
-            0.5,
+            1.6,
             9.0,
             5.0,
             0.5,
