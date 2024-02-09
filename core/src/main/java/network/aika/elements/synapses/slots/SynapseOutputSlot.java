@@ -20,8 +20,9 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.Subtraction;
+import network.aika.fields.Field;
 
+import static network.aika.fields.Fields.add;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.excludeInput;
 
@@ -31,20 +32,25 @@ import static network.aika.fields.Fields.excludeInput;
  */
 public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends ConjunctiveLink> extends ConjunctiveSynapseSlot<S, L> {
 
-    protected Subtraction outputNet;
+    protected Field outputNet;
 
     public SynapseOutputSlot(Activation act, S synapse) {
         super(act, synapse, Direction.OUTPUT);
 
-        outputNet = excludeInput(
+        outputNet = add(
                 this,
                 "outputNet",
-                synapse.getOutputNet(act),
-                maxField
+                excludeInput(
+                        this,
+                        "outputNet-exclude",
+                        synapse.getOutputNet(act),
+                        maxField
+                ),
+                synapse.getWeight()
         );
     }
 
-    public Subtraction getOutputNet() {
+    public Field getOutputNet() {
         return outputNet;
     }
 

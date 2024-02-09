@@ -191,7 +191,7 @@ public abstract class AbstractViewManager<N, G extends AbstractGraphManager> {
                         "edge:selected {" +
                         "stroke-mode: plain; " +
                         "fill-color: red;" +
-                        "stroke-width: 3px;" +
+                        "stroke-width: 2px;" +
                         "}"
         );
 

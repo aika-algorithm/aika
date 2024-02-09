@@ -49,6 +49,9 @@ public class SubsumesOperator implements Operator {
     }
 
     public static boolean subsumes(Scope s, PatternActivation a, PatternActivation b) {
+        if(a == b)
+            return true;
+
         SubsumesOperator op = new SubsumesOperator(b, a);
         new DownVisitor(a.getDocument(), op)
                 .start(a, s);

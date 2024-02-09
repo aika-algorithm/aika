@@ -20,6 +20,7 @@ import network.aika.elements.links.*;
 import network.aika.elements.links.types.InputObjectLink;
 import network.aika.elements.links.types.PatternLink;
 import network.aika.elements.synapses.slots.SynapseInputSlot;
+import network.aika.elements.synapses.slots.SynapseOutputSlot;
 
 
 /**
@@ -35,21 +36,32 @@ public class ConjunctiveLinkPropertyPanel<L extends ConjunctiveLink<?, ?, ?>> ex
     public void initInputIdentitySection(L l) {
         super.initInputIdentitySection(l);
 
-        SynapseInputSlot sl = l.getSynInputSlot();
-        if(sl != null)
-            addConstant("Slot Selection: ",
-                    sl.getSelectedLink() != null ?
-                            "" + sl.getSelectedLink().getOutput() :
+        SynapseInputSlot slot = l.getSynInputSlot();
+        if(slot != null) {
+            ConjunctiveLink sl = slot.getSelectedLink();
+            addConstant(
+                    "Slot Selection: ",
+                    sl != null ?
+                            "" + sl.getOutput() :
                             "--"
             );
+        }
     }
 
     @Override
     public void initOutputIdentitySection(L l) {
         super.initOutputIdentitySection(l);
 
-        if(l.getSynOutputSlot() != null)
-            addConstant("Slot Selection: ", "" + l.getSynOutputSlot().getSelectedLink().getInput());
+        SynapseOutputSlot slot = l.getSynOutputSlot();
+        if(slot != null) {
+            ConjunctiveLink sl = slot.getSelectedLink();
+            addConstant(
+                    "Slot Selection: ",
+                    sl != null ?
+                            "" + sl.getInput() :
+                            "--"
+            );
+        }
     }
 
     public void initTrainingSection(L l) {

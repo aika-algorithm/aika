@@ -28,6 +28,7 @@ import network.aika.fields.*;
 import network.aika.fields.link.FieldLink;
 import network.aika.visitor.Visitor;
 
+import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.fields.link.AbstractFieldLink.updateConnected;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
@@ -69,7 +70,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         updateConnected(
                 inputSlotFL,
                 state && (
-                        subsumes(bsType, nBS, bs) || subsumes(bsType, bs, nBS)
+                        subsumes(SAME, nBS, bs) || subsumes(SAME, bs, nBS)
                 ),
                 true
         );
@@ -100,7 +101,11 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         super.initWeightInput();
 
         if (synInputSlot != null)
-            inputSlotFL = linkAndConnect(synOutputSlot.getOutputNet(), this, synInputSlot.getInputField());
+            inputSlotFL = linkAndConnect(
+                    synOutputSlot.getOutputNet(),
+                    this,
+                    synInputSlot.getInputField()
+            );
 
         if(synapse.isOptional())
             synapse.initBiasInput(output);
@@ -108,6 +113,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
 
     public void initFromTemplate(Link template) {
         super.initFromTemplate(template);
+
         synapse.initBiasInput(output);
     }
 
