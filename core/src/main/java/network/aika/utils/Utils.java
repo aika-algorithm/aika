@@ -91,6 +91,14 @@ public class Utils {
         return doubleToString(x, "#.######");
     }
 
+    public static String floatToString(Float d, String format) {
+        if(d == null)
+            return "--";
+        DecimalFormat formatter = new DecimalFormat(format, DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+        formatter.setRoundingMode( RoundingMode.DOWN );
+        return formatter.format(d);
+    }
+
     public static String doubleToString(Double d, String format) {
         if(d == null)
             return "--";

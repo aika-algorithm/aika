@@ -17,7 +17,6 @@
 package network.aika.meta.entities;
 
 import network.aika.Model;
-import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.BindingNeuron;
@@ -227,15 +226,15 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
     @Override
     public void prepareInstantiation() {
-        setNotInstantiable(false);
-        phraseModel.getEntityBN().setNotInstantiable(true);
-        phraseModel.getPatternNeuron().setNotInstantiable(true);
+        setInstantiable(false);
+        phraseModel.getEntityBN().setInstantiable(true);
+        phraseModel.getPatternNeuron().setInstantiable(true);
     }
 
     @Override
     public void mapResults(Document doc) {
-        phraseModel.getEntityBN().setNotInstantiable(true);
-        phraseModel.getPatternNeuron().setNotInstantiable(false);
+        phraseModel.getEntityBN().setInstantiable(true);
+        phraseModel.getPatternNeuron().setInstantiable(false);
 
         entityPattern = lookupInstance(doc, parent.entityPattern);
         entityPattern.setPersistent(true);
@@ -245,7 +244,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         Synapse s = entityPattern.getOutputSynapse(getTopicModel().getTopicBindingNeuron().getProvider());
         if(s != null)
-            s.setNotInstantiable(true);
+            s.setInstantiable(false);
 
         entityBN = lookupInstance(doc, parent.entityBN);
         entityBN.setPersistent(true);
@@ -278,10 +277,10 @@ public class EntityModel extends TemplateModel<EntityModel> {
     public void postProcess(Document doc) {
     }
 
-    public void setNotInstantiable(boolean notInstantiable) {
-        entityPattern.setNotInstantiable(notInstantiable, true);
-        entityBN.setNotInstantiable(notInstantiable, true);
-        topicBN.setNotInstantiable(notInstantiable, true);
+    public void setInstantiable(boolean instantiable) {
+        entityPattern.setInstantiable(instantiable, true);
+        entityBN.setInstantiable(instantiable, true);
+        topicBN.setInstantiable(instantiable, true);
     }
 
     public Model getModel() {

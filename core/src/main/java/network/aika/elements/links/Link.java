@@ -127,7 +127,7 @@ public abstract class Link<
         if(iAct == null || oAct == null)
             return;
 
-        if(synapse.isNotInstantiable())
+        if(!synapse.isInstantiable())
             return;
 
         S s = (S) synapse.instantiateTemplate(

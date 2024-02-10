@@ -517,11 +517,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public boolean isInstantiable() {
-        return !neuron.isNotInstantiable() && neuron.isAbstract();
+        return neuron.isInstantiable() && neuron.isAbstract();
     }
 
     public Activation<N> instantiateTemplateNode() {
-        if(neuron.isNotInstantiable())
+        if(!neuron.isInstantiable())
             return null;
 
         N n = null;

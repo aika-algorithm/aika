@@ -102,7 +102,7 @@ public class NetworkMotifs {
                 0.0,
                 false,
                 false,
-                false
+                true
         ).setPropagable(true);
 
         return new OuterPositiveFeedbackSynapse()
@@ -143,7 +143,7 @@ public class NetworkMotifs {
                 weakInputMargin,
                 allowRelaxedMatching,
                 isOptional,
-                false
+                true
         );
     }
 
@@ -154,13 +154,13 @@ public class NetworkMotifs {
             double weakInputMargin,
             boolean allowRelaxedMatching,
             boolean isOptional,
-            boolean notInstantiable
+            boolean instantiable
     ) {
         PatternSynapse pSyn = new PatternSynapse()
                 .setWeight(weight)
                 .setOptional(isOptional)
                 .link(bn, pn)
-                .setNotInstantiable(notInstantiable)
+                .setInstantiable(instantiable)
                 .setPropagable(true)
                 .adjustBias(bn.getTargetValue() + weakInputMargin);
 
@@ -174,7 +174,7 @@ public class NetworkMotifs {
                                 null
                 )
                 .link(pn, bn)
-                .setNotInstantiable(notInstantiable)
+                .setInstantiable(instantiable)
                 .adjustBias();
 
         log.info("  " + posFeedSyn + " targetNetContr:" + -posFeedSyn.getSynapseBias().getValue());
@@ -196,11 +196,11 @@ public class NetworkMotifs {
             LatentRelationNeuron relN,
             double relWeight,
             double spsWeight,
-            boolean notInstantiable
+            boolean instantiable
     ) {
         RelationInputSynapse relSyn = new RelationInputSynapse()
                 .setWeight(relWeight)
-                .setNotInstantiable(notInstantiable)
+                .setInstantiable(instantiable)
                 .link(relN, bn)
                 .adjustBias();
 
@@ -212,7 +212,7 @@ public class NetworkMotifs {
         SameObjectSynapse spSyn = new SameObjectSynapse()
                 .setWeight(spsWeight)
                 .setRelation(rel)
-                .setNotInstantiable(notInstantiable)
+                .setInstantiable(instantiable)
                 .link(lastBN, bn)
                 .setPropagable(true)
                 .adjustBias(prevValueTarget);

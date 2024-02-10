@@ -38,12 +38,8 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addTitle(s.getClass().getSimpleName());
         addConstant("Synapse Id: ", "" + s.getSynapseId());
 
-        addConstant("Input-Type: ", "" + s.getInputType());
         addConstant("Input: ", s.getInput().toString());
-        addConstant("Output-Type: ", "" + s.getOutputType());
         addConstant("Output: ", s.getOutput().toString());
-
-        addField(s.getWeight());
 
         addTitle("Synapse Properties", SUB_TITLE_SIZE);
         initSynapseProperties(s);
@@ -53,18 +49,7 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
     }
 
     protected void initSynapseProperties(E s) {
-        addConstant("Transitions: ", "" +
-                Arrays.asList(s.getTransition())
-                        .stream()
-                        .map(t -> "" + t)
-                        .collect(Collectors.joining(", "))
-        );
-        addConstant("Required: ", "" +
-                Arrays.asList(s.getRequired())
-                        .stream()
-                        .map(t -> "" + t)
-                        .collect(Collectors.joining(", "))
-        );
+        addField(s.getWeight());
 
         addConstant("Is Training Allowed: ", "" + s.isTrainingAllowed());
         addConstant("Stored At: ", "" + s.getStoredAt());
@@ -73,7 +58,7 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         if(s.getRelation() != null)
             addConstant("Relation: ", "" + s.getRelation());
 
-        addConstant("Not Instantiable: ", "" + s.isNotInstantiable());
+        addConstant("Instantiable: ", "" + s.isInstantiable());
         addConstant("Initial Instance Weight: ", "" + Utils.doubleToString(s.getInitialInstanceWeight()));
     }
 

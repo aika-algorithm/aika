@@ -103,7 +103,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
     @Override
     public void prepareInstantiation() {
-        setNotInstantiable(false);
+        setInstantiable(true);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
         Range entityPosRange = new Range(0, 1);
         Range entityCharRange = new Range(0, doc.length());
 
-        setNotInstantiableForInputEntity(topicBN, true);
+        setNotInstantiableForInputEntity(topicBN, false);
 
         doc.addToken(
                 entityModel.getEntityPattern(),
@@ -121,19 +121,19 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
     @Override
     public void postProcess(Document doc) {
-        setNotInstantiableForInputEntity(topicBN, false);
+        setNotInstantiableForInputEntity(topicBN, true);
     }
 
-    private void setNotInstantiableForInputEntity(BindingNeuron topicBN, boolean notInstantiable) {
+    private void setNotInstantiableForInputEntity(BindingNeuron topicBN, boolean instantiable) {
         InputObjectSynapse ios = topicBN.getInputSynapseByType(InputObjectSynapse.class);
-        ios.setNotInstantiable(notInstantiable);
+        ios.setInstantiable(instantiable);
 
-        entityModel.setNotInstantiable(notInstantiable);
+        entityModel.setInstantiable(instantiable);
     }
 
-    public void setNotInstantiable(boolean notInstantiable) {
-        topicPatternN.setNotInstantiable(notInstantiable, true);
-        topicBN.setNotInstantiable(notInstantiable, true);
+    public void setInstantiable(boolean instantiable) {
+        topicPatternN.setInstantiable(instantiable, true);
+        topicBN.setInstantiable(instantiable, true);
     }
 
     @Override
@@ -223,7 +223,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
         inhibitoryN = lookupInstance(doc, parent.inhibitoryN);
         inhibitoryN.setPersistent(true);
-        inhibitoryN.setNotInstantiable(true);
+        inhibitoryN.setInstantiable(true);
     }
 
     @Override

@@ -22,7 +22,7 @@ import network.aika.elements.synapses.types.PatternSynapse;
 import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.elements.synapses.types.SameObjectSynapse;
 
-import static network.aika.utils.Utils.doubleToString;
+import static network.aika.utils.Utils.floatToString;
 
 
 /**
@@ -38,9 +38,8 @@ public class ConjunctiveSynapsePropertyPanel<E extends ConjunctiveSynapse> exten
         addField(s.getSynapseBias());
 
         super.initSynapseProperties(s);
-        addConstant("AvgRelActTime: ", "" + doubleToString((double) s.getAvgRelActTime(), "#.###"));
+        addConstant("AvgRelActTime: ", "" + floatToString(s.getAvgRelActTime(), "#.###"));
         addConstant("isOptional: ", "" + s.isOptional());
-        addConstant("Sorting Weight: ", "" + doubleToString(s.getSortingWeight(), "#.######"));
     }
 
     public static ConjunctiveSynapsePropertyPanel create(ConjunctiveSynapse s, Link ref) {

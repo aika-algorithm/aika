@@ -265,7 +265,7 @@ public abstract class SequenceModel implements Writable {
                 rel,
                 5.0,
                 p.sosRelWeight,
-                false
+                true
         );
 
         return bn;

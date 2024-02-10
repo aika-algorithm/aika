@@ -79,7 +79,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected boolean allowTraining = true;
 
-    private boolean notInstantiable;
+    private boolean instantiable = true;
 
     protected InitParams initParams;
 
@@ -232,23 +232,23 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                 .link(this, cis.getInput());
     }
 
-    public N setNotInstantiable(boolean notInstantiable) {
-        this.notInstantiable = notInstantiable;
+    public N setInstantiable(boolean instantiable) {
+        this.instantiable = instantiable;
 
         return (N) this;
     }
 
-    public N setNotInstantiable(boolean notInstantiable, boolean includeSyns) {
+    public N setInstantiable(boolean instantiable, boolean includeSyns) {
         if (includeSyns)
             getInputSynapses().forEach(s ->
-                    s.setNotInstantiable(notInstantiable)
+                    s.setInstantiable(instantiable)
             );
 
-        return setNotInstantiable(notInstantiable);
+        return setInstantiable(instantiable);
     }
 
-    public boolean isNotInstantiable() {
-        return notInstantiable;
+    public boolean isInstantiable() {
+        return instantiable;
     }
 
     public abstract CategorySynapse createCategorySynapse();
@@ -480,7 +480,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         if(customData != null)
             customData.write(out);
 
-        out.writeBoolean(notInstantiable);
+        out.writeBoolean(instantiable);
         out.writeInt(synapseIdCounter);
 
         out.writeBoolean(initParams != null);
@@ -527,7 +527,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
             customData.readFields(in, m);
         }
 
-        notInstantiable = in.readBoolean();
+        instantiable = in.readBoolean();
         synapseIdCounter = in.readInt();
 
         if(in.readBoolean())

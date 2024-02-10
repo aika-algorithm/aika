@@ -52,7 +52,7 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
         addConstant("Is Abstract: ", "" + n.isAbstract());
         addConstant("Is Training Allowed: ", "" + n.isTrainingAllowed());
 
-        addConstant("Not Instantiable: ", "" + n.isNotInstantiable());
+        addConstant("Instantiable: ", "" + n.isInstantiable());
         addConstant("Is Modified: ", "" + n.isModified());
         addConstant("Is Persistent: ", "" + n.getProvider().isPersistent());
         addConstant("Is Registered: ", "" + n.getProvider().isRegistered());

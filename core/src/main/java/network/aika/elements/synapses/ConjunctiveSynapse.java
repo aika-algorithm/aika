@@ -62,8 +62,8 @@ public abstract class ConjunctiveSynapse<
 
     protected boolean propagable;
 
-    protected int relActTimeSum;
-    protected int relActTimeN;
+    protected Integer relActTimeSum;
+    protected Integer relActTimeN;
 
 
     public ConjunctiveSynapse() {
@@ -104,20 +104,27 @@ public abstract class ConjunctiveSynapse<
         Timestamp outFired = l.getOutput().getFired(StateType.PRE_FEEDBACK);
 
         if(inFired != null && outFired != null) {
-            relActTimeSum += inFired.getTimestamp() - outFired.getTimestamp();
+            if(relActTimeSum == null) {
+                relActTimeSum = 0;
+                relActTimeN = 0;
+            }
+            relActTimeSum += (int) (inFired.getTimestamp() - outFired.getTimestamp());
             relActTimeN++;
             setModified();
         }
     }
 
-    public S setRelativeActivationTime(int relActTimeSum, int relActTimeN) {
+    public S setRelativeActivationTime(Integer relActTimeSum, Integer relActTimeN) {
         this.relActTimeSum = relActTimeSum;
         this.relActTimeN = relActTimeN;
 
         return (S) this;
     }
 
-    public float getAvgRelActTime() {
+    public Float getAvgRelActTime() {
+        if(relActTimeSum == null)
+            return null;
+
         return ((float) relActTimeSum) / ((float) relActTimeN);
     }
 
@@ -143,12 +150,6 @@ public abstract class ConjunctiveSynapse<
 
         super.initFromTemplate(input, output, templateSyn);
         setPropagable(templateSyn.isPropagable());
-    }
-
-    public double getSortingWeight() {
-        return optional ?
-                0.0 :
-                getWeight().getUpdatedValue();
     }
 
     public S setPropagable(boolean propagable) {
@@ -204,8 +205,12 @@ public abstract class ConjunctiveSynapse<
         synapseBias.write(out);
         out.writeBoolean(propagable);
         out.writeBoolean(optional);
-        out.writeInt(relActTimeSum);
-        out.writeInt(relActTimeN);
+
+        out.writeBoolean(relActTimeSum != null);
+        if(relActTimeSum != null) {
+            out.writeInt(relActTimeSum);
+            out.writeInt(relActTimeN);
+        }
     }
 
     @Override
@@ -215,7 +220,10 @@ public abstract class ConjunctiveSynapse<
         synapseBias.readFields(in, m);
         propagable = in.readBoolean();
         optional = in.readBoolean();
-        relActTimeSum = in.readInt();
-        relActTimeN = in.readInt();
+
+        if(in.readBoolean()) {
+            relActTimeSum = in.readInt();
+            relActTimeN = in.readInt();
+        }
     }
 }

@@ -69,7 +69,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     private Relation relation;
 
-    private boolean notInstantiable;
+    private boolean instantiable = true;
 
     protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
             .setQueued(getDocument(), TRAINING)
@@ -252,14 +252,14 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return weight.getUpdatedValue();
     }
 
-    public S setNotInstantiable(boolean notInstantiable) {
-        this.notInstantiable = notInstantiable;
+    public S setInstantiable(boolean instantiable) {
+        this.instantiable = instantiable;
 
         return (S) this;
     }
 
-    public boolean isNotInstantiable() {
-        return notInstantiable;
+    public boolean isInstantiable() {
+        return instantiable;
     }
 
     public S link(Neuron input, Neuron output) {
@@ -411,7 +411,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         out.writeLong(output.getId());
 
         weight.write(out);
-        out.writeBoolean(notInstantiable);
+        out.writeBoolean(instantiable);
 
         out.writeBoolean(relation != null);
         if(relation != null)
@@ -433,7 +433,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         output = m.lookupNeuronProvider(in.readLong());
 
         weight.readFields(in, m);
-        notInstantiable = in.readBoolean();
+        instantiable = in.readBoolean();
 
         if(in.readBoolean())
             relation = Relation.read(in, m);
