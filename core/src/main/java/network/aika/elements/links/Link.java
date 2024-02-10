@@ -217,6 +217,9 @@ public abstract class Link<
     }
 
     public void retrieveAndConnectBindingSignals(boolean state) {
+        if(!isActive())
+            return;
+
         if(output.getBindingSignalSlots().findAny().isEmpty())
             return;
 

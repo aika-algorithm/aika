@@ -67,12 +67,12 @@ public class LinkUpdate extends ElementStep<Link> {
             updateConnected(l.getInputValueLink(), state, true);
             //updateConnected(outputSlotFL, state, true);
 
-            l.retrieveAndConnectBindingSignals(state);
-
             l.checkPrimarySuppression();
         } else {
             //  updateConnected(inputSlotFL, state, true);
         }
+
+        l.retrieveAndConnectBindingSignals(state);
 
         l.getDocument().onElementEvent(EventType.UPDATE, l);
     }
