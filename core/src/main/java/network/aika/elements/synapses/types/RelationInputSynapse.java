@@ -90,11 +90,6 @@ public class RelationInputSynapse extends ConjunctiveSynapse<
     }
 
     @Override
-    public double getSortingWeight() {
-        return 0.0;
-    }
-
-    @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
 
