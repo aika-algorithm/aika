@@ -223,7 +223,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
         inhibitoryN = lookupInstance(doc, parent.inhibitoryN);
         inhibitoryN.setPersistent(true);
-        inhibitoryN.setInstantiable(true);
+        inhibitoryN.setInstantiable(false);
     }
 
     @Override

@@ -226,15 +226,15 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
     @Override
     public void prepareInstantiation() {
-        setInstantiable(false);
-        phraseModel.getEntityBN().setInstantiable(true);
-        phraseModel.getPatternNeuron().setInstantiable(true);
+        setInstantiable(true);
+        phraseModel.getEntityBN().setInstantiable(false);
+        phraseModel.getPatternNeuron().setInstantiable(false);
     }
 
     @Override
     public void mapResults(Document doc) {
-        phraseModel.getEntityBN().setInstantiable(true);
-        phraseModel.getPatternNeuron().setInstantiable(false);
+        phraseModel.getEntityBN().setInstantiable(false);
+        phraseModel.getPatternNeuron().setInstantiable(true);
 
         entityPattern = lookupInstance(doc, parent.entityPattern);
         entityPattern.setPersistent(true);
