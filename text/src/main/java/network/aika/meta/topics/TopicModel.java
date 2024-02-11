@@ -145,7 +145,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 .setPersistent(true);
 
         topicPatternN.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT)
+                .setWeight(getDefaultInputCategorySynapseWeight(topicPatternN.getType()))
                 .getInput()
                 .setPersistent(true);
 
@@ -156,7 +156,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
         );
 
         topicBN.makeAbstract()
-                .setWeight(PASSIVE_SYNAPSE_WEIGHT);
+                .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()));
 
         addPositiveFeedbackLoop(
                 topicBN,

@@ -55,7 +55,7 @@ public abstract class TemplateModel<T extends TemplateModel> implements Instanti
     public Document createDocument(String l) {
         Document doc = new Document(getModel(), l);
 
-        boolean flag = true;
+        boolean flag = false;
 
         if(flag)
             AIKADebugger.createAndShowGUI()
