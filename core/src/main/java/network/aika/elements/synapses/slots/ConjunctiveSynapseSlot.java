@@ -30,6 +30,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
+import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -54,16 +55,21 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
         this.dir = dir;
 
         links = new TreeMap<>();
-        maxField = new MaxField(this, getLabel(), TOLERANCE, (si, state) -> {
-            if(si == null)
-                return;
+        maxField = new MaxField(
+                this,
+                getLabel(),
+                dir == INPUT,
+                TOLERANCE,
+                (si, state) -> {
+                    if (si == null)
+                        return;
 
-            LinkUpdate.add(
-                    getLink(si),
-                    dir,
-                    state
-            );
-        });
+                    LinkUpdate.add(
+                            getLink(si),
+                            dir,
+                            state
+                    );
+                });
     }
 
     public MaxField getMaxField() {

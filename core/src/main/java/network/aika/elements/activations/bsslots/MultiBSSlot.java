@@ -32,8 +32,8 @@ public class MultiBSSlot extends BindingSignalSlot {
 
     private Set<PatternActivation> bindingSignals = new HashSet<>();
 
-    public MultiBSSlot(Activation act, Scope type, boolean isFeedback) {
-        super(act, type, isFeedback);
+    public MultiBSSlot(Activation act, BSSlotDefinition slotDef) {
+        super(act, slotDef);
     }
 
     @Override

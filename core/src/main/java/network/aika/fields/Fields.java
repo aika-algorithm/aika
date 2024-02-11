@@ -51,11 +51,11 @@ public class Fields {
         return v > 0.0;
     }
 
-    public static MaxField max(FieldObject ref, String label, FieldOutput... in) {
+    public static MaxField max(FieldObject ref, String label, boolean allowNegativeInput, FieldOutput... in) {
         if(in == null)
             return null;
 
-        MaxField max = new MaxField(ref, label, TOLERANCE);
+        MaxField max = new MaxField(ref, label, allowNegativeInput, TOLERANCE);
         for(FieldOutput fi: in)
             link(fi, max);
 

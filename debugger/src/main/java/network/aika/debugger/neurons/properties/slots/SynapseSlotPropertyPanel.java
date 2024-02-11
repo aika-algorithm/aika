@@ -17,6 +17,7 @@
 package network.aika.debugger.neurons.properties.slots;
 
 import network.aika.debugger.properties.AbstractPropertyPanel;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.slots.*;
 
@@ -36,7 +37,9 @@ public class SynapseSlotPropertyPanel<S extends SynapseSlot> extends AbstractPro
         addTitle(s.getClass().getSimpleName());
         addConstant("Synapse Id: ", "" + s.getSynapse().getSynapseId());
         addConstant("Activation: ", "" + s.getActivation());
-        addConstant("Slot Selection: ", "" + s.getDirection().invert().getActivation(s.getSelectedLink()));
+
+        Activation slotSelection = s.getDirection().invert().getActivation(s.getSelectedLink());
+        addConstant("Slot Selection: ", slotSelection != null ? "" + slotSelection : "--");
 
         addField(s.getOutputField());
 

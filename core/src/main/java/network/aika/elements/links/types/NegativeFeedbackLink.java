@@ -16,7 +16,6 @@
  */
 package network.aika.elements.links.types;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.links.ConjunctiveLink;
@@ -27,8 +26,6 @@ import network.aika.visitor.Visitor;
 
 import java.util.stream.Stream;
 
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.fields.Fields.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -43,7 +40,7 @@ public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynaps
 
     @Override
     protected void initInputValue() {
-        inputValue = new MaxField(this, "max-input-value", TOLERANCE);
+        inputValue = new MaxField(this, "max-input-value", true, TOLERANCE);
 
         if(input != null) {
             InhibitoryActivation.connectFields(

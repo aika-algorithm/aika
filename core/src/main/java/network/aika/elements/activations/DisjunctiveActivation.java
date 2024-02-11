@@ -17,7 +17,6 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
-import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.neurons.DisjunctiveNeuron;
 
 /**

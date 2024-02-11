@@ -92,7 +92,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
        if(input == null)
             return;
 
-        if(isActive())
+        if(isActive() || output.getBindingSignalSlot(s).isFeedback())
             v.next(this, s, depth);
     }
 

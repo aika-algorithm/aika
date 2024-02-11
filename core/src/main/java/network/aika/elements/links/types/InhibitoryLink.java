@@ -16,7 +16,6 @@
  */
 package network.aika.elements.links.types;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.activations.types.PatternActivation;
@@ -26,8 +25,6 @@ import network.aika.fields.*;
 
 import java.util.stream.Stream;
 
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.queue.Phase.NEGATIVE_FEEDBACK;

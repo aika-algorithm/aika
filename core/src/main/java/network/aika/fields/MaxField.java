@@ -33,12 +33,16 @@ public class MaxField extends SumField {
 
     private MaxFieldListener sectionChangeListener;
 
-    public MaxField(FieldObject ref, String label, Double tolerance) {
+    private boolean allowNegativeInput;
+
+    public MaxField(FieldObject ref, String label, boolean allowNegativeInput, Double tolerance) {
         super(ref, label, tolerance);
+
+        this.allowNegativeInput = allowNegativeInput;
     }
 
-    public MaxField(FieldObject ref, String label, Double tolerance, MaxFieldListener scl) {
-        super(ref, label, tolerance);
+    public MaxField(FieldObject ref, String label, boolean allowNegativeInput, Double tolerance, MaxFieldListener scl) {
+        this(ref, label, allowNegativeInput, tolerance);
 
         this.sectionChangeListener = scl;
     }
@@ -82,7 +86,9 @@ public class MaxField extends SumField {
     }
 
     private Stream<FieldLink> getCandidateInputs() {
-        return getInputs().stream()
-                .filter(fl -> fl.getUpdatedInputValue() > 0.0);
+        Stream<FieldLink> inputs = getInputs().stream();
+        return allowNegativeInput ?
+                inputs :
+                inputs.filter(fl -> fl.getUpdatedInputValue() > 0.0);
     }
 }

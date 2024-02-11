@@ -40,18 +40,25 @@ public abstract class BindingSignalSlot {
 
     protected Activation<?> act;
 
-    protected boolean isFeedback;
+    protected BSSlotDefinition slotDef;
 
-    protected Scope type;
-
-    public BindingSignalSlot(Activation act, Scope type, boolean isFeedback) {
+    public BindingSignalSlot(Activation act, BSSlotDefinition slotDef) {
         this.act = act;
-        this.type = type;
-        this.isFeedback = isFeedback;
+        this.slotDef = slotDef;
+    }
+
+    public boolean isFeedback() {
+        return slotDef.isFeedback();
+    }
+
+    public static BindingSignalSlot create(Activation act, BSSlotDefinition slotDef) {
+        return slotDef.isMulti() ?
+                        new MultiBSSlot(act, slotDef) :
+                        new SingleBSSlot(act, slotDef);
     }
 
     public Scope getType() {
-        return type;
+        return slotDef.getScope();
     }
 
     public abstract boolean isSet();
@@ -61,15 +68,15 @@ public abstract class BindingSignalSlot {
     public abstract void connectBindingSignal(PatternActivation bs, boolean state);
 
     protected void onBindingSignalSlotFilled(PatternActivation bs) {
-        Linking.add(act, type, bs, NOT_FIRED);
+        Linking.add(act, getType(), bs, NOT_FIRED);
 
         if(act.isFired(PRE_FEEDBACK))
-            Linking.add(act, type, bs, FIRED_PRE_FEEDBACK);
+            Linking.add(act, getType(), bs, FIRED_PRE_FEEDBACK);
     }
 
     public void onFired(State s) {
         Stream<PatternActivation> bindingSignals =
-                isFeedback && !isSet() ?
+                isFeedback() && !isSet() ?
                         Stream.of((PatternActivation) null) :
                         getBindingSignals();
 
@@ -78,14 +85,14 @@ public abstract class BindingSignalSlot {
                         .filter(t -> t.getType() == s.getType())
                         .filter(t -> t.checkPrimary(act))
                         .forEach(t ->
-                                Linking.add(act, type, bs, t)
+                                Linking.add(act, getType(), bs, t)
                         )
         );
     }
 
     @Override
     public String toString() {
-        return type + (isFeedback ? "-fb" : "") + ": " +
+        return getType() + (isFeedback() ? "-fb" : "") + ": " +
                 getBindingSignals()
                         .map(bs -> "" + bs)
                         .collect(Collectors.joining(", "));

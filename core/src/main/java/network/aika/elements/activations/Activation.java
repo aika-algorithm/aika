@@ -23,7 +23,6 @@ import network.aika.elements.Timestamp;
 import network.aika.elements.Type;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
-import network.aika.elements.activations.bsslots.MultiBSSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.CategoryInputLink;
@@ -169,16 +168,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected void initBindingSignalSlots() {
         Stream<BSSlotDefinition> bsSlots = neuron.getBindingSignalSlots();
-        bsSlots.forEach(bsSlot ->
-                bindingSignalSlots[bsSlot.getScope().ordinal()] =
-                        bsSlot.isMulti() ?
-                                new MultiBSSlot(this, bsSlot.getScope(), isFeedback(bsSlot.getScope())) :
-                                new SingleBSSlot(this, bsSlot.getScope(), isFeedback(bsSlot.getScope()))
+        bsSlots.forEach(slotDef ->
+                bindingSignalSlots[slotDef.getScope().ordinal()] = BindingSignalSlot.create(this, slotDef)
         );
-    }
-
-    protected boolean isFeedback(Scope bsSlot) {
-        return false;
     }
 
     public void propagateBindingSignal(Scope t, PatternActivation bs, boolean state) {

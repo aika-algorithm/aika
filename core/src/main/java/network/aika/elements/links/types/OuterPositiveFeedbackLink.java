@@ -23,7 +23,6 @@ import network.aika.elements.synapses.types.OuterPositiveFeedbackSynapse;
 import network.aika.fields.*;
 
 import static network.aika.fields.Fields.*;
-import static network.aika.fields.Fields.scale;
 
 
 /**

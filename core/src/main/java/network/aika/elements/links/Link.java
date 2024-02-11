@@ -217,16 +217,14 @@ public abstract class Link<
     }
 
     public void retrieveAndConnectBindingSignals(boolean state) {
-        if(!isActive())
-            return;
-
         if(output.getBindingSignalSlots().findAny().isEmpty())
             return;
 
         output.getBindingSignalSlots()
-                        .forEach(bsSlot ->
-                            propagateBindingSignal(state, bsSlot)
-                        );
+                .filter(bsSlot -> bsSlot.isFeedback() || isActive())
+                .forEach(bsSlot ->
+                        propagateBindingSignal(state, bsSlot)
+                );
     }
 
     private void propagateBindingSignal(boolean state, BindingSignalSlot bsSlot) {

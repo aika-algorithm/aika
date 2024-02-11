@@ -26,16 +26,20 @@ import static network.aika.enums.Scope.SAME;
  * @author Lukas Molzberger
  */
 public enum BSSlotDefinition {
-    SINGLE_SAME(SAME, false),
-    SINGLE_INPUT(INPUT, false),
-    MULTI_INPUT(INPUT, true);
+    SINGLE_SAME(SAME, false, false),
+    SINGLE_SAME_FEEDBACK(SAME, false, true),
+    SINGLE_INPUT(INPUT, false, false),
+    MULTI_INPUT(INPUT, true, false);
 
     private Scope scope;
     private boolean multi;
 
-    BSSlotDefinition(Scope scope, boolean multi) {
+    private boolean isFeedback;
+
+    BSSlotDefinition(Scope scope, boolean multi, boolean isFeedback) {
         this.scope = scope;
         this.multi = multi;
+        this.isFeedback = isFeedback;
     }
 
     public Scope getScope() {
@@ -44,5 +48,9 @@ public enum BSSlotDefinition {
 
     public boolean isMulti() {
         return multi;
+    }
+
+    public boolean isFeedback() {
+        return isFeedback;
     }
 }

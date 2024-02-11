@@ -103,11 +103,6 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     }
 
     @Override
-    protected boolean isFeedback(Scope bsSlot) {
-        return bsSlot == SAME;
-    }
-
-    @Override
     public boolean isActiveTemplateInstance() {
         return isNewInstance || (
                 isFired(INNER_FEEDBACK) && getBindingSignalSlot(SAME).isSet()

@@ -32,15 +32,15 @@ public class SingleBSSlot extends BindingSignalSlot {
 
     private int sourcesCount;
 
-    public SingleBSSlot(Activation act, Scope type, boolean isFeedback) {
-        super(act, type, isFeedback);
+    public SingleBSSlot(Activation act, BSSlotDefinition slotDef) {
+        super(act, slotDef);
     }
 
     @Override
     protected void onBindingSignalSlotFilled(PatternActivation bs) {
         super.onBindingSignalSlotFilled(bs);
 
-        act.propagateBindingSignal(type, bs, true);
+        act.propagateBindingSignal(getType(), bs, true);
     }
 
     @Override
@@ -80,9 +80,9 @@ public class SingleBSSlot extends BindingSignalSlot {
 
         if(state != lastState)
             act.getInputLinks()
-                    .filter(l -> l.getSynapse().getRequired().getTo() == type)
+                    .filter(l -> l.getSynapse().getRequired().getTo() == getType())
                     .forEach(l ->
-                            l.onOutputBindingSignalChange(type, bindingSignal, state)
+                            l.onOutputBindingSignalChange(getType(), bindingSignal, state)
                     );
     }
 
