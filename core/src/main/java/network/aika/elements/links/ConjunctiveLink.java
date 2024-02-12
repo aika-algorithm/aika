@@ -59,10 +59,11 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         if(input == null)
             return;
 
-        PatternActivation bs = retrieveBindingSignal(
-                input,
-                INPUT.transition(bsType, synapse.getTransition())
-        );
+        Scope inputBSType = INPUT.transition(bsType, synapse.getTransition());
+        if(inputBSType == null)
+            return;
+
+        PatternActivation bs = retrieveBindingSignal(input, inputBSType);
 
         if(bs == null)
             return;
