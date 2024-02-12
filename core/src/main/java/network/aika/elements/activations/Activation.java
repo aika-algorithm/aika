@@ -32,6 +32,7 @@ import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.*;
+import network.aika.elements.synapses.slots.SynapseOutputSlot;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
 import network.aika.queue.steps.InactiveLinks;
@@ -147,13 +148,13 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public SynapseSlot registerOutputSlot(Synapse syn) {
         return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId ->
-                syn.createInputSlot(this)
+                syn.createAndInitInputSlot(this)
         );
     }
 
     public SynapseSlot registerInputSlot(Synapse syn) {
         return inputSlots.computeIfAbsent(syn.getSynapseId(), nId ->
-                syn.createOutputSlot(this)
+            syn.createAndInitOutputSlot(this)
         );
     }
 

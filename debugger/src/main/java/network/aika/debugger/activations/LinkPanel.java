@@ -84,7 +84,15 @@ public class LinkPanel extends ElementPanel {
     protected void setConsoleManager(AbstractConsoleManager cm) {
         super.setConsoleManager(cm);
 
-        setSelectedIndex(consoleManager.getSelectedLinkPanelTab());
+        setSelectedIndex(
+                Math.min(
+                        this.getTabCount(),
+                        Math.max(
+                                0,
+                                consoleManager.getSelectedLinkPanelTab()
+                        )
+                )
+        );
         addChangeListener(e -> {
             JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
             consoleManager.setSelectedLinkPanelTab(

@@ -113,7 +113,20 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public abstract SynapseSlot createInputSlot(IA iAct);
 
+    public SynapseSlot createAndInitInputSlot(IA iAct) {
+        SynapseSlot slot = createInputSlot(iAct);
+        slot.init();
+        return slot;
+    }
+
+
     public abstract SynapseSlot createOutputSlot(OA oAct);
+
+    public SynapseSlot createAndInitOutputSlot(OA oAct) {
+        SynapseSlot slot = createOutputSlot(oAct);
+        slot.init();
+        return slot;
+    }
 
     public SumField getOutputNet(Activation act) {
         return act.getNet(synapseType.stateType());

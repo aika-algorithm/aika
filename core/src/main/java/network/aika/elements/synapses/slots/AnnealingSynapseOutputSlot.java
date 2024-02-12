@@ -21,6 +21,8 @@ import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.fields.*;
 
+import static network.aika.elements.synapses.slots.AnnealingType.CATEGORY_INPUT;
+import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.fields.Fields.*;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 
@@ -38,9 +40,18 @@ public class AnnealingSynapseOutputSlot extends SynapseOutputSlot<ConjunctiveSyn
         super(act, synapse);
 
         this.annealingType = at;
+    }
 
-        initFeedbackTrigger(
-                act.getAnnealingValue(at)
+    @Override
+    public void init() {
+        super.init();
+
+        mixField = mix(
+                this,
+                "annealed input value",
+                ((ConjunctiveActivation)act).getAnnealingValue(annealingType),
+                synapse.getWeightForAnnealing(),
+                maxField
         );
     }
 
@@ -48,14 +59,10 @@ public class AnnealingSynapseOutputSlot extends SynapseOutputSlot<ConjunctiveSyn
         return annealingType;
     }
 
-    protected void initFeedbackTrigger(Field av) {
-        mixField = mix(
-                this,
-                "annealed input value",
-                av,
-                synapse.getWeightForAnnealing(),
-                maxField
-        );
+    @Override
+    protected boolean isNegativeInputAllowed() {
+        return annealingType == CATEGORY_INPUT ||
+                super.isNegativeInputAllowed();
     }
 
     @Override

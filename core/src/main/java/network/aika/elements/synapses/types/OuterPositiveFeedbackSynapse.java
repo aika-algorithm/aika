@@ -68,8 +68,6 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
 
     @Override
     public SynapseSlot createOutputSlot(BindingActivation oAct) {
-        AnnealingSynapseOutputSlot slot = new AnnealingSynapseOutputSlot(oAct, this, AnnealingType.OUTER_FEEDBACK);
-        slot.connectToActivation();
-        return slot;
+        return new AnnealingSynapseOutputSlot(oAct, this, AnnealingType.OUTER_FEEDBACK);
     }
 }

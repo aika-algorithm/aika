@@ -36,6 +36,11 @@ public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends Conjuncti
 
     public SynapseOutputSlot(Activation act, S synapse) {
         super(act, synapse, Direction.OUTPUT);
+    }
+
+    @Override
+    public void init() {
+        super.init();
 
         outputNet = add(
                 this,

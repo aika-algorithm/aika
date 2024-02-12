@@ -55,10 +55,14 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
         this.dir = dir;
 
         links = new TreeMap<>();
+    }
+
+    @Override
+    public void init() {
         maxField = new MaxField(
                 this,
                 getLabel(),
-                dir == INPUT,
+                isNegativeInputAllowed(),
                 TOLERANCE,
                 (si, state) -> {
                     if (si == null)
@@ -69,7 +73,12 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
                             dir,
                             state
                     );
-                });
+                }
+        );
+    }
+
+    protected boolean isNegativeInputAllowed() {
+        return dir == INPUT;
     }
 
     public MaxField getMaxField() {

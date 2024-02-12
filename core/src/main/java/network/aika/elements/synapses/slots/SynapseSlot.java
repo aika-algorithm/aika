@@ -31,6 +31,8 @@ import java.util.stream.Stream;
  */
 public interface SynapseSlot<S extends Synapse, L extends Link> extends FieldObject {
 
+    void init();
+
     void addLink(L l);
 
     Stream<L> getLinks();

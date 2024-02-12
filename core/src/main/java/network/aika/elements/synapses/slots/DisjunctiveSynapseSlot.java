@@ -40,6 +40,11 @@ public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, D
     }
 
     @Override
+    public void init() {
+
+    }
+
+    @Override
     public void addLink(DisjunctiveLink l) {
         link = l;
     }

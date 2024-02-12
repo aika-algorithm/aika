@@ -120,12 +120,6 @@ public class NetworkMotifs {
                 .adjustBias();
     }
 
-    public static double getMaxBindingNetTarget(double bindingNetTarget, double patternValueTarget) {
-        return bindingNetTarget +
-                getPosFeedbackMargin(bindingNetTarget, patternValueTarget) +
-                SAME_OBJECT_MARGIN;
-    }
-
     public static InnerPositiveFeedbackSynapse addPositiveFeedbackLoop(
             BindingNeuron bn,
             PatternNeuron pn,

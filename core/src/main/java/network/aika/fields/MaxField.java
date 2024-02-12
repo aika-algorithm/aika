@@ -58,7 +58,8 @@ public class MaxField extends SumField {
                 .max()
                 .orElse(0.0) - value;
 
-        if(Utils.belowTolerance(tolerance, update))
+        if(!(allowNegativeInput && selectedInput == null) &&
+                Utils.belowTolerance(tolerance, update))
             return;
 
         if(interceptor != null) {

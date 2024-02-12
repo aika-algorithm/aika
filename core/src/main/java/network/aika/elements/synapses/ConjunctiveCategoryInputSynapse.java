@@ -40,9 +40,7 @@ public abstract class ConjunctiveCategoryInputSynapse<
 
     @Override
     public SynapseSlot createOutputSlot(OA oAct) {
-        AnnealingSynapseOutputSlot slot = new AnnealingSynapseOutputSlot(oAct, this, AnnealingType.CATEGORY_INPUT);
-        slot.connectToActivation();
-        return slot;
+        return new AnnealingSynapseOutputSlot(oAct, this, AnnealingType.CATEGORY_INPUT);
     }
 
     @Override

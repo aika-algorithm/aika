@@ -77,7 +77,12 @@ public abstract class ConjunctiveSynapse<
 
     @Override
     public SynapseSlot createOutputSlot(OA oAct) {
-        SynapseOutputSlot slot = new SynapseOutputSlot(oAct, this);
+        return new SynapseOutputSlot(oAct, this);
+    }
+
+    @Override
+    public SynapseSlot createAndInitOutputSlot(OA oAct) {
+        SynapseOutputSlot slot = (SynapseOutputSlot) super.createAndInitOutputSlot(oAct);
         slot.connectToActivation();
         return slot;
     }
