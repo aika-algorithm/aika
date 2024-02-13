@@ -28,10 +28,14 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
+import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.link.FieldLink;
 import network.aika.visitor.Visitor;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 import static network.aika.debugger.EventType.CREATE;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
@@ -233,10 +237,13 @@ public abstract class Link<
             bsSlot.connectBindingSignal(bs, state);
     }
 
-    public void propagateBindingSignal(PatternActivation bs, Scope t, boolean state) {
-        BindingSignalSlot bsSlot = output.getBindingSignalSlot(t);
-        if(bsSlot != null)
-            bsSlot.connectBindingSignal(bs, state);
+    public void propagateBindingSignal(PatternActivation bs, Scope is, boolean state) {
+        Arrays.stream(synapse.getSynapseType().getTransition())
+                .filter(t -> is == t.getFrom())
+                .map(Transition::getTo)
+                .map(os -> output.getBindingSignalSlot(os))
+                .filter(Objects::nonNull)
+                .forEach(bsSlot -> bsSlot.connectBindingSignal(bs, state));
     }
 
     public Field getWeightedInput() {
