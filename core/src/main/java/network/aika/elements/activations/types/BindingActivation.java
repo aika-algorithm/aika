@@ -132,9 +132,9 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
             return false;
 
         InnerPositiveFeedbackLink l = slot.getSelectedLink();
-        if(l == null)
-            return false;
-
-        return !l.isActive();
+        return l == null &&
+                slot.getLinks().allMatch(il ->
+                        !il.isInputSideActive()
+                );
     }
 }

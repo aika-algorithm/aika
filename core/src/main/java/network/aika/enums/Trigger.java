@@ -65,7 +65,7 @@ public enum Trigger {
     }
 
     public boolean match(Trigger t) {
-        return type == t.type;
+        return type == t.type && checkPrimary == t.checkPrimary;
     }
 
     public boolean checkPrimary(Activation act) {
