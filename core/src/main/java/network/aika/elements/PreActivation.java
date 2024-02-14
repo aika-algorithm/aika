@@ -19,6 +19,7 @@ package network.aika.elements;
 
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Range;
@@ -39,6 +40,8 @@ public class PreActivation<A extends Activation> {
 
     private Document doc;
 
+    private Neuron neuron;
+
     private SortedSet<A> activations = new TreeSet<>();
 
     private NavigableMap<TokenPositionKey, Activation> tokenPosBeginIndex = new TreeMap<>();
@@ -46,13 +49,19 @@ public class PreActivation<A extends Activation> {
     private NavigableMap<TokenPositionKey, Activation> tokenPosEndIndex = new TreeMap<>();
 
 
-    public PreActivation(Document doc, NeuronProvider provider) {
+    public PreActivation(Document doc, Neuron neuron) {
         this.doc = doc;
-        doc.register(provider, this);
+        this.neuron = neuron;
+
+        doc.register(neuron.getProvider(), this);
     }
 
     public SortedSet<A> getActivations() {
         return activations;
+    }
+
+    public Neuron getNeuron() {
+        return neuron;
     }
 
     public NavigableMap<TokenPositionKey, Activation> getTokenPosBeginIndex() {

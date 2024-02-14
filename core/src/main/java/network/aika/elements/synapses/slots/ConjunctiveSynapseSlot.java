@@ -19,6 +19,7 @@ package network.aika.elements.synapses.slots;
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.MaxField;
@@ -47,7 +48,7 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
 
     protected MaxField maxField;
 
-    protected NavigableMap<Activation, L> links;
+    protected NavigableMap<LinkKey, L> links;
 
     public ConjunctiveSynapseSlot(Activation act, S synapse, Direction dir) {
         this.act = act;
@@ -97,11 +98,14 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
 
     @Override
     public void addLink(L l) {
-        Activation keyAct = dir.invert().getActivation(l);
-        if(keyAct == null)
-            return;
-
-        L el = links.put(keyAct, l);
+        Direction d = dir.invert();
+        L el = links.put(
+                new LinkKey(
+                        d.getNeuron(l.getSynapse()),
+                        d.getActivation(l)
+                ),
+                l
+        );
         assert el == null;
     }
 
@@ -112,7 +116,9 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
 
     @Override
     public L getLink(Activation act) {
-        return links.get(act);
+        return links.get(
+                new LinkKey(act.getNeuron(), act)
+        );
     }
 
     @Override
@@ -147,7 +153,7 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
 
     @Override
     public void disconnect() {
-        maxField.disconnectAndUnlinkOutputs(false);
+        maxField.disconnectAndUnlinkInputs(false);
 
         getLinks()
                 .forEach(ConjunctiveLink::disconnect);

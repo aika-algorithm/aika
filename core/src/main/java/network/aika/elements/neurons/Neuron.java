@@ -85,7 +85,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     private Set<NeuronProvider> propagable = new HashSet<>();
 
-    private final WeakHashMap<Long, WeakReference<PreActivation<A>>> activations = new WeakHashMap<>();
+    private final HashMap<Long, PreActivation<A>> activations = new HashMap<>();
 
     public Neuron(NeuronProvider np) {
         provider = np;
@@ -157,26 +157,21 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public PreActivation<A> getOrCreatePreActivation(Document doc) {
-        PreActivation<A> npd;
+        PreActivation<A> preAct;
         synchronized (activations) {
-            WeakReference<PreActivation<A>> weakRef = activations
+            preAct = activations
                     .computeIfAbsent(
                             doc.getId(),
-                            n -> new WeakReference<>(
-                                    new PreActivation<>(doc, provider)
-                            )
+                            n -> new PreActivation<>(doc, this)
                     );
-
-            npd = weakRef.get();
         }
-        return npd;
+        return preAct;
     }
 
     public Stream<PreActivation<A>> getPreActivations() {
         synchronized (activations) {
             return activations.values()
                     .stream()
-                    .map(Reference::get)
                     .filter(Objects::nonNull);
         }
     }
@@ -185,10 +180,11 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         if(doc == null)
             return null;
 
-        WeakReference<PreActivation<A>> weakRef = activations.get(doc.getId());
-        return weakRef != null ?
-                weakRef.get() :
-                null;
+        return activations.get(doc.getId());
+    }
+
+    public void removePreActivation(Document doc) {
+        activations.remove(doc.getId());
     }
 
     public SortedSet<A> getActivations(Document doc) {

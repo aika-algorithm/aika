@@ -171,12 +171,17 @@ public class Document extends Queue implements Element {
     }
 
     public void disconnect() {
-        model.deregisterThought(this);
+        model.deregisterDocument(this);
 
         getActivations()
                 .forEach(act ->
                         act.disconnect()
                 );
+
+        actsPerNeuron.values()
+                .stream()
+                .map(PreActivation::getNeuron)
+                .forEach(n -> n.removePreActivation(this));
     }
 
     public String activationsToString() {

@@ -33,6 +33,8 @@ import network.aika.queue.steps.Anneal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
@@ -78,6 +80,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
         return getInputLinksByType(InnerPositiveFeedbackLink.class)
                 .filter(Link::isActive)
                 .map(Link::getInput)
+                .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(null);
     }
@@ -85,6 +88,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     public PatternActivation getInputPatternActivation() {
         return getInputLinksByType(InputObjectLink.class)
                 .map(Link::getInput)
+                .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(null);
     }

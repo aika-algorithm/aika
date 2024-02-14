@@ -43,13 +43,13 @@ public class Model implements Writable {
 
     private SuspensionCallback suspensionCallback;
 
-    private final AtomicLong thoughtIdCounter = new AtomicLong(0);
+    private final AtomicLong documentIdCounter = new AtomicLong(0);
 
     public final Map<Long, NeuronProvider> providers = new TreeMap<>();
 
-    private Document currentThought;
+    private Document currentDocument;
 
-    private SortedMap<Long, Document> thoughts = new TreeMap<>();
+    private SortedMap<Long, Document> documents = new TreeMap<>();
 
     private long lastProcessedThought;
 
@@ -76,25 +76,25 @@ public class Model implements Writable {
     }
 
     public Document getCurrentDocument() {
-        return currentThought;
+        return currentDocument;
     }
 
     public Long getLowestThoughtId() {
-        return thoughts.isEmpty() ?
+        return documents.isEmpty() ?
                 null :
-                thoughts.firstKey();
+                documents.firstKey();
     }
 
     public void registerDocument(Document doc) {
-        this.currentThought = doc;
-        thoughts.put(doc.getId(), doc);
+        this.currentDocument = doc;
+        documents.put(doc.getId(), doc);
     }
 
-    public void deregisterThought(Document doc) {
-        if(currentThought == doc)
-            currentThought = null;
+    public void deregisterDocument(Document doc) {
+        if(currentDocument == doc)
+            currentDocument = null;
 
-        thoughts.remove(doc.getId());
+        documents.remove(doc.getId());
 
         lastProcessedThought = Math.max(lastProcessedThought, doc.getId());
     }
@@ -249,7 +249,7 @@ public class Model implements Writable {
 
 
     public long createThoughtId() {
-        return thoughtIdCounter.addAndGet(1);
+        return documentIdCounter.addAndGet(1);
     }
 
     public Config getConfig() {
