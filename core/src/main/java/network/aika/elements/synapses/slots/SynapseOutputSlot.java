@@ -64,6 +64,13 @@ public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends Conjuncti
     }
 
     @Override
+    public void disconnect() {
+        super.disconnect();
+
+        outputNet.disconnectAndUnlinkInputs(false);
+    }
+
+    @Override
     protected String getLabel() {
         return "out-slot-" + synapse.getPInput().getId();
     }

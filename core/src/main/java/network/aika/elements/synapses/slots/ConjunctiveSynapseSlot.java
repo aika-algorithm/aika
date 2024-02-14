@@ -148,6 +148,9 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
     @Override
     public void disconnect() {
         maxField.disconnectAndUnlinkOutputs(false);
+
+        getLinks()
+                .forEach(ConjunctiveLink::disconnect);
     }
 
     @Override

@@ -37,11 +37,4 @@ public class SynapseInputSlot extends ConjunctiveSynapseSlot {
     protected String getLabel() {
         return "in-slot-" + synapse.getPOutput().getId();
     }
-
-    @Override
-    public void addLink(ConjunctiveLink l) {
-        super.addLink(l);
-
-//        l.inputSlotFL = linkAndConnect(l.getSynOutputSlot().getOutputNet(), l, maxField);
-    }
 }

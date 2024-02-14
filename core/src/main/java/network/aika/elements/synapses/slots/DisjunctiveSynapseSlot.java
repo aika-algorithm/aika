@@ -96,5 +96,6 @@ public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, D
 
     @Override
     public void disconnect() {
+        link.disconnect();
     }
 }

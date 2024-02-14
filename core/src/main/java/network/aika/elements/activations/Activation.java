@@ -461,9 +461,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         if(negUpdateValue != null)
             negUpdateValue.disconnectAndUnlinkOutputs(false);
 
-        getInputLinks().forEach(l ->
-                l.disconnect()
-        );
+        getInputSlots().forEach(SynapseSlot::disconnect);
     }
 
     public Activation getTemplate() {
