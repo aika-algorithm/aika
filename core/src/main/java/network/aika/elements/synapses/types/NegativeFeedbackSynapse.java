@@ -16,6 +16,7 @@
  */
 package network.aika.elements.synapses.types;
 
+import network.aika.Model;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
@@ -29,6 +30,11 @@ import network.aika.elements.synapses.slots.AnnealingType;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.Field;
+import network.aika.statistic.SampleSpace;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import static network.aika.elements.Type.*;
 import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
@@ -105,5 +111,19 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
         BindingNeuron no = getOutput();
         if(no != null)
             no.setModified();
+    }
+
+    @Override
+    public void write(DataOutput out) throws IOException {
+        super.write(out);
+
+        negativeWeight.write(out);
+    }
+
+    @Override
+    public void readFields(DataInput in, Model m) throws IOException {
+        super.readFields(in, m);
+
+        negativeWeight.readFields(in, m);
     }
 }
