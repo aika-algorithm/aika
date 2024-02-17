@@ -20,6 +20,8 @@ import network.aika.Model;
 import network.aika.elements.neurons.types.*;
 import network.aika.elements.relations.ContainsRelation;
 import network.aika.elements.relations.BeforeRelation;
+import network.aika.elements.synapses.types.InhibitorySynapse;
+import network.aika.elements.synapses.types.PrimaryInhibitorySynapse;
 import network.aika.meta.Dictionary;
 import network.aika.text.Range;
 import network.aika.utils.Writable;
@@ -179,6 +181,10 @@ public abstract class SequenceModel implements Writable {
 
         inhibitoryN.makeAbstract()
                 .setWeight(1.0);
+
+        new PrimaryInhibitorySynapse()
+                .setWeight(1.0)
+                .link(dictionary.getInputToken(), inhibitoryN);
 
         log.info(getPatternType() + " Pattern: netTarget:" + PATTERN_NET_TARGET);
 

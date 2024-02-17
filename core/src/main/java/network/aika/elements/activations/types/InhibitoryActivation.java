@@ -48,7 +48,9 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
     @Override
     public CategoryInputLink getActiveCategoryInputLink() {
         SynapseSlot<InhibitoryCategoryInputSynapse, InhibitoryCategoryInputLink> sl = getInputSlotBySynapseType(InhibitoryCategoryInputSynapse.class);
-        return sl != null ? sl.getSelectedLink() : null;
+        return sl != null ?
+                sl.getSelectedLink() :
+                null;
     }
 
     @Override

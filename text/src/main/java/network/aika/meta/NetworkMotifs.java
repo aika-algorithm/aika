@@ -41,8 +41,6 @@ public class NetworkMotifs {
     public static double DEFAULT_PATTERN_INPUT_CATEGORY_SYNAPSE_WEIGHT = 5.0;
     public static double DEFAULT_INHIBITORY_INPUT_CATEGORY_SYNAPSE_WEIGHT = 1.0;
 
-    public static double SAME_OBJECT_MARGIN = 0.15;
-
     public static double getDefaultInputCategorySynapseWeight(Type type) {
         return switch (type) {
             case BINDING -> DEFAULT_BINDING_INPUT_CATEGORY_SYNAPSE_WEIGHT;
