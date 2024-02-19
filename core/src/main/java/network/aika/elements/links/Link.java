@@ -32,6 +32,7 @@ import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.link.FieldLink;
+import network.aika.queue.Queue;
 import network.aika.visitor.Visitor;
 
 import java.util.Arrays;
@@ -339,8 +340,12 @@ public abstract class Link<
         return synapse.isNegative();
     }
 
-    @Override
     public Document getDocument() {
+        return output.getDocument();
+    }
+
+    @Override
+    public Queue getQueue() {
         return output.getDocument();
     }
 

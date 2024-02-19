@@ -19,13 +19,17 @@ package network.aika;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.suspension.InMemorySuspensionCallback;
+import network.aika.suspension.SuspensionMode;
 import network.aika.suspension.SuspensionCallback;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.suspension.SuspensionMode;
+import network.aika.queue.Queue;
 import network.aika.utils.Writable;
 
-import java.io.*;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
@@ -35,7 +39,7 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public class Model implements Writable {
+public class Model extends Queue implements Writable {
 
     private long N = 0;
 
@@ -47,11 +51,9 @@ public class Model implements Writable {
 
     public final Map<Long, NeuronProvider> providers = new TreeMap<>();
 
-    private Document currentDocument;
-
     private SortedMap<Long, Document> documents = new TreeMap<>();
 
-    private long lastProcessedThought;
+    private long lastProcessedDocument;
 
     private Supplier<Writable> customDataInstanceSupplier;
 
@@ -75,10 +77,6 @@ public class Model implements Writable {
         return suspensionCallback.createId();
     }
 
-    public Document getCurrentDocument() {
-        return currentDocument;
-    }
-
     public Long getLowestThoughtId() {
         return documents.isEmpty() ?
                 null :
@@ -86,17 +84,13 @@ public class Model implements Writable {
     }
 
     public void registerDocument(Document doc) {
-        this.currentDocument = doc;
         documents.put(doc.getId(), doc);
     }
 
     public void deregisterDocument(Document doc) {
-        if(currentDocument == doc)
-            currentDocument = null;
-
         documents.remove(doc.getId());
 
-        lastProcessedThought = Math.max(lastProcessedThought, doc.getId());
+        lastProcessedDocument = Math.max(lastProcessedDocument, doc.getId());
     }
 
     public Collection<NeuronProvider> getActiveNeurons() {
@@ -168,7 +162,7 @@ public class Model implements Writable {
     public boolean canBeSuspended(Long lastUsed) {
         Long tId = getLowestThoughtId();
         if(tId == null)
-            tId = lastProcessedThought;
+            tId = lastProcessedDocument;
 
         return lastUsed < tId - config.getNeuronProviderRetention();
     }

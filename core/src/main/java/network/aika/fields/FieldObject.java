@@ -17,7 +17,7 @@
 package network.aika.fields;
 
 
-import network.aika.Document;
+import network.aika.queue.Queue;
 
 /**
  *
@@ -27,5 +27,5 @@ public interface FieldObject {
 
     void disconnect();
 
-    Document getDocument();
+    Queue getQueue();
 }

@@ -17,8 +17,8 @@
 package network.aika.fields;
 
 
-import network.aika.Document;
 import network.aika.debugger.FieldObserver;
+import network.aika.queue.Queue;
 import network.aika.queue.steps.FieldUpdate;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
@@ -39,11 +39,11 @@ public class QueueInterceptor {
 
     private Field field;
 
-    private Document queue;
+    private Queue queue;
 
     private List<FieldObserver> observers = new ArrayList<>();
 
-    public QueueInterceptor(Document q, Field f, Phase p) {
+    public QueueInterceptor(Queue q, Field f, Phase p) {
         this.queue = q;
         this.field = f;
         this.phase = p;
@@ -101,7 +101,7 @@ public class QueueInterceptor {
         );
     }
 
-    public Document getQueue() {
+    public Queue getQueue() {
         return queue;
     }
 }

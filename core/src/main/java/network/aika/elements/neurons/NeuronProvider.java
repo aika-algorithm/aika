@@ -154,7 +154,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
     }
 
     public void save() {
-        if(!neuron.isModified())
+        if(neuron == null || !neuron.isModified())
             return;
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

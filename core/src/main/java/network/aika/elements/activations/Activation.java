@@ -35,6 +35,7 @@ import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.slots.SynapseOutputSlot;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
+import network.aika.queue.Queue;
 import network.aika.queue.steps.InactiveLinks;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
@@ -100,7 +101,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         initBindingSignalSlots();
 
         gradient = new SumField(this, "gradient", TOLERANCE)
-                .setQueued(doc, TRAINING);
+                .setQueued(getQueue(), TRAINING);
 
         if (getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
             connectGradientFields();
@@ -284,6 +285,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Document getDocument() {
+        return doc;
+    }
+
+    @Override
+    public Queue getQueue() {
         return doc;
     }
 

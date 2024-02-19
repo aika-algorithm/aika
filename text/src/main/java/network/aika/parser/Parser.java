@@ -114,6 +114,8 @@ public abstract class Parser<C extends Context> {
 
             doc.process(getStepFilter(context, phase));
 
+            getPhraseModel().getModel().process();
+
             if(mapResults != null)
                 mapResults.accept(doc);
         } catch(Exception e) {

@@ -25,7 +25,6 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.exceptions.PreviousDocumentNotDisconnected;
 import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.fields.Field;
@@ -80,9 +79,6 @@ public class Document extends Queue implements Element {
         }
 
         absoluteBeginChar = m.getN();
-
-        if(m.getCurrentDocument() != null)
-            throw new PreviousDocumentNotDisconnected(m.getCurrentDocument(), this);
 
         m.registerDocument(this);
     }
@@ -184,6 +180,11 @@ public class Document extends Queue implements Element {
                 .forEach(n -> n.removePreActivation(this));
     }
 
+    @Override
+    public Queue getQueue() {
+        return this;
+    }
+
     public String activationsToString() {
         return getActivations()
                 .stream()
@@ -254,11 +255,6 @@ public class Document extends Queue implements Element {
     @Override
     public Timestamp getFired() {
         return NOT_SET;
-    }
-
-    @Override
-    public Document getDocument() {
-        return this;
     }
 
     public String docToString() {

@@ -53,7 +53,7 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
         NextRoundFunction nextRoundValue = new NextRoundFunction(this, "nr value");
         FieldLink.linkAndConnect(getValue(StateType.PRE_FEEDBACK), 0, nextRoundValue);
-        nextRoundValue.setQueued(doc, INFERENCE);
+        nextRoundValue.setQueued(getQueue(), INFERENCE);
     }
 
     @Override

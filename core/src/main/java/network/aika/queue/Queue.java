@@ -54,7 +54,7 @@ public class Queue {
         return new Timestamp(timestampCounter++);
     }
 
-    public void addStep(Step s) {
+    public synchronized void addStep(Step s) {
         s.createQueueKey(
                 getNextTimestamp(),
                 getRound(s)
@@ -85,13 +85,13 @@ public class Queue {
         return r == MAX_ROUND ? 0 : r;
     }
 
-    public void removeStep(Step s) {
+    public synchronized void removeStep(Step s) {
         Step removedStep = queue.remove(s.getQueueKey());
         assert removedStep != null;
         s.setQueued(false);
     }
 
-    public Collection<Step> getQueue() {
+    public Collection<Step> getQueueEntries() {
         return queue.values();
     }
 
@@ -99,7 +99,7 @@ public class Queue {
         process(null);
     }
 
-    public void process(Predicate<Step> filter) {
+    public synchronized void process(Predicate<Step> filter) {
         while (!queue.isEmpty()) {
             currentStep = queue.pollFirstEntry().getValue();
             queueEvent(BEFORE, currentStep);

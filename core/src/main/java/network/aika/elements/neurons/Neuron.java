@@ -31,6 +31,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
 import network.aika.elements.Timestamp;
 import network.aika.elements.synapses.Synapse;
+import network.aika.queue.Queue;
 import network.aika.queue.steps.Save;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
@@ -274,7 +275,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected SumField initBias() {
         return (SumField) new SumField(this, "bias", TOLERANCE)
-                .setQueued(getDocument(), TRAINING)
+                .setQueued(getQueue(), TRAINING)
                 .addListener("onBiasModified", (fl, u) ->
                         setModified()
                 );
@@ -544,12 +545,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     @Override
-    public Document getDocument() {
-        Model m = getModel();
-        if(m == null)
-            return null;
-
-        return m.getCurrentDocument();
+    public Queue getQueue() {
+        return getModel();
     }
 
     public String getLabel() {

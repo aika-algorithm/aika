@@ -54,7 +54,7 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
                 TOLERANCE,
                 net,
                 x -> output.getActivationFunction().f(x)
-        ).setQueued(getDocument(), NEGATIVE_FEEDBACK);
+        ).setQueued(getQueue(), NEGATIVE_FEEDBACK);
 
         InhibitoryActivation.connectFields(
                 Stream.of(this),

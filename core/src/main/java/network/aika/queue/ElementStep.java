@@ -34,7 +34,7 @@ public abstract class ElementStep<E extends Element> extends Step<E> {
 
     @Override
     public Queue getQueue() {
-        return element.getDocument();
+        return element.getQueue();
     }
 
     @Override

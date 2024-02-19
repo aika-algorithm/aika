@@ -20,6 +20,7 @@ import network.aika.Document;
 import network.aika.elements.Timestamp;
 import network.aika.fields.*;
 import network.aika.fields.link.AbstractFieldLink;
+import network.aika.queue.Queue;
 import network.aika.queue.steps.Fired;
 
 import static network.aika.debugger.EventType.UPDATE;
@@ -68,7 +69,7 @@ public class State implements FieldObject {
                 net,
                 x -> act.getActivationFunction().f(x)
         );
-        value.setQueued(act.getDocument(), INFERENCE);
+        value.setQueued(getQueue(), INFERENCE);
 
         value.addListener("onFired", (fl, u) -> {
             if (isTrue(value, false) != isTrue(value, true))
@@ -123,6 +124,10 @@ public class State implements FieldObject {
     }
 
     @Override
+    public Queue getQueue() {
+        return act.getQueue();
+    }
+
     public Document getDocument() {
         return act.getDocument();
     }

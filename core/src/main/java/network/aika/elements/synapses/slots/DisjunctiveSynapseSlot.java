@@ -22,6 +22,7 @@ import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.Field;
+import network.aika.queue.Queue;
 
 import java.util.stream.Stream;
 
@@ -90,8 +91,8 @@ public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, D
     }
 
     @Override
-    public Document getDocument() {
-        return link.getDocument();
+    public Queue getQueue() {
+        return link.getQueue();
     }
 
     @Override

@@ -51,7 +51,7 @@ public class QueueRenderer implements ConsoleRenderer {
                 "regular",
                 Color.BLACK
         );
-        for(Step s: new ArrayList<>(doc.getQueue())) {
+        for(Step s: new ArrayList<>(doc.getQueueEntries())) {
             new StepConsoleRenderer(doc, s, highlightedElement, sortKey)
                     .render(sDoc, s);
         }

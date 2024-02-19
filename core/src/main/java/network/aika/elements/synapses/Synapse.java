@@ -35,6 +35,7 @@ import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.Trigger;
+import network.aika.queue.Queue;
 import network.aika.text.TextReference;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
@@ -72,7 +73,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     private boolean instantiable = true;
 
     protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
-            .setQueued(getDocument(), TRAINING)
+            .setQueued(getQueue(), TRAINING)
             .addListener("onWeightModified", (fl, u) -> {
                 checkWeight();
                 setModified();
@@ -473,11 +474,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     @Override
-    public Document getDocument() {
-        Model m = getModel();
-        return m != null ?
-                m.getCurrentDocument() :
-                null;
+    public Queue getQueue() {
+        return getModel();
     }
 
     public String toString() {

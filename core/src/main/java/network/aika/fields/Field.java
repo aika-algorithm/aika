@@ -21,6 +21,7 @@ import network.aika.Document;
 import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.FieldLink;
 import network.aika.queue.Phase;
+import network.aika.queue.Queue;
 import network.aika.utils.Utils;
 import network.aika.utils.Writable;
 
@@ -64,7 +65,7 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
         initIO();
     }
 
-    public <F extends Field> F setQueued(Document q, Phase p) {
+    public <F extends Field> F setQueued(Queue q, Phase p) {
         interceptor = new QueueInterceptor(q, this, p);
         return (F) this;
     }

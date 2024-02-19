@@ -25,6 +25,7 @@ import network.aika.enums.direction.Direction;
 import network.aika.fields.MaxField;
 import network.aika.fields.link.ArgumentFieldLink;
 import network.aika.fields.link.FieldLink;
+import network.aika.queue.Queue;
 import network.aika.queue.steps.LinkUpdate;
 
 import java.util.NavigableMap;
@@ -160,8 +161,8 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
     }
 
     @Override
-    public Document getDocument() {
-        return act.getDocument();
+    public Queue getQueue() {
+        return act.getQueue();
     }
 
     @Override
