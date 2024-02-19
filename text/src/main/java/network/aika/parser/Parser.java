@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
@@ -105,7 +106,7 @@ public abstract class Parser<C extends Context> {
 
     protected abstract void prepareInputs(Document doc, C context);
 
-    public Document process(String txt, C context, ParserPhase phase) {
+    public void process(String txt, C context, ParserPhase phase, Consumer<Document> mapResults) {
         Document doc = initDocument(txt, context, phase);
 
         try {
@@ -113,12 +114,12 @@ public abstract class Parser<C extends Context> {
 
             doc.process(getStepFilter(context, phase));
 
+            if(mapResults != null)
+                mapResults.accept(doc);
         } catch(Exception e) {
             log.warn("Error while training:", e);
         } finally {
             doc.disconnect();
         }
-
-        return doc;
     }
 }

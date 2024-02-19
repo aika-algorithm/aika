@@ -70,9 +70,9 @@ public class AnnealingTest extends Parser {
 
     @Test
     public void testAnnealing() {
-        process("a b", null, COUNTING);
+        process("a b", null, COUNTING, null);
         templateModel.initStaticNeurons();
-        process("a b", null, TRAINING);
+        process("a b", null, TRAINING, null);
     }
 
     @Override

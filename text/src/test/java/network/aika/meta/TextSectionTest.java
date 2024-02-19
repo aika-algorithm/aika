@@ -165,21 +165,21 @@ public class TextSectionTest extends Parser<TestContext> {
     public void testTextSections() {
         log.info("Start");
 
-        process(tasksHeadlineLabel, null, COUNTING);
-        process(profileHeadlineLabel, null, COUNTING);
-        process(exampleTxt, null, COUNTING);
+        process(tasksHeadlineLabel, null, COUNTING, null);
+        process(profileHeadlineLabel, null, COUNTING, null);
+        process(exampleTxt, null, COUNTING, null);
 
         dictionary.initInputTokenWeights();
 
         tasksHeadline.enable();
         tasksTopic.enable();
-        process(tasksHeadlineLabel, new TestContext(TASKS_LABEL, null), TRAINING);
+        process(tasksHeadlineLabel, new TestContext(TASKS_LABEL, null), TRAINING, null);
         tasksHeadline.disable();
         tasksTopic.disable();
 
         profileHeadline.enable();
         profileTopic.enable();
-        process(profileHeadlineLabel, new TestContext(PROFILE_LABEL, null), TRAINING);
+        process(profileHeadlineLabel, new TestContext(PROFILE_LABEL, null), TRAINING, null);
         profileHeadline.disable();
         profileTopic.disable();
 
@@ -190,7 +190,8 @@ public class TextSectionTest extends Parser<TestContext> {
                                 new TextReference(new Range(0, 1), new Range(0, 1))
                         )
                 ),
-                TRAINING
+                TRAINING,
+                null
         );
     }
 

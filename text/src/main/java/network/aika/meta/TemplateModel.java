@@ -115,7 +115,7 @@ public abstract class TemplateModel<T extends TemplateModel> implements Instanti
 
     protected void generateLabel(Activation tAct, Activation iAct, String l) {
         iAct.getNeuron().setLabel(
-                tAct.getLabel().replace(label, l + getLabelPostfix())
+                tAct.getLabel().replace(label, l)
         );
     }
 

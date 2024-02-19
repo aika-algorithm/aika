@@ -201,7 +201,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
     @Override
     public void onInstantiation(Activation tAct, Activation iAct) {
-        parent.generateLabel(tAct, iAct, label);
+        super.onInstantiation(tAct, iAct);
+
         iAct.getNeuron().makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
                 .adjustBias();
