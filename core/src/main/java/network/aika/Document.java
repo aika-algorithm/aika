@@ -25,7 +25,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.exceptions.PreviousThoughtNotDisconnected;
+import network.aika.exceptions.PreviousDocumentNotDisconnected;
 import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.fields.Field;
@@ -82,7 +82,7 @@ public class Document extends Queue implements Element {
         absoluteBeginChar = m.getN();
 
         if(m.getCurrentDocument() != null)
-            throw new PreviousThoughtNotDisconnected(m.getCurrentDocument(), this);
+            throw new PreviousDocumentNotDisconnected(m.getCurrentDocument(), this);
 
         m.registerDocument(this);
     }

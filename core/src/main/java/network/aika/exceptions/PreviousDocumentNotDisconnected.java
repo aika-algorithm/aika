@@ -24,9 +24,9 @@ import static java.lang.String.format;
  *
  * @author Lukas Molzberger
  */
-public class PreviousThoughtNotDisconnected extends RuntimeException {
+public class PreviousDocumentNotDisconnected extends RuntimeException {
 
-    public PreviousThoughtNotDisconnected(Document oldThought, Document newThought) {
-        super(format("The new thought [%d] can not be processed until the old thought [%d] is disconnected.", newThought.getId(), oldThought.getId()));
+    public PreviousDocumentNotDisconnected(Document oldDoc, Document newDoc) {
+        super(format("The new document [%d] can not be processed until the old document [%d] is disconnected.", newDoc.getId(), oldDoc.getId()));
     }
 }
