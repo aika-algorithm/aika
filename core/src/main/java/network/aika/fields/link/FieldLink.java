@@ -24,6 +24,10 @@ import network.aika.fields.FieldOutput;
  */
 public class FieldLink extends AbstractFieldLink<FieldInput> {
 
+    public FieldLink(FieldOutput input, int arg, FieldInput output) {
+        super(input, arg, output);
+    }
+
     public static FieldLink linkAndConnect(FieldOutput in, Object argRef, FieldInput out) {
         FieldLink fl = link(in, out.getNextArg(), argRef, out);
 
@@ -82,11 +86,6 @@ public class FieldLink extends AbstractFieldLink<FieldInput> {
             }
         }
     }
-
-    public FieldLink(FieldOutput input, int arg, FieldInput output) {
-        super(input, arg, output);
-    }
-
 
     @Override
     public void unlinkOutput() {

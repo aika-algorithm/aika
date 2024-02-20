@@ -51,10 +51,6 @@ public abstract class AbstractFieldLink<O extends UpdateListener> {
         return connected;
     }
 
-    public void setInput(FieldOutput input) {
-        this.input = input;
-    }
-
     public void receiveUpdate(double u) {
         if(connected && propagateUpdates)
             output.receiveUpdate(this, u);
@@ -132,6 +128,9 @@ public abstract class AbstractFieldLink<O extends UpdateListener> {
 
     @Override
     public boolean equals(Object o) {
+        if(o == null)
+            return false;
+
         AbstractFieldLink fLink = (AbstractFieldLink) o;
         if(arg != fLink.arg)
             return false;
