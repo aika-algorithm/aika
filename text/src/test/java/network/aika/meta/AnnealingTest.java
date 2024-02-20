@@ -19,16 +19,13 @@ package network.aika.meta;
 import network.aika.Model;
 import network.aika.meta.sequences.SequenceModel;
 import network.aika.meta.sequences.PhraseModel;
-import network.aika.parser.Context;
+import network.aika.Context;
 import network.aika.parser.Parser;
 import network.aika.Document;
-import network.aika.queue.Step;
 import network.aika.tokenizer.WordTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.function.Predicate;
 
 import static network.aika.parser.ParserPhase.COUNTING;
 import static network.aika.parser.ParserPhase.TRAINING;
@@ -59,8 +56,8 @@ public class AnnealingTest extends Parser {
     }
 
     @Override
-    protected void prepareInputs(Document doc, Context context) {
-        tokenizer.tokenize(doc, context, (token, ref) ->
+    protected void prepareInputs(Document doc) {
+        tokenizer.tokenize(doc, (token, ref) ->
             doc.addToken(
                     dict.lookupInputToken(token),
                     ref

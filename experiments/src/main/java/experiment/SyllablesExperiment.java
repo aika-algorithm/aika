@@ -26,7 +26,7 @@ import network.aika.meta.LabelUtil;
 import network.aika.meta.sequences.SyllableModel;
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
-import network.aika.parser.Context;
+import network.aika.Context;
 import network.aika.parser.ParserPhase;
 import network.aika.parser.TrainingParser;
 import network.aika.Document;

@@ -16,7 +16,7 @@
  */
 package network.aika.meta;
 
-import network.aika.parser.Context;
+import network.aika.Context;
 import network.aika.text.TextReference;
 
 import java.util.List;

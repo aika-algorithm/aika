@@ -17,6 +17,7 @@
 package network.aika.meta;
 
 import network.aika.Config;
+import network.aika.Context;
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
 import network.aika.meta.entities.EntityModel;
@@ -149,9 +150,9 @@ public class TextSectionTest extends Parser<TestContext> {
     }
 
     @Override
-    protected void prepareInputs(Document doc, TestContext context) {
+    protected void prepareInputs(Document doc) {
         int[] tokenCounter = new int[1];
-        tokenizer.tokenize(doc, context, (n, ref) -> {
+        tokenizer.tokenize(doc, (n, ref) -> {
                     doc.addToken(
                             dictionary.lookupInputToken(n),
                             ref

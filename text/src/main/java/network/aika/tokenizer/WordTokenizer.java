@@ -19,7 +19,7 @@ package network.aika.tokenizer;
 
 
 import network.aika.Document;
-import network.aika.parser.Context;
+import network.aika.Context;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
 
@@ -52,7 +52,7 @@ public class WordTokenizer implements Tokenizer {
     }
 
     @Override
-    public void tokenize(Document doc, Context context, TokenConsumer tc) {
+    public void tokenize(Document doc, TokenConsumer tc) {
         int pos = 0;
         int begin = 0;
 
@@ -69,7 +69,7 @@ public class WordTokenizer implements Tokenizer {
             else if(lastWithinToken && !withinToken) {
                 processTokenIntern(tc, content, begin, i, pos);
                 pos++;
-            } else if(lastWithinToken && forcedSplit(i, context)) {
+            } else if(lastWithinToken && forcedSplit(i, doc.getContext())) {
                 processTokenIntern(tc, content, begin, i, pos);
                 begin = i;
                 pos++;

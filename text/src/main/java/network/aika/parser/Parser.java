@@ -17,6 +17,7 @@
 package network.aika.parser;
 
 
+import network.aika.Context;
 import network.aika.callbacks.InstantiationCallback;
 import network.aika.debugger.AIKADebugger;
 import network.aika.elements.activations.Activation;
@@ -48,6 +49,8 @@ public abstract class Parser<C extends Context> {
 
     protected Document initDocument(String txt, C context, ParserPhase phase) {
         Document doc = new Document(getPhraseModel().getModel(), txt);
+        doc.setContext(context);
+
         doc.setInstantiationCallback(new InstantiationCallback() {
             @Override
             public Neuron resolveInstance(Neuron template) {
@@ -66,30 +69,29 @@ public abstract class Parser<C extends Context> {
 
     protected AIKADebugger debugger = null;
 
-    protected Predicate<Step> getStepFilter(C context, ParserPhase phase) {
+    protected Predicate<Step> getStepFilter(Document doc, ParserPhase phase) {
         return switch(phase) {
-            case COUNTING -> getCountingStepFilter(context);
-            case TRAINING -> getTrainingStepFilter(context);
+            case COUNTING -> getCountingStepFilter(doc);
+            case TRAINING -> getTrainingStepFilter(doc);
             case INFERENCE -> null;
         };
     }
 
-    private Predicate<Step> getCountingStepFilter(C context) {
+    private Predicate<Step> getCountingStepFilter(Document doc) {
         return s ->
                 !(s instanceof Fired &&
                         ((Fired)s).getElement().getActivation().getNeuron() == getPhraseModel().getDictionary().getInputToken());
     }
 
-    private Predicate<Step> getTrainingStepFilter(C context) {
+    private Predicate<Step> getTrainingStepFilter(Document doc) {
         return s ->
                 !(s instanceof Anneal &&
                         isTargetActivation(
-                                context,
                                 ((Anneal) s).getElement()
                         ));
     }
 
-    private boolean isTargetActivation(C context, BindingActivation act) {
+    private boolean isTargetActivation(BindingActivation act) {
         PatternActivation pAct = act.getSamePatternActivation();
         if(pAct == null)
             return false;
@@ -104,15 +106,15 @@ public abstract class Parser<C extends Context> {
                 tr.getCharRange().getEnd() == doc.length();
     }
 
-    protected abstract void prepareInputs(Document doc, C context);
+    protected abstract void prepareInputs(Document doc);
 
     public void process(String txt, C context, ParserPhase phase, Consumer<Document> mapResults) {
         Document doc = initDocument(txt, context, phase);
 
         try {
-            prepareInputs(doc, context);
+            prepareInputs(doc);
 
-            doc.process(getStepFilter(context, phase));
+            doc.process(getStepFilter(doc, phase));
 
             getPhraseModel().getModel().process();
 

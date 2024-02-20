@@ -108,8 +108,12 @@ public class EntityModel extends TemplateModel<EntityModel> {
         return entityBN;
     }
 
+    public InhibitoryNeuron getEntityInhib() {
+        return inhibitoryN;
+    }
+
     public BindingNeuron getTopicBN() {
-        return entityBN;
+        return topicBN;
     }
 
     public PhraseModel getPhraseModel() {

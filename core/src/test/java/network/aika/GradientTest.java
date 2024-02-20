@@ -74,13 +74,13 @@ public class GradientTest {
 
         processDoc(m, doc);
 
-        PatternNeuron nA = m.getInputNeuron("A", null);
+        PatternNeuron nA = m.getNeuronByLabel("A", null);
         setStatistic(nA, 53.0,299,899l);
 
-        PatternNeuron nB = m.getInputNeuron("B", null);
+        PatternNeuron nB = m.getNeuronByLabel("B", null);
         setStatistic(nB, 10.0, 121, 739l);
 
-        PatternNeuron nC = m.getInputNeuron("C", null);
+        PatternNeuron nC = m.getNeuronByLabel("C", null);
         setStatistic(nC, 30.0, 234, 867l);
 
         doc.disconnect();
@@ -104,10 +104,10 @@ public class GradientTest {
 
         processDoc(m, doc1);
 
-        PatternNeuron nA = m.getInputNeuron("A", null);
+        PatternNeuron nA = m.getNeuronByLabel("A", null);
         setStatistic(nA, 53.0, 299, 899l);
 
-        PatternNeuron nB = m.getInputNeuron("B", null);
+        PatternNeuron nB = m.getNeuronByLabel("B", null);
         setStatistic(nB, 10.0, 121, 739l);
 
         doc1.disconnect();
@@ -115,7 +115,7 @@ public class GradientTest {
         Document doc2 = new Document(m, "A C ");
         processDoc(m, doc2);
 
-        PatternNeuron nC = m.getInputNeuron("C", null);
+        PatternNeuron nC = m.getNeuronByLabel("C", null);
         setStatistic(nC, 30.0, 234, 867l);
 
         doc2.disconnect();

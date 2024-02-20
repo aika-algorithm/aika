@@ -56,6 +56,8 @@ public class Document extends Queue implements Element {
 
     private final StringBuilder content;
 
+    private Context context;
+
     private long absoluteBeginChar;
 
     private int activationIdCounter = 0;
@@ -202,6 +204,14 @@ public class Document extends Queue implements Element {
 
     public String getContent() {
         return content.toString();
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     public int length() {

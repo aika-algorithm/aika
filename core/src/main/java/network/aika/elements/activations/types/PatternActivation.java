@@ -77,14 +77,6 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
     }
 
     @Override
-    public PatternActivation instantiateTemplateNode() {
-        PatternActivation ti = (PatternActivation) super.instantiateTemplateNode();
-        if(ti != null)
-            getModel().registerLabel(ti.getNeuron(), neuron);
-        return ti;
-    }
-
-    @Override
     public void connectGradientFields() {
         entropy = func(
                 this,

@@ -17,8 +17,7 @@
 package network.aika.tokenizer;
 
 
-import network.aika.meta.Dictionary;
-import network.aika.parser.Context;
+import network.aika.Context;
 import network.aika.Document;
 import network.aika.text.TextReference;
 import network.aika.text.Range;
@@ -33,7 +32,7 @@ public class SimpleCharTokenizer implements Tokenizer {
     }
 
     @Override
-    public void tokenize(Document doc, Context context, TokenConsumer tokenConsumer) {
+    public void tokenize(Document doc, TokenConsumer tokenConsumer) {
         int i = 0;
         int pos = 0;
 

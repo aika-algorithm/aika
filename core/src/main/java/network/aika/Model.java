@@ -97,13 +97,13 @@ public class Model extends Queue implements Writable {
         return new ArrayList<>(providers.values());
     }
 
-    public PatternNeuron lookupInputNeuron(String tokenLabel, PatternNeuron template) {
-        PatternNeuron n = getInputNeuron(tokenLabel, template);
+    public <N extends Neuron> N lookupNeuronByLabel(String label, N template) {
+        N n = getNeuronByLabel(label, template);
         if(n != null)
             return n;
 
-        n = template.instantiateTemplate()
-                .setLabel(tokenLabel);
+        n = (N) template.instantiateTemplate()
+                .setLabel(label);
 
         n.setAllowTraining(false);
 
@@ -111,12 +111,12 @@ public class Model extends Queue implements Writable {
         return n;
     }
 
-    public void registerLabel(PatternNeuron in, PatternNeuron tn) {
+    public void registerLabel(Neuron in, Neuron tn) {
         suspensionCallback.putLabel(in.getLabel(), tn.getId(), in.getId());
         in.getProvider().save();
     }
 
-    public <N extends Neuron> N getInputNeuron(String tokenLabel, PatternNeuron template) {
+    public <N extends Neuron> N getNeuronByLabel(String tokenLabel, Neuron template) {
         Long id = suspensionCallback.getIdByLabel(tokenLabel, template.getId());
         return id != null ? (N) lookupNeuronProvider(id).getNeuron() : null;
     }

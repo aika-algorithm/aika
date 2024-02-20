@@ -16,15 +16,15 @@
  */
 package network.aika.tokenizer;
 
-import network.aika.parser.Context;
+import network.aika.Context;
 import network.aika.Document;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public interface Tokenizer<C extends Context> {
+public interface Tokenizer {
 
-    void tokenize(Document doc, C context, TokenConsumer tokenConsumer);
+    void tokenize(Document doc, TokenConsumer tokenConsumer);
 
 }

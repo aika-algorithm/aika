@@ -34,8 +34,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Objects;
 
-import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
-
 /**
  *
  * @author Lukas Molzberger
@@ -102,11 +100,11 @@ public class Dictionary implements Writable {
     }
 
     public PatternNeuron getTokenNeuron(String label) {
-        return model.getInputNeuron(label, inputToken);
+        return model.getNeuronByLabel(label, inputToken);
     }
 
     public PatternNeuron lookupInputToken(String label) {
-        return model.lookupInputNeuron(label, inputToken);
+        return model.lookupNeuronByLabel(label, inputToken);
     }
 
     public void addToken(Document doc, String token, TextReference ref) {
