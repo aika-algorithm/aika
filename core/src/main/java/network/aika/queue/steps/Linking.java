@@ -143,6 +143,7 @@ public class Linking extends ElementStep<Activation> {
                         checkLLPreCondition(sourceSyn, ts) ||
                                 checkLLPreCondition(ts, sourceSyn)
                 )
+                .toList()
                 .forEach(ts ->
                         latentLink(sourceSyn, ts)
                 );
