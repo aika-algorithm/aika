@@ -66,7 +66,7 @@ public class LatentRelationNeuron extends BindingNeuron {
     @Override
     protected SumField initBias() {
         return new SumField(this, "bias", TOLERANCE)
-                .setQueued(getQueue(), TRAINING);
+                .setQueued(getQueue(), TRAINING, false);
     }
 
     @Override

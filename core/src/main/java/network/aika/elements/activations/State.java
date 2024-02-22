@@ -38,6 +38,8 @@ public class State implements FieldObject {
 
     protected StateType type;
 
+    protected boolean isNextRound;
+
     protected Activation act;
 
     protected SumField net;
@@ -48,9 +50,10 @@ public class State implements FieldObject {
     protected Fired firedStep = new Fired(this);
 
 
-    public State(Activation act, StateType type) {
+    public State(Activation act, StateType type, boolean isNextRound) {
         this.act = act;
         this.type = type;
+        this.isNextRound = isNextRound;
 
         init();
     }
@@ -69,7 +72,7 @@ public class State implements FieldObject {
                 net,
                 x -> act.getActivationFunction().f(x)
         );
-        value.setQueued(getQueue(), INFERENCE);
+        value.setQueued(getQueue(), INFERENCE, isNextRound);
 
         value.addListener("onFired", (fl, u) -> {
             if (isTrue(value, false) != isTrue(value, true))

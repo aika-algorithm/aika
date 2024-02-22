@@ -56,7 +56,7 @@ public abstract class ConjunctiveSynapse<
 {
 
     protected SumField synapseBias = new SumField(this, "synapseBias", TOLERANCE)
-            .setQueued(getQueue(), TRAINING);
+            .setQueued(getQueue(), TRAINING, false);
 
     private boolean optional;
 

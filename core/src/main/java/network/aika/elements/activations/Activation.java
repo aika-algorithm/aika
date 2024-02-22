@@ -101,7 +101,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         initBindingSignalSlots();
 
         gradient = new SumField(this, "gradient", TOLERANCE)
-                .setQueued(getQueue(), TRAINING);
+                .setQueued(getQueue(), TRAINING, false);
 
         if (getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
             connectGradientFields();
@@ -160,7 +160,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     protected void initNet() {
-        states[PRE_FEEDBACK.ordinal()] = new State(this, PRE_FEEDBACK);
+        states[PRE_FEEDBACK.ordinal()] = new State(this, PRE_FEEDBACK, isNextRound());
+    }
+
+    protected boolean isNextRound() {
+        return false;
     }
 
     protected void initBiases() {
@@ -523,7 +527,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         N n = null;
         if(doc.getInstantiationCallback() != null)
-            n = (N) doc.getInstantiationCallback().resolveInstance(neuron);
+            n = (N) doc.getInstantiationCallback().resolveInstance(neuron, doc);
 
         boolean newNeuronInstance = false;
         if(n == null) {

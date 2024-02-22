@@ -213,7 +213,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
     }
 
     @Override
-    public Neuron resolveInstance(Neuron template) {
+    public Neuron resolveInstance(Neuron template, Document doc) {
         if(parent.entityPattern == template)
             return entityPattern;
 
@@ -226,7 +226,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
         if(parent.inhibitoryN == template)
             return inhibitoryN;
 
-        return topicModel.resolveInstance(template);
+        return topicModel.resolveInstance(template, doc);
     }
 
     @Override

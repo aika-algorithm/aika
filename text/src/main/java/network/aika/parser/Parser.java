@@ -53,7 +53,7 @@ public abstract class Parser<C extends Context> {
 
         doc.setInstantiationCallback(new InstantiationCallback() {
             @Override
-            public Neuron resolveInstance(Neuron template) {
+            public Neuron resolveInstance(Neuron template, Document doc) {
                 return null;
             }
 

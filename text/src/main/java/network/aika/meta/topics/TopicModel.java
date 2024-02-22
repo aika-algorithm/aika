@@ -197,7 +197,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
     }
 
     @Override
-    public Neuron resolveInstance(Neuron template) {
+    public Neuron resolveInstance(Neuron template, Document doc) {
         if(parent == null)
             return null;
 

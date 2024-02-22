@@ -65,8 +65,8 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
         initIO();
     }
 
-    public <F extends Field> F setQueued(Queue q, Phase p) {
-        interceptor = new QueueInterceptor(q, this, p);
+    public <F extends Field> F setQueued(Queue q, Phase p, boolean isNextRound) {
+        interceptor = new QueueInterceptor(q, this, p, isNextRound);
         return (F) this;
     }
 
@@ -168,10 +168,6 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
 
     public void setInterceptor(QueueInterceptor interceptor) {
         this.interceptor = interceptor;
-    }
-
-    public boolean isNextRound() {
-        return false;
     }
 
     @Override

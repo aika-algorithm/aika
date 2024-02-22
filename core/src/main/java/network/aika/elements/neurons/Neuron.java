@@ -21,6 +21,7 @@ import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
+import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
@@ -248,6 +249,21 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return instantiable;
     }
 
+    public Stream<Activation> getInstanceActivations(Document doc) {
+        assert isAbstract();
+        CategoryInputSynapse cis = getCategoryInputSynapse();
+        if(cis == null)
+            return Stream.empty();
+
+        CategoryNeuron cn = cis.getInput();
+        if(cn == null)
+            return Stream.empty();
+
+        return cn.getActivations(doc)
+                .stream()
+                .flatMap(CategoryActivation::getCategoryInputs);
+    }
+
     public abstract CategorySynapse createCategorySynapse();
 
     public boolean isAbstract() {
@@ -275,7 +291,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected SumField initBias() {
         return (SumField) new SumField(this, "bias", TOLERANCE)
-                .setQueued(getQueue(), TRAINING)
+                .setQueued(getQueue(), TRAINING, false)
                 .addListener("onBiasModified", (fl, u) ->
                         setModified()
                 );

@@ -73,7 +73,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     private boolean instantiable = true;
 
     protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
-            .setQueued(getQueue(), TRAINING)
+            .setQueued(getQueue(), TRAINING, false)
             .addListener("onWeightModified", (fl, u) -> {
                 checkWeight();
                 setModified();

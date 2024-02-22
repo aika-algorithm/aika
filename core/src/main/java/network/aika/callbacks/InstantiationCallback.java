@@ -16,6 +16,7 @@
  */
 package network.aika.callbacks;
 
+import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.Neuron;
 
@@ -26,7 +27,7 @@ import network.aika.elements.neurons.Neuron;
  */
 public interface InstantiationCallback {
 
-    Neuron resolveInstance(Neuron template);
+    Neuron resolveInstance(Neuron template, Document doc);
 
     void onInstantiation(Activation tAct, Activation iAct);
 }

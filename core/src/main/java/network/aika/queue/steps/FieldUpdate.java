@@ -49,7 +49,7 @@ public class FieldUpdate<E extends FieldObject> extends Step<E> {
 
     @Override
     public boolean incrementRound() {
-        return interceptor.getField().isNextRound();
+        return interceptor.isNextRound();
     }
 
     private void updateSortValue(double delta) {

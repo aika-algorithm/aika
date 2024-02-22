@@ -41,12 +41,15 @@ public class QueueInterceptor {
 
     private Queue queue;
 
+    private boolean isNextRound;
+
     private List<FieldObserver> observers = new ArrayList<>();
 
-    public QueueInterceptor(Queue q, Field f, Phase p) {
+    public QueueInterceptor(Queue q, Field f, Phase p, boolean isNextRound) {
         this.queue = q;
         this.field = f;
         this.phase = p;
+        this.isNextRound = isNextRound;
     }
 
     public FieldUpdate getStep() {
@@ -55,6 +58,10 @@ public class QueueInterceptor {
 
     public Field getField() {
         return field;
+    }
+
+    public boolean isNextRound() {
+        return isNextRound;
     }
 
     private FieldUpdate getOrCreateStep() {

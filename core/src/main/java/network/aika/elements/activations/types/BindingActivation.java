@@ -62,10 +62,10 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
 
         super.initNet();
 
-        states[OUTER_FEEDBACK.ordinal()] = new State(this, OUTER_FEEDBACK);
+        states[OUTER_FEEDBACK.ordinal()] = new State(this, OUTER_FEEDBACK, false);
         linkAndConnect(getNet(PRE_FEEDBACK), getNet(OUTER_FEEDBACK));
 
-        states[INNER_FEEDBACK.ordinal()] = new State(this, INNER_FEEDBACK);
+        states[INNER_FEEDBACK.ordinal()] = new State(this, INNER_FEEDBACK, false);
         linkAndConnect(getNet(OUTER_FEEDBACK), getNet(INNER_FEEDBACK));
 
         Anneal.add(this);
