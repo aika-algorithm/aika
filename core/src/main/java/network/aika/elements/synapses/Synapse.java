@@ -21,12 +21,14 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.relations.Relation;
 import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.Timestamp;
 import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.enums.Scope;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.Field;
@@ -46,6 +48,8 @@ import org.slf4j.LoggerFactory;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MAX;
@@ -120,6 +124,13 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return slot;
     }
 
+    public Stream<BindingSignalSlot> transitionBindingSignal(Activation<?> oAct, Scope is) {
+        return Arrays.stream(getSynapseType().getTransition())
+                .filter(t -> is == t.getFrom())
+                .map(Transition::getTo)
+                .map(oAct::getBindingSignalSlot)
+                .filter(Objects::nonNull);
+    }
 
     public abstract SynapseSlot createOutputSlot(OA oAct);
 

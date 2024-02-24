@@ -35,8 +35,7 @@ import network.aika.fields.link.FieldLink;
 import network.aika.queue.Queue;
 import network.aika.visitor.Visitor;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.stream.Stream;
 
 import static network.aika.debugger.EventType.CREATE;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
@@ -239,12 +238,8 @@ public abstract class Link<
     }
 
     public void propagateBindingSignal(PatternActivation bs, Scope is, boolean state) {
-        Arrays.stream(synapse.getSynapseType().getTransition())
-                .filter(t -> is == t.getFrom())
-                .map(Transition::getTo)
-                .map(os -> output.getBindingSignalSlot(os))
-                .filter(Objects::nonNull)
-                .forEach(bsSlot -> bsSlot.connectBindingSignal(bs, state));
+        Stream<BindingSignalSlot> slots = synapse.transitionBindingSignal(output, is);
+        slots.forEach(bsSlot -> bsSlot.connectBindingSignal(bs, state));
     }
 
     public Field getWeightedInput() {

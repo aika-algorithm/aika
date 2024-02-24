@@ -78,6 +78,9 @@ public class IncomingLinkingOperator extends LinkingOperator {
 
     @Override
     public void relationCheck(Relation rel, Synapse relSyn, Activation relatedAct, Direction relDir) {
+        if(sourceAct != null && !checkBSMatches(relatedAct, sourceAct))
+            return;
+
         Link l = checkAndLink(relatedAct);
         if (l != null)
             rel.createLatentRelation(

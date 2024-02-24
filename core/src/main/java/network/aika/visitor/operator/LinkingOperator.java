@@ -17,6 +17,8 @@
 package network.aika.visitor.operator;
 
 import network.aika.Document;
+import network.aika.elements.activations.bsslots.BindingSignalSlot;
+import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.Synapse;
@@ -24,6 +26,8 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
+
+import java.util.stream.Stream;
 
 import static network.aika.elements.synapses.Synapse.getLatentLink;
 
@@ -74,5 +78,22 @@ public abstract class LinkingOperator implements Operator {
         Activation oAct = synA.getOutput().createActivation(doc);
 
         return synA.createAndInitLink(actA, oAct);
+    }
+
+    protected boolean checkBSMatches(Activation<?> iAct, Activation<?> oAct) {
+        return iAct.getBindingSignalSlots()
+                .filter(BindingSignalSlot::isSet)
+                .filter(SingleBSSlot.class::isInstance)
+                .allMatch(inputBSSlot ->
+                        checkBSMatch(oAct, (SingleBSSlot) inputBSSlot)
+                );
+    }
+
+    private boolean checkBSMatch(Activation<?> oAct, SingleBSSlot inputBSSlot) {
+        Stream<BindingSignalSlot> outputBSSlots = targetSyn.transitionBindingSignal(oAct, inputBSSlot.getType());
+        return outputBSSlots.filter(BindingSignalSlot::isSet)
+                .allMatch(outputBSSlot ->
+                        outputBSSlot.isSet(inputBSSlot.getBindingSignal())
+                );
     }
 }

@@ -48,6 +48,11 @@ public class SingleBSSlot extends BindingSignalSlot {
         return bindingSignal != null;
     }
 
+    @Override
+    public boolean isSet(PatternActivation bs) {
+        return bindingSignal == bs;
+    }
+
     public PatternActivation getBindingSignal() {
         return bindingSignal;
     }

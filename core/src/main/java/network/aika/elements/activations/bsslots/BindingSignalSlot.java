@@ -63,6 +63,8 @@ public abstract class BindingSignalSlot {
 
     public abstract boolean isSet();
 
+    public abstract boolean isSet(PatternActivation bs);
+
     public abstract Stream<PatternActivation> getBindingSignals();
 
     public abstract void connectBindingSignal(PatternActivation bs, boolean state);

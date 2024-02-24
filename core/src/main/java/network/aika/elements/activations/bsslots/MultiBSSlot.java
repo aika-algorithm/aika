@@ -42,6 +42,12 @@ public class MultiBSSlot extends BindingSignalSlot {
     }
 
     @Override
+    public boolean isSet(PatternActivation bs) {
+        return getBindingSignals()
+                .anyMatch(bsa -> bsa == bs);
+    }
+
+    @Override
     public Stream<PatternActivation> getBindingSignals() {
         return bindingSignals.stream();
     }

@@ -85,6 +85,8 @@ public class PatternSynapse extends ConjunctiveSynapse<
 
     @Override
     public void link() {
+        checkAlreadyLinkedToPattern(input.getNeuron());
+
         super.link();
         // Pattern Synapses always need to be propagable because their inputs may depend on each other.
         getInput().updatePropagable(output, true);
@@ -109,6 +111,15 @@ public class PatternSynapse extends ConjunctiveSynapse<
                             .collect(Collectors.joining(", "))
             );
         }
+    }
+
+    private static void checkAlreadyLinkedToPattern(BindingNeuron input) {
+        if(input == null)
+            return;
+
+        PatternSynapse ps = input.getOutputSynapseByType(PatternSynapse.class);
+        if(ps != null)
+            log.warn("Already linked to Pattern: " + ps);
     }
 
     @Override

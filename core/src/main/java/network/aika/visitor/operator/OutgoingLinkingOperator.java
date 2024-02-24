@@ -59,6 +59,9 @@ public class OutgoingLinkingOperator extends LinkingOperator {
     public void relationCheck(Relation rel, Synapse relSyn, Activation relatedAct, Direction relDir) {
         assert relDir == Direction.OUTPUT;
 
+        if(!checkBSMatches(sourceAct, relatedAct))
+            return;
+
         Link l = checkAndLink(relatedAct);
         if (l != null)
             rel.createLatentRelation(
