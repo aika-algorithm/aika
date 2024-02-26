@@ -28,15 +28,19 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
+import network.aika.enums.direction.Direction;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.link.FieldLink;
 import network.aika.queue.Queue;
+import network.aika.queue.steps.LinkUpdate;
 import network.aika.visitor.Visitor;
 
 import java.util.stream.Stream;
 
 import static network.aika.debugger.EventType.CREATE;
+import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.link.ArgumentFieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.fields.ThresholdOperator.Type.ABOVE;
@@ -58,6 +62,10 @@ public abstract class Link<
 
     protected I input;
     protected O output;
+
+    protected LinkUpdate inputStep = new LinkUpdate(this, INPUT);
+
+    protected LinkUpdate outputStep = new LinkUpdate(this, OUTPUT);
 
     protected SI synInputSlot;
 
@@ -88,6 +96,17 @@ public abstract class Link<
 
         propagateRanges();
         getDocument().onElementEvent(CREATE, this);
+    }
+
+    private LinkUpdate getLinkUpdateStep(Direction dir) {
+        return dir == INPUT ?
+                inputStep :
+                outputStep;
+    }
+
+    public void setState(Direction dir, boolean state) {
+        getLinkUpdateStep(dir)
+                .setState(state);
     }
 
     public boolean isActive() {

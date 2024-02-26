@@ -24,6 +24,7 @@ import network.aika.fields.AbstractMaxField;
 import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.ArgumentFieldLink;
 import network.aika.queue.Queue;
+import network.aika.queue.steps.FieldUpdate;
 import network.aika.queue.steps.LinkUpdate;
 
 import java.util.Collection;
@@ -59,11 +60,11 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
                     if (si == null)
                         return;
 
-                    LinkUpdate.add(
-                            si.getArgumentRef(),
-                            dir,
-                            state
-                    );
+                    si.getArgumentRef()
+                            .setState(
+                                    dir,
+                                    state
+                            );
                 });
 
         this.act = act;

@@ -38,15 +38,19 @@ public class LinkUpdate extends ElementStep<Link> {
 
     private boolean state;
 
-    public static void add(Link l, Direction dir, boolean state) {
-        Step.add(new LinkUpdate(l, dir, state));
-    }
-
-    public LinkUpdate(Link l, Direction dir, boolean state) {
+    public LinkUpdate(Link l, Direction dir) {
         super(l);
 
-        this.state = state;
         this.dir = dir;
+    }
+
+    public void setState(boolean state) {
+        if(this.state != state) {
+            this.state = state;
+
+            if(!isQueued)
+                Step.add(this);
+        }
     }
 
     @Override
@@ -65,11 +69,8 @@ public class LinkUpdate extends ElementStep<Link> {
         Link l = getElement();
         if(dir == Direction.INPUT) {
             updateConnected(l.getInputValueLink(), state, true);
-            //updateConnected(outputSlotFL, state, true);
 
             l.checkPrimarySuppression();
-        } else {
-            //  updateConnected(inputSlotFL, state, true);
         }
 
         l.retrieveAndConnectBindingSignals(state);

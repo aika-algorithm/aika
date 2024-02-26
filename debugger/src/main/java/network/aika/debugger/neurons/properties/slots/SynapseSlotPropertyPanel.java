@@ -53,7 +53,7 @@ public class SynapseSlotPropertyPanel<S extends SynapseSlot> extends AbstractPro
         addConstant("Links: ", "");
         links.limit(10)
                 .forEach(l ->
-                        addConstant("", l.toString())
+                        addConstant("", "" + l)
                 );
 
         addFinal();
