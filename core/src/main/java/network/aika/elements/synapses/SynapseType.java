@@ -44,7 +44,7 @@ public @interface SynapseType {
 
     public Trigger trigger() default Trigger.FIRED_INNER_FEEDBACK;
 
-    public StateType stateType() default StateType.PRE_FEEDBACK;
+    public StateType outputState() default StateType.PRE_FEEDBACK;
 
     public boolean propagateRange() default true;
 }

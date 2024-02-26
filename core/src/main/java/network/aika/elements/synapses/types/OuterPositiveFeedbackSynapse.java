@@ -43,7 +43,7 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         transition = SAME_INPUT,
         required = INPUT_SAME,
         trigger = FIRED_PRE_FEEDBACK,
-        stateType = OUTER_FEEDBACK
+        outputState = OUTER_FEEDBACK
 )
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         OuterPositiveFeedbackSynapse,

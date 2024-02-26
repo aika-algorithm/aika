@@ -16,12 +16,10 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.FieldLink;
-
 /**
  * @author Lukas Molzberger
  */
-public interface MaxFieldListener {
+public interface MaxFieldListener<F> {
 
-    void updateSelectedInput(FieldLink si, boolean state);
+    void updateSelectedInput(F si, boolean state);
 }

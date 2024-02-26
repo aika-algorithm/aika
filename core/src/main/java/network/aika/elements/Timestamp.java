@@ -16,22 +16,15 @@
  */
 package network.aika.elements;
 
-import java.util.Comparator;
-
 /**
  *
  * @author Lukas Molzberger
  */
 public class Timestamp implements Comparable<Timestamp> {
 
-    public static Timestamp NOT_SET = new Timestamp(Long.MIN_VALUE);
-
     public static Timestamp MIN = new Timestamp(0);
     public static Timestamp MAX = new Timestamp(Long.MAX_VALUE);
-
-    public static Comparator<Timestamp> FIRED_COMPARATOR = Comparator
-            .<Timestamp>comparingInt(ts -> ts == NOT_SET ? 1 : 0)
-            .thenComparingLong(Timestamp::getTimestamp);
+    public static Timestamp NOT_SET = new Timestamp(Long.MAX_VALUE);
 
     private long timestamp;
 

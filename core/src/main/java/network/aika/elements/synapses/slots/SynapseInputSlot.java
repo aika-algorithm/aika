@@ -18,8 +18,15 @@ package network.aika.elements.synapses.slots;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.Link;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.direction.Direction;
+import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fields.link.ArgumentFieldLink;
+import network.aika.fields.link.FieldLink;
+
+import java.util.Collection;
+import java.util.Comparator;
 
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 
@@ -27,14 +34,18 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
  *
  * @author Lukas Molzberger
  */
-public class SynapseInputSlot extends ConjunctiveSynapseSlot {
+public class SynapseInputSlot<S extends ConjunctiveSynapse, L extends ConjunctiveLink> extends ConjunctiveSynapseSlot<S, L>  {
 
-    public SynapseInputSlot(Activation act, ConjunctiveSynapse synapse) {
-        super(act, synapse, Direction.INPUT);
+    public SynapseInputSlot(Activation act, S synapse) {
+        super(
+                act,
+                synapse,
+                "in-slot-" + synapse.getPOutput().getId(),
+                Direction.INPUT
+        );
     }
 
     @Override
-    protected String getLabel() {
-        return "in-slot-" + synapse.getPOutput().getId();
+    public void init() {
     }
 }

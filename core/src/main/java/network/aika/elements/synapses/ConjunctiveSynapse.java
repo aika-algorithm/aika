@@ -28,6 +28,7 @@ import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
+import network.aika.fields.Field;
 import network.aika.fields.SumField;
 
 import java.io.DataInput;
@@ -55,7 +56,7 @@ public abstract class ConjunctiveSynapse<
         extends Synapse<S, I, O, L, IA, OA>
 {
 
-    protected SumField synapseBias = new SumField(this, "synapseBias", TOLERANCE)
+    protected Field synapseBias = new SumField(this, "synapseBias", TOLERANCE)
             .setQueued(getQueue(), TRAINING, false);
 
     private boolean optional;
@@ -88,7 +89,7 @@ public abstract class ConjunctiveSynapse<
     }
 
     public void initBiasInput(OA act) {
-        linkAndConnect(synapseBias, act.getNet(synapseType.stateType()))
+        linkAndConnect(synapseBias, act.getNet(synapseType.outputState()))
                 .setPropagateUpdates(false);
     }
 
@@ -133,7 +134,7 @@ public abstract class ConjunctiveSynapse<
         return ((float) relActTimeSum) / ((float) relActTimeN);
     }
 
-    public SumField getSynapseBias() {
+    public Field getSynapseBias() {
         return synapseBias;
     }
 

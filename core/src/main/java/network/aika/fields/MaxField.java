@@ -20,76 +20,47 @@ import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.FieldLink;
 import network.aika.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger
  *
  */
-public class MaxField extends SumField {
+public class MaxField extends AbstractMaxField<FieldLink> {
 
-    private FieldLink selectedInput;
+    private List<FieldLink> inputs;
 
-    private MaxFieldListener sectionChangeListener;
-
-    private boolean allowNegativeInput;
-
-    public MaxField(FieldObject ref, String label, boolean allowNegativeInput, Double tolerance) {
+    public MaxField(FieldObject ref, String label, Double tolerance) {
         super(ref, label, tolerance);
-
-        this.allowNegativeInput = allowNegativeInput;
-    }
-
-    public MaxField(FieldObject ref, String label, boolean allowNegativeInput, Double tolerance, MaxFieldListener scl) {
-        this(ref, label, allowNegativeInput, tolerance);
-
-        this.sectionChangeListener = scl;
-    }
-
-    public FieldLink getSelectedInput() {
-        return selectedInput;
     }
 
     @Override
-    public void receiveUpdate(FieldLink ufl, double u) {
-        double update = getCandidateInputs()
-                .mapToDouble(AbstractFieldLink::getUpdatedInputValue)
-                .max()
-                .orElse(0.0) - value;
+    protected void initIO() {
+        super.initIO();
 
-        if(!(allowNegativeInput && selectedInput == null) &&
-                Utils.belowTolerance(tolerance, update))
-            return;
-
-        if(interceptor != null) {
-            interceptor.receiveUpdate(update, true);
-            return;
-        }
-
-        triggerUpdate(update);
+        inputs = new ArrayList<>();
     }
 
     @Override
-    public void triggerUpdate(double u) {
-        FieldLink lastSelectedInput = selectedInput;
-
-        selectedInput = getCandidateInputs()
-                .max(Comparator.comparingDouble(AbstractFieldLink::getUpdatedInputValue))
-                .orElse(null);
-
-        if(sectionChangeListener != null && lastSelectedInput != selectedInput) {
-            sectionChangeListener.updateSelectedInput(lastSelectedInput, false);
-            sectionChangeListener.updateSelectedInput(selectedInput, true);
-        }
-
-        super.triggerUpdate(u);
+    public int size() {
+        return inputs.size();
     }
 
-    private Stream<FieldLink> getCandidateInputs() {
-        Stream<FieldLink> inputs = getInputs().stream();
-        return allowNegativeInput ?
-                inputs :
-                inputs.filter(fl -> fl.getUpdatedInputValue() > 0.0);
+    @Override
+    public void addInput(FieldLink l) {
+        inputs.add(l);
+    }
+
+    @Override
+    public void removeInput(FieldLink l) {
+        inputs.remove(l);
+    }
+
+    @Override
+    public List<FieldLink> getInputs() {
+        return inputs;
     }
 }

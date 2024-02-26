@@ -28,7 +28,6 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
-import network.aika.enums.Transition;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.link.FieldLink;
@@ -38,9 +37,8 @@ import network.aika.visitor.Visitor;
 import java.util.stream.Stream;
 
 import static network.aika.debugger.EventType.CREATE;
-import static network.aika.fields.link.FieldLink.linkAndConnect;
+import static network.aika.fields.link.ArgumentFieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
-import static network.aika.elements.Timestamp.FIRED_COMPARATOR;
 import static network.aika.fields.ThresholdOperator.Type.ABOVE;
 import static network.aika.visitor.operator.BindingSignalCollector.retrieveBindingSignal;
 
@@ -165,8 +163,12 @@ public abstract class Link<
         linkAndConnect(weightedInput, this, synOutputSlot.getInputField());
     }
 
-    public StateType feedbackMode() {
-        return getSynapse().getSynapseType().stateType();
+    public StateType inputState() {
+        return getSynapse().getSynapseType().getTrigger().getType();
+    }
+
+    public StateType outputState() {
+        return getSynapse().getSynapseType().outputState();
     }
 
     protected void initInputValue() {
@@ -252,7 +254,9 @@ public abstract class Link<
 
     @Override
     public Timestamp getFired() {
-        return input != null && isCausal() ? input.getFired() : output.getFired();
+        return input != null && isCausal() ?
+                input.getFired() :
+                output.getFired();
     }
 
     @Override
@@ -293,7 +297,7 @@ public abstract class Link<
     }
 
     public static boolean isCausal(Activation iAct, Activation oAct) {
-        return FIRED_COMPARATOR.compare(iAct.getFired(), oAct.getFired()) < 0;
+        return iAct.getFired().compareTo(oAct.getFired()) < 0;
     }
 
     public void linkInput() {

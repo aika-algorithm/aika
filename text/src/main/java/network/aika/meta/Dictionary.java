@@ -92,7 +92,9 @@ public class Dictionary implements Writable {
 
         double surprisal = s.getInput().getSurprisal(Sign.POS, r, false);
 
-        double weight = 0.8 + (-0.1 * surprisal);
+        double weight = 1.0 + (-0.1 * surprisal);
+        assert weight >= 1.0;
+
         s.setWeight(weight);
 
         if(log.isDebugEnabled())

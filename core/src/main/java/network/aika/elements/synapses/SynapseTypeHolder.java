@@ -38,7 +38,7 @@ public class SynapseTypeHolder {
 
     private Trigger trigger;
     
-    private StateType stateType;
+    private StateType outputState;
 
     private boolean propagateRange;
 
@@ -58,7 +58,7 @@ public class SynapseTypeHolder {
         transition = synTypeAnno.transition();
         required = synTypeAnno.required();
         trigger = synTypeAnno.trigger();
-        stateType = synTypeAnno.stateType();
+        outputState = synTypeAnno.outputState();
         propagateRange = synTypeAnno.propagateRange();
     }
 
@@ -82,8 +82,8 @@ public class SynapseTypeHolder {
         return trigger;
     }
 
-    public StateType stateType() {
-        return stateType;
+    public StateType outputState() {
+        return outputState;
     }
 
     public boolean isPropagateRange() {

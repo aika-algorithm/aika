@@ -46,7 +46,7 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         outputType = BINDING,
         transition = {INPUT_INPUT, SAME_SAME},
         required = INPUT_INPUT,
-        stateType = PRE_FEEDBACK,
+        outputState = PRE_FEEDBACK,
         trigger = FIRED_PRE_FEEDBACK
 )
 public class BindingCategoryInputSynapse extends ConjunctiveCategoryInputSynapse<

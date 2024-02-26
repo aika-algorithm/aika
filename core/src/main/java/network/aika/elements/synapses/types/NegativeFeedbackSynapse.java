@@ -17,7 +17,6 @@
 package network.aika.elements.synapses.types;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.links.types.NegativeFeedbackLink;
@@ -30,7 +29,6 @@ import network.aika.elements.synapses.slots.AnnealingType;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.Field;
-import network.aika.statistic.SampleSpace;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -54,7 +52,7 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
         trigger = FIRED_PRE_FEEDBACK,
-        stateType = OUTER_FEEDBACK,
+        outputState = OUTER_FEEDBACK,
         propagateRange = false
 )
 public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
@@ -84,7 +82,7 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
 
     @Override
     public void initBiasInput(BindingActivation act) {
-        linkAndConnect(weight, act.getNet(synapseType.stateType()))
+        linkAndConnect(weight, act.getNet(synapseType.outputState()))
                 .setPropagateUpdates(false);
 
         act.registerInputSlot(this);

@@ -16,6 +16,7 @@
  */
 package network.aika.visitor.operator;
 
+import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
@@ -24,6 +25,8 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.visitor.UpVisitor;
+
+import static network.aika.elements.synapses.Synapse.getLatentLink;
 
 
 /**
@@ -36,10 +39,6 @@ public class IncomingLinkingOperator extends LinkingOperator {
     public IncomingLinkingOperator(Activation sourceAct, Synapse sourceSyn, Synapse targetSyn, PatternActivation bindingSignal) {
         super(sourceAct, targetSyn, bindingSignal);
         this.sourceSyn = sourceSyn;
-    }
-
-    public Synapse getStartSynapse() {
-        return sourceSyn;
     }
 
     @Override
@@ -61,24 +60,17 @@ public class IncomingLinkingOperator extends LinkingOperator {
         if (!targetSyn.getTrigger().check(act))
             return null;
 
-        Activation targetAct;
-
-        if(sourceSyn == null)
-            targetAct = sourceAct;
-        else {
-            Link sl = latentLink(sourceAct, sourceSyn, act, targetSyn);
-            if(sl == null)
-                return null;
-
-            targetAct = sl.getOutput();
-        }
-
-        return targetSyn.link(act, targetAct);
+        return targetSyn.link(
+                act,
+                isLatent() ?
+                        latentLink(act) :
+                        sourceAct
+        );
     }
 
     @Override
     public void relationCheck(Relation rel, Synapse relSyn, Activation relatedAct, Direction relDir) {
-        if(sourceAct != null && !checkBSMatches(relatedAct, sourceAct))
+        if(!isLatent() && !checkBSMatches(relatedAct, sourceAct))
             return;
 
         Link l = checkAndLink(relatedAct);
@@ -88,5 +80,27 @@ public class IncomingLinkingOperator extends LinkingOperator {
                     relDir.getInput(sourceAct, relatedAct),
                     relDir.getOutput(sourceAct, relatedAct)
             );
+    }
+
+    private Activation latentLink(Activation act) {
+        Link sl = latentLink(sourceAct, sourceSyn, act, targetSyn);
+        return sl != null ?
+                sl.getOutput() :
+                null;
+    }
+
+    public static Link latentLink(Activation actA, Synapse synA, Activation actB, Synapse synB) {
+        Link linkA = getLatentLink(synA, synB, actA, actB);
+        if (linkA != null)
+            return linkA;
+
+        Document doc = actA.getDocument();
+        Activation oAct = synA.getOutput().createActivation(doc);
+
+        return synA.createAndInitLink(actA, oAct);
+    }
+
+    private boolean isLatent() {
+        return sourceSyn != null;
     }
 }

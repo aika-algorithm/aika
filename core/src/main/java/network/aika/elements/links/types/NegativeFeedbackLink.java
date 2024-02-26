@@ -40,7 +40,7 @@ public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynaps
 
     @Override
     protected void initInputValue() {
-        inputValue = new MaxField(this, "max-input-value", true, TOLERANCE);
+        inputValue = new MaxField(this, "max-input-value", TOLERANCE);
 
         if(input != null) {
             InhibitoryActivation.connectFields(

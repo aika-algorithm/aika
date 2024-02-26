@@ -70,7 +70,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     protected State[] states = new State[numberOfStates()];
 
     protected FieldFunction netOuterGradient;
-    protected SumField gradient;
+    protected Field gradient;
 
     protected Field updateValue;
 
@@ -217,7 +217,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return netOuterGradient;
     }
 
-    public SumField getGradient() {
+    public Field getGradient() {
         return gradient;
     }
 
@@ -276,12 +276,15 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
     public Timestamp getFired(StateType st) {
+        if(st == null)
+            return NOT_SET;
+
         return getState(st).fired;
     }
 
     @Override
     public Timestamp getFired() {
-        return getFired(INNER_FEEDBACK);
+        return getFired(PRE_FEEDBACK);
     }
 
     public boolean isFired(StateType st) {

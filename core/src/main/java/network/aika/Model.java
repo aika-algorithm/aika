@@ -247,6 +247,9 @@ public class Model extends Queue implements Writable {
     }
 
     public Config getConfig() {
+        if(config == null)
+            config = new Config();
+
         return config;
     }
 

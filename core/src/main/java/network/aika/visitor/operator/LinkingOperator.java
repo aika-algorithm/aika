@@ -63,22 +63,7 @@ public abstract class LinkingOperator implements Operator {
         return sourceAct;
     }
 
-    public Synapse getTargetSyn() {
-        return targetSyn;
-    }
-
     public abstract void relationCheck(Relation rel, Synapse relSyn, Activation toAct, Direction relDir);
-
-    public static Link latentLink(Activation actA, Synapse synA, Activation actB, Synapse synB) {
-        Link linkA = getLatentLink(synA, synB, actA, actB);
-        if (linkA != null)
-            return linkA;
-
-        Document doc = actA.getDocument();
-        Activation oAct = synA.getOutput().createActivation(doc);
-
-        return synA.createAndInitLink(actA, oAct);
-    }
 
     protected boolean checkBSMatches(Activation<?> iAct, Activation<?> oAct) {
         return iAct.getBindingSignalSlots()

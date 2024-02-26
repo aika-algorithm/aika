@@ -71,7 +71,7 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         );
         addConstant("Required: ", "" + st.getRequired());
         addConstant("Trigger: ", "" + st.getTrigger());
-        addConstant("StateType: ", "" + st.stateType());
+        addConstant("StateType: ", "" + st.outputState());
     }
 
     public static SynapsePropertyPanel create(Synapse s, Link ref) {

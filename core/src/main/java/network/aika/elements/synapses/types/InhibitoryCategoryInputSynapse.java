@@ -47,7 +47,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
         outputType = BINDING,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        stateType = PRE_FEEDBACK,
+        outputState = PRE_FEEDBACK,
         trigger = FIRED_PRE_FEEDBACK
 )
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<

@@ -77,7 +77,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     private Writable customData;
 
-    protected SumField bias = initBias();
+    protected Field bias = initBias();
 
     protected boolean allowTraining = true;
 
@@ -289,7 +289,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     public void count(A act) {
     }
 
-    protected SumField initBias() {
+    protected Field initBias() {
         return (SumField) new SumField(this, "bias", TOLERANCE)
                 .setQueued(getQueue(), TRAINING, false)
                 .addListener("onBiasModified", (fl, u) ->
@@ -425,7 +425,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return modified;
     }
 
-    public SumField getBias() {
+    public Field getBias() {
         return bias;
     }
 

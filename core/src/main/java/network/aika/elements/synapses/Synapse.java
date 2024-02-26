@@ -141,7 +141,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public SumField getOutputNet(Activation act) {
-        return act.getNet(synapseType.stateType());
+        return act.getNet(synapseType.outputState());
     }
 
     public FieldOutput getInputValue(IA input) {

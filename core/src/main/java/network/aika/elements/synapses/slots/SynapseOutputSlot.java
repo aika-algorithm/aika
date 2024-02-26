@@ -35,13 +35,16 @@ public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends Conjuncti
     protected Field outputNet;
 
     public SynapseOutputSlot(Activation act, S synapse) {
-        super(act, synapse, Direction.OUTPUT);
+        super(
+                act,
+                synapse,
+                "out-slot-" + synapse.getPInput().getId(),
+                Direction.OUTPUT
+        );
     }
 
     @Override
     public void init() {
-        super.init();
-
         outputNet = add(
                 this,
                 "outputNet",
@@ -49,7 +52,7 @@ public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends Conjuncti
                         this,
                         "outputNet-exclude",
                         synapse.getOutputNet(act),
-                        maxField
+                        this
                 ),
                 synapse.getWeight()
         );
@@ -60,7 +63,7 @@ public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends Conjuncti
     }
 
     public void connectToActivation() {
-        linkAndConnect(maxField, synapse.getOutputNet(act));
+        linkAndConnect(this, synapse.getOutputNet(act));
     }
 
     @Override
@@ -68,10 +71,5 @@ public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends Conjuncti
         super.disconnect();
 
         outputNet.disconnectAndUnlinkInputs(false);
-    }
-
-    @Override
-    protected String getLabel() {
-        return "out-slot-" + synapse.getPInput().getId();
     }
 }

@@ -37,7 +37,7 @@ import static network.aika.utils.Utils.doubleToString;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Field implements FieldInput, FieldOutput, Writable {
+public abstract class Field<F extends FieldLink> implements FieldInput<F>, FieldOutput, Writable {
 
     private static double MIN_TOLERANCE = 0.0000000001;
 
@@ -171,7 +171,7 @@ public abstract class Field implements FieldInput, FieldOutput, Writable {
     }
 
     @Override
-    public void receiveUpdate(FieldLink fl, double u) {
+    public void receiveUpdate(F fl, double u) {
         if(blocked)
             return;
 

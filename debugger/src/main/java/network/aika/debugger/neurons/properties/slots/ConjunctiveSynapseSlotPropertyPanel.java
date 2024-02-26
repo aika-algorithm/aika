@@ -33,7 +33,7 @@ public class ConjunctiveSynapseSlotPropertyPanel<S extends ConjunctiveSynapseSlo
     public void initSlotProperties(S s) {
         super.initSlotProperties(s);
 
-        addField(s.getMaxField());
+        addField(s);
     }
 
     public static ConjunctiveSynapseSlotPropertyPanel create(ConjunctiveSynapseSlot s) {

@@ -117,6 +117,10 @@ public class State implements FieldObject {
         fired = getDocument().getCurrentTimestamp();
     }
 
+    public void setFired(Timestamp f) {
+        fired = f;
+    }
+
     public boolean isFired() {
         return isTrue(value, true);
     }

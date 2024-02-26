@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractFunction extends Field {
+public abstract class AbstractFunction extends Field<FieldLink> {
 
     private FieldLink[] inputs;
 
@@ -47,7 +47,7 @@ public abstract class AbstractFunction extends Field {
     }
 
     @Override
-    public int getNextArg() {
+    public int size() {
         throw new UnsupportedOperationException();
     }
 

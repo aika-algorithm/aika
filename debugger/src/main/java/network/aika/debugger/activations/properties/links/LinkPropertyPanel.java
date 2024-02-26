@@ -69,7 +69,7 @@ public class LinkPropertyPanel<E extends Link> extends AbstractPropertyPanel {
         Activation oAct = l.getOutput();
 
         addField(oAct.getValue());
-        addField(oAct.getNet(l.feedbackMode()));
+        addField(oAct.getNet(l.outputState()));
     }
 
     public void initTrainingSection(E l) {

@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class InputField extends Field {
+public class InputField extends Field<FieldLink> {
 
     public InputField(FieldObject ref, String label, double value) {
         super(ref, label, null);
@@ -45,7 +45,7 @@ public class InputField extends Field {
     }
 
     @Override
-    public int getNextArg() {
+    public int size() {
         return 0;
     }
 }

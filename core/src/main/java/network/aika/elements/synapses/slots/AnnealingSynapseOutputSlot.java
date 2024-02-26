@@ -51,7 +51,7 @@ public class AnnealingSynapseOutputSlot extends SynapseOutputSlot<ConjunctiveSyn
                 "annealed input value",
                 ((ConjunctiveActivation)act).getAnnealingValue(annealingType),
                 synapse.getWeightForAnnealing(),
-                maxField
+                this
         );
     }
 

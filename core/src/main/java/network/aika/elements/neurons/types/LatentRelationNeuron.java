@@ -21,6 +21,7 @@ import network.aika.Document;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.relations.Relation;
+import network.aika.fields.Field;
 import network.aika.fields.SumField;
 import network.aika.elements.activations.types.LatentRelationActivation;
 
@@ -64,7 +65,7 @@ public class LatentRelationNeuron extends BindingNeuron {
     }
 
     @Override
-    protected SumField initBias() {
+    protected Field initBias() {
         return new SumField(this, "bias", TOLERANCE)
                 .setQueued(getQueue(), TRAINING, false);
     }

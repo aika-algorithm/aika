@@ -25,13 +25,13 @@ import network.aika.elements.synapses.slots.SynapseInputSlot;
 import network.aika.elements.synapses.slots.SynapseOutputSlot;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
-import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.ArgumentFieldLink;
 import network.aika.visitor.Visitor;
 
 import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.fields.link.AbstractFieldLink.updateConnected;
-import static network.aika.fields.link.FieldLink.linkAndConnect;
+import static network.aika.fields.link.ArgumentFieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.visitor.operator.BindingSignalCollector.retrieveBindingSignal;
 import static network.aika.visitor.operator.SubsumesOperator.subsumes;
@@ -43,7 +43,7 @@ import static network.aika.visitor.operator.SubsumesOperator.subsumes;
 public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>>
         extends Link<S, IA, OA, SynapseInputSlot, SynapseOutputSlot> {
 
-    protected FieldLink inputSlotFL;
+    protected ArgumentFieldLink<ConjunctiveLink> inputSlotFL;
 
     private FieldOutput weightUpdatePosCase;
     private FieldOutput weightUpdateNegCase;

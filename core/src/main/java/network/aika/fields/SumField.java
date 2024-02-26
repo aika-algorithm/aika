@@ -40,7 +40,7 @@ public class SumField extends Field {
     }
 
     @Override
-    public int getNextArg() {
+    public int size() {
         return inputs.size();
     }
 
