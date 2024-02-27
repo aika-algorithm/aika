@@ -21,6 +21,8 @@ import network.aika.elements.links.types.InputObjectLink;
 import network.aika.elements.links.types.PatternLink;
 import network.aika.elements.synapses.slots.SynapseInputSlot;
 import network.aika.elements.synapses.slots.SynapseOutputSlot;
+import network.aika.enums.direction.Direction;
+import network.aika.queue.steps.LinkUpdate;
 
 
 /**
@@ -46,6 +48,14 @@ public class ConjunctiveLinkPropertyPanel<L extends ConjunctiveLink<?, ?, ?>> ex
                             "--"
             );
         }
+
+        LinkUpdate lu = l.getLinkUpdateStep(Direction.INPUT);
+        addConstant(
+                "Link Update: ",
+                "CS:" + lu.getCurrentState() +
+                        "TS:" + lu.getTargetState() +
+                        " isQueued:" + lu.isQueued()
+        );
     }
 
     @Override
@@ -62,6 +72,14 @@ public class ConjunctiveLinkPropertyPanel<L extends ConjunctiveLink<?, ?, ?>> ex
                             "--"
             );
         }
+
+        LinkUpdate lu = l.getLinkUpdateStep(Direction.INPUT);
+        addConstant(
+                "Link Update: ",
+                "CS:" + lu.getCurrentState() +
+                        "TS:" + lu.getTargetState() +
+                        " isQueued:" + lu.isQueued()
+        );
     }
 
     public void initTrainingSection(L l) {

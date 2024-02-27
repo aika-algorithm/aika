@@ -98,7 +98,7 @@ public abstract class Link<
         getDocument().onElementEvent(CREATE, this);
     }
 
-    private LinkUpdate getLinkUpdateStep(Direction dir) {
+    public LinkUpdate getLinkUpdateStep(Direction dir) {
         return dir == INPUT ?
                 inputStep :
                 outputStep;
@@ -106,7 +106,7 @@ public abstract class Link<
 
     public void setState(Direction dir, boolean state) {
         getLinkUpdateStep(dir)
-                .setState(state);
+                .setTargetState(state);
     }
 
     public boolean isActive() {

@@ -102,6 +102,8 @@ public class Queue {
     public synchronized void process(Predicate<Step> filter) {
         while (!queue.isEmpty()) {
             currentStep = queue.pollFirstEntry().getValue();
+            currentStep.setQueued(false);
+
             queueEvent(BEFORE, currentStep);
 
             timestampOnProcess = getCurrentTimestamp();

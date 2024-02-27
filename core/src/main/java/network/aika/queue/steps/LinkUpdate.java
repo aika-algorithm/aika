@@ -36,7 +36,9 @@ public class LinkUpdate extends ElementStep<Link> {
 
     private Direction dir;
 
-    private boolean state;
+    private boolean currentState;
+    private boolean targetState;
+
 
     public LinkUpdate(Link l, Direction dir) {
         super(l);
@@ -44,13 +46,11 @@ public class LinkUpdate extends ElementStep<Link> {
         this.dir = dir;
     }
 
-    public void setState(boolean state) {
-        if(this.state != state) {
-            this.state = state;
+    public void setTargetState(boolean targetState) {
+        this.targetState = targetState;
 
-            if(!isQueued)
-                Step.add(this);
-        }
+        if(!isQueued && currentState != targetState)
+            Step.add(this);
     }
 
     @Override
@@ -66,14 +66,16 @@ public class LinkUpdate extends ElementStep<Link> {
 
     @Override
     public void process() {
+        currentState = targetState;
+
         Link l = getElement();
         if(dir == Direction.INPUT) {
-            updateConnected(l.getInputValueLink(), state, true);
+            updateConnected(l.getInputValueLink(), targetState, true);
 
             l.checkPrimarySuppression();
         }
 
-        l.retrieveAndConnectBindingSignals(state);
+        l.retrieveAndConnectBindingSignals(targetState);
 
         l.getDocument().onElementEvent(EventType.UPDATE, l);
     }
@@ -83,8 +85,16 @@ public class LinkUpdate extends ElementStep<Link> {
         return Phase.LINK_UPDATE;
     }
 
+    public boolean getCurrentState() {
+        return currentState;
+    }
+
+    public boolean getTargetState() {
+        return targetState;
+    }
+
     @Override
     public String toString() {
-        return super.toString() + " " + dir + " state:" + state;
+        return super.toString() + " " + dir + " state:" + targetState;
     }
 }
