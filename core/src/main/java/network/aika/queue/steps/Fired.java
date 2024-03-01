@@ -22,10 +22,10 @@ import network.aika.queue.Phase;
 import network.aika.queue.Queue;
 import network.aika.queue.Step;
 import network.aika.queue.keys.FieldQueueKey;
+import network.aika.utils.ApproximateComparisonValueUtil;
 import network.aika.utils.Utils;
 
 import static network.aika.queue.Phase.FIRED;
-import static network.aika.queue.keys.FieldQueueKey.SORT_VALUE_PRECISION;
 
 /**
  *
@@ -64,20 +64,11 @@ public class Fired extends Step<State> {
                 .forEach(bsSlot -> bsSlot.onFired(s));
 
         Counting.add(s.getActivation());
-/*
-        if (act.getNeuron().isAbstract() &&
-                act.getModel().getConfig().isMetaInstantiationEnabled())
-            Instantiation.add(act);
- */
     }
 
     public void updateNet(double net) {
         this.net = net;
-        sortValue = convertSortValue(net);
-    }
-
-    private int convertSortValue(double newSortValue) {
-        return (int) (SORT_VALUE_PRECISION * newSortValue);
+        sortValue = ApproximateComparisonValueUtil.convert(net);
     }
 
     @Override

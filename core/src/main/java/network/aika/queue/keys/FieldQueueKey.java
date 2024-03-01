@@ -27,8 +27,6 @@ import java.util.Comparator;
  */
 public class FieldQueueKey extends QueueKey {
 
-    public static final double SORT_VALUE_PRECISION = 1000.0;
-
     Comparator<FieldQueueKey> COMPARATOR = Comparator
             .comparingInt(k -> -k.sortValue);
 

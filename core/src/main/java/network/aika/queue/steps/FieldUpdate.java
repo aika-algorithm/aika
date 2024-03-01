@@ -17,15 +17,14 @@
 package network.aika.queue.steps;
 
 import network.aika.elements.Timestamp;
-import network.aika.elements.Element;
 import network.aika.fields.FieldObject;
 import network.aika.fields.QueueInterceptor;
 import network.aika.queue.Phase;
 import network.aika.queue.Queue;
 import network.aika.queue.Step;
 import network.aika.queue.keys.FieldQueueKey;
+import network.aika.utils.ApproximateComparisonValueUtil;
 
-import static network.aika.queue.keys.FieldQueueKey.SORT_VALUE_PRECISION;
 import static network.aika.utils.Utils.*;
 
 /**
@@ -53,7 +52,7 @@ public class FieldUpdate<E extends FieldObject> extends Step<E> {
     }
 
     private void updateSortValue(double delta) {
-        int newSortValue = convertSortValue(delta);
+        int newSortValue = ApproximateComparisonValueUtil.convert(delta);
         if(Math.abs(sortValue - newSortValue) == 0)
             return;
 
@@ -64,10 +63,6 @@ public class FieldUpdate<E extends FieldObject> extends Step<E> {
             q.addStep(this);
         } else
             sortValue = newSortValue;
-    }
-
-    private int convertSortValue(double newSortValue) {
-        return (int) (SORT_VALUE_PRECISION * newSortValue);
     }
 
     public int getSortValue() {

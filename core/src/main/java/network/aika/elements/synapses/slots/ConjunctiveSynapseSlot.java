@@ -21,11 +21,9 @@ import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.AbstractMaxField;
-import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.ArgumentFieldLink;
 import network.aika.queue.Queue;
-import network.aika.queue.steps.FieldUpdate;
-import network.aika.queue.steps.LinkUpdate;
+import network.aika.utils.ApproximateComparisonValueUtil;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -33,8 +31,7 @@ import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.comparingDouble;
+import static java.util.Comparator.*;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -96,7 +93,9 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
 
     @Override
     public Comparator<ArgumentFieldLink<L>> getComparator() {
-        Comparator<ArgumentFieldLink<L>> valueComp = comparingDouble(AbstractFieldLink::getUpdatedInputValue);
+        Comparator<ArgumentFieldLink<L>> valueComp = comparingInt(fl ->
+                ApproximateComparisonValueUtil.convert(fl.getUpdatedInputValue())
+        );
         Comparator<ArgumentFieldLink<L>> firedComp = comparing(fl -> fl.getArgumentRef().getFired());
         return valueComp.thenComparing(firedComp.reversed());
     }

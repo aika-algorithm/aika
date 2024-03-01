@@ -16,8 +16,8 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.FieldLink;
+import network.aika.utils.ApproximateComparisonValueUtil;
 
 import java.util.Comparator;
 import java.util.stream.Stream;
@@ -32,8 +32,9 @@ public abstract class AbstractMaxField<F extends FieldLink> extends Field<F> {
 
     private MaxFieldListener<F> sectionChangeListener;
 
-    public static final Comparator<? extends FieldLink> INPUT_VALUE_COMPARATOR = Comparator.comparingDouble(AbstractFieldLink::getUpdatedInputValue);
-
+    public static final Comparator<? extends FieldLink> INPUT_VALUE_COMPARATOR = Comparator.comparingInt(fl ->
+            ApproximateComparisonValueUtil.convert(fl.getUpdatedInputValue())
+    );
 
     public AbstractMaxField(FieldObject ref, String label, Double tolerance) {
         super(ref, label, tolerance);

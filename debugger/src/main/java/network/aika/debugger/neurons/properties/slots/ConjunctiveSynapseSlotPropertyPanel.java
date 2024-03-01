@@ -17,13 +17,12 @@
 package network.aika.debugger.neurons.properties.slots;
 
 import network.aika.elements.links.ConjunctiveLink;
-import network.aika.elements.links.Link;
 import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
 import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 import network.aika.fields.link.ArgumentFieldLink;
+import network.aika.utils.ApproximateComparisonValueUtil;
 
 import java.util.Collection;
-import java.util.stream.Stream;
 
 
 /**
@@ -50,7 +49,7 @@ public class ConjunctiveSynapseSlotPropertyPanel<S extends ConjunctiveSynapseSlo
         inputs.stream().limit(10)
                 .forEach(in ->
                         addConstant("",
-                                "iv:" + in.getUpdatedInputValue() +
+                                "iv:" + ApproximateComparisonValueUtil.convert(in.getUpdatedInputValue()) +
                                         " f:" +  in.getArgumentRef().getFired() +
                                         " l:" + s.getDirection().invert().getActivation(in.getArgumentRef())
                         )
