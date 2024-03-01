@@ -17,7 +17,6 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
@@ -33,7 +32,6 @@ import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.fields.link.AbstractFieldLink.updateConnected;
 import static network.aika.fields.link.ArgumentFieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
-import static network.aika.visitor.operator.BindingSignalCollector.retrieveBindingSignal;
 import static network.aika.visitor.operator.SubsumesOperator.subsumes;
 
 
@@ -55,7 +53,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     }
 
     @Override
-    public void onOutputBindingSignalChange(Scope bsType, PatternActivation nBS, boolean state) {
+    public void onOutputBindingSignalUpdate(Scope bsType, PatternActivation nBS, boolean state) {
         if(input == null)
             return;
 
@@ -63,8 +61,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
         if(inputBSType == null)
             return;
 
-        PatternActivation bs = retrieveBindingSignal(input, inputBSType);
-
+        PatternActivation bs = input.getBindingSignal(inputBSType);
         if(bs == null)
             return;
 

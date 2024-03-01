@@ -48,14 +48,6 @@ public class ConjunctiveLinkPropertyPanel<L extends ConjunctiveLink<?, ?, ?>> ex
                             "--"
             );
         }
-
-        LinkUpdate lu = l.getLinkUpdateStep(Direction.INPUT);
-        addConstant(
-                "Link Update: ",
-                "CS:" + lu.getCurrentState() +
-                        "TS:" + lu.getTargetState() +
-                        " isQueued:" + lu.isQueued()
-        );
     }
 
     @Override
@@ -72,14 +64,6 @@ public class ConjunctiveLinkPropertyPanel<L extends ConjunctiveLink<?, ?, ?>> ex
                             "--"
             );
         }
-
-        LinkUpdate lu = l.getLinkUpdateStep(Direction.INPUT);
-        addConstant(
-                "Link Update: ",
-                "CS:" + lu.getCurrentState() +
-                        "TS:" + lu.getTargetState() +
-                        " isQueued:" + lu.isQueued()
-        );
     }
 
     public void initTrainingSection(L l) {

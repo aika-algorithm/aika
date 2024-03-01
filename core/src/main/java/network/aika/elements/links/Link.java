@@ -24,6 +24,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.Timestamp;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.slots.SynapseSlot;
@@ -39,12 +40,12 @@ import network.aika.visitor.Visitor;
 import java.util.stream.Stream;
 
 import static network.aika.debugger.EventType.CREATE;
+import static network.aika.elements.links.BSLinkEvent.ON_CREATE;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.link.ArgumentFieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.fields.ThresholdOperator.Type.ABOVE;
-import static network.aika.visitor.operator.BindingSignalCollector.retrieveBindingSignal;
 
 /**
  *
@@ -129,7 +130,7 @@ public abstract class Link<
         return synapse.getOutputType();
     }
 
-    public void onOutputBindingSignalChange(Scope bsType, PatternActivation nBS, boolean state) {
+    public void onOutputBindingSignalUpdate(Scope bsType, PatternActivation nBS, boolean state) {
     }
 
     public void visit(Visitor v, Scope s, int depth) {
@@ -241,26 +242,43 @@ public abstract class Link<
             linkOutput();
     }
 
-    public void retrieveAndConnectBindingSignals(boolean state) {
-        if(output.getBindingSignalSlots().findAny().isEmpty())
+    public void updateBindingSignals(BSLinkEvent e, boolean state) {
+        if(input == null)
             return;
 
-        output.getBindingSignalSlots()
-                .filter(bsSlot -> bsSlot.isFeedback() || isActive())
-                .forEach(bsSlot ->
-                        propagateBindingSignal(state, bsSlot)
-                );
+        input.getBindingSignalSlots()
+                .filter(SingleBSSlot.class::isInstance)
+                        .forEach(iBSSlot ->
+                                propagateBindingSignal(
+                                        e,
+                                        (SingleBSSlot) iBSSlot,
+                                        state
+                                )
+        );
     }
 
-    private void propagateBindingSignal(boolean state, BindingSignalSlot bsSlot) {
-        PatternActivation bs = retrieveBindingSignal(this, bsSlot.getType());
-        if(bs != null)
-            bsSlot.connectBindingSignal(bs, state);
+    private void propagateBindingSignal(BSLinkEvent e, SingleBSSlot iBSSlot, boolean state) {
+        Stream<BindingSignalSlot> slots = synapse.transitionBindingSignal(output, iBSSlot.getType());
+
+        slots
+                .filter(oBSSlot -> oBSSlot.isFeedback() == e.isFeedback())
+                .forEach(oBSSlot ->
+                        oBSSlot.updateBindingSignal(
+                                iBSSlot.getBindingSignal(),
+                                state
+                        )
+                );
     }
 
     public void propagateBindingSignal(PatternActivation bs, Scope is, boolean state) {
         Stream<BindingSignalSlot> slots = synapse.transitionBindingSignal(output, is);
-        slots.forEach(bsSlot -> bsSlot.connectBindingSignal(bs, state));
+
+        if(!isActive())
+            slots = slots.filter(BindingSignalSlot::isFeedback);
+
+        slots.forEach(oBSSlot ->
+                oBSSlot.updateBindingSignal(bs, state)
+        );
     }
 
     public Field getWeightedInput() {
@@ -322,7 +340,7 @@ public abstract class Link<
     public void linkInput() {
         synInputSlot = (SI) input.registerOutputSlot(synapse);
         synInputSlot.addLink(this);
-        retrieveAndConnectBindingSignals(true);
+        updateBindingSignals(ON_CREATE, true);
     }
 
     public void linkOutput() {

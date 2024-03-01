@@ -18,7 +18,6 @@ package network.aika.elements.activations.bsslots;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
-import network.aika.enums.Scope;
 
 import java.util.stream.Stream;
 
@@ -37,10 +36,10 @@ public class SingleBSSlot extends BindingSignalSlot {
     }
 
     @Override
-    protected void onBindingSignalSlotFilled(PatternActivation bs) {
-        super.onBindingSignalSlotFilled(bs);
+    protected void onBindingSignalSlotUpdate(PatternActivation bs, boolean state) {
+        super.onBindingSignalSlotUpdate(bs, state);
 
-        act.propagateBindingSignal(getType(), bs, true);
+        act.propagateBindingSignal(getType(), bs, state);
     }
 
     @Override
@@ -65,7 +64,7 @@ public class SingleBSSlot extends BindingSignalSlot {
     }
 
     @Override
-    public void connectBindingSignal(PatternActivation bs, boolean state) {
+    public void updateBindingSignal(PatternActivation bs, boolean state) {
         if(bs == null)
             return;
 
@@ -80,15 +79,15 @@ public class SingleBSSlot extends BindingSignalSlot {
                 this.bindingSignal = null;
         }
 
-        if(state && !lastState)
-            onBindingSignalSlotFilled(bindingSignal);
+        if(state != lastState) {
+            onBindingSignalSlotUpdate(bindingSignal, state);
 
-        if(state != lastState)
             act.getInputLinks()
                     .filter(l -> l.getSynapse().getRequired().getTo() == getType())
                     .forEach(l ->
-                            l.onOutputBindingSignalChange(getType(), bindingSignal, state)
+                            l.onOutputBindingSignalUpdate(getType(), bindingSignal, state)
                     );
+        }
     }
 
     @Override

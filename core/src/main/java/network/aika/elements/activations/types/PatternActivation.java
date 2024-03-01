@@ -18,19 +18,14 @@ package network.aika.elements.activations.types;
 
 import network.aika.Document;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.activations.State;
-import network.aika.elements.activations.StateType;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.enums.sign.Sign;
-import network.aika.fields.link.FieldLink;
 
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
 import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.Fields.*;
-import static network.aika.queue.Phase.INFERENCE;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -60,7 +55,7 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
         super.initBindingSignalSlots();
 
         getBindingSignalSlot(SAME)
-                .connectBindingSignal(this, true);
+                .updateBindingSignal(this, true);
     }
 
     @Override

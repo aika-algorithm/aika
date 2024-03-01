@@ -19,7 +19,7 @@ package network.aika.elements.links;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
-import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.enums.direction.Direction;
 
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.mul;
@@ -32,6 +32,9 @@ public abstract class DisjunctiveLink<S extends DisjunctiveSynapse, IA extends A
 
     public DisjunctiveLink(S s, IA input, OA output) {
         super(s, input, output);
+
+        setState(Direction.INPUT, true);
+        setState(Direction.OUTPUT, true);
     }
 
     @Override

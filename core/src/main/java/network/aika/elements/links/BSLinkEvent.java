@@ -16,36 +16,21 @@
  */
 package network.aika.elements.links;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.synapses.CategorySynapse;
-import network.aika.elements.synapses.Synapse;
-
 /**
  *
  * @author Lukas Molzberger
  */
-public interface CategoryInputLink {
+public enum BSLinkEvent {
+    ON_CREATE(true),
+    ON_STATE_CHANGE(false);
 
-    CategoryActivation getInput();
+    private boolean isFeedback;
 
-    Activation getOutput();
+    BSLinkEvent(boolean isFeedback) {
+        this.isFeedback = isFeedback;
+    }
 
-    Synapse getSynapse();
-
-    CategorySynapse createCategorySynapse();
-
-    default void instantiateTemplate(CategoryActivation iAct, Activation oAct, Link template) {
-        if(iAct == null || oAct == null)
-            return;
-
-        Link l = iAct.getInputLink(oAct, getSynapse().getSynapseId());
-        if(l != null)
-            return;
-
-        CategorySynapse s = createCategorySynapse();
-        s.initFromTemplate(oAct.getNeuron(), iAct.getNeuron(), getSynapse());
-
-        s.createLinkFromTemplate(oAct, iAct, template);
+    public boolean isFeedback() {
+        return isFeedback;
     }
 }

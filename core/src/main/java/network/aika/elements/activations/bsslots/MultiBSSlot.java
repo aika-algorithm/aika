@@ -18,7 +18,6 @@ package network.aika.elements.activations.bsslots;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
-import network.aika.enums.Scope;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -53,11 +52,12 @@ public class MultiBSSlot extends BindingSignalSlot {
     }
 
     @Override
-    public void connectBindingSignal(PatternActivation bs, boolean state) {
-        if (state) {
+    public void updateBindingSignal(PatternActivation bs, boolean state) {
+        if (state)
             bindingSignals.add(bs);
-            onBindingSignalSlotFilled(bs);
-        } else
+        else
             bindingSignals.remove(bs);
+
+        onBindingSignalSlotUpdate(bs, state);
     }
 }

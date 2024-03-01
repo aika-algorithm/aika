@@ -156,7 +156,8 @@ public class TopicModel extends TemplateModel<TopicModel> {
         );
 
         topicBN.makeAbstract()
-                .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()));
+                .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()))
+                .adjustBias();
 
         addPositiveFeedbackLoop(
                 topicBN,

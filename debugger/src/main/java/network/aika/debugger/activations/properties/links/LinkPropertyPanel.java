@@ -20,6 +20,8 @@ import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.*;
 import network.aika.elements.links.types.InhibitoryLink;
+import network.aika.enums.direction.Direction;
+import network.aika.queue.steps.LinkUpdate;
 
 
 /**
@@ -52,12 +54,28 @@ public class LinkPropertyPanel<E extends Link> extends AbstractPropertyPanel {
         addConstant("Type: ", "" + l.getInputType());
         addConstant("Activation: ", getShortString(l.getInput()));
         addConstant("IsActive: ", "" + l.isInputSideActive());
+
+        LinkUpdate lu = l.getLinkUpdateStep(Direction.INPUT);
+        addConstant(
+                "Link Update: ",
+                "CS:" + lu.getCurrentState() +
+                        "TS:" + lu.getTargetState() +
+                        " isQueued:" + lu.isQueued()
+        );
     }
 
     public void initOutputIdentitySection(E l) {
         addConstant("Type: ", "" + l.getOutputType());
         addConstant("Activation: ", getShortString(l.getOutput()));
         addConstant("IsActive: ", "" + l.isOutputSideActive());
+
+        LinkUpdate lu = l.getLinkUpdateStep(Direction.OUTPUT);
+        addConstant(
+                "Link Update: ",
+                "CS:" + lu.getCurrentState() +
+                        "TS:" + lu.getTargetState() +
+                        " isQueued:" + lu.isQueued()
+        );
     }
 
     public void initInferenceSection(E l) {

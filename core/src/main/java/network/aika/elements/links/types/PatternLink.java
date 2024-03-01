@@ -55,7 +55,7 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
     public void init() {
         if(input != null)
             input.getBindingSignalSlot(SAME)
-                    .connectBindingSignal(output, true);
+                    .updateBindingSignal(output, true);
     }
 
     @Override

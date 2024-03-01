@@ -67,9 +67,12 @@ public abstract class BindingSignalSlot {
 
     public abstract Stream<PatternActivation> getBindingSignals();
 
-    public abstract void connectBindingSignal(PatternActivation bs, boolean state);
+    public abstract void updateBindingSignal(PatternActivation bs, boolean state);
 
-    protected void onBindingSignalSlotFilled(PatternActivation bs) {
+    protected void onBindingSignalSlotUpdate(PatternActivation bs, boolean state) {
+        if(!state)
+            return;
+
         Linking.add(act, getType(), bs, NOT_FIRED);
 
         if(act.isFired(PRE_FEEDBACK))
