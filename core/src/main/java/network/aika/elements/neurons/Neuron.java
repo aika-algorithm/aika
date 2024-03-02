@@ -294,7 +294,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                 .setQueued(getQueue(), TRAINING, false)
                 .addListener("onBiasModified", (fl, u) ->
                         setModified()
-                );
+                , true);
     }
 
     public void setAllowTraining(boolean allowTraining) {
