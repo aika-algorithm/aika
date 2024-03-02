@@ -254,6 +254,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             throw new RuntimeException(e);
         }
 
+        input.setModified();
+        output.setModified();
         s.initFromTemplate(input, output, this);
         return s;
     }

@@ -91,7 +91,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     public Neuron(NeuronProvider np) {
         provider = np;
-        setModified();
         setBias(0.0);
     }
 
@@ -206,7 +205,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
+        n.setModified();
         n.initFromTemplate(this);
         return n;
     }
@@ -370,22 +369,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
                 .filter(predicate)
                 .findFirst()
                 .orElse(null);
-    }
-
-    public void addInputSynapse(Synapse s) {
-        setModified();
-    }
-
-    public void removeInputSynapse(Synapse s) {
-        setModified();
-    }
-
-    public void addOutputSynapse(Synapse s) {
-        setModified();
-    }
-
-    public void removeOutputSynapse(Synapse s) {
-        setModified();
     }
 
     public void delete() {
