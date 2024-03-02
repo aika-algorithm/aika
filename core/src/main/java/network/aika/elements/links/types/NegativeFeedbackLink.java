@@ -20,6 +20,7 @@ import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.enums.Scope;
+import network.aika.enums.direction.Direction;
 import network.aika.fields.*;
 import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
 import network.aika.visitor.Visitor;
@@ -36,6 +37,13 @@ public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynaps
 
     public NegativeFeedbackLink(NegativeFeedbackSynapse s, InhibitoryActivation input, BindingActivation output) {
         super(s, input, output);
+
+        super.setState(Direction.INPUT, true);
+        super.setState(Direction.OUTPUT, true);
+    }
+
+    @Override
+    public void setState(Direction dir, boolean state) {
     }
 
     @Override

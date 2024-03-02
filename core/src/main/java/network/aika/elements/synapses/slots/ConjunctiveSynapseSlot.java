@@ -50,25 +50,25 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
     protected NavigableMap<LinkKey, ArgumentFieldLink<L>> links;
 
     public ConjunctiveSynapseSlot(Activation act, S synapse, String label, Direction dir) {
-        super(null,
-                label,
-                TOLERANCE,
-                (si, state) -> {
-                    if (si == null)
-                        return;
-
-                    si.getArgumentRef()
-                            .setState(
-                                    dir,
-                                    state
-                            );
-                });
+        super(null, label, TOLERANCE);
 
         this.act = act;
         this.synapse = synapse;
         this.dir = dir;
 
         links = new TreeMap<>();
+    }
+
+    @Override
+    protected void updateSelectedInput(ArgumentFieldLink<L> si, boolean state) {
+        if (si == null)
+            return;
+
+        si.getArgumentRef()
+                .setState(
+                        dir,
+                        state
+                );
     }
 
     @Override

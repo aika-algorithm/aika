@@ -16,7 +16,6 @@
  */
 package network.aika.elements.synapses.slots;
 
-import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.DisjunctiveSynapse;

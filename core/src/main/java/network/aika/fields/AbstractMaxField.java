@@ -30,8 +30,6 @@ public abstract class AbstractMaxField<F extends FieldLink> extends Field<F> {
 
     private F selectedInput;
 
-    private MaxFieldListener<F> sectionChangeListener;
-
     public static final Comparator<? extends FieldLink> INPUT_VALUE_COMPARATOR = Comparator.comparingInt(fl ->
             ApproximateComparisonValueUtil.convert(fl.getUpdatedInputValue())
     );
@@ -40,10 +38,8 @@ public abstract class AbstractMaxField<F extends FieldLink> extends Field<F> {
         super(ref, label, tolerance);
     }
 
-    public AbstractMaxField(FieldObject ref, String label, Double tolerance, MaxFieldListener<F> scl) {
-        this(ref, label, tolerance);
+    protected void updateSelectedInput(F si, boolean state) {
 
-        this.sectionChangeListener = scl;
     }
 
     public F getSelectedInput() {
@@ -83,9 +79,9 @@ public abstract class AbstractMaxField<F extends FieldLink> extends Field<F> {
 
         double update = maxInputValue - value;
 
-        if(sectionChangeListener != null && lastSelectedInput != selectedInput) {
-            sectionChangeListener.updateSelectedInput(lastSelectedInput, false);
-            sectionChangeListener.updateSelectedInput(selectedInput, true);
+        if(lastSelectedInput != selectedInput) {
+            updateSelectedInput(lastSelectedInput, false);
+            updateSelectedInput(selectedInput, true);
         }
 
         super.triggerUpdate(update);
