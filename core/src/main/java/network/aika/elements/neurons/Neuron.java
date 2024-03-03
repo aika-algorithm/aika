@@ -25,6 +25,8 @@ import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
+import network.aika.enums.Scope;
+import network.aika.enums.Trigger;
 import network.aika.exceptions.MissingInputCategoryNeuron;
 import network.aika.exceptions.NeuronExistsTwiceException;
 import network.aika.fields.*;
@@ -320,6 +322,17 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return getOutputSynapses().stream();
     }
 
+    public List<? extends Synapse> getOutputSynapsesByTriggerAndBSType(Trigger t, Scope bsType) {
+        provider.lock.acquireReadLock();
+        List<? extends Synapse> os = getOutputSynapsesAsStream()
+                .filter(s ->
+                        s.getTrigger().match(t) &&
+                                s.getRequired().getFrom() == bsType
+                ).toList();
+        provider.lock.releaseReadLock();
+        return os;
+    }
+
     public Collection<? extends Synapse> getOutputSynapses() {
         return provider.outputSynapses.values();
     }
@@ -345,9 +358,12 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public <IS extends Synapse> IS getInputSynapseByType(Class<IS> synapseType) {
-        return getInputSynapsesByType(synapseType)
+        provider.lock.acquireReadLock();
+        IS is = getInputSynapsesByType(synapseType)
                 .findAny()
                 .orElse(null);
+        provider.lock.releaseReadLock();
+        return is;
     }
 
     public <IS extends Synapse> Stream<IS> getInputSynapsesByType(Class<IS> synapseType) {
@@ -357,24 +373,32 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public <OS> OS getOutputSynapseByType(Class<OS> synapseType) {
-        return getProvider().getOutputSynapses()
+        provider.lock.acquireReadLock();
+        OS os = getProvider().getOutputSynapses()
                 .filter(synapseType::isInstance)
                 .map(synapseType::cast)
                 .findAny()
                 .orElse(null);
+        provider.lock.releaseReadLock();
+        return os;
     }
 
     protected Synapse selectInputSynapse(Predicate<? super Synapse> predicate) {
-        return getInputSynapsesAsStream()
+        provider.lock.acquireReadLock();
+        Synapse s = getInputSynapsesAsStream()
                 .filter(predicate)
                 .findFirst()
                 .orElse(null);
+        provider.lock.releaseReadLock();
+        return s;
     }
 
     public void delete() {
         log.info("Delete Neuron: " + this);
+        provider.lock.acquireReadLock();
         provider.getInputSynapses().forEach(Synapse::unlinkInput);
         provider.getOutputSynapses().forEach(Synapse::unlinkOutput);
+        provider.lock.releaseReadLock();
     }
 
     public Writable getCustomData() {
@@ -442,6 +466,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     @Override
     public void write(DataOutput out) throws IOException {
+        provider.lock.acquireReadLock();
+
         out.writeUTF(getClass().getCanonicalName());
 
         out.writeBoolean(label != null);
@@ -484,6 +510,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
             initParams.write(out);
 
         out.writeBoolean(getProvider().isPersistent());
+
+        provider.lock.releaseReadLock();
     }
 
     public static Neuron read(DataInput in, NeuronProvider np) throws Exception {
@@ -496,6 +524,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
+        provider.lock.acquireWriteLock();
+
         if(in.readBoolean())
             label = in.readUTF();
 
@@ -531,6 +561,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
         if(in.readBoolean())
             setPersistent(true);
+
+        provider.lock.releaseWriteLock();
     }
 
     @Override

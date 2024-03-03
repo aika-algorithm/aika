@@ -89,20 +89,16 @@ public class Linking extends ElementStep<Activation> {
 
         n.wakeupPropagable();
 
-        n.getOutputSynapsesAsStream()
-                .filter(s ->
-                        s.getTrigger().match(trigger) &&
-                                s.getRequired().getFrom() == bsType
-                )
-                .toList()
+        n.getOutputSynapsesByTriggerAndBSType(trigger, bsType)
                 .forEach(s -> {
-                    if(bindingSignal != null) {
-                        linkOutgoing(s);
-                        latentLinkingExpand(s);
-                    }
+                            if (bindingSignal != null) {
+                                linkOutgoing(s);
+                                latentLinkingExpand(s);
+                            }
 
-                    s.propagate(act);
-                });
+                            s.propagate(act);
+                        }
+                );
     }
 
     private void linkIncoming(Synapse targetSyn) {
