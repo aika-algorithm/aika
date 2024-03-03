@@ -16,7 +16,6 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.suspension.InMemorySuspensionCallback;
 import network.aika.suspension.SuspensionMode;
@@ -77,10 +76,12 @@ public class Model extends Queue implements Writable {
         return suspensionCallback.createId();
     }
 
-    public Long getLowestThoughtId() {
-        return documents.isEmpty() ?
-                null :
-                documents.firstKey();
+    public Long getLowestDocumentId() {
+        try {
+            return documents.firstKey();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 
     public void registerDocument(Document doc) {
@@ -160,7 +161,7 @@ public class Model extends Queue implements Writable {
     }
 
     public boolean canBeSuspended(Long lastUsed) {
-        Long tId = getLowestThoughtId();
+        Long tId = getLowestDocumentId();
         if(tId == null)
             tId = lastProcessedDocument;
 
