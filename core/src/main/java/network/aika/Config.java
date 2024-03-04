@@ -34,6 +34,8 @@ public class Config {
 
     private long neuronProviderRetention = 50;
 
+    private Long timeout;
+
     public double getLearnRate(boolean isAbstract) {
         return isAbstract ? learnRateForAbstract : learnRate;
     }
@@ -109,6 +111,15 @@ public class Config {
 
     public Config setNeuronProviderRetention(long neuronProviderRetention) {
         this.neuronProviderRetention = neuronProviderRetention;
+        return this;
+    }
+
+    public Long getTimeout() {
+        return timeout;
+    }
+
+    public Config setTimeout(Long timeout) {
+        this.timeout = timeout;
         return this;
     }
 

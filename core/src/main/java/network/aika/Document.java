@@ -104,6 +104,11 @@ public class Document extends Queue implements Element {
         return model;
     }
 
+    @Override
+    public Config getConfig() {
+        return model.getConfig();
+    }
+
     public Step getCurrentStep() {
         return currentStep;
     }
