@@ -121,9 +121,13 @@ public abstract class Parser<C extends Context> {
             if(mapResults != null)
                 mapResults.accept(doc);
         } catch(Exception e) {
-            log.warn("Error while training:", e);
+            handleException(e);
         } finally {
             doc.disconnect();
         }
+    }
+
+    protected void handleException(Exception e) {
+        log.warn("Error while processing:", e);
     }
 }
