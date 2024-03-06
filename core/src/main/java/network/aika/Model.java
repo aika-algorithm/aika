@@ -18,7 +18,6 @@ package network.aika;
 
 import network.aika.elements.synapses.Synapse;
 import network.aika.suspension.InMemorySuspensionCallback;
-import network.aika.suspension.SuspensionMode;
 import network.aika.suspension.SuspensionCallback;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
@@ -178,21 +177,44 @@ public class Model extends Queue implements Writable {
         }
     }
 
-    public void suspend(SuspensionMode sm) {
+    public void saveAll() {
+        List<NeuronProvider> toSave;
+
         synchronized (providers) {
-            providers
+            toSave = providers
                     .values()
                     .stream()
                     .filter(n -> !n.isSuspended())
-                    .toList()
-                    .forEach(n -> suspend(n, sm));
+                    .toList();
         }
+
+        toSave.forEach(NeuronProvider::save);
     }
 
-    private void suspend(NeuronProvider p, SuspensionMode sm) {
+    public void suspend(boolean saveOnSuspend, boolean staleOnly) {
+        List<NeuronProvider> toSuspend;
+
+        synchronized (providers) {
+            toSuspend = providers
+                    .values()
+                    .stream()
+                    .filter(n ->
+                            !n.isSuspended() &&
+                                    !n.isPersistent() &&
+                                    (!staleOnly || canBeSuspended(n.getLastUsed()))
+                    )
+                    .toList();
+        }
+
+        toSuspend.forEach(n ->
+                        suspend(n, saveOnSuspend)
+                );
+    }
+
+    private void suspend(NeuronProvider p, boolean saveOnSuspend) {
         Neuron n = p.getIfNotSuspended();
         if (n != null)
-            p.suspend(sm);
+            p.suspend(saveOnSuspend);
     }
 
     public void register(NeuronProvider p) {

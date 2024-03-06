@@ -19,7 +19,6 @@ package network.aika.elements.neurons;
 import network.aika.Model;
 import network.aika.elements.synapses.Synapse;
 import network.aika.exceptions.NeuronSerializationException;
-import network.aika.suspension.SuspensionMode;
 import network.aika.utils.ReadWriteLock;
 
 import java.io.*;
@@ -124,6 +123,10 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return persistent;
     }
 
+    public long getLastUsed() {
+        return lastUsed;
+    }
+
     public void updateLastUsed(long thoughtId) {
         lastUsed = Math.max(lastUsed, thoughtId);
     }
@@ -137,15 +140,14 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
             checkUnregister();
     }
 
-    public synchronized void suspend(SuspensionMode sm) {
-        if(neuron == null) return;
+    public synchronized void suspend(boolean saveOnSuspend) {
+        if(neuron == null)
+            return;
+
         assert model.getSuspensionCallback() != null;
 
-        if(sm.isSave())
+        if(saveOnSuspend)
             save();
-
-        if(persistent || !model.canBeSuspended(lastUsed))
-            return;
 
         neuron.suspend();
         neuron = null;

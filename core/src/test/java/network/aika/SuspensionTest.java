@@ -38,7 +38,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.suspension.SuspensionMode.SAVE_ALL;
 
 /**
  *
@@ -73,9 +72,9 @@ public class SuspensionTest {
         Assertions.assertEquals(INPUT, sStrong.getStoredAt());
         Assertions.assertEquals(OUTPUT, sWeak.getStoredAt());
 
-        inStrong.suspend(SAVE_ALL);
-        inWeak.suspend(SAVE_ALL);
-        out.suspend(SAVE_ALL);
+        inStrong.save();
+        inWeak.save();
+        out.save();
 
         // Reactivate
         inStrong = m.lookupNeuronProvider(inStrong.getId());
@@ -114,6 +113,11 @@ public class SuspensionTest {
         @Override
         public long createId() {
             return currentId.addAndGet(1);
+        }
+
+        @Override
+        public long getCurrentId() {
+            return currentId.get();
         }
 
         @Override

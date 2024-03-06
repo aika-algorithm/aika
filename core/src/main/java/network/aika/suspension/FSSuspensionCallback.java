@@ -46,18 +46,12 @@ public class FSSuspensionCallback implements SuspensionCallback {
 
     private RandomAccessFile modelStore;
 
-    private boolean readOnly;
-
-    public FSSuspensionCallback(Path path, String modelLabel, boolean readOnly) {
+    public FSSuspensionCallback(Path path, String modelLabel) {
         this.path = path;
         this.modelLabel = modelLabel;
-        this.readOnly = readOnly;
     }
 
     public void prepareNewModel() throws IOException {
-        if(readOnly)
-            return;
-
         Files.createDirectories(path);
         File modelFile = getFile(MODEL);
         if(modelFile.exists())
@@ -100,10 +94,12 @@ public class FSSuspensionCallback implements SuspensionCallback {
     }
 
     @Override
-    public synchronized void store(Long id, String label, Writable customData, byte[] data) throws IOException {
-        if(readOnly)
-            return;
+    public long getCurrentId() {
+        return currentId.get();
+    }
 
+    @Override
+    public synchronized void store(Long id, String label, Writable customData, byte[] data) throws IOException {
         modelStore.seek(modelStore.length());
 
         index.put(id, new long[]{modelStore.getFilePointer(), data.length});
@@ -148,9 +144,6 @@ public class FSSuspensionCallback implements SuspensionCallback {
 
     @Override
     public void saveIndex(Model m) {
-        if(readOnly)
-            return;
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         try (DataOutputStream dos = new DataOutputStream(baos);

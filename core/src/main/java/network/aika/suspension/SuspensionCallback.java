@@ -41,6 +41,8 @@ public interface SuspensionCallback {
 
     long createId();
 
+    long getCurrentId();
+
     void store(Long id, String label, Writable customData, byte[] data) throws IOException;
 
     void remove(Long id) throws IOException;
