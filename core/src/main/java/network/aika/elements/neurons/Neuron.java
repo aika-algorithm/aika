@@ -127,17 +127,27 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     private void addPropagable(NeuronProvider np) {
+        provider.outputLock.acquireWriteLock();
         propagable.add(np);
+        provider.outputLock.releaseWriteLock();
         np.addPropagableRef(provider);
     }
 
     private void removePropagable(NeuronProvider np) {
+        provider.outputLock.acquireWriteLock();
         propagable.remove(np);
+        provider.outputLock.releaseWriteLock();
         np.removePropagableRef(provider);
     }
 
     public void wakeupPropagable() {
-        propagable.forEach(NeuronProvider::getNeuron);
+        provider.outputLock.acquireReadLock();
+        List<NeuronProvider> p = propagable
+                .stream()
+                .toList();
+        provider.outputLock.releaseReadLock();
+
+        p.forEach(NeuronProvider::getNeuron);
     }
 
     public Collection<NeuronProvider> getPropagable() {
@@ -310,95 +320,17 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         this.provider = p;
     }
 
-    public Stream<Synapse> getInputSynapsesAsStream() {
-        return getInputSynapses().stream();
-    }
-
-    public Collection<Synapse> getInputSynapses() {
-        return provider.inputSynapses.values();
-    }
-
-    public Stream<? extends Synapse> getOutputSynapsesAsStream() {
-        return getOutputSynapses().stream();
-    }
-
-    public List<? extends Synapse> getOutputSynapsesByTriggerAndBSType(Trigger t, Scope bsType) {
-        provider.lock.acquireReadLock();
-        List<? extends Synapse> os = getOutputSynapsesAsStream()
-                .filter(s ->
-                        s.getTrigger().match(t) &&
-                                s.getRequired().getFrom() == bsType
-                ).toList();
-        provider.lock.releaseReadLock();
-        return os;
-    }
-
-    public Collection<? extends Synapse> getOutputSynapses() {
-        return provider.outputSynapses.values();
-    }
-
-    public Synapse getOutputSynapse(NeuronProvider n) {
-        provider.lock.acquireReadLock();
-        Synapse syn = getOutputSynapsesAsStream()
-                .filter(s -> s.getPOutput().getId() == n.getId())
-                .findFirst()
-                .orElse(null);
-        provider.lock.releaseReadLock();
-        return syn;
-    }
-
-    public Synapse getInputSynapse(NeuronProvider n) {
-        provider.lock.acquireReadLock();
-        Synapse syn = selectInputSynapse(s ->
-                s.getPInput().getId() == n.getId()
-        );
-
-        provider.lock.releaseReadLock();
-        return syn;
-    }
-
-    public <IS extends Synapse> IS getInputSynapseByType(Class<IS> synapseType) {
-        provider.lock.acquireReadLock();
-        IS is = getInputSynapsesByType(synapseType)
-                .findAny()
-                .orElse(null);
-        provider.lock.releaseReadLock();
-        return is;
-    }
-
-    public <IS extends Synapse> Stream<IS> getInputSynapsesByType(Class<IS> synapseType) {
-        return getProvider().getInputSynapses()
-                .filter(synapseType::isInstance)
-                .map(synapseType::cast);
-    }
-
-    public <OS> OS getOutputSynapseByType(Class<OS> synapseType) {
-        provider.lock.acquireReadLock();
-        OS os = getProvider().getOutputSynapses()
-                .filter(synapseType::isInstance)
-                .map(synapseType::cast)
-                .findAny()
-                .orElse(null);
-        provider.lock.releaseReadLock();
-        return os;
-    }
-
-    protected Synapse selectInputSynapse(Predicate<? super Synapse> predicate) {
-        provider.lock.acquireReadLock();
-        Synapse s = getInputSynapsesAsStream()
-                .filter(predicate)
-                .findFirst()
-                .orElse(null);
-        provider.lock.releaseReadLock();
-        return s;
-    }
-
     public void delete() {
         log.info("Delete Neuron: " + this);
-        provider.lock.acquireReadLock();
-        provider.getInputSynapses().forEach(Synapse::unlinkInput);
-        provider.getOutputSynapses().forEach(Synapse::unlinkOutput);
-        provider.lock.releaseReadLock();
+        provider.inputLock.acquireReadLock();
+        provider.getInputSynapses()
+                .forEach(Synapse::unlinkInput);
+        provider.inputLock.releaseReadLock();
+
+        provider.outputLock.acquireReadLock();
+        provider.getOutputSynapses()
+                .forEach(Synapse::unlinkOutput);
+        provider.outputLock.releaseReadLock();
     }
 
     public Writable getCustomData() {
@@ -441,17 +373,11 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public void suspend() {
-        for (Synapse s : getInputSynapsesAsStream()
-                .filter(s -> s.getStoredAt() == OUTPUT)
-                .toList()
-        ) {
+        for (Synapse s : getProvider().getInputSynapsesStoredAtOutputSide()) {
             provider.removeInputSynapse(s);
             s.getPInput().removeOutputSynapse(s);
         }
-        for (Synapse s : getOutputSynapsesAsStream()
-                .filter(s -> s.getStoredAt() == INPUT)
-                .toList()
-        ) {
+        for (Synapse s : getProvider().getOutputSynapsesStoredAtInputSide()) {
             provider.removeOutputSynapse(s);
             s.getPOutput().removeInputSynapse(s);
         }
@@ -466,8 +392,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     @Override
     public void write(DataOutput out) throws IOException {
-        provider.lock.acquireReadLock();
-
         out.writeUTF(getClass().getCanonicalName());
 
         out.writeBoolean(label != null);
@@ -476,25 +400,21 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
         bias.write(out);
 
+        for (Synapse s : getProvider().getInputSynapsesStoredAtOutputSide()) {
+            out.writeBoolean(true);
+            s.write(out);
+        }
+        out.writeBoolean(false);
+
+        for (Synapse s : getProvider().getOutputSynapsesStoredAtInputSide()) {
+            out.writeBoolean(true);
+            s.write(out);
+        }
+        out.writeBoolean(false);
+
         for (NeuronProvider np: propagable) {
             out.writeBoolean(true);
             out.writeLong(np.getId());
-        }
-        out.writeBoolean(false);
-
-        for (Synapse s : getInputSynapses()) {
-            if (s.getStoredAt() == OUTPUT) {
-                out.writeBoolean(true);
-                s.write(out);
-            }
-        }
-        out.writeBoolean(false);
-
-        for (Synapse s : getOutputSynapses()) {
-            if (s.getStoredAt() == INPUT) {
-                out.writeBoolean(true);
-                s.write(out);
-            }
         }
         out.writeBoolean(false);
 
@@ -510,8 +430,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
             initParams.write(out);
 
         out.writeBoolean(getProvider().isPersistent());
-
-        provider.lock.releaseReadLock();
     }
 
     public static Neuron read(DataInput in, NeuronProvider np) throws Exception {
@@ -524,17 +442,10 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
-        provider.lock.acquireWriteLock();
-
         if(in.readBoolean())
             label = in.readUTF();
 
         bias.readFields(in, m);
-
-        while (in.readBoolean()) {
-            NeuronProvider np = m.lookupNeuronProvider(in.readLong());
-            addPropagable(np);
-        }
 
         while (in.readBoolean()) {
             Synapse syn = Synapse.read(in, m);
@@ -546,6 +457,11 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
             Synapse syn = Synapse.read(in, m);
             syn.link();
             assert provider == syn.getPInput();
+        }
+
+        while (in.readBoolean()) {
+            NeuronProvider np = m.lookupNeuronProvider(in.readLong());
+            addPropagable(np);
         }
 
         if(in.readBoolean()) {
@@ -561,10 +477,67 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
         if(in.readBoolean())
             setPersistent(true);
-
-        provider.lock.releaseWriteLock();
     }
 
+    public Stream<Synapse> getInputSynapsesAsStream() {
+        return provider.getInputSynapsesAsStream();
+    }
+
+    public Collection<Synapse> getInputSynapses() {
+        return provider.getInputSynapses();
+    }
+
+    public Stream<? extends Synapse> getOutputSynapsesAsStream() {
+        return provider.getOutputSynapsesAsStream();
+    }
+
+    public List<? extends Synapse> getOutputSynapsesByTriggerAndBSType(Trigger t, Scope bsType) {
+        return provider.getOutputSynapsesByTriggerAndBSType(t, bsType);
+    }
+
+    public Collection<? extends Synapse> getOutputSynapses() {
+        return provider.getOutputSynapses();
+    }
+
+    public Synapse getOutputSynapse(NeuronProvider n) {
+        return provider.getOutputSynapse(n);
+    }
+
+    public List<Synapse> getInputSynapsesStoredAtOutputSide() {
+        return provider.getInputSynapsesStoredAtOutputSide();
+    }
+
+    public List<? extends Synapse> getOutputSynapsesStoredAtInputSide() {
+        return provider.getOutputSynapsesStoredAtInputSide();
+    }
+
+    public Synapse getInputSynapse(NeuronProvider n) {
+        return provider.getInputSynapse(n);
+    }
+
+    public <IS extends Synapse> IS getInputSynapseByType(Class<IS> synapseType) {
+        return provider.getInputSynapseByType(synapseType);
+    }
+
+    public <IS extends Synapse> Stream<IS> getInputSynapsesByType(Class<IS> synapseType) {
+        return provider.getInputSynapsesByType(synapseType);
+    }
+
+    public <OS> OS getOutputSynapseByType(Class<OS> synapseType) {
+        return provider.getOutputSynapseByType(synapseType);
+    }
+
+    public Synapse selectInputSynapse(Predicate<? super Synapse> predicate) {
+        return provider.selectInputSynapse(predicate);
+    }
+
+    public void addPropagableRef(NeuronProvider np) {
+        provider.addPropagableRef(np);
+    }
+
+    public void removePropagableRef(NeuronProvider np) {
+        provider.removePropagableRef(np);
+    }
     @Override
     public Timestamp getCreated() {
         return MIN;

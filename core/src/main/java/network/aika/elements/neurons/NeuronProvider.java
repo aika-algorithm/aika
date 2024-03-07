@@ -18,14 +18,18 @@ package network.aika.elements.neurons;
 
 import network.aika.Model;
 import network.aika.elements.synapses.Synapse;
+import network.aika.enums.Scope;
+import network.aika.enums.Trigger;
 import network.aika.exceptions.NeuronSerializationException;
 import network.aika.utils.ReadWriteLock;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import static network.aika.enums.direction.Direction.INPUT;
+import static network.aika.enums.direction.Direction.OUTPUT;
 
 /**
  * The {@code NeuronProvider} class is a proxy implementation for the real neuron implementation in the class {@code Neuron}.
@@ -48,7 +52,8 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
 
     private Set<NeuronProvider> propagableRefs = new HashSet<>();
 
-    protected final ReadWriteLock lock = new ReadWriteLock();
+    protected final ReadWriteLock inputLock = new ReadWriteLock();
+    protected final ReadWriteLock outputLock = new ReadWriteLock();
 
     private boolean persistent;
     private volatile long lastUsed;
@@ -109,14 +114,6 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
             return null;
 
         return inputSynapses.get(synId);
-    }
-
-    public Stream<Synapse> getInputSynapses() {
-        return inputSynapses.values().stream();
-    }
-
-    public Stream<Synapse> getOutputSynapses() {
-        return outputSynapses.values().stream();
     }
 
     public boolean isPersistent() {
@@ -195,51 +192,154 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
     }
 
     public void addInputSynapse(Synapse s) {
-        lock.acquireWriteLock();
+        inputLock.acquireWriteLock();
         inputSynapses.put(s.getSynapseId(), s);
 
         checkRegister();
-        lock.releaseWriteLock();
+        inputLock.releaseWriteLock();
     }
 
     public void removeInputSynapse(Synapse s) {
-        lock.acquireWriteLock();
+        inputLock.acquireWriteLock();
         inputSynapses.remove(s.getSynapseId());
 
         checkUnregister();
-        lock.releaseWriteLock();
+        inputLock.releaseWriteLock();
     }
 
     public void addOutputSynapse(Synapse s) {
-        lock.acquireWriteLock();
+        outputLock.acquireWriteLock();
         outputSynapses.put(s.getPOutput().getId(), s);
 
         checkRegister();
-        lock.releaseWriteLock();
+        outputLock.releaseWriteLock();
     }
 
     public void removeOutputSynapse(Synapse s) {
-        lock.acquireWriteLock();
+        outputLock.acquireWriteLock();
         outputSynapses.remove(s.getPOutput().getId());
 
         checkUnregister();
-        lock.releaseWriteLock();
+        outputLock.releaseWriteLock();
+    }
+
+
+    public Stream<Synapse> getInputSynapsesAsStream() {
+        return getInputSynapses().stream();
+    }
+
+    public Collection<Synapse> getInputSynapses() {
+        return inputSynapses.values();
+    }
+
+    public Stream<? extends Synapse> getOutputSynapsesAsStream() {
+        return getOutputSynapses().stream();
+    }
+
+    public List<? extends Synapse> getOutputSynapsesByTriggerAndBSType(Trigger t, Scope bsType) {
+        outputLock.acquireReadLock();
+        List<? extends Synapse> os = getOutputSynapsesAsStream()
+                .filter(s ->
+                        s.getTrigger().match(t) &&
+                                s.getRequired().getFrom() == bsType
+                ).toList();
+        outputLock.releaseReadLock();
+        return os;
+    }
+
+    public Collection<? extends Synapse> getOutputSynapses() {
+        return outputSynapses.values();
+    }
+
+    public Synapse getOutputSynapse(NeuronProvider n) {
+        outputLock.acquireReadLock();
+        Synapse syn = getOutputSynapsesAsStream()
+                .filter(s -> s.getPOutput().getId() == n.getId())
+                .findFirst()
+                .orElse(null);
+        outputLock.releaseReadLock();
+        return syn;
+    }
+
+    public List<Synapse> getInputSynapsesStoredAtOutputSide() {
+        inputLock.acquireReadLock();
+        List<Synapse> syns = getInputSynapsesAsStream()
+                .filter(s -> s.getStoredAt() == OUTPUT)
+                .toList();
+        inputLock.releaseReadLock();
+
+        return syns;
+    }
+
+    public List<? extends Synapse> getOutputSynapsesStoredAtInputSide() {
+        outputLock.acquireReadLock();
+        List<? extends Synapse> syns = getOutputSynapsesAsStream()
+                .filter(s -> s.getStoredAt() == INPUT)
+                .toList();
+        outputLock.releaseReadLock();
+        return syns;
+    }
+
+    public Synapse getInputSynapse(NeuronProvider n) {
+        inputLock.acquireReadLock();
+        Synapse syn = selectInputSynapse(s ->
+                s.getPInput().getId() == n.getId()
+        );
+
+        inputLock.releaseReadLock();
+        return syn;
+    }
+
+    public <IS extends Synapse> IS getInputSynapseByType(Class<IS> synapseType) {
+        inputLock.acquireReadLock();
+        IS is = getInputSynapsesByType(synapseType)
+                .findAny()
+                .orElse(null);
+        inputLock.releaseReadLock();
+        return is;
+    }
+
+    public <IS extends Synapse> Stream<IS> getInputSynapsesByType(Class<IS> synapseType) {
+        return getInputSynapsesAsStream()
+                .filter(synapseType::isInstance)
+                .map(synapseType::cast);
+    }
+
+    public <OS> OS getOutputSynapseByType(Class<OS> synapseType) {
+        outputLock.acquireReadLock();
+        OS os = getOutputSynapsesAsStream()
+                .filter(synapseType::isInstance)
+                .map(synapseType::cast)
+                .findAny()
+                .orElse(null);
+        outputLock.releaseReadLock();
+        return os;
+    }
+
+    public Synapse selectInputSynapse(Predicate<? super Synapse> predicate) {
+        inputLock.acquireReadLock();
+        Synapse s = getInputSynapsesAsStream()
+                .filter(predicate)
+                .findFirst()
+                .orElse(null);
+        inputLock.releaseReadLock();
+        return s;
     }
 
     public void addPropagableRef(NeuronProvider np) {
-        lock.acquireWriteLock();
+        inputLock.acquireWriteLock();
         propagableRefs.add(np);
 
         checkRegister();
-        lock.releaseWriteLock();
+        inputLock.releaseWriteLock();
     }
 
     public void removePropagableRef(NeuronProvider np) {
-        lock.acquireWriteLock();
+        inputLock.acquireWriteLock();
         propagableRefs.remove(np);
 
         checkUnregister();
-        lock.releaseWriteLock();
+        inputLock.releaseWriteLock();
     }
 
     private void checkRegister() {
