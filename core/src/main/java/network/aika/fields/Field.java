@@ -17,7 +17,6 @@
 package network.aika.fields;
 
 import network.aika.Model;
-import network.aika.Document;
 import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.FieldLink;
 import network.aika.queue.Phase;
@@ -122,19 +121,19 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
                 value;
     }
 
-    public void connectInputs(boolean initialize) {
+    public synchronized void connectInputs(boolean initialize) {
         getInputs().forEach(fl ->
                 fl.connect(initialize)
         );
     }
 
-    public void disconnectInputs(boolean deinitialize) {
+    public synchronized void disconnectInputs(boolean deinitialize) {
         getInputs().forEach(fl ->
                 fl.disconnect(deinitialize)
         );
     }
 
-    public void disconnectAndUnlinkInputs(boolean deinitialize) {
+    public synchronized void disconnectAndUnlinkInputs(boolean deinitialize) {
         getInputs().forEach(fl -> {
             fl.disconnect(deinitialize);
             fl.unlinkInput();
@@ -142,10 +141,12 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
     }
 
     public void disconnectAndUnlinkOutputs(boolean deinitialize) {
-        getReceivers().forEach(fl -> {
-            fl.disconnect(deinitialize);
-            fl.unlinkOutput();
-        });
+        synchronized (this.receivers) {
+            receivers.forEach(fl -> {
+                fl.disconnect(deinitialize);
+                fl.unlinkOutput();
+            });
+        }
     }
 
     public Collection<AbstractFieldLink> getReceivers() {
@@ -154,12 +155,16 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
 
     @Override
     public void addOutput(AbstractFieldLink fl) {
-        this.receivers.add(fl);
+        synchronized (this.receivers) {
+            this.receivers.add(fl);
+        }
     }
 
     @Override
     public void removeOutput(AbstractFieldLink fl) {
-        this.receivers.remove(fl);
+        synchronized (this.receivers) {
+            this.receivers.remove(fl);
+        }
     }
 
     public QueueInterceptor getInterceptor() {
@@ -202,7 +207,11 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
     }
 
     protected void propagateUpdate(double update) {
-        AbstractFieldLink[] recs = receivers.toArray(new AbstractFieldLink[0]);
+        AbstractFieldLink[] recs;
+
+        synchronized (this.receivers) {
+            recs = receivers.toArray(new AbstractFieldLink[0]);
+        }
 
         for(int i = 0; i < recs.length; i++) {
             recs[i].receiveUpdate(update);

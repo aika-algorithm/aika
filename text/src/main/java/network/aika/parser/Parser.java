@@ -45,7 +45,7 @@ import static network.aika.meta.LabelUtil.generateTemplateInstanceLabels;
  */
 public abstract class Parser<C extends Context> {
 
-    protected static final Logger log = LoggerFactory.getLogger(Parser.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(Parser.class);
 
     protected Document initDocument(String txt, C context, ParserPhase phase) {
         Document doc = new Document(getPhraseModel().getModel(), txt);
@@ -123,11 +123,17 @@ public abstract class Parser<C extends Context> {
         } catch(Exception e) {
             handleException(context, e);
         } finally {
-            doc.disconnect();
+            try {
+                doc.disconnect();
+            } catch (Exception e) {
+                LOG.error("Exception while disconnecting document: ", e);
+                
+                handleException(context, e);
+            }
         }
     }
 
     protected void handleException(C context, Exception e) {
-        log.warn("Error while processing:", e);
+        LOG.warn("Error while processing:", e);
     }
 }

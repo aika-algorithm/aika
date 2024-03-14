@@ -17,7 +17,6 @@
 package network.aika.meta;
 
 import network.aika.Config;
-import network.aika.Context;
 import network.aika.Model;
 import network.aika.debugger.AIKADebugger;
 import network.aika.meta.entities.EntityModel;
@@ -164,7 +163,7 @@ public class TextSectionTest extends Parser<TestContext> {
 
     @Test
     public void testTextSections() {
-        log.info("Start");
+        LOG.info("Start");
 
         process(tasksHeadlineLabel, null, COUNTING, null);
         process(profileHeadlineLabel, null, COUNTING, null);

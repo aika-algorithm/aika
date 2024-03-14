@@ -33,24 +33,24 @@ public class SumField extends Field {
     }
 
     @Override
-    protected void initIO() {
+    protected synchronized void initIO() {
         super.initIO();
 
         inputs = new ArrayList<>();
     }
 
     @Override
-    public int size() {
+    public synchronized int size() {
         return inputs.size();
     }
 
     @Override
-    public void addInput(FieldLink l) {
+    public synchronized void addInput(FieldLink l) {
         inputs.add(l);
     }
 
     @Override
-    public void removeInput(FieldLink l) {
+    public synchronized void removeInput(FieldLink l) {
         inputs.remove(l);
     }
 

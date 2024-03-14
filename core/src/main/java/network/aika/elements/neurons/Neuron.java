@@ -43,15 +43,11 @@ import org.slf4j.LoggerFactory;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static network.aika.elements.neurons.NeuronTypeHolder.getHolder;
-import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
 import static network.aika.queue.Phase.TRAINING;
@@ -63,7 +59,7 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public abstract class Neuron<N extends Neuron, A extends Activation> implements Element, Writable {
 
-    protected static final Logger log = LoggerFactory.getLogger(Neuron.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
 
     protected static final String CATEGORY_LABEL = " Category";
 
@@ -190,14 +186,18 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public PreActivation<A> getPreActivation(Document doc) {
-        if(doc == null)
-            return null;
+        synchronized (activations) {
+            if (doc == null)
+                return null;
 
-        return activations.get(doc.getId());
+            return activations.get(doc.getId());
+        }
     }
 
     public void removePreActivation(Document doc) {
-        activations.remove(doc.getId());
+        synchronized (activations) {
+            activations.remove(doc.getId());
+        }
     }
 
     public SortedSet<A> getActivations(Document doc) {
@@ -321,7 +321,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public void delete() {
-        log.info("Delete Neuron: " + this);
+        LOG.info("Delete Neuron: " + this);
         provider.inputLock.acquireReadLock();
         provider.getInputSynapses()
                 .forEach(Synapse::unlinkInput);

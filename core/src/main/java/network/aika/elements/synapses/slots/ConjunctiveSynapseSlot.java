@@ -101,7 +101,7 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
     }
 
     @Override
-    public Stream<L> getLinks() {
+    public synchronized Stream<L> getLinks() {
         return getInputs()
                 .stream()
                 .map(ArgumentFieldLink::getArgumentRef);

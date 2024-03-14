@@ -32,6 +32,8 @@ import network.aika.queue.Queue;
 import network.aika.text.Range;
 import network.aika.queue.Step;
 import network.aika.text.TextReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -49,6 +51,9 @@ import static network.aika.elements.activations.StateType.*;
  * @author Lukas Molzberger
  */
 public class Document extends Queue implements Element {
+
+    protected static final Logger LOG = LoggerFactory.getLogger(Document.class);
+
 
     protected final Model model;
 
@@ -83,6 +88,8 @@ public class Document extends Queue implements Element {
         absoluteBeginChar = m.getN();
 
         m.registerDocument(this);
+
+        LOG.info("Registered Document: " + id);
     }
 
     public long getNewVisitorId() {
@@ -185,6 +192,8 @@ public class Document extends Queue implements Element {
                 .stream()
                 .map(PreActivation::getNeuron)
                 .forEach(n -> n.removePreActivation(this));
+
+        LOG.info("Disconnected Document: " + id);
     }
 
     @Override

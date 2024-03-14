@@ -87,7 +87,7 @@ public abstract class AbstractMaxField<F extends FieldLink> extends Field<F> {
         super.triggerUpdate(update);
     }
 
-    private Stream<F> getCandidateInputs() {
+    private synchronized Stream<F> getCandidateInputs() {
         Stream<F> inputs = getInputs().stream();
         return isNegativeInputAllowed() ?
                 inputs :
