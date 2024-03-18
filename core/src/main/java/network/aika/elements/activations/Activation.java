@@ -531,8 +531,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
             return null;
 
         N n = null;
-        if(doc.getInstantiationCallback() != null)
+        if(doc.getInstantiationCallback() != null) {
             n = (N) doc.getInstantiationCallback().resolveInstance(neuron, doc);
+            n.getProvider().increaseRefCount(TEMPLATE);
+        }
 
         boolean newNeuronInstance = false;
         if(n == null) {
