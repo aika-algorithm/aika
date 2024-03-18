@@ -21,6 +21,7 @@ import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.elements.neurons.RefType;
 import network.aika.enums.direction.Direction;
 import network.aika.text.Range;
 import network.aika.text.TextReference;
@@ -29,6 +30,7 @@ import network.aika.text.TokenPositionKey;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static network.aika.elements.neurons.RefType.NEURON;
 import static network.aika.text.TextReference.getTPBegin;
 import static network.aika.text.TextReference.getTPEnd;
 
@@ -53,7 +55,9 @@ public class PreActivation<A extends Activation> {
         this.doc = doc;
         this.neuron = neuron;
 
-        doc.register(neuron.getProvider(), this);
+        neuron.getProvider().increaseRefCount(NEURON);
+
+        doc.register(neuron, this);
     }
 
     public SortedSet<A> getActivations() {
@@ -111,5 +115,9 @@ public class PreActivation<A extends Activation> {
 
     public Document getDocument() {
         return doc;
+    }
+
+    public void disconnect() {
+        neuron.getProvider().decreaseRefCount(NEURON);
     }
 }

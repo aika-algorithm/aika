@@ -23,6 +23,7 @@ import network.aika.elements.activations.types.InhibitoryCategoryActivation;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
+import network.aika.elements.neurons.RefType;
 
 import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
@@ -40,8 +41,8 @@ public class InhibitoryCategoryNeuron extends CategoryNeuron {
         super(np);
     }
 
-    public InhibitoryCategoryNeuron(Model m) {
-        super(m);
+    public InhibitoryCategoryNeuron(Model m, RefType rt) {
+        super(m, rt);
     }
 
     @Override

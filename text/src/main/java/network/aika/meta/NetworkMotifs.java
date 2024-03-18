@@ -18,6 +18,7 @@ package network.aika.meta;
 
 import network.aika.Model;
 import network.aika.elements.Type;
+import network.aika.elements.neurons.RefType;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
@@ -28,6 +29,7 @@ import network.aika.elements.synapses.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static network.aika.elements.neurons.RefType.TEMPLATE_MODEL;
 import static network.aika.meta.sequences.SequenceModel.POS_MARGIN;
 
 /**
@@ -50,7 +52,7 @@ public class NetworkMotifs {
     }
 
     public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double netTarget, boolean isPrimary) {
-        BindingNeuron bn = new BindingNeuron(input.getModel())
+        BindingNeuron bn = new BindingNeuron(input.getModel(), TEMPLATE_MODEL)
                 .setLabel(label)
                 .setPersistent(true);
 
@@ -67,7 +69,7 @@ public class NetworkMotifs {
     }
 
     public static BindingNeuron addBindingNeuron(Model m, String label, double netTarget) {
-        BindingNeuron bn = new BindingNeuron(m)
+        BindingNeuron bn = new BindingNeuron(m, TEMPLATE_MODEL)
                 .setLabel(label)
                 .setPersistent(true);
 

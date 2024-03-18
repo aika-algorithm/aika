@@ -32,6 +32,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.elements.neurons.RefType.TEMPLATE_MODEL;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.meta.NetworkMotifs.*;
@@ -152,7 +153,8 @@ public abstract class SequenceModel implements Writable {
                 new BeforeRelation(
                         INPUT,
                         new Range(0, 0)
-                )
+                ),
+                TEMPLATE_MODEL
         )
                 .setLabel("Prev. Token Rel.: -1,-1")
                 .setBias(5.0);
@@ -162,7 +164,8 @@ public abstract class SequenceModel implements Writable {
                 new BeforeRelation(
                         OUTPUT,
                         new Range(0, 0)
-                )
+                ),
+                TEMPLATE_MODEL
         )
                 .setLabel("Next. Token Rel.: 1,1")
                 .setBias(5.0);
@@ -175,7 +178,7 @@ public abstract class SequenceModel implements Writable {
                 .setWeight(10.0)
                 .adjustBias();
 
-        inhibitoryN = new InhibitoryNeuron(model)
+        inhibitoryN = new InhibitoryNeuron(model, TEMPLATE_MODEL)
                 .setLabel("I")
                 .setPersistent(true);
 
@@ -190,7 +193,8 @@ public abstract class SequenceModel implements Writable {
 
         relContains = new LatentRelationNeuron(
                 model,
-                new ContainsRelation(OUTPUT)
+                new ContainsRelation(OUTPUT),
+                TEMPLATE_MODEL
         )
                 .setLabel("Contains Rel.: ")
                 .setBias(5.0)
@@ -337,12 +341,12 @@ public abstract class SequenceModel implements Writable {
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
-        relPT = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        relNT = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        relContains = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        sequencePatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        primaryBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        subPhraseBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        relPT = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
+        relNT = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
+        relContains = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
+        inhibitoryN = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
+        sequencePatternN = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
+        primaryBN = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
+        subPhraseBN = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
     }
 }

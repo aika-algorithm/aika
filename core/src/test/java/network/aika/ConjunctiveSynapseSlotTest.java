@@ -31,6 +31,7 @@ import network.aika.fields.link.ArgumentFieldLink;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
 import static network.aika.fields.link.ArgumentFieldLink.linkAndConnect;
 
 /**
@@ -42,8 +43,8 @@ public class ConjunctiveSynapseSlotTest {
     @Test
     public void testSynapseInputSlot() {
         Model m = new Model();
-        BindingNeuron on = new BindingNeuron(m);
-        PatternNeuron in = new PatternNeuron(m);
+        BindingNeuron on = new BindingNeuron(m, NEURON_EXTERNAL);
+        PatternNeuron in = new PatternNeuron(m, NEURON_EXTERNAL);
         InnerPositiveFeedbackSynapse s = new InnerPositiveFeedbackSynapse();
         s.setInput(in);
         s.setOutput(on);

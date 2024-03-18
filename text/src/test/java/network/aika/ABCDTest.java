@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import static network.aika.TestUtils.initPatternLoop;
 import static network.aika.TestUtils.processTokens;
+import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
 import static network.aika.enums.direction.Direction.INPUT;
 
 
@@ -62,15 +63,16 @@ public class ABCDTest {
         PatternNeuron d_IN = dict.lookupInputToken("d");
 
         // Pattern ab
-        BindingNeuron a_abBN = new BindingNeuron(m).setLabel("a (ab)");
-        BindingNeuron b_abBN = new BindingNeuron(m).setLabel("b (ab)");
+        BindingNeuron a_abBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("a (ab)");
+        BindingNeuron b_abBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("b (ab)");
 
         LatentRelationNeuron relPT = new LatentRelationNeuron(
                 m,
                 new BeforeRelation(
                         INPUT,
                         new Range(0, 0)
-                )
+                ),
+                NEURON_EXTERNAL
         )
                 .setLabel("relPT");
 
@@ -98,8 +100,8 @@ public class ABCDTest {
         abPattern.setBias(3.0);
 
         // Pattern bc
-        BindingNeuron b_bcBN = new BindingNeuron(m).setLabel("b (bc)");
-        BindingNeuron c_bcBN = new BindingNeuron(m).setLabel("c (bc)");
+        BindingNeuron b_bcBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("b (bc)");
+        BindingNeuron c_bcBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("c (bc)");
 
         new RelationInputSynapse()
                 .setWeight(10.0)
@@ -114,7 +116,7 @@ public class ABCDTest {
                 .setWeight(10.0)
                 .link(b_IN, b_bcBN)
                 .adjustBias();
-        TestUtils.addOuterInhibitoryLoop(new InhibitoryNeuron(m).setLabel("I-b"), false, b_abBN, b_bcBN);
+        TestUtils.addOuterInhibitoryLoop(new InhibitoryNeuron(m, NEURON_EXTERNAL).setLabel("I-b"), false, b_abBN, b_bcBN);
         b_abBN.setBias(3.0);
         b_bcBN.setBias(2.5);
 
@@ -128,8 +130,8 @@ public class ABCDTest {
         bcPattern.setBias(3.0);
 
         // Pattern bcd
-        BindingNeuron bc_bcdBN = new BindingNeuron(m).setLabel("bc (bcd)");
-        BindingNeuron d_bcdBN = new BindingNeuron(m).setLabel("d (bcd)");
+        BindingNeuron bc_bcdBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("bc (bcd)");
+        BindingNeuron d_bcdBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("d (bcd)");
         new RelationInputSynapse()
                 .setWeight(10.0)
                 .link(c_bcBN, bc_bcdBN)

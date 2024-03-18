@@ -24,6 +24,7 @@ import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
 import network.aika.elements.activations.types.PatternActivation;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
@@ -75,6 +76,7 @@ public class Document extends Queue implements Element {
 
     private InstantiationCallback instantiationCallback;
 
+    private boolean isStale;
 
     public Document(Model m, String content) {
         model = m;
@@ -160,8 +162,13 @@ public class Document extends Queue implements Element {
         activationsById.put(act.getId(), act);
     }
 
-    public void register(NeuronProvider np, PreActivation<? extends Activation> acts) {
-        actsPerNeuron.put(np, acts);
+    public void register(Neuron n, PreActivation<? extends Activation> acts) {
+        PreActivation existingPreAct = actsPerNeuron.put(n.getProvider(), acts);
+
+        if(existingPreAct != null)
+            LOG.error("Attempted to overwrite existing PreAct: (doc:" + id + " n:" + n.getId() + ")");
+
+        System.out.print("i" + id + ":" + n.getId() + ":" + n.hashCode() + ", ");
     }
 
     public Range getCharRange() {
@@ -188,12 +195,15 @@ public class Document extends Queue implements Element {
                         act.disconnect()
                 );
 
-        actsPerNeuron.values()
+        String report = actsPerNeuron.values()
                 .stream()
                 .map(PreActivation::getNeuron)
-                .forEach(n -> n.removePreActivation(this));
+                .map(n -> n.removePreActivation(this))
+                .collect(Collectors.joining(", "));
 
-        LOG.info("Disconnected Document: " + id);
+        isStale = true;
+
+        LOG.info("Disconnected Document: " + id + " Report:" + report);
     }
 
     @Override

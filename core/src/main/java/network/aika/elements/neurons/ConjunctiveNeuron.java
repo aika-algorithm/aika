@@ -42,8 +42,8 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
         super(np);
     }
 
-    public ConjunctiveNeuron(Model m) {
-        super(m);
+    public ConjunctiveNeuron(Model m, RefType rt) {
+        super(m, rt);
     }
 
     @Override

@@ -22,6 +22,7 @@ import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
+import network.aika.elements.neurons.RefType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.BindingCategoryInputSynapse;
 import network.aika.elements.synapses.types.BindingCategorySynapse;
@@ -33,6 +34,7 @@ import java.util.Comparator;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.*;
+import static network.aika.elements.neurons.RefType.TEMPLATE;
 
 
 /**
@@ -50,8 +52,8 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
         super(np);
     }
 
-    public BindingNeuron(Model m) {
-        super(m);
+    public BindingNeuron(Model m, RefType rt) {
+        super(m, rt);
     }
 
     @Override
@@ -80,14 +82,14 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     }
 
     public static BindingNeuron create(Model m, String label) {
-        return new BindingNeuron(m)
+        return new BindingNeuron(m, RefType.NEURON_EXTERNAL)
                 .setLabel(label)
                 .setPersistent(true);
     }
 
     @Override
     public BindingCategoryInputSynapse makeAbstract() {
-        BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron(getModel())
+        BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron(getModel(), TEMPLATE)
                 .setLabel(getLabel() + CATEGORY_LABEL);
 
         BindingCategoryInputSynapse s = new BindingCategoryInputSynapse()

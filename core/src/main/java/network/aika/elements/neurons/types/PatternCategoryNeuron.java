@@ -23,6 +23,7 @@ import network.aika.elements.activations.types.PatternCategoryActivation;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
+import network.aika.elements.neurons.RefType;
 
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
@@ -40,8 +41,8 @@ public class PatternCategoryNeuron extends CategoryNeuron {
         super(np);
     }
 
-    public PatternCategoryNeuron(Model m) {
-        super(m);
+    public PatternCategoryNeuron(Model m, RefType rt) {
+        super(m, rt);
     }
 
     @Override

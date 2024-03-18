@@ -16,6 +16,7 @@
  */
 package network.aika;
 
+import network.aika.elements.neurons.RefType;
 import network.aika.elements.synapses.Synapse;
 import network.aika.suspension.InMemorySuspensionCallback;
 import network.aika.suspension.SuspensionCallback;
@@ -23,6 +24,8 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.queue.Queue;
 import network.aika.utils.Writable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.io.DataInput;
@@ -33,11 +36,16 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
+import static network.aika.elements.neurons.RefType.OTHER;
+
 /**
  *
  * @author Lukas Molzberger
  */
 public class Model extends Queue implements Writable {
+
+    protected static final Logger LOG = LoggerFactory.getLogger(Model.class);
 
     private long N = 0;
 
@@ -118,13 +126,15 @@ public class Model extends Queue implements Writable {
 
     public <N extends Neuron> N getNeuronByLabel(String tokenLabel, Neuron template) {
         Long id = suspensionCallback.getIdByLabel(tokenLabel, template.getId());
-        return id != null ? (N) lookupNeuronProvider(id).getNeuron() : null;
+        return id != null ?
+                (N) lookupNeuronProvider(id, NEURON_EXTERNAL).getNeuron() :
+                null;
     }
 
     public Stream<NeuronProvider> getAllNeurons() {
         return suspensionCallback
                 .getAllIds().stream()
-                .map(this::lookupNeuronProvider);
+                .map(id -> lookupNeuronProvider(id, OTHER));
     }
 
     public <N extends Neuron> Stream<N> getNeuronsByType(Class<N> type) {
@@ -167,13 +177,17 @@ public class Model extends Queue implements Writable {
         return lastUsed < tId - config.getNeuronProviderRetention();
     }
 
-    public NeuronProvider lookupNeuronProvider(Long id) {
+    public NeuronProvider lookupNeuronProvider(Long id, RefType rt) {
         synchronized (providers) {
             NeuronProvider n = providers.get(id);
-            if(n != null)
-                return n;
+            if(n != null) {
+                if(rt != null)
+                    n.increaseRefCount(rt);
 
-            return new NeuronProvider(this, id);
+                return n;
+            }
+
+            return new NeuronProvider(this, id, rt);
         }
     }
 
@@ -219,7 +233,10 @@ public class Model extends Queue implements Writable {
 
     public void register(NeuronProvider p) {
         synchronized (providers) {
-            providers.put(p.getId(), p);
+            NeuronProvider existingNP = providers.put(p.getId(), p);
+
+            if(existingNP != null)
+                LOG.error("Attempted to overwrite existing Provider: (np:" + p.getId() + ")");
         }
     }
 

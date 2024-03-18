@@ -16,6 +16,7 @@
  */
 package network.aika;
 
+import network.aika.elements.neurons.RefType;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.types.InputObjectSynapse;
@@ -24,6 +25,8 @@ import network.aika.text.TextReference;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
 
 
 /**
@@ -39,8 +42,8 @@ public class PropagateTest {
         Model m = new Model();
         m.setConfig(new Config());
 
-        PatternNeuron in = new PatternNeuron(m).setLabel("IN");
-        BindingNeuron out = new BindingNeuron(m).setLabel("OUT");
+        PatternNeuron in = new PatternNeuron(m, NEURON_EXTERNAL).setLabel("IN");
+        BindingNeuron out = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("OUT");
 
         new InputObjectSynapse()
                 .setWeight(10.0)

@@ -22,6 +22,7 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
+import network.aika.elements.neurons.RefType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.PatternCategoryInputSynapse;
 import network.aika.elements.synapses.types.PatternCategorySynapse;
@@ -39,6 +40,8 @@ import java.io.IOException;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.MULTI_INPUT;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
+import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
+import static network.aika.elements.neurons.RefType.TEMPLATE;
 import static network.aika.enums.sign.Sign.POS;
 import static network.aika.text.Range.length;
 
@@ -63,19 +66,19 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
         super(np);
     }
 
-    public PatternNeuron(Model m) {
-        super(m);
+    public PatternNeuron(Model m, RefType rt) {
+        super(m, rt);
     }
 
     public static PatternNeuron create(Model m, String label) {
-        return new PatternNeuron(m)
+        return new PatternNeuron(m, NEURON_EXTERNAL)
                 .setLabel(label)
                 .setPersistent(true);
     }
 
     @Override
     public PatternCategoryInputSynapse makeAbstract() {
-        PatternCategoryNeuron patternCategory = new PatternCategoryNeuron(getModel())
+        PatternCategoryNeuron patternCategory = new PatternCategoryNeuron(getModel(), TEMPLATE)
                 .setLabel(getCategoryLabel(getLabel()));
 
         PatternCategoryInputSynapse s = new PatternCategoryInputSynapse()

@@ -19,7 +19,6 @@ package network.aika.meta.sequences;
 import network.aika.Model;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternCategoryNeuron;
-import network.aika.elements.synapses.types.OuterPositiveFeedbackSynapse;
 import network.aika.meta.Dictionary;
 import network.aika.meta.entities.EntityModel;
 import org.slf4j.Logger;
@@ -29,6 +28,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.elements.neurons.RefType.TEMPLATE_MODEL;
 import static network.aika.meta.NetworkMotifs.*;
 
 /**
@@ -68,7 +68,7 @@ public class PhraseModel extends SequenceModel {
     public void initStaticNeurons() {
         super.initStaticNeurons();
 
-        upperCaseN = new PatternCategoryNeuron(model)
+        upperCaseN = new PatternCategoryNeuron(model, TEMPLATE_MODEL)
                 .setLabel("Upper Case")
                 .setPersistent(true);
 
@@ -121,7 +121,7 @@ public class PhraseModel extends SequenceModel {
     public void readFields(DataInput in, Model m) throws Exception {
         super.readFields(in, m);
 
-        upperCaseN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        entityBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        upperCaseN = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
+        entityBN = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
     }
 }

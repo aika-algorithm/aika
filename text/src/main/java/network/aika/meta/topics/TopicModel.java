@@ -35,6 +35,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.elements.Type.INHIBITORY;
+import static network.aika.elements.neurons.RefType.TEMPLATE_MODEL;
 import static network.aika.meta.LabelUtil.getAbstractLabel;
 import static network.aika.meta.NetworkMotifs.*;
 
@@ -138,7 +139,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
     @Override
     public void initTemplateNeurons() {
-        topicPatternN = new PatternNeuron(model)
+        topicPatternN = new PatternNeuron(model, TEMPLATE_MODEL)
                 .setLabel("Abstract Topic")
                 .setTargetNet(TOPIC_NET_TARGET)
                 .setBias(TOPIC_NET_TARGET)
@@ -168,7 +169,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 true
         );
 
-        inhibitoryN = new InhibitoryNeuron(getModel())
+        inhibitoryN = new InhibitoryNeuron(getModel(), TEMPLATE_MODEL)
                 .setLabel(getAbstractLabel(INHIBITORY, label))
                 .setPersistent(true);
 
@@ -239,10 +240,10 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
-        topicPatternN = m.lookupNeuronProvider(in.readLong()).getNeuron();
-        topicBN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        topicPatternN = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
+        topicBN = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
 
         if(in.readBoolean())
-            inhibitoryN = m.lookupNeuronProvider(in.readLong()).getNeuron();
+            inhibitoryN = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
     }
 }

@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import static network.aika.TestHelper.initPatternBlackCat;
 import static network.aika.TestHelper.initPatternTheCat;
 import static network.aika.TestUtils.*;
+import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
 
 
 /**
@@ -43,8 +44,8 @@ public class TheBlackCatTest {
         Dictionary dict = new Dictionary(m);
         dict.initStaticNeurons();
 
-        InhibitoryNeuron inhibNThe = new InhibitoryNeuron(m).setLabel("I-the");
-        InhibitoryNeuron inhibNCat = new InhibitoryNeuron(m).setLabel("I-cat");
+        InhibitoryNeuron inhibNThe = new InhibitoryNeuron(m, NEURON_EXTERNAL).setLabel("I-the");
+        InhibitoryNeuron inhibNCat = new InhibitoryNeuron(m, NEURON_EXTERNAL).setLabel("I-cat");
         initPatternTheCat(m, dict, inhibNThe, inhibNCat, 0);
         initPatternBlackCat(m, dict);
 

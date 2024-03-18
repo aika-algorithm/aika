@@ -23,6 +23,7 @@ import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
+import network.aika.elements.neurons.RefType;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
@@ -41,8 +42,8 @@ public class BindingCategoryNeuron extends CategoryNeuron {
         super(np);
     }
 
-    public BindingCategoryNeuron(Model m) {
-        super(m);
+    public BindingCategoryNeuron(Model m, RefType rt) {
+        super(m, rt);
     }
 
     @Override

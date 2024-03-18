@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static network.aika.elements.neurons.RefType.*;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 
@@ -55,30 +56,36 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
     protected final ReadWriteLock inputLock = new ReadWriteLock();
     protected final ReadWriteLock outputLock = new ReadWriteLock();
 
+    private int refCount;
+    private int[] refCountByType = new int[RefType.values().length];
+
     private boolean persistent;
+
     private volatile long lastUsed;
     private boolean isRegistered;
 
-    public NeuronProvider(long id) {
+    private NeuronProvider(Long id) {
         this.id = id;
     }
 
-    public NeuronProvider(Model model, long id) {
+    public NeuronProvider(Model model, Long id, RefType rt) {
         this(id);
         assert model != null;
         this.model = model;
-        model.register(this);
+
+        increaseRefCount(rt);
     }
 
-    public NeuronProvider(Model model, Neuron n) {
-        this(model, model.createNeuronId());
+    public NeuronProvider(Model model, Neuron n, RefType rt) {
+        this(model, model.createNeuronId(), rt);
         assert model != null && n != null;
 
         neuron = n;
-        checkRegister();
     }
 
-    public <N extends Neuron> N getNeuron() {
+    public synchronized <N extends Neuron> N getNeuron() {
+        assert isRegistered;
+
         if (neuron == null)
             reactivate();
 
@@ -101,6 +108,37 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return model;
     }
 
+    public synchronized void increaseRefCount(RefType rt) {
+        refCount++;
+        refCountByType[rt.ordinal()]++;
+
+        if(!isRegistered && refCount > 0) {
+            model.register(this);
+            isRegistered = true;
+        }
+    }
+
+    public synchronized void decreaseRefCount(RefType rt) {
+        refCount--;
+        refCountByType[rt.ordinal()]--;
+
+        assert refCount >= 0;
+        assert refCountByType[rt.ordinal()] >= 0;
+
+        if(isRegistered && refCount == 0) {
+            model.unregister(this);
+            isRegistered = false;
+        }
+    }
+
+    public synchronized int getRefCount() {
+        return refCount;
+    }
+
+    public boolean isReferenced() {
+        return refCount > 0;
+    }
+
     public boolean isSuspended() {
         return neuron == null;
     }
@@ -120,6 +158,19 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return persistent;
     }
 
+    /**
+     * Prevent the neuron from being suspended.
+     * @param persistent
+     */
+    public void setPersistent(boolean persistent) {
+        this.persistent = persistent;
+
+        if(persistent)
+            increaseRefCount(PERSISTENCE);
+        else
+            decreaseRefCount(PERSISTENCE);
+    }
+
     public long getLastUsed() {
         return lastUsed;
     }
@@ -128,18 +179,12 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         lastUsed = Math.max(lastUsed, thoughtId);
     }
 
-    public void setPersistent(boolean persistent) {
-        this.persistent = persistent;
-
-        if(persistent)
-            checkRegister();
-        else
-            checkUnregister();
-    }
-
-    public synchronized void suspend(boolean saveOnSuspend) {
+    public synchronized boolean suspend(boolean saveOnSuspend) {
         if(neuron == null)
-            return;
+            return false;
+
+        if(neuron.inUse())
+            return false;
 
         assert model.getSuspensionCallback() != null;
 
@@ -149,7 +194,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         neuron.suspend();
         neuron = null;
 
-        checkUnregister();
+        return true;
     }
 
     public void save() {
@@ -188,41 +233,31 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         n.setProvider(this);
         n.reactivate(model);
         neuron = n;
-        checkRegister();
     }
 
     public void addInputSynapse(Synapse s) {
         inputLock.acquireWriteLock();
         inputSynapses.put(s.getSynapseId(), s);
-
-        checkRegister();
         inputLock.releaseWriteLock();
     }
 
     public void removeInputSynapse(Synapse s) {
         inputLock.acquireWriteLock();
         inputSynapses.remove(s.getSynapseId());
-
-        checkUnregister();
         inputLock.releaseWriteLock();
     }
 
     public void addOutputSynapse(Synapse s) {
         outputLock.acquireWriteLock();
         outputSynapses.put(s.getPOutput().getId(), s);
-
-        checkRegister();
         outputLock.releaseWriteLock();
     }
 
     public void removeOutputSynapse(Synapse s) {
         outputLock.acquireWriteLock();
         outputSynapses.remove(s.getPOutput().getId());
-
-        checkUnregister();
         outputLock.releaseWriteLock();
     }
-
 
     public Stream<Synapse> getInputSynapsesAsStream() {
         return getInputSynapses().stream();
@@ -328,40 +363,18 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
 
     public void addPropagableRef(NeuronProvider np) {
         inputLock.acquireWriteLock();
-        propagableRefs.add(np);
+        if(propagableRefs.add(np))
+            np.increaseRefCount(PROPAGABLE);
 
-        checkRegister();
         inputLock.releaseWriteLock();
     }
 
     public void removePropagableRef(NeuronProvider np) {
         inputLock.acquireWriteLock();
-        propagableRefs.remove(np);
+        if(propagableRefs.remove(np))
+            np.decreaseRefCount(PROPAGABLE);
 
-        checkUnregister();
         inputLock.releaseWriteLock();
-    }
-
-    private void checkRegister() {
-        if(!isRegistered && isReferenced()) {
-            model.register(this);
-            isRegistered = true;
-        }
-    }
-
-    private void checkUnregister() {
-        if(isRegistered && !isReferenced()) {
-            model.unregister(this);
-            isRegistered = false;
-        }
-    }
-
-    private boolean isReferenced() {
-        return persistent ||
-                neuron != null ||
-                !inputSynapses.isEmpty() ||
-                !outputSynapses.isEmpty() ||
-                !propagableRefs.isEmpty();
     }
 
     public boolean isRegistered() {

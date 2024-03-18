@@ -31,8 +31,8 @@ public abstract class DisjunctiveNeuron<N extends DisjunctiveNeuron, A extends A
         super(np);
     }
 
-    public DisjunctiveNeuron(Model m) {
-        super(m);
+    public DisjunctiveNeuron(Model m, RefType rt) {
+        super(m, rt);
     }
 
     @Override

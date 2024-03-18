@@ -50,6 +50,7 @@ import java.util.stream.Stream;
 import static network.aika.elements.neurons.NeuronTypeHolder.getHolder;
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
+import static network.aika.elements.neurons.RefType.*;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -87,13 +88,15 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     private final HashMap<Long, PreActivation<A>> activations = new HashMap<>();
 
+    private boolean isStale;
+
     public Neuron(NeuronProvider np) {
         provider = np;
         setBias(0.0);
     }
 
-    public Neuron(Model m) {
-        provider = new NeuronProvider(m, this);
+    public Neuron(Model m, RefType rt) {
+        provider = new NeuronProvider(m, this, rt);
         setModified();
         setBias(0.0);
     }
@@ -115,23 +118,26 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public void updatePropagable(NeuronProvider np, boolean isPropagable) {
-        if(isPropagable) {
+        if (isPropagable)
             addPropagable(np);
-        } else {
+        else
             removePropagable(np);
-        }
     }
 
     private void addPropagable(NeuronProvider np) {
         provider.outputLock.acquireWriteLock();
-        propagable.add(np);
+        if(propagable.add(np))
+            np.increaseRefCount(PROPAGABLE);
+
         provider.outputLock.releaseWriteLock();
         np.addPropagableRef(provider);
     }
 
     private void removePropagable(NeuronProvider np) {
         provider.outputLock.acquireWriteLock();
-        propagable.remove(np);
+        if(propagable.remove(np))
+            np.decreaseRefCount(PROPAGABLE);
+
         provider.outputLock.releaseWriteLock();
         np.removePropagableRef(provider);
     }
@@ -165,13 +171,19 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         provider.updateLastUsed(doc.getId());
     }
 
+    public boolean inUse() {
+        synchronized (activations) {
+            return !activations.isEmpty();
+        }
+    }
+
     public PreActivation<A> getOrCreatePreActivation(Document doc) {
         PreActivation<A> preAct;
         synchronized (activations) {
             preAct = activations
                     .computeIfAbsent(
                             doc.getId(),
-                            n -> new PreActivation<>(doc, this)
+                            docId -> new PreActivation<>(doc, this)
                     );
         }
         return preAct;
@@ -194,10 +206,14 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public void removePreActivation(Document doc) {
+    public String removePreActivation(Document doc) {
+        StringBuilder sb = new StringBuilder("d" + doc.getId() + ":" + getId() + ":" + hashCode() + ":");
+
         synchronized (activations) {
-            activations.remove(doc.getId());
+            PreActivation removedPreAct = activations.remove(doc.getId());
+            removedPreAct.disconnect();
         }
+        return sb.toString();
     }
 
     public SortedSet<A> getActivations(Document doc) {
@@ -213,7 +229,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         try {
             n = (R) getClass()
                     .getConstructor(Model.class)
-                    .newInstance(getModel());
+                    .newInstance(getModel(), TEMPLATE);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -373,18 +389,32 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     public void suspend() {
-        for (Synapse s : getProvider().getInputSynapsesStoredAtOutputSide()) {
+        for (Synapse s : provider.getInputSynapsesStoredAtOutputSide()) {
+            NeuronProvider in = s.getPInput();
+
+            in.decreaseRefCount(SYNAPSE);
+            provider.decreaseRefCount(SYNAPSE);
+
             provider.removeInputSynapse(s);
-            s.getPInput().removeOutputSynapse(s);
+            in.removeOutputSynapse(s);
         }
-        for (Synapse s : getProvider().getOutputSynapsesStoredAtInputSide()) {
+        for (Synapse s : provider.getOutputSynapsesStoredAtInputSide()) {
+            NeuronProvider out = s.getPOutput();
+
+            out.decreaseRefCount(SYNAPSE);
+            provider.decreaseRefCount(SYNAPSE);
+
             provider.removeOutputSynapse(s);
-            s.getPOutput().removeInputSynapse(s);
+            out.removeInputSynapse(s);
         }
 
         for(NeuronProvider np: propagable) {
+            np.decreaseRefCount(PROPAGABLE);
+
             np.removePropagableRef(provider);
         }
+
+        isStale = true;
     }
 
     public void reactivate(Model m) {
@@ -460,7 +490,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
 
         while (in.readBoolean()) {
-            NeuronProvider np = m.lookupNeuronProvider(in.readLong());
+            NeuronProvider np = m.lookupNeuronProvider(in.readLong(), null);
             addPropagable(np);
         }
 

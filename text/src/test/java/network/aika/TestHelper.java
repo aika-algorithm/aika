@@ -16,6 +16,7 @@
  */
 package network.aika;
 
+import network.aika.elements.neurons.RefType;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
@@ -28,6 +29,7 @@ import network.aika.meta.Dictionary;
 import network.aika.text.Range;
 
 import static network.aika.TestUtils.initPatternLoop;
+import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.meta.NetworkMotifs.addInhibitoryLoop;
@@ -51,17 +53,18 @@ public class TestHelper {
                 new BeforeRelation(
                         relFrom < 0 ? INPUT : OUTPUT,
                         new Range(relFrom, relTo)
-                )
+                ),
+                NEURON_EXTERNAL
         )
                 .setLabel("relPT");
 
-        BindingNeuron theBN = new BindingNeuron(m).setLabel("the (the cat)");
+        BindingNeuron theBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("the (the cat)");
         new InputObjectSynapse()
                 .setWeight(10.0)
                 .link(theIN, theBN)
                 .adjustBias();
 
-        BindingNeuron catBN = new BindingNeuron(m).setLabel("cat (the cat)");
+        BindingNeuron catBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("cat (the cat)");
         new InputObjectSynapse()
                 .setWeight(variant == 0  || variant == 2 ? 10.0 : 5.0)
                 .link(catIN, catBN)
@@ -107,17 +110,18 @@ public class TestHelper {
                 new BeforeRelation(
                         INPUT,
                         new Range(0, 0)
-                )
+                ),
+                NEURON_EXTERNAL
         )
                 .setLabel("relPT");
 
-        BindingNeuron blackBN = new BindingNeuron(m).setLabel("black (black cat)");
+        BindingNeuron blackBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("black (black cat)");
         new InputObjectSynapse()
                 .setWeight(10.0)
                 .link(blackIN, blackBN)
                 .adjustBias();
 
-        BindingNeuron catBN = new BindingNeuron(m).setLabel("cat (black cat)");
+        BindingNeuron catBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("cat (black cat)");
         new InputObjectSynapse()
                 .setWeight(20.0)
                 .link(catIN, catBN)
@@ -152,17 +156,18 @@ public class TestHelper {
                 new BeforeRelation(
                         relFrom < 0 ? INPUT : OUTPUT,
                         new Range(relFrom, relTo)
-                )
+                ),
+                NEURON_EXTERNAL
         )
                 .setLabel("relPT");
 
-        BindingNeuron theBN = new BindingNeuron(m).setLabel("the (the dog)");
+        BindingNeuron theBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("the (the dog)");
         new InputObjectSynapse()
                 .setWeight(10.0)
                 .link(theIN, theBN)
                 .adjustBias();
 
-        BindingNeuron dogBN = new BindingNeuron(m).setLabel("dog (the dog)");
+        BindingNeuron dogBN = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("dog (the dog)");
         new InputObjectSynapse()
                 .setWeight(variant == 0  || variant == 2 ? 10.0 : 5.0)
                 .link(dogIN, dogBN)
@@ -191,7 +196,7 @@ public class TestHelper {
         PatternNeuron theDogP = initPatternLoop(m, "the dog", theBN, dogBN);
 
         addInhibitoryLoop(theBN, inhibNThe, -10.0);
-        addInhibitoryLoop(theBN, new InhibitoryNeuron(m).setLabel("I-the (tg)"), -10.0);
+        addInhibitoryLoop(theBN, new InhibitoryNeuron(m, NEURON_EXTERNAL).setLabel("I-the (tg)"), -10.0);
 
         theDogP.setBias(3.0);
 

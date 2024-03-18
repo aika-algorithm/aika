@@ -20,6 +20,7 @@ import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
+import network.aika.elements.neurons.RefType;
 import network.aika.elements.relations.Relation;
 import network.aika.fields.Field;
 import network.aika.fields.SumField;
@@ -49,14 +50,14 @@ public class LatentRelationNeuron extends BindingNeuron {
         super(np);
     }
 
-    public LatentRelationNeuron(Model m) {
-        super(m);
+    public LatentRelationNeuron(Model m, RefType rt) {
+        super(m, rt);
 
         setAllowTraining(false);
     }
 
-    public LatentRelationNeuron(Model m, Relation rel) {
-        this(m);
+    public LatentRelationNeuron(Model m, Relation rel, RefType rt) {
+        this(m, rt);
         this.relation = rel;
     }
 

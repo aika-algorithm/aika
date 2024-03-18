@@ -21,6 +21,7 @@ import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.links.types.PatternLink;
+import network.aika.elements.neurons.RefType;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.types.InnerPositiveFeedbackSynapse;
@@ -29,6 +30,8 @@ import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
 
 
 /**
@@ -40,9 +43,9 @@ public class PropagateBindingSignalTest {
     @Test
     public void testPropagateBindingSignalOnLinkStateChange() {
         Model m = new Model();
-        PatternNeuron bsN = new PatternNeuron(m);
-        BindingNeuron in = new BindingNeuron(m);
-        PatternNeuron on = new PatternNeuron(m);
+        PatternNeuron bsN = new PatternNeuron(m, NEURON_EXTERNAL);
+        BindingNeuron in = new BindingNeuron(m, NEURON_EXTERNAL);
+        PatternNeuron on = new PatternNeuron(m, NEURON_EXTERNAL);
         PatternSynapse s = new PatternSynapse()
                 .setWeight(1.0)
                 .link(in, on);
@@ -73,9 +76,9 @@ public class PropagateBindingSignalTest {
     @Test
     public void testPropagateBindingSignalOnBSArrived() {
         Model m = new Model();
-        PatternNeuron bsN = new PatternNeuron(m);
-        BindingNeuron in = new BindingNeuron(m);
-        PatternNeuron on = new PatternNeuron(m);
+        PatternNeuron bsN = new PatternNeuron(m, NEURON_EXTERNAL);
+        BindingNeuron in = new BindingNeuron(m, NEURON_EXTERNAL);
+        PatternNeuron on = new PatternNeuron(m, NEURON_EXTERNAL);
         PatternSynapse s = new PatternSynapse()
                 .setWeight(1.0)
                 .link(in, on);
@@ -108,8 +111,8 @@ public class PropagateBindingSignalTest {
     @Test
     public void testPropagateBindingSignalOnLinkCreation() {
         Model m = new Model();
-        PatternNeuron in = new PatternNeuron(m);
-        BindingNeuron on = new BindingNeuron(m);
+        PatternNeuron in = new PatternNeuron(m, NEURON_EXTERNAL);
+        BindingNeuron on = new BindingNeuron(m, NEURON_EXTERNAL);
         InnerPositiveFeedbackSynapse s = new InnerPositiveFeedbackSynapse()
                 .setWeight(1.0)
                 .link(in, on);

@@ -31,6 +31,7 @@ import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
+import network.aika.elements.neurons.RefType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
@@ -47,6 +48,7 @@ import static network.aika.debugger.EventType.*;
 import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
+import static network.aika.elements.neurons.RefType.TEMPLATE;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.fields.Fields.*;
 import static network.aika.queue.Phase.*;
@@ -91,6 +93,10 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         this.id = id;
         this.neuron = n;
         this.doc = doc;
+
+        neuron.register(this);
+        doc.register(this);
+
         setCreated(doc.getCurrentTimestamp());
 
         initNet();
@@ -107,9 +113,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
             connectWeightUpdate();
             InactiveLinks.add(this);
         }
-
-        doc.register(this);
-        neuron.register(this);
 
         doc.onElementEvent(CREATE, this);
     }
@@ -553,6 +556,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         if(ti != null && ti.getLabel() != null)
             getModel().registerLabel(ti.getNeuron(), neuron);
+
+        n.getProvider().decreaseRefCount(TEMPLATE);
 
         return ti;
     }

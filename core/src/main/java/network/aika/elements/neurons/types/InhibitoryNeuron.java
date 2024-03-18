@@ -23,12 +23,14 @@ import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.neurons.DisjunctiveNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
+import network.aika.elements.neurons.RefType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
 
 import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
+import static network.aika.elements.neurons.RefType.TEMPLATE;
 
 /**
  *
@@ -44,13 +46,13 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
         super(np);
     }
 
-    public InhibitoryNeuron(Model m) {
-        super(m);
+    public InhibitoryNeuron(Model m, RefType rt) {
+        super(m, rt);
     }
 
     @Override
     public InhibitoryCategoryInputSynapse makeAbstract() {
-        InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(getModel())
+        InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(getModel(), TEMPLATE)
                 .setLabel(getLabel() + CATEGORY_LABEL);
 
         InhibitoryCategoryInputSynapse s = new InhibitoryCategoryInputSynapse()
@@ -63,7 +65,7 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
 
     @Override
     public InhibitoryNeuron instantiateTemplate() {
-        InhibitoryNeuron n = new InhibitoryNeuron(getModel());
+        InhibitoryNeuron n = new InhibitoryNeuron(getModel(), TEMPLATE);
         n.initFromTemplate(this);
         return n;
     }

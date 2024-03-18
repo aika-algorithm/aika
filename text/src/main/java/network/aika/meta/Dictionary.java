@@ -34,6 +34,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Objects;
 
+import static network.aika.elements.neurons.RefType.TEMPLATE_MODEL;
+
 /**
  *
  * @author Lukas Molzberger
@@ -58,7 +60,7 @@ public class Dictionary implements Writable {
     }
 
     public void initStaticNeurons() {
-        inputToken = new PatternNeuron(model)
+        inputToken = new PatternNeuron(model, TEMPLATE_MODEL)
                 .setLabel("Input Token")
                 .setBias(INPUT_TOKEN_NET_TARGET)
                 .setTargetNet(INPUT_TOKEN_NET_TARGET)
@@ -128,6 +130,6 @@ public class Dictionary implements Writable {
 
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
-        inputToken = m.lookupNeuronProvider(in.readLong()).getNeuron();
+        inputToken = m.lookupNeuronProvider(in.readLong(), TEMPLATE_MODEL).getNeuron();
     }
 }

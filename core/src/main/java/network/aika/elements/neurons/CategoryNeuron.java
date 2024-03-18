@@ -31,8 +31,8 @@ public abstract class CategoryNeuron extends DisjunctiveNeuron<CategoryNeuron, C
         super(np);
     }
 
-    public CategoryNeuron(Model m) {
-        super(m);
+    public CategoryNeuron(Model m, RefType rt) {
+        super(m, rt);
     }
 
     @Override

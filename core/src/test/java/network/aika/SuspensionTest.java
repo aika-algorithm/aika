@@ -36,6 +36,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
+import static network.aika.elements.neurons.RefType.OTHER;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 
@@ -54,9 +56,9 @@ public class SuspensionTest {
                 .setTrainingEnabled(false);
         m.setConfig(c);
 
-        NeuronProvider inStrong = new PatternNeuron(m).setLabel("IN Strong").getProvider();
-        NeuronProvider inWeak = new PatternNeuron(m).setLabel("IN Weak").getProvider();
-        NeuronProvider out = new BindingNeuron(m).setLabel("OUT").getProvider();
+        NeuronProvider inStrong = new PatternNeuron(m, NEURON_EXTERNAL).setLabel("IN Strong").getProvider();
+        NeuronProvider inWeak = new PatternNeuron(m, NEURON_EXTERNAL).setLabel("IN Weak").getProvider();
+        NeuronProvider out = new BindingNeuron(m, NEURON_EXTERNAL).setLabel("OUT").getProvider();
         out.getNeuron().setBias(1.0);
 
         Synapse sStrong = new InputObjectSynapse()
@@ -77,7 +79,7 @@ public class SuspensionTest {
         out.save();
 
         // Reactivate
-        inStrong = m.lookupNeuronProvider(inStrong.getId());
+        inStrong = m.lookupNeuronProvider(inStrong.getId(), OTHER);
 
         Document doc = new Document(m, "test");
         doc.addToken(
