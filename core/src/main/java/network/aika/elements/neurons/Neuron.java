@@ -228,7 +228,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         R n;
         try {
             n = (R) getClass()
-                    .getConstructor(Model.class)
+                    .getConstructor(Model.class, RefType.class)
                     .newInstance(getModel(), TEMPLATE);
         } catch (Exception e) {
             throw new RuntimeException(e);
