@@ -231,18 +231,21 @@ public class Model extends Queue implements Writable {
             p.suspend(saveOnSuspend);
     }
 
-    public void register(NeuronProvider p) {
+    public void register(NeuronProvider np) {
         synchronized (providers) {
-            NeuronProvider existingNP = providers.put(p.getId(), p);
+            NeuronProvider existingNP = providers.put(np.getId(), np);
 
             if(existingNP != null)
-                LOG.error("Attempted to overwrite existing Provider: (np:" + p.getId() + ")");
+                LOG.error("Attempted to overwrite existing Provider: (np:" + np.getId() + ")");
         }
     }
 
-    public void unregister(NeuronProvider p) {
+    public void unregister(NeuronProvider np) {
         synchronized (providers) {
-            providers.remove(p.getId());
+            NeuronProvider removedNP = providers.remove(np.getId());
+
+            if(removedNP != np)
+                LOG.error("Attempted to remove a duplicate Provider: (np:" + np.getId() + ")");
         }
     }
 
