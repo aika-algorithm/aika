@@ -73,7 +73,8 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         assert model != null;
         this.model = model;
 
-        increaseRefCount(rt);
+        if(rt == null)
+            increaseRefCount(rt);
     }
 
     public NeuronProvider(Model model, Neuron n, RefType rt) {
