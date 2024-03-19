@@ -109,35 +109,43 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return model;
     }
 
-    public synchronized void increaseRefCount(RefType rt) {
-        refCount++;
-        refCountByType[rt.ordinal()]++;
+    public void increaseRefCount(RefType rt) {
+        synchronized (refCountByType) {
+            refCount++;
+            refCountByType[rt.ordinal()]++;
 
-        if(!isRegistered && refCount > 0) {
-            model.register(this);
-            isRegistered = true;
+            if (!isRegistered && refCount > 0) {
+                model.register(this);
+                isRegistered = true;
+            }
         }
     }
 
-    public synchronized void decreaseRefCount(RefType rt) {
-        refCount--;
-        refCountByType[rt.ordinal()]--;
+    public void decreaseRefCount(RefType rt) {
+        synchronized (refCountByType) {
+            refCount--;
+            refCountByType[rt.ordinal()]--;
 
-        assert refCount >= 0;
-        assert refCountByType[rt.ordinal()] >= 0;
+            assert refCount >= 0;
+            assert refCountByType[rt.ordinal()] >= 0;
 
-        if(isRegistered && refCount == 0) {
-            model.unregister(this);
-            isRegistered = false;
+            if (isRegistered && refCount == 0) {
+                model.unregister(this);
+                isRegistered = false;
+            }
         }
     }
 
-    public synchronized int getRefCount() {
-        return refCount;
+    public int getRefCount() {
+        synchronized (refCountByType) {
+            return refCount;
+        }
     }
 
     public boolean isReferenced() {
-        return refCount > 0;
+        synchronized (refCountByType) {
+            return refCount > 0;
+        }
     }
 
     public boolean isSuspended() {
