@@ -54,7 +54,8 @@ import java.util.stream.Stream;
 
 import static network.aika.elements.Timestamp.MAX;
 import static network.aika.elements.Timestamp.MIN;
-import static network.aika.elements.neurons.RefType.SYNAPSE;
+import static network.aika.elements.neurons.RefType.SYNAPSE_IN;
+import static network.aika.elements.neurons.RefType.SYNAPSE_OUT;
 import static network.aika.elements.synapses.SynapseTypeHolder.getHolder;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
@@ -238,12 +239,12 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     public void setInput(I input) {
         this.input = input.getProvider();
-        this.input.increaseRefCount(SYNAPSE);
+        this.input.increaseRefCount(SYNAPSE_IN);
     }
 
     public void setOutput(O output) {
         this.output = output.getProvider();
-        this.output.increaseRefCount(SYNAPSE);
+        this.output.increaseRefCount(SYNAPSE_OUT);
     }
 
     public S instantiateTemplate(I input, O output) {
@@ -459,8 +460,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     @Override
     public void readFields(DataInput in, Model m) throws IOException {
         synapseId = in.readInt();
-        input = m.lookupNeuronProvider(in.readLong(), SYNAPSE);
-        output = m.lookupNeuronProvider(in.readLong(), SYNAPSE);
+        input = m.lookupNeuronProvider(in.readLong(), SYNAPSE_IN);
+        output = m.lookupNeuronProvider(in.readLong(), SYNAPSE_OUT);
 
         weight.readFields(in, m);
         instantiable = in.readBoolean();

@@ -364,7 +364,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
     public void addPropagableRef(NeuronProvider np) {
         inputLock.acquireWriteLock();
         if(propagableRefs.add(np))
-            np.increaseRefCount(PROPAGABLE);
+            np.increaseRefCount(PROPAGABLE_OUT);
 
         inputLock.releaseWriteLock();
     }
@@ -372,7 +372,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
     public void removePropagableRef(NeuronProvider np) {
         inputLock.acquireWriteLock();
         if(propagableRefs.remove(np))
-            np.decreaseRefCount(PROPAGABLE);
+            np.decreaseRefCount(PROPAGABLE_OUT);
 
         inputLock.releaseWriteLock();
     }

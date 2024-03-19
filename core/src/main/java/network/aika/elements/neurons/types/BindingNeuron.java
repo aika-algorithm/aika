@@ -34,7 +34,7 @@ import java.util.Comparator;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.*;
-import static network.aika.elements.neurons.RefType.TEMPLATE;
+import static network.aika.elements.neurons.RefType.CATEGORY;
 
 
 /**
@@ -89,7 +89,7 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
 
     @Override
     public BindingCategoryInputSynapse makeAbstract() {
-        BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron(getModel(), TEMPLATE)
+        BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron(getModel(), CATEGORY)
                 .setLabel(getLabel() + CATEGORY_LABEL);
 
         BindingCategoryInputSynapse s = new BindingCategoryInputSynapse()
@@ -97,6 +97,7 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
 
         s.setInitialCategorySynapseWeight(1.0);
 
+        bindingCategory.getProvider().decreaseRefCount(CATEGORY);
         return s;
     }
 

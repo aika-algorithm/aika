@@ -40,8 +40,7 @@ import java.io.IOException;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.MULTI_INPUT;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
-import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
-import static network.aika.elements.neurons.RefType.TEMPLATE;
+import static network.aika.elements.neurons.RefType.*;
 import static network.aika.enums.sign.Sign.POS;
 import static network.aika.text.Range.length;
 
@@ -78,7 +77,7 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
 
     @Override
     public PatternCategoryInputSynapse makeAbstract() {
-        PatternCategoryNeuron patternCategory = new PatternCategoryNeuron(getModel(), TEMPLATE)
+        PatternCategoryNeuron patternCategory = new PatternCategoryNeuron(getModel(), CATEGORY)
                 .setLabel(getCategoryLabel(getLabel()));
 
         PatternCategoryInputSynapse s = new PatternCategoryInputSynapse()
@@ -86,6 +85,7 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
 
         s.setInitialCategorySynapseWeight(1.0);
 
+        patternCategory.getProvider().decreaseRefCount(CATEGORY);
         return s;
     }
 

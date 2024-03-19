@@ -90,8 +90,6 @@ public class Document extends Queue implements Element {
         absoluteBeginChar = m.getN();
 
         m.registerDocument(this);
-
-        LOG.info("Registered Document: " + id);
     }
 
     public long getNewVisitorId() {
@@ -167,8 +165,6 @@ public class Document extends Queue implements Element {
 
         if(existingPreAct != null)
             LOG.error("Attempted to overwrite existing PreAct: (doc:" + id + " n:" + n.getId() + ")");
-
-        System.out.print("i" + id + ":" + n.getId() + ":" + n.hashCode() + ", ");
     }
 
     public Range getCharRange() {
@@ -195,15 +191,12 @@ public class Document extends Queue implements Element {
                         act.disconnect()
                 );
 
-        String report = actsPerNeuron.values()
+        actsPerNeuron.values()
                 .stream()
                 .map(PreActivation::getNeuron)
-                .map(n -> n.removePreActivation(this))
-                .collect(Collectors.joining(", "));
+                .forEach(n -> n.removePreActivation(this));
 
         isStale = true;
-
-        LOG.info("Disconnected Document: " + id + " Report:" + report);
     }
 
     @Override

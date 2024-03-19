@@ -127,7 +127,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     private void addPropagable(NeuronProvider np) {
         provider.outputLock.acquireWriteLock();
         if(propagable.add(np))
-            np.increaseRefCount(PROPAGABLE);
+            np.increaseRefCount(PROPAGABLE_IN);
 
         provider.outputLock.releaseWriteLock();
         np.addPropagableRef(provider);
@@ -136,7 +136,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     private void removePropagable(NeuronProvider np) {
         provider.outputLock.acquireWriteLock();
         if(propagable.remove(np))
-            np.decreaseRefCount(PROPAGABLE);
+            np.decreaseRefCount(PROPAGABLE_IN);
 
         provider.outputLock.releaseWriteLock();
         np.removePropagableRef(provider);
@@ -206,14 +206,11 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public String removePreActivation(Document doc) {
-        StringBuilder sb = new StringBuilder("d" + doc.getId() + ":" + getId() + ":" + hashCode() + ":");
-
+    public void removePreActivation(Document doc) {
         synchronized (activations) {
             PreActivation removedPreAct = activations.remove(doc.getId());
             removedPreAct.disconnect();
         }
-        return sb.toString();
     }
 
     public SortedSet<A> getActivations(Document doc) {
@@ -392,8 +389,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         for (Synapse s : provider.getInputSynapsesStoredAtOutputSide()) {
             NeuronProvider in = s.getPInput();
 
-            in.decreaseRefCount(SYNAPSE);
-            provider.decreaseRefCount(SYNAPSE);
+            in.decreaseRefCount(SYNAPSE_IN);
+            provider.decreaseRefCount(SYNAPSE_OUT);
 
             provider.removeInputSynapse(s);
             in.removeOutputSynapse(s);
@@ -401,18 +398,19 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         for (Synapse s : provider.getOutputSynapsesStoredAtInputSide()) {
             NeuronProvider out = s.getPOutput();
 
-            out.decreaseRefCount(SYNAPSE);
-            provider.decreaseRefCount(SYNAPSE);
+            out.decreaseRefCount(SYNAPSE_OUT);
+            provider.decreaseRefCount(SYNAPSE_IN);
 
             provider.removeOutputSynapse(s);
             out.removeInputSynapse(s);
         }
 
         for(NeuronProvider np: propagable) {
-            np.decreaseRefCount(PROPAGABLE);
+            np.decreaseRefCount(PROPAGABLE_IN);
 
             np.removePropagableRef(provider);
         }
+        propagable = null;
 
         isStale = true;
     }

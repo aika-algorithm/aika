@@ -30,6 +30,7 @@ import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
 
 import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
+import static network.aika.elements.neurons.RefType.CATEGORY;
 import static network.aika.elements.neurons.RefType.TEMPLATE;
 
 /**
@@ -52,7 +53,7 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
 
     @Override
     public InhibitoryCategoryInputSynapse makeAbstract() {
-        InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(getModel(), TEMPLATE)
+        InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(getModel(), CATEGORY)
                 .setLabel(getLabel() + CATEGORY_LABEL);
 
         InhibitoryCategoryInputSynapse s = new InhibitoryCategoryInputSynapse()
@@ -60,6 +61,7 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
 
         s.setInitialCategorySynapseWeight(1.0);
 
+        inhibCategory.getProvider().decreaseRefCount(CATEGORY);
         return s;
     }
 

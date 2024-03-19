@@ -36,8 +36,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
-import static network.aika.elements.neurons.RefType.OTHER;
+import static network.aika.elements.neurons.RefType.*;
 
 /**
  *
@@ -116,6 +115,8 @@ public class Model extends Queue implements Writable {
         n.setAllowTraining(false);
 
         registerLabel(n, template);
+
+        n.getProvider().decreaseRefCount(TEMPLATE);
         return n;
     }
 
