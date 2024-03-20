@@ -230,6 +230,8 @@ public class Model extends Queue implements Writable {
         toSuspend.forEach(n ->
                         suspend(n, saveOnSuspend)
                 );
+
+        LOG.info("Suspended " + toSuspend.size() + " neurons. (saveOnSuspend:" + saveOnSuspend + ")");
     }
 
     private void suspend(NeuronProvider p, boolean saveOnSuspend) {
