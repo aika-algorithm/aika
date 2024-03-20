@@ -83,19 +83,25 @@ public class Model extends Queue implements Writable {
     }
 
     public Long getLowestDocumentId() {
-        try {
-            return documents.firstKey();
-        } catch (NoSuchElementException e) {
-            return null;
+        synchronized (documents) {
+            try {
+                return documents.firstKey();
+            } catch (NoSuchElementException e) {
+                return null;
+            }
         }
     }
 
     public void registerDocument(Document doc) {
-        documents.put(doc.getId(), doc);
+        synchronized (documents) {
+            documents.put(doc.getId(), doc);
+        }
     }
 
     public void deregisterDocument(Document doc) {
-        documents.remove(doc.getId());
+        synchronized (documents) {
+            documents.remove(doc.getId());
+        }
 
         lastProcessedDocument = Math.max(lastProcessedDocument, doc.getId());
     }
