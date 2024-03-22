@@ -51,4 +51,6 @@ public @interface SynapseType {
     boolean propagateRange() default true;
 
     DirectionEnum storedAt();
+
+    boolean trainingAllowed() default true;
 }

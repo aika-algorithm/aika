@@ -47,6 +47,8 @@ public class SynapseTypeDefinition {
 
     private Direction storedAt;
 
+    private boolean trainingAllowed;
+
     public static SynapseTypeDefinition getDefinition(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
                 new SynapseTypeDefinition(
@@ -98,5 +100,9 @@ public class SynapseTypeDefinition {
 
     public Direction getStoredAt() {
         return storedAt;
+    }
+
+    public boolean isTrainingAllowed() {
+        return trainingAllowed;
     }
 }

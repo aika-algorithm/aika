@@ -45,11 +45,6 @@ public abstract class CategoryNeuron extends DisjunctiveNeuron<CategoryNeuron, C
     }
 
     @Override
-    public boolean isTrainingAllowed() {
-        return false;
-    }
-
-    @Override
     public CategorySynapse createCategorySynapse() {
         throw new UnsupportedOperationException();
     }

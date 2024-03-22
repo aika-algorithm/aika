@@ -36,6 +36,8 @@ public class NeuronTypeDefinition {
 
     private BSSlotDefinition[] bindingSignalSlots;
 
+    private boolean trainingAllowed;
+
     public static NeuronTypeDefinition getDefinition(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
                 new NeuronTypeDefinition(
@@ -50,6 +52,7 @@ public class NeuronTypeDefinition {
         this.type = typeAnnotation.type();
         this.activationFunction = typeAnnotation.activationFunction();
         this.bindingSignalSlots = typeAnnotation.bindingSignalSlots();
+        this.trainingAllowed = typeAnnotation.trainingAllowed();
     }
 
     public Type getType() {
@@ -62,5 +65,9 @@ public class NeuronTypeDefinition {
 
     public BSSlotDefinition[] getBindingSignalSlots() {
         return bindingSignalSlots;
+    }
+
+    public boolean isTrainingAllowed() {
+        return trainingAllowed;
     }
 }

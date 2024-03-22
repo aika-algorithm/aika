@@ -49,7 +49,8 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         required = INPUT_INPUT,
         outputState = PRE_FEEDBACK,
         trigger = FIRED_PRE_FEEDBACK,
-        storedAt = DirectionEnum.OUTPUT
+        storedAt = DirectionEnum.OUTPUT,
+        trainingAllowed = false
 )
 public class BindingCategoryInputSynapse extends ConjunctiveCategoryInputSynapse<
         BindingCategoryInputSynapse,
@@ -65,11 +66,6 @@ public class BindingCategoryInputSynapse extends ConjunctiveCategoryInputSynapse
     @Override
     public BindingCategoryInputLink createLink(CategoryActivation input, BindingActivation output) {
         return new BindingCategoryInputLink(this, input, output);
-    }
-
-    @Override
-    public boolean isTrainingAllowed() {
-        return false;
     }
 
     @Override

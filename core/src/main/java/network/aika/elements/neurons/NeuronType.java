@@ -38,4 +38,6 @@ public @interface NeuronType {
     ActivationFunction activationFunction();
 
     BSSlotDefinition[] bindingSignalSlots();
+
+    boolean trainingAllowed() default true;
 }

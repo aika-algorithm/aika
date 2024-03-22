@@ -353,8 +353,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return weight;
     }
 
-    public boolean isTrainingAllowed() {
-        return trainingAllowed && getOutput().isTrainingAllowed();
+    public final boolean isTrainingAllowed() {
+        return trainingAllowed && synapseType.isTrainingAllowed() && getOutput().isTrainingAllowed();
     }
 
     public void setTrainingAllowed(boolean trainingAllowed) {

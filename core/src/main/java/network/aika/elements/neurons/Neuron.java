@@ -301,8 +301,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     public abstract CategorySynapse getCategoryOutputSynapse();
 
-    public boolean isTrainingAllowed() {
-        return true;
+    public final boolean isTrainingAllowed() {
+        return neuronType.isTrainingAllowed();
     }
 
     public abstract A createActivation(Document doc);

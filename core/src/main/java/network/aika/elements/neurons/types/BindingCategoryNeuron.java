@@ -36,7 +36,8 @@ import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_
 @NeuronType(
         type = BINDING,
         activationFunction = LIMITED_RECTIFIED_LINEAR_UNIT,
-        bindingSignalSlots = {SINGLE_INPUT, SINGLE_SAME}
+        bindingSignalSlots = {SINGLE_INPUT, SINGLE_SAME},
+        trainingAllowed = false
 )
 public class BindingCategoryNeuron extends CategoryNeuron {
 

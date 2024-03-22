@@ -41,7 +41,8 @@ import static network.aika.elements.neurons.RefType.TEMPLATE;
 @NeuronType(
         type = INHIBITORY,
         activationFunction = LIMITED_RECTIFIED_LINEAR_UNIT,
-        bindingSignalSlots = SINGLE_INPUT
+        bindingSignalSlots = SINGLE_INPUT,
+        trainingAllowed = false
 )
 public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, InhibitoryActivation> {
 
@@ -92,10 +93,5 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
     @Override
     public InhibitoryCategorySynapse getCategoryOutputSynapse() {
         return getOutputSynapseByType(InhibitoryCategorySynapse.class);
-    }
-
-    @Override
-    public boolean isTrainingAllowed() {
-        return false;
     }
 }
