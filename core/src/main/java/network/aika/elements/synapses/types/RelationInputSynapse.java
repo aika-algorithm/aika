@@ -26,6 +26,7 @@ import network.aika.elements.neurons.types.LatentRelationNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.Direction;
+import network.aika.enums.direction.DirectionEnum;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -44,7 +45,8 @@ import static network.aika.enums.Transition.INPUT_INPUT;
         outputType = BINDING,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        propagateRange = false
+        propagateRange = false,
+        storedAt = DirectionEnum.OUTPUT
 )
 public class RelationInputSynapse extends ConjunctiveSynapse<
         RelationInputSynapse,

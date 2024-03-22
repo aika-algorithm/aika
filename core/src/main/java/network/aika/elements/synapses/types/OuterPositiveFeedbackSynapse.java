@@ -26,6 +26,7 @@ import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
 import network.aika.elements.synapses.slots.AnnealingType;
 import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.enums.direction.DirectionEnum;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
@@ -43,7 +44,8 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         transition = SAME_INPUT,
         required = INPUT_SAME,
         trigger = FIRED_PRE_FEEDBACK,
-        outputState = OUTER_FEEDBACK
+        outputState = OUTER_FEEDBACK,
+        storedAt = DirectionEnum.OUTPUT
 )
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         OuterPositiveFeedbackSynapse,

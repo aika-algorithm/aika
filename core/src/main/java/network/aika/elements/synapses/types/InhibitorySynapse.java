@@ -23,6 +23,7 @@ import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
+import network.aika.enums.direction.DirectionEnum;
 
 import static network.aika.elements.Type.*;
 import static network.aika.enums.Transition.INPUT_INPUT;
@@ -37,7 +38,8 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         outputType = INHIBITORY,
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
-        trigger = FIRED_PRE_FEEDBACK
+        trigger = FIRED_PRE_FEEDBACK,
+        storedAt = DirectionEnum.INPUT
 )
 public class InhibitorySynapse extends DisjunctiveSynapse<
         InhibitorySynapse,

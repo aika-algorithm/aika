@@ -20,6 +20,8 @@ import network.aika.elements.Type;
 import network.aika.elements.activations.StateType;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
+import network.aika.enums.direction.Direction;
+import network.aika.enums.direction.DirectionEnum;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -47,4 +49,6 @@ public @interface SynapseType {
     StateType outputState() default StateType.PRE_FEEDBACK;
 
     boolean propagateRange() default true;
+
+    DirectionEnum storedAt();
 }

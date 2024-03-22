@@ -22,6 +22,7 @@ import network.aika.elements.links.types.BindingCategoryLink;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.SynapseType;
+import network.aika.enums.direction.DirectionEnum;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.enums.Transition.INPUT_INPUT;
@@ -37,7 +38,8 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         outputType = BINDING,
         transition = {INPUT_INPUT, SAME_SAME},
         required = INPUT_INPUT,
-        trigger = FIRED_PRE_FEEDBACK
+        trigger = FIRED_PRE_FEEDBACK,
+        storedAt = DirectionEnum.INPUT
 )
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
 

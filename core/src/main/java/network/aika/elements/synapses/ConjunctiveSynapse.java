@@ -181,12 +181,6 @@ public abstract class ConjunctiveSynapse<
     }
 
     @Override
-    public Direction getStoredAt() {
-        return OUTPUT;
-    }
-
-
-    @Override
     public boolean isWeak() {
         return getOutput().getBias().getUpdatedValue() > -synapseBias.getUpdatedValue();
     }

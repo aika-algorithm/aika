@@ -22,6 +22,7 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
+import network.aika.enums.direction.Direction;
 
 import java.util.HashMap;
 
@@ -44,6 +45,8 @@ public class SynapseTypeDefinition {
 
     private boolean propagateRange;
 
+    private Direction storedAt;
+
     public static SynapseTypeDefinition getDefinition(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
                 new SynapseTypeDefinition(
@@ -62,6 +65,7 @@ public class SynapseTypeDefinition {
         trigger = synTypeAnno.trigger();
         outputState = synTypeAnno.outputState();
         propagateRange = synTypeAnno.propagateRange();
+        storedAt = synTypeAnno.storedAt().getDir();
     }
 
     public Type getInputType() {
@@ -90,5 +94,9 @@ public class SynapseTypeDefinition {
 
     public boolean isPropagateRange() {
         return propagateRange;
+    }
+
+    public Direction getStoredAt() {
+        return storedAt;
     }
 }

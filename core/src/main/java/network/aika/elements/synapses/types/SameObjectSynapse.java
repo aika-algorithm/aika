@@ -21,6 +21,7 @@ import network.aika.elements.links.types.SameObjectLink;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
+import network.aika.enums.direction.DirectionEnum;
 import network.aika.fields.FieldOutput;
 
 import static network.aika.elements.Type.BINDING;
@@ -40,7 +41,8 @@ import static network.aika.enums.Trigger.PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK;
         transition = SAME_SAME,
         required = INPUT_INPUT,
         trigger = PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK,
-        propagateRange = false
+        propagateRange = false,
+        storedAt = DirectionEnum.OUTPUT
 )
 public class SameObjectSynapse extends ConjunctiveSynapse<
         SameObjectSynapse,

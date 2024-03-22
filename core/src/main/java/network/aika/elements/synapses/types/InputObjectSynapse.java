@@ -23,6 +23,7 @@ import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
+import network.aika.enums.direction.DirectionEnum;
 
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.Type.PATTERN;
@@ -38,7 +39,8 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         outputType = BINDING,
         transition = SAME_INPUT,
         required = SAME_INPUT,
-        trigger = FIRED_PRE_FEEDBACK
+        trigger = FIRED_PRE_FEEDBACK,
+        storedAt = DirectionEnum.OUTPUT
 )
 public class InputObjectSynapse extends ConjunctiveSynapse<
         InputObjectSynapse,

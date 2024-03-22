@@ -28,6 +28,7 @@ import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
 import network.aika.elements.synapses.slots.AnnealingType;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.direction.Direction;
+import network.aika.enums.direction.DirectionEnum;
 import network.aika.fields.Field;
 
 import java.io.DataInput;
@@ -53,7 +54,8 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
         required = INPUT_INPUT,
         trigger = FIRED_PRE_FEEDBACK,
         outputState = OUTER_FEEDBACK,
-        propagateRange = false
+        propagateRange = false,
+        storedAt = DirectionEnum.OUTPUT
 )
 public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
         NegativeFeedbackSynapse,
@@ -97,11 +99,6 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
     @Override
     public NegativeFeedbackLink createLink(InhibitoryActivation input, BindingActivation output) {
         return new NegativeFeedbackLink(this, input, output);
-    }
-
-    @Override
-    public Direction getStoredAt() {
-        return OUTPUT;
     }
 
     @Override

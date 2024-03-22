@@ -26,6 +26,7 @@ import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.Direction;
+import network.aika.enums.direction.DirectionEnum;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -48,7 +49,8 @@ import static network.aika.enums.direction.Direction.OUTPUT;
         transition = INPUT_INPUT,
         required = INPUT_INPUT,
         outputState = PRE_FEEDBACK,
-        trigger = FIRED_PRE_FEEDBACK
+        trigger = FIRED_PRE_FEEDBACK,
+        storedAt = DirectionEnum.OUTPUT
 )
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InhibitoryCategoryInputSynapse,
@@ -60,11 +62,6 @@ public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         > implements CategoryInputSynapse<InhibitoryCategoryInputSynapse>
 {
     private double initialCategorySynapseWeight;
-
-    @Override
-    public Direction getStoredAt() {
-        return OUTPUT;
-    }
 
     @Override
     public void link() {

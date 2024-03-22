@@ -60,9 +60,4 @@ public abstract class DisjunctiveSynapse<
         if(in != null)
             in.setModified();
     }
-
-    @Override
-    public Direction getStoredAt() {
-        return INPUT;
-    }
 }

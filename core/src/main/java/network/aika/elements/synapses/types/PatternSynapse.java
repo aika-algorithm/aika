@@ -25,6 +25,7 @@ import network.aika.elements.links.types.PatternLink;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
+import network.aika.enums.direction.DirectionEnum;
 import network.aika.fields.FieldOutput;
 import network.aika.text.Range;
 import network.aika.statistic.SampleSpace;
@@ -57,7 +58,8 @@ import static network.aika.enums.sign.Sign.POS;
         outputType = PATTERN,
         transition = {SAME_SAME, INPUT_INPUT},
         required = SAME_SAME,
-        trigger = PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK
+        trigger = PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK,
+        storedAt = DirectionEnum.OUTPUT
 )
 public class PatternSynapse extends ConjunctiveSynapse<
         PatternSynapse,

@@ -25,6 +25,7 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveCategoryInputSynapse;
 import network.aika.elements.synapses.SynapseType;
+import network.aika.enums.direction.DirectionEnum;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -47,7 +48,8 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
         transition = {INPUT_INPUT, SAME_SAME},
         required = INPUT_INPUT,
         outputState = PRE_FEEDBACK,
-        trigger = FIRED_PRE_FEEDBACK
+        trigger = FIRED_PRE_FEEDBACK,
+        storedAt = DirectionEnum.OUTPUT
 )
 public class BindingCategoryInputSynapse extends ConjunctiveCategoryInputSynapse<
         BindingCategoryInputSynapse,

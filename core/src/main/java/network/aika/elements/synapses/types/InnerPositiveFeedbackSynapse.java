@@ -23,6 +23,7 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
+import network.aika.enums.direction.DirectionEnum;
 
 import static network.aika.elements.Type.*;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
@@ -40,7 +41,8 @@ import static network.aika.enums.Transition.SAME_SAME;
         required = SAME_SAME,
         trigger = NOT_FIRED,
         outputState = INNER_FEEDBACK,
-        propagateRange = false
+        propagateRange = false,
+        storedAt = DirectionEnum.OUTPUT
 )
 public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         InnerPositiveFeedbackSynapse,
