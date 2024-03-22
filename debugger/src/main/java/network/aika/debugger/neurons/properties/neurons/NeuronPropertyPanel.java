@@ -20,6 +20,7 @@ import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.Neuron;
+import network.aika.utils.StringUtils;
 import network.aika.utils.Utils;
 
 
@@ -43,8 +44,8 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
         addField(n.getBias());
 
         if(n.getTargetNet() != null) {
-            addConstant("Target Net: ", "" + Utils.doubleToString(n.getTargetNet()));
-            addConstant("Target Value: ", "" + Utils.doubleToString(n.getTargetValue()));
+            addConstant("Target Net: ", "" + StringUtils.doubleToString(n.getTargetNet()));
+            addConstant("Target Value: ", "" + StringUtils.doubleToString(n.getTargetValue()));
         }
 
         addConstant("Activation Function: ", "" + n.getActivationFunction().name());

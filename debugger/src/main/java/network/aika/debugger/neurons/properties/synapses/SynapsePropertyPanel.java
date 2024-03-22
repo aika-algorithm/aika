@@ -21,12 +21,11 @@ import network.aika.elements.links.Link;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.SynapseTypeHolder;
-import network.aika.utils.Utils;
+import network.aika.utils.StringUtils;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static network.aika.utils.Utils.doubleToString;
 
 
 /**
@@ -59,7 +58,7 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
             addConstant("Relation: ", "" + s.getRelation());
 
         addConstant("Instantiable: ", "" + s.isInstantiable());
-        addConstant("Initial Instance Weight: ", "" + Utils.doubleToString(s.getInitialInstanceWeight()));
+        addConstant("Initial Instance Weight: ", "" + StringUtils.doubleToString(s.getInitialInstanceWeight()));
     }
 
     protected void initSynapseTypeProperties(SynapseTypeHolder st) {

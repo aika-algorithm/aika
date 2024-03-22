@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static experiment.logger.ExperimentLogger.CSV_FORMAT;
-import static network.aika.utils.Utils.doubleToString;
+import static network.aika.utils.StringUtils.doubleToString;
 
 /**
  * @author Lukas Molzberger

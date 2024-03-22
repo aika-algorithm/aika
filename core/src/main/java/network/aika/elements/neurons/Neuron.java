@@ -32,9 +32,9 @@ import network.aika.exceptions.NeuronExistsTwiceException;
 import network.aika.fields.*;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
-import network.aika.elements.Timestamp;
 import network.aika.elements.synapses.Synapse;
 import network.aika.queue.Queue;
+import network.aika.queue.Timestamp;
 import network.aika.queue.steps.Save;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
@@ -48,11 +48,11 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static network.aika.elements.neurons.NeuronTypeHolder.getHolder;
-import static network.aika.elements.Timestamp.MAX;
-import static network.aika.elements.Timestamp.MIN;
 import static network.aika.elements.neurons.RefType.*;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
+import static network.aika.queue.Timestamp.MAX;
+import static network.aika.queue.Timestamp.MIN;
 
 /**
  *
@@ -473,7 +473,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         if(in.readBoolean())
             label = in.readUTF();
 
-        bias.readFields(in, m);
+        bias.readFields(in);
 
         while (in.readBoolean()) {
             Synapse syn = Synapse.read(in, m);

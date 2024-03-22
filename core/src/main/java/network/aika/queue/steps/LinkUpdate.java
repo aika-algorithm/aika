@@ -17,11 +17,11 @@
 package network.aika.queue.steps;
 
 import network.aika.debugger.EventType;
-import network.aika.elements.Timestamp;
 import network.aika.elements.links.Link;
 import network.aika.enums.direction.Direction;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
+import network.aika.queue.Timestamp;
 import network.aika.queue.Step;
 import network.aika.queue.keys.LinkUpdateQueueKey;
 

@@ -16,8 +16,8 @@
  */
 package network.aika.queue.keys;
 
-import network.aika.elements.Timestamp;
-import network.aika.queue.Phase;
+import network.aika.queue.ProcessingPhase;
+import network.aika.queue.Timestamp;
 
 import java.util.Comparator;
 
@@ -33,7 +33,7 @@ public class FieldQueueKey extends QueueKey {
     private int sortValue;
 
 
-    public FieldQueueKey(int round, Phase phase, int sortValue, Timestamp currentTimestamp) {
+    public FieldQueueKey(int round, ProcessingPhase phase, int sortValue, Timestamp currentTimestamp) {
         super(round, phase, currentTimestamp);
         this.sortValue = sortValue;
     }

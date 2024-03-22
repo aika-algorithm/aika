@@ -16,9 +16,7 @@
  */
 package network.aika.queue;
 
-import network.aika.Config;
 import network.aika.debugger.EventType;
-import network.aika.elements.Timestamp;
 import network.aika.exceptions.TimeoutException;
 import network.aika.queue.keys.QueueKey;
 
@@ -26,9 +24,6 @@ import java.util.Collection;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.function.Predicate;
-
-import static network.aika.debugger.EventType.*;
-import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
  *
@@ -44,7 +39,7 @@ public abstract class Queue {
 
     private Timestamp timestampOnProcess = new Timestamp(0);
 
-    public abstract Config getConfig();
+    public abstract long getTimeout();
 
     public Timestamp getTimestampOnProcess() {
         return timestampOnProcess;
@@ -65,13 +60,13 @@ public abstract class Queue {
         );
         queue.put(s.getQueueKey(), s);
         s.setQueued(true);
-        queueEvent(ADDED, s);
+        queueEvent(EventType.ADDED, s);
     }
 
     private int getRound(Step s) {
         int round;
         if(s.getPhase().isDelayed())
-            round = MAX_ROUND;
+            round = QueueKey.MAX_ROUND;
         else
             round = getCurrentRound();
 
@@ -86,7 +81,7 @@ public abstract class Queue {
             return 0;
 
         int r = currentStep.getQueueKey().getRound();
-        return r == MAX_ROUND ? 0 : r;
+        return r == QueueKey.MAX_ROUND ? 0 : r;
     }
 
     public synchronized void removeStep(Step s) {
@@ -112,19 +107,19 @@ public abstract class Queue {
             currentStep = queue.pollFirstEntry().getValue();
             currentStep.setQueued(false);
 
-            queueEvent(BEFORE, currentStep);
+            queueEvent(EventType.BEFORE, currentStep);
 
             timestampOnProcess = getCurrentTimestamp();
             if(filter == null || filter.test(currentStep))
                 currentStep.process();
 
-            queueEvent(AFTER, currentStep);
+            queueEvent(EventType.AFTER, currentStep);
             currentStep = null;
         }
     }
 
     private void checkTimeout(long startTime) {
-        Long timeout = getConfig().getTimeout();
+        Long timeout = getTimeout();
         if(timeout == null)
             return;
 

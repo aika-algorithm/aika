@@ -26,7 +26,7 @@ import network.aika.elements.relations.Relation;
 import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
-import network.aika.elements.Timestamp;
+import network.aika.queue.Timestamp;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
 import network.aika.enums.Transition;
@@ -52,8 +52,8 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static network.aika.elements.Timestamp.MAX;
-import static network.aika.elements.Timestamp.MIN;
+import static network.aika.queue.Timestamp.MAX;
+import static network.aika.queue.Timestamp.MIN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_IN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_OUT;
 import static network.aika.elements.synapses.SynapseTypeHolder.getHolder;
@@ -463,7 +463,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         input = m.lookupNeuronProvider(in.readLong(), SYNAPSE_IN);
         output = m.lookupNeuronProvider(in.readLong(), SYNAPSE_OUT);
 
-        weight.readFields(in, m);
+        weight.readFields(in);
         instantiable = in.readBoolean();
 
         if(in.readBoolean())

@@ -17,7 +17,6 @@
 package network.aika.enums.sign;
 
 import network.aika.fields.FieldObject;
-import network.aika.elements.activations.Activation;
 import network.aika.fields.FieldOutput;
 
 

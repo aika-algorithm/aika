@@ -16,13 +16,13 @@
  */
 package network.aika.queue.keys;
 
-import network.aika.elements.Timestamp;
-import network.aika.queue.Phase;
+
+import network.aika.queue.ProcessingPhase;
+import network.aika.queue.Timestamp;
+import network.aika.utils.StringUtils;
 
 import java.util.Comparator;
 import java.util.function.Function;
-
-import static network.aika.utils.Utils.roundToString;
 
 /**
  * @author Lukas Molzberger
@@ -33,17 +33,17 @@ public abstract class QueueKey implements Comparable<QueueKey> {
 
     public static final Comparator<QueueKey> COMPARATOR = Comparator
             .<QueueKey>comparingInt(k -> k.round)
-            .thenComparingInt(k -> k.getPhase().ordinal())
+            .thenComparingInt(k -> k.getPhase().rank())
             .thenComparing(Function.identity())
             .thenComparing(QueueKey::getCurrentTimestamp);
 
     private int round;
 
-    private Phase phase;
+    private ProcessingPhase phase;
 
     private Timestamp currentTimestamp;
 
-    public QueueKey(int round, Phase phase, Timestamp currentTimestamp) {
+    public QueueKey(int round, ProcessingPhase phase, Timestamp currentTimestamp) {
         this.round = round;
         this.phase = phase;
         this.currentTimestamp = currentTimestamp;
@@ -54,15 +54,15 @@ public abstract class QueueKey implements Comparable<QueueKey> {
     }
 
     protected String getRoundStr() {
-        return roundToString(getRound());
+        return StringUtils.roundToString(getRound());
     }
 
-    public Phase getPhase() {
+    public ProcessingPhase getPhase() {
         return phase;
     }
 
     protected String getPhaseStr() {
-        return getPhase() + "-" + getPhase().ordinal();
+        return getPhase() + "-" + getPhase();
     }
 
     public Timestamp getCurrentTimestamp() {

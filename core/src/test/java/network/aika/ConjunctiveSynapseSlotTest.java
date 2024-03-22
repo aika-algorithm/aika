@@ -16,7 +16,6 @@
  */
 package network.aika;
 
-import network.aika.elements.Timestamp;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
@@ -28,6 +27,7 @@ import network.aika.elements.synapses.types.InnerPositiveFeedbackSynapse;
 import network.aika.fields.Field;
 import network.aika.fields.SumField;
 import network.aika.fields.link.ArgumentFieldLink;
+import network.aika.queue.Timestamp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

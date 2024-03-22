@@ -21,7 +21,6 @@ import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.Timestamp;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
@@ -34,6 +33,7 @@ import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.link.FieldLink;
 import network.aika.queue.Queue;
+import network.aika.queue.Timestamp;
 import network.aika.queue.steps.LinkUpdate;
 import network.aika.visitor.Visitor;
 

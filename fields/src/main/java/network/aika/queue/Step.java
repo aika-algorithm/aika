@@ -16,7 +16,6 @@
  */
 package network.aika.queue;
 
-import network.aika.elements.Timestamp;
 import network.aika.fields.FieldObject;
 import network.aika.queue.keys.QueueKey;
 
@@ -55,7 +54,7 @@ public abstract class Step<E extends FieldObject> {
 
     public abstract void process();
 
-    public abstract Phase getPhase();
+    public abstract ProcessingPhase getPhase();
 
     public static boolean add(Step s) {
         Queue q = s.getQueue();

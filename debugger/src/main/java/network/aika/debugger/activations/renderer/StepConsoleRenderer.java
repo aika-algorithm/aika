@@ -19,11 +19,11 @@ package network.aika.debugger.activations.renderer;
 import network.aika.Document;
 import network.aika.debugger.ConsoleRenderer;
 import network.aika.debugger.Visible;
-import network.aika.elements.Timestamp;
 import network.aika.fields.FieldObject;
 import network.aika.queue.Step;
+import network.aika.queue.Timestamp;
 import network.aika.queue.keys.QueueKey;
-import network.aika.utils.Utils;
+import network.aika.utils.StringUtils;
 
 import javax.swing.text.StyledDocument;
 import java.awt.*;
@@ -66,7 +66,7 @@ public class StepConsoleRenderer implements ConsoleRenderer {
     private String stepToPrefix(Step s) {
         QueueKey qk = s.getQueueKey();
         return s.getStepName() +
-                    " " + Utils.roundToString(qk.getRound()) + " " + qk.getPhase() + " " +
+                    " " + StringUtils.roundToString(qk.getRound()) + " " + qk.getPhase() + " " +
                 (sortKey == Visible.SHOW ? " " + s.getQueueKey() : "");
     }
 }

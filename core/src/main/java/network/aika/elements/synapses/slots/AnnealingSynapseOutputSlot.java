@@ -22,7 +22,6 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.fields.*;
 
 import static network.aika.elements.synapses.slots.AnnealingType.CATEGORY_INPUT;
-import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.fields.Fields.*;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 

@@ -22,7 +22,7 @@ import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 
 import static network.aika.queue.Phase.*;
-import static network.aika.utils.Utils.doubleToString;
+import static network.aika.utils.StringUtils.doubleToString;
 
 
 /**

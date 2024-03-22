@@ -16,16 +16,18 @@
  */
 package network.aika.queue.steps;
 
-import network.aika.elements.Timestamp;
+import network.aika.queue.Timestamp;
+import network.aika.queue.keys.FieldQueueKey;
 import network.aika.fields.FieldObject;
 import network.aika.fields.QueueInterceptor;
-import network.aika.queue.Phase;
 import network.aika.queue.Queue;
 import network.aika.queue.Step;
-import network.aika.queue.keys.FieldQueueKey;
+import network.aika.queue.ProcessingPhase;
 import network.aika.utils.ApproximateComparisonValueUtil;
 
-import static network.aika.utils.Utils.*;
+import static network.aika.utils.StringUtils.doubleToString;
+import static network.aika.utils.StringUtils.roundToString;
+
 
 /**
  *
@@ -35,13 +37,13 @@ public class FieldUpdate<E extends FieldObject> extends Step<E> {
 
     private QueueInterceptor interceptor;
 
-    private Phase phase;
+    private ProcessingPhase phase;
 
     private int sortValue = Integer.MAX_VALUE;
 
     private double delta = 0.0;
 
-    public FieldUpdate(Phase p, QueueInterceptor qf) {
+    public FieldUpdate(ProcessingPhase p, QueueInterceptor qf) {
         this.phase = p;
         this.interceptor = qf;
     }
@@ -100,7 +102,7 @@ public class FieldUpdate<E extends FieldObject> extends Step<E> {
     }
 
     @Override
-    public Phase getPhase() {
+    public ProcessingPhase getPhase() {
         return phase;
     }
 

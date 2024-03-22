@@ -18,9 +18,9 @@ package network.aika.fields;
 
 
 import network.aika.debugger.FieldObserver;
+import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
 import network.aika.queue.steps.FieldUpdate;
-import network.aika.queue.Phase;
 import network.aika.queue.Step;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class QueueInterceptor {
 
-    private Phase phase;
+    private ProcessingPhase phase;
 
     private FieldUpdate step;
 
@@ -45,10 +45,10 @@ public class QueueInterceptor {
 
     private List<FieldObserver> observers = new ArrayList<>();
 
-    public QueueInterceptor(Queue q, Field f, Phase p, boolean isNextRound) {
+    public QueueInterceptor(Queue q, Field f, ProcessingPhase phase, boolean isNextRound) {
         this.queue = q;
         this.field = f;
-        this.phase = p;
+        this.phase = phase;
         this.isNextRound = isNextRound;
     }
 

@@ -17,16 +17,16 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
-import network.aika.elements.Timestamp;
 import network.aika.fields.*;
 import network.aika.fields.link.AbstractFieldLink;
 import network.aika.queue.Queue;
+import network.aika.queue.Timestamp;
 import network.aika.queue.steps.Fired;
 
 import static network.aika.debugger.EventType.UPDATE;
-import static network.aika.elements.Timestamp.NOT_SET;
 import static network.aika.fields.Fields.func;
 import static network.aika.fields.Fields.isTrue;
+import static network.aika.queue.Timestamp.NOT_SET;
 import static network.aika.queue.Phase.INFERENCE;
 import static network.aika.utils.Utils.TOLERANCE;
 

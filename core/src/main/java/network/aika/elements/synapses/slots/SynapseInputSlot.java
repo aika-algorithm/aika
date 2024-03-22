@@ -18,15 +18,11 @@ package network.aika.elements.synapses.slots;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
-import network.aika.elements.links.Link;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.ArgumentFieldLink;
 import network.aika.fields.link.FieldLink;
-
-import java.util.Collection;
-import java.util.Comparator;
 
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 

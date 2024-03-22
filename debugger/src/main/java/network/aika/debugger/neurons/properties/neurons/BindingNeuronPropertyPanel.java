@@ -20,7 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
 
-import static network.aika.utils.Utils.doubleToString;
+import static network.aika.utils.StringUtils.doubleToString;
 
 
 /**

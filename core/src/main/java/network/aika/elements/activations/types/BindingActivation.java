@@ -26,7 +26,6 @@ import network.aika.elements.links.types.InputObjectLink;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.synapses.types.InnerPositiveFeedbackSynapse;
 import network.aika.elements.synapses.types.RelationInputSynapse;
-import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.queue.steps.Anneal;

@@ -17,12 +17,12 @@
 package network.aika.fields;
 
 import network.aika.fields.link.FieldLink;
+import network.aika.utils.ToleranceUtils;
 
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleFunction;
 
 import static network.aika.fields.link.FieldLink.*;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
@@ -55,7 +55,7 @@ public class Fields {
         if(in == null)
             return null;
 
-        MaxField max = new MaxField(ref, label, TOLERANCE);
+        MaxField max = new MaxField(ref, label, ToleranceUtils.TOLERANCE);
         for(FieldOutput fi: in)
             link(fi, max);
 

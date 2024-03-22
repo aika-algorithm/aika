@@ -24,7 +24,7 @@ import network.aika.enums.sign.Sign;
 import static network.aika.debugger.AbstractConsole.NOT_SET_STR;
 import static network.aika.enums.sign.Sign.NEG;
 import static network.aika.enums.sign.Sign.POS;
-import static network.aika.utils.Utils.doubleToString;
+import static network.aika.utils.StringUtils.doubleToString;
 
 /**
  * @author Lukas Molzberger

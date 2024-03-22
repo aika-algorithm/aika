@@ -14,44 +14,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.queue;
-
-import network.aika.elements.Element;
-import network.aika.queue.keys.FiredQueueKey;
+package network.aika.utils;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class ElementStep<E extends Element> extends Step<E> {
+public class ToleranceUtils {
 
-    private E element;
+    public static double TOLERANCE = 0.001;
 
-    public ElementStep(E element) {
-        this.element = element;
+
+    public static double sum(double[] a) {
+        double sum = 0;
+        for(int i = 0; i < a.length; i++)
+            sum += a[i];
+        return sum;
     }
 
-    @Override
-    public Queue getQueue() {
-        return element.getQueue();
+    public static boolean belowTolerance(Double tolerance, double[] x) {
+        if(x == null)
+            return true;
+
+        if(tolerance == null)
+            return false;
+
+        return Math.abs(sum(x)) < tolerance;
     }
 
-    @Override
-    public void createQueueKey(Timestamp timestamp, int round) {
-        queueKey = new FiredQueueKey(
-                round,
-                getPhase(),
-                element,
-                timestamp
-        );
-    }
+    public static boolean belowTolerance(Double tolerance, double x) {
+        if(x == 0.0)
+            return true;
 
-    public E getElement() {
-        return element;
-    }
+        if(tolerance == null)
+            return false;
 
-    @Override
-    public String toString() {
-        return "" + getElement();
+        return Math.abs(x) < tolerance;
     }
 }

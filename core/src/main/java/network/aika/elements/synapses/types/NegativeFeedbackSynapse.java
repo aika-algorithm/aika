@@ -122,6 +122,6 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
 
-        negativeWeight.readFields(in, m);
+        negativeWeight.readFields(in);
     }
 }

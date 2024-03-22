@@ -16,20 +16,8 @@
  */
 package experiment.logger;
 
-import network.aika.elements.links.types.NegativeFeedbackLink;
-import network.aika.fields.Field;
-import network.aika.Document;
 import org.apache.commons.csv.CSVPrinter;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static experiment.logger.ExperimentLogger.CSV_FORMAT;
-import static network.aika.utils.Utils.doubleToString;
 
 /**
  * @author Lukas Molzberger

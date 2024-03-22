@@ -43,7 +43,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_X;
-import static network.aika.utils.Utils.doubleToString;
+import static network.aika.utils.StringUtils.doubleToString;
 
 /**
  * @author Lukas Molzberger

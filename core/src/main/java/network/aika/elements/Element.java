@@ -19,6 +19,7 @@ package network.aika.elements;
 import network.aika.Config;
 import network.aika.Model;
 import network.aika.fields.FieldObject;
+import network.aika.queue.Timestamp;
 
 /**
  * An Element is either a node (Activation) or an edge (Link) in the Activation graph.

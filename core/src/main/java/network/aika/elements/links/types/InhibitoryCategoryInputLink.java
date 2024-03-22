@@ -16,7 +16,6 @@
  */
 package network.aika.elements.links.types;
 
-import network.aika.elements.Type;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.links.CategoryInputLink;
@@ -26,7 +25,6 @@ import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
 import network.aika.fields.Field;
 
-import static network.aika.elements.Type.*;
 import static network.aika.elements.activations.types.InhibitoryActivation.crossConnectFields;
 
 

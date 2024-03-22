@@ -20,7 +20,6 @@ package network.aika;
 import network.aika.debugger.EventListener;
 import network.aika.debugger.EventType;
 import network.aika.callbacks.InstantiationCallback;
-import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
 import network.aika.elements.activations.types.PatternActivation;
@@ -30,8 +29,9 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.fields.Field;
 import network.aika.queue.Queue;
-import network.aika.text.Range;
+import network.aika.queue.Timestamp;
 import network.aika.queue.Step;
+import network.aika.text.Range;
 import network.aika.text.TextReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +41,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static network.aika.elements.Timestamp.MIN;
-import static network.aika.elements.Timestamp.NOT_SET;
+import static network.aika.queue.Timestamp.MIN;
+import static network.aika.queue.Timestamp.NOT_SET;
 import static network.aika.elements.activations.StateType.*;
 
 /**
@@ -98,6 +98,11 @@ public class Document extends Queue implements Element {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public long getTimeout() {
+        return getConfig().getTimeout();
     }
 
     public void process(Predicate<Step> filter) {

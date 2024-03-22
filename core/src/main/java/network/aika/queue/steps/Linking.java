@@ -16,7 +16,6 @@
  */
 package network.aika.queue.steps;
 
-import network.aika.elements.Timestamp;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.Neuron;
@@ -24,6 +23,7 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
 import network.aika.queue.ElementStep;
+import network.aika.queue.Timestamp;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
 import network.aika.queue.keys.LinkingQueueKey;

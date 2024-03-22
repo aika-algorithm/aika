@@ -16,14 +16,14 @@
  */
 package network.aika.queue.steps;
 
-import network.aika.elements.Timestamp;
 import network.aika.elements.activations.State;
 import network.aika.queue.Phase;
 import network.aika.queue.Queue;
+import network.aika.queue.Timestamp;
 import network.aika.queue.Step;
 import network.aika.queue.keys.FieldQueueKey;
 import network.aika.utils.ApproximateComparisonValueUtil;
-import network.aika.utils.Utils;
+import network.aika.utils.StringUtils;
 
 import static network.aika.queue.Phase.FIRED;
 
@@ -88,6 +88,6 @@ public class Fired extends Step<State> {
 
     @Override
     public String toString() {
-        return "" + getElement() + " net:" + Utils.doubleToString(net);
+        return "" + getElement() + " net:" + StringUtils.doubleToString(net);
     }
 }

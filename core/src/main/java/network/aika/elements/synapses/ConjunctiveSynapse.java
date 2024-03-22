@@ -17,7 +17,6 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
-import network.aika.elements.Timestamp;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.synapses.slots.SynapseInputSlot;
 import network.aika.elements.synapses.slots.SynapseOutputSlot;
@@ -28,6 +27,7 @@ import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
+import network.aika.queue.Timestamp;
 import network.aika.fields.Field;
 import network.aika.fields.SumField;
 
@@ -223,7 +223,7 @@ public abstract class ConjunctiveSynapse<
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
 
-        synapseBias.readFields(in, m);
+        synapseBias.readFields(in);
         propagable = in.readBoolean();
         optional = in.readBoolean();
 

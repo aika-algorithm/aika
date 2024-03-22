@@ -6,6 +6,7 @@
     <packaging>pom</packaging>
     <version>${revision}</version>
     <modules>
+        <module>fields</module>
         <module>core</module>
         <module>text</module>
         <module>debugger</module>
@@ -224,6 +225,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>network.aika</groupId>
+                <artifactId>fields</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
             <dependency>
                 <groupId>network.aika</groupId>
                 <artifactId>aika</artifactId>

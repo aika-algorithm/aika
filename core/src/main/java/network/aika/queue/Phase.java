@@ -20,7 +20,7 @@ package network.aika.queue;
  *
  * @author Lukas Molzberger
  */
-public enum Phase {
+public enum Phase implements ProcessingPhase {
     INSTANTIATION(),
     LINKING(),
     LINK_UPDATE(),
@@ -45,6 +45,12 @@ public enum Phase {
         this.delayed = delayed;
     }
 
+    @Override
+    public int rank() {
+        return ordinal();
+    }
+
+    @Override
     public boolean isDelayed() {
         return delayed;
     }

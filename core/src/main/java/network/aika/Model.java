@@ -70,6 +70,11 @@ public class Model extends Queue implements Writable {
         suspensionCallback = sc;
     }
 
+    @Override
+    public long getTimeout() {
+        return config.getTimeout();
+    }
+
     public Supplier<Writable> getCustomDataInstanceSupplier() {
         return customDataInstanceSupplier;
     }

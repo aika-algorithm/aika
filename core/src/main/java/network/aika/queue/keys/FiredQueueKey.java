@@ -17,12 +17,13 @@
 package network.aika.queue.keys;
 
 import network.aika.elements.Element;
-import network.aika.elements.Timestamp;
 import network.aika.queue.Phase;
+import network.aika.queue.ProcessingPhase;
+import network.aika.queue.Timestamp;
 
 import java.util.Comparator;
 
-import static network.aika.elements.Timestamp.NOT_SET;
+import static network.aika.queue.Timestamp.NOT_SET;
 
 /**
  * @author Lukas Molzberger
@@ -36,7 +37,7 @@ public class FiredQueueKey extends QueueKey {
     private Timestamp created;
     private Timestamp fired;
 
-    public FiredQueueKey(int round, Phase phase, Element element, Timestamp currentTimestamp) {
+    public FiredQueueKey(int round, ProcessingPhase phase, Element element, Timestamp currentTimestamp) {
         super(round, phase, currentTimestamp);
         this.created = element.getCreated();
         this.fired = element.getFired();

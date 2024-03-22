@@ -19,13 +19,6 @@ package network.aika.utils;
 
 import network.aika.elements.activations.Activation;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
-
-import static network.aika.queue.keys.QueueKey.MAX_ROUND;
-
 /**
  *
  * @author Lukas Molzberger
@@ -83,32 +76,6 @@ public class Utils {
             return false;
 
         return Math.abs(x) < tolerance;
-    }
-
-    public static String doubleToString(Double x) {
-        if(x == null)
-            return "--";
-        return doubleToString(x, "#.######");
-    }
-
-    public static String floatToString(Float d, String format) {
-        if(d == null)
-            return "--";
-        DecimalFormat formatter = new DecimalFormat(format, DecimalFormatSymbols.getInstance(Locale.ENGLISH));
-        formatter.setRoundingMode( RoundingMode.DOWN );
-        return formatter.format(d);
-    }
-
-    public static String doubleToString(Double d, String format) {
-        if(d == null)
-            return "--";
-        DecimalFormat formatter = new DecimalFormat(format, DecimalFormatSymbols.getInstance(Locale.ENGLISH));
-        formatter.setRoundingMode( RoundingMode.DOWN );
-        return formatter.format(d);
-    }
-
-    public static String roundToString(int r) {
-        return r == MAX_ROUND ? "MAX" : "" + r;
     }
 
     public static String depthToSpace(int depth) {

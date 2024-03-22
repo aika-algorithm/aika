@@ -16,13 +16,13 @@
  */
 package network.aika.fields;
 
-import network.aika.Model;
 import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.FieldLink;
-import network.aika.queue.Phase;
+import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
-import network.aika.utils.Utils;
-import network.aika.utils.Writable;
+import network.aika.utils.FieldWritable;
+import network.aika.utils.StringUtils;
+import network.aika.utils.ToleranceUtils;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -30,13 +30,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static network.aika.utils.Utils.doubleToString;
 
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class Field<F extends FieldLink> implements FieldInput<F>, FieldOutput, Writable {
+public abstract class Field<F extends FieldLink> implements FieldInput<F>, FieldOutput, FieldWritable {
 
     private static double MIN_TOLERANCE = 0.0000000001;
 
@@ -64,8 +63,8 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
         initIO();
     }
 
-    public <F extends Field> F setQueued(Queue q, Phase p, boolean isNextRound) {
-        interceptor = new QueueInterceptor(q, this, p, isNextRound);
+    public <F extends Field> F setQueued(Queue q, ProcessingPhase phase, boolean isNextRound) {
+        interceptor = new QueueInterceptor(q, this, phase, isNextRound);
         return (F) this;
     }
 
@@ -190,7 +189,7 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
     }
 
     public void triggerUpdate(double u) {
-        if(Utils.belowTolerance(tolerance, u))
+        if(ToleranceUtils.belowTolerance(tolerance, u))
             return;
 
         withinUpdate = true;
@@ -224,7 +223,7 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws IOException {
+    public void readFields(DataInput in) throws IOException {
         value = in.readDouble();
     }
 
@@ -234,6 +233,6 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
     }
 
     public String getValueString() {
-        return doubleToString(getValue());
+        return StringUtils.doubleToString(getValue());
     }
 }

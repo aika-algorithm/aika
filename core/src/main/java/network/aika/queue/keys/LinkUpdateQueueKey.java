@@ -17,9 +17,9 @@
 package network.aika.queue.keys;
 
 import network.aika.elements.Element;
-import network.aika.elements.Timestamp;
 import network.aika.enums.direction.Direction;
 import network.aika.queue.Phase;
+import network.aika.queue.Timestamp;
 
 /**
  * @author Lukas Molzberger

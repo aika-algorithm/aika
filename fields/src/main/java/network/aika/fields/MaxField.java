@@ -16,14 +16,9 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.FieldLink;
-import network.aika.utils.Utils;
-
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger

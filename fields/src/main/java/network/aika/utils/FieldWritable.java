@@ -14,30 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.queue.keys;
+package network.aika.utils;
 
-import network.aika.elements.Timestamp;
-import network.aika.queue.Phase;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
-/**
- * @author Lukas Molzberger
- */
-public class DocQueueKey extends QueueKey {
+public interface FieldWritable {
 
-    public DocQueueKey(int round, Phase phase, Timestamp currentTimestamp) {
-        super(round, phase, currentTimestamp);
-    }
+    /**
+     * Serialize the fields of this object to <code>out</code>.
+     *
+     * @param out <code>DataOuput</code> to serialize this object into.
+     * @throws IOException
+     */
+    void write(DataOutput out) throws IOException;
 
-    @Override
-    public int compareTo(QueueKey qk) {
-        return 0;
-    }
+    /**
+     * Deserialize the fields of this object from <code>in</code>.
+     *
+     * <p>For efficiency, implementations should attempt to re-use storage in the
+     * existing object where possible.</p>
+     *
+     * @param in <code>DataInput</code> to deseriablize this object from.
+     * @throws Exception
+     */
+    void readFields(DataInput in) throws Exception;
 
-    @Override
-    public String toString() {
-        return "[r:" + getRoundStr() +
-                ",p:" + getPhase() + "-" + getPhase().ordinal() +
-                ",ts:" + getCurrentTimestamp() +
-                "]";
-    }
 }

@@ -22,7 +22,7 @@ import network.aika.elements.synapses.types.PatternSynapse;
 import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.elements.synapses.types.SameObjectSynapse;
 
-import static network.aika.utils.Utils.floatToString;
+import static network.aika.utils.StringUtils.floatToString;
 
 
 /**

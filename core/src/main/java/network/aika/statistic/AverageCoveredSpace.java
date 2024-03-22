@@ -26,7 +26,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.text.Range.length;
-import static network.aika.utils.Utils.doubleToString;
+import static network.aika.utils.StringUtils.doubleToString;
 
 /**
  *
