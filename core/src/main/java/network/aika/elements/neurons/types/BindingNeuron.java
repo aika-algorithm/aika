@@ -32,6 +32,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Comparator;
 
+import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.*;
 import static network.aika.elements.neurons.RefType.CATEGORY;
@@ -42,6 +43,7 @@ import static network.aika.elements.neurons.RefType.CATEGORY;
  */
 @NeuronType(
         type = BINDING,
+        activationFunction = RECTIFIED_HYPERBOLIC_TANGENT,
         bindingSignalSlots = {SINGLE_INPUT, SINGLE_SAME_FEEDBACK}
 )
 public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActivation> {

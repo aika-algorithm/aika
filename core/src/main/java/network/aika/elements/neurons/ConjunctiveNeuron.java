@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  */
 public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends ConjunctiveActivation> extends Neuron<N, A> {
 
-    private static final Logger log = LoggerFactory.getLogger(ConjunctiveNeuron.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConjunctiveNeuron.class);
 
     public ConjunctiveNeuron(NeuronProvider np) {
         super(np);
@@ -90,9 +90,5 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
                 .forEach(s ->
                         s.createAndInitLink(null, act)
                 );
-    }
-
-    public ActivationFunction getActivationFunction() {
-        return ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
     }
 }

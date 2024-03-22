@@ -38,8 +38,4 @@ public abstract class DisjunctiveNeuron<N extends DisjunctiveNeuron, A extends A
     @Override
     public void addInactiveLinks(Activation act) {
     }
-
-    public ActivationFunction getActivationFunction() {
-        return ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
-    }
 }

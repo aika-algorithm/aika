@@ -14,10 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.neurons;
+package network.aika.elements.typedef;
 
+import network.aika.ActivationFunction;
 import network.aika.elements.Type;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
+import network.aika.elements.neurons.Neuron;
+import network.aika.elements.neurons.NeuronType;
 
 import java.util.HashMap;
 
@@ -25,29 +28,36 @@ import java.util.HashMap;
  *
  * @author Lukas Molzberger
  */
-public class NeuronTypeHolder {
+public class NeuronTypeDefinition {
 
     private Type type;
 
+    private ActivationFunction activationFunction;
+
     private BSSlotDefinition[] bindingSignalSlots;
 
-    public static NeuronTypeHolder getHolder(Class clazz) {
+    public static NeuronTypeDefinition getDefinition(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
-                new NeuronTypeHolder(
+                new NeuronTypeDefinition(
                         c.getAnnotation(NeuronType.class)
                 )
         );
     }
 
-    private static HashMap<Class<Neuron>, NeuronTypeHolder> cache = new HashMap();
+    private static HashMap<Class<Neuron>, NeuronTypeDefinition> cache = new HashMap();
 
-    private NeuronTypeHolder(NeuronType typeAnnotation) {
+    private NeuronTypeDefinition(NeuronType typeAnnotation) {
         this.type = typeAnnotation.type();
+        this.activationFunction = typeAnnotation.activationFunction();
         this.bindingSignalSlots = typeAnnotation.bindingSignalSlots();
     }
 
     public Type getType() {
         return type;
+    }
+
+    public ActivationFunction getActivationFunction() {
+        return activationFunction;
     }
 
     public BSSlotDefinition[] getBindingSignalSlots() {

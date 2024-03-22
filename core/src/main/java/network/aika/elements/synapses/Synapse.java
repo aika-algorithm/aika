@@ -26,6 +26,7 @@ import network.aika.elements.relations.Relation;
 import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
+import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.queue.Timestamp;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
@@ -56,7 +57,7 @@ import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_IN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_OUT;
-import static network.aika.elements.synapses.SynapseTypeHolder.getHolder;
+import static network.aika.elements.typedef.SynapseTypeDefinition.getDefinition;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -68,7 +69,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
-    protected final SynapseTypeHolder synapseType = getHolder(getClass());
+    protected final SynapseTypeDefinition synapseType = getDefinition(getClass());
 
     protected int synapseId;
     protected NeuronProvider input;
@@ -429,7 +430,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return weight.getUpdatedValue() < 0.0;
     }
 
-    public SynapseTypeHolder getSynapseType() {
+    public SynapseTypeDefinition getSynapseType() {
         return synapseType;
     }
 

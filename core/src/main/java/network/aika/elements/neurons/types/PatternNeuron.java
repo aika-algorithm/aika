@@ -37,6 +37,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.MULTI_INPUT;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
@@ -50,6 +51,7 @@ import static network.aika.text.Range.length;
  */
 @NeuronType(
         type = PATTERN,
+        activationFunction = RECTIFIED_HYPERBOLIC_TANGENT,
         bindingSignalSlots = {SINGLE_SAME, MULTI_INPUT}
 )
 public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActivation> {

@@ -16,6 +16,7 @@
  */
 package network.aika.elements.neurons;
 
+import network.aika.ActivationFunction;
 import network.aika.elements.Type;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 
@@ -32,7 +33,9 @@ import java.lang.annotation.ElementType;
 @Target(ElementType.TYPE)
 public @interface NeuronType {
 
-    public Type type();
+    Type type();
 
-    public BSSlotDefinition[] bindingSignalSlots();
+    ActivationFunction activationFunction();
+
+    BSSlotDefinition[] bindingSignalSlots();
 }

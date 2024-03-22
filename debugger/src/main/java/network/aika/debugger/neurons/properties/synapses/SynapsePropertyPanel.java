@@ -20,7 +20,7 @@ import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.synapses.SynapseTypeHolder;
+import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.utils.StringUtils;
 
 import java.util.Arrays;
@@ -61,7 +61,7 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         addConstant("Initial Instance Weight: ", "" + StringUtils.doubleToString(s.getInitialInstanceWeight()));
     }
 
-    protected void initSynapseTypeProperties(SynapseTypeHolder st) {
+    protected void initSynapseTypeProperties(SynapseTypeDefinition st) {
         addConstant("InputType: ", "" + st.getInputType());
         addConstant("OutputType: ", "" + st.getOutputType());
         addConstant("Transitions: ", "" +

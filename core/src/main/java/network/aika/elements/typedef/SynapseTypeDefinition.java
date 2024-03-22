@@ -14,10 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements.typedef;
 
 import network.aika.elements.Type;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 
@@ -27,7 +29,7 @@ import java.util.HashMap;
  *
  * @author Lukas Molzberger
  */
-public class SynapseTypeHolder {
+public class SynapseTypeDefinition {
     private Type inputType;
 
     private Type outputType;
@@ -42,17 +44,17 @@ public class SynapseTypeHolder {
 
     private boolean propagateRange;
 
-    public static SynapseTypeHolder getHolder(Class clazz) {
+    public static SynapseTypeDefinition getDefinition(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
-                new SynapseTypeHolder(
+                new SynapseTypeDefinition(
                         c.getAnnotation(SynapseType.class)
                 )
         );
     }
 
-    private static HashMap<Class<Synapse>, SynapseTypeHolder> cache = new HashMap();
+    private static HashMap<Class<Synapse>, SynapseTypeDefinition> cache = new HashMap();
 
-    private SynapseTypeHolder(SynapseType synTypeAnno) {
+    private SynapseTypeDefinition(SynapseType synTypeAnno) {
         inputType = synTypeAnno.inputType();
         outputType = synTypeAnno.outputType();
         transition = synTypeAnno.transition();

@@ -25,6 +25,7 @@ import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.neurons.RefType;
 
+import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
 
@@ -33,6 +34,7 @@ import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_
  */
 @NeuronType(
         type = INHIBITORY,
+        activationFunction = LIMITED_RECTIFIED_LINEAR_UNIT,
         bindingSignalSlots = SINGLE_INPUT
 )
 public class InhibitoryCategoryNeuron extends CategoryNeuron {

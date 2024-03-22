@@ -34,17 +34,17 @@ import java.lang.annotation.ElementType;
 @Target(ElementType.TYPE)
 public @interface SynapseType {
 
-    public Type inputType();
+    Type inputType();
 
-    public Type outputType();
+    Type outputType();
 
-    public Transition[] transition();
+    Transition[] transition();
 
-    public Transition required();
+    Transition required();
 
-    public Trigger trigger() default Trigger.FIRED_INNER_FEEDBACK;
+    Trigger trigger() default Trigger.FIRED_INNER_FEEDBACK;
 
-    public StateType outputState() default StateType.PRE_FEEDBACK;
+    StateType outputState() default StateType.PRE_FEEDBACK;
 
-    public boolean propagateRange() default true;
+    boolean propagateRange() default true;
 }

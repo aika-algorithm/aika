@@ -28,6 +28,7 @@ import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
 
+import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.elements.Type.INHIBITORY;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
 import static network.aika.elements.neurons.RefType.CATEGORY;
@@ -39,6 +40,7 @@ import static network.aika.elements.neurons.RefType.TEMPLATE;
  */
 @NeuronType(
         type = INHIBITORY,
+        activationFunction = LIMITED_RECTIFIED_LINEAR_UNIT,
         bindingSignalSlots = SINGLE_INPUT
 )
 public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, InhibitoryActivation> {
@@ -76,11 +78,6 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
     public InhibitoryActivation createActivation(Document doc) {
         return new InhibitoryActivation(doc.createActivationId(), doc, this);
     }
-
-    public ActivationFunction getActivationFunction() {
-        return ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
-    }
-
 
     @Override
     public CategorySynapse createCategorySynapse() {

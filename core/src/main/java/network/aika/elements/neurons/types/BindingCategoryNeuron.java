@@ -25,6 +25,7 @@ import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.neurons.RefType;
 
+import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.elements.Type.BINDING;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
@@ -34,6 +35,7 @@ import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_
  */
 @NeuronType(
         type = BINDING,
+        activationFunction = LIMITED_RECTIFIED_LINEAR_UNIT,
         bindingSignalSlots = {SINGLE_INPUT, SINGLE_SAME}
 )
 public class BindingCategoryNeuron extends CategoryNeuron {

@@ -25,6 +25,7 @@ import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
+import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
 import network.aika.exceptions.MissingInputCategoryNeuron;
@@ -47,7 +48,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static network.aika.elements.neurons.NeuronTypeHolder.getHolder;
+import static network.aika.elements.typedef.NeuronTypeDefinition.getDefinition;
 import static network.aika.elements.neurons.RefType.*;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
@@ -64,7 +65,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected static final String CATEGORY_LABEL = " Category";
 
-    private final NeuronTypeHolder neuronType = getHolder(getClass());
+    private final NeuronTypeDefinition neuronType = getDefinition(getClass());
 
     private int synapseIdCounter = 0;
 
@@ -308,7 +309,9 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     public abstract void addInactiveLinks(Activation act);
 
-    public abstract ActivationFunction getActivationFunction();
+    public final ActivationFunction getActivationFunction() {
+        return neuronType.getActivationFunction();
+    }
 
     public void count(A act) {
     }

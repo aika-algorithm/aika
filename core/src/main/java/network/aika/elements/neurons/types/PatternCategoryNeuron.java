@@ -25,6 +25,7 @@ import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.neurons.RefType;
 
+import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.elements.Type.PATTERN;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
 
@@ -33,6 +34,7 @@ import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_
  */
 @NeuronType(
         type = PATTERN,
+        activationFunction = LIMITED_RECTIFIED_LINEAR_UNIT,
         bindingSignalSlots = SINGLE_SAME
 )
 public class PatternCategoryNeuron extends CategoryNeuron {
