@@ -16,11 +16,10 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.Type;
+import network.aika.elements.NeuronType;
 import network.aika.elements.activations.StateType;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
-import network.aika.enums.direction.Direction;
 import network.aika.enums.direction.DirectionEnum;
 
 import java.lang.annotation.Retention;
@@ -36,9 +35,9 @@ import java.lang.annotation.ElementType;
 @Target(ElementType.TYPE)
 public @interface SynapseType {
 
-    Type inputType();
+    NeuronType inputType();
 
-    Type outputType();
+    NeuronType outputType();
 
     Transition[] transition();
 

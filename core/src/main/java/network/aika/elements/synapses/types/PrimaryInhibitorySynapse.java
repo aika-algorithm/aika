@@ -25,8 +25,8 @@ import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.DirectionEnum;
 
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.INHIBITORY;
+import static network.aika.elements.NeuronType.BINDING;
+import static network.aika.elements.NeuronType.INHIBITORY;
 import static network.aika.enums.Transition.SAME_INPUT;
 import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 

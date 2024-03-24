@@ -1,6 +1,6 @@
 package network.aika.elements;
 
-public enum Type {
+public enum NeuronType {
 
     PATTERN,
     BINDING,

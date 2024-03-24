@@ -17,9 +17,8 @@
 package network.aika.debugger.activations.particles;
 
 import network.aika.debugger.activations.ActivationGraphManager;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.types.PatternActivation;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.text.TextReference;
 import org.graphstream.graph.Node;
 

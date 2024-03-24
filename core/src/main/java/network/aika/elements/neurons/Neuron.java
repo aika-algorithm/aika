@@ -20,7 +20,7 @@ import network.aika.ActivationFunction;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.PreActivation;
-import network.aika.elements.Type;
+import network.aika.elements.NeuronType;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.synapses.CategoryInputSynapse;
@@ -102,7 +102,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         setBias(0.0);
     }
 
-    public Type getType() {
+    public NeuronType getType() {
         return neuronType.getType();
     }
 
@@ -295,7 +295,22 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return getCategoryInputSynapse() != null;
     }
 
-    public abstract CategoryInputSynapse makeAbstract();
+
+    public abstract CategoryNeuron createCategoryNeuron();
+
+    public abstract CategoryInputSynapse createCategoryInputSynapse();
+
+    public CategoryInputSynapse makeAbstract() {
+        CategoryNeuron category = createCategoryNeuron();
+
+        CategoryInputSynapse s = createCategoryInputSynapse()
+                .link(category, this);
+
+        s.setInitialCategorySynapseWeight(1.0);
+
+        category.getProvider().decreaseRefCount(CATEGORY);
+        return s;
+    }
 
     public abstract CategoryInputSynapse getCategoryInputSynapse();
 

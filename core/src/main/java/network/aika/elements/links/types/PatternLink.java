@@ -19,7 +19,7 @@ package network.aika.elements.links.types;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.ConjunctiveLink;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.fields.AbstractFunction;
 import network.aika.elements.synapses.types.PatternSynapse;
 import network.aika.fields.FieldOutput;
@@ -92,7 +92,7 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
 
         Double s = cachedSurprisal[is.index()][os.index()];
         if(s == null) {
-            s = synapse.getSurprisal(is, os, getAbsoluteRange(), true);
+            s = synapse.getStatistic().getSurprisal(is, os, getAbsoluteRange(), true);
             cachedSurprisal[is.index()][os.index()] = s;
         }
         return s;

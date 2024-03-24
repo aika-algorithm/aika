@@ -31,7 +31,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
-import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.NeuronType.BINDING;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 

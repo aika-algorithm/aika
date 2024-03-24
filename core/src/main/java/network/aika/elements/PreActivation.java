@@ -20,10 +20,8 @@ package network.aika.elements;
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.RefType;
 import network.aika.enums.direction.Direction;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.text.TextReference;
 import network.aika.text.TokenPositionKey;
 

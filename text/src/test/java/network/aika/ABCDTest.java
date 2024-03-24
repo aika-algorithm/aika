@@ -25,7 +25,6 @@ import network.aika.elements.synapses.types.InputObjectSynapse;
 import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.elements.synapses.types.SameObjectSynapse;
 import network.aika.meta.Dictionary;
-import network.aika.text.Range;
 import org.junit.jupiter.api.Test;
 
 import static network.aika.TestUtils.initPatternLoop;

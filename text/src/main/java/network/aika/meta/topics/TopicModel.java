@@ -25,7 +25,7 @@ import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.Document;
 import network.aika.meta.entities.EntityModel;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.text.TextReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.Type.INHIBITORY;
+import static network.aika.elements.NeuronType.INHIBITORY;
 import static network.aika.elements.neurons.RefType.TEMPLATE_MODEL;
 import static network.aika.meta.LabelUtil.getAbstractLabel;
 import static network.aika.meta.NetworkMotifs.*;

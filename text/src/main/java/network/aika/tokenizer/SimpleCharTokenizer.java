@@ -17,10 +17,9 @@
 package network.aika.tokenizer;
 
 
-import network.aika.Context;
 import network.aika.Document;
 import network.aika.text.TextReference;
-import network.aika.text.Range;
+import network.aika.Range;
 
 /**
  *

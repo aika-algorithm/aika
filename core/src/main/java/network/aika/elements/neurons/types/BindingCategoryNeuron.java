@@ -24,9 +24,10 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.neurons.RefType;
+import network.aika.elements.synapses.CategoryInputSynapse;
 
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
-import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.NeuronType.BINDING;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
 
@@ -47,6 +48,16 @@ public class BindingCategoryNeuron extends CategoryNeuron {
 
     public BindingCategoryNeuron(Model m, RefType rt) {
         super(m, rt);
+    }
+
+    @Override
+    public CategoryNeuron createCategoryNeuron() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public CategoryInputSynapse createCategoryInputSynapse() {
+        throw new UnsupportedOperationException();
     }
 
     @Override

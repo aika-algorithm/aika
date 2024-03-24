@@ -48,7 +48,7 @@ public abstract class AbstractFunction extends Field<FieldLink> {
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return inputs.length;
     }
 
     @Override

@@ -25,7 +25,7 @@ import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.enums.direction.DirectionEnum;
 
-import static network.aika.elements.Type.*;
+import static network.aika.elements.NeuronType.*;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.enums.Trigger.NOT_FIRED;
 import static network.aika.enums.Transition.SAME_SAME;

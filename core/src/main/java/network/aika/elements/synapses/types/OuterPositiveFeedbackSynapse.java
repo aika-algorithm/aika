@@ -28,8 +28,8 @@ import network.aika.elements.synapses.slots.AnnealingType;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.direction.DirectionEnum;
 
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
+import static network.aika.elements.NeuronType.BINDING;
+import static network.aika.elements.NeuronType.PATTERN;
 import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
 import static network.aika.enums.Transition.*;
 import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;

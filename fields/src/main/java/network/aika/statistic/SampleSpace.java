@@ -16,10 +16,8 @@
  */
 package network.aika.statistic;
 
-import network.aika.Model;
-import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.text.Range;
-import network.aika.utils.Writable;
+import network.aika.Range;
+import network.aika.utils.FieldWritable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +25,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.text.Range.length;
 
 /**
  * The <a href="https://en.wikipedia.org/wiki/Sample_space}">Sample Space</a> keeps track of the number of
@@ -36,7 +33,7 @@ import static network.aika.text.Range.length;
  *
  * @author Lukas Molzberger
  */
-public class SampleSpace implements Writable {
+public class SampleSpace implements FieldWritable {
 
     private static final Logger log = LoggerFactory.getLogger(SampleSpace.class);
 
@@ -50,13 +47,9 @@ public class SampleSpace implements Writable {
         return N;
     }
 
-    public double getN(Range range, PatternNeuron pn) {
+    public double getN(Range range, Double avgCoveredSpace) {
         if(range == null)
             return N;
-
-        Double avgCoveredSpace = pn != null ?
-                pn.getAvgCoveredSpaceFromTemplate(range) :
-                range.length();
 
         return N + getInactiveInstancesSinceLastPos(range, avgCoveredSpace);
     }
@@ -110,14 +103,14 @@ public class SampleSpace implements Writable {
             out.writeLong(lastPosition);
     }
 
-    public static SampleSpace read(DataInput in, Model m) throws IOException {
+    public static SampleSpace read(DataInput in) throws IOException {
         SampleSpace sampleSpace = new SampleSpace();
-        sampleSpace.readFields(in, m);
+        sampleSpace.readFields(in);
         return sampleSpace;
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws IOException {
+    public void readFields(DataInput in) throws IOException {
         N = in.readDouble();
         if(in.readBoolean())
             lastPosition = in.readLong();

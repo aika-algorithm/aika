@@ -17,7 +17,7 @@
 package network.aika.debugger.neurons.properties.synapses;
 
 import network.aika.elements.links.Link;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.elements.synapses.types.PatternSynapse;
 import network.aika.enums.sign.Sign;
 
@@ -41,7 +41,7 @@ public class PatternSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel
         addConstant("Frequency(POS, NEG): ", frequencyToString(POS, NEG, s, range));
         addConstant("Frequency(NEG, POS): ", frequencyToString(NEG, POS, s, range));
         addConstant("Frequency(NEG, NEG): ", frequencyToString(NEG, NEG, s, range));
-        addConstant("SampleSpace: ", "" + s.getSampleSpace().toString(range));
+        addConstant("SampleSpace: ", "" + s.getStatistic().getSampleSpace().toString(range));
         addConstant("P(POS, POS) :", probabilityToString(POS, POS, s, range));
         addConstant("P(POS, NEG) :", probabilityToString(POS, NEG, s, range));
         addConstant("P(NEG, POS) :", probabilityToString(NEG, POS, s, range));
@@ -53,36 +53,36 @@ public class PatternSynapsePropertyPanel extends ConjunctiveSynapsePropertyPanel
     }
 
     private String frequencyToString(Sign is, Sign os, PatternSynapse s, Range range) {
-        double N = s.getSampleSpace().getN(range, s.getOutput());
+        double N = s.getStatistic().getSampleSpace().getN(range, s.getOutput().getTemplate().getAverageCoveredSpace().getValue());
         if(N == 0.0)
             return NOT_SET_STR;
 
         try {
-            return doubleToString(s.getFrequency(is, os, s.getSampleSpace().getN(range, s.getOutput())));
+            return doubleToString(s.getStatistic().getFrequency(is, os, s.getStatistic().getSampleSpace().getN(range, s.getOutput().getTemplate().getAverageCoveredSpace().getValue())));
         } catch(IllegalStateException e) {
             return NOT_SET_STR;
         }
     }
 
     private String probabilityToString(Sign is, Sign os, PatternSynapse s, Range range) {
-        double N = s.getSampleSpace().getN(range, s.getOutput());
+        double N = s.getStatistic().getSampleSpace().getN(range, s.getOutput().getTemplate().getAverageCoveredSpace().getValue());
         if(N == 0.0)
             return NOT_SET_STR;
 
         try {
-            return doubleToString(s.getProbability(is, os, N, false), "#.########");
+            return doubleToString(s.getStatistic().getProbability(is, os, N, false), "#.########");
         } catch(IllegalStateException e) {
             return NOT_SET_STR;
         }
     }
 
     private String surprisalToString(Sign is, Sign os, PatternSynapse s, Range range) {
-        double N = s.getSampleSpace().getN(range, s.getOutput());
+        double N = s.getStatistic().getSampleSpace().getN(range, s.getOutput().getTemplate().getAverageCoveredSpace().getValue());
         if(N == 0.0)
             return NOT_SET_STR;
 
         try {
-            return "" + doubleToString(s.getSurprisal(is, os, range, false));
+            return "" + doubleToString(s.getStatistic().getSurprisal(is, os, range, false));
         } catch(IllegalStateException e) {
             return NOT_SET_STR;
         }

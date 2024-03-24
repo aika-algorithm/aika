@@ -14,12 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.text;
+package network.aika;
 
-
-import network.aika.Model;
-import network.aika.enums.direction.Direction;
-import network.aika.utils.Writable;
+import network.aika.utils.FieldWritable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -29,7 +26,7 @@ import java.io.IOException;
  *
  * @author Lukas Molzberger
  */
-public class Range implements Writable {
+public class Range implements FieldWritable {
     private long begin;
     private long end;
 
@@ -40,13 +37,13 @@ public class Range implements Writable {
         this.begin = begin;
         this.end = end;
     }
-
+/*
     public long getPosition(Direction dir) {
         return dir == Direction.INPUT ?
                 begin :
                 end;
     }
-
+*/
     public static Range join(Range a, Range b) {
         if(a == null)
             return b;
@@ -121,14 +118,14 @@ public class Range implements Writable {
         out.writeLong(end);
     }
 
-    public static Range read(DataInput in, Model m) throws IOException {
+    public static Range read(DataInput in) throws IOException {
         Range r = new Range();
-        r.readFields(in, m);
+        r.readFields(in);
         return r;
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws IOException {
+    public void readFields(DataInput in) throws IOException {
         begin = in.readLong();
         end = in.readLong();
     }

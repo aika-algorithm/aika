@@ -19,7 +19,7 @@ package network.aika.elements.links;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.Element;
-import network.aika.elements.Type;
+import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
@@ -122,11 +122,11 @@ public abstract class Link<
         return true;
     }
 
-    public Type getInputType() {
+    public NeuronType getInputType() {
         return synapse.getInputType();
     }
 
-    public Type getOutputType() {
+    public NeuronType getOutputType() {
         return synapse.getOutputType();
     }
 

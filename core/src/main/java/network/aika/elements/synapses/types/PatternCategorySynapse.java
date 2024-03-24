@@ -24,7 +24,7 @@ import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.DirectionEnum;
 
-import static network.aika.elements.Type.PATTERN;
+import static network.aika.elements.NeuronType.PATTERN;
 import static network.aika.enums.Transition.SAME_SAME;
 import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 

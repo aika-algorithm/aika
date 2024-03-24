@@ -16,7 +16,6 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.RefType;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
@@ -26,7 +25,6 @@ import network.aika.elements.synapses.types.InputObjectSynapse;
 import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.elements.synapses.types.SameObjectSynapse;
 import network.aika.meta.Dictionary;
-import network.aika.text.Range;
 
 import static network.aika.TestUtils.initPatternLoop;
 import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;

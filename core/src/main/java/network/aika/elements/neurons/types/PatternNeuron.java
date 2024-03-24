@@ -18,6 +18,7 @@ package network.aika.elements.neurons.types;
 
 import network.aika.Model;
 import network.aika.Document;
+import network.aika.Range;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.NeuronProvider;
@@ -26,24 +27,20 @@ import network.aika.elements.neurons.RefType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.PatternCategoryInputSynapse;
 import network.aika.elements.synapses.types.PatternCategorySynapse;
-import network.aika.enums.sign.Sign;
+import network.aika.fields.link.FieldLink;
 import network.aika.statistic.AverageCoveredSpace;
-import network.aika.statistic.SampleSpace;
-import network.aika.text.Range;
-import network.aika.utils.Bound;
-import network.aika.utils.Utils;
+import network.aika.statistic.NeuronStatistic;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
-import static network.aika.elements.Type.PATTERN;
+import static network.aika.elements.NeuronType.PATTERN;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.MULTI_INPUT;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
 import static network.aika.elements.neurons.RefType.*;
-import static network.aika.enums.sign.Sign.POS;
-import static network.aika.text.Range.length;
+import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
 /**
  *
@@ -56,19 +53,32 @@ import static network.aika.text.Range.length;
 )
 public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActivation> {
 
-    protected double frequency;
-
-    protected SampleSpace sampleSpace = new SampleSpace();
-
     private AverageCoveredSpace averageCoveredSpace;
 
+    private NeuronStatistic statistic = new NeuronStatistic(
+            this,
+            "statistic",
+            getConfig().getAlpha(),
+            TOLERANCE
+    );
 
     public PatternNeuron(NeuronProvider np) {
         super(np);
+
+        init();
     }
 
     public PatternNeuron(Model m, RefType rt) {
         super(m, rt);
+
+        init();
+    }
+
+    public void init() {
+        FieldLink.linkAndConnect(
+                getTemplate().averageCoveredSpace,
+                statistic
+        );
     }
 
     public static PatternNeuron create(Model m, String label) {
@@ -78,17 +88,24 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
     }
 
     @Override
-    public PatternCategoryInputSynapse makeAbstract() {
-        PatternCategoryNeuron patternCategory = new PatternCategoryNeuron(getModel(), CATEGORY)
+    public PatternCategoryNeuron createCategoryNeuron() {
+        return new PatternCategoryNeuron(getModel(), CATEGORY)
                 .setLabel(getCategoryLabel(getLabel()));
+    }
 
-        PatternCategoryInputSynapse s = new PatternCategoryInputSynapse()
-                .link(patternCategory, this);
+    @Override
+    public PatternCategoryInputSynapse createCategoryInputSynapse() {
+        return new PatternCategoryInputSynapse();
+    }
 
-        s.setInitialCategorySynapseWeight(1.0);
+    public NeuronStatistic getStatistic() {
+        return statistic;
+    }
 
-        patternCategory.getProvider().decreaseRefCount(CATEGORY);
-        return s;
+    public AverageCoveredSpace getAverageCoveredSpace() {
+        if(averageCoveredSpace == null)
+            averageCoveredSpace = new AverageCoveredSpace(this, "avgCoveredSpace");
+        return averageCoveredSpace;
     }
 
     public static String getCategoryLabel(String placeholder) {
@@ -115,101 +132,29 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
         return getOutputSynapseByType(PatternCategorySynapse.class);
     }
 
-    public AverageCoveredSpace getAverageCoveredSpace() {
-        if(averageCoveredSpace == null)
-            averageCoveredSpace = new AverageCoveredSpace();
-        return averageCoveredSpace;
-    }
-
-    public SampleSpace getSampleSpace() {
-        return sampleSpace;
-    }
-
     @Override
     public void count(PatternActivation act) {
-        super.count(act);
+        Range absRange = act.getAbsoluteCharRange();
+        statistic.count(absRange);
 
-        double oldN = sampleSpace.getN();
-
-        Range absoluteRange = act.getAbsoluteCharRange();
-
-        sampleSpace.countSkippedInstances(
-                absoluteRange,
-                getAvgCoveredSpaceFromTemplate(absoluteRange)
-        );
-
-        sampleSpace.count();
-        frequency += 1.0;
-
-        Double alpha = act.getConfig().getAlpha();
-        if (alpha != null)
-            applyMovingAverage(
-                    Math.pow(alpha, sampleSpace.getN() - oldN)
-            );
-
-        sampleSpace.updateLastPosition(absoluteRange);
         setModified();
 
         PatternNeuron tn = getTemplate();
         if(tn != null)
             tn.getAverageCoveredSpace()
-                    .count(absoluteRange);
-    }
-
-    public Double getAvgCoveredSpaceFromTemplate(Range absoluteRange) {
-        PatternNeuron tn = getTemplate();
-
-        Double result = null;
-        if(tn != null)
-            result = tn.getAverageCoveredSpace().getAvgCoveredSpace();
-
-        return result != null ? result : length(absoluteRange);
-    }
-
-    public void applyMovingAverage(double alpha) {
-        sampleSpace.applyMovingAverage(alpha);
-        frequency *= alpha;
-        setModified();
-    }
-
-    public double getFrequency() {
-        return frequency;
-    }
-
-    public double getFrequency(Sign s, double n) {
-        return s == POS ?
-                frequency :
-                n - frequency;
+                    .count(absRange);
     }
 
     public void setFrequency(double f) {
-        frequency = f;
+        statistic.setFrequency(f);
         setModified();
-    }
-
-    public double getSurprisal(Sign s, Range range, boolean addCurrentInstance) {
-        double n = sampleSpace.getN(range, this);
-        double p = getProbability(s, n, addCurrentInstance);
-        return -Utils.surprisal(p);
-    }
-
-    public double getProbability(Sign s, double n, boolean addCurrentInstance) {
-        double f = getFrequency(s, n);
-
-        if(addCurrentInstance) {
-            f += 1.0;
-            n += 1.0;
-        }
-
-        return Bound.UPPER.probability(f, n);
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
 
-        out.writeDouble(frequency);
-        sampleSpace.write(out);
+        statistic.write(out);
 
         out.writeBoolean(averageCoveredSpace != null);
         if(averageCoveredSpace != null)
@@ -220,10 +165,9 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
     public void readFields(DataInput in, Model m) throws Exception {
         super.readFields(in, m);
 
-        frequency = in.readDouble();
-        sampleSpace = SampleSpace.read(in, m);
+        statistic.readFields(in);
 
         if(in.readBoolean())
-            averageCoveredSpace = AverageCoveredSpace.read(in, m);
+            getAverageCoveredSpace().readFields(in);
     }
 }

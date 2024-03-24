@@ -129,7 +129,7 @@ public class GradientTest {
 
     public static void setStatistic(PatternNeuron n, double frequency, int N, long lastPosition) {
         n.setFrequency(frequency);
-        n.getSampleSpace().setN(N);
-        n.getSampleSpace().setLastPosition(lastPosition);
+        n.getStatistic().getSampleSpace().setN(N);
+        n.getStatistic().getSampleSpace().setLastPosition(lastPosition);
     }
 }

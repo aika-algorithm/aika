@@ -20,7 +20,7 @@ package network.aika.tokenizer;
 
 import network.aika.Document;
 import network.aika.Context;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.text.TextReference;
 
 import java.util.HashSet;

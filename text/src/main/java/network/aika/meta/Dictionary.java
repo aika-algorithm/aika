@@ -24,7 +24,7 @@ import network.aika.elements.synapses.types.PatternCategorySynapse;
 import network.aika.enums.sign.Sign;
 import network.aika.Document;
 import network.aika.text.TextReference;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,13 +86,13 @@ public class Dictionary implements Writable {
 
     private void mapSurprisalToWeight(PatternCategorySynapse s) {
         PatternNeuron tn = s.getInput();
-        if(tn.getSampleSpace().getN() == 0)
+        if(tn.getStatistic().getSampleSpace().getN() == 0)
             return;
 
         Range r = new Range(0, tn.getLabel().length());
         r = r.getAbsoluteRange(model.getN());
 
-        double surprisal = s.getInput().getSurprisal(Sign.POS, r, false);
+        double surprisal = s.getInput().getStatistic().getSurprisal(Sign.POS, r, false);
 
         double weight = 1.0 + (-0.1 * surprisal);
         assert weight >= 1.0;

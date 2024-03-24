@@ -21,7 +21,7 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.text.TextReference;
 
 import java.io.DataInput;

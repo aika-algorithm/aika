@@ -53,11 +53,4 @@ public abstract class DisjunctiveSynapse<
     public void link() {
         input.addOutputSynapse(this);
     }
-
-    @Override
-    public void setModified() {
-        I in = getInput();
-        if(in != null)
-            in.setModified();
-    }
 }

@@ -24,7 +24,7 @@ import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.DirectionEnum;
 
-import static network.aika.elements.Type.INHIBITORY;
+import static network.aika.elements.NeuronType.INHIBITORY;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Trigger.NOT_FIRED;
 

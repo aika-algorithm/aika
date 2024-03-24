@@ -17,36 +17,37 @@
 package network.aika.statistic;
 
 
-import network.aika.Model;
-import network.aika.text.Range;
-import network.aika.utils.Writable;
+import network.aika.Range;
+import network.aika.fields.FieldObject;
+import network.aika.fields.FieldOutputImpl;
+import network.aika.utils.FieldWritable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.text.Range.length;
-import static network.aika.utils.StringUtils.doubleToString;
+import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class AverageCoveredSpace implements Writable {
+public class AverageCoveredSpace extends FieldOutputImpl implements FieldWritable {
 
     private long n;
     private long coveredSpace;
 
-    public void count(Range r) {
-        n++;
-        coveredSpace += length(r);
+    public AverageCoveredSpace(FieldObject reference, String label) {
+        super(reference, label, TOLERANCE);
     }
 
-    public Double getAvgCoveredSpace() {
-        if(n == 0)
-            return null;
+    public void count(Range r) {
+        n++;
+        coveredSpace += Range.length(r);
 
-        return (double) coveredSpace / (double) n;
+        double uv = (double) coveredSpace / (double) n;
+
+        triggerUpdate(uv - value);
     }
 
     @Override
@@ -55,20 +56,9 @@ public class AverageCoveredSpace implements Writable {
         out.writeLong(coveredSpace);
     }
 
-    public static AverageCoveredSpace read(DataInput in, Model m) throws Exception {
-        AverageCoveredSpace acs = new AverageCoveredSpace();
-        acs.readFields(in, m);
-        return acs;
-    }
-
     @Override
-    public void readFields(DataInput in, Model m) throws Exception {
+    public void readFields(DataInput in) throws Exception {
         n = in.readLong();
         coveredSpace = in.readLong();
-    }
-
-    @Override
-    public String toString() {
-        return "avg:" + doubleToString(getAvgCoveredSpace()) + " n:" + n;
     }
 }

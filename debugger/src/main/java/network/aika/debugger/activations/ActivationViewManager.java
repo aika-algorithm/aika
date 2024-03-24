@@ -29,7 +29,7 @@ import network.aika.queue.ElementStep;
 import network.aika.queue.Step;
 import network.aika.Document;
 import network.aika.text.TextReference;
-import network.aika.text.Range;
+import network.aika.Range;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Element;
 import org.graphstream.graph.Node;

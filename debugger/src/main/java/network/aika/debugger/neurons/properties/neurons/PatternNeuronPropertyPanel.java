@@ -18,7 +18,7 @@ package network.aika.debugger.neurons.properties.neurons;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.enums.sign.Sign;
 
 import static network.aika.debugger.AbstractConsole.NOT_SET_STR;
@@ -38,9 +38,9 @@ public class PatternNeuronPropertyPanel<E extends PatternNeuron> extends Conjunc
 
         Range range = ref != null ? ref.getAbsoluteCharRange() : null;
         addConstant("Range: ", range != null ? "" + range : NOT_SET_STR);
-        addConstant("Frequency: ", doubleToString(n.getFrequency()));
         addConstant("AvgCoveredSpace: ", "" + n.getAverageCoveredSpace());
-        addConstant("SampleSpace: ", n.getSampleSpace().toString(range));
+        addConstant("Frequency: ", doubleToString(n.getStatistic().getFrequency()));
+        addConstant("SampleSpace: ", n.getStatistic().getSampleSpace().toString(range));
         addConstant("P(POS): ", probabilityToString(POS, n, range));
         addConstant("P(NEG): ", probabilityToString(NEG, n, range));
         addConstant("Surprisal(POS): ", surprisalToString(POS, n, range));
@@ -52,24 +52,24 @@ public class PatternNeuronPropertyPanel<E extends PatternNeuron> extends Conjunc
     }
 
     private String probabilityToString(Sign s, PatternNeuron n, Range range) {
-        double N = n.getSampleSpace().getN(range, n);
+        double N = n.getStatistic().getSampleSpace().getN(range, n.getTemplate().getAverageCoveredSpace().getValue());
         if(N == 0.0)
             return NOT_SET_STR;
 
         try {
-            return doubleToString(n.getProbability(s, N, false), "#.########");
+            return doubleToString(n.getStatistic().getProbability(s, N, false), "#.########");
         } catch(IllegalStateException e) {
             return NOT_SET_STR;
         }
     }
 
     private String surprisalToString(Sign s, PatternNeuron n, Range range) {
-        double N = n.getSampleSpace().getN(range, n);
+        double N = n.getStatistic().getSampleSpace().getN(range, n.getTemplate().getAverageCoveredSpace().getValue());
         if(N == 0.0)
             return NOT_SET_STR;
 
         try {
-            return "" + doubleToString(n.getSurprisal(s, range, false));
+            return "" + doubleToString(n.getStatistic().getSurprisal(s, range, false));
         } catch(IllegalStateException e) {
             return NOT_SET_STR;
         }

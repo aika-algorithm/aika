@@ -19,7 +19,7 @@ package network.aika.elements.activations;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.Element;
-import network.aika.elements.Type;
+import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
@@ -37,7 +37,7 @@ import network.aika.queue.Queue;
 import network.aika.queue.Timestamp;
 import network.aika.queue.steps.InactiveLinks;
 import network.aika.text.TextReference;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.fields.*;
 
 import java.util.*;
@@ -117,7 +117,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     }
 
 
-    public Type getType() {
+    public NeuronType getType() {
         return neuron.getType();
     }
 

@@ -27,7 +27,7 @@ import network.aika.parser.Parser;
 import network.aika.parser.ParserPhase;
 import network.aika.Document;
 import network.aika.text.TextReference;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.tokenizer.WordTokenizer;
 import network.aika.tokenizer.Tokenizer;
 import org.junit.jupiter.api.BeforeEach;

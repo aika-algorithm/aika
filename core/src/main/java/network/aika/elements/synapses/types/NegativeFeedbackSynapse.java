@@ -27,7 +27,6 @@ import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
 import network.aika.elements.synapses.slots.AnnealingType;
 import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.enums.direction.Direction;
 import network.aika.enums.direction.DirectionEnum;
 import network.aika.fields.Field;
 
@@ -35,11 +34,10 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.Type.*;
+import static network.aika.elements.NeuronType.*;
 import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
-import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.Fields.scale;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 
@@ -99,13 +97,6 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
     @Override
     public NegativeFeedbackLink createLink(InhibitoryActivation input, BindingActivation output) {
         return new NegativeFeedbackLink(this, input, output);
-    }
-
-    @Override
-    public void setModified() {
-        BindingNeuron no = getOutput();
-        if(no != null)
-            no.setModified();
     }
 
     @Override

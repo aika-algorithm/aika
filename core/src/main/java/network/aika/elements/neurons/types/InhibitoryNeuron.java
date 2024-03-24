@@ -16,7 +16,6 @@
  */
 package network.aika.elements.neurons.types;
 
-import network.aika.ActivationFunction;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.activations.types.InhibitoryActivation;
@@ -29,7 +28,7 @@ import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
 
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
-import static network.aika.elements.Type.INHIBITORY;
+import static network.aika.elements.NeuronType.INHIBITORY;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
 import static network.aika.elements.neurons.RefType.CATEGORY;
 import static network.aika.elements.neurons.RefType.TEMPLATE;
@@ -54,18 +53,16 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
         super(m, rt);
     }
 
+
     @Override
-    public InhibitoryCategoryInputSynapse makeAbstract() {
-        InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(getModel(), CATEGORY)
+    public InhibitoryCategoryNeuron createCategoryNeuron() {
+        return new InhibitoryCategoryNeuron(getModel(), CATEGORY)
                 .setLabel(getLabel() + CATEGORY_LABEL);
+    }
 
-        InhibitoryCategoryInputSynapse s = new InhibitoryCategoryInputSynapse()
-                .link(inhibCategory, this);
-
-        s.setInitialCategorySynapseWeight(1.0);
-
-        inhibCategory.getProvider().decreaseRefCount(CATEGORY);
-        return s;
+    @Override
+    public InhibitoryCategoryInputSynapse createCategoryInputSynapse() {
+        return new InhibitoryCategoryInputSynapse();
     }
 
     @Override

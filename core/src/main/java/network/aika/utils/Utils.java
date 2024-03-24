@@ -27,11 +27,6 @@ public class Utils {
 
     public static double TOLERANCE = 0.001;
 
-
-    public static double surprisal(double p) {
-        return -Math.log(p);
-    }
-
     public static double[] add(double[] a, double[] b) {
         if(a == null)
             return b;

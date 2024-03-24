@@ -31,7 +31,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.NeuronType.BINDING;
 import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_SAME;

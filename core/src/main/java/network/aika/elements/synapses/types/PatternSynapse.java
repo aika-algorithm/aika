@@ -27,27 +27,24 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.DirectionEnum;
 import network.aika.fields.FieldOutput;
-import network.aika.text.Range;
-import network.aika.statistic.SampleSpace;
+import network.aika.Range;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.enums.sign.Sign;
-import network.aika.utils.Bound;
-import network.aika.utils.Utils;
+import network.aika.statistic.SynapseStatistic;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
-import static network.aika.elements.Type.BINDING;
-import static network.aika.elements.Type.PATTERN;
+import static network.aika.elements.NeuronType.BINDING;
+import static network.aika.elements.NeuronType.PATTERN;
 import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_SAME;
 import static network.aika.enums.Trigger.PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK;
 import static network.aika.fields.Fields.isTrue;
-import static network.aika.enums.sign.Sign.NEG;
-import static network.aika.enums.sign.Sign.POS;
+import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
 /**
  *
@@ -71,14 +68,19 @@ public class PatternSynapse extends ConjunctiveSynapse<
         >
 {
 
+    SynapseStatistic statistic = new SynapseStatistic(
+            this,
+            "statistic",
+            getConfig().getAlpha(),
+            TOLERANCE
+    );
+
     public PatternSynapse() {
     }
 
-    protected double frequencyIPosOPos;
-    protected double frequencyIPosONeg;
-    protected double frequencyINegOPos;
-
-    protected SampleSpace sampleSpace = new SampleSpace();
+    public SynapseStatistic getStatistic() {
+        return statistic;
+    }
 
     @Override
     public FieldOutput getInputValue(BindingActivation input) {
@@ -130,62 +132,14 @@ public class PatternSynapse extends ConjunctiveSynapse<
         getInput().delete();
     }
 
-    public SampleSpace getSampleSpace() {
-        return sampleSpace;
-    }
-
-    public double getFrequency(Sign inputSign, Sign outputSign, double n) {
-        if(inputSign == POS && outputSign == POS) {
-            return frequencyIPosOPos;
-        } else if(inputSign == POS && outputSign == NEG) {
-            return frequencyIPosONeg;
-        } else if(inputSign == NEG && outputSign == POS) {
-            return frequencyINegOPos;
-        }
-
-        //TODO:
-        return Math.max(n - (frequencyIPosOPos + frequencyIPosONeg + frequencyINegOPos), 0);
-    }
-
     public void setFrequency(Sign inputSign, Sign outputSign, double f) {
-        if(inputSign == POS && outputSign == POS) {
-            frequencyIPosOPos = f;
-        } else if(inputSign == POS && outputSign == NEG) {
-            frequencyIPosONeg = f;
-        } else if(inputSign == NEG && outputSign == POS) {
-            frequencyINegOPos = f;
-        } else {
-            throw new UnsupportedOperationException();
-        }
+        statistic.setFrequency(inputSign, outputSign, f);
         setModified();
-    }
-
-    public void applyMovingAverage(double alpha) {
-        sampleSpace.applyMovingAverage(alpha);
-        frequencyIPosOPos *= alpha;
-        frequencyIPosONeg *= alpha;
-        frequencyINegOPos *= alpha;
-        setModified();
-    }
-
-    public void updateFrequencyForIandO(boolean inputActive,boolean outputActive){
-        if(inputActive && outputActive) {
-            frequencyIPosOPos += 1.0;
-            setModified();
-        } else if(inputActive) {
-            frequencyIPosONeg += 1.0;
-            setModified();
-        } else if(outputActive) {
-            frequencyINegOPos += 1.0;
-            setModified();
-        }
     }
 
     @Override
     public void count(PatternLink l) {
         super.count(l);
-
-        double oldN = sampleSpace.getN();
 
         if(l.getInput() == null)
             return; // TODO: fix
@@ -194,65 +148,21 @@ public class PatternSynapse extends ConjunctiveSynapse<
         boolean outputActive = isTrue(l.getOutput().getValue());
 
         Range absoluteRange = l.getInput().getAbsoluteCharRange();
-        if(absoluteRange == null)
-            return;
 
-        sampleSpace.countSkippedInstances(
-                absoluteRange,
-                getOutput().getAvgCoveredSpaceFromTemplate(absoluteRange)
-        );
-
-        sampleSpace.count();
-
-        if(outputActive) {
-            Double alpha = l.getConfig().getAlpha();
-            if (alpha != null)
-                applyMovingAverage(
-                        Math.pow(alpha, sampleSpace.getN() - oldN)
-                );
-        }
-
-        updateFrequencyForIandO(inputActive,outputActive);
-        sampleSpace.updateLastPosition(absoluteRange);
-    }
-
-    public double getSurprisal(Sign inputSign, Sign outputSign, Range range, boolean addCurrentInstance) {
-        double n = sampleSpace.getN(range, getOutput());
-        double probability = getProbability(inputSign, outputSign, n, addCurrentInstance);
-        return -Utils.surprisal(probability);
-    }
-
-    public double getProbability(Sign inputSign, Sign outputSign, double n, boolean addCurrentInstance) {
-        double frequency = getFrequency(inputSign, outputSign, n);
-
-        // Add the current instance
-        if(addCurrentInstance) {
-            frequency += 1.0;
-            n += 1.0;
-        }
-
-        return Bound.UPPER.probability(frequency, n);
+        statistic.count(absoluteRange, inputActive, outputActive);
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
 
-        out.writeDouble(frequencyIPosOPos);
-        out.writeDouble(frequencyIPosONeg);
-        out.writeDouble(frequencyINegOPos);
-
-        sampleSpace.write(out);
+        statistic.write(out);
     }
 
     @Override
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
 
-        frequencyIPosOPos = in.readDouble();
-        frequencyIPosONeg = in.readDouble();
-        frequencyINegOPos = in.readDouble();
-
-        sampleSpace = SampleSpace.read(in, m);
+        statistic.readFields(in);
     }
 }

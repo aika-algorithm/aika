@@ -16,17 +16,14 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.RefType;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.meta.Dictionary;
 import network.aika.meta.NetworkMotifs;
 import network.aika.text.TextReference;
-import network.aika.text.Range;
 
 import static network.aika.elements.neurons.RefType.NEURON_EXTERNAL;
-import static network.aika.elements.neurons.RefType.TEMPLATE_MODEL;
 
 /**
  *

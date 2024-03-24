@@ -16,7 +16,8 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.elements.Type;
+import network.aika.Model;
+import network.aika.elements.NeuronType;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.SynapseType;
@@ -24,16 +25,17 @@ import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class SynapseTypeDefinition {
-    private Type inputType;
+public class SynapseTypeDefinition<T extends Type> extends TypeDefinition<T> {
+    private NeuronType inputNeuronType;
 
-    private Type outputType;
+    private NeuronType outputNeuronType;
 
     private Transition[] transition;
 
@@ -52,16 +54,19 @@ public class SynapseTypeDefinition {
     public static SynapseTypeDefinition getDefinition(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
                 new SynapseTypeDefinition(
-                        c.getAnnotation(SynapseType.class)
+                        c.getAnnotation(SynapseType.class),
+                        clazz.getSimpleName(),
+                        clazz
                 )
         );
     }
 
     private static HashMap<Class<Synapse>, SynapseTypeDefinition> cache = new HashMap();
 
-    private SynapseTypeDefinition(SynapseType synTypeAnno) {
-        inputType = synTypeAnno.inputType();
-        outputType = synTypeAnno.outputType();
+    private SynapseTypeDefinition(SynapseType synTypeAnno, String name, Class<T> clazz) {
+        super(name, clazz);
+        inputNeuronType = synTypeAnno.inputType();
+        outputNeuronType = synTypeAnno.outputType();
         transition = synTypeAnno.transition();
         required = synTypeAnno.required();
         trigger = synTypeAnno.trigger();
@@ -70,12 +75,12 @@ public class SynapseTypeDefinition {
         storedAt = synTypeAnno.storedAt().getDir();
     }
 
-    public Type getInputType() {
-        return inputType;
+    public NeuronType getInputType() {
+        return inputNeuronType;
     }
 
-    public Type getOutputType() {
-        return outputType;
+    public NeuronType getOutputType() {
+        return outputNeuronType;
     }
 
     public Transition[] getTransition() {
@@ -104,5 +109,22 @@ public class SynapseTypeDefinition {
 
     public boolean isTrainingAllowed() {
         return trainingAllowed;
+    }
+
+    @Override
+    public T instantiate(Model m) {
+        try {
+            T instance = clazz.getConstructor().newInstance();
+            instance.setTypeDefinition(this);
+            return instance;
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

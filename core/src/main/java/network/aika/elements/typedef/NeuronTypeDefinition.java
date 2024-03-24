@@ -17,20 +17,24 @@
 package network.aika.elements.typedef;
 
 import network.aika.ActivationFunction;
-import network.aika.elements.Type;
+import network.aika.Model;
+import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.NeuronType;
+import network.aika.elements.neurons.RefType;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class NeuronTypeDefinition {
+public class NeuronTypeDefinition<T extends Type> extends TypeDefinition<T> {
 
-    private Type type;
+    private RefType refType;
+
+    private NeuronType neuronType;
 
     private ActivationFunction activationFunction;
 
@@ -41,22 +45,25 @@ public class NeuronTypeDefinition {
     public static NeuronTypeDefinition getDefinition(Class clazz) {
         return cache.computeIfAbsent(clazz, c ->
                 new NeuronTypeDefinition(
-                        c.getAnnotation(NeuronType.class)
+                        c.getAnnotation(network.aika.elements.neurons.NeuronType.class),
+                        clazz.getSimpleName(),
+                        clazz
                 )
         );
     }
 
     private static HashMap<Class<Neuron>, NeuronTypeDefinition> cache = new HashMap();
 
-    private NeuronTypeDefinition(NeuronType typeAnnotation) {
-        this.type = typeAnnotation.type();
+    private NeuronTypeDefinition(network.aika.elements.neurons.NeuronType typeAnnotation, String name, Class<T> clazz) {
+        super(name, clazz);
+        this.neuronType = typeAnnotation.type();
         this.activationFunction = typeAnnotation.activationFunction();
         this.bindingSignalSlots = typeAnnotation.bindingSignalSlots();
         this.trainingAllowed = typeAnnotation.trainingAllowed();
     }
 
-    public Type getType() {
-        return type;
+    public NeuronType getType() {
+        return neuronType;
     }
 
     public ActivationFunction getActivationFunction() {
@@ -69,5 +76,24 @@ public class NeuronTypeDefinition {
 
     public boolean isTrainingAllowed() {
         return trainingAllowed;
+    }
+
+    public T instantiate(Model m) {
+        try {
+            T instance = clazz
+                    .getConstructor(Model.class, RefType.class)
+                    .newInstance(m, refType);
+
+            instance.setTypeDefinition(this);
+            return instance;
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

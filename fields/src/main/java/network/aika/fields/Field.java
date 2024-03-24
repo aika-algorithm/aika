@@ -16,60 +16,32 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.FieldLink;
 import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
 import network.aika.utils.FieldWritable;
-import network.aika.utils.StringUtils;
-import network.aika.utils.ToleranceUtils;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-
 
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class Field<F extends FieldLink> implements FieldInput<F>, FieldOutput, FieldWritable {
-
-    private static double MIN_TOLERANCE = 0.0000000001;
-
-    private String label;
-    private FieldObject reference;
-
-    protected double value;
+public abstract class Field<F extends FieldLink> extends FieldOutputImpl implements FieldInput<F>, FieldOutput, FieldWritable {
 
     private boolean blocked;
-
-    private boolean withinUpdate;
-    private double updatedValue;
-
-    private Collection<AbstractFieldLink> receivers;
-
-    protected Double tolerance;
 
     QueueInterceptor interceptor;
 
     public Field(FieldObject reference, String label, Double tolerance) {
-        this.reference = reference;
-        this.label = label;
-        this.tolerance = tolerance;
-
-        initIO();
+        super(reference, label, tolerance);
     }
 
     public <F extends Field> F setQueued(Queue q, ProcessingPhase phase, boolean isNextRound) {
         interceptor = new QueueInterceptor(q, this, phase, isNextRound);
         return (F) this;
-    }
-
-    protected void initIO() {
-        receivers = new ArrayList<>();
     }
 
     public Field setInitialValue(double initialValue) {
@@ -89,36 +61,6 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
         this.blocked = blocked;
     }
 
-    @Override
-    public boolean isWithinUpdate() {
-        return withinUpdate;
-    }
-
-    @Override
-    public FieldObject getReference() {
-        return reference;
-    }
-
-    public void setReference(FieldObject reference) {
-        this.reference = reference;
-    }
-
-    @Override
-    public String getLabel() {
-        return label;
-    }
-
-    @Override
-    public double getValue() {
-        return value;
-    }
-
-    @Override
-    public double getUpdatedValue() {
-        return withinUpdate ?
-                updatedValue :
-                value;
-    }
 
     public synchronized void connectInputs(boolean initialize) {
         getInputs().forEach(fl ->
@@ -137,33 +79,6 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
             fl.disconnect(deinitialize);
             fl.unlinkInput();
         });
-    }
-
-    public void disconnectAndUnlinkOutputs(boolean deinitialize) {
-        synchronized (this.receivers) {
-            receivers.forEach(fl -> {
-                fl.disconnect(deinitialize);
-                fl.unlinkOutput();
-            });
-        }
-    }
-
-    public Collection<AbstractFieldLink> getReceivers() {
-        return receivers;
-    }
-
-    @Override
-    public void addOutput(AbstractFieldLink fl) {
-        synchronized (this.receivers) {
-            this.receivers.add(fl);
-        }
-    }
-
-    @Override
-    public void removeOutput(AbstractFieldLink fl) {
-        synchronized (this.receivers) {
-            this.receivers.remove(fl);
-        }
     }
 
     public QueueInterceptor getInterceptor() {
@@ -188,35 +103,6 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
         triggerUpdate(u);
     }
 
-    public void triggerUpdate(double u) {
-        if(ToleranceUtils.belowTolerance(tolerance, u))
-            return;
-
-        withinUpdate = true;
-
-        updatedValue = value + u;
-        if(updatedValue > -MIN_TOLERANCE && updatedValue < MIN_TOLERANCE) {
-            updatedValue = 0.0; // TODO: Find a better solution to this hack
-        }
-
-        propagateUpdate(u);
-        value = updatedValue;
-
-        withinUpdate = false;
-    }
-
-    protected void propagateUpdate(double update) {
-        AbstractFieldLink[] recs;
-
-        synchronized (this.receivers) {
-            recs = receivers.toArray(new AbstractFieldLink[0]);
-        }
-
-        for(int i = 0; i < recs.length; i++) {
-            recs[i].receiveUpdate(update);
-        }
-    }
-
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeDouble(value);
@@ -225,14 +111,5 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
     @Override
     public void readFields(DataInput in) throws IOException {
         value = in.readDouble();
-    }
-
-    @Override
-    public String toString() {
-        return getLabel() + ": " + getValueString();
-    }
-
-    public String getValueString() {
-        return StringUtils.doubleToString(getValue());
     }
 }

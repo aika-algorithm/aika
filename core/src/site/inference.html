@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Inference - AIKA</title>
-	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="css/style.css" neuronType="text/css">
 	<link rel="shortcut icon" href="images/favicon.png" />
 
 	<!-- Google tag (gtag.js) -->
@@ -98,7 +98,7 @@
 				are not completely created from scratch. Instead they are instantiated based on neurons and synapses in a template network. This template network contains several
 				different types of neurons and synapses that are needed for specific tasks within the network. A similar approach can be observed in the human brain, where different types of
 				neurons serve different purposes. Pyramidal neurons, for instance, possess long axons through which these neurons are able to connect parts of the brain that are far from
-				each other. Interneurons, on the other hand, create local circuits. Depending on the type of neuron, different neurotransmitters are used, such as gamma-Aminobutyric acid (GABA) in some of the
+				each other. Interneurons, on the other hand, create local circuits. Depending on the neuronType of neuron, different neurotransmitters are used, such as gamma-Aminobutyric acid (GABA) in some of the
 				inhibitory neurons.
 			</p>
 
@@ -116,7 +116,7 @@
 				$$net_j = {b_j + \sum\limits_{i=0}^N{x_i w_{ij}}}$$
 				$$y_j = \varphi (net_j)$$
 
-				Depending on the type of neuron, different activation functions are used. One commonly used activation function
+				Depending on the neuronType of neuron, different activation functions are used. One commonly used activation function
 				in the AIKA network is the <a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)">rectified</a>
 				hyperbolic tangent function, which is basically the positive half of the \(\tanh()\) function.
 
@@ -137,7 +137,7 @@
 				(i.e., the bias) accordingly, neurons can take on the characteristics of boolean logic gates, such as an
 				and-gate or an or-gate. These two kinds of logic gates can be implemented by two different types neurons.
 				Excitatory neurons take on the characteristics of an and-gate. These are used to detect patterns in the
-				input data set. The second type of neuron is the inhibitory neuron, which acts like an or-gate. These are able
+				input data set. The second neuronType of neuron is the inhibitory neuron, which acts like an or-gate. These are able
 				to group a large number of excitatory neurons together and form a category of them. They are called inhibitory
 				because they are able to form negative feedback loops with their input neurons, so that only one of their
 				inputs is allowed to stay active. All other input neurons will then be suppressed.
@@ -222,7 +222,7 @@
 				This is done by requiring a connecting path through the activation network between the input and the output
 				activation of a potential new link. This verification is performed by a 'visitor' class that steps through
 				the activation network in search of such a connection. At each activation and each link a transition operation is
-				performed in order to check that all of the conditions for a certain neuron or synapse type hold. When the visitor
+				performed in order to check that all of the conditions for a certain neuron or synapse neuronType hold. When the visitor
 				is able to close a loop, a new link is created.
 			</p>
 			<div style="text-align:center; width:100%">

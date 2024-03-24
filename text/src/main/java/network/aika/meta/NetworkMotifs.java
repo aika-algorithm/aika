@@ -17,8 +17,7 @@
 package network.aika.meta;
 
 import network.aika.Model;
-import network.aika.elements.Type;
-import network.aika.elements.neurons.RefType;
+import network.aika.elements.NeuronType;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
@@ -43,8 +42,8 @@ public class NetworkMotifs {
     public static double DEFAULT_PATTERN_INPUT_CATEGORY_SYNAPSE_WEIGHT = 5.0;
     public static double DEFAULT_INHIBITORY_INPUT_CATEGORY_SYNAPSE_WEIGHT = 1.0;
 
-    public static double getDefaultInputCategorySynapseWeight(Type type) {
-        return switch (type) {
+    public static double getDefaultInputCategorySynapseWeight(NeuronType neuronType) {
+        return switch (neuronType) {
             case BINDING -> DEFAULT_BINDING_INPUT_CATEGORY_SYNAPSE_WEIGHT;
             case PATTERN -> DEFAULT_PATTERN_INPUT_CATEGORY_SYNAPSE_WEIGHT;
             case INHIBITORY -> DEFAULT_INHIBITORY_INPUT_CATEGORY_SYNAPSE_WEIGHT;

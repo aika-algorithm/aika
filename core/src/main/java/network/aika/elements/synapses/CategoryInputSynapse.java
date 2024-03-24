@@ -16,14 +16,16 @@
  */
 package network.aika.elements.synapses;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.CategoryNeuron;
+import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.Neuron;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public interface CategoryInputSynapse<S extends Synapse> {
+public interface CategoryInputSynapse<S extends CategoryInputSynapse> {
 
     default boolean isTrainingAllowed() {
         return false;
@@ -40,4 +42,8 @@ public interface CategoryInputSynapse<S extends Synapse> {
     S setWeight(double w);
 
     S adjustBias();
+
+    S setPropagable(boolean p);
+
+    S link(Neuron category, Neuron on);
 }

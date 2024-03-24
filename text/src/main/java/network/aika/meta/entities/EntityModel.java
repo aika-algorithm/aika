@@ -30,7 +30,7 @@ import network.aika.meta.sequences.PhraseModel;
 import network.aika.Document;
 import network.aika.meta.topics.TopicModel;
 import network.aika.text.TextReference;
-import network.aika.text.Range;
+import network.aika.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.Type.*;
+import static network.aika.elements.NeuronType.*;
 import static network.aika.elements.neurons.RefType.TEMPLATE_MODEL;
 import static network.aika.meta.LabelUtil.getAbstractLabel;
 import static network.aika.meta.NetworkMotifs.*;

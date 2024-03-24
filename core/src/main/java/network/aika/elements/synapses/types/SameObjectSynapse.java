@@ -24,7 +24,7 @@ import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.DirectionEnum;
 import network.aika.fields.FieldOutput;
 
-import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.NeuronType.BINDING;
 import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_SAME;

@@ -174,13 +174,6 @@ public abstract class ConjunctiveSynapse<
     }
 
     @Override
-    public void setModified() {
-        O no = getOutput();
-        if(no != null)
-            no.setModified();
-    }
-
-    @Override
     public boolean isWeak() {
         return getOutput().getBias().getUpdatedValue() > -synapseBias.getUpdatedValue();
     }

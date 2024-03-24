@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.util.Comparator;
 
 import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
-import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.NeuronType.BINDING;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.*;
 import static network.aika.elements.neurons.RefType.CATEGORY;
 
@@ -90,21 +90,18 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     }
 
     @Override
-    public BindingCategoryInputSynapse makeAbstract() {
-        BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron(getModel(), CATEGORY)
+    public BindingCategoryNeuron createCategoryNeuron() {
+        return new BindingCategoryNeuron(getModel(), CATEGORY)
                 .setLabel(getLabel() + CATEGORY_LABEL);
-
-        BindingCategoryInputSynapse s = new BindingCategoryInputSynapse()
-                .link(bindingCategory, this);
-
-        s.setInitialCategorySynapseWeight(1.0);
-
-        bindingCategory.getProvider().decreaseRefCount(CATEGORY);
-        return s;
     }
 
     @Override
-    public CategorySynapse createCategorySynapse() {
+    public BindingCategoryInputSynapse createCategoryInputSynapse() {
+        return new BindingCategoryInputSynapse();
+    }
+
+    @Override
+    public BindingCategorySynapse createCategorySynapse() {
         return new BindingCategorySynapse();
     }
 

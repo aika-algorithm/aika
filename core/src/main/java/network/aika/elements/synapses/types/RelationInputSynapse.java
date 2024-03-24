@@ -33,7 +33,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.debugger.EventType.UPDATE;
-import static network.aika.elements.Type.BINDING;
+import static network.aika.elements.NeuronType.BINDING;
 import static network.aika.enums.Transition.INPUT_INPUT;
 
 /**

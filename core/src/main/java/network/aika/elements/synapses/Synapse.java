@@ -18,7 +18,7 @@ package network.aika.elements.synapses;
 
 import network.aika.Model;
 import network.aika.elements.PreActivation;
-import network.aika.elements.Type;
+import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
@@ -99,11 +99,11 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         this.synapseId = synapseId;
     }
 
-    public Type getInputType() {
+    public NeuronType getInputType() {
         return synapseType.getInputType();
     }
 
-    public Type getOutputType() {
+    public NeuronType getOutputType() {
         return synapseType.getOutputType();
     }
 
@@ -233,7 +233,11 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return createAndInitLink(iAct, oAct);
     }
 
-    public abstract void setModified();
+    public final void setModified() {
+        Neuron n = getStoredAt().getNeuron(this);
+        if(n != null)
+            n.setModified();
+    }
 
     public void count(L l) {
     }
