@@ -16,22 +16,39 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.Model;
+import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.State;
 import network.aika.fielddefs.FieldObjectDefinition;
 
+import java.lang.reflect.InvocationTargetException;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class TypeDefinition<T extends Type> extends FieldObjectDefinition {
+public class StateTypeDefinition extends TypeDefinition<State> {
 
-    private String name;
 
-    protected Class<? extends T> clazz;
+    public StateTypeDefinition(String name) {
+        super(name, State.class);
+    }
 
-    public TypeDefinition(String name, Class<? extends T> clazz) {
-        this.name = name;
-        this.clazz = clazz;
+    public State instantiate(Activation act) {
+        try {
+            State instance = clazz
+                    .getConstructor(Activation.class)
+                    .newInstance(act);
+
+            instance.setTypeDefinition(this);
+            return instance;
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

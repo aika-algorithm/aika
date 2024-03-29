@@ -58,9 +58,4 @@ public class PatternCategoryNeuron extends CategoryNeuron {
     public CategoryInputSynapse createCategoryInputSynapse() {
         throw new UnsupportedOperationException();
     }
-
-    @Override
-    public CategoryActivation createActivation(Document doc) {
-        return new PatternCategoryActivation(doc.createActivationId(), doc, this);
-    }
 }

@@ -106,11 +106,6 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     }
 
     @Override
-    public BindingActivation createActivation(Document doc) {
-        return new BindingActivation(doc.createActivationId(), doc, this);
-    }
-
-    @Override
     public BindingCategoryInputSynapse getCategoryInputSynapse() {
         return getInputSynapseByType(BindingCategoryInputSynapse.class);
     }

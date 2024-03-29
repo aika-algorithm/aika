@@ -26,6 +26,7 @@ import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.typedef.NeuronTypeDefinition;
+import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
 import network.aika.exceptions.MissingInputCategoryNeuron;
@@ -48,7 +49,6 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static network.aika.elements.typedef.NeuronTypeDefinition.getDefinition;
 import static network.aika.elements.neurons.RefType.*;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
@@ -59,13 +59,13 @@ import static network.aika.queue.Timestamp.MIN;
  *
  * @author Lukas Molzberger
  */
-public abstract class Neuron<N extends Neuron, A extends Activation> implements Element, Writable {
+public abstract class Neuron<N extends Neuron, A extends Activation> implements Type<NeuronTypeDefinition>, Element, Writable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
 
     protected static final String CATEGORY_LABEL = " Category";
 
-    private final NeuronTypeDefinition neuronType = getDefinition(getClass());
+    private NeuronTypeDefinition neuronType;
 
     private int synapseIdCounter = 0;
 
@@ -100,6 +100,10 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         provider = new NeuronProvider(m, this, rt);
         setModified();
         setBias(0.0);
+    }
+
+    public void setTypeDefinition(NeuronTypeDefinition typeDef) {
+        neuronType = typeDef;
     }
 
     public NeuronType getType() {
@@ -320,7 +324,10 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return neuronType.isTrainingAllowed();
     }
 
-    public abstract A createActivation(Document doc);
+    public final A createActivation(Document doc) {
+        return (A) neuronType.getActivationType()
+                .instantiate(doc.createActivationId(), doc, this);
+    }
 
     public abstract void addInactiveLinks(Activation act);
 

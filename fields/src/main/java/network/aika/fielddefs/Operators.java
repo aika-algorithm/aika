@@ -17,11 +17,10 @@
 package network.aika.fielddefs;
 
 import network.aika.fields.*;
-import network.aika.fields.link.FieldLink;
 import network.aika.utils.ToleranceUtils;
 
 import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleFunction;
+import java.util.function.DoubleUnaryOperator;
 
 import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.FieldLinkDefinition.linkAll;
@@ -66,7 +65,6 @@ public class Operators {
         FieldDefinition sub = new FieldDefinition(Subtraction.class, ref, label);
         link(in1, 0, sub);
         link(in2, 1, sub);
-        sub.connectInputs(true);
 
         return sub;
     }
@@ -146,17 +144,17 @@ public class Operators {
         return mul;
     }
 
-    public static FieldDefinition func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, DoubleFunction<Double> f) {
+    public static FieldDefinition func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, DoubleUnaryOperator f) {
         if(in == null)
             return null;
 
-        FieldDefinition func = new FieldDefinition(FieldFunction.class, ref, label, tolerance, f);
+        FieldDefinition func = new FieldFunctionDefinition(ref, label, tolerance, f);
         link(in, 0, func);
 
         return func;
     }
 
-    public static FieldDefinition func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, DoubleFunction<Double> f, FieldInputDefinition... out) {
+    public static FieldDefinition func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, DoubleUnaryOperator f, FieldInputDefinition... out) {
         if(in == null)
             return null;
 
@@ -169,7 +167,7 @@ public class Operators {
         if(in1 == null || in2 == null)
             return null;
 
-        FieldDefinition func = new FieldDefinition(BiFunction.class, ref, label, f);
+        FieldDefinition func = new BiFunctionFieldDefinition(ref, label, f);
         link(in1, 0, func);
         link(in2, 1, func);
 
@@ -186,7 +184,7 @@ public class Operators {
         if(in == null)
             return null;
 
-        FieldDefinition op = new FieldDefinition(ThresholdOperator.class, ref, label, threshold, type);
+        FieldDefinition op = new ThresholdOperatorFieldDefinition(ref, label, threshold, type);
         link(in, 0, op);
         return op;
     }
@@ -195,7 +193,7 @@ public class Operators {
         if(in == null)
             return null;
 
-        FieldDefinition op = new FieldDefinition(ThresholdOperator.class, ref, label, threshold, type, isFinal);
+        FieldDefinition op = new ThresholdOperatorFieldDefinition(ref, label, threshold, type, isFinal);
         link(in, 0, op);
         return op;
     }

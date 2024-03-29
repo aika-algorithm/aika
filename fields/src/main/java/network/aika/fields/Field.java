@@ -16,6 +16,7 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.link.FieldLink;
 import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
@@ -47,6 +48,10 @@ public abstract class Field<F extends FieldLink> extends FieldOutputImpl impleme
     public Field setInitialValue(double initialValue) {
         value = initialValue;
         return this;
+    }
+
+    public void setFieldDefinition(FieldDefinition fieldDefinition) {
+
     }
 
     public void setValue(double v) {

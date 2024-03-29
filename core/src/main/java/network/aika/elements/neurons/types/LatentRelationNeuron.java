@@ -74,11 +74,6 @@ public class LatentRelationNeuron extends BindingNeuron {
     }
 
     @Override
-    public LatentRelationActivation createActivation(Document doc) {
-        return new LatentRelationActivation(doc.createActivationId(), doc, this);
-    }
-
-    @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
 

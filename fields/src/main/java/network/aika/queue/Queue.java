@@ -29,7 +29,7 @@ import java.util.function.Predicate;
  *
  * @author Lukas Molzberger
  */
-public abstract class Queue {
+public class Queue {
 
     protected Step currentStep;
 
@@ -39,7 +39,9 @@ public abstract class Queue {
 
     private Timestamp timestampOnProcess = new Timestamp(0);
 
-    public abstract long getTimeout();
+    public long getTimeout(){
+        return Long.MAX_VALUE;
+    }
 
     public Timestamp getTimestampOnProcess() {
         return timestampOnProcess;

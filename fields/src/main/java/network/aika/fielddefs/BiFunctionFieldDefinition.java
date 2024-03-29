@@ -14,30 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fielddefs;
 
-import network.aika.fields.link.FieldLink;
+import network.aika.fields.BiFunction;
+import network.aika.fields.Field;
+import network.aika.fields.FieldFunction;
+import network.aika.fields.FieldObject;
 
+import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleFunction;
-import java.util.function.DoubleUnaryOperator;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldFunction extends AbstractFunction {
+public class BiFunctionFieldDefinition extends FieldDefinition<BiFunction> {
 
-    private DoubleUnaryOperator function;
+    DoubleBinaryOperator f;
 
-    public FieldFunction(FieldObject ref, String label, Double tolerance) {
-        super(ref, label, tolerance);
+    public BiFunctionFieldDefinition(FieldObjectDefinition ref, String name, DoubleBinaryOperator f) {
+        super(BiFunction.class, ref, name);
+
+        this.f = f;
+    }
+
+    public BiFunctionFieldDefinition(FieldObjectDefinition ref, String name, double tolerance, DoubleBinaryOperator f) {
+        super(BiFunction.class, ref, name, tolerance);
+
+        this.f = f;
     }
 
     @Override
-    protected double computeUpdate(FieldLink fl, double u) {
-        return function.applyAsDouble(fl.getUpdatedInputValue()) - value;
-    }
-
-    public void setFunction(DoubleUnaryOperator f) {
-        function = f;
+    public BiFunction instantiate(FieldObject reference) {
+        BiFunction ff = super.instantiate(reference);
+        ff.setFunction(f);
+        return ff;
     }
 }

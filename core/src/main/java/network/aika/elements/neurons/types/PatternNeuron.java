@@ -118,11 +118,6 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
     }
 
     @Override
-    public PatternActivation createActivation(Document doc) {
-        return new PatternActivation(doc.createActivationId(), doc, this);
-    }
-
-    @Override
     public PatternCategoryInputSynapse getCategoryInputSynapse() {
         return getInputSynapseByType(PatternCategoryInputSynapse.class);
     }

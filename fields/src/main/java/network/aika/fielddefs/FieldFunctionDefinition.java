@@ -14,24 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.typedef;
+package network.aika.fielddefs;
 
-import network.aika.Model;
-import network.aika.fielddefs.FieldObjectDefinition;
+import network.aika.fields.FieldFunction;
+import network.aika.fields.FieldObject;
 
+import java.util.function.DoubleUnaryOperator;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public abstract class TypeDefinition<T extends Type> extends FieldObjectDefinition {
+public class FieldFunctionDefinition extends FieldDefinition<FieldFunction> {
 
-    private String name;
+    DoubleUnaryOperator f;
 
-    protected Class<? extends T> clazz;
+    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, DoubleUnaryOperator f) {
+        super(FieldFunction.class, ref, name);
 
-    public TypeDefinition(String name, Class<? extends T> clazz) {
-        this.name = name;
-        this.clazz = clazz;
+        this.f = f;
+    }
+
+    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, double tolerance, DoubleUnaryOperator f) {
+        super(FieldFunction.class, ref, name, tolerance);
+
+        this.f = f;
+    }
+
+    @Override
+    public FieldFunction instantiate(FieldObject reference) {
+        FieldFunction ff = super.instantiate(reference);
+        ff.setFunction(f);
+        return ff;
     }
 }

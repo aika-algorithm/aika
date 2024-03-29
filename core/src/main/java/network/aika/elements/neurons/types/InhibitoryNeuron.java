@@ -73,11 +73,6 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
     }
 
     @Override
-    public InhibitoryActivation createActivation(Document doc) {
-        return new InhibitoryActivation(doc.createActivationId(), doc, this);
-    }
-
-    @Override
     public CategorySynapse createCategorySynapse() {
         return new InhibitoryCategorySynapse();
     }

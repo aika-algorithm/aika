@@ -27,8 +27,11 @@ public class BiFunction extends AbstractFunction {
 
     private DoubleBinaryOperator function;
 
-    public BiFunction(FieldObject ref, String label, DoubleBinaryOperator f) {
+    public BiFunction(FieldObject ref, String label) {
         super(ref, label);
+    }
+
+    public void setFunction(DoubleBinaryOperator f) {
         this.function = f;
     }
 

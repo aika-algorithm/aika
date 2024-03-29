@@ -32,6 +32,9 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.elements.typedef.ActivationTypeDefinition;
+import network.aika.elements.typedef.NeuronTypeDefinition;
+import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.queue.Queue;
 import network.aika.queue.Timestamp;
@@ -57,13 +60,15 @@ import static network.aika.utils.Utils.TOLERANCE;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Activation<N extends Neuron> implements Element, Comparable<Activation> {
+public abstract class Activation<N extends Neuron> implements Type<ActivationTypeDefinition>, Element, Comparable<Activation> {
 
     public static final Comparator<Activation> ID_COMPARATOR = Comparator.comparingInt(Activation::getId);
 
     protected final int id;
     protected N neuron;
     protected Document doc;
+
+    private ActivationTypeDefinition activationType;
 
     protected Timestamp created = NOT_SET;
 
@@ -121,6 +126,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return neuron.getType();
     }
 
+    public void setTypeDefinition(ActivationTypeDefinition typeDef) {
+        activationType = typeDef;
+    }
 
     protected void connectWeightUpdate() {
     }

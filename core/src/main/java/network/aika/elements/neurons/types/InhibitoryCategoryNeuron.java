@@ -58,9 +58,4 @@ public class InhibitoryCategoryNeuron extends CategoryNeuron {
     public CategoryInputSynapse createCategoryInputSynapse() {
         throw new UnsupportedOperationException();
     }
-
-    @Override
-    public CategoryActivation createActivation(Document doc) {
-        return new InhibitoryCategoryActivation(doc.createActivationId(), doc, this);
-    }
 }

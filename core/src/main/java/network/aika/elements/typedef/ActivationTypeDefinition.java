@@ -17,8 +17,10 @@
 package network.aika.elements.typedef;
 
 import network.aika.ActivationFunction;
+import network.aika.Document;
 import network.aika.Model;
 import network.aika.elements.NeuronType;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.RefType;
@@ -30,79 +32,25 @@ import java.util.HashMap;
  *
  * @author Lukas Molzberger
  */
-public class NeuronTypeDefinition extends TypeDefinition<Neuron> {
+public class ActivationTypeDefinition extends TypeDefinition<Activation> {
 
-    private RefType refType;
 
     private NeuronType neuronType;
 
-    private ActivationFunction activationFunction;
-
-    private BSSlotDefinition[] bindingSignalSlots;
-
-    private boolean trainingAllowed;
-
-    private ActivationTypeDefinition activationType;
-
-    public NeuronTypeDefinition(String name, Class<? extends Neuron> clazz) {
+    public ActivationTypeDefinition(String name, Class<? extends Activation> clazz) {
         super(name, clazz);
-    }
-
-    public ActivationTypeDefinition getActivationType() {
-        return activationType;
-    }
-
-    public NeuronTypeDefinition setRefType(RefType refType) {
-        this.refType = refType;
-
-        return this;
-    }
-
-    public NeuronTypeDefinition setNeuronType(NeuronType neuronType) {
-        this.neuronType = neuronType;
-
-        return this;
-    }
-
-    public NeuronTypeDefinition setActivationFunction(ActivationFunction activationFunction) {
-        this.activationFunction = activationFunction;
-
-        return this;
-    }
-
-    public NeuronTypeDefinition setBindingSignalSlots(BSSlotDefinition... bindingSignalSlots) {
-        this.bindingSignalSlots = bindingSignalSlots;
-
-        return this;
-    }
-
-    public NeuronTypeDefinition setTrainingAllowed(boolean trainingAllowed) {
-        this.trainingAllowed = trainingAllowed;
-
-        return this;
     }
 
     public NeuronType getType() {
         return neuronType;
     }
 
-    public ActivationFunction getActivationFunction() {
-        return activationFunction;
-    }
 
-    public BSSlotDefinition[] getBindingSignalSlots() {
-        return bindingSignalSlots;
-    }
-
-    public boolean isTrainingAllowed() {
-        return trainingAllowed;
-    }
-
-    public Neuron instantiate(Model m) {
+    public Activation instantiate(int id, Document doc, Neuron n) {
         try {
-            Neuron instance = clazz
-                    .getConstructor(Model.class, RefType.class)
-                    .newInstance(m, refType);
+            Activation instance = clazz
+                    .getConstructor(Integer.class, Document.class, Neuron.class)
+                    .newInstance(id, doc, n);
 
             instance.setTypeDefinition(this);
             return instance;

@@ -21,7 +21,7 @@ import network.aika.fields.link.FieldLink;
 /**
  * @author Lukas Molzberger
  */
-public class  ThresholdOperator extends AbstractFunction {
+public class ThresholdOperator extends AbstractFunction {
 
     public enum Type {
         ABOVE,
@@ -34,14 +34,13 @@ public class  ThresholdOperator extends AbstractFunction {
     private Type type;
     private boolean isFinal = false;
 
-    public ThresholdOperator(FieldObject ref, String label, double threshold, Type type) {
+    public ThresholdOperator(FieldObject ref, String label) {
         super(ref, label);
-        this.threshold = threshold;
-        this.type = type;
     }
 
-    public ThresholdOperator(FieldObject ref, String label, double threshold, Type type, boolean isFinal) {
-        this(ref, label, threshold, type);
+    public void init(double threshold, Type type, boolean isFinal) {
+        this.threshold = threshold;
+        this.type = type;
         this.isFinal = isFinal;
     }
 

@@ -59,9 +59,4 @@ public class BindingCategoryNeuron extends CategoryNeuron {
     public CategoryInputSynapse createCategoryInputSynapse() {
         throw new UnsupportedOperationException();
     }
-
-    @Override
-    public CategoryActivation createActivation(Document doc) {
-        return new BindingCategoryActivation(doc.createActivationId(), doc, this);
-    }
 }

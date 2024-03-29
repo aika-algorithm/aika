@@ -51,28 +51,63 @@ public class SynapseTypeDefinition<T extends Type> extends TypeDefinition<T> {
 
     private boolean trainingAllowed;
 
-    public static SynapseTypeDefinition getDefinition(Class clazz) {
-        return cache.computeIfAbsent(clazz, c ->
-                new SynapseTypeDefinition(
-                        c.getAnnotation(SynapseType.class),
-                        clazz.getSimpleName(),
-                        clazz
-                )
-        );
+
+    public SynapseTypeDefinition(String name, Class<T> clazz) {
+        super(name, clazz);
     }
 
-    private static HashMap<Class<Synapse>, SynapseTypeDefinition> cache = new HashMap();
+    public SynapseTypeDefinition setInputNeuronType(NeuronType inputNeuronType) {
+        this.inputNeuronType = inputNeuronType;
 
-    private SynapseTypeDefinition(SynapseType synTypeAnno, String name, Class<T> clazz) {
-        super(name, clazz);
-        inputNeuronType = synTypeAnno.inputType();
-        outputNeuronType = synTypeAnno.outputType();
-        transition = synTypeAnno.transition();
-        required = synTypeAnno.required();
-        trigger = synTypeAnno.trigger();
-        outputState = synTypeAnno.outputState();
-        propagateRange = synTypeAnno.propagateRange();
-        storedAt = synTypeAnno.storedAt().getDir();
+        return this;
+    }
+
+    public SynapseTypeDefinition setOutputNeuronType(NeuronType outputNeuronType) {
+        this.outputNeuronType = outputNeuronType;
+
+        return this;
+    }
+
+    public SynapseTypeDefinition setTransition(Transition[] transition) {
+        this.transition = transition;
+
+        return this;
+    }
+
+    public SynapseTypeDefinition setRequired(Transition required) {
+        this.required = required;
+
+        return this;
+    }
+
+    public SynapseTypeDefinition setTrigger(Trigger trigger) {
+        this.trigger = trigger;
+
+        return this;
+    }
+
+    public SynapseTypeDefinition setOutputState(StateType outputState) {
+        this.outputState = outputState;
+
+        return this;
+    }
+
+    public SynapseTypeDefinition setPropagateRange(boolean propagateRange) {
+        this.propagateRange = propagateRange;
+
+        return this;
+    }
+
+    public SynapseTypeDefinition setStoredAt(Direction storedAt) {
+        this.storedAt = storedAt;
+
+        return this;
+    }
+
+    public SynapseTypeDefinition setTrainingAllowed(boolean trainingAllowed) {
+        this.trainingAllowed = trainingAllowed;
+
+        return this;
     }
 
     public NeuronType getInputType() {
