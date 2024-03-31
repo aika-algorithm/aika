@@ -21,17 +21,20 @@ import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.DisjunctiveActivation;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.links.ConjunctiveCategoryInputLink;
 import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.DisjunctiveNeuron;
+import network.aika.elements.synapses.ConjunctiveCategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
 import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
 import network.aika.elements.synapses.types.RelationInputSynapse;
-import network.aika.enums.direction.DirectionEnum;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.SumField;
 
@@ -43,6 +46,7 @@ import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.*;
 import static network.aika.enums.Transition.*;
 import static network.aika.enums.Trigger.*;
+import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.Operators.func;
@@ -191,15 +195,9 @@ public class TypeModel {
 
         /*
 
-        synapseTypeModifiers.put(InhibitorySynapse.class, "fill-color: rgb(100,100,255);");
-        synapseTypeModifiers.put(PrimaryInhibitorySynapse.class, "fill-color: rgb(70,70,210);");
         synapseTypeModifiers.put(PatternCategorySynapse.class, "fill-color: rgb(100,0,200);");
         synapseTypeModifiers.put(BindingCategorySynapse.class, "fill-color: rgb(110,0,220);");
         synapseTypeModifiers.put(InhibitoryCategorySynapse.class, "fill-color: rgb(110,0,220);");
-        synapseTypeModifiers.put(PatternSynapse.class, "fill-color: rgb(224, 34, 245);");
-        synapseTypeModifiers.put(PatternCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
-        synapseTypeModifiers.put(BindingCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
-        synapseTypeModifiers.put(InhibitoryCategoryInputSynapse.class, "fill-color: rgb(110,200,220); ");
 
          */
 
@@ -314,6 +312,119 @@ public class TypeModel {
                 .setStoredAt(OUTPUT)
                 .setDebugStyle("fill-color: rgb(50,230,50);");
 
+
+        LinkTypeDefinition bindingCategoryInputLink = new LinkTypeDefinition(
+                "BindingCategoryInputLink",
+                ConjunctiveCategoryInputLink.class);
+
+        SynapseTypeDefinition bindingCategoryInputSynapse = new SynapseTypeDefinition(
+                "BindingCategoryInputSynapse",
+                ConjunctiveCategoryInputSynapse.class
+        )
+                .setLinkType(bindingCategoryInputLink)
+                .setInputNeuronType(BINDING)
+                .setOutputNeuronType(BINDING)
+                .setTransition(INPUT_INPUT, SAME_SAME)
+                .setRequired(INPUT_INPUT)
+                .setOutputState(PRE_FEEDBACK)
+                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setStoredAt(OUTPUT)
+                .setTrainingAllowed(false)
+                .setDebugStyle("fill-color: rgb(110,200,220);");
+
+
+        LinkTypeDefinition patternLink = new LinkTypeDefinition(
+                "PatternLink",
+                ConjunctiveLink.class);
+
+        SynapseTypeDefinition patternSynapse = new SynapseTypeDefinition(
+                "PatternSynapse",
+                ConjunctiveSynapse.class
+        )
+                .setLinkType(patternLink)
+                .setInputNeuronType(BINDING)
+                .setOutputNeuronType(PATTERN)
+                .setTransition(SAME_SAME, INPUT_INPUT)
+                .setRequired(SAME_SAME)
+                .setTrigger(PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK)
+                .setStoredAt(OUTPUT)
+                .setDebugStyle("fill-color: rgb(224, 34, 245);");
+
+
+        LinkTypeDefinition patternCategoryInputLink = new LinkTypeDefinition(
+                "PatternCategoryInputLink",
+                ConjunctiveCategoryInputLink.class);
+
+        SynapseTypeDefinition patternCategoryInputSynapse = new SynapseTypeDefinition(
+                "PatternCategoryInputSynapse",
+                ConjunctiveCategoryInputSynapse.class
+        )
+                .setLinkType(patternCategoryInputLink)
+                .setInputNeuronType(PATTERN)
+                .setOutputNeuronType(PATTERN)
+                .setTransition(SAME_SAME)
+                .setRequired(SAME_SAME)
+                .setOutputState(PRE_FEEDBACK)
+                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setStoredAt(OUTPUT)
+                .setTrainingAllowed(false)
+                .setDebugStyle("fill-color: rgb(110,200,220);");
+
+
+        LinkTypeDefinition inhibitoryLink = new LinkTypeDefinition(
+                "InhibitoryLink",
+                DisjunctiveLink.class);
+
+        SynapseTypeDefinition inhibitorySynapse = new SynapseTypeDefinition(
+                "InhibitorySynapse",
+                DisjunctiveSynapse.class
+        )
+                .setLinkType(inhibitoryLink)
+                .setInputNeuronType(BINDING)
+                .setOutputNeuronType(INHIBITORY)
+                .setTransition(INPUT_INPUT)
+                .setRequired(INPUT_INPUT)
+                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setStoredAt(INPUT)
+                .setDebugStyle("fill-color: rgb(100,100,255);");
+
+
+        LinkTypeDefinition primaryInhibitoryLink = new LinkTypeDefinition(
+                "PrimaryInhibitoryLink",
+                DisjunctiveLink.class);
+
+        SynapseTypeDefinition PrimaryInhibitorySynapse = new SynapseTypeDefinition(
+                "PrimaryInhibitorySynapse",
+                DisjunctiveSynapse.class
+        )
+                .setLinkType(primaryInhibitoryLink)
+                .setInputNeuronType(PATTERN)
+                .setOutputNeuronType(INHIBITORY)
+                .setTransition(SAME_INPUT)
+                .setRequired(SAME_INPUT)
+                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setStoredAt(OUTPUT)
+                .setDebugStyle("fill-color: rgb(70,70,210);");
+
+
+        LinkTypeDefinition inhibitoryCategoryInputLink = new LinkTypeDefinition(
+                "InhibitoryCategoryInputLink",
+                ConjunctiveCategoryInputLink.class);
+
+        SynapseTypeDefinition inhibitoryCategoryInputSynapse = new SynapseTypeDefinition(
+                "InhibitoryCategoryInputSynapse",
+                ConjunctiveCategoryInputSynapse.class
+        )
+                .setLinkType(bindingCategoryInputLink)
+                .setInputNeuronType(INHIBITORY)
+                .setOutputNeuronType(BINDING)
+                .setTransition(INPUT_INPUT)
+                .setRequired(INPUT_INPUT)
+                .setOutputState(PRE_FEEDBACK)
+                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setStoredAt(OUTPUT)
+                .setTrainingAllowed(false)
+                .setDebugStyle("fill-color: rgb(110,200,220); ");
     }
 
     private StateTypeDefinition initStateType(String name, StateType stateType) {
