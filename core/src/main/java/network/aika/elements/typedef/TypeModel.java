@@ -22,10 +22,15 @@ import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.DisjunctiveActivation;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.PositiveFeedbackLink;
+import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.DisjunctiveNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.elements.synapses.PositiveFeedbackSynapse;
+import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
+import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.enums.direction.DirectionEnum;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.SumField;
@@ -37,8 +42,7 @@ import static network.aika.elements.activations.StateType.*;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.*;
 import static network.aika.enums.Transition.*;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
-import static network.aika.enums.Trigger.PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK;
+import static network.aika.enums.Trigger.*;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.Operators.func;
@@ -65,17 +69,6 @@ public class TypeModel {
                 outerFeedbackState.getFieldDef("net"),
                 innerFeedbackState.getFieldDef("net")
         );
-
-        /*
-                neuronTypeModifiers.put(BindingNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(0,205,0);"));
-        neuronTypeModifiers.put(LatentRelationNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(10,170,0);"));
-        neuronTypeModifiers.put(InhibitoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,100,255);"));
-        neuronTypeModifiers.put(PatternCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-        neuronTypeModifiers.put(BindingCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-        neuronTypeModifiers.put(InhibitoryCategoryNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(100,0,200);"));
-        neuronTypeModifiers.put(PatternNeuron.class, n -> n.setAttribute("ui.style", "fill-color: rgb(224, 34, 245);"));
-
-         */
 
         ActivationTypeDefinition bindingActivation = new ActivationTypeDefinition(
                 "BindingActivation",
@@ -198,10 +191,6 @@ public class TypeModel {
 
         /*
 
-        synapseTypeModifiers.put(OuterPositiveFeedbackSynapse.class, "fill-color: rgb(90,200,20); arrow-shape: diamond;");
-        synapseTypeModifiers.put(RelationInputSynapse.class, "fill-color: rgb(50,230,50);");
-        synapseTypeModifiers.put(NegativeFeedbackSynapse.class, "fill-color: rgb(185,0,0); arrow-shape: diamond;");
-        synapseTypeModifiers.put(InnerPositiveFeedbackSynapse.class, "fill-color: rgb(120,200,50); arrow-shape: diamond;");
         synapseTypeModifiers.put(InhibitorySynapse.class, "fill-color: rgb(100,100,255);");
         synapseTypeModifiers.put(PrimaryInhibitorySynapse.class, "fill-color: rgb(70,70,210);");
         synapseTypeModifiers.put(PatternCategorySynapse.class, "fill-color: rgb(100,0,200);");
@@ -249,6 +238,82 @@ public class TypeModel {
                 .setStoredAt(OUTPUT)
                 .setPropagateRange(false)
                 .setDebugStyle("fill-color: rgb(50,200,120);");
+
+        LinkTypeDefinition innerPositiveFeedbackLink = new LinkTypeDefinition(
+                "InnerPositiveFeedbackLink",
+                PositiveFeedbackLink.class);
+
+        SynapseTypeDefinition innerPositiveFeedbackSynapse = new SynapseTypeDefinition(
+                "InnerPositiveFeedbackSynapse",
+                PositiveFeedbackSynapse.class
+        )
+                .setLinkType(innerPositiveFeedbackLink)
+                .setInputNeuronType(PATTERN)
+                .setOutputNeuronType(BINDING)
+                .setTransition(SAME_SAME)
+                .setRequired(SAME_SAME)
+                .setTrigger(NOT_FIRED)
+                .setOutputState(INNER_FEEDBACK)
+                .setStoredAt(OUTPUT)
+                .setPropagateRange(false)
+                .setDebugStyle("fill-color: rgb(120,200,50); arrow-shape: diamond;");
+
+
+        LinkTypeDefinition outerPositiveFeedbackLink = new LinkTypeDefinition(
+                "OuterPositiveFeedbackLink",
+                PositiveFeedbackLink.class);
+
+        SynapseTypeDefinition outerPositiveFeedbackSynapse = new SynapseTypeDefinition(
+                "OuterPositiveFeedbackSynapse",
+                PositiveFeedbackSynapse.class
+        )
+                .setLinkType(outerPositiveFeedbackLink)
+                .setInputNeuronType(PATTERN)
+                .setOutputNeuronType(BINDING)
+                .setTransition(SAME_INPUT)
+                .setRequired(INPUT_SAME)
+                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setOutputState(OUTER_FEEDBACK)
+                .setStoredAt(OUTPUT)
+                .setDebugStyle("fill-color: rgb(90,200,20); arrow-shape: diamond;");
+
+        LinkTypeDefinition negativeFeedbackLink = new LinkTypeDefinition(
+                "NegativeFeedbackLink",
+                NegativeFeedbackLink.class);
+
+        SynapseTypeDefinition negativeFeedbackSynapse = new SynapseTypeDefinition(
+                "NegativeFeedbackSynapse",
+                NegativeFeedbackSynapse.class
+        )
+                .setLinkType(negativeFeedbackLink)
+                .setInputNeuronType(INHIBITORY)
+                .setOutputNeuronType(BINDING)
+                .setTransition(INPUT_INPUT)
+                .setRequired(INPUT_INPUT)
+                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setOutputState(OUTER_FEEDBACK)
+                .setPropagateRange(false)
+                .setStoredAt(OUTPUT)
+                .setDebugStyle("fill-color: rgb(185,0,0); arrow-shape: diamond;");
+
+
+        LinkTypeDefinition relationInputLink = new LinkTypeDefinition(
+                "RelationInputLink",
+                NegativeFeedbackLink.class);
+
+        SynapseTypeDefinition relationInputSynapse = new SynapseTypeDefinition(
+                "RelationInputSynapse",
+                RelationInputSynapse.class
+        )
+                .setLinkType(relationInputLink)
+                .setInputNeuronType(BINDING)
+                .setOutputNeuronType(BINDING)
+                .setTransition(INPUT_INPUT)
+                .setRequired(INPUT_INPUT)
+                .setPropagateRange(false)
+                .setStoredAt(OUTPUT)
+                .setDebugStyle("fill-color: rgb(50,230,50);");
+
     }
 
     private StateTypeDefinition initStateType(String name, StateType stateType) {
