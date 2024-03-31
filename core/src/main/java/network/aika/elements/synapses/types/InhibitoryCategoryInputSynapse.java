@@ -70,11 +70,6 @@ public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
     }
 
     @Override
-    public InhibitoryCategoryInputLink createLink(CategoryActivation input, InhibitoryActivation output) {
-        return new InhibitoryCategoryInputLink(this, input, output);
-    }
-
-    @Override
     public void setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
         this.initialCategorySynapseWeight = initialCategorySynapseWeight;
     }

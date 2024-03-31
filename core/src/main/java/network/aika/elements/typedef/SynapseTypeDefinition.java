@@ -16,26 +16,30 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.Model;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class SynapseTypeDefinition<T extends Type> extends TypeDefinition<T> {
+public class SynapseTypeDefinition extends TypeDefinition<Synapse> {
+
+    private LinkTypeDefinition linkType;
+
     private NeuronType inputNeuronType;
 
+    private SynapseSlotTypeDefinition inputSlotType;
+
     private NeuronType outputNeuronType;
+
+    private SynapseSlotTypeDefinition outputSlotType;
 
     private Transition[] transition;
 
@@ -51,9 +55,37 @@ public class SynapseTypeDefinition<T extends Type> extends TypeDefinition<T> {
 
     private boolean trainingAllowed;
 
+    private String debugStyle;
 
-    public SynapseTypeDefinition(String name, Class<T> clazz) {
+
+    public SynapseTypeDefinition(String name, Class<? extends Synapse> clazz) {
         super(name, clazz);
+    }
+
+    public SynapseSlotTypeDefinition getInputSlotType() {
+        return inputSlotType;
+    }
+
+    public SynapseTypeDefinition setInputSlotType(SynapseSlotTypeDefinition inputSlotType) {
+        this.inputSlotType = inputSlotType;
+
+        return this;
+    }
+
+    public SynapseSlotTypeDefinition getOutputSlotType() {
+        return outputSlotType;
+    }
+
+    public SynapseTypeDefinition setOutputSlotType(SynapseSlotTypeDefinition outputSlotType) {
+        this.outputSlotType = outputSlotType;
+
+        return this;
+    }
+
+    public SynapseTypeDefinition setLinkType(LinkTypeDefinition linkType) {
+        this.linkType = linkType;
+
+        return this;
     }
 
     public SynapseTypeDefinition setInputNeuronType(NeuronType inputNeuronType) {
@@ -68,7 +100,7 @@ public class SynapseTypeDefinition<T extends Type> extends TypeDefinition<T> {
         return this;
     }
 
-    public SynapseTypeDefinition setTransition(Transition[] transition) {
+    public SynapseTypeDefinition setTransition(Transition... transition) {
         this.transition = transition;
 
         return this;
@@ -110,6 +142,10 @@ public class SynapseTypeDefinition<T extends Type> extends TypeDefinition<T> {
         return this;
     }
 
+    public LinkTypeDefinition getLinkType() {
+        return linkType;
+    }
+
     public NeuronType getInputType() {
         return inputNeuronType;
     }
@@ -146,10 +182,18 @@ public class SynapseTypeDefinition<T extends Type> extends TypeDefinition<T> {
         return trainingAllowed;
     }
 
-    @Override
-    public T instantiate(Model m) {
+    public SynapseTypeDefinition setDebugStyle(String c) {
+        debugStyle = c;
+        return this;
+    }
+
+    public String getDebugStyle() {
+        return debugStyle;
+    }
+
+    public Synapse instantiate() {
         try {
-            T instance = clazz.getConstructor().newInstance();
+            Synapse instance = clazz.getConstructor().newInstance();
             instance.setTypeDefinition(this);
             return instance;
         } catch (InstantiationException e) {

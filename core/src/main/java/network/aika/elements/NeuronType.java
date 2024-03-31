@@ -4,5 +4,6 @@ public enum NeuronType {
 
     PATTERN,
     BINDING,
-    INHIBITORY
+    INHIBITORY,
+    CATEGORY
 }

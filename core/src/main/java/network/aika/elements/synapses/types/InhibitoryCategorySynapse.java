@@ -42,9 +42,4 @@ import static network.aika.enums.Trigger.NOT_FIRED;
 )
 public class InhibitoryCategorySynapse extends CategorySynapse<InhibitoryCategorySynapse, Neuron, InhibitoryActivation> {
 
-
-    @Override
-    public InhibitoryCategoryLink createLink(InhibitoryActivation input, CategoryActivation output) {
-        return new InhibitoryCategoryLink(this, input, output);
-    }
 }

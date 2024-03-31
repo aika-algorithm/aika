@@ -17,12 +17,10 @@
 package network.aika.elements.neurons.types;
 
 import network.aika.Model;
-import network.aika.Document;
 import network.aika.Range;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.neurons.RefType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.PatternCategoryInputSynapse;
@@ -46,11 +44,6 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-@NeuronType(
-        type = PATTERN,
-        activationFunction = RECTIFIED_HYPERBOLIC_TANGENT,
-        bindingSignalSlots = {SINGLE_SAME, MULTI_INPUT}
-)
 public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActivation> {
 
     private AverageCoveredSpace averageCoveredSpace;

@@ -16,17 +16,14 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.ActivationFunction;
 import network.aika.Document;
-import network.aika.Model;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.RefType;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -34,17 +31,47 @@ import java.util.HashMap;
  */
 public class ActivationTypeDefinition extends TypeDefinition<Activation> {
 
+    private NeuronTypeDefinition neuronType;
 
-    private NeuronType neuronType;
+    private List<StateTypeDefinition> stateTypes = new ArrayList<>();
+
+    private boolean isNextRound;
+
 
     public ActivationTypeDefinition(String name, Class<? extends Activation> clazz) {
         super(name, clazz);
     }
 
-    public NeuronType getType() {
-        return neuronType;
+    public ActivationTypeDefinition setNeuronType(NeuronTypeDefinition neuronType) {
+        this.neuronType = neuronType;
+
+        return this;
     }
 
+    public NeuronType getType() {
+        return neuronType.getType();
+    }
+
+    public StateTypeDefinition[] getStateTypes() {
+        return stateTypes.toArray(new StateTypeDefinition[0]);
+    }
+
+    public ActivationTypeDefinition addStateType(StateTypeDefinition stateType) {
+        stateTypes.add(stateType);
+        stateType.setActivationType(this);
+
+        return this;
+    }
+
+    public ActivationTypeDefinition setNextRound(boolean nextRound) {
+        isNextRound = nextRound;
+
+        return this;
+    }
+
+    public boolean isNextRound() {
+        return isNextRound;
+    }
 
     public Activation instantiate(int id, Document doc, Neuron n) {
         try {

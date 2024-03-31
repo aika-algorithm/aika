@@ -43,8 +43,4 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 )
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
 
-    @Override
-    public BindingCategoryLink createLink(BindingActivation input, CategoryActivation output) {
-        return new BindingCategoryLink(this, input, output);
-    }
 }

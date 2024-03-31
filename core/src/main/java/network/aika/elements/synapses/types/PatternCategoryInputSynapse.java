@@ -65,11 +65,6 @@ public class PatternCategoryInputSynapse
     private double initialCategorySynapseWeight;
 
     @Override
-    public PatternCategoryInputLink createLink(CategoryActivation input, PatternActivation output) {
-        return new PatternCategoryInputLink(this, input, output);
-    }
-
-    @Override
     public void setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
         this.initialCategorySynapseWeight = initialCategorySynapseWeight;
     }

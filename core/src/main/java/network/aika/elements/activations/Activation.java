@@ -33,7 +33,6 @@ import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.ActivationTypeDefinition;
-import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.queue.Queue;
@@ -51,7 +50,6 @@ import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.elements.neurons.RefType.TEMPLATE;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.*;
 import static network.aika.queue.Phase.*;
 import static network.aika.queue.Timestamp.NOT_SET;
 import static network.aika.text.TextReference.join;
@@ -169,11 +167,12 @@ public abstract class Activation<N extends Neuron> implements Type<ActivationTyp
     }
 
     protected void initNet() {
-        states[PRE_FEEDBACK.ordinal()] = new State(this, PRE_FEEDBACK, isNextRound());
+        Stream.of(activationType.getStateTypes())
+                .forEach(sd -> states[sd.getType().ordinal()] = sd.instantiate(this));
     }
 
-    protected boolean isNextRound() {
-        return false;
+    protected final int numberOfStates() {
+        return activationType.getStateTypes().length;
     }
 
     protected void initBiases() {
@@ -248,10 +247,6 @@ public abstract class Activation<N extends Neuron> implements Type<ActivationTyp
 
     public void setCreated(Timestamp ts) {
         this.created = ts;
-    }
-
-    protected int numberOfStates() {
-        return 1;
     }
 
     public Field getValue() {

@@ -53,7 +53,4 @@ public class InnerPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         BindingActivation
         >
 {
-    public InnerPositiveFeedbackLink createLink(PatternActivation input, BindingActivation output) {
-        return new InnerPositiveFeedbackLink(this, input, output);
-    }
 }

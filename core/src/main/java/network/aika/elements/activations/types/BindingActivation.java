@@ -51,21 +51,10 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     }
 
     @Override
-    protected int numberOfStates() {
-        return 3;
-    }
-
-    @Override
     protected void initNet() {
         outerFeedbackAnnealingValue = new InputField(this, "annealing value", 0.0);
 
         super.initNet();
-
-        states[OUTER_FEEDBACK.ordinal()] = new State(this, OUTER_FEEDBACK, false);
-        linkAndConnect(getNet(PRE_FEEDBACK), getNet(OUTER_FEEDBACK));
-
-        states[INNER_FEEDBACK.ordinal()] = new State(this, INNER_FEEDBACK, false);
-        linkAndConnect(getNet(OUTER_FEEDBACK), getNet(INNER_FEEDBACK));
 
         Anneal.add(this);
     }

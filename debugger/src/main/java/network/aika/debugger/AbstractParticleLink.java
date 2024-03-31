@@ -19,11 +19,8 @@ package network.aika.debugger;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
-
-import static network.aika.debugger.TypeMapper.synapseTypeModifiers;
 
 /**
  * @author Lukas Molzberger
@@ -76,13 +73,6 @@ public abstract class AbstractParticleLink<E extends Element> {
             s = (Synapse) link;
         }
 
-        String style = synapseTypeModifiers.get(s.getClass());
-        if(style != null)
-            synapseTypeModifier += style;
-
-        if(s instanceof PositiveFeedbackSynapse || s instanceof NegativeFeedbackSynapse)
-            synapseTypeModifier += " arrow-shape: diamond;";
-
-        edge.setAttribute("ui.style", synapseTypeModifier);
+        edge.setAttribute("ui.style",  synapseTypeModifier + s.getSynapseType().getDebugStyle());
     }
 }

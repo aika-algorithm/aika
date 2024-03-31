@@ -18,9 +18,11 @@ package network.aika.elements.typedef;
 
 import network.aika.Model;
 import network.aika.elements.NeuronType;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.SynapseType;
+import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Transition;
 import network.aika.enums.Trigger;
 import network.aika.enums.direction.Direction;
@@ -32,16 +34,17 @@ import java.util.HashMap;
  *
  * @author Lukas Molzberger
  */
-public class SynapseSlotTypeDefinition<T extends Type> extends TypeDefinition<T> {
+public class SynapseSlotTypeDefinition extends TypeDefinition<SynapseSlot> {
 
-    public SynapseSlotTypeDefinition(String name, Class<T> clazz) {
+    public SynapseSlotTypeDefinition(String name, Class<? extends SynapseSlot> clazz) {
         super(name, clazz);
     }
 
-    @Override
-    public T instantiate(Model m) {
+
+    public SynapseSlot instantiate(Activation act, Synapse synapse) {
         try {
-            T instance = clazz.getConstructor().newInstance();
+            SynapseSlot instance = clazz.getConstructor(Activation.class, Synapse.class)
+                    .newInstance(act, synapse);
             instance.setTypeDefinition(this);
             return instance;
         } catch (InstantiationException e) {

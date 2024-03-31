@@ -31,8 +31,6 @@ import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
 import static network.aika.enums.Scope.SAME;
 import static network.aika.fields.ConstantField.ZERO;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.func;
-import static network.aika.fields.Fields.scale;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**

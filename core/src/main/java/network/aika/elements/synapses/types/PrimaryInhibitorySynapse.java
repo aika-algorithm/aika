@@ -50,9 +50,4 @@ public class PrimaryInhibitorySynapse extends DisjunctiveSynapse<
         PatternActivation,
         InhibitoryActivation
         > {
-
-    @Override
-    public PrimaryInhibitoryLink createLink(PatternActivation input, InhibitoryActivation output) {
-        return new PrimaryInhibitoryLink(this, input, output);
-    }
 }

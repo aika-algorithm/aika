@@ -26,7 +26,9 @@ import network.aika.elements.relations.Relation;
 import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
+import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.Type;
 import network.aika.queue.Timestamp;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
@@ -57,7 +59,6 @@ import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_IN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_OUT;
-import static network.aika.elements.typedef.SynapseTypeDefinition.getDefinition;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -65,11 +66,11 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neuron<O, OA>, L extends Link<S, IA, OA, ?, ?>, IA extends Activation<?>, OA extends Activation<?>> implements Element, Writable {
+public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neuron<O, OA>, L extends Link<S, IA, OA, ?, ?>, IA extends Activation<?>, OA extends Activation<?>> implements Type<SynapseTypeDefinition>, Element, Writable {
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
-    protected final SynapseTypeDefinition synapseType = getDefinition(getClass());
+    protected SynapseTypeDefinition synapseType;
 
     protected int synapseId;
     protected NeuronProvider input;
@@ -89,6 +90,11 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     protected boolean trainingAllowed = true;
 
     public Synapse() {
+    }
+
+    @Override
+    public void setTypeDefinition(SynapseTypeDefinition typeDef) {
+        synapseType = typeDef;
     }
 
     public int getSynapseId() {
@@ -119,7 +125,11 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return synapseType.isPropagateRange();
     }
 
-    public abstract SynapseSlot createInputSlot(IA iAct);
+    public final SynapseSlot createInputSlot(IA iAct) {
+        return synapseType
+                .getInputSlotType()
+                .instantiate(iAct, this);
+    }
 
     public SynapseSlot createAndInitInputSlot(IA iAct) {
         SynapseSlot slot = createInputSlot(iAct);
@@ -135,7 +145,11 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                 .filter(Objects::nonNull);
     }
 
-    public abstract SynapseSlot createOutputSlot(OA oAct);
+    public final SynapseSlot createOutputSlot(OA iAct) {
+        return synapseType
+                .getOutputSlotType()
+                .instantiate(iAct, this);
+    }
 
     public SynapseSlot createAndInitOutputSlot(OA oAct) {
         SynapseSlot slot = createOutputSlot(oAct);
@@ -325,7 +339,11 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         input.removeInputSynapse(this);
     }
 
-    public abstract L createLink(IA input, OA output);
+    public final L createLink(IA input, OA output) {
+        return (L) synapseType
+                .getLinkType()
+                .instantiate(this, input, output);
+    }
 
     public L createAndInitLink(IA input, OA output) {
         L l = createLink(input, output);

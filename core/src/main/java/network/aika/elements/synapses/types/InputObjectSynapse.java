@@ -51,9 +51,4 @@ public class InputObjectSynapse extends ConjunctiveSynapse<
         BindingActivation
         >
 {
-
-    @Override
-    public InputObjectLink createLink(PatternActivation input, BindingActivation output) {
-        return new InputObjectLink(this, input, output);
-    }
 }

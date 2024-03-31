@@ -71,10 +71,6 @@ public class RelationInputSynapse extends ConjunctiveSynapse<
         this.latentProxySynapseId = latentProxySynapseId;
     }
 
-    @Override
-    public RelationInputLink createLink(LatentRelationActivation input, BindingActivation output) {
-        return new RelationInputLink(this, input, output);
-    }
 
     public LatentRelationActivation createOrLookupLatentActivation(Activation fromOriginAct, Activation toOriginAct) {
         return getInput().getOrCreatePreActivation(fromOriginAct.getDocument())

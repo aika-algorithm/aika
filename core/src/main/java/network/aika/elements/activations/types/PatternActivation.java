@@ -46,11 +46,6 @@ public class PatternActivation extends ConjunctiveActivation<PatternNeuron> {
 
 
     @Override
-    protected boolean isNextRound() {
-        return true;
-    }
-
-    @Override
     protected void initBindingSignalSlots() {
         super.initBindingSignalSlots();
 

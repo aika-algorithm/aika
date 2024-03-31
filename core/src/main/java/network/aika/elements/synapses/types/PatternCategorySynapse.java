@@ -42,8 +42,4 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 )
 public class PatternCategorySynapse extends CategorySynapse<PatternCategorySynapse, PatternNeuron, PatternActivation> {
 
-    @Override
-    public PatternCategoryLink createLink(PatternActivation input, CategoryActivation output) {
-        return new PatternCategoryLink(this, input, output);
-    }
 }

@@ -17,11 +17,9 @@
 package network.aika.elements.neurons.types;
 
 import network.aika.Model;
-import network.aika.Document;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.neurons.RefType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.BindingCategoryInputSynapse;
@@ -32,20 +30,13 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Comparator;
 
-import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
-import static network.aika.elements.NeuronType.BINDING;
-import static network.aika.elements.activations.bsslots.BSSlotDefinition.*;
 import static network.aika.elements.neurons.RefType.CATEGORY;
 
 
 /**
  * @author Lukas Molzberger
  */
-@NeuronType(
-        type = BINDING,
-        activationFunction = RECTIFIED_HYPERBOLIC_TANGENT,
-        bindingSignalSlots = {SINGLE_INPUT, SINGLE_SAME_FEEDBACK}
-)
+
 public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActivation> {
 
     private boolean isPrimary;

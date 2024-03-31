@@ -25,6 +25,7 @@ import network.aika.elements.links.types.PatternLink;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.SynapseType;
+import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.enums.direction.DirectionEnum;
 import network.aika.fields.FieldOutput;
 import network.aika.Range;
@@ -100,7 +101,7 @@ public class PatternSynapse extends ConjunctiveSynapse<
     public PatternLink createLink(BindingActivation input, PatternActivation output) {
         checkAlreadyLinkedToPattern(input);
 
-        return new PatternLink(this, input, output);
+        return super.createLink(input, output);
     }
 
     private static void checkAlreadyLinkedToPattern(BindingActivation input) {

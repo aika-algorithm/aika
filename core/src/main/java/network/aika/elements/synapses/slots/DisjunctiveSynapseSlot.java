@@ -19,6 +19,8 @@ package network.aika.elements.synapses.slots;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.DisjunctiveSynapse;
+import network.aika.elements.typedef.SynapseSlotTypeDefinition;
+import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.Field;
 import network.aika.queue.Queue;
@@ -31,12 +33,19 @@ import java.util.stream.Stream;
  */
 public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, DisjunctiveLink> {
 
+    SynapseSlotTypeDefinition synapseSlotType;
+
     private Direction dir;
 
     private DisjunctiveLink<DisjunctiveSynapse, ?, ?> link;
 
     public DisjunctiveSynapseSlot(Direction dir) {
         this.dir = dir;
+    }
+
+    @Override
+    public void setTypeDefinition(SynapseSlotTypeDefinition typeDef) {
+        synapseSlotType = typeDef;
     }
 
     @Override

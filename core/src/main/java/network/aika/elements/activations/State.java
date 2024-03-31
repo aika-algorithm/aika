@@ -22,6 +22,7 @@ import network.aika.elements.typedef.Type;
 import network.aika.fields.*;
 import network.aika.fields.link.AbstractFieldLink;
 import network.aika.queue.Queue;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.queue.steps.Fired;
 
@@ -35,11 +36,9 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public class State implements Type<StateTypeDefinition>, FieldObject {
+public class State implements Type<StateTypeDefinition>, FieldObject, QueueProvider {
 
-    protected StateType type;
-
-    protected boolean isNextRound;
+    protected StateTypeDefinition type;
 
     protected Activation act;
 
@@ -51,10 +50,8 @@ public class State implements Type<StateTypeDefinition>, FieldObject {
     protected Fired firedStep = new Fired(this);
 
 
-    public State(Activation act, StateType type, boolean isNextRound) {
+    public State(Activation act) {
         this.act = act;
-        this.type = type;
-        this.isNextRound = isNextRound;
 
         init();
     }
@@ -77,7 +74,7 @@ public class State implements Type<StateTypeDefinition>, FieldObject {
                 net,
                 x -> act.getActivationFunction().f(x)
         );
-        value.setQueued(getQueue(), INFERENCE, isNextRound);
+        value.setQueued(getQueue(), INFERENCE, type.isNextRound());
 
         value.addListener("onFired", (fl, u) -> {
             if (isTrue(value, false) != isTrue(value, true))
@@ -99,7 +96,7 @@ public class State implements Type<StateTypeDefinition>, FieldObject {
     }
 
     public StateType getType() {
-        return type;
+        return type.getType();
     }
 
     public FieldOutput getValue() {
@@ -138,6 +135,11 @@ public class State implements Type<StateTypeDefinition>, FieldObject {
     @Override
     public Queue getQueue() {
         return act.getQueue();
+    }
+
+    @Override
+    public boolean isNextRound() {
+        return type.getActivationType().isNextRound() && type.isNextRound();
     }
 
     public Document getDocument() {

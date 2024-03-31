@@ -27,6 +27,9 @@ import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.elements.typedef.ActivationTypeDefinition;
+import network.aika.elements.typedef.LinkTypeDefinition;
+import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.*;
@@ -57,7 +60,9 @@ public abstract class Link<
         O extends Activation<?>,
         SI extends SynapseSlot,
         SO extends SynapseSlot
-        > implements Element {
+        > implements Type<LinkTypeDefinition>, Element {
+
+    protected LinkTypeDefinition linkType;
 
     protected S synapse;
 
@@ -97,6 +102,11 @@ public abstract class Link<
 
         propagateRanges();
         getDocument().onElementEvent(CREATE, this);
+    }
+
+    @Override
+    public void setTypeDefinition(LinkTypeDefinition typeDef) {
+        linkType = typeDef;
     }
 
     public LinkUpdate getLinkUpdateStep(Direction dir) {

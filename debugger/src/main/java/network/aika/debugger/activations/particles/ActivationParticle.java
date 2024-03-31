@@ -33,9 +33,6 @@ import org.graphstream.ui.layout.springbox.EdgeSpring;
 import org.graphstream.ui.layout.springbox.Energies;
 import org.graphstream.ui.layout.springbox.implementations.SpringBox;
 
-import java.util.function.Consumer;
-
-import static network.aika.debugger.TypeMapper.neuronTypeModifiers;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 
@@ -70,12 +67,9 @@ public class ActivationParticle<E extends Activation> extends AbstractParticle<A
     public void onEvent(EventType et) {
         node.setAttribute("ui.label", act.getLabel());
         node.setAttribute("ui.style", getActivationStrokeColor(act));
+        node.setAttribute("ui.style", act.getNeuron().getNeuronType().getDebugStyle());
 
 //        highlightCurrentOnly(node);
-
-        Consumer<Node> neuronTypeModifier = neuronTypeModifiers.get(act.getNeuron().getClass());
-        if (neuronTypeModifier != null)
-            neuronTypeModifier.accept(node);
     }
 
     @Override

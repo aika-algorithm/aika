@@ -64,11 +64,6 @@ public class BindingCategoryInputSynapse extends ConjunctiveCategoryInputSynapse
     private double initialCategorySynapseWeight;
 
     @Override
-    public BindingCategoryInputLink createLink(CategoryActivation input, BindingActivation output) {
-        return new BindingCategoryInputLink(this, input, output);
-    }
-
-    @Override
     public void setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
         this.initialCategorySynapseWeight = initialCategorySynapseWeight;
     }

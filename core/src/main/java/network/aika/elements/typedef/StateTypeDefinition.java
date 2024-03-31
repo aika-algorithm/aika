@@ -18,6 +18,7 @@ package network.aika.elements.typedef;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.State;
+import network.aika.elements.activations.StateType;
 import network.aika.fielddefs.FieldObjectDefinition;
 
 import java.lang.reflect.InvocationTargetException;
@@ -29,8 +30,38 @@ import java.lang.reflect.InvocationTargetException;
 public class StateTypeDefinition extends TypeDefinition<State> {
 
 
-    public StateTypeDefinition(String name) {
+    private StateType type;
+
+    private boolean isNextRound;
+
+    private ActivationTypeDefinition activationType;
+
+    public StateTypeDefinition(String name, StateType type) {
         super(name, State.class);
+        this.type = type;
+    }
+
+    public StateType getType() {
+        return type;
+    }
+
+    public StateTypeDefinition setActivationType(ActivationTypeDefinition activationType) {
+        this.activationType = activationType;
+        return this;
+    }
+
+    public ActivationTypeDefinition getActivationType() {
+        return activationType;
+    }
+
+    public StateTypeDefinition setNextRound(boolean nextRound) {
+        isNextRound = nextRound;
+
+        return this;
+    }
+
+    public boolean isNextRound() {
+        return isNextRound;
     }
 
     public State instantiate(Activation act) {

@@ -106,6 +106,10 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         neuronType = typeDef;
     }
 
+    public NeuronTypeDefinition getNeuronType() {
+        return neuronType;
+    }
+
     public NeuronType getType() {
         return neuronType.getType();
     }

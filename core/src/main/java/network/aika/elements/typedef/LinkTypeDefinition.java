@@ -14,43 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses.slots;
+package network.aika.elements.typedef;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.typedef.SynapseSlotTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
-import network.aika.elements.typedef.Type;
-import network.aika.enums.direction.Direction;
-import network.aika.fields.Field;
-import network.aika.fields.FieldObject;
 
-import java.util.stream.Stream;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public interface SynapseSlot<S extends Synapse, L extends Link> extends Type<SynapseSlotTypeDefinition>, FieldObject {
+public class LinkTypeDefinition extends TypeDefinition<Link> {
 
-    void init();
+    public LinkTypeDefinition(String name, Class<? extends Link> clazz) {
+        super(name, clazz);
+    }
 
-    void addLink(L l);
+    public Link instantiate(Synapse s, Activation iAct, Activation oAct) {
+        try {
+            Link instance = clazz
+                    .getConstructor(Synapse.class, Activation.class, Activation.class)
+                    .newInstance(s, iAct, oAct);
 
-    Stream<L> getLinks();
-
-    L getLink(Activation act);
-
-    Field getInputField();
-
-    Field getOutputField();
-
-    L getSelectedLink();
-
-    S getSynapse();
-
-    Activation getActivation();
-
-    Direction getDirection();
+            instance.setTypeDefinition(this);
+            return instance;
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -19,6 +19,8 @@ package network.aika.elements.synapses.slots;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.elements.typedef.SynapseSlotTypeDefinition;
+import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.AbstractMaxField;
 import network.aika.fields.link.ArgumentFieldLink;
@@ -41,6 +43,8 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L extends ConjunctiveLink> extends AbstractMaxField<ArgumentFieldLink<L>> implements SynapseSlot<S, L> {
 
+    protected SynapseSlotTypeDefinition synapseSlotType;
+
     protected Activation act;
 
     protected S synapse;
@@ -57,6 +61,11 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
         this.dir = dir;
 
         links = new TreeMap<>();
+    }
+
+    @Override
+    public void setTypeDefinition(SynapseSlotTypeDefinition typeDef) {
+        synapseSlotType = typeDef;
     }
 
     @Override

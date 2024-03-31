@@ -31,4 +31,11 @@ public class FieldObjectDefinition {
         fieldDef.setFieldId(fieldDefs.size());
         fieldDefs.add(fieldDef);
     }
+
+    public FieldDefinition getFieldDef(String name) {
+        return fieldDefs.stream()
+                .filter(fd -> fd.getFieldName() == name)
+                .findFirst()
+                .orElse(null);
+    }
 }

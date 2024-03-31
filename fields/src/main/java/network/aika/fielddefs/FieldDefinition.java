@@ -79,8 +79,74 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
         }
     }
 
-    public void setFieldId(int id) {
+    public FieldDefinition setFieldId(int id) {
         fieldId = id;
+
+        return this;
+    }
+
+    public int getFieldId() {
+        return fieldId;
+    }
+
+    public Class<F> getClazz() {
+        return clazz;
+    }
+
+    public FieldDefinition setClazz(Class<F> clazz) {
+        this.clazz = clazz;
+
+        return this;
+    }
+
+    public FieldObjectDefinition getRef() {
+        return ref;
+    }
+
+    public FieldDefinition setRef(FieldObjectDefinition ref) {
+        this.ref = ref;
+
+        return this;
+    }
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public FieldDefinition setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+
+        return this;
+    }
+
+    public Double getTolerance() {
+        return tolerance;
+    }
+
+    public FieldDefinition setTolerance(Double tolerance) {
+        this.tolerance = tolerance;
+
+        return this;
+    }
+
+    public ProcessingPhase getPhase() {
+        return phase;
+    }
+
+    public FieldDefinition setPhase(ProcessingPhase phase) {
+        this.phase = phase;
+
+        return this;
+    }
+
+    public boolean isNextRound() {
+        return isNextRound;
+    }
+
+    public FieldDefinition setNextRound(boolean nextRound) {
+        isNextRound = nextRound;
+
+        return this;
     }
 
     @Override

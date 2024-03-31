@@ -54,11 +54,6 @@ public class SameObjectSynapse extends ConjunctiveSynapse<
         >
 {
     @Override
-    public SameObjectLink createLink(BindingActivation input, BindingActivation output) {
-        return new SameObjectLink(this, input, output);
-    }
-
-    @Override
     public FieldOutput getInputValue(BindingActivation input) {
         return input.getValue(OUTER_FEEDBACK);
     }

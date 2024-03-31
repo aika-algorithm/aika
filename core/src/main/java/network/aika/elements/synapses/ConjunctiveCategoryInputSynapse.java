@@ -38,10 +38,12 @@ public abstract class ConjunctiveCategoryInputSynapse<
         OA extends ConjunctiveActivation<O>
         > extends PositiveFeedbackSynapse<S, I, O, L, IA, OA> implements CategoryInputSynapse<S> {
 
+    /*
     @Override
     public SynapseSlot createOutputSlot(OA oAct) {
         return new AnnealingSynapseOutputSlot(oAct, this, AnnealingType.CATEGORY_INPUT);
     }
+     */
 
     @Override
     public void initBiasInput(OA act) {

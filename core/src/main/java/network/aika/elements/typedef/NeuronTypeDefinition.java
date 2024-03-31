@@ -24,7 +24,6 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.RefType;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 
 /**
  *
@@ -44,12 +43,20 @@ public class NeuronTypeDefinition extends TypeDefinition<Neuron> {
 
     private ActivationTypeDefinition activationType;
 
+    private String debugStyle;
+
     public NeuronTypeDefinition(String name, Class<? extends Neuron> clazz) {
         super(name, clazz);
     }
 
     public ActivationTypeDefinition getActivationType() {
         return activationType;
+    }
+
+    public NeuronTypeDefinition setActivationType(ActivationTypeDefinition activationType) {
+        this.activationType = activationType;
+        this.activationType.setNeuronType(this);
+        return this;
     }
 
     public NeuronTypeDefinition setRefType(RefType refType) {
@@ -96,6 +103,19 @@ public class NeuronTypeDefinition extends TypeDefinition<Neuron> {
 
     public boolean isTrainingAllowed() {
         return trainingAllowed;
+    }
+
+    public RefType getRefType() {
+        return refType;
+    }
+
+    public NeuronTypeDefinition setDebugStyle(String c) {
+        debugStyle = c;
+        return this;
+    }
+
+    public String getDebugStyle() {
+        return debugStyle;
     }
 
     public Neuron instantiate(Model m) {

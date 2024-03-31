@@ -17,19 +17,14 @@
 package network.aika.elements.neurons.types;
 
 import network.aika.Model;
-import network.aika.Document;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.neurons.DisjunctiveNeuron;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.NeuronType;
 import network.aika.elements.neurons.RefType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
 
-import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
-import static network.aika.elements.NeuronType.INHIBITORY;
-import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
 import static network.aika.elements.neurons.RefType.CATEGORY;
 import static network.aika.elements.neurons.RefType.TEMPLATE;
 
@@ -37,12 +32,6 @@ import static network.aika.elements.neurons.RefType.TEMPLATE;
  *
  * @author Lukas Molzberger
  */
-@NeuronType(
-        type = INHIBITORY,
-        activationFunction = LIMITED_RECTIFIED_LINEAR_UNIT,
-        bindingSignalSlots = SINGLE_INPUT,
-        trainingAllowed = false
-)
 public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, InhibitoryActivation> {
 
     public InhibitoryNeuron(NeuronProvider np) {

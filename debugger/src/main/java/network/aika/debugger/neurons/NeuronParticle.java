@@ -29,10 +29,8 @@ import org.graphstream.ui.layout.springbox.implementations.SpringBox;
 import org.miv.pherd.geom.Point3;
 
 import java.util.Random;
-import java.util.function.Consumer;
 
 import static network.aika.debugger.AbstractGraphManager.STANDARD_DISTANCE_Y;
-import static network.aika.debugger.TypeMapper.neuronTypeModifiers;
 
 /**
  * @author Lukas Molzberger
@@ -87,10 +85,7 @@ public class NeuronParticle extends AbstractParticle<NeuronGraphManager> {
 
     public void updateNode(double x , double y) {
         node.setAttribute("aika.neuronId", neuron.getId());
-        Consumer<Node> neuronTypeModifier = neuronTypeModifiers.get(neuron.getClass());
-        if (neuronTypeModifier != null) {
-            neuronTypeModifier.accept(node);
-        }
+        node.setAttribute("ui.style", neuron.getNeuronType().getDebugStyle());
         node.setAttribute("ui.label", neuron.getLabel());
         node.setAttribute("x", x);
         node.setAttribute("y", y);

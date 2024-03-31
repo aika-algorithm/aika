@@ -38,17 +38,6 @@ public abstract class DisjunctiveSynapse<
         OA extends Activation<?>
         > extends Synapse<S, I, O, L, IA, OA>
 {
-
-    @Override
-    public DisjunctiveSynapseSlot createInputSlot(Activation iAct) {
-        return new DisjunctiveSynapseSlot(INPUT);
-    }
-
-    @Override
-    public DisjunctiveSynapseSlot createOutputSlot(Activation oAct) {
-        return new DisjunctiveSynapseSlot(OUTPUT);
-    }
-
     @Override
     public void link() {
         input.addOutputSynapse(this);
