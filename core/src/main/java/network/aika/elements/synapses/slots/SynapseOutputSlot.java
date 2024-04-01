@@ -22,9 +22,7 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.Field;
 
-import static network.aika.fields.Fields.add;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.excludeInput;
 
 /**
  *

@@ -26,7 +26,6 @@ import network.aika.elements.relations.Relation;
 import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
-import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.elements.typedef.Type;
 import network.aika.queue.Timestamp;

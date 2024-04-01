@@ -29,9 +29,7 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Lukas Molzberger
  */
-public class NeuronTypeDefinition extends TypeDefinition<Neuron> {
-
-    private RefType refType;
+public class NeuronTypeDefinition extends TypeDefinition<NeuronTypeDefinition, Neuron> {
 
     private NeuronType neuronType;
 
@@ -56,12 +54,6 @@ public class NeuronTypeDefinition extends TypeDefinition<Neuron> {
     public NeuronTypeDefinition setActivationType(ActivationTypeDefinition activationType) {
         this.activationType = activationType;
         this.activationType.setNeuronType(this);
-        return this;
-    }
-
-    public NeuronTypeDefinition setRefType(RefType refType) {
-        this.refType = refType;
-
         return this;
     }
 
@@ -105,10 +97,6 @@ public class NeuronTypeDefinition extends TypeDefinition<Neuron> {
         return trainingAllowed;
     }
 
-    public RefType getRefType() {
-        return refType;
-    }
-
     public NeuronTypeDefinition setDebugStyle(String c) {
         debugStyle = c;
         return this;
@@ -118,7 +106,7 @@ public class NeuronTypeDefinition extends TypeDefinition<Neuron> {
         return debugStyle;
     }
 
-    public Neuron instantiate(Model m) {
+    public Neuron instantiate(Model m, RefType refType) {
         try {
             Neuron instance = clazz
                     .getConstructor(Model.class, RefType.class)

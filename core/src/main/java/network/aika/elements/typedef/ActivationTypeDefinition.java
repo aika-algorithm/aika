@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author Lukas Molzberger
  */
-public class ActivationTypeDefinition extends TypeDefinition<Activation> {
+public class ActivationTypeDefinition extends TypeDefinition<ActivationTypeDefinition, Activation> {
 
     private NeuronTypeDefinition neuronType;
 

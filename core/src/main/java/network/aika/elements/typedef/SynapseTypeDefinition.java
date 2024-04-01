@@ -29,7 +29,7 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Lukas Molzberger
  */
-public class SynapseTypeDefinition extends TypeDefinition<Synapse> {
+public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition, Synapse> {
 
     private LinkTypeDefinition linkType;
 

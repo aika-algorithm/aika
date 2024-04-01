@@ -16,25 +16,17 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.Model;
-import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.StateType;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.enums.Transition;
-import network.aika.enums.Trigger;
-import network.aika.enums.direction.Direction;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class SynapseSlotTypeDefinition extends TypeDefinition<SynapseSlot> {
+public class SynapseSlotTypeDefinition extends TypeDefinition<SynapseSlotTypeDefinition, SynapseSlot> {
 
     public SynapseSlotTypeDefinition(String name, Class<? extends SynapseSlot> clazz) {
         super(name, clazz);

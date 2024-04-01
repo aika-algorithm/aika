@@ -50,12 +50,6 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
         negativeWeight = scale(this, "weight", -1, weight);
     }
 
-    /*
-    @Override
-    public SynapseSlot createOutputSlot(BindingActivation oAct) {
-        return new AnnealingSynapseOutputSlot(oAct, this, AnnealingType.OUTER_FEEDBACK);
-    }
-*/
 
     @Override
     public Field getWeightForAnnealing() {

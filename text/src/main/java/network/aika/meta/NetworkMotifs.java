@@ -18,12 +18,14 @@ package network.aika.meta;
 
 import network.aika.Model;
 import network.aika.elements.NeuronType;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.relations.LatentProxyRelation;
 import network.aika.elements.relations.NearRelation;
+import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.types.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,16 +44,18 @@ public class NetworkMotifs {
     public static double DEFAULT_PATTERN_INPUT_CATEGORY_SYNAPSE_WEIGHT = 5.0;
     public static double DEFAULT_INHIBITORY_INPUT_CATEGORY_SYNAPSE_WEIGHT = 1.0;
 
+
     public static double getDefaultInputCategorySynapseWeight(NeuronType neuronType) {
         return switch (neuronType) {
             case BINDING -> DEFAULT_BINDING_INPUT_CATEGORY_SYNAPSE_WEIGHT;
             case PATTERN -> DEFAULT_PATTERN_INPUT_CATEGORY_SYNAPSE_WEIGHT;
             case INHIBITORY -> DEFAULT_INHIBITORY_INPUT_CATEGORY_SYNAPSE_WEIGHT;
+            default -> 0.0;
         };
     }
 
-    public static BindingNeuron addBindingNeuron(PatternNeuron input, String label, double weight, double netTarget, boolean isPrimary) {
-        BindingNeuron bn = new BindingNeuron(input.getModel(), TEMPLATE_MODEL)
+    public static Neuron addBindingNeuron(PatternNeuron input, String label, double weight, double netTarget, boolean isPrimary) {
+        Neuron bn = input.getModel().getTypeModel().getBindingNeuron().instantiate(input.getModel(), TEMPLATE_MODEL)
                 .setLabel(label)
                 .setPersistent(true);
 
@@ -120,8 +124,8 @@ public class NetworkMotifs {
     }
 
     public static InnerPositiveFeedbackSynapse addPositiveFeedbackLoop(
-            BindingNeuron bn,
-            PatternNeuron pn,
+            Neuron bn,
+            Neuron pn,
             double weight,
             double weakInputMargin,
             boolean allowRelaxedMatching,
@@ -139,15 +143,15 @@ public class NetworkMotifs {
     }
 
     public static InnerPositiveFeedbackSynapse addPositiveFeedbackLoop(
-            BindingNeuron bn,
-            PatternNeuron pn,
+            Neuron bn,
+            Neuron pn,
             double weight,
             double weakInputMargin,
             boolean allowRelaxedMatching,
             boolean isOptional,
             boolean instantiable
     ) {
-        PatternSynapse pSyn = new PatternSynapse()
+        Synapse pSyn = pn.getModel().getTypeModel().getPatternSynapse().instantiate()
                 .setWeight(weight)
                 .setOptional(isOptional)
                 .link(bn, pn)

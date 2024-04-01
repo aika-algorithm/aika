@@ -66,7 +66,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
     protected PatternNeuron entityPattern;
 
-    protected BindingNeuron entityBN;
+    protected Neuron entityBN;
 
     protected InhibitoryNeuron inhibitoryN;
 

@@ -26,7 +26,7 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Lukas Molzberger
  */
-public class LinkTypeDefinition extends TypeDefinition<Link> {
+public class LinkTypeDefinition extends TypeDefinition<LinkTypeDefinition, Link> {
 
     public LinkTypeDefinition(String name, Class<? extends Link> clazz) {
         super(name, clazz);

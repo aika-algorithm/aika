@@ -19,19 +19,42 @@ package network.aika.elements.typedef;
 import network.aika.Model;
 import network.aika.fielddefs.FieldObjectDefinition;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class TypeDefinition<T extends Type> extends FieldObjectDefinition {
+public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends Type> extends FieldObjectDefinition {
 
     private String name;
 
     protected Class<? extends T> clazz;
 
+    protected List<TypeDefinition<D, T>> parents = new ArrayList<>();
+
     public TypeDefinition(String name, Class<? extends T> clazz) {
         this.name = name;
         this.clazz = clazz;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Class<? extends T> getClazz() {
+        return clazz;
+    }
+
+    public D addParent(TypeDefinition<D ,T> p) {
+        parents.add(p);
+
+        return (D) this;
+    }
+
+    public List<TypeDefinition<D ,T>> getParents() {
+        return parents;
     }
 }

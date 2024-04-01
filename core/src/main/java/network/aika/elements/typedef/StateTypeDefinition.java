@@ -27,7 +27,7 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Lukas Molzberger
  */
-public class StateTypeDefinition extends TypeDefinition<State> {
+public class StateTypeDefinition extends TypeDefinition<StateTypeDefinition, State> {
 
 
     private StateType type;
