@@ -16,10 +16,7 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.fields.BiFunction;
-import network.aika.fields.Field;
-import network.aika.fields.FieldFunction;
-import network.aika.fields.FieldObject;
+import network.aika.fields.*;
 
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleFunction;
@@ -27,17 +24,17 @@ import java.util.function.DoubleFunction;
 /**
  * @author Lukas Molzberger
  */
-public class BiFunctionFieldDefinition extends FieldDefinition<BiFunction> {
+public class BiFunctionFieldDefinition<R extends FieldObject> extends FieldDefinition<R, BiFunction> {
 
-    DoubleBinaryOperator f;
+    ReferencedBiFunction<R> f;
 
-    public BiFunctionFieldDefinition(FieldObjectDefinition ref, String name, DoubleBinaryOperator f) {
+    public BiFunctionFieldDefinition(FieldObjectDefinition<R> ref, String name, ReferencedBiFunction<R> f) {
         super(BiFunction.class, ref, name);
 
         this.f = f;
     }
 
-    public BiFunctionFieldDefinition(FieldObjectDefinition ref, String name, double tolerance, DoubleBinaryOperator f) {
+    public BiFunctionFieldDefinition(FieldObjectDefinition<R> ref, String name, double tolerance, ReferencedBiFunction<R> f) {
         super(BiFunction.class, ref, name, tolerance);
 
         this.f = f;

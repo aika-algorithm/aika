@@ -163,7 +163,7 @@ public class Operators {
         return func;
     }
 
-    public static FieldDefinition func(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2, DoubleBinaryOperator f) {
+    public static <R extends FieldObject> FieldDefinition func(FieldObjectDefinition<R> ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2, ReferencedBiFunction<R> f) {
         if(in1 == null || in2 == null)
             return null;
 
@@ -174,7 +174,7 @@ public class Operators {
         return func;
     }
 
-    public static FieldDefinition func(FieldObjectDefinition ref, String label, FieldOutput in1, FieldOutput in2, DoubleBinaryOperator f, FieldInputDefinition... out) {
+    public static <R extends FieldObject> FieldDefinition func(FieldObjectDefinition<R> ref, String label, FieldOutput in1, FieldOutput in2, ReferencedFunction<R> f, FieldInputDefinition... out) {
         FieldDefinition func = func(ref, label, in1, in2, f);
         linkAll(func, out);
         return func;

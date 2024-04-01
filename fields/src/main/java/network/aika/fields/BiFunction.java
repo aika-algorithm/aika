@@ -25,13 +25,13 @@ import java.util.function.DoubleBinaryOperator;
  */
 public class BiFunction extends AbstractFunction {
 
-    private DoubleBinaryOperator function;
+    private ReferencedBiFunction function;
 
     public BiFunction(FieldObject ref, String label) {
         super(ref, label);
     }
 
-    public void setFunction(DoubleBinaryOperator f) {
+    public void setFunction(ReferencedBiFunction f) {
         this.function = f;
     }
 
@@ -43,11 +43,13 @@ public class BiFunction extends AbstractFunction {
     @Override
     protected double computeUpdate(FieldLink fl, double u) {
         return switch (fl.getArgument()) {
-            case 0 -> function.applyAsDouble(
+            case 0 -> function.f(
+                    getReference(),
                     fl.getUpdatedInputValue(),
                     getInputValueByArg(1)
                 );
-            case 1 -> function.applyAsDouble(
+            case 1 -> function.f(
+                    getReference(),
                     getInputValueByArg(0),
                     fl.getUpdatedInputValue()
                 );

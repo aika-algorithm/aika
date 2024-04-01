@@ -31,8 +31,6 @@ public class FieldObjectDefinition<R extends FieldObject> {
 
     public void addFieldDefinition(FieldDefinition<R, ?> fieldDef) {
         fieldDef.setFieldId(fieldDefs.size());
-        fieldDef.setReference(this);
-
         fieldDefs.add(fieldDef);
     }
 

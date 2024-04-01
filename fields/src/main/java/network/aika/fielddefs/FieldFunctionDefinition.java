@@ -27,15 +27,15 @@ import java.util.function.DoubleUnaryOperator;
  */
 public class FieldFunctionDefinition<R extends FieldObject> extends FieldDefinition<R, FieldFunction> {
 
-    ReferencedFunction f;
+    ReferencedFunction<R> f;
 
-    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, ReferencedFunction f) {
+    public FieldFunctionDefinition(FieldObjectDefinition<R> ref, String name, ReferencedFunction<R> f) {
         super(FieldFunction.class, ref, name);
 
         this.f = f;
     }
 
-    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, double tolerance, ReferencedFunction f) {
+    public FieldFunctionDefinition(FieldObjectDefinition<R> ref, String name, double tolerance, ReferencedFunction<R> f) {
         super(FieldFunction.class, ref, name, tolerance);
 
         this.f = f;
