@@ -24,30 +24,18 @@ import network.aika.elements.activations.types.LatentRelationActivation;
 import network.aika.elements.links.types.RelationInputLink;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.elements.synapses.SynapseType;
 import network.aika.enums.direction.Direction;
-import network.aika.enums.direction.DirectionEnum;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 import static network.aika.debugger.EventType.UPDATE;
-import static network.aika.elements.NeuronType.BINDING;
-import static network.aika.enums.Transition.INPUT_INPUT;
 
 /**
  *
  * @author Lukas Molzberger
  */
-@SynapseType(
-        inputType = BINDING,
-        outputType = BINDING,
-        transition = INPUT_INPUT,
-        required = INPUT_INPUT,
-        propagateRange = false,
-        storedAt = DirectionEnum.OUTPUT
-)
 public class RelationInputSynapse extends ConjunctiveSynapse<
         RelationInputSynapse,
         LatentRelationNeuron,

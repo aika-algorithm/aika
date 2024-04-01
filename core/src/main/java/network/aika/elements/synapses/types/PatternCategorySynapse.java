@@ -16,30 +16,14 @@
  */
 package network.aika.elements.synapses.types;
 
-import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.PatternActivation;
-import network.aika.elements.links.types.PatternCategoryLink;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.CategorySynapse;
-import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.direction.DirectionEnum;
-
-import static network.aika.elements.NeuronType.PATTERN;
-import static network.aika.enums.Transition.SAME_SAME;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 
 /**
  *
  * @author Lukas Molzberger
  */
-@SynapseType(
-        inputType = PATTERN,
-        outputType = PATTERN,
-        transition = SAME_SAME,
-        required = SAME_SAME,
-        trigger = FIRED_PRE_FEEDBACK,
-        storedAt = DirectionEnum.INPUT
-)
 public class PatternCategorySynapse extends CategorySynapse<PatternCategorySynapse, PatternNeuron, PatternActivation> {
 
 }

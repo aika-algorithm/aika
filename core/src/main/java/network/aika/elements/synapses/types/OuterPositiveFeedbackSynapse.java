@@ -21,32 +21,12 @@ import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.types.OuterPositiveFeedbackLink;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.elements.synapses.SynapseType;
 import network.aika.elements.synapses.PositiveFeedbackSynapse;
-import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
-import network.aika.elements.synapses.slots.AnnealingType;
-import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.enums.direction.DirectionEnum;
-
-import static network.aika.elements.NeuronType.BINDING;
-import static network.aika.elements.NeuronType.PATTERN;
-import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
-import static network.aika.enums.Transition.*;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 
 /**
  *
  * @author Lukas Molzberger
  */
-@SynapseType(
-        inputType = PATTERN,
-        outputType = BINDING,
-        transition = SAME_INPUT,
-        required = INPUT_SAME,
-        trigger = FIRED_PRE_FEEDBACK,
-        outputState = OUTER_FEEDBACK,
-        storedAt = DirectionEnum.OUTPUT
-)
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
         OuterPositiveFeedbackSynapse,
         PatternNeuron,

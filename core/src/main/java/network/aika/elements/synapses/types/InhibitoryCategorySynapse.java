@@ -16,30 +16,14 @@
  */
 package network.aika.elements.synapses.types;
 
-import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
-import network.aika.elements.links.types.InhibitoryCategoryLink;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.CategorySynapse;
-import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.direction.DirectionEnum;
-
-import static network.aika.elements.NeuronType.INHIBITORY;
-import static network.aika.enums.Transition.INPUT_INPUT;
-import static network.aika.enums.Trigger.NOT_FIRED;
 
 /**
  *
  * @author Lukas Molzberger
  */
-@SynapseType(
-        inputType = INHIBITORY,
-        outputType = INHIBITORY,
-        transition = INPUT_INPUT,
-        required = INPUT_INPUT,
-        trigger = NOT_FIRED,
-        storedAt = DirectionEnum.INPUT
-)
 public class InhibitoryCategorySynapse extends CategorySynapse<InhibitoryCategorySynapse, Neuron, InhibitoryActivation> {
 
 }

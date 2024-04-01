@@ -17,30 +17,13 @@
 package network.aika.elements.synapses.types;
 
 import network.aika.elements.activations.types.BindingActivation;
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.links.types.BindingCategoryLink;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.CategorySynapse;
-import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.direction.DirectionEnum;
-
-import static network.aika.elements.NeuronType.BINDING;
-import static network.aika.enums.Transition.INPUT_INPUT;
-import static network.aika.enums.Transition.SAME_SAME;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 
 /**
  *
  * @author Lukas Molzberger
  */
-@SynapseType(
-        inputType = BINDING,
-        outputType = BINDING,
-        transition = {INPUT_INPUT, SAME_SAME},
-        required = INPUT_INPUT,
-        trigger = FIRED_PRE_FEEDBACK,
-        storedAt = DirectionEnum.INPUT
-)
 public class BindingCategorySynapse extends CategorySynapse<BindingCategorySynapse, Neuron, BindingActivation> {
 
 }

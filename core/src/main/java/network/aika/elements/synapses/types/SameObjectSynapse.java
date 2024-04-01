@@ -20,30 +20,15 @@ import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.links.types.SameObjectLink;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.direction.DirectionEnum;
 import network.aika.fields.FieldOutput;
 
-import static network.aika.elements.NeuronType.BINDING;
 import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
-import static network.aika.enums.Transition.INPUT_INPUT;
-import static network.aika.enums.Transition.SAME_SAME;
-import static network.aika.enums.Trigger.PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK;
 
 /**
  * The Same Object Binding Neuron Synapse is an inner synapse between two binding neurons of the same object.
  *
  * @author Lukas Molzberger
  */
-@SynapseType(
-        inputType = BINDING,
-        outputType = BINDING,
-        transition = SAME_SAME,
-        required = INPUT_INPUT,
-        trigger = PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK,
-        propagateRange = false,
-        storedAt = DirectionEnum.OUTPUT
-)
 public class SameObjectSynapse extends ConjunctiveSynapse<
         SameObjectSynapse,
         BindingNeuron,

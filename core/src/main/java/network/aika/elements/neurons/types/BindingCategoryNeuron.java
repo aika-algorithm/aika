@@ -26,7 +26,6 @@ import network.aika.elements.synapses.CategoryInputSynapse;
 /**
  * @author Lukas Molzberger
  */
-
 public class BindingCategoryNeuron extends CategoryNeuron {
 
     public BindingCategoryNeuron(NeuronProvider np) {

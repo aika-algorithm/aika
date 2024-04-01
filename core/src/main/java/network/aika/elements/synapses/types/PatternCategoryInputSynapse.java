@@ -24,33 +24,16 @@ import network.aika.elements.links.types.PatternCategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveCategoryInputSynapse;
-import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.direction.DirectionEnum;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
-import static network.aika.elements.NeuronType.PATTERN;
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
-import static network.aika.enums.Transition.SAME_SAME;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 
 /**
  * The Same Pattern Binding Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
  *
  * @author Lukas Molzberger
  */
-@SynapseType(
-        inputType = PATTERN,
-        outputType = PATTERN,
-        transition = SAME_SAME,
-        required = SAME_SAME,
-        outputState = PRE_FEEDBACK,
-        trigger = FIRED_PRE_FEEDBACK,
-        storedAt = DirectionEnum.OUTPUT,
-        trainingAllowed = false
-)
 public class PatternCategoryInputSynapse
         extends ConjunctiveCategoryInputSynapse<
                             PatternCategoryInputSynapse,

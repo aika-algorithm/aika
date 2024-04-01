@@ -22,26 +22,11 @@ import network.aika.elements.links.types.PrimaryInhibitoryLink;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
-import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.direction.DirectionEnum;
-
-import static network.aika.elements.NeuronType.BINDING;
-import static network.aika.elements.NeuronType.INHIBITORY;
-import static network.aika.enums.Transition.SAME_INPUT;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 
 /**
  *
  * @author Lukas Molzberger
  */
-@SynapseType(
-        inputType = BINDING,
-        outputType = INHIBITORY,
-        transition = SAME_INPUT,
-        required = SAME_INPUT,
-        trigger = FIRED_PRE_FEEDBACK,
-        storedAt = DirectionEnum.OUTPUT
-)
 public class PrimaryInhibitorySynapse extends DisjunctiveSynapse<
         PrimaryInhibitorySynapse,
         PatternNeuron,

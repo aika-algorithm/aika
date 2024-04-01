@@ -23,34 +23,18 @@ import network.aika.elements.links.types.NegativeFeedbackLink;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.elements.synapses.SynapseType;
-import network.aika.enums.direction.DirectionEnum;
 import network.aika.fields.Field;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.elements.NeuronType.*;
-import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
-import static network.aika.enums.Transition.INPUT_INPUT;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 
 /**
  *
  * @author Lukas Molzberger
  */
-@SynapseType(
-        inputType = INHIBITORY,
-        outputType = BINDING,
-        transition = INPUT_INPUT,
-        required = INPUT_INPUT,
-        trigger = FIRED_PRE_FEEDBACK,
-        outputState = OUTER_FEEDBACK,
-        propagateRange = false,
-        storedAt = DirectionEnum.OUTPUT
-)
 public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
         NegativeFeedbackSynapse,
         InhibitoryNeuron,

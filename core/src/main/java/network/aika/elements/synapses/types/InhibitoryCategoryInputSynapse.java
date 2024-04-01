@@ -24,34 +24,16 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.DisjunctiveSynapse;
-import network.aika.elements.synapses.SynapseType;
-import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.enums.direction.DirectionEnum;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
-import static network.aika.elements.NeuronType.*;
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
-import static network.aika.enums.Transition.INPUT_INPUT;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 
 /**
  * The Inhibitory Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
  *
  * @author Lukas Molzberger
  */
-@SynapseType(
-        inputType = INHIBITORY,
-        outputType = BINDING,
-        transition = INPUT_INPUT,
-        required = INPUT_INPUT,
-        outputState = PRE_FEEDBACK,
-        trigger = FIRED_PRE_FEEDBACK,
-        storedAt = DirectionEnum.OUTPUT,
-        trainingAllowed = false
-)
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
         InhibitoryCategoryInputSynapse,
         CategoryNeuron,
