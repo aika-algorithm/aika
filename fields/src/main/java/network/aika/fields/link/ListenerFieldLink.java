@@ -17,22 +17,31 @@
 package network.aika.fields.link;
 
 import network.aika.fields.FieldOutput;
+import network.aika.fields.ReferencedUpdateListener;
 import network.aika.fields.UpdateListener;
 
 /**
  * @author Lukas Molzberger
  */
-public class ListenerFieldLink extends AbstractFieldLink<UpdateListener> {
+public class ListenerFieldLink extends AbstractFieldLink {
 
     private String listenerName;
 
-    public ListenerFieldLink(FieldOutput input, String listenerName, UpdateListener output) {
-        super(input, 0, output);
+    private ReferencedUpdateListener output;
+
+    public ListenerFieldLink(FieldOutput input, String listenerName, ReferencedUpdateListener output) {
+        super(input, 0);
         this.listenerName = listenerName;
+        this.output = output;
     }
 
     public void setInput(FieldOutput input) {
         this.input = input;
+    }
+
+    @Override
+    protected void propagateUpdate(double u) {
+        output.receiveUpdate(input.getReference(), this, u);
     }
 
     @Override

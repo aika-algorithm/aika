@@ -69,8 +69,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
                 inputSlotFL,
                 state && (
                         subsumes(SAME, nBS, bs) || subsumes(SAME, bs, nBS)
-                ),
-                true
+                )
         );
     }
 

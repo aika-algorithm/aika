@@ -63,7 +63,7 @@ public class State implements Type<StateTypeDefinition>, FieldObject, QueueProvi
     protected void init() {
         net = new SumField(this, "net", null);
 
-        net.addListener("onFired", (fl, u) ->
+        net.addListener("onFired", (r, fl, u) ->
                 updateFiredStep(fl)
         );
 
@@ -76,13 +76,13 @@ public class State implements Type<StateTypeDefinition>, FieldObject, QueueProvi
         );
         value.setQueued(getQueue(), INFERENCE, type.isNextRound());
 
-        value.addListener("onFired", (fl, u) -> {
+        value.addListener("onFired", (r, fl, u) -> {
             if (isTrue(value, false) != isTrue(value, true))
                 getDocument().onElementEvent(UPDATE, act);
         });
     }
 
-    private void updateFiredStep(AbstractFieldLink fl) {
+    public void updateFiredStep(AbstractFieldLink fl) {
         FieldOutput net = fl.getInput();
         if(!net.exceedsThreshold() || fired != NOT_SET)
             return;

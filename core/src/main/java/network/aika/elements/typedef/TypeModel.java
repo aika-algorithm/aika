@@ -17,10 +17,7 @@
 package network.aika.elements.typedef;
 
 
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.activations.DisjunctiveActivation;
-import network.aika.elements.activations.StateType;
+import network.aika.elements.activations.*;
 import network.aika.elements.links.ConjunctiveCategoryInputLink;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.CategoryLink;
@@ -40,6 +37,7 @@ import network.aika.fields.SumField;
 
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
+import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.NeuronType.*;
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
@@ -50,6 +48,7 @@ import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.Operators.func;
+import static network.aika.fields.Fields.isTrue;
 import static network.aika.queue.Phase.INFERENCE;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -145,13 +144,12 @@ public class TypeModel {
         StateTypeDefinition state = new StateTypeDefinition(name, stateType)
                 .setNextRound(stateType == PRE_FEEDBACK);
 
-        FieldDefinition net = new FieldDefinition(SumField.class, state, "net");
-        state.addFieldDefinition(net);
-/*
-        net.addListener("onFired", (fl, u) ->
-                updateFiredStep(fl)
+        FieldDefinition<State, SumField> net = new FieldDefinition<>(SumField.class, state, "net");
+
+        net.addListener("onFired", (r, fl, u) ->
+                r.updateFiredStep(fl)
         );
-*/
+
         FieldDefinition value = func(
                 this,
                 "value = f(net)",
@@ -159,6 +157,12 @@ public class TypeModel {
                 net,
                 x -> act.getActivationFunction().f(x)
         );
+
+        value.addListener("onFired", (fl, u) -> {
+            if (isTrue(value, false) != isTrue(value, true))
+                getDocument().onElementEvent(UPDATE, act);
+        });
+
         value.setQueued(preFeedbackState, INFERENCE);
         return preFeedbackState;
     }

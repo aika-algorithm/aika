@@ -16,31 +16,12 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.FieldLink;
-
-import java.util.Collection;
+import network.aika.fields.link.AbstractFieldLink;
 
 /**
  * @author Lukas Molzberger
  */
-public interface FieldInput<F extends FieldLink> extends UpdateListener<F> {
+public interface ReferencedUpdateListener<R extends FieldObject, F extends AbstractFieldLink> {
 
-    String getLabel();
-
-    void addInput(F fl);
-
-    void removeInput(F fl);
-
-    Collection<F> getInputs();
-
-    int size();
-
-    void connectInputs();
-
-    void disconnectAndUnlinkInputs();
-
-    void unlinkInputs();
-
-
-    FieldObject getReference();
+    void receiveUpdate(R ref, F fl, double u);
 }

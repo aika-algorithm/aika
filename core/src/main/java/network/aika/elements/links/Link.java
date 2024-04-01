@@ -152,7 +152,7 @@ public abstract class Link<
 
     @Override
     public void disconnect() {
-        weightedInput.disconnectAndUnlinkInputs(false);
+        weightedInput.unlinkInputs();
     }
 
     public void instantiateTemplate(I iAct, O oAct) {

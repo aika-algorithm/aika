@@ -71,7 +71,7 @@ public class LinkUpdate extends ElementStep<Link> {
 
         Link l = getElement();
         if(dir == Direction.INPUT) {
-            updateConnected(l.getInputValueLink(), targetState, true);
+            updateConnected(l.getInputValueLink(), targetState);
 
             l.checkPrimarySuppression();
         }

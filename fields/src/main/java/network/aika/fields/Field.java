@@ -67,23 +67,29 @@ public abstract class Field<F extends FieldLink> extends FieldOutputImpl impleme
     }
 
 
-    public synchronized void connectInputs(boolean initialize) {
+    public synchronized void connectInputs() {
         getInputs().forEach(fl ->
-                fl.connect(initialize)
+                fl.connect()
         );
     }
 
-    public synchronized void disconnectInputs(boolean deinitialize) {
+    public synchronized void disconnectInputs() {
         getInputs().forEach(fl ->
-                fl.disconnect(deinitialize)
+                fl.disconnect()
         );
     }
 
-    public synchronized void disconnectAndUnlinkInputs(boolean deinitialize) {
+    public synchronized void disconnectAndUnlinkInputs() {
         getInputs().forEach(fl -> {
-            fl.disconnect(deinitialize);
+            fl.disconnect();
             fl.unlinkInput();
         });
+    }
+
+    public synchronized void unlinkInputs() {
+        getInputs().forEach(fl ->
+            fl.unlinkInput()
+        );
     }
 
     public QueueInterceptor getInterceptor() {

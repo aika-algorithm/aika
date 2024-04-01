@@ -18,6 +18,8 @@ package network.aika.fielddefs;
 
 import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
+import network.aika.fields.ReferencedUpdateListener;
+import network.aika.fields.UpdateListener;
 import network.aika.queue.ProcessingPhase;
 import network.aika.queue.QueueProvider;
 
@@ -28,13 +30,13 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<F extends Field> implements FieldInputDefinition, FieldOutputDefinition {
+public class FieldDefinition<R extends FieldObject, F extends Field> implements FieldInputDefinition, FieldOutputDefinition {
 
     protected int fieldId;
 
     protected Class<F> clazz;
 
-    protected FieldObjectDefinition ref;
+    protected FieldObjectDefinition<R> ref;
 
     protected String fieldName;
 
@@ -48,13 +50,15 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
     protected boolean isNextRound;
 
 
-    public FieldDefinition(Class<F> clazz, FieldObjectDefinition ref, String name) {
+    public FieldDefinition(Class<F> clazz, FieldObjectDefinition<R> ref, String name) {
         this.clazz = clazz;
-        this.ref = ref;
         this.fieldName = name;
+        this.ref = ref;
+
+        ref.addFieldDefinition(this);
     }
 
-    public FieldDefinition(Class<F> clazz, FieldObjectDefinition ref, String name, double tolerance) {
+    public FieldDefinition(Class<F> clazz, FieldObjectDefinition<R> ref, String name, double tolerance) {
         this(clazz, ref, name);
 
         this.tolerance = tolerance;
@@ -85,6 +89,10 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
         return this;
     }
 
+    public void addListener(String name, ReferencedUpdateListener listener) {
+
+    }
+
     public int getFieldId() {
         return fieldId;
     }
@@ -99,7 +107,7 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
         return this;
     }
 
-    public FieldObjectDefinition getRef() {
+    public FieldObjectDefinition getReference() {
         return ref;
     }
 

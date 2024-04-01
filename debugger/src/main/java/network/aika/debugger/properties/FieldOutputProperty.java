@@ -16,6 +16,7 @@
  */
 package network.aika.debugger.properties;
 
+import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.*;
 import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.FieldLink;
@@ -92,7 +93,7 @@ public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty
         if(listenerLink == null) {
             listenerLink = new ListenerFieldLink(field, "fieldPropertyListener " + (field != null ? "(" + field.getLabel() + ")" : ""), this);
             field.addOutput(listenerLink);
-            listenerLink.connect(true);
+            listenerLink.connect();
         }
     }
 

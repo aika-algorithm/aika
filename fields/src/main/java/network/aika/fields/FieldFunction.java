@@ -18,26 +18,25 @@ package network.aika.fields;
 
 import network.aika.fields.link.FieldLink;
 
-import java.util.function.DoubleFunction;
 import java.util.function.DoubleUnaryOperator;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldFunction extends AbstractFunction {
+public class FieldFunction<R extends FieldObject> extends AbstractFunction<R> {
 
-    private DoubleUnaryOperator function;
+    private ReferencedFunction function;
 
-    public FieldFunction(FieldObject ref, String label, Double tolerance) {
+    public FieldFunction(R ref, String label, Double tolerance) {
         super(ref, label, tolerance);
     }
 
     @Override
     protected double computeUpdate(FieldLink fl, double u) {
-        return function.applyAsDouble(fl.getUpdatedInputValue()) - value;
+        return function.f(getReference(), fl.getUpdatedInputValue()) - value;
     }
 
-    public void setFunction(DoubleUnaryOperator f) {
+    public void setFunction(ReferencedFunction f) {
         function = f;
     }
 }

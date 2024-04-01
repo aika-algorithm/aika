@@ -46,14 +46,16 @@ public interface FieldOutput {
 
     boolean isWithinUpdate();
 
-    default FieldOutput addListener(String listenerName, UpdateListener fieldListener) {
+    default FieldOutput addListener(String listenerName, ReferencedUpdateListener fieldListener) {
         return addListener(listenerName, fieldListener, false);
     }
 
-    default FieldOutput addListener(String listenerName, UpdateListener fieldListener, boolean assumeInitialized) {
+    default FieldOutput addListener(String listenerName, ReferencedUpdateListener fieldListener, boolean assumeInitialized) {
         ListenerFieldLink fl = new ListenerFieldLink(this, listenerName, fieldListener);
         addOutput(fl);
-        fl.connect(!assumeInitialized);
+        if(!assumeInitialized)
+            fl.connect();
+
         return this;
     }
 

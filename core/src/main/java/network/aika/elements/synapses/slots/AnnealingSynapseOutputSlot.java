@@ -72,6 +72,6 @@ public class AnnealingSynapseOutputSlot extends SynapseOutputSlot<ConjunctiveSyn
     @Override
     public void disconnect() {
         super.disconnect();
-        mixField.disconnectAndUnlinkInputs(false);
+        mixField.unlinkInputs();
     }
 }

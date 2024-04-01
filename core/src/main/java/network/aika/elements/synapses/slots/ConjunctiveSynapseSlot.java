@@ -156,7 +156,7 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
 
     @Override
     public void disconnect() {
-        disconnectAndUnlinkInputs(false);
+        unlinkInputs();
 
         getLinks()
                 .forEach(ConjunctiveLink::disconnect);

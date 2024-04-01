@@ -22,16 +22,31 @@ import network.aika.fields.FieldOutput;
 /**
  * @author Lukas Molzberger
  */
-public class FieldLink extends AbstractFieldLink<FieldInput> {
+public class FieldLink extends AbstractFieldLink {
+
+    FieldInput output;
 
     public FieldLink(FieldOutput input, int arg, FieldInput output) {
-        super(input, arg, output);
+        super(input, arg);
+
+        this.output = output;
+    }
+
+    public FieldLink(FieldOutput input, Integer port, int arg, FieldInput output) {
+        super(input, port, arg);
+
+        this.output = output;
+    }
+
+    @Override
+    protected void propagateUpdate(double u) {
+        output.receiveUpdate(this, u);
     }
 
     public static FieldLink linkAndConnect(FieldOutput in, FieldInput out) {
         FieldLink fl = link(in, out.size(), out);
 
-        fl.connect(true);
+        fl.connect();
         return fl;
     }
 
@@ -41,7 +56,7 @@ public class FieldLink extends AbstractFieldLink<FieldInput> {
 
     public static FieldLink linkAndConnect(FieldOutput in, int arg, FieldInput out) {
         FieldLink fl = link(in, arg, out);
-        fl.connect(true);
+        fl.connect();
         return fl;
     }
 
@@ -58,7 +73,7 @@ public class FieldLink extends AbstractFieldLink<FieldInput> {
         for(FieldInput o : out) {
             if(o != null) {
                 link(in, 0, o)
-                        .connect(true);
+                        .connect();
             }
         }
     }
@@ -76,5 +91,23 @@ public class FieldLink extends AbstractFieldLink<FieldInput> {
     @Override
     public void unlinkOutput() {
         output.removeInput(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == null)
+            return false;
+
+        if(!super.equals(o))
+            return false;
+
+        FieldLink fLink = (FieldLink) o;
+
+        return output.equals(fLink.output);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "--> " + output;
     }
 }

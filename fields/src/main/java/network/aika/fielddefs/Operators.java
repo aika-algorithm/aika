@@ -144,7 +144,7 @@ public class Operators {
         return mul;
     }
 
-    public static FieldDefinition func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, DoubleUnaryOperator f) {
+    public static FieldDefinition func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, ReferencedFunction f) {
         if(in == null)
             return null;
 
@@ -154,7 +154,7 @@ public class Operators {
         return func;
     }
 
-    public static FieldDefinition func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, DoubleUnaryOperator f, FieldInputDefinition... out) {
+    public static FieldDefinition func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, ReferencedFunction f, FieldInputDefinition... out) {
         if(in == null)
             return null;
 

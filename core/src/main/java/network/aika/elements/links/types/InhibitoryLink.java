@@ -90,7 +90,7 @@ public class InhibitoryLink extends DisjunctiveLink<InhibitorySynapse, BindingAc
     @Override
     public void disconnect() {
         super.disconnect();
-        net.disconnectAndUnlinkInputs(false);
+        net.unlinkInputs();
     }
 
     public FieldOutput getValue() {

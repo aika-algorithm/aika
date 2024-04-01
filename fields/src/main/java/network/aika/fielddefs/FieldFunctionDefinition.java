@@ -18,23 +18,24 @@ package network.aika.fielddefs;
 
 import network.aika.fields.FieldFunction;
 import network.aika.fields.FieldObject;
+import network.aika.fields.ReferencedFunction;
 
 import java.util.function.DoubleUnaryOperator;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldFunctionDefinition extends FieldDefinition<FieldFunction> {
+public class FieldFunctionDefinition<R extends FieldObject> extends FieldDefinition<R, FieldFunction> {
 
-    DoubleUnaryOperator f;
+    ReferencedFunction f;
 
-    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, DoubleUnaryOperator f) {
+    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, ReferencedFunction f) {
         super(FieldFunction.class, ref, name);
 
         this.f = f;
     }
 
-    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, double tolerance, DoubleUnaryOperator f) {
+    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, double tolerance, ReferencedFunction f) {
         super(FieldFunction.class, ref, name, tolerance);
 
         this.f = f;

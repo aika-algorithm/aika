@@ -68,6 +68,6 @@ public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends Conjuncti
     public void disconnect() {
         super.disconnect();
 
-        outputNet.disconnectAndUnlinkInputs(false);
+        outputNet.unlinkInputs();
     }
 }

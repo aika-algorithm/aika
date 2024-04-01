@@ -22,22 +22,30 @@ import network.aika.fields.UpdateListener;
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractFieldLink<O extends UpdateListener> {
+public abstract class AbstractFieldLink {
+
+    private Integer port;
 
     protected FieldOutput input;
     private int arg;
-    protected O output;
 
     protected boolean connected;
     protected boolean withinConnectionChange;
 
     protected boolean propagateUpdates = true;
 
-    public AbstractFieldLink(FieldOutput input, int arg, O output) {
+
+    public AbstractFieldLink(FieldOutput input, int arg) {
         this.input = input;
         this.arg = arg;
-        this.output = output;
     }
+
+    public AbstractFieldLink(FieldOutput input, Integer port, int arg) {
+        this(input, arg);
+        this.port = port;
+    }
+
+    protected abstract void propagateUpdate(double u);
 
     public void setPropagateUpdates(boolean propagateUpdates) {
         this.propagateUpdates = propagateUpdates;
@@ -53,44 +61,40 @@ public abstract class AbstractFieldLink<O extends UpdateListener> {
 
     public void receiveUpdate(double u) {
         if(connected && propagateUpdates)
-            output.receiveUpdate(this, u);
+            propagateUpdate(u);
     }
 
-    public static void updateConnected(FieldLink fl, boolean newConnected, boolean initialize) {
+    public static void updateConnected(FieldLink fl, boolean newConnected) {
         if(fl != null)
-            fl.updateConnected(newConnected, initialize);
+            fl.updateConnected(newConnected);
     }
 
-    public void updateConnected(boolean newConnected, boolean initialize) {
+    public void updateConnected(boolean newConnected) {
         if(!connected && newConnected)
-            connect(initialize);
+            connect();
         else if(connected && !newConnected)
-            disconnect(initialize);
+            disconnect();
     }
 
-    public void connect(boolean initialize) {
+    public void connect() {
         if(connected)
             return;
 
         withinConnectionChange = true;
-        if(initialize) {
-            double cv = input.getValue();
-            output.receiveUpdate(this, cv);
-        }
+        double cv = input.getValue();
+        propagateUpdate(cv);
         withinConnectionChange = false;
 
         connected = true;
     }
 
-    public void disconnect(boolean deinitialize) {
+    public void disconnect() {
         if(!connected)
             return;
 
         withinConnectionChange = true;
-        if(deinitialize) {
-            double cv = input.getValue();
-            output.receiveUpdate(this, -cv);
-        }
+        double cv = input.getValue();
+        propagateUpdate(-cv);
         withinConnectionChange = false;
 
         connected = false;
@@ -122,10 +126,6 @@ public abstract class AbstractFieldLink<O extends UpdateListener> {
         return input;
     }
 
-    public O getOutput() {
-        return output;
-    }
-
     @Override
     public boolean equals(Object o) {
         if(o == null)
@@ -133,9 +133,6 @@ public abstract class AbstractFieldLink<O extends UpdateListener> {
 
         AbstractFieldLink fLink = (AbstractFieldLink) o;
         if(arg != fLink.arg)
-            return false;
-
-        if(!output.equals(fLink.output))
             return false;
 
         if(input == fLink.input)
@@ -146,6 +143,6 @@ public abstract class AbstractFieldLink<O extends UpdateListener> {
 
     @Override
     public String toString() {
-        return input + " --" + arg + "--> " + output;
+        return input + " --" + arg;
     }
 }

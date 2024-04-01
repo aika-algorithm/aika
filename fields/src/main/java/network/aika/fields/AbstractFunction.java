@@ -24,15 +24,15 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractFunction extends Field<FieldLink> {
+public abstract class AbstractFunction<R extends FieldObject> extends Field<FieldLink> {
 
     private FieldLink[] inputs;
 
-    public AbstractFunction(FieldObject ref, String label, Double tolerance) {
+    public AbstractFunction(R ref, String label, Double tolerance) {
         super(ref, label, tolerance);
     }
 
-    public AbstractFunction(FieldObject ref, String label) {
+    public AbstractFunction(R ref, String label) {
         this(ref, label, null);
     }
 
