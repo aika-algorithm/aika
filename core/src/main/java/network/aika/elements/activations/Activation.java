@@ -28,6 +28,7 @@ import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.links.CategoryLink;
 import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
+import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.*;
@@ -490,6 +491,16 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return getOutputLinksByType(CategoryLink.class)
                 .map(l -> (CategoryActivation) l.getOutput())
                 .filter(Objects::nonNull);
+    }
+
+    public Neuron getTemplateNeuron() {
+        return getCategoryActivations()
+                .map(Activation::getNeuron)
+                .map(CategoryNeuron::getOutgoingCategoryInputSynapse)
+                .map(CategoryInputSynapse::getOutput)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 
     public Stream<Activation> getTemplateInstances() {

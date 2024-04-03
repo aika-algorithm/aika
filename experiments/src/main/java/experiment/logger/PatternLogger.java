@@ -130,7 +130,7 @@ public class PatternLogger {
 
     public void log(PatternActivation pAct) {
         PatternNeuron pn = pAct.getNeuron();
-        Document doc = (Document) pAct.getDocument();
+        Document doc = pAct.getDocument();
         try {
             List entry = new ArrayList();
 
