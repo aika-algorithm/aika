@@ -27,14 +27,7 @@ import network.aika.elements.synapses.PositiveFeedbackSynapse;
  *
  * @author Lukas Molzberger
  */
-public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
-        OuterPositiveFeedbackSynapse,
-        PatternNeuron,
-        BindingNeuron,
-        OuterPositiveFeedbackLink,
-        PatternActivation,
-        BindingActivation
-        >
+public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse
 {
     @Override
     public void initBiasInput(BindingActivation act) {

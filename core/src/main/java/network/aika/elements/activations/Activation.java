@@ -58,12 +58,12 @@ import static network.aika.utils.Utils.TOLERANCE;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Activation<N extends Neuron> implements Type<ActivationTypeDefinition>, Element, Comparable<Activation> {
+public abstract class Activation implements Type<ActivationTypeDefinition, Activation>, Element, Comparable<Activation> {
 
     public static final Comparator<Activation> ID_COMPARATOR = Comparator.comparingInt(Activation::getId);
 
     protected final int id;
-    protected N neuron;
+    protected Neuron neuron;
     protected Document doc;
 
     private ActivationTypeDefinition activationType;
@@ -91,7 +91,7 @@ public abstract class Activation<N extends Neuron> implements Type<ActivationTyp
 
     protected HashMap<Integer, Integer> templateSynIdMap;
 
-    public Activation(int id, Document doc, N n) {
+    public Activation(int id, Document doc, Neuron n) {
         this.id = id;
         this.neuron = n;
         this.doc = doc;
@@ -354,11 +354,11 @@ public abstract class Activation<N extends Neuron> implements Type<ActivationTyp
         return false;
     }
 
-    public N getNeuron() {
+    public Neuron getNeuron() {
         return neuron;
     }
 
-    public void setNeuron(N n) {
+    public void setNeuron(Neuron n) {
         this.neuron = n;
     }
 
@@ -511,7 +511,7 @@ public abstract class Activation<N extends Neuron> implements Type<ActivationTyp
 
     public abstract CategoryInputLink getActiveCategoryInputLink();
 
-    public Activation<N> resolveAbstractInputActivation() {
+    public Activation resolveAbstractInputActivation() {
         return isInstantiable() ?
                 getActiveTemplateInstance() :
                 this;
@@ -532,18 +532,18 @@ public abstract class Activation<N extends Neuron> implements Type<ActivationTyp
         if(!neuron.isInstantiable())
             return null;
 
-        N n = null;
+        Neuron n = null;
         if(doc.getInstantiationCallback() != null) {
-            n = (N) doc.getInstantiationCallback().resolveInstance(neuron, doc);
+            n = doc.getInstantiationCallback().resolveInstance(neuron, doc);
         }
 
         boolean newNeuronInstance = false;
         if(n == null) {
-            n = (N) neuron.instantiateTemplate();
+            n = neuron.instantiateTemplate();
             newNeuronInstance = true;
         }
 
-        Activation<N> ti = n.createActivation(getDocument());
+        Activation ti = n.createActivation(getDocument());
 
         ti.textReference = textReference;
         ti.isNewInstance = true;
@@ -566,7 +566,7 @@ public abstract class Activation<N extends Neuron> implements Type<ActivationTyp
         return ti;
     }
 
-    private void linkTemplateAndInstance(Activation<N> ti) {
+    private void linkTemplateAndInstance(Activation ti) {
         CategoryInputLink cl = getActiveCategoryInputLink();
         if(cl == null)
             cl = createCategoryInputLink();
@@ -579,13 +579,13 @@ public abstract class Activation<N extends Neuron> implements Type<ActivationTyp
         if(cis == null)
             return null;
 
-        CategoryActivation catAct = cis.getInput().createActivation(doc);
+        Activation catAct = cis.getInput().createActivation(doc);
 
         Synapse s = ((Synapse)cis);
         return (CategoryInputLink) s.createAndInitLink(catAct, this);
     }
 
-    public void instantiateTemplateEdges(Activation<N> instanceAct) {
+    public void instantiateTemplateEdges(Activation instanceAct) {
         getInputLinks()
                 .filter(l -> l.getInput() != null)
                 .filter(l -> l.getInput().isFired(INNER_FEEDBACK))

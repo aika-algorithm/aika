@@ -17,7 +17,10 @@
 package network.aika.elements.typedef;
 
 import network.aika.elements.NeuronType;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.links.Link;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;

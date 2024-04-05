@@ -46,7 +46,7 @@ public class ArgumentFieldLink<A> extends FieldLink {
     public static <A> ArgumentFieldLink<A> linkAndConnect(FieldOutput in, A argRef, FieldInput<ArgumentFieldLink<A>> out) {
         ArgumentFieldLink<A> fl = link(in, out.size(), argRef, out);
 
-        fl.connect();
+        fl.connect(true);
         return fl;
     }
 }

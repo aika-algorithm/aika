@@ -16,6 +16,10 @@
  */
 package network.aika.enums.sign;
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldObjectDefinition;
+import network.aika.fielddefs.FieldOutputDefinition;
+import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
 import network.aika.fields.FieldOutput;
 
@@ -30,7 +34,7 @@ public class Positive implements Sign {
     }
 
     @Override
-    public FieldOutput getValue(FieldObject ref, FieldOutput v) {
+    public <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> getValue(D ref, FieldDefinition v) {
         return v;
     }
 

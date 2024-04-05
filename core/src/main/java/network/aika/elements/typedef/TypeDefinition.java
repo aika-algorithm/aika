@@ -16,8 +16,8 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.Model;
 import network.aika.fielddefs.FieldObjectDefinition;
+import network.aika.fields.FieldObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +27,13 @@ import java.util.List;
  *
  * @author Lukas Molzberger
  */
-public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends Type> extends FieldObjectDefinition {
+public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends Type<D, T> & FieldObject<T, D>> extends FieldObjectDefinition<T> {
 
     private String name;
 
     protected Class<? extends T> clazz;
 
-    protected List<TypeDefinition<D, T>> parents = new ArrayList<>();
+    protected List<TypeDefinition> parents = new ArrayList<>();
 
     public TypeDefinition(String name, Class<? extends T> clazz) {
         this.name = name;
@@ -48,13 +48,13 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
         return clazz;
     }
 
-    public D addParent(TypeDefinition<D ,T> p) {
+    public D addParent(TypeDefinition p) {
         parents.add(p);
 
         return (D) this;
     }
 
-    public List<TypeDefinition<D ,T>> getParents() {
+    public List<TypeDefinition> getParents() {
         return parents;
     }
 }

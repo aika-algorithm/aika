@@ -18,7 +18,9 @@ package network.aika.elements.synapses.slots;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.Link;
 import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.SynapseSlotTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.enums.direction.Direction;
@@ -41,19 +43,19 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L extends ConjunctiveLink> extends AbstractMaxField<ArgumentFieldLink<L>> implements SynapseSlot<S, L> {
+public abstract class ConjunctiveSynapseSlot extends AbstractMaxField<ArgumentFieldLink<Link>> implements SynapseSlot {
 
     protected SynapseSlotTypeDefinition synapseSlotType;
 
     protected Activation act;
 
-    protected S synapse;
+    protected Synapse synapse;
 
     protected Direction dir;
 
-    protected NavigableMap<LinkKey, ArgumentFieldLink<L>> links;
+    protected NavigableMap<LinkKey, ArgumentFieldLink<Link>> links;
 
-    public ConjunctiveSynapseSlot(Activation act, S synapse, String label, Direction dir) {
+    public ConjunctiveSynapseSlot(Activation act, Synapse synapse, String label, Direction dir) {
         super(null, label, TOLERANCE);
 
         this.act = act;
@@ -69,7 +71,7 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
     }
 
     @Override
-    protected void updateSelectedInput(ArgumentFieldLink<L> si, boolean state) {
+    protected void updateSelectedInput(ArgumentFieldLink<Link> si, boolean state) {
         if (si == null)
             return;
 
@@ -101,24 +103,24 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
     }
 
     @Override
-    public Comparator<ArgumentFieldLink<L>> getComparator() {
-        Comparator<ArgumentFieldLink<L>> valueComp = comparingInt(fl ->
+    public Comparator<ArgumentFieldLink<Link>> getComparator() {
+        Comparator<ArgumentFieldLink<Link>> valueComp = comparingInt(fl ->
                 ApproximateComparisonValueUtil.convert(fl.getUpdatedInputValue())
         );
-        Comparator<ArgumentFieldLink<L>> firedComp = comparing(fl -> fl.getArgumentRef().getFired());
+        Comparator<ArgumentFieldLink<Link>> firedComp = comparing(fl -> fl.getArgumentRef().getFired());
         return valueComp.thenComparing(firedComp.reversed());
     }
 
     @Override
-    public synchronized Stream<L> getLinks() {
+    public synchronized Stream<Link> getLinks() {
         return getInputs()
                 .stream()
                 .map(ArgumentFieldLink::getArgumentRef);
     }
 
     @Override
-    public L getLink(Activation act) {
-        ArgumentFieldLink<L> fl = links.get(
+    public Link getLink(Activation act) {
+        ArgumentFieldLink<Link> fl = links.get(
                 new LinkKey(
                         act.getNeuron(),
                         act
@@ -128,19 +130,19 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
         return getLink(fl);
     }
 
-    private L getLink(ArgumentFieldLink<L> fl) {
+    private Link getLink(ArgumentFieldLink<Link> fl) {
         return fl != null ?
                 fl.getArgumentRef() :
                 null;
     }
 
     @Override
-    public L getSelectedLink() {
+    public Link getSelectedLink() {
         return getLink(getSelectedInput());
     }
 
     @Override
-    public S getSynapse() {
+    public Synapse getSynapse() {
         return synapse;
     }
 
@@ -159,7 +161,7 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
         unlinkInputs();
 
         getLinks()
-                .forEach(ConjunctiveLink::disconnect);
+                .forEach(Link::disconnect);
     }
 
     @Override
@@ -169,15 +171,15 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
 
 
     @Override
-    public void addLink(L l) {
+    public void addLink(Link l) {
     }
 
     @Override
-    public void addInput(ArgumentFieldLink<L> fl) {
-        L l = fl.getArgumentRef();
+    public void addInput(ArgumentFieldLink<Link> fl) {
+        Link l = fl.getArgumentRef();
 
         Direction d = dir.invert();
-        ArgumentFieldLink<L> el = links.put(
+        ArgumentFieldLink<Link> el = links.put(
                 new LinkKey(
                         d.getNeuron(l.getSynapse()),
                         d.getActivation(l)
@@ -188,14 +190,14 @@ public abstract class ConjunctiveSynapseSlot<S extends ConjunctiveSynapse, L ext
     }
 
     @Override
-    public void removeInput(ArgumentFieldLink<L> fl) {
+    public void removeInput(ArgumentFieldLink<Link> fl) {
         links.remove(
                 new LinkKey(fl, dir)
         );
     }
 
     @Override
-    public Collection<ArgumentFieldLink<L>> getInputs() {
+    public Collection<ArgumentFieldLink<Link>> getInputs() {
         return links.values();
     }
 

@@ -26,19 +26,18 @@ import network.aika.fields.InputField;
 import network.aika.queue.steps.FeedbackTrigger;
 
 import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.scale;
 
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> extends Activation<N> {
+public abstract class ConjunctiveActivation extends Activation<ConjunctiveNeuron> {
 
     protected InputField outerFeedbackAnnealingValue;
     protected InputField instantiationAnnealingValue;
 
-    public ConjunctiveActivation(int id, Document doc, N n) {
+    public ConjunctiveActivation(int id, Document doc, ConjunctiveNeuron n) {
         super(id, doc, n);
 
         if(getConfig().isMetaInstantiationEnabled()) {
@@ -97,7 +96,7 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
 
     @Override
     protected void initBiases() {
-        neuron.getSynapseBiasSynapses()
+        ((ConjunctiveNeuron)neuron).getSynapseBiasSynapses()
                 .forEach(s ->
                         s.initBiasInput(this)
                 );

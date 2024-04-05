@@ -36,15 +36,7 @@ import static network.aika.debugger.EventType.UPDATE;
  *
  * @author Lukas Molzberger
  */
-public class RelationInputSynapse extends ConjunctiveSynapse<
-        RelationInputSynapse,
-        LatentRelationNeuron,
-        BindingNeuron,
-        RelationInputLink,
-        LatentRelationActivation,
-        BindingActivation
-        >
-{
+public class RelationInputSynapse extends ConjunctiveSynapse {
 
     private int latentProxySynapseId;
 

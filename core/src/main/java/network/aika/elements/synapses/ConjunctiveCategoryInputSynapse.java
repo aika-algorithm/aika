@@ -16,6 +16,7 @@
  */
 package network.aika.elements.synapses;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.ConjunctiveCategoryInputLink;
@@ -29,18 +30,11 @@ import network.aika.elements.synapses.slots.SynapseSlot;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveCategoryInputSynapse<
-        S extends ConjunctiveCategoryInputSynapse,
-        I extends CategoryNeuron,
-        O extends ConjunctiveNeuron<O, OA>,
-        L extends ConjunctiveCategoryInputLink<S, IA, OA>,
-        IA extends CategoryActivation,
-        OA extends ConjunctiveActivation<O>
-        > extends PositiveFeedbackSynapse<S, I, O, L, IA, OA> implements CategoryInputSynapse<S> {
+public abstract class ConjunctiveCategoryInputSynapse extends PositiveFeedbackSynapse implements CategoryInputSynapse {
 
 
     @Override
-    public void initBiasInput(OA act) {
+    public void initBiasInput(Activation act) {
         super.initBiasInput(act);
 
         act.registerInputSlot(this);

@@ -17,13 +17,20 @@
 package network.aika.fields;
 
 
+import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.queue.Queue;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public interface FieldObject {
+public interface FieldObject<R extends FieldObject<R, D>, D extends FieldObjectDefinition<R>> {
+
+    void setTypeDefinition(D typeDef);
+
+    D getTypeDefinition();
+
+    void setField(int i, Field f);
 
     void disconnect();
 

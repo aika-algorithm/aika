@@ -35,11 +35,9 @@ public interface FieldInput<F extends FieldLink> extends UpdateListener<F> {
 
     int size();
 
-    void connectInputs();
+    void connectInputs(boolean initialize);
 
-    void disconnectAndUnlinkInputs();
-
-    void unlinkInputs();
+    void disconnectAndUnlinkInputs(boolean deinitialize);
 
 
     FieldObject getReference();

@@ -34,7 +34,7 @@ public class FieldInstantiationTest {
 
     @Test
     public void testFieldInstantiation() {
-        FieldObjectDefinition state = new FieldObjectDefinition();
+        FieldObjectDefinition<?> state = new FieldObjectDefinition();
 
         FieldDefinition net = new FieldDefinition(SumField.class, state, "net");
 
@@ -43,21 +43,9 @@ public class FieldInstantiationTest {
                 "value = f(net)",
                 TOLERANCE,
                 net,
-                x -> Math.max(0.0, Math.tanh(x))
+                (r, x) -> Math.max(0.0, Math.tanh(x))
         );
 
-        QueueProvider queueProvider = new QueueProvider() {
-            @Override
-            public Queue getQueue() {
-                return null;
-            }
-
-            @Override
-            public boolean isNextRound() {
-                return false;
-            }
-        };
-
-        value.setQueued(queueProvider, null);
+        value.setQueued(null);
     }
 }

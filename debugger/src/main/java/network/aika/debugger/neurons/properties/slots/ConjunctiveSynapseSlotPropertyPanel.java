@@ -17,6 +17,7 @@
 package network.aika.debugger.neurons.properties.slots;
 
 import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.Link;
 import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
 import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 import network.aika.fields.link.ArgumentFieldLink;
@@ -43,7 +44,7 @@ public class ConjunctiveSynapseSlotPropertyPanel<S extends ConjunctiveSynapseSlo
 
     @Override
     protected void initLinks(S s) {
-        Collection<ArgumentFieldLink<ConjunctiveLink>> inputs = s.getInputs();
+        Collection<ArgumentFieldLink<Link>> inputs = s.getInputs();
 
         addConstant("Links: ", "");
         inputs.stream().limit(10)

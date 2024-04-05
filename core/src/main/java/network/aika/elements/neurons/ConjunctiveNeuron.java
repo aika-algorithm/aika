@@ -34,7 +34,7 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends ConjunctiveActivation> extends Neuron<N, A> {
+public abstract class ConjunctiveNeuron extends Neuron {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConjunctiveNeuron.class);
 
@@ -68,8 +68,8 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
         return tn.getId() == templateNeuron.getId();
     }
 
-    public N getTemplate() {
-        CategorySynapse<?,?,?> cs = getCategoryOutputSynapse();
+    public Neuron getTemplate() {
+        CategorySynapse cs = getCategoryOutputSynapse();
         if(cs == null)
             return null;
 
@@ -77,7 +77,7 @@ public abstract class ConjunctiveNeuron<N extends ConjunctiveNeuron, A extends C
         if(cis == null)
             return null;
 
-        return (N) cis.getOutput();
+        return cis.getOutput();
     }
 
     @Override

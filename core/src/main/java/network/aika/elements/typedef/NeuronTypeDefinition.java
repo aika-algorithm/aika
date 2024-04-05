@@ -19,6 +19,7 @@ package network.aika.elements.typedef;
 import network.aika.ActivationFunction;
 import network.aika.Model;
 import network.aika.elements.NeuronType;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.RefType;

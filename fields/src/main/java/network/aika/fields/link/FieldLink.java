@@ -46,7 +46,7 @@ public class FieldLink extends AbstractFieldLink {
     public static FieldLink linkAndConnect(FieldOutput in, FieldInput out) {
         FieldLink fl = link(in, out.size(), out);
 
-        fl.connect();
+        fl.connect(true);
         return fl;
     }
 
@@ -56,7 +56,7 @@ public class FieldLink extends AbstractFieldLink {
 
     public static FieldLink linkAndConnect(FieldOutput in, int arg, FieldInput out) {
         FieldLink fl = link(in, arg, out);
-        fl.connect();
+        fl.connect(true);
         return fl;
     }
 
@@ -73,7 +73,7 @@ public class FieldLink extends AbstractFieldLink {
         for(FieldInput o : out) {
             if(o != null) {
                 link(in, 0, o)
-                        .connect();
+                        .connect(true);
             }
         }
     }

@@ -38,7 +38,7 @@ public class ConjunctiveLinkPropertyPanel<L extends ConjunctiveLink<?, ?, ?>> ex
     public void initInputIdentitySection(L l) {
         super.initInputIdentitySection(l);
 
-        SynapseInputSlot slot = l.getSynInputSlot();
+        SynapseInputSlot slot = (SynapseInputSlot) l.getSynInputSlot();
         if(slot != null) {
             ConjunctiveLink sl = slot.getSelectedLink();
             addConstant(
@@ -54,7 +54,7 @@ public class ConjunctiveLinkPropertyPanel<L extends ConjunctiveLink<?, ?, ?>> ex
     public void initOutputIdentitySection(L l) {
         super.initOutputIdentitySection(l);
 
-        SynapseOutputSlot slot = l.getSynOutputSlot();
+        SynapseOutputSlot slot = (SynapseOutputSlot) l.getSynOutputSlot();
         if(slot != null) {
             ConjunctiveLink sl = slot.getSelectedLink();
             addConstant(

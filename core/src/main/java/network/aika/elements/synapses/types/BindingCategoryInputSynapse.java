@@ -35,14 +35,7 @@ import java.io.IOException;
  *
  * @author Lukas Molzberger
  */
-public class BindingCategoryInputSynapse extends ConjunctiveCategoryInputSynapse<
-        BindingCategoryInputSynapse,
-        CategoryNeuron,
-        BindingNeuron,
-        BindingCategoryInputLink,
-        CategoryActivation,
-        BindingActivation
-        > implements CategoryInputSynapse<BindingCategoryInputSynapse>
+public class BindingCategoryInputSynapse extends ConjunctiveCategoryInputSynapse implements CategoryInputSynapse<BindingCategoryInputSynapse>
 {
     private double initialCategorySynapseWeight;
 

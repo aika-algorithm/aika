@@ -53,9 +53,7 @@ public interface FieldOutput {
     default FieldOutput addListener(String listenerName, ReferencedUpdateListener fieldListener, boolean assumeInitialized) {
         ListenerFieldLink fl = new ListenerFieldLink(this, listenerName, fieldListener);
         addOutput(fl);
-        if(!assumeInitialized)
-            fl.connect();
-
+        fl.connect(!assumeInitialized);
         return this;
     }
 

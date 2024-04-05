@@ -70,7 +70,7 @@ public class Document extends Queue implements Element {
     private long visitorCounter = 0;
 
     private final TreeMap<Integer, Activation> activationsById = new TreeMap<>();
-    private final Map<NeuronProvider, PreActivation<? extends Activation>> actsPerNeuron = new HashMap<>();
+    private final Map<NeuronProvider, PreActivation> actsPerNeuron = new HashMap<>();
     private final Set<EventListener> eventListeners = new HashSet<>();
 
     private InstantiationCallback instantiationCallback;

@@ -19,12 +19,9 @@ package network.aika.elements.activations.types;
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.activations.State;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.links.types.InputObjectLink;
-import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.elements.synapses.types.InnerPositiveFeedbackSynapse;
 import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.fields.*;
 import network.aika.elements.neurons.types.BindingNeuron;
@@ -36,7 +33,6 @@ import java.util.Objects;
 
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.enums.Scope.SAME;
-import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**

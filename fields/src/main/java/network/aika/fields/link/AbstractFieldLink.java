@@ -64,37 +64,41 @@ public abstract class AbstractFieldLink {
             propagateUpdate(u);
     }
 
-    public static void updateConnected(FieldLink fl, boolean newConnected) {
+    public static void updateConnected(FieldLink fl, boolean newConnected, boolean initialize) {
         if(fl != null)
-            fl.updateConnected(newConnected);
+            fl.updateConnected(newConnected, initialize);
     }
 
-    public void updateConnected(boolean newConnected) {
+    public void updateConnected(boolean newConnected, boolean initialize) {
         if(!connected && newConnected)
-            connect();
+            connect(initialize);
         else if(connected && !newConnected)
-            disconnect();
+            disconnect(initialize);
     }
 
-    public void connect() {
+    public void connect(boolean initialize) {
         if(connected)
             return;
 
         withinConnectionChange = true;
-        double cv = input.getValue();
-        propagateUpdate(cv);
+        if(initialize) {
+            double cv = input.getValue();
+            propagateUpdate(cv);
+        }
         withinConnectionChange = false;
 
         connected = true;
     }
 
-    public void disconnect() {
+    public void disconnect(boolean deinitialize) {
         if(!connected)
             return;
 
         withinConnectionChange = true;
-        double cv = input.getValue();
-        propagateUpdate(-cv);
+        if(deinitialize) {
+            double cv = input.getValue();
+            propagateUpdate(-cv);
+        }
         withinConnectionChange = false;
 
         connected = false;

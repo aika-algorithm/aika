@@ -16,6 +16,10 @@
  */
 package network.aika.enums.sign;
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldObjectDefinition;
+import network.aika.fielddefs.FieldOutputDefinition;
+import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
 import network.aika.fields.FieldOutput;
 
@@ -37,7 +41,7 @@ public interface Sign {
         return x >= 0.0 ? POS : NEG;
     }
 
-    FieldOutput getValue(FieldObject ref, FieldOutput v);
+    <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> getValue(D ref, FieldDefinition v);
 
     int index();
 }

@@ -30,7 +30,7 @@ import static network.aika.fielddefs.FieldLinkDefinition.linkAll;
  */
 public class Operators {
 
-    public static FieldDefinition max(FieldObjectDefinition ref, String label, FieldOutputDefinition... in) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> max(D ref, String label, FieldOutputDefinition... in) {
         if(in == null)
             return null;
 
@@ -41,7 +41,7 @@ public class Operators {
         return max;
     }
 
-    public static FieldDefinition add(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> add(D ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
         if(in1 == null || in2 == null)
             return null;
 
@@ -52,13 +52,13 @@ public class Operators {
         return add;
     }
 
-    public static FieldDefinition add(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2, FieldInputDefinition... out) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> add(D ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2, FieldInputDefinition... out) {
         FieldDefinition add = add(ref, label, in1, in2);
         linkAll(add, out);
         return add;
     }
 
-    public static FieldDefinition sub(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> sub(D ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
         if(in1 == null || in2 == null)
             return null;
 
@@ -69,7 +69,7 @@ public class Operators {
         return sub;
     }
 
-    public static FieldDefinition mix(FieldObjectDefinition ref, String label, FieldOutputDefinition x, FieldOutputDefinition in1, FieldOutputDefinition in2) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> mix(D ref, String label, FieldOutputDefinition x, FieldOutputDefinition in1, FieldOutputDefinition in2) {
         if(in1 == null || in2 == null)
             return null;
 
@@ -82,13 +82,13 @@ public class Operators {
         return mix;
     }
 
-    public static FieldDefinition mix(FieldObjectDefinition ref, String label, FieldOutputDefinition x, FieldOutputDefinition in1, FieldOutputDefinition in2, FieldInputDefinition... out) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> mix(D ref, String label, FieldOutputDefinition x, FieldOutputDefinition in1, FieldOutputDefinition in2, FieldInputDefinition... out) {
         FieldDefinition mix = mix(ref, label, x, in1, in2);
         linkAll(mix, out);
         return mix;
     }
 
-    public static FieldDefinition excludeInput(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> excludeInput(D ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
         if(in1 == null || in2 == null)
             return null;
 
@@ -99,7 +99,7 @@ public class Operators {
         return sub;
     }
 
-    public static FieldDefinition mul(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, boolean propagateUpdates1, FieldOutputDefinition in2, boolean propagateUpdates2) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> mul(D ref, String label, FieldOutputDefinition in1, boolean propagateUpdates1, FieldOutputDefinition in2, boolean propagateUpdates2) {
         if(in1 == null || in2 == null)
             return null;
 
@@ -113,7 +113,7 @@ public class Operators {
         return mul;
     }
 
-    public static FieldDefinition mul(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, boolean connect1, boolean propagateUpdates1, FieldOutputDefinition in2, boolean connect2, boolean propagateUpdates2) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> mul(D ref, String label, FieldOutputDefinition in1, boolean connect1, boolean propagateUpdates1, FieldOutputDefinition in2, boolean connect2, boolean propagateUpdates2) {
         if(in1 == null || in2 == null)
             return null;
 
@@ -127,7 +127,7 @@ public class Operators {
         return mul;
     }
 
-    public static FieldDefinition mul(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> mul(D ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
         if(in1 == null || in2 == null)
             return null;
 
@@ -138,23 +138,23 @@ public class Operators {
         return mul;
     }
 
-    public static FieldDefinition mul(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2, FieldInputDefinition... out) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> mul(D ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2, FieldInputDefinition... out) {
         FieldDefinition mul = mul(ref, label, in1, in2);
         linkAll(mul, out);
         return mul;
     }
 
-    public static FieldDefinition func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, ReferencedFunction f) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> func(D ref, String label, Double tolerance, FieldOutputDefinition in, ReferencedFunction<R> f) {
         if(in == null)
             return null;
 
-        FieldDefinition func = new FieldFunctionDefinition(ref, label, tolerance, f);
+        FieldDefinition<R, F> func = new FieldFunctionDefinition(ref, label, tolerance, f);
         link(in, 0, func);
 
         return func;
     }
 
-    public static FieldDefinition func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, ReferencedFunction f, FieldInputDefinition... out) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> func(D ref, String label, Double tolerance, FieldOutputDefinition in, ReferencedFunction<R> f, FieldInputDefinition... out) {
         if(in == null)
             return null;
 
@@ -163,7 +163,7 @@ public class Operators {
         return func;
     }
 
-    public static <R extends FieldObject> FieldDefinition func(FieldObjectDefinition<R> ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2, ReferencedBiFunction<R> f) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> func(D ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2, ReferencedBiFunction<R> f) {
         if(in1 == null || in2 == null)
             return null;
 
@@ -174,13 +174,13 @@ public class Operators {
         return func;
     }
 
-    public static <R extends FieldObject> FieldDefinition func(FieldObjectDefinition<R> ref, String label, FieldOutput in1, FieldOutput in2, ReferencedFunction<R> f, FieldInputDefinition... out) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> func(D ref, String label, FieldOutput in1, FieldOutput in2, ReferencedFunction<R> f, FieldInputDefinition... out) {
         FieldDefinition func = func(ref, label, in1, in2, f);
         linkAll(func, out);
         return func;
     }
 
-    public static FieldDefinition threshold(FieldObjectDefinition ref, String label, double threshold, ThresholdOperator.Type type, FieldOutputDefinition in) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> threshold(D ref, String label, double threshold, ThresholdOperator.Type type, FieldOutputDefinition in) {
         if(in == null)
             return null;
 
@@ -189,7 +189,7 @@ public class Operators {
         return op;
     }
 
-    public static FieldDefinition threshold(FieldObjectDefinition ref, String label, double threshold, ThresholdOperator.Type type, boolean isFinal, FieldOutputDefinition in) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> threshold(D ref, String label, double threshold, ThresholdOperator.Type type, boolean isFinal, FieldOutputDefinition in) {
         if(in == null)
             return null;
 
@@ -198,7 +198,7 @@ public class Operators {
         return op;
     }
 
-    public static FieldDefinition invert(FieldObjectDefinition ref, String label, FieldOutputDefinition in) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> invert(D ref, String label, FieldOutputDefinition in) {
         if(in == null)
             return null;
 
@@ -207,7 +207,7 @@ public class Operators {
         return f;
     }
 
-    public static FieldDefinition scale(FieldObjectDefinition ref, String label, double scale, FieldOutputDefinition in) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> scale(D ref, String label, double scale, FieldOutputDefinition in) {
         if(in == null)
             return null;
 
@@ -216,7 +216,7 @@ public class Operators {
         return f;
     }
 
-    public static FieldDefinition scale(FieldObjectDefinition ref, String label, double scale, FieldOutputDefinition in, FieldInputDefinition... out) {
+    public static <R extends FieldObject, D extends FieldObjectDefinition<R>, F extends Field> FieldDefinition<R, F> scale(D ref, String label, double scale, FieldOutputDefinition in, FieldInputDefinition... out) {
         FieldDefinition f = scale(ref, label, scale, in);
         linkAll(f, out);
         return f;

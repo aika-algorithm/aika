@@ -34,14 +34,7 @@ import java.io.IOException;
  *
  * @author Lukas Molzberger
  */
-public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
-        InhibitoryCategoryInputSynapse,
-        CategoryNeuron,
-        InhibitoryNeuron,
-        InhibitoryCategoryInputLink,
-        CategoryActivation,
-        InhibitoryActivation
-        > implements CategoryInputSynapse<InhibitoryCategoryInputSynapse>
+public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse implements CategoryInputSynapse<InhibitoryCategoryInputSynapse>
 {
     private double initialCategorySynapseWeight;
 

@@ -45,7 +45,6 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
     protected List<FieldLinkDefinition> inputs = new ArrayList<>();
     protected List<FieldLinkDefinition> outputs = new ArrayList<>();
 
-    protected QueueProvider queueProvider;
     protected ProcessingPhase phase;
     protected boolean isNextRound;
 
@@ -89,7 +88,7 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         return this;
     }
 
-    public void addListener(String name, ReferencedUpdateListener listener) {
+    public void addListener(String name, ReferencedUpdateListener<R, ?> listener) {
 
     }
 
@@ -172,9 +171,7 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         outputs.add(fl);
     }
 
-    public void setQueued(QueueProvider queueProvider, ProcessingPhase phase) {
-        this.queueProvider = queueProvider;
+    public void setQueued(ProcessingPhase phase) {
         this.phase = phase;
-        this.isNextRound = isNextRound;
     }
 }

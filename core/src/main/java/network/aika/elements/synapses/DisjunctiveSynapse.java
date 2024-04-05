@@ -29,14 +29,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  *
  * @author Lukas Molzberger
  */
-public abstract class DisjunctiveSynapse<
-        S extends DisjunctiveSynapse,
-        I extends Neuron,
-        O extends Neuron<O, OA>,
-        L extends Link<S, IA, OA, DisjunctiveSynapseSlot, DisjunctiveSynapseSlot>,
-        IA extends Activation<?>,
-        OA extends Activation<?>
-        > extends Synapse<S, I, O, L, IA, OA>
+public abstract class DisjunctiveSynapse extends Synapse
 {
     @Override
     public void link() {

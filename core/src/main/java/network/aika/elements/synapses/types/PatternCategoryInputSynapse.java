@@ -35,14 +35,7 @@ import java.io.IOException;
  * @author Lukas Molzberger
  */
 public class PatternCategoryInputSynapse
-        extends ConjunctiveCategoryInputSynapse<
-                            PatternCategoryInputSynapse,
-                            CategoryNeuron,
-                            PatternNeuron,
-                            PatternCategoryInputLink,
-                            CategoryActivation,
-                            PatternActivation
-                        >
+        extends ConjunctiveCategoryInputSynapse
         implements CategoryInputSynapse<PatternCategoryInputSynapse> {
 
     private double initialCategorySynapseWeight;

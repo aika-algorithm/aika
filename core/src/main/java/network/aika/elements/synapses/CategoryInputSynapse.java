@@ -25,7 +25,7 @@ import network.aika.elements.neurons.Neuron;
  *
  * @author Lukas Molzberger
  */
-public interface CategoryInputSynapse<S extends CategoryInputSynapse> {
+public interface CategoryInputSynapse {
 
     default boolean isTrainingAllowed() {
         return false;
@@ -39,11 +39,11 @@ public interface CategoryInputSynapse<S extends CategoryInputSynapse> {
 
     double getInitialInstanceWeight();
 
-    S setWeight(double w);
+    Synapse setWeight(double w);
 
-    S adjustBias();
+    Synapse adjustBias();
 
-    S setPropagable(boolean p);
+    Synapse setPropagable(boolean p);
 
-    S link(Neuron category, Neuron on);
+    Synapse link(Neuron category, Neuron on);
 }

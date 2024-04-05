@@ -20,11 +20,11 @@ import network.aika.Model;
 import network.aika.Range;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.RefType;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.PatternCategoryInputSynapse;
-import network.aika.elements.synapses.types.PatternCategorySynapse;
 import network.aika.fields.link.FieldLink;
 import network.aika.statistic.AverageCoveredSpace;
 import network.aika.statistic.NeuronStatistic;
@@ -33,10 +33,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
-import static network.aika.elements.NeuronType.PATTERN;
-import static network.aika.elements.activations.bsslots.BSSlotDefinition.MULTI_INPUT;
-import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
 import static network.aika.elements.neurons.RefType.*;
 import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
@@ -44,7 +40,7 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActivation> {
+public class PatternNeuron extends ConjunctiveNeuron {
 
     private AverageCoveredSpace averageCoveredSpace;
 
@@ -81,7 +77,7 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
     }
 
     @Override
-    public PatternCategoryNeuron createCategoryNeuron() {
+    public Neuron createCategoryNeuron() {
         return new PatternCategoryNeuron(getModel(), CATEGORY)
                 .setLabel(getCategoryLabel(getLabel()));
     }

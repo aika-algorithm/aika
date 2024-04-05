@@ -34,6 +34,10 @@ public class FieldObjectDefinition<R extends FieldObject> {
         fieldDefs.add(fieldDef);
     }
 
+    public int getNumberOfFields() {
+        return fieldDefs.size();
+    }
+
     public FieldDefinition<R, ?> getFieldDef(String name) {
         return fieldDefs.stream()
                 .filter(fd -> fd.getFieldName() == name)

@@ -54,28 +54,22 @@ import static network.aika.fields.ThresholdOperator.Type.ABOVE;
  *
  * @author Lukas Molzberger
  */
-public abstract class Link<
-        S extends Synapse,
-        I extends Activation<?>,
-        O extends Activation<?>,
-        SI extends SynapseSlot,
-        SO extends SynapseSlot
-        > implements Type<LinkTypeDefinition>, Element {
+public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
 
     protected LinkTypeDefinition linkType;
 
-    protected S synapse;
+    protected Synapse synapse;
 
-    protected I input;
-    protected O output;
+    protected Activation input;
+    protected Activation output;
 
     protected LinkUpdate inputStep = new LinkUpdate(this, INPUT);
 
     protected LinkUpdate outputStep = new LinkUpdate(this, OUTPUT);
 
-    protected SI synInputSlot;
+    protected SynapseSlot synInputSlot;
 
-    protected SO synOutputSlot;
+    protected SynapseSlot synOutputSlot;
 
     protected Field inputValue;
     protected AbstractFunction inputIsFired;
@@ -84,7 +78,7 @@ public abstract class Link<
 
     protected SumField gradient;
 
-    public Link(S s, I input, O output) {
+    public Link(Synapse s, Activation input, Activation output) {
         this.synapse = s;
         this.input = input;
         this.output = output;
@@ -155,14 +149,14 @@ public abstract class Link<
         weightedInput.unlinkInputs();
     }
 
-    public void instantiateTemplate(I iAct, O oAct) {
+    public void instantiateTemplate(Activation iAct, Activation oAct) {
         if(iAct == null || oAct == null)
             return;
 
         if(!synapse.isInstantiable())
             return;
 
-        S s = (S) synapse.instantiateTemplate(
+        Synapse s = synapse.instantiateTemplate(
                 iAct.getNeuron(),
                 oAct.getNeuron()
         );
@@ -229,7 +223,7 @@ public abstract class Link<
     public void init() {
     }
 
-    public void initFromTemplate(Link<S, ?, ?, SI, SO> template) {
+    public void initFromTemplate(Link template) {
         output.registerTemplateInstanceSynapse(
                 template.synapse.getSynapseId(),
                 synapse.getSynapseId()
@@ -238,7 +232,7 @@ public abstract class Link<
         linkRelationFromTemplate(template);
     }
 
-    protected void linkRelationFromTemplate(Link<S, ?, ?, SI, SO> template) {
+    protected void linkRelationFromTemplate(Link template) {
         Relation rel = synapse.getRelation();
         if(rel != null)
             rel.linkRelationFromTemplate(output, synapse, template);
@@ -323,19 +317,19 @@ public abstract class Link<
         return negInputIsFired;
     }
 
-    public S getSynapse() {
+    public Synapse getSynapse() {
         return synapse;
     }
 
-    public void setSynapse(S synapse) {
+    public void setSynapse(Synapse synapse) {
         this.synapse = synapse;
     }
 
-    public I getInput() {
+    public Activation getInput() {
         return input;
     }
 
-    public O getOutput() {
+    public Activation getOutput() {
         return output;
     }
 
@@ -348,21 +342,21 @@ public abstract class Link<
     }
 
     public void linkInput() {
-        synInputSlot = (SI) input.registerOutputSlot(synapse);
+        synInputSlot = input.registerOutputSlot(synapse);
         synInputSlot.addLink(this);
         updateBindingSignals(ON_CREATE, true);
     }
 
     public void linkOutput() {
-        synOutputSlot = (SO) output.registerInputSlot(synapse);
+        synOutputSlot = output.registerInputSlot(synapse);
         synOutputSlot.addLink(this);
     }
 
-    public SI getSynInputSlot() {
+    public SynapseSlot getSynInputSlot() {
         return synInputSlot;
     }
 
-    public SO getSynOutputSlot() {
+    public SynapseSlot getSynOutputSlot() {
         return synOutputSlot;
     }
 

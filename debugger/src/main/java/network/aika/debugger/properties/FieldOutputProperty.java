@@ -93,7 +93,7 @@ public class FieldOutputProperty<F extends FieldOutput> extends AbstractProperty
         if(listenerLink == null) {
             listenerLink = new ListenerFieldLink(field, "fieldPropertyListener " + (field != null ? "(" + field.getLabel() + ")" : ""), this);
             field.addOutput(listenerLink);
-            listenerLink.connect();
+            listenerLink.connect(false);
         }
     }
 

@@ -20,8 +20,6 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.elements.synapses.slots.SynapseInputSlot;
-import network.aika.elements.synapses.slots.SynapseOutputSlot;
 import network.aika.enums.Scope;
 import network.aika.fields.*;
 import network.aika.fields.link.ArgumentFieldLink;
@@ -38,8 +36,7 @@ import static network.aika.visitor.operator.SubsumesOperator.subsumes;
 /**
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>>
-        extends Link<S, IA, OA, SynapseInputSlot, SynapseOutputSlot> {
+public abstract class ConjunctiveLink extends Link {
 
     protected ArgumentFieldLink<ConjunctiveLink> inputSlotFL;
 
@@ -48,7 +45,7 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
     private FieldOutput biasUpdateNegCase;
 
 
-    public ConjunctiveLink(S s, IA input, OA output) {
+    public ConjunctiveLink(ConjunctiveSynapse s, Activation input, ConjunctiveActivation output) {
         super(s, input, output);
     }
 

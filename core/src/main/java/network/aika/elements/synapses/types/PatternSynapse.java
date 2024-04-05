@@ -43,15 +43,7 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public class PatternSynapse extends ConjunctiveSynapse<
-        PatternSynapse,
-        BindingNeuron,
-        PatternNeuron,
-        PatternLink,
-        BindingActivation,
-        PatternActivation
-        >
-{
+public class PatternSynapse extends ConjunctiveSynapse {
 
     SynapseStatistic statistic = new SynapseStatistic(
             this,

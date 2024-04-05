@@ -18,6 +18,7 @@ package network.aika.elements.synapses;
 
 import network.aika.Model;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.slots.SynapseInputSlot;
 import network.aika.elements.synapses.slots.SynapseOutputSlot;
 import network.aika.elements.synapses.slots.SynapseSlot;
@@ -45,15 +46,7 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveSynapse<
-            S extends ConjunctiveSynapse,
-            I extends Neuron,
-            O extends ConjunctiveNeuron<O, OA>,
-            L extends Link<S, IA, OA, SynapseInputSlot, SynapseOutputSlot>,
-            IA extends Activation<?>,
-            OA extends ConjunctiveActivation<?>
-        >
-        extends Synapse<S, I, O, L, IA, OA>
+public abstract class ConjunctiveSynapse extends Synapse
 {
 
     protected Field synapseBias = new SumField(this, "synapseBias", TOLERANCE)
@@ -72,25 +65,25 @@ public abstract class ConjunctiveSynapse<
     }
 
     @Override
-    public SynapseSlot createAndInitOutputSlot(OA oAct) {
+    public SynapseSlot createAndInitOutputSlot(Activation oAct) {
         SynapseOutputSlot slot = (SynapseOutputSlot) super.createAndInitOutputSlot(oAct);
         slot.connectToActivation();
         return slot;
     }
 
-    public void initBiasInput(OA act) {
+    public void initBiasInput(Activation act) {
         linkAndConnect(synapseBias, act.getNet(synapseType.outputState()))
                 .setPropagateUpdates(false);
     }
 
-    public S setSynapseBias(double b) {
+    public Synapse setSynapseBias(double b) {
         synapseBias.setValue(b);
 
-        return (S) this;
+        return this;
     }
 
     @Override
-    public void count(L l) {
+    public void count(Link l) {
         super.count(l);
 
         if(l.getInput() == null)
@@ -110,11 +103,11 @@ public abstract class ConjunctiveSynapse<
         }
     }
 
-    public S setRelativeActivationTime(Integer relActTimeSum, Integer relActTimeN) {
+    public Synapse setRelativeActivationTime(Integer relActTimeSum, Integer relActTimeN) {
         this.relActTimeSum = relActTimeSum;
         this.relActTimeN = relActTimeN;
 
-        return (S) this;
+        return this;
     }
 
     public Float getAvgRelActTime() {
@@ -132,14 +125,14 @@ public abstract class ConjunctiveSynapse<
         return optional;
     }
 
-    public S setOptional(boolean optional) {
+    public Synapse setOptional(boolean optional) {
         this.optional = optional;
 
-        return (S) this;
+        return this;
     }
 
     @Override
-    public void initFromTemplate(I input, O output, Synapse templateSyn) {
+    public void initFromTemplate(Neuron input, Neuron output, Synapse templateSyn) {
         synapseBias.setInitialValue(
                 ((ConjunctiveSynapse)templateSyn).synapseBias.getUpdatedValue()
         );
@@ -148,14 +141,14 @@ public abstract class ConjunctiveSynapse<
         setPropagable(templateSyn.isPropagable());
     }
 
-    public S setPropagable(boolean propagable) {
+    public Synapse setPropagable(boolean propagable) {
         if(this.propagable != propagable)
             input.getNeuron().setModified();
 
         getInput().updatePropagable(output, propagable);
         this.propagable = propagable;
 
-        return (S) this;
+        return this;
     }
 
     @Override
@@ -168,17 +161,17 @@ public abstract class ConjunctiveSynapse<
         return getOutput().getBias().getUpdatedValue() > -synapseBias.getUpdatedValue();
     }
 
-    public S adjustBias() {
+    public Synapse adjustBias() {
         return adjustBias(
                 getInput().getTargetValue()
         );
     }
 
-    public S adjustBias(double inputValueTarget) {
+    public Synapse adjustBias(double inputValueTarget) {
         if(weight.getValue() > 0.0)
             synapseBias.receiveUpdate(null, -weight.getValue() * inputValueTarget);
 
-        return (S) this;
+        return this;
     }
 
     @Override

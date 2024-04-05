@@ -29,15 +29,7 @@ import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
  *
  * @author Lukas Molzberger
  */
-public class SameObjectSynapse extends ConjunctiveSynapse<
-        SameObjectSynapse,
-        BindingNeuron,
-        BindingNeuron,
-        SameObjectLink,
-        BindingActivation,
-        BindingActivation
-        >
-{
+public class SameObjectSynapse extends ConjunctiveSynapse{
     @Override
     public FieldOutput getInputValue(BindingActivation input) {
         return input.getValue(OUTER_FEEDBACK);

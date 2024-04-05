@@ -35,14 +35,7 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
  *
  * @author Lukas Molzberger
  */
-public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
-        NegativeFeedbackSynapse,
-        InhibitoryNeuron,
-        BindingNeuron,
-        NegativeFeedbackLink,
-        InhibitoryActivation,
-        BindingActivation
-        >
+public class NegativeFeedbackSynapse extends ConjunctiveSynapse
 {
     Field negativeWeight;
 

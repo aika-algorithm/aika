@@ -59,7 +59,7 @@ import static network.aika.queue.Timestamp.MIN;
  *
  * @author Lukas Molzberger
  */
-public abstract class Neuron<N extends Neuron, A extends Activation> implements Type<NeuronTypeDefinition>, Element, Writable {
+public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Element, Writable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
 
@@ -173,9 +173,9 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return synapseIdCounter++;
     }
 
-    public void register(A act) {
+    public void register(Activation act) {
         Document doc = act.getDocument();
-        PreActivation<A> npd = getOrCreatePreActivation(doc);
+        PreActivation npd = getOrCreatePreActivation(doc);
         npd.addActivation(act);
         provider.updateLastUsed(doc.getId());
     }
@@ -186,19 +186,19 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public PreActivation<A> getOrCreatePreActivation(Document doc) {
-        PreActivation<A> preAct;
+    public PreActivation getOrCreatePreActivation(Document doc) {
+        PreActivation preAct;
         synchronized (activations) {
             preAct = activations
                     .computeIfAbsent(
                             doc.getId(),
-                            docId -> new PreActivation<>(doc, this)
+                            docId -> new PreActivation(doc, this)
                     );
         }
         return preAct;
     }
 
-    public Stream<PreActivation<A>> getPreActivations() {
+    public Stream<PreActivation> getPreActivations() {
         synchronized (activations) {
             return activations.values()
                     .stream()
@@ -206,7 +206,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public PreActivation<A> getPreActivation(Document doc) {
+    public PreActivation getPreActivation(Document doc) {
         synchronized (activations) {
             if (doc == null)
                 return null;
@@ -222,8 +222,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public SortedSet<A> getActivations(Document doc) {
-        PreActivation<A> preAct = getPreActivation(doc);
+    public SortedSet<Activation> getActivations(Document doc) {
+        PreActivation preAct = getPreActivation(doc);
 
         return preAct != null ?
                 preAct.getActivations() :
@@ -328,8 +328,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return neuronType.isTrainingAllowed();
     }
 
-    public final A createActivation(Document doc) {
-        return (A) neuronType.getActivationType()
+    public final Activation createActivation(Document doc) {
+        return neuronType.getActivationType()
                 .instantiate(doc.createActivationId(), doc, this);
     }
 
