@@ -25,8 +25,13 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fields.SumField;
 
 import java.lang.reflect.InvocationTargetException;
+
+import static network.aika.queue.Phase.TRAINING;
+import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
@@ -60,6 +65,7 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     private String debugStyle;
 
+    public FieldDefinition<Synapse, SumField> weight;
 
     public SynapseTypeDefinition(String name, Class<? extends Synapse> clazz) {
         super(name, clazz);

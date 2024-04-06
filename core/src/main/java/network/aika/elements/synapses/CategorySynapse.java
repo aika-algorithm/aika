@@ -16,18 +16,12 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.links.CategoryLink;
-import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.Neuron;
-
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class CategorySynapse<S extends CategorySynapse, I extends Neuron, IA extends Activation<?>>
-        extends DisjunctiveSynapse<S, I, CategoryNeuron, CategoryLink<S, IA>, IA, CategoryActivation>
+public abstract class CategorySynapse
+        extends DisjunctiveSynapse
 {
 
     @Override

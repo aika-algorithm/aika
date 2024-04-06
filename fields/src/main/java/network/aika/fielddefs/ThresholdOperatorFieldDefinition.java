@@ -29,14 +29,14 @@ public class ThresholdOperatorFieldDefinition<R extends FieldObject> extends Fie
 
     boolean isFinal;
 
-    public ThresholdOperatorFieldDefinition(FieldObjectDefinition ref, String name, double threshold, ThresholdOperator.Type type) {
+    public ThresholdOperatorFieldDefinition(FieldObjectDefinition<R> ref, String name, double threshold, ThresholdOperator.Type type) {
         super(ThresholdOperator.class, ref, name);
 
         this.threshold = threshold;
         this.type = type;
     }
 
-    public ThresholdOperatorFieldDefinition(FieldObjectDefinition ref, String name, double threshold, ThresholdOperator.Type type, boolean isFinal) {
+    public ThresholdOperatorFieldDefinition(FieldObjectDefinition<R> ref, String name, double threshold, ThresholdOperator.Type type, boolean isFinal) {
         super(ThresholdOperator.class, ref, name);
 
         this.threshold = threshold;
@@ -44,7 +44,7 @@ public class ThresholdOperatorFieldDefinition<R extends FieldObject> extends Fie
         this.isFinal = isFinal;
     }
 
-    public ThresholdOperatorFieldDefinition(FieldObjectDefinition ref, String name, double threshold, ThresholdOperator.Type type, double tolerance) {
+    public ThresholdOperatorFieldDefinition(FieldObjectDefinition<R> ref, String name, double threshold, ThresholdOperator.Type type, double tolerance) {
         super(ThresholdOperator.class, ref, name, tolerance);
 
         this.threshold = threshold;
@@ -52,7 +52,7 @@ public class ThresholdOperatorFieldDefinition<R extends FieldObject> extends Fie
     }
 
     @Override
-    public ThresholdOperator instantiate(FieldObject reference) {
+    public ThresholdOperator instantiate(R reference) {
         ThresholdOperator to = super.instantiate(reference);
         to.init(threshold, type, isFinal);
         return to;

@@ -63,7 +63,7 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         this.tolerance = tolerance;
     }
 
-    public F instantiate(FieldObject reference) {
+    public F instantiate(R reference) {
         try {
             F instance = clazz
                     .getConstructor(FieldObject.class)
@@ -82,14 +82,15 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         }
     }
 
-    public FieldDefinition setFieldId(int id) {
+    public FieldDefinition<R, F> setFieldId(int id) {
         fieldId = id;
 
         return this;
     }
 
-    public void addListener(String name, ReferencedUpdateListener<R, ?> listener) {
+    public FieldDefinition<R, F> addListener(String name, ReferencedUpdateListener<R, ?> listener) {
 
+        return this;
     }
 
     public int getFieldId() {
@@ -100,17 +101,17 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         return clazz;
     }
 
-    public FieldDefinition setClazz(Class<F> clazz) {
+    public FieldDefinition<R, F> setClazz(Class<F> clazz) {
         this.clazz = clazz;
 
         return this;
     }
 
-    public FieldObjectDefinition getReference() {
+    public FieldObjectDefinition<R> getReference() {
         return ref;
     }
 
-    public FieldDefinition setRef(FieldObjectDefinition ref) {
+    public FieldDefinition<R, F> setRef(FieldObjectDefinition<R> ref) {
         this.ref = ref;
 
         return this;
@@ -120,7 +121,7 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         return fieldName;
     }
 
-    public FieldDefinition setFieldName(String fieldName) {
+    public FieldDefinition<R, F> setFieldName(String fieldName) {
         this.fieldName = fieldName;
 
         return this;
@@ -130,7 +131,7 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         return tolerance;
     }
 
-    public FieldDefinition setTolerance(Double tolerance) {
+    public FieldDefinition<R, F> setTolerance(Double tolerance) {
         this.tolerance = tolerance;
 
         return this;
@@ -140,7 +141,7 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         return phase;
     }
 
-    public FieldDefinition setPhase(ProcessingPhase phase) {
+    public FieldDefinition<R, F> setPhase(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;
@@ -150,8 +151,14 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         return isNextRound;
     }
 
-    public FieldDefinition setNextRound(boolean nextRound) {
+    public FieldDefinition<R, F> setNextRound(boolean nextRound) {
         isNextRound = nextRound;
+
+        return this;
+    }
+
+    public FieldDefinition<R, F> setQueued(ProcessingPhase phase) {
+        this.phase = phase;
 
         return this;
     }
@@ -169,9 +176,5 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
     @Override
     public void addOutput(FieldLinkDefinition fl) {
         outputs.add(fl);
-    }
-
-    public void setQueued(ProcessingPhase phase) {
-        this.phase = phase;
     }
 }

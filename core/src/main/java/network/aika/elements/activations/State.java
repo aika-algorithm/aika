@@ -80,7 +80,7 @@ public class State extends FieldObjectImpl<State, StateTypeDefinition> implement
     }
 
     public boolean isFired() {
-        return isTrue(value, true);
+        return isTrue(getField(type.value), true);
     }
 
     @Override

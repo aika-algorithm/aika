@@ -42,7 +42,7 @@ public class FieldFunctionDefinition<R extends FieldObject> extends FieldDefinit
     }
 
     @Override
-    public FieldFunction instantiate(FieldObject reference) {
+    public FieldFunction<R> instantiate(R reference) {
         FieldFunction ff = super.instantiate(reference);
         ff.setFunction(f);
         return ff;

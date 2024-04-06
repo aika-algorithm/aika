@@ -51,7 +51,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  */
 public class TypeModel {
 
-    StateDef states = new StateDef(this);
+    StatesDef states = new StatesDef(this);
 
     NeuronDef neuron = new NeuronDef(this);
 

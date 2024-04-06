@@ -79,12 +79,6 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
 
     private boolean instantiable = true;
 
-    protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
-            .setQueued(getQueue(), TRAINING, false)
-            .addListener("onWeightModified", (r, fl, u) -> {
-                checkWeight();
-                setModified();
-            }, true);
 
     protected boolean trainingAllowed = true;
 
@@ -168,7 +162,7 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         return input.getValue(t);
     }
 
-    protected void checkWeight() {
+    public void checkWeight() {
         if(isNegative())
             delete();
     }

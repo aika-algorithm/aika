@@ -41,7 +41,7 @@ public class BiFunctionFieldDefinition<R extends FieldObject> extends FieldDefin
     }
 
     @Override
-    public BiFunction instantiate(FieldObject reference) {
+    public BiFunction instantiate(R reference) {
         BiFunction ff = super.instantiate(reference);
         ff.setFunction(f);
         return ff;

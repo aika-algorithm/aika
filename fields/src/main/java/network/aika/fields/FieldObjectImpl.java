@@ -17,6 +17,7 @@
 package network.aika.fields;
 
 
+import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.queue.QueueProvider;
 
@@ -43,6 +44,16 @@ public abstract class FieldObjectImpl<R extends FieldObject<R, D>, D extends Fie
     @Override
     public void setField(int i, Field f) {
         fields[i] = f;
+    }
+
+    @Override
+    public void setField(FieldDefinition fieldDef, Field f) {
+        fields[fieldDef.getFieldId()] = f;
+    }
+
+    @Override
+    public Field getField(FieldDefinition fieldDef) {
+        return fields[fieldDef.getFieldId()];
     }
 
     @Override

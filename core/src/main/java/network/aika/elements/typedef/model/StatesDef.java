@@ -24,6 +24,7 @@ import network.aika.fields.SumField;
 
 import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.activations.StateType.*;
+import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.Operators.func;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.queue.Phase.INFERENCE;
@@ -33,41 +34,45 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public class StateDef {
+public class StatesDef {
 
     TypeModel typeModel;
 
-    StateTypeDefinition state;
+    StateDef preFeedbackState = new StateDef(typeModel);
+    StateDef outerFeedbackState = new StateDef(typeModel);
+    StateDef innerFeedbackState = new StateDef(typeModel);
 
-
-    public StateDef(TypeModel typeModel) {
+    public StatesDef(TypeModel typeModel) {
         this.typeModel = typeModel;
     }
 
-    public void init(String name, StateType stateType) {
-        state = new StateTypeDefinition(name, stateType)
-                .setNextRound(stateType == PRE_FEEDBACK);
+    public void init() {
+        preFeedbackState.init("PreFeedbackState", PRE_FEEDBACK);
+        outerFeedbackState.init("OuterFeedbackState", OUTER_FEEDBACK);
+        innerFeedbackState.init("InnerFeedbackState", INNER_FEEDBACK);
 
-        state.net = new FieldDefinition<>(SumField.class, state, "net");
-
-        state.net.addListener("onFired", (r, fl, u) ->
-                r.updateFiredStep(fl)
+        link(
+                preFeedbackState.state.getFieldDef("net"),
+                outerFeedbackState.state.getFieldDef("net")
         );
 
-        state.value = func(
-                state,
-                "value = f(net)",
-                TOLERANCE,
-                state.net,
-                (r, x) ->
-                        r.getActivation().getActivationFunction().f(x)
+        link(
+                outerFeedbackState.state.getFieldDef("net"),
+                innerFeedbackState.state.getFieldDef("net")
         );
-
-        state.value.addListener("onFired", (r, fl, u) -> {
-            if (isTrue(r.getField(state.value), false) != isTrue(r.getField(state.value), true))
-                r.getDocument().onElementEvent(UPDATE, r.getActivation());
-        });
-
-        state.value.setQueued(INFERENCE);
     }
+
+    public StateTypeDefinition getPreFeedbackState() {
+        return preFeedbackState.state;
+    }
+
+    public StateTypeDefinition getOuterFeedbackState() {
+        return outerFeedbackState.state;
+    }
+
+    public StateTypeDefinition getInnerFeedbackState() {
+        return innerFeedbackState.state;
+    }
+
+
 }

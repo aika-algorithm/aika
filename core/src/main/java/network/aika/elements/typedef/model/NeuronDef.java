@@ -24,6 +24,11 @@ import network.aika.elements.typedef.ActivationTypeDefinition;
 import network.aika.elements.typedef.LinkTypeDefinition;
 import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fields.SumField;
+
+import static network.aika.queue.Phase.TRAINING;
+import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
@@ -63,6 +68,13 @@ public class NeuronDef {
                 "Synapse",
                 Synapse.class
         );
+
+        synapse.weight = new FieldDefinition<Synapse, SumField>(SumField.class, synapse, "weight", TOLERANCE)
+                .setQueued(TRAINING)
+                .addListener("onWeightModified", (r, fl, u) -> {
+                    r.checkWeight();
+                    r.setModified();
+                });
     }
 
     public TypeModel getTypeModel() {

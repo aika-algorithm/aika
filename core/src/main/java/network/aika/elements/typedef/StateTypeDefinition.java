@@ -19,7 +19,9 @@ package network.aika.elements.typedef;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
+import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldObjectDefinition;
+import network.aika.fields.SumField;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -29,12 +31,15 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class StateTypeDefinition extends TypeDefinition<StateTypeDefinition, State> {
 
-
     private StateType type;
 
     private boolean isNextRound;
 
     private ActivationTypeDefinition activationType;
+
+    public FieldDefinition<State, SumField> net;
+
+    public FieldDefinition<State, SumField> value;
 
     public StateTypeDefinition(String name, StateType type) {
         super(name, State.class);
