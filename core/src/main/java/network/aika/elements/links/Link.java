@@ -23,6 +23,7 @@ import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.activations.bsslots.RegisterInputSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
@@ -348,7 +349,9 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
     }
 
     public void linkOutput() {
-        synOutputSlot = output.registerInputSlot(synapse);
+        if(synapse.getSynapseType().getRegisterInputSlot() == RegisterInputSlot.ON_LINKING)
+            synOutputSlot = output.registerInputSlot(synapse);
+
         synOutputSlot.addLink(this);
     }
 

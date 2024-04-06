@@ -29,13 +29,6 @@ import network.aika.elements.synapses.PositiveFeedbackSynapse;
  */
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse
 {
-    @Override
-    public void initBiasInput(BindingActivation act) {
-        super.initBiasInput(act);
-
-        act.registerInputSlot(this);
-    }
-
     /*
     @Override
     public SynapseSlot createOutputSlot(BindingActivation oAct) {

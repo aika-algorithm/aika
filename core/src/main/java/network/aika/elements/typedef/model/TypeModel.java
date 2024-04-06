@@ -40,6 +40,7 @@ import static network.aika.elements.NeuronType.*;
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.*;
+import static network.aika.elements.activations.bsslots.RegisterInputSlot.ON_INIT;
 import static network.aika.enums.Transition.*;
 import static network.aika.enums.Trigger.*;
 import static network.aika.enums.direction.Direction.INPUT;
@@ -315,6 +316,7 @@ public class TypeModel {
                 .setTrigger(FIRED_PRE_FEEDBACK)
                 .setOutputState(OUTER_FEEDBACK)
                 .setStoredAt(OUTPUT)
+                .setRegisterInputSlot(ON_INIT)
                 .setDebugStyle("fill-color: rgb(90,200,20); arrow-shape: diamond;");
 
         negativeFeedbackLink = new LinkTypeDefinition(
@@ -336,6 +338,7 @@ public class TypeModel {
                 .setOutputState(OUTER_FEEDBACK)
                 .setPropagateRange(false)
                 .setStoredAt(OUTPUT)
+                .setRegisterInputSlot(ON_INIT)
                 .setDebugStyle("fill-color: rgb(185,0,0); arrow-shape: diamond;");
 
 
@@ -420,6 +423,7 @@ public class TypeModel {
                 .setTrigger(FIRED_PRE_FEEDBACK)
                 .setStoredAt(OUTPUT)
                 .setTrainingAllowed(false)
+                .setRegisterInputSlot(ON_INIT)
                 .setDebugStyle("fill-color: rgb(110,200,220);");
 
 
@@ -501,6 +505,7 @@ public class TypeModel {
                 .setRequired(INPUT_INPUT)
                 .setTrigger(FIRED_PRE_FEEDBACK)
                 .setStoredAt(INPUT)
+                .setRegisterInputSlot(ON_INIT)
                 .setDebugStyle("fill-color: rgb(110,0,220);");
 
 

@@ -19,6 +19,7 @@ package network.aika.elements.typedef;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.activations.bsslots.RegisterInputSlot;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
@@ -26,6 +27,7 @@ import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fields.Field;
 import network.aika.fields.SumField;
 
 import java.lang.reflect.InvocationTargetException;
@@ -65,7 +67,11 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     private String debugStyle;
 
+    private RegisterInputSlot registerInputSlot = RegisterInputSlot.ON_LINKING;
+
     public FieldDefinition<Synapse, SumField> weight;
+
+    public FieldDefinition<Synapse, Field> initialCategorySynapseWeight;
 
     public SynapseTypeDefinition(String name, Class<? extends Synapse> clazz) {
         super(name, clazz);
@@ -198,6 +204,17 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     public String getDebugStyle() {
         return debugStyle;
+    }
+
+
+    public RegisterInputSlot getRegisterInputSlot() {
+        return registerInputSlot;
+    }
+
+    public SynapseTypeDefinition setRegisterInputSlot(RegisterInputSlot registerInputSlot) {
+        this.registerInputSlot = registerInputSlot;
+
+        return this;
     }
 
     public Synapse instantiate() {

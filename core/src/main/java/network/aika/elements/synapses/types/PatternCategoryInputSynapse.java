@@ -24,6 +24,7 @@ import network.aika.elements.links.types.PatternCategoryInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveCategoryInputSynapse;
+import network.aika.elements.synapses.Synapse;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -41,8 +42,10 @@ public class PatternCategoryInputSynapse
     private double initialCategorySynapseWeight;
 
     @Override
-    public void setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
+    public Synapse setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
         this.initialCategorySynapseWeight = initialCategorySynapseWeight;
+
+        return this;
     }
 
     @Override

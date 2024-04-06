@@ -18,6 +18,7 @@ package network.aika.elements.synapses;
 
 import network.aika.Model;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.activations.bsslots.RegisterInputSlot;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.slots.SynapseInputSlot;
 import network.aika.elements.synapses.slots.SynapseOutputSlot;
@@ -74,6 +75,9 @@ public abstract class ConjunctiveSynapse extends Synapse
     public void initBiasInput(Activation act) {
         linkAndConnect(synapseBias, act.getNet(synapseType.outputState()))
                 .setPropagateUpdates(false);
+
+        if(synapseType.getRegisterInputSlot() == RegisterInputSlot.ON_INIT)
+            act.registerInputSlot(this);
     }
 
     public Synapse setSynapseBias(double b) {
@@ -168,8 +172,8 @@ public abstract class ConjunctiveSynapse extends Synapse
     }
 
     public Synapse adjustBias(double inputValueTarget) {
-        if(weight.getValue() > 0.0)
-            synapseBias.receiveUpdate(null, -weight.getValue() * inputValueTarget);
+        if(getWeight().getValue() > 0.0)
+            synapseBias.receiveUpdate(null, -getWeight().getValue() * inputValueTarget);
 
         return this;
     }

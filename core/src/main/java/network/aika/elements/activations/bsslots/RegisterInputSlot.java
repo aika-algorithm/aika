@@ -14,36 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
-
-import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.neurons.Neuron;
+package network.aika.elements.activations.bsslots;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public interface CategoryInputSynapse {
-
-    default boolean isTrainingAllowed() {
-        return false;
-    }
-
-    CategoryNeuron getInput();
-
-    Neuron getOutput();
-
-    Synapse setInitialCategorySynapseWeight(double initialCategorySynapseWeight);
-
-    double getInitialInstanceWeight();
-
-    Synapse setWeight(double w);
-
-    Synapse adjustBias();
-
-    Synapse setPropagable(boolean p);
-
-    Synapse link(Neuron category, Neuron on);
+public enum RegisterInputSlot {
+    ON_INIT,
+    ON_LINKING
 }

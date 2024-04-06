@@ -24,6 +24,7 @@ import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.DisjunctiveSynapse;
+import network.aika.elements.synapses.Synapse;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -45,8 +46,10 @@ public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse implement
     }
 
     @Override
-    public void setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
+    public Synapse setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
         this.initialCategorySynapseWeight = initialCategorySynapseWeight;
+
+        return this;
     }
 
     @Override

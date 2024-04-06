@@ -33,10 +33,4 @@ import network.aika.elements.synapses.slots.SynapseSlot;
 public abstract class ConjunctiveCategoryInputSynapse extends PositiveFeedbackSynapse implements CategoryInputSynapse {
 
 
-    @Override
-    public void initBiasInput(Activation act) {
-        super.initBiasInput(act);
-
-        act.registerInputSlot(this);
-    }
 }

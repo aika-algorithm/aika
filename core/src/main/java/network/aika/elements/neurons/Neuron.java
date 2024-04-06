@@ -87,7 +87,7 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
 
     private Set<NeuronProvider> propagable = new HashSet<>();
 
-    private final HashMap<Long, PreActivation<A>> activations = new HashMap<>();
+    private final HashMap<Long, PreActivation> activations = new HashMap<>();
 
     private boolean isStale;
 
@@ -230,10 +230,10 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
                 Collections.emptyNavigableSet();
     }
 
-    public <R extends N> R instantiateTemplate() {
-        R n;
+    public Neuron instantiateTemplate() {
+        Neuron n;
         try {
-            n = (R) getClass()
+            n = getClass()
                     .getConstructor(Model.class, RefType.class)
                     .newInstance(getModel(), TEMPLATE);
         } catch (Exception e) {
@@ -263,13 +263,13 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
                 .link(this, cis.getInput());
     }
 
-    public N setInstantiable(boolean instantiable) {
+    public Neuron setInstantiable(boolean instantiable) {
         this.instantiable = instantiable;
 
-        return (N) this;
+        return this;
     }
 
-    public N setInstantiable(boolean instantiable, boolean includeSyns) {
+    public Neuron setInstantiable(boolean instantiable, boolean includeSyns) {
         if (includeSyns)
             getInputSynapses().forEach(s ->
                     s.setInstantiable(instantiable)
@@ -311,7 +311,7 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
     public CategoryInputSynapse makeAbstract() {
         CategoryNeuron category = createCategoryNeuron();
 
-        CategoryInputSynapse s = createCategoryInputSynapse()
+        Synapse s = createCategoryInputSynapse()
                 .link(category, this);
 
         s.setInitialCategorySynapseWeight(1.0);

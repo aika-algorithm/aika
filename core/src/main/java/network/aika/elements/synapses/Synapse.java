@@ -286,13 +286,14 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         if(templateSyn.relation != null)
             relation = templateSyn.relation.instantiate();
 
-        weight.setValue(
-                templateSyn.getInitialInstanceWeight()
-        );
+        getWeight()
+                .setValue(
+                        templateSyn.getInitialInstanceWeight()
+                );
     }
 
     public double getInitialInstanceWeight() {
-        return weight.getUpdatedValue();
+        return getWeight().getUpdatedValue();
     }
 
     public Synapse setInstantiable(boolean instantiable) {
@@ -351,21 +352,29 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
     }
 
     public Synapse setWeight(double w) {
-        weight.setValue(w);
+        getWeight().setValue(w);
 
         return this;
+    }
+
+    public Synapse setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Synapse setOptional(boolean optional) {
+        throw new UnsupportedOperationException();
     }
 
     public Synapse adjustBias() {
         return this;
     }
 
-    public SumField getWeight() {
-        return weight;
+    public Field getWeight() {
+        return getField(synapseType.weight);
     }
 
     public Field getWeightForAnnealing() {
-        return weight;
+        return getWeight();
     }
 
     public final boolean isTrainingAllowed() {
@@ -440,11 +449,11 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
     }
 
     public boolean isZero() {
-        return Utils.belowTolerance(TOLERANCE, weight.getValue());
+        return Utils.belowTolerance(TOLERANCE, getWeight().getValue());
     }
 
     public boolean isNegative() {
-        return weight.getUpdatedValue() < 0.0;
+        return getWeight().getUpdatedValue() < 0.0;
     }
 
     public SynapseTypeDefinition getSynapseType() {
@@ -466,7 +475,7 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         out.writeLong(input.getId());
         out.writeLong(output.getId());
 
-        weight.write(out);
+        getWeight().write(out);
         out.writeBoolean(instantiable);
 
         out.writeBoolean(relation != null);
@@ -488,7 +497,7 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         input = m.lookupNeuronProvider(in.readLong(), SYNAPSE_IN);
         output = m.lookupNeuronProvider(in.readLong(), SYNAPSE_OUT);
 
-        weight.readFields(in);
+        getWeight().readFields(in);
         instantiable = in.readBoolean();
 
         if(in.readBoolean())
