@@ -25,8 +25,12 @@ import network.aika.elements.typedef.LinkTypeDefinition;
 import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fields.IdentityFunction;
 import network.aika.fields.SumField;
 
+import static network.aika.fielddefs.Operators.invert;
+import static network.aika.fielddefs.Operators.threshold;
+import static network.aika.fields.ThresholdOperator.Type.ABOVE;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -63,6 +67,10 @@ public class NeuronDef {
         link = new LinkTypeDefinition(
                 "Link",
                 Link.class);
+
+        link.inputValue = new FieldDefinition(IdentityFunction.class, link, "input value");
+        link.inputIsFired = threshold(link, "inputIsFired", 0.0, ABOVE, link.inputValue);
+        link.negInputIsFired = invert(link,"!inputIsFired", link.inputIsFired);
 
         synapse = new SynapseTypeDefinition(
                 "Synapse",

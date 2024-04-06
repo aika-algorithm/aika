@@ -74,12 +74,6 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
 
     protected SynapseSlot synOutputSlot;
 
-    protected Field inputValue;
-    protected AbstractFunction inputIsFired;
-    protected AbstractFunction negInputIsFired;
-    protected Multiplication weightedInput;
-
-    protected SumField gradient;
 
     public Link(Synapse s, Activation input, Activation output) {
         this.synapse = s;
@@ -184,9 +178,6 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
 
     protected void initWeightInput() {
         initInputValue();
-
-        inputIsFired = threshold(this, "inputIsFired", 0.0, ABOVE, inputValue);
-        negInputIsFired = invert(this,"!inputIsFired", inputIsFired);
 
         initWeightedInput();
         initWeightedOutput();

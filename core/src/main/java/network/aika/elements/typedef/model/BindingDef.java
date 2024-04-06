@@ -36,6 +36,7 @@ import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.Field;
+import network.aika.fields.MaxField;
 
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
@@ -50,7 +51,7 @@ import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.Operators.scale;
-import static network.aika.fields.link.FieldLink.linkAndConnect;
+import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
@@ -289,6 +290,9 @@ public class BindingDef {
         )
                 .setInputDef(typeModel.inhibitoryDef.getInhibitoryActivation())
                 .setOutputDef(bindingActivation);
+
+        negativeFeedbackLink.inputValue = new FieldDefinition(MaxField.class, negativeFeedbackLink, "max-input-value", TOLERANCE);
+
 
         negativeFeedbackSynapse = new SynapseTypeDefinition(
                 "NegativeFeedbackSynapse",

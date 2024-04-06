@@ -19,6 +19,8 @@ package network.aika.elements.typedef;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fields.AbstractFunction;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -30,6 +32,13 @@ public class LinkTypeDefinition extends TypeDefinition<LinkTypeDefinition, Link>
 
     ActivationTypeDefinition inputDef;
     ActivationTypeDefinition outputDef;
+
+    public FieldDefinition inputValue;
+    public FieldDefinition inputIsFired;
+    public FieldDefinition negInputIsFired;
+    public FieldDefinition weightedInput;
+
+    public FieldDefinition gradient;
 
     public LinkTypeDefinition(String name, Class<? extends Link> clazz) {
         super(name, clazz);
