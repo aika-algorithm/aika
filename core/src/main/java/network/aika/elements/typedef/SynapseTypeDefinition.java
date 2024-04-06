@@ -69,6 +69,8 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     private RegisterInputSlot registerInputSlot = RegisterInputSlot.ON_LINKING;
 
+    private SynapseTypeDefinition categorySynapseType;
+
     public FieldDefinition<Synapse, SumField> weight;
 
     public FieldDefinition<Synapse, Field> initialCategorySynapseWeight;
@@ -213,6 +215,16 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     public SynapseTypeDefinition setRegisterInputSlot(RegisterInputSlot registerInputSlot) {
         this.registerInputSlot = registerInputSlot;
+
+        return this;
+    }
+
+    public SynapseTypeDefinition getCategorySynapseType() {
+        return categorySynapseType;
+    }
+
+    public SynapseTypeDefinition setCategorySynapse(SynapseTypeDefinition categorySynapseType) {
+        this.categorySynapseType = categorySynapseType;
 
         return this;
     }

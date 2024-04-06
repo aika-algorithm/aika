@@ -37,6 +37,8 @@ public class ConjunctiveDef {
     private SynapseSlotTypeDefinition conjunctiveSynapseInputSlot;
     private SynapseSlotTypeDefinition conjunctiveSynapseOutputSlot;
 
+    private SynapseSlotTypeDefinition annealingSynapseOutputSlot;
+
     private LinkTypeDefinition conjunctiveLink;
     private SynapseTypeDefinition conjunctiveSynapse;
 
@@ -66,6 +68,13 @@ public class ConjunctiveDef {
                 ConjunctiveSynapseSlot.class
         );
 
+        annealingSynapseOutputSlot = new SynapseSlotTypeDefinition(
+                "AnnealingSynapseOutputSlot",
+                ConjunctiveSynapseSlot.class
+        )
+                .addParent(conjunctiveSynapseOutputSlot);
+
+
         conjunctiveLink = new LinkTypeDefinition(
                 "InputObjectLink",
                 ConjunctiveLink.class);
@@ -91,6 +100,10 @@ public class ConjunctiveDef {
 
     public SynapseSlotTypeDefinition getConjunctiveSynapseOutputSlot() {
         return conjunctiveSynapseOutputSlot;
+    }
+
+    public SynapseSlotTypeDefinition getAnnealingSynapseOutputSlot() {
+        return annealingSynapseOutputSlot;
     }
 
     public LinkTypeDefinition getConjunctiveLink() {

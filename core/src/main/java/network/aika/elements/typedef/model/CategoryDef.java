@@ -1,16 +1,15 @@
 package network.aika.elements.typedef.model;
 
-import network.aika.elements.links.CategoryInputLink;
-import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.CategoryLink;
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.CategoryInputSynapse;
-import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 import network.aika.elements.typedef.LinkTypeDefinition;
+import network.aika.elements.typedef.SynapseSlotTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.Field;
-import network.aika.fields.SumField;
 
 import static network.aika.utils.Utils.TOLERANCE;
 
@@ -18,9 +17,14 @@ public class CategoryDef {
 
     private TypeModel typeModel;
 
+    private SynapseSlotTypeDefinition categoryInputAnnealingSynapseOutputSlot;
 
     private LinkTypeDefinition categoryInputLink;
     private SynapseTypeDefinition categoryInputSynapse;
+
+    private LinkTypeDefinition categoryLink;
+    private SynapseTypeDefinition categorySynapse;
+
 
     public CategoryDef(TypeModel typeModel) {
         this.typeModel = typeModel;
@@ -28,8 +32,14 @@ public class CategoryDef {
 
 
     public void init() {
+        categoryInputAnnealingSynapseOutputSlot = new SynapseSlotTypeDefinition(
+                "CategoryInputAnnealingSynapseOutputSlot",
+                ConjunctiveSynapseSlot.class
+        )
+                .addParent(typeModel.conjunctiveDef.getAnnealingSynapseOutputSlot());
+
         categoryInputLink = new LinkTypeDefinition(
-                "InputObjectLink",
+                "CategoryInputLink",
                 Link.class);
 
         categoryInputSynapse = new SynapseTypeDefinition(
@@ -43,10 +53,23 @@ public class CategoryDef {
                 "initialCategorySynapseWeight",
                 TOLERANCE
         );
+
+        categoryLink = new LinkTypeDefinition(
+                "CategoryLink",
+                CategoryLink.class);
+
+        categorySynapse = new SynapseTypeDefinition(
+                "CategorySynapse",
+                CategorySynapse.class
+        );
     }
 
     public TypeModel getTypeModel() {
         return typeModel;
+    }
+
+    public SynapseSlotTypeDefinition getCategoryInputAnnealingSynapseOutputSlot() {
+        return categoryInputAnnealingSynapseOutputSlot;
     }
 
     public LinkTypeDefinition getCategoryInputLink() {
@@ -55,5 +78,14 @@ public class CategoryDef {
 
     public SynapseTypeDefinition getCategoryInputSynapse() {
         return categoryInputSynapse;
+    }
+
+
+    public LinkTypeDefinition getCategoryLink() {
+        return categoryLink;
+    }
+
+    public SynapseTypeDefinition getCategorySynapse() {
+        return categorySynapse;
     }
 }

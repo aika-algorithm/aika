@@ -27,9 +27,11 @@ import network.aika.elements.activations.bsslots.RegisterInputSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
+import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.ActivationTypeDefinition;
 import network.aika.elements.typedef.LinkTypeDefinition;
+import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
@@ -168,6 +170,15 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
 
         s.createLinkFromTemplate(iAct, oAct, this);
     }
+
+    public CategorySynapse createCategorySynapse() {
+        SynapseTypeDefinition cst = synapse.getSynapseType().getCategorySynapseType();
+        if(cst == null)
+            return null;
+
+        return (CategorySynapse) cst.instantiate();
+    }
+
 
     public abstract void connectWeightUpdate();
 

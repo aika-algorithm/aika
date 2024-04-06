@@ -618,7 +618,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Activation)) return false;
-        Activation<?> that = (Activation<?>) o;
+        Activation that = (Activation) o;
         return id == that.id;
     }
 

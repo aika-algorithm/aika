@@ -16,19 +16,8 @@
  */
 package network.aika.elements.synapses.types;
 
-import network.aika.Model;
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.types.InhibitoryActivation;
-import network.aika.elements.links.types.InhibitoryCategoryInputLink;
-import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.DisjunctiveSynapse;
-import network.aika.elements.synapses.Synapse;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 
 /**
  * The Inhibitory Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
@@ -37,7 +26,6 @@ import java.io.IOException;
  */
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse implements CategoryInputSynapse<InhibitoryCategoryInputSynapse>
 {
-    private double initialCategorySynapseWeight;
 
     @Override
     public void link() {
@@ -45,34 +33,4 @@ public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse implement
         output.addInputSynapse(this);
     }
 
-    @Override
-    public Synapse setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
-        this.initialCategorySynapseWeight = initialCategorySynapseWeight;
-
-        return this;
-    }
-
-    @Override
-    public double getInitialInstanceWeight() {
-        return initialCategorySynapseWeight;
-    }
-
-    @Override
-    public InhibitoryCategoryInputSynapse setPropagable(boolean p) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        super.write(out);
-
-        out.writeDouble(initialCategorySynapseWeight);
-    }
-
-    @Override
-    public void readFields(DataInput in, Model m) throws IOException {
-        super.readFields(in, m);
-
-        initialCategorySynapseWeight = in.readDouble();
-    }
 }
