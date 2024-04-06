@@ -40,7 +40,8 @@ public class CategoryDef {
 
         categoryInputLink = new LinkTypeDefinition(
                 "CategoryInputLink",
-                Link.class);
+                Link.class
+        );
 
         categoryInputSynapse = new SynapseTypeDefinition(
                 "CategoryInputSynapse",

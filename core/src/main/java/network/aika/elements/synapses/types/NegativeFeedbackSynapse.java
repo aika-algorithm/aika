@@ -37,10 +37,10 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
  */
 public class NegativeFeedbackSynapse extends ConjunctiveSynapse
 {
-    Field negativeWeight;
+
 
     public NegativeFeedbackSynapse() {
-        negativeWeight = scale(this, "weight", -1, weight);
+
     }
 
 
@@ -50,28 +50,9 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse
     }
 
     @Override
-    public void initBiasInput(BindingActivation act) {
-        linkAndConnect(weight, act.getNet(synapseType.outputState()))
-                .setPropagateUpdates(false);
-    }
-
-    @Override
     public void checkWeight() {
         if(!isNegative())
             delete();
     }
 
-    @Override
-    public void write(DataOutput out) throws IOException {
-        super.write(out);
-
-        negativeWeight.write(out);
-    }
-
-    @Override
-    public void readFields(DataInput in, Model m) throws IOException {
-        super.readFields(in, m);
-
-        negativeWeight.readFields(in);
-    }
 }

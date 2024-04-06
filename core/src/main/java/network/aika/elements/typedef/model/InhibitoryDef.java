@@ -87,7 +87,10 @@ public class InhibitoryDef {
 
         inhibitoryLink = new LinkTypeDefinition(
                 "InhibitoryLink",
-                DisjunctiveLink.class);
+                DisjunctiveLink.class
+        )
+                .setInputDef(typeModel.bindingDef.getBindingActivation())
+                .setOutputDef(inhibitoryActivation);
 
         inhibitorySynapse = new SynapseTypeDefinition(
                 "InhibitorySynapse",

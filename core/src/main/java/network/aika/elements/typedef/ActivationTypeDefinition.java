@@ -19,7 +19,9 @@ package network.aika.elements.typedef;
 import network.aika.Document;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.StateType;
 import network.aika.elements.neurons.Neuron;
+import network.aika.fielddefs.FieldDefinition;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -71,6 +73,10 @@ public class ActivationTypeDefinition extends TypeDefinition<ActivationTypeDefin
 
     public boolean isNextRound() {
         return isNextRound;
+    }
+
+    public FieldDefinition getNet(StateType stateType) {
+        return stateTypes.get(stateType.ordinal()).net;
     }
 
     public Activation instantiate(int id, Document doc, Neuron n) {

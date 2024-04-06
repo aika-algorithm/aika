@@ -23,6 +23,7 @@ import network.aika.elements.links.ConjunctiveCategoryInputLink;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.elements.links.types.NegativeFeedbackLink;
+import network.aika.elements.links.types.RelationInputLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.CategorySynapse;
@@ -33,6 +34,8 @@ import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
 import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.elements.typedef.*;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fields.Field;
 
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
@@ -45,6 +48,9 @@ import static network.aika.enums.Transition.*;
 import static network.aika.enums.Trigger.*;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
+import static network.aika.fielddefs.FieldLinkDefinition.link;
+import static network.aika.fielddefs.Operators.scale;
+import static network.aika.fields.link.FieldLink.linkAndConnect;
 
 /**
  *
@@ -87,6 +93,8 @@ public class BindingDef {
     private SynapseTypeDefinition bindingCategorySynapse;
 
 
+    FieldDefinition<Synapse, Field> negativeWeight;
+
     public BindingDef(TypeModel typeModel) {
         this.typeModel = typeModel;
     }
@@ -122,7 +130,8 @@ public class BindingDef {
 
         bindingCategoryInputLink = new LinkTypeDefinition(
                 "BindingCategoryInputLink",
-                ConjunctiveLink.class);
+                ConjunctiveLink.class
+        );
 
         bindingCategoryInputSynapse = new SynapseTypeDefinition(
                 "BindingCategoryInputSynapse",
@@ -180,7 +189,10 @@ public class BindingDef {
 
         inputObjectLink = new LinkTypeDefinition(
                 "InputObjectLink",
-                ConjunctiveLink.class)
+                ConjunctiveLink.class
+        )
+                .setInputDef(typeModel.patternDef.getPatternActivation())
+                .setOutputDef(bindingActivation)
                 .addParent(typeModel.conjunctiveDef.getConjunctiveLink());
 
         inputObjectSynapse = new SynapseTypeDefinition(
@@ -202,7 +214,10 @@ public class BindingDef {
 
         sameObjectLink = new LinkTypeDefinition(
                 "SameObjectLink",
-                ConjunctiveLink.class);
+                ConjunctiveLink.class
+        )
+                .setInputDef(bindingActivation)
+                .setOutputDef(bindingActivation);
 
         sameObjectSynapse = new SynapseTypeDefinition(
                 "SameObjectSynapse",
@@ -222,7 +237,9 @@ public class BindingDef {
 
         innerPositiveFeedbackLink = new LinkTypeDefinition(
                 "InnerPositiveFeedbackLink",
-                PositiveFeedbackLink.class);
+                PositiveFeedbackLink.class)
+                .setInputDef(typeModel.patternDef.getPatternActivation())
+                .setOutputDef(typeModel.bindingDef.getBindingActivation());
 
         innerPositiveFeedbackSynapse = new SynapseTypeDefinition(
                 "InnerPositiveFeedbackSynapse",
@@ -244,7 +261,10 @@ public class BindingDef {
 
         outerPositiveFeedbackLink = new LinkTypeDefinition(
                 "OuterPositiveFeedbackLink",
-                PositiveFeedbackLink.class);
+                PositiveFeedbackLink.class
+        )
+                .setInputDef(typeModel.patternDef.getPatternActivation())
+                .setOutputDef(typeModel.bindingDef.getBindingActivation());
 
         outerPositiveFeedbackSynapse = new SynapseTypeDefinition(
                 "OuterPositiveFeedbackSynapse",
@@ -265,7 +285,10 @@ public class BindingDef {
 
         negativeFeedbackLink = new LinkTypeDefinition(
                 "NegativeFeedbackLink",
-                NegativeFeedbackLink.class);
+                NegativeFeedbackLink.class
+        )
+                .setInputDef(typeModel.inhibitoryDef.getInhibitoryActivation())
+                .setOutputDef(bindingActivation);
 
         negativeFeedbackSynapse = new SynapseTypeDefinition(
                 "NegativeFeedbackSynapse",
@@ -285,10 +308,16 @@ public class BindingDef {
                 .setRegisterInputSlot(ON_INIT)
                 .setDebugStyle("fill-color: rgb(185,0,0); arrow-shape: diamond;");
 
+        negativeWeight = scale(negativeFeedbackSynapse, "weight", -1, typeModel.neuron.getSynapse().weight);
+        link(typeModel.neuron.getSynapse().weight, negativeFeedbackLink.getOutputDef().getNet(negativeFeedbackSynapse.outputState()))
+                .setPropagateUpdates(false);
+
 
         relationInputLink = new LinkTypeDefinition(
                 "RelationInputLink",
-                NegativeFeedbackLink.class);
+                RelationInputLink.class)
+                .setInputDef(bindingActivation)
+                .setOutputDef(bindingActivation);
 
         relationInputSynapse = new SynapseTypeDefinition(
                 "RelationInputSynapse",
@@ -307,7 +336,9 @@ public class BindingDef {
 
         bindingCategoryLink = new LinkTypeDefinition(
                 "BindingCategoryLink",
-                CategoryLink.class);
+                CategoryLink.class)
+                .setInputDef(typeModel.bindingDef.getBindingCategoryActivation())
+                .setOutputDef(typeModel.bindingDef.getBindingActivation());
 
         bindingCategorySynapse = new SynapseTypeDefinition(
                 "BindingCategorySynapse",

@@ -113,7 +113,10 @@ public class PatternDef {
 
         patternLink = new LinkTypeDefinition(
                 "PatternLink",
-                ConjunctiveLink.class);
+                ConjunctiveLink.class
+        )
+                .setInputDef(typeModel.bindingDef.getBindingActivation())
+                .setOutputDef(typeModel.patternDef.patternActivation);
 
         patternSynapse = new SynapseTypeDefinition(
                 "PatternSynapse",
@@ -133,7 +136,10 @@ public class PatternDef {
 
         patternCategoryInputLink = new LinkTypeDefinition(
                 "PatternCategoryInputLink",
-                ConjunctiveCategoryInputLink.class);
+                ConjunctiveCategoryInputLink.class
+        )
+                .setInputDef(patternCategoryActivation)
+                .setOutputDef(patternActivation);
 
         patternCategoryInputSynapse = new SynapseTypeDefinition(
                 "PatternCategoryInputSynapse",
@@ -155,7 +161,10 @@ public class PatternDef {
 
         patternCategoryLink = new LinkTypeDefinition(
                 "PatternCategoryLink",
-                CategoryLink.class);
+                CategoryLink.class
+        )
+                .setInputDef(patternActivation)
+                .setOutputDef(patternCategoryActivation);
 
         patternCategorySynapse = new SynapseTypeDefinition(
                 "PatternCategorySynapse",
