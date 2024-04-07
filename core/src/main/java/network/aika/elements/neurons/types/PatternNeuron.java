@@ -42,33 +42,19 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  */
 public class PatternNeuron extends ConjunctiveNeuron {
 
-    private AverageCoveredSpace averageCoveredSpace;
 
-    private NeuronStatistic statistic = new NeuronStatistic(
-            this,
-            "statistic",
-            getConfig().getAlpha(),
-            TOLERANCE
-    );
 
     public PatternNeuron(NeuronProvider np) {
         super(np);
 
-        init();
     }
 
     public PatternNeuron(Model m, RefType rt) {
         super(m, rt);
 
-        init();
     }
 
-    public void init() {
-        FieldLink.linkAndConnect(
-                getTemplate().averageCoveredSpace,
-                statistic
-        );
-    }
+
 
     public static PatternNeuron create(Model m, String label) {
         return new PatternNeuron(m, NEURON_EXTERNAL)
@@ -91,11 +77,6 @@ public class PatternNeuron extends ConjunctiveNeuron {
         return statistic;
     }
 
-    public AverageCoveredSpace getAverageCoveredSpace() {
-        if(averageCoveredSpace == null)
-            averageCoveredSpace = new AverageCoveredSpace(this, "avgCoveredSpace");
-        return averageCoveredSpace;
-    }
 
     public static String getCategoryLabel(String placeholder) {
         return placeholder + CATEGORY_LABEL;
@@ -132,26 +113,5 @@ public class PatternNeuron extends ConjunctiveNeuron {
     public void setFrequency(double f) {
         statistic.setFrequency(f);
         setModified();
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        super.write(out);
-
-        statistic.write(out);
-
-        out.writeBoolean(averageCoveredSpace != null);
-        if(averageCoveredSpace != null)
-            averageCoveredSpace.write(out);
-    }
-
-    @Override
-    public void readFields(DataInput in, Model m) throws Exception {
-        super.readFields(in, m);
-
-        statistic.readFields(in);
-
-        if(in.readBoolean())
-            getAverageCoveredSpace().readFields(in);
     }
 }

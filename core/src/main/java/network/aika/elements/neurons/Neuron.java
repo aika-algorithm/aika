@@ -254,7 +254,7 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
             setTargetNet(ip.targetNet);
         }
 
-        CategoryInputSynapse cis = templateN.getCategoryInputSynapse();
+        Synapse cis = templateN.getCategoryInputSynapse();
         if(cis == null)
             throw new MissingInputCategoryNeuron(templateN);
 
@@ -284,11 +284,11 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
 
     public Stream<Activation> getInstanceActivations(Document doc) {
         assert isAbstract();
-        CategoryInputSynapse cis = getCategoryInputSynapse();
+        Synapse cis = getCategoryInputSynapse();
         if(cis == null)
             return Stream.empty();
 
-        CategoryNeuron cn = cis.getInput();
+        Neuron cn = cis.getInput();
         if(cn == null)
             return Stream.empty();
 
@@ -306,9 +306,9 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
 
     public abstract CategoryNeuron createCategoryNeuron();
 
-    public abstract CategoryInputSynapse createCategoryInputSynapse();
+    public abstract Synapse createCategoryInputSynapse();
 
-    public CategoryInputSynapse makeAbstract() {
+    public Synapse makeAbstract() {
         CategoryNeuron category = createCategoryNeuron();
 
         Synapse s = createCategoryInputSynapse()
@@ -320,7 +320,7 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
         return s;
     }
 
-    public abstract CategoryInputSynapse getCategoryInputSynapse();
+    public abstract Synapse getCategoryInputSynapse();
 
     public abstract CategorySynapse getCategoryOutputSynapse();
 
@@ -339,7 +339,7 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
         return neuronType.getActivationFunction();
     }
 
-    public void count(A act) {
+    public void count(Activation act) {
     }
 
     protected Field initBias() {
@@ -614,28 +614,28 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
         return label;
     }
 
-    public <R extends N> R  setLabel(String label) {
+    public Neuron  setLabel(String label) {
         this.label = label;
-        return (R) this;
+        return this;
     }
 
-    public <R extends N> R setBias(double bias) {
+    public Neuron setBias(double bias) {
         getBias().setValue(bias);
-        return (R) this;
+        return this;
     }
 
-    public <R extends N> R  setTargetNet(double targetNet) {
+    public Neuron  setTargetNet(double targetNet) {
         if(initParams == null) {
             initParams = new InitParams();
         }
         initParams.targetNet = targetNet;
 
-        return (R) this;
+        return this;
     }
 
-    public <R extends N> R setPersistent(boolean persistent) {
+    public Neuron setPersistent(boolean persistent) {
         getProvider().setPersistent(persistent);
-        return (R) this;
+        return this;
     }
 
     public void verifyNeuronExistsOnlyOnce() {

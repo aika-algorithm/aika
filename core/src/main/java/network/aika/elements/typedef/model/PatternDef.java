@@ -19,17 +19,19 @@ package network.aika.elements.typedef.model;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.CategoryLink;
-import network.aika.elements.links.ConjunctiveCategoryInputLink;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.ActivationTypeDefinition;
 import network.aika.elements.typedef.LinkTypeDefinition;
 import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.statistic.AverageCoveredSpace;
+import network.aika.statistic.NeuronStatistic;
 
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
@@ -44,6 +46,8 @@ import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
 import static network.aika.enums.Trigger.PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
+import static network.aika.fielddefs.FieldLinkDefinition.link;
+import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
@@ -68,6 +72,11 @@ public class PatternDef {
     private SynapseTypeDefinition patternCategorySynapse;
 
 
+    FieldDefinition<Neuron, AverageCoveredSpace> averageCoveredSpace;
+
+    FieldDefinition<Neuron, NeuronStatistic> neuronStatistic;
+
+
     public PatternDef(TypeModel typeModel) {
         this.typeModel = typeModel;
     }
@@ -90,6 +99,22 @@ public class PatternDef {
                 .setActivationFunction(RECTIFIED_HYPERBOLIC_TANGENT)
                 .setBindingSignalSlots(SINGLE_SAME, MULTI_INPUT)
                 .setDebugStyle("fill-color: rgb(224, 34, 245);");
+
+
+        averageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, patternNeuron, "avgCoveredSpace");
+
+        /*
+            private NeuronStatistic statistic = new NeuronStatistic(
+            this,
+            "statistic",
+            getConfig().getAlpha(),
+            TOLERANCE
+    );
+        */
+
+        neuronStatistic = new FieldDefinition(NeuronStatistic.class, patternNeuron, "statistic", TOLERANCE);
+
+        link(averageCoveredSpace, neuronStatistic);
 
 
         patternCategoryActivation = new ActivationTypeDefinition(
@@ -133,32 +158,6 @@ public class PatternDef {
                 .setStoredAt(OUTPUT)
                 .setDebugStyle("fill-color: rgb(224, 34, 245);");
 
-
-        patternCategoryInputLink = new LinkTypeDefinition(
-                "PatternCategoryInputLink",
-                ConjunctiveCategoryInputLink.class
-        )
-                .setInputDef(patternCategoryActivation)
-                .setOutputDef(patternActivation);
-
-        patternCategoryInputSynapse = new SynapseTypeDefinition(
-                "PatternCategoryInputSynapse",
-                ConjunctiveSynapse.class
-        )
-                .setLinkType(patternCategoryInputLink)
-                .setInputSlotType(typeModel.conjunctiveDef.getConjunctiveSynapseInputSlot())
-                .setOutputSlotType(typeModel.categoryDef.getCategoryInputAnnealingSynapseOutputSlot())
-                .setInputNeuronType(CATEGORY)
-                .setOutputNeuronType(PATTERN)
-                .setTransition(SAME_SAME)
-                .setRequired(SAME_SAME)
-                .setOutputState(PRE_FEEDBACK)
-                .setTrigger(FIRED_PRE_FEEDBACK)
-                .setStoredAt(OUTPUT)
-                .setTrainingAllowed(false)
-                .setRegisterInputSlot(ON_INIT)
-                .setDebugStyle("fill-color: rgb(110,200,220);");
-
         patternCategoryLink = new LinkTypeDefinition(
                 "PatternCategoryLink",
                 CategoryLink.class
@@ -180,6 +179,33 @@ public class PatternDef {
                 .setTrigger(FIRED_PRE_FEEDBACK)
                 .setStoredAt(INPUT)
                 .setDebugStyle("fill-color: rgb(100,0,200);");
+
+
+        patternCategoryInputLink = new LinkTypeDefinition(
+                "PatternCategoryInputLink",
+                ConjunctiveLink.class
+        )
+                .setInputDef(patternCategoryActivation)
+                .setOutputDef(patternActivation);
+
+        patternCategoryInputSynapse = new SynapseTypeDefinition(
+                "PatternCategoryInputSynapse",
+                ConjunctiveSynapse.class
+        )
+                .setLinkType(patternCategoryInputLink)
+                .setInputSlotType(typeModel.conjunctiveDef.getConjunctiveSynapseInputSlot())
+                .setOutputSlotType(typeModel.categoryDef.getCategoryInputAnnealingSynapseOutputSlot())
+                .setInputNeuronType(CATEGORY)
+                .setOutputNeuronType(PATTERN)
+                .setTransition(SAME_SAME)
+                .setRequired(SAME_SAME)
+                .setOutputState(PRE_FEEDBACK)
+                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setStoredAt(OUTPUT)
+                .setTrainingAllowed(false)
+                .setRegisterInputSlot(ON_INIT)
+                .setInstanceSynapseType(patternCategorySynapse)
+                .setDebugStyle("fill-color: rgb(110,200,220);");
     }
 
 

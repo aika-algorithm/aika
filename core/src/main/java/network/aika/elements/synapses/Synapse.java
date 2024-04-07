@@ -58,7 +58,6 @@ import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_IN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_OUT;
-import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -264,11 +263,11 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         if(s != null)
             return s;
 
-        try {
-            s = getClass().getConstructor().newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        SynapseTypeDefinition std = synapseType.getInstanceSynapseType() != null ?
+                synapseType.getInstanceSynapseType() :
+                synapseType;
+
+        s = std.instantiate();
 
         input.setModified();
         output.setModified();

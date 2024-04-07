@@ -18,12 +18,7 @@ package network.aika.elements.links.types;
 
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
-import network.aika.elements.links.CategoryInputLink;
-import network.aika.elements.links.DisjunctiveLink;
-import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
-import network.aika.fields.Field;
 
 import static network.aika.elements.activations.types.InhibitoryActivation.crossConnectFields;
 
@@ -31,7 +26,7 @@ import static network.aika.elements.activations.types.InhibitoryActivation.cross
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCategoryInputSynapse, CategoryActivation, InhibitoryActivation> implements CategoryInputLink {
+public class InhibitoryCategoryInputLink extends DisjunctiveLink<> implements CategoryInputLink {
 
     public InhibitoryCategoryInputLink(InhibitoryCategoryInputSynapse s, CategoryActivation input, InhibitoryActivation output) {
         super(s, input, output);
@@ -40,15 +35,5 @@ public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCateg
                 .forEach(act ->
                         crossConnectFields((InhibitoryActivation) act, output)
                 );
-    }
-
-    @Override
-    public CategorySynapse createCategorySynapse() {
-        return new InhibitoryCategorySynapse();
-    }
-
-    @Override
-    public void instantiateTemplate(CategoryActivation iAct, InhibitoryActivation oAct) {
-        instantiateTemplate(iAct, oAct, this);
     }
 }

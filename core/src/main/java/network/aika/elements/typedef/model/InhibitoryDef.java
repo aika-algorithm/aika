@@ -128,28 +128,6 @@ public class InhibitoryDef {
                 .setDebugStyle("fill-color: rgb(70,70,210);");
 
 
-        inhibitoryCategoryInputLink = new LinkTypeDefinition(
-                "InhibitoryCategoryInputLink",
-                ConjunctiveCategoryInputLink.class);
-
-        inhibitoryCategoryInputSynapse = new SynapseTypeDefinition(
-                "InhibitoryCategoryInputSynapse",
-                Synapse.class
-        )
-                .setLinkType(inhibitoryCategoryInputLink)
-                .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
-                .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
-                .setInputNeuronType(CATEGORY)
-                .setOutputNeuronType(BINDING)
-                .setTransition(INPUT_INPUT)
-                .setRequired(INPUT_INPUT)
-                .setOutputState(PRE_FEEDBACK)
-                .setTrigger(FIRED_PRE_FEEDBACK)
-                .setStoredAt(OUTPUT)
-                .setTrainingAllowed(false)
-                .setDebugStyle("fill-color: rgb(110,200,220); ");
-
-
         inhibitoryCategoryLink = new LinkTypeDefinition(
                 "InhibitoryCategoryLink",
                 CategoryLink.class);
@@ -168,6 +146,29 @@ public class InhibitoryDef {
                 .setTrigger(NOT_FIRED)
                 .setStoredAt(INPUT)
                 .setDebugStyle("fill-color: rgb(110,0,220);");
+
+
+        inhibitoryCategoryInputLink = new LinkTypeDefinition(
+                "InhibitoryCategoryInputLink",
+                DisjunctiveLink.class);
+
+        inhibitoryCategoryInputSynapse = new SynapseTypeDefinition(
+                "InhibitoryCategoryInputSynapse",
+                Synapse.class
+        )
+                .setLinkType(inhibitoryCategoryInputLink)
+                .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
+                .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
+                .setInputNeuronType(CATEGORY)
+                .setOutputNeuronType(BINDING)
+                .setTransition(INPUT_INPUT)
+                .setRequired(INPUT_INPUT)
+                .setOutputState(PRE_FEEDBACK)
+                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setStoredAt(OUTPUT)
+                .setTrainingAllowed(false)
+                .setInstanceSynapseType(inhibitoryCategorySynapse)
+                .setDebugStyle("fill-color: rgb(110,200,220); ");
     }
 
 

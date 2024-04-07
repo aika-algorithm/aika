@@ -17,11 +17,8 @@
 package network.aika.elements.typedef;
 
 import network.aika.elements.NeuronType;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.RegisterInputSlot;
-import network.aika.elements.links.Link;
-import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
@@ -31,9 +28,6 @@ import network.aika.fields.Field;
 import network.aika.fields.SumField;
 
 import java.lang.reflect.InvocationTargetException;
-
-import static network.aika.queue.Phase.TRAINING;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
@@ -69,7 +63,7 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     private RegisterInputSlot registerInputSlot = RegisterInputSlot.ON_LINKING;
 
-    private SynapseTypeDefinition categorySynapseType;
+    private SynapseTypeDefinition instanceSynapseType;
 
     public FieldDefinition<Synapse, SumField> weight;
 
@@ -219,12 +213,12 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
         return this;
     }
 
-    public SynapseTypeDefinition getCategorySynapseType() {
-        return categorySynapseType;
+    public SynapseTypeDefinition getInstanceSynapseType() {
+        return instanceSynapseType;
     }
 
-    public SynapseTypeDefinition setCategorySynapse(SynapseTypeDefinition categorySynapseType) {
-        this.categorySynapseType = categorySynapseType;
+    public SynapseTypeDefinition setInstanceSynapseType(SynapseTypeDefinition instanceSynapseType) {
+        this.instanceSynapseType = instanceSynapseType;
 
         return this;
     }

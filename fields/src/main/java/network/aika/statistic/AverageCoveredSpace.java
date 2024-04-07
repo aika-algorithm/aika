@@ -18,6 +18,7 @@ package network.aika.statistic;
 
 
 import network.aika.Range;
+import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
 import network.aika.fields.FieldOutputImpl;
 import network.aika.utils.FieldWritable;
@@ -32,7 +33,7 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public class AverageCoveredSpace extends FieldOutputImpl implements FieldWritable {
+public class AverageCoveredSpace extends Field implements FieldWritable {
 
     private long n;
     private long coveredSpace;
@@ -57,7 +58,7 @@ public class AverageCoveredSpace extends FieldOutputImpl implements FieldWritabl
     }
 
     @Override
-    public void readFields(DataInput in) throws Exception {
+    public void readFields(DataInput in) throws IOException {
         n = in.readLong();
         coveredSpace = in.readLong();
     }

@@ -153,6 +153,12 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
         if(!synapse.isInstantiable())
             return;
 
+        /* TODO: check if necessary
+        Link l = iAct.getInputLink(oAct, getSynapse().getSynapseId());
+        if(l != null)
+            return;
+         */
+
         Synapse s = synapse.instantiateTemplate(
                 iAct.getNeuron(),
                 oAct.getNeuron()
@@ -164,15 +170,6 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
 
         s.createLinkFromTemplate(iAct, oAct, this);
     }
-
-    public CategorySynapse createCategorySynapse() {
-        SynapseTypeDefinition cst = synapse.getSynapseType().getCategorySynapseType();
-        if(cst == null)
-            return null;
-
-        return (CategorySynapse) cst.instantiate();
-    }
-
 
     public abstract void connectWeightUpdate();
 

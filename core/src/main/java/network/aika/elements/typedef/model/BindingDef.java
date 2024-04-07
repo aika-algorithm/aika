@@ -129,28 +129,6 @@ public class BindingDef {
         )
                 .addParent(typeModel.conjunctiveDef.getAnnealingSynapseOutputSlot());
 
-        bindingCategoryInputLink = new LinkTypeDefinition(
-                "BindingCategoryInputLink",
-                ConjunctiveLink.class
-        );
-
-        bindingCategoryInputSynapse = new SynapseTypeDefinition(
-                "BindingCategoryInputSynapse",
-                ConjunctiveSynapse.class
-        )
-                .setLinkType(bindingCategoryInputLink)
-                .setInputSlotType(typeModel.conjunctiveDef.getConjunctiveSynapseInputSlot())
-                .setOutputSlotType(typeModel.categoryDef.getCategoryInputAnnealingSynapseOutputSlot())
-                .setInputNeuronType(CATEGORY)
-                .setOutputNeuronType(BINDING)
-                .setTransition(INPUT_INPUT, SAME_SAME)
-                .setRequired(INPUT_INPUT)
-                .setOutputState(PRE_FEEDBACK)
-                .setTrigger(FIRED_PRE_FEEDBACK)
-                .setStoredAt(OUTPUT)
-                .setTrainingAllowed(false)
-                .setDebugStyle("fill-color: rgb(110,200,220);");
-
         bindingCategoryActivation = new ActivationTypeDefinition(
                 "BindingCategoryActivation",
                 CategoryActivation.class
@@ -357,8 +335,32 @@ public class BindingDef {
                 .setRequired(INPUT_INPUT)
                 .setTrigger(FIRED_PRE_FEEDBACK)
                 .setStoredAt(INPUT)
-                .setRegisterInputSlot(ON_INIT)
                 .setDebugStyle("fill-color: rgb(110,0,220);");
+
+
+        bindingCategoryInputLink = new LinkTypeDefinition(
+                "BindingCategoryInputLink",
+                ConjunctiveLink.class
+        );
+
+        bindingCategoryInputSynapse = new SynapseTypeDefinition(
+                "BindingCategoryInputSynapse",
+                ConjunctiveSynapse.class
+        )
+                .setLinkType(bindingCategoryInputLink)
+                .setInputSlotType(typeModel.conjunctiveDef.getConjunctiveSynapseInputSlot())
+                .setOutputSlotType(typeModel.categoryDef.getCategoryInputAnnealingSynapseOutputSlot())
+                .setInputNeuronType(CATEGORY)
+                .setOutputNeuronType(BINDING)
+                .setTransition(INPUT_INPUT, SAME_SAME)
+                .setRequired(INPUT_INPUT)
+                .setOutputState(PRE_FEEDBACK)
+                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setStoredAt(OUTPUT)
+                .setTrainingAllowed(false)
+                .setRegisterInputSlot(ON_INIT)
+                .setInstanceSynapseType(bindingCategorySynapse)
+                .setDebugStyle("fill-color: rgb(110,200,220);");
     }
 
     public ActivationTypeDefinition getLatentRelationActivation() {

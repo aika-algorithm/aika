@@ -496,7 +496,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     }
 
     public Stream<Activation> getTemplateInstances() {
-        CategoryInputLink cil = getActiveCategoryInputLink();
+        Link cil = getActiveCategoryInputLink();
         if(cil == null || cil.getInput() == null)
             return Stream.empty();
 
@@ -509,7 +509,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
                 isFired(INNER_FEEDBACK);
     }
 
-    public abstract CategoryInputLink getActiveCategoryInputLink();
+    public abstract Link getActiveCategoryInputLink();
 
     public Activation resolveAbstractInputActivation() {
         return isInstantiable() ?
@@ -518,7 +518,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     }
 
     public Activation getActiveTemplateInstance() {
-        CategoryInputLink l = getActiveCategoryInputLink();
+        Link l = getActiveCategoryInputLink();
         return l != null && l.getInput() != null ?
                 l.getInput().getActiveTemplateInstance() :
                 null;
@@ -528,7 +528,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         return neuron.isInstantiable() && neuron.isAbstract();
     }
 
-    public Activation<N> instantiateTemplateNode() {
+    public Activation instantiateTemplateNode() {
         if(!neuron.isInstantiable())
             return null;
 
@@ -567,22 +567,20 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     }
 
     private void linkTemplateAndInstance(Activation ti) {
-        CategoryInputLink cl = getActiveCategoryInputLink();
+        Link cl = getActiveCategoryInputLink();
         if(cl == null)
             cl = createCategoryInputLink();
 
-        cl.instantiateTemplate(cl.getInput(), ti, (Link) cl);
+        cl.instantiateTemplate(cl.getInput(), ti);
     }
 
-    public CategoryInputLink createCategoryInputLink() {
-        CategoryInputSynapse cis = getNeuron().getCategoryInputSynapse();
+    public Link createCategoryInputLink() {
+        Synapse cis = getNeuron().getCategoryInputSynapse();
         if(cis == null)
             return null;
 
         Activation catAct = cis.getInput().createActivation(doc);
-
-        Synapse s = ((Synapse)cis);
-        return (CategoryInputLink) s.createAndInitLink(catAct, this);
+        return cis.createAndInitLink(catAct, this);
     }
 
     public void instantiateTemplateEdges(Activation instanceAct) {
