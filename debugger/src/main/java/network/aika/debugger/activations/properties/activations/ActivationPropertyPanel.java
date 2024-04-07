@@ -81,8 +81,8 @@ public class ActivationPropertyPanel<E extends Activation> extends AbstractPrope
         addField(act.getUpdateValue());
         addField(act.getNegUpdateValue());
 
-        if(act.getTemplate() != null)
-            addConstant("Template: ", getShortString(act.getTemplate()));
+        if(act.getTemplateNeuron() != null)
+            addConstant("Template: ", act.getTemplateNeuron().toKeyString());
 
         Activation ati = act.getActiveTemplateInstance();
         if(ati != null)
