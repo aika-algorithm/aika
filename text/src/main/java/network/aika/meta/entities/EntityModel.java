@@ -127,7 +127,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 .setLabel(getAbstractLabel(PATTERN, label))
                 .setTargetNet(ENTITY_NET_TARGET)
                 .setBias(ENTITY_NET_TARGET)
-                .setPersistent(true);
+                .setPersistent(true)
+                .setTypeDescription("Abstract Entity Pattern Neuron");
 
         entityPattern.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(entityPattern.getType()))
@@ -148,7 +149,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 10.0,
                 BINDING_NET_TARGET,
                 true
-        );
+        ).setTypeDescription("Abstract Phrase -> Entity BN");
 
         entityBN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(entityBN.getType()))
@@ -165,7 +166,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         inhibitoryN = new InhibitoryNeuron(getModel(), TEMPLATE_MODEL)
                 .setLabel(getAbstractLabel(INHIBITORY, label))
-                .setPersistent(true);
+                .setPersistent(true)
+                .setTypeDescription("Abstract Phrase -> Entity InhibN");
 
         inhibitoryN.makeAbstract()
                 .setWeight(1.0);
@@ -180,7 +182,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 getModel(),
                 "Topic (Entity)",
                 BINDING_NET_TARGET
-        );
+        ).setTypeDescription("Abstract Topic -> Entity BN");
 
         topicBN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()))

@@ -143,7 +143,8 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 .setLabel("Abstract Topic")
                 .setTargetNet(TOPIC_NET_TARGET)
                 .setBias(TOPIC_NET_TARGET)
-                .setPersistent(true);
+                .setPersistent(true)
+                .setTypeDescription("Abstract Topic PN");
 
         topicPatternN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(topicPatternN.getType()))
@@ -154,7 +155,8 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 model,
                 "Abstract Topic",
                 BINDING_NET_TARGET
-        );
+        )
+                .setTypeDescription("Abstract Entity -> Topic BN");
 
         topicBN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()))
@@ -171,7 +173,8 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
         inhibitoryN = new InhibitoryNeuron(getModel(), TEMPLATE_MODEL)
                 .setLabel(getAbstractLabel(INHIBITORY, label))
-                .setPersistent(true);
+                .setPersistent(true)
+                .setTypeDescription("Abstract Entity -> Topic InhibN");
 
         inhibitoryN.makeAbstract()
                 .setWeight(1.0);

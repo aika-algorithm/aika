@@ -37,6 +37,9 @@ public class NeuronPropertyPanel<E extends Neuron> extends AbstractPropertyPanel
         addConstant("Type: ", "" + n.getType());
         addConstant("Label: ", n.getLabel());
 
+        if(n.getTypeDescription() != null)
+            addConstant("Type-Description: ", n.getTypeDescription());
+
         n.getBindingSignalSlots().forEach(bsSlot ->
                 addConstant("BS-Slot-Type: ", "" + bsSlot)
         );

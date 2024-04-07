@@ -75,6 +75,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     private String label;
 
+    private String typeDescription;
+
     private Writable customData;
 
     protected Field bias = initBias();
@@ -429,6 +431,10 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         if(label != null)
             out.writeUTF(label);
 
+        out.writeBoolean(typeDescription != null);
+        if(typeDescription != null)
+            out.writeUTF(typeDescription);
+
         bias.write(out);
 
         for (Synapse s : getProvider().getInputSynapsesStoredAtOutputSide()) {
@@ -475,6 +481,9 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     public void readFields(DataInput in, Model m) throws Exception {
         if(in.readBoolean())
             label = in.readUTF();
+
+        if(in.readBoolean())
+            typeDescription = in.readUTF();
 
         bias.readFields(in);
 
@@ -586,6 +595,16 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     public String getLabel() {
         return label;
+    }
+
+    public String getTypeDescription() {
+        return typeDescription;
+    }
+
+    public <R extends N> R setTypeDescription(String typeDescription) {
+        this.typeDescription = typeDescription;
+
+        return (R) this;
     }
 
     public <R extends N> R  setLabel(String label) {

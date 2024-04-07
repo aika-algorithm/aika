@@ -72,7 +72,8 @@ public class PhraseModel extends SequenceModel {
                 .setLabel("Upper Case")
                 .setPersistent(true);
 
-        entityBN = addBindingNeuron(model, "Entity (Phrase)", 2.5);
+        entityBN = addBindingNeuron(model, "Entity (Phrase)", 2.5)
+                .setTypeDescription("Abstract Entity -> Phrase BN");
 
         entityBN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(entityBN.getType()))
@@ -91,8 +92,12 @@ public class PhraseModel extends SequenceModel {
 
     @Override
     protected void initTemplateBindingNeurons() {
-        subPhraseBN = createSubPhraseBindingNeuron();
-        primaryBN = createPrimaryBindingNeuron();
+        subPhraseBN = createSubPhraseBindingNeuron()
+                .setTypeDescription("Abstract Sub-Phrase BN");
+
+        primaryBN = createPrimaryBindingNeuron()
+                .setTypeDescription("Abstract Primary Phrase BN");
+
 
         expandContinueBindingNeurons(
                 1,
