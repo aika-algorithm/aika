@@ -38,7 +38,7 @@ public class RelationInputLink extends ConjunctiveLink<RelationInputSynapse, Lat
     }
 
     @Override
-    protected void linkRelationFromTemplate(Link<RelationInputSynapse, ?, ?, SynapseInputSlot, SynapseOutputSlot> template) {
+    protected void linkRelationFromTemplate(Link template) {
         RelationInputSynapse templateSyn = template.getSynapse();
 
         Integer instanceLatentProxySynapseId = getOutput().getInstanceSynapseId(templateSyn.getLatentProxySynapseId());
