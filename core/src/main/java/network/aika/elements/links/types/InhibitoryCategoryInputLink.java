@@ -18,6 +18,7 @@ package network.aika.elements.links.types;
 
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
+import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 
 import static network.aika.elements.activations.types.InhibitoryActivation.crossConnectFields;
@@ -26,7 +27,7 @@ import static network.aika.elements.activations.types.InhibitoryActivation.cross
 /**
  * @author Lukas Molzberger
  */
-public class InhibitoryCategoryInputLink extends DisjunctiveLink<> implements CategoryInputLink {
+public class InhibitoryCategoryInputLink extends DisjunctiveLink {
 
     public InhibitoryCategoryInputLink(InhibitoryCategoryInputSynapse s, CategoryActivation input, InhibitoryActivation output) {
         super(s, input, output);

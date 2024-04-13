@@ -76,11 +76,11 @@ public class ConjunctiveDef {
 
 
         conjunctiveLink = new LinkTypeDefinition(
-                "InputObjectLink",
+                "ConjunctiveLink",
                 ConjunctiveLink.class);
 
         conjunctiveSynapse = new SynapseTypeDefinition(
-                "InputObjectSynapse",
+                "ConjunctiveSynapse",
                 ConjunctiveSynapse.class
         );
     }

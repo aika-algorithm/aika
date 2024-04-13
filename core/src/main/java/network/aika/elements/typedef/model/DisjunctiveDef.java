@@ -17,11 +17,18 @@
 package network.aika.elements.typedef.model;
 
 import network.aika.elements.activations.DisjunctiveActivation;
+import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.neurons.DisjunctiveNeuron;
+import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
-import network.aika.elements.typedef.ActivationTypeDefinition;
-import network.aika.elements.typedef.NeuronTypeDefinition;
-import network.aika.elements.typedef.SynapseSlotTypeDefinition;
+import network.aika.elements.typedef.*;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fields.IdentityFunction;
+
+import static network.aika.fielddefs.FieldLinkDefinition.link;
+import static network.aika.fielddefs.Operators.mul;
 
 /**
  *
@@ -37,6 +44,10 @@ public class DisjunctiveDef {
     private SynapseSlotTypeDefinition disjunctiveSynapseInputSlot;
     private SynapseSlotTypeDefinition disjunctiveSynapseOutputSlot;
 
+    private LinkTypeDefinition disjunctiveLink;
+    private SynapseTypeDefinition disjunctiveSynapse;
+
+    private FieldDefinition weightUpdate;
 
     public DisjunctiveDef(TypeModel typeModel) {
         this.typeModel = typeModel;
@@ -63,6 +74,25 @@ public class DisjunctiveDef {
                 DisjunctiveSynapseSlot.class
         );
 
+        disjunctiveLink = new LinkTypeDefinition(
+                "DisjunctiveLink",
+                DisjunctiveLink.class);
+
+        weightUpdate = mul(
+                this,
+                "weight update",
+                typeModel.neuron.getLink().inputIsFired,
+                getOutput().getUpdateValue()
+        );
+        link(
+                weightUpdate,
+                typeModel.neuron.getSynapse().weight
+        );
+
+        disjunctiveSynapse = new SynapseTypeDefinition(
+                "DisjunctiveSynapse",
+                DisjunctiveSynapse.class
+        );
     }
 
     public ActivationTypeDefinition getDisjunctiveActivation() {
@@ -79,6 +109,15 @@ public class DisjunctiveDef {
 
     public SynapseSlotTypeDefinition getDisjunctiveSynapseOutputSlot() {
         return disjunctiveSynapseOutputSlot;
+    }
+
+
+    public LinkTypeDefinition getDisjunctiveLink() {
+        return disjunctiveLink;
+    }
+
+    public SynapseTypeDefinition getDisjunctiveSynapse() {
+        return disjunctiveSynapse;
     }
 
 }

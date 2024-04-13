@@ -18,40 +18,25 @@ package network.aika.fielddefs;
 
 import network.aika.fields.FieldObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Lukas Molzberger
  */
-public class FieldObjectDefinition<R extends FieldObject> {
+public class FieldObjectRelationDefinition<R extends FieldObject> {
 
-    List<FieldDefinition<R, ?>> fieldDefs = new ArrayList<>();
+    private int relId;
 
-    List<FieldObjectRelationDefinition> relations = new ArrayList<>();
+    private FieldObjectDefinition<R> relatedObject;
 
-
-    public void addFieldDefinition(FieldDefinition<R, ?> fieldDef) {
-        fieldDef.setFieldId(fieldDefs.size());
-        fieldDefs.add(fieldDef);
+    public FieldObjectRelationDefinition(int relId, FieldObjectDefinition<R> relatedObject) {
+        this.relId = relId;
+        this.relatedObject = relatedObject;
     }
 
-    public int getNumberOfFields() {
-        return fieldDefs.size();
+    public int getRelId() {
+        return relId;
     }
 
-    public FieldDefinition<R, ?> getFieldDef(String name) {
-        return fieldDefs.stream()
-                .filter(fd -> fd.getFieldName() == name)
-                .findFirst()
-                .orElse(null);
-    }
-
-    public void addRelation(FieldObjectDefinition relObjDef) {
-        relations.add(new FieldObjectRelationDefinition(relations.size(), relObjDef));
-    }
-
-    public List<FieldObjectRelationDefinition> getRelations() {
-        return relations;
+    public FieldObjectDefinition<R> getRelatedObject() {
+        return relatedObject;
     }
 }

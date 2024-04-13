@@ -18,12 +18,9 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.DisjunctiveSynapse;
-import network.aika.elements.synapses.Synapse;
-import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
 import network.aika.enums.direction.Direction;
 
 import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.mul;
 
 /**
  * @author Lukas Molzberger
@@ -37,16 +34,4 @@ public abstract class DisjunctiveLink extends Link {
         setState(Direction.OUTPUT, true);
     }
 
-    @Override
-    public void connectWeightUpdate() {
-        linkAndConnect(
-                mul(
-                        this,
-                        "weight update",
-                        inputIsFired,
-                        getOutput().getUpdateValue()
-                ),
-                synapse.getWeight()
-        );
-    }
 }
