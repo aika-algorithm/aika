@@ -17,25 +17,6 @@
 package network.aika.elements.typedef.model;
 
 
-import network.aika.elements.activations.*;
-import network.aika.elements.links.ConjunctiveCategoryInputLink;
-import network.aika.elements.links.CategoryLink;
-import network.aika.elements.links.DisjunctiveLink;
-import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.DisjunctiveNeuron;
-import network.aika.elements.synapses.*;
-import network.aika.elements.typedef.*;
-
-import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
-import static network.aika.elements.NeuronType.*;
-import static network.aika.elements.activations.StateType.*;
-import static network.aika.elements.activations.bsslots.BSSlotDefinition.*;
-import static network.aika.elements.activations.bsslots.RegisterInputSlot.ON_INIT;
-import static network.aika.enums.Transition.*;
-import static network.aika.enums.Trigger.*;
-import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.enums.direction.Direction.OUTPUT;
-
 /**
  *
  * @author Lukas Molzberger
@@ -63,5 +44,38 @@ public class TypeModel {
         bindingDef.init();
         patternDef.init();
         inhibitoryDef.init();
+    }
+
+
+    public StatesDef getStates() {
+        return states;
+    }
+
+    public NeuronDef getNeuron() {
+        return neuron;
+    }
+
+    public ConjunctiveDef getConjunctiveDef() {
+        return conjunctiveDef;
+    }
+
+    public DisjunctiveDef getDisjunctiveDef() {
+        return disjunctiveDef;
+    }
+
+    public CategoryDef getCategoryDef() {
+        return categoryDef;
+    }
+
+    public BindingDef getBindingDef() {
+        return bindingDef;
+    }
+
+    public PatternDef getPatternDef() {
+        return patternDef;
+    }
+
+    public InhibitoryDef getInhibitoryDef() {
+        return inhibitoryDef;
     }
 }

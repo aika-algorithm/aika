@@ -47,7 +47,7 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveSynapse extends Synapse
+public class ConjunctiveSynapse extends Synapse
 {
 
     protected Field synapseBias = new SumField(this, "synapseBias", TOLERANCE)

@@ -18,8 +18,8 @@ package network.aika.elements.neurons;
 
 import network.aika.Model;
 import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
+import network.aika.elements.synapses.Synapse;
 
 /**
  *
@@ -36,11 +36,11 @@ public abstract class CategoryNeuron extends DisjunctiveNeuron<CategoryNeuron, C
     }
 
     @Override
-    public CategoryInputSynapse makeAbstract() {
+    public Synapse makeAbstract() {
         throw new UnsupportedOperationException();
     }
 
-    public CategoryInputSynapse getOutgoingCategoryInputSynapse() {
+    public Synapse getOutgoingCategoryInputSynapse() {
         return getOutputSynapseByType(CategoryInputSynapse.class);
     }
 
@@ -55,7 +55,7 @@ public abstract class CategoryNeuron extends DisjunctiveNeuron<CategoryNeuron, C
     }
 
     @Override
-    public CategoryInputSynapse getCategoryInputSynapse() {
+    public Synapse getCategoryInputSynapse() {
         return getOutputSynapseByType(CategoryInputSynapse.class);
     }
 

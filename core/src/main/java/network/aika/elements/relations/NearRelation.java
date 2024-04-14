@@ -58,7 +58,7 @@ public class NearRelation extends Relation {
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
+    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation toPreAct, Direction dir) {
         Range inputRange = ref.getTokenPosRange();
 
         Range targetRange = new Range(

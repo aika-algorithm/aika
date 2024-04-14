@@ -31,6 +31,7 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
+/*
 public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, DisjunctiveLink> {
 
     SynapseSlotTypeDefinition synapseSlotType;
@@ -108,3 +109,4 @@ public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, D
         link.disconnect();
     }
 }
+*/

@@ -16,20 +16,13 @@
  */
 package network.aika.elements.links.types;
 
-import network.aika.elements.activations.types.BindingActivation;
-import network.aika.elements.activations.types.PatternActivation;
-import network.aika.elements.links.PositiveFeedbackLink;
-import network.aika.elements.synapses.types.InnerPositiveFeedbackSynapse;
-import network.aika.fields.*;
 
-import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.mul;
-import static network.aika.fields.Fields.scale;
 
 /**
  *
  * @author Lukas Molzberger
  */
+/*
 public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiveFeedbackSynapse, PatternActivation, BindingActivation> {
 
     protected AbstractFunction inputGradient;
@@ -74,3 +67,4 @@ public class InnerPositiveFeedbackLink extends PositiveFeedbackLink<InnerPositiv
             linkAndConnect(input.getGradient(), 0, inputGradient);
     }
 }
+*/

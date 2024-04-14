@@ -16,26 +16,10 @@
  */
 package network.aika.elements.links.types;
 
-import network.aika.elements.activations.types.BindingActivation;
-import network.aika.elements.activations.types.PatternActivation;
-import network.aika.elements.links.ConjunctiveLink;
-import network.aika.Range;
-import network.aika.fields.AbstractFunction;
-import network.aika.elements.synapses.types.PatternSynapse;
-import network.aika.fields.FieldOutput;
-import network.aika.fields.SumField;
-import network.aika.enums.sign.Sign;
-import network.aika.queue.steps.LinkCounting;
-
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
-import static network.aika.enums.Scope.SAME;
-import static network.aika.fields.ConstantField.ZERO;
-import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.utils.Utils.TOLERANCE;
-
 /**
  * @author Lukas Molzberger
  */
+/*
 public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivation, PatternActivation> {
 
     private AbstractFunction outputEntropy;
@@ -131,3 +115,4 @@ public class PatternLink extends ConjunctiveLink<PatternSynapse, BindingActivati
         return informationGain;
     }
 }
+*/

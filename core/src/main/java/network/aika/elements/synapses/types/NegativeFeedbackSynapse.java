@@ -35,6 +35,7 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
  *
  * @author Lukas Molzberger
  */
+/*
 public class NegativeFeedbackSynapse extends ConjunctiveSynapse
 {
 
@@ -56,3 +57,4 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse
     }
 
 }
+*/

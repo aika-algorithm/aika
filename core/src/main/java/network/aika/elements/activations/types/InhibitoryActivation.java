@@ -20,13 +20,6 @@ import network.aika.Document;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.DisjunctiveActivation;
 import network.aika.elements.links.*;
-import network.aika.elements.links.types.InhibitoryCategoryInputLink;
-import network.aika.elements.links.types.InhibitoryCategoryLink;
-import network.aika.elements.links.types.InhibitoryLink;
-import network.aika.elements.links.types.NegativeFeedbackLink;
-import network.aika.elements.neurons.types.InhibitoryNeuron;
-import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +31,7 @@ import static network.aika.enums.Scope.INPUT;
  *
  * @author Lukas Molzberger
  */
+/*
 public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron> {
 
 
@@ -124,3 +118,4 @@ public class InhibitoryActivation extends DisjunctiveActivation<InhibitoryNeuron
         );
     }
 }
+*/

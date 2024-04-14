@@ -19,7 +19,6 @@ package network.aika.elements.typedef.model;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.CategoryLink;
-import network.aika.elements.links.ConjunctiveCategoryInputLink;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.PositiveFeedbackLink;
 import network.aika.elements.links.types.NegativeFeedbackLink;

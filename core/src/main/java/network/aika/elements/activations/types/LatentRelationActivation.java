@@ -24,7 +24,7 @@ import network.aika.elements.neurons.types.LatentRelationNeuron;
 /**
  * @author Lukas Molzberger
  */
-public class LatentRelationActivation extends BindingActivation {
+public class LatentRelationActivation extends Activation {
 
     private Activation fromAct;
     private Activation toAct;

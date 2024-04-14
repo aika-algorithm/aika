@@ -16,22 +16,12 @@
  */
 package network.aika.elements.neurons.types;
 
-import network.aika.Model;
-import network.aika.elements.activations.types.InhibitoryActivation;
-import network.aika.elements.neurons.DisjunctiveNeuron;
-import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.RefType;
-import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
-import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
-
-import static network.aika.elements.neurons.RefType.CATEGORY;
-import static network.aika.elements.neurons.RefType.TEMPLATE;
 
 /**
  *
  * @author Lukas Molzberger
  */
+/*
 public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, InhibitoryActivation> {
 
     public InhibitoryNeuron(NeuronProvider np) {
@@ -76,3 +66,4 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
         return getOutputSynapseByType(InhibitoryCategorySynapse.class);
     }
 }
+*/

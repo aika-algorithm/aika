@@ -16,23 +16,10 @@
  */
 package network.aika.elements.links.types;
 
-import network.aika.elements.activations.types.BindingActivation;
-import network.aika.elements.activations.types.InhibitoryActivation;
-import network.aika.elements.links.ConjunctiveLink;
-import network.aika.enums.Scope;
-import network.aika.enums.direction.Direction;
-import network.aika.fields.*;
-import network.aika.elements.synapses.types.NegativeFeedbackSynapse;
-import network.aika.visitor.Visitor;
-
-import java.util.stream.Stream;
-
-import static network.aika.fields.Fields.*;
-import static network.aika.utils.Utils.TOLERANCE;
-
 /**
  * @author Lukas Molzberger
  */
+/*
 public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynapse, InhibitoryActivation, BindingActivation> {
 
     public NegativeFeedbackLink(NegativeFeedbackSynapse s, InhibitoryActivation input, BindingActivation output) {
@@ -81,3 +68,4 @@ public class NegativeFeedbackLink extends ConjunctiveLink<NegativeFeedbackSynaps
     public void visit(Visitor v, Scope s, int depth) {
     }
 }
+*/

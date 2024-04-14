@@ -16,20 +16,12 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.links.Link;
-import network.aika.elements.neurons.Neuron;
-import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
-import network.aika.enums.direction.Direction;
-
-import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.enums.direction.Direction.OUTPUT;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class DisjunctiveSynapse extends Synapse
+public class DisjunctiveSynapse extends Synapse
 {
     @Override
     public void link() {

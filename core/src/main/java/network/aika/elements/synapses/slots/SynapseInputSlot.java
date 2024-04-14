@@ -30,6 +30,7 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
  *
  * @author Lukas Molzberger
  */
+/*
 public class SynapseInputSlot<S extends ConjunctiveSynapse, L extends ConjunctiveLink> extends ConjunctiveSynapseSlot<S, L>  {
 
     public SynapseInputSlot(Activation act, S synapse) {
@@ -45,3 +46,4 @@ public class SynapseInputSlot<S extends ConjunctiveSynapse, L extends Conjunctiv
     public void init() {
     }
 }
+*/

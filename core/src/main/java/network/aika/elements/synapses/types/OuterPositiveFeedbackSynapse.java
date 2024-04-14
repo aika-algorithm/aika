@@ -27,12 +27,14 @@ import network.aika.elements.synapses.PositiveFeedbackSynapse;
  *
  * @author Lukas Molzberger
  */
+/*
 public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse
 {
-    /*
+
     @Override
     public SynapseSlot createOutputSlot(BindingActivation oAct) {
         return new AnnealingSynapseOutputSlot(oAct, this, AnnealingType.OUTER_FEEDBACK);
     }
-     */
+
 }
+*/

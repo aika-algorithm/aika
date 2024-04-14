@@ -62,7 +62,7 @@ public class BeforeRelation extends Relation {
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
+    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation toPreAct, Direction dir) {
         Direction toSlot = dir.combine(relDirection);
         Direction fromSlot = toSlot.invert();
 

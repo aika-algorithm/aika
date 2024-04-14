@@ -36,6 +36,7 @@ import static network.aika.debugger.EventType.UPDATE;
  *
  * @author Lukas Molzberger
  */
+
 public class RelationInputSynapse extends ConjunctiveSynapse {
 
     private int latentProxySynapseId;

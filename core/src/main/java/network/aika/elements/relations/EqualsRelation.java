@@ -71,7 +71,7 @@ public class EqualsRelation extends Relation {
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
+    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation toPreAct, Direction dir) {
         Range r = ref.getTokenPosRange();
 
         return toPreAct.getRelatedTokensByTokenPosition(compareBegin ? INPUT : OUTPUT, r)

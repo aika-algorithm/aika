@@ -3,7 +3,6 @@ package network.aika.elements.typedef.model;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.DisjunctiveActivation;
 import network.aika.elements.links.CategoryLink;
-import network.aika.elements.links.ConjunctiveCategoryInputLink;
 import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.neurons.CategoryNeuron;
 import network.aika.elements.neurons.DisjunctiveNeuron;

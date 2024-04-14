@@ -23,8 +23,6 @@ import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
-import network.aika.elements.activations.types.PatternActivation;
-import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.links.CategoryLink;
 import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
@@ -72,12 +70,15 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
 
     protected State[] states = new State[numberOfStates()];
 
+    /*
     protected FieldFunction netOuterGradient;
     protected Field gradient;
 
     protected Field updateValue;
 
     protected FieldOutput negUpdateValue;
+
+     */
 
     protected NavigableMap<Integer, SynapseSlot> inputSlots = new TreeMap<>();
     protected NavigableMap<Long, SynapseSlot> outputSlots = new TreeMap<>();
@@ -103,16 +104,16 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
 
         initNet();
 
-        initBiases();
+//        initBiases();
 
         initBindingSignalSlots();
-
+/*
         gradient = new SumField(this, "gradient", TOLERANCE)
                 .setQueued(getQueue(), TRAINING, false);
-
+*/
         if (getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
-            connectGradientFields();
-            connectWeightUpdate();
+//            connectGradientFields();
+//            connectWeightUpdate();
             InactiveLinks.add(this);
         }
 
@@ -174,12 +175,12 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     protected final int numberOfStates() {
         return activationType.getStateTypes().length;
     }
-
+/*
     protected void initBiases() {
         linkAndConnect(getNeuron().getBias(), getNet(PRE_FEEDBACK))
                 .setPropagateUpdates(false);
     }
-
+*/
     protected void initBindingSignalSlots() {
         Stream<BSSlotDefinition> bsSlots = neuron.getBindingSignalSlots();
         bsSlots.forEach(slotDef ->
@@ -210,6 +211,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         return neuron.isAbstract();
     }
 
+    /*
     protected void connectGradientFields() {
         netOuterGradient =
                 func(
@@ -236,7 +238,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     public FieldOutput getNegUpdateValue() {
         return negUpdateValue;
     }
-
+*/
     public int getId() {
         return id;
     }
@@ -248,18 +250,18 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     public void setCreated(Timestamp ts) {
         this.created = ts;
     }
-
+/*
     public Field getValue() {
         return getValue(PRE_FEEDBACK);
     }
-
+*/
     public State getState(StateType st) {
         if(st.ordinal() >= states.length)
             return states[states.length - 1];
 
         return states[st.ordinal()];
     }
-
+/*
     public Field getValue(StateType st) {
         if(st == null)
             return getValue();
@@ -274,7 +276,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     public SumField getNet(StateType st) {
         return getState(st).net;
     }
-
+*/
     public void setFired(StateType st, Timestamp fired) {
         getState(st).fired = fired;
     }
@@ -466,7 +468,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         return getOutputLinks(s.getOutput())
                 .filter(l -> l.getSynapse() == s);
     }
-
+/*
     @Override
     public void disconnect() {
         for(State s: states)
@@ -480,7 +482,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
 
         getInputSlots().forEach(SynapseSlot::disconnect);
     }
-
+*/
     public Activation getTemplate() {
         return getCategoryActivations()
                 .map(CategoryActivation::getTemplate)

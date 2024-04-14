@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 /**
  * @author Lukas Molzberger
  */
-public abstract class CategoryActivation extends DisjunctiveActivation<CategoryNeuron> {
+public abstract class CategoryActivation extends DisjunctiveActivation {
 
     public CategoryActivation(int id, Document doc, CategoryNeuron neuron) {
         super(id, doc, neuron);

@@ -19,13 +19,14 @@ package network.aika.elements.links;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.synapses.CategorySynapse;
+import network.aika.elements.synapses.Synapse;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class CategoryLink<S extends CategorySynapse, IA extends Activation<?>> extends DisjunctiveLink<S, IA, CategoryActivation> {
+public abstract class CategoryLink extends DisjunctiveLink {
 
-    public CategoryLink(S s, IA input, CategoryActivation output) {
+    public CategoryLink(CategorySynapse s, Activation input, CategoryActivation output) {
         super(s, input, output);
     }
 

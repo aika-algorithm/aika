@@ -53,14 +53,14 @@ public class LatentProxyRelation extends Relation {
         LatentProxyRelation templateRel = (LatentProxyRelation) templateSyn.getRelation();
         Integer relSynId = instanceOAct.getInstanceSynapseId(templateRel.relationSynId);
         if(relSynId != null) {
-            RelationInputSynapse ris = (RelationInputSynapse) instanceSyn.getPOutput().getSynapseBySynId(relSynId);
+            Synapse ris = instanceSyn.getPOutput().getSynapseBySynId(relSynId);
             assert ris.getSynapseId() == relSynId;
 
             linkRelation(instanceSyn, ris);
         }
     }
 
-    public void linkRelation(Synapse syn, RelationInputSynapse relSyn) {
+    public void linkRelation(Synapse syn, Synapse relSyn) {
         relationSynId = relSyn.getSynapseId();
         relSyn.setLatentProxySynapseId(syn.getSynapseId());
     }
@@ -79,10 +79,10 @@ public class LatentProxyRelation extends Relation {
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
+    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation toPreAct, Direction dir) {
         assert relationSynId != null;
 
-        RelationInputSynapse ris = (RelationInputSynapse) s.getPOutput().getSynapseBySynId(relationSynId);
+        Synapse ris = s.getPOutput().getSynapseBySynId(relationSynId);
         return ris.getInput().getRelation()
                 .evaluateLatentRelation(s, ref, fromAct, toPreAct, dir);
     }

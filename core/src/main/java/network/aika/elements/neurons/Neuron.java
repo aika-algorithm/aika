@@ -23,7 +23,6 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
-import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.elements.typedef.Type;

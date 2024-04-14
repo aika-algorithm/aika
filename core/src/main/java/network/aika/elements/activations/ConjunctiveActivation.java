@@ -17,7 +17,6 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
-import network.aika.elements.links.CategoryInputLink;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
 import network.aika.elements.synapses.slots.AnnealingType;
@@ -32,7 +31,7 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveActivation extends Activation<ConjunctiveNeuron> {
+public abstract class ConjunctiveActivation extends Activation {
 
     protected InputField outerFeedbackAnnealingValue;
     protected InputField instantiationAnnealingValue;
@@ -78,7 +77,7 @@ public abstract class ConjunctiveActivation extends Activation<ConjunctiveNeuron
         AnnealingSynapseOutputSlot sl = getActiveCategoryInputSlot();
         return sl != null ? (CategoryInputLink) sl.getSelectedLink() : null;
     }
-
+/*
     @Override
     protected void connectWeightUpdate() {
         negUpdateValue = scale(
@@ -102,5 +101,5 @@ public abstract class ConjunctiveActivation extends Activation<ConjunctiveNeuron
                 );
 
         super.initBiases();
-    }
+    }*/
 }

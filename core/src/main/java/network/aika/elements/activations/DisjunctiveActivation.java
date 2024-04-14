@@ -23,7 +23,7 @@ import network.aika.elements.neurons.DisjunctiveNeuron;
  *
  * @author Lukas Molzberger
  */
-public abstract class DisjunctiveActivation extends Activation<DisjunctiveNeuron> {
+public abstract class DisjunctiveActivation extends Activation {
 
     public DisjunctiveActivation(int id, Document doc, DisjunctiveNeuron neuron) {
         super(id, doc, neuron);

@@ -18,7 +18,6 @@ package network.aika.elements.activations.bsslots;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.State;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.enums.Scope;
 import network.aika.queue.steps.Linking;
 import org.slf4j.Logger;
@@ -38,7 +37,7 @@ public abstract class BindingSignalSlot {
 
     protected static final Logger log = LoggerFactory.getLogger(BindingSignalSlot.class);
 
-    protected Activation<?> act;
+    protected Activation act;
 
     protected BSSlotDefinition slotDef;
 

@@ -16,12 +16,9 @@
  */
 package network.aika.elements.neurons;
 
-import network.aika.ActivationFunction;
 import network.aika.Model;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.CategorySynapse;
-import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.fields.Field;
 import org.slf4j.Logger;

@@ -20,7 +20,7 @@ package network.aika.elements.synapses;
  *
  * @author Lukas Molzberger
  */
-public abstract class CategorySynapse
+public class CategorySynapse
         extends DisjunctiveSynapse
 {
 

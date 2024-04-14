@@ -16,27 +16,11 @@
  */
 package network.aika.elements.neurons.types;
 
-import network.aika.Model;
-import network.aika.elements.activations.types.BindingActivation;
-import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.RefType;
-import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.types.BindingCategoryInputSynapse;
-import network.aika.elements.synapses.types.BindingCategorySynapse;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.Comparator;
-
-import static network.aika.elements.neurons.RefType.CATEGORY;
-
 
 /**
  * @author Lukas Molzberger
  */
-
+/*
 public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActivation> {
 
     private boolean isPrimary;
@@ -121,3 +105,4 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
         isPrimary = in.readBoolean();
     }
 }
+*/

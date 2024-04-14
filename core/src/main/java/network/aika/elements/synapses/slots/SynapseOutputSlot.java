@@ -28,6 +28,7 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
  *
  * @author Lukas Molzberger
  */
+/*
 public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends ConjunctiveLink> extends ConjunctiveSynapseSlot<S, L> {
 
     protected Field outputNet;
@@ -71,3 +72,4 @@ public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends Conjuncti
         outputNet.unlinkInputs();
     }
 }
+*/

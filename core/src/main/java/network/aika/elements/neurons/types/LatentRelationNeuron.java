@@ -16,25 +16,24 @@
  */
 package network.aika.elements.neurons.types;
 
+
 import network.aika.Model;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.neurons.RefType;
 import network.aika.elements.relations.Relation;
 import network.aika.fields.Field;
-import network.aika.fields.SumField;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.queue.Phase.TRAINING;
-import static network.aika.utils.Utils.TOLERANCE;
-
 /**
  *
  * @author Lukas Molzberger
  */
-public class LatentRelationNeuron extends BindingNeuron {
+
+public class LatentRelationNeuron extends Neuron {
 
     private Relation relation;
 
@@ -56,12 +55,12 @@ public class LatentRelationNeuron extends BindingNeuron {
     public Relation getRelation() {
         return relation;
     }
-
+/*
     @Override
     protected Field initBias() {
         return new SumField(this, "bias", TOLERANCE)
                 .setQueued(getQueue(), TRAINING, false);
-    }
+    }*/
 
     @Override
     public void write(DataOutput out) throws IOException {

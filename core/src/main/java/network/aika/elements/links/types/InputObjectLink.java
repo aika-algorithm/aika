@@ -16,16 +16,11 @@
  */
 package network.aika.elements.links.types;
 
-import network.aika.elements.activations.types.BindingActivation;
-import network.aika.elements.activations.types.PatternActivation;
-import network.aika.elements.links.ConjunctiveLink;
-import network.aika.elements.synapses.types.InputObjectSynapse;
-import network.aika.fields.AbstractFunction;
-import network.aika.fields.Fields;
 
 /**
  * @author Lukas Molzberger
  */
+/*
 public class InputObjectLink extends ConjunctiveLink<InputObjectSynapse, PatternActivation, BindingActivation> {
 
     private AbstractFunction inputEntropy;
@@ -49,3 +44,4 @@ public class InputObjectLink extends ConjunctiveLink<InputObjectSynapse, Pattern
         );
     }
 }
+*/

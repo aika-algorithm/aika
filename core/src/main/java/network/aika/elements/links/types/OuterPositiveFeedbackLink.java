@@ -16,19 +16,14 @@
  */
 package network.aika.elements.links.types;
 
-import network.aika.elements.activations.types.BindingActivation;
-import network.aika.elements.activations.types.PatternActivation;
-import network.aika.elements.links.PositiveFeedbackLink;
-import network.aika.elements.synapses.types.OuterPositiveFeedbackSynapse;
-import network.aika.fields.*;
 
-import static network.aika.fields.Fields.*;
 
 
 /**
  *
  * @author Lukas Molzberger
  */
+/*
 public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiveFeedbackSynapse, PatternActivation, BindingActivation> {
 
     protected Field annealedInputValue;
@@ -77,3 +72,4 @@ public class OuterPositiveFeedbackLink extends PositiveFeedbackLink<OuterPositiv
         );
     }
 }
+*/

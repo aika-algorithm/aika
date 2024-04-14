@@ -16,22 +16,17 @@
  */
 package network.aika.elements.synapses.types;
 
-import network.aika.elements.activations.types.BindingActivation;
-import network.aika.elements.links.types.SameObjectLink;
-import network.aika.elements.neurons.types.BindingNeuron;
-import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.fields.FieldOutput;
-
-import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
 
 /**
  * The Same Object Binding Neuron Synapse is an inner synapse between two binding neurons of the same object.
  *
  * @author Lukas Molzberger
  */
+/*
 public class SameObjectSynapse extends ConjunctiveSynapse{
     @Override
     public FieldOutput getInputValue(BindingActivation input) {
         return input.getValue(OUTER_FEEDBACK);
     }
 }
+*/

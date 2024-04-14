@@ -16,14 +16,13 @@
  */
 package network.aika.elements.synapses.types;
 
-import network.aika.elements.synapses.CategoryInputSynapse;
-import network.aika.elements.synapses.DisjunctiveSynapse;
 
 /**
  * The Inhibitory Neuron Synapse is an inner synapse between two binding neurons of the same pattern.
  *
  * @author Lukas Molzberger
  */
+/*
 public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse implements CategoryInputSynapse<InhibitoryCategoryInputSynapse>
 {
 
@@ -34,3 +33,4 @@ public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse implement
     }
 
 }
+*/

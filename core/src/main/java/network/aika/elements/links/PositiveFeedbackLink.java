@@ -16,24 +16,19 @@
  */
 package network.aika.elements.links;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.synapses.PositiveFeedbackSynapse;
-import network.aika.fields.*;
 
-import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.*;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA extends Activation<?>, OA extends ConjunctiveActivation<?>>
-        extends ConjunctiveLink<S, IA, OA> {
+/*
+public abstract class PositiveFeedbackLink
+        extends ConjunctiveLink {
 
     protected AbstractFunction inputGradient;
 
-    public PositiveFeedbackLink(S s, IA input, OA output) {
+    public PositiveFeedbackLink(Synapse s, Activation input, Activation output) {
         super(s, input, output);
     }
 
@@ -60,3 +55,4 @@ public abstract class PositiveFeedbackLink<S extends PositiveFeedbackSynapse, IA
             linkAndConnect(input.getGradient(), 0, inputGradient);
     }
 }
+*/

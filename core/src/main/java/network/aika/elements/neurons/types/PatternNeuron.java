@@ -16,30 +16,11 @@
  */
 package network.aika.elements.neurons.types;
 
-import network.aika.Model;
-import network.aika.Range;
-import network.aika.elements.activations.types.PatternActivation;
-import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.RefType;
-import network.aika.elements.synapses.*;
-import network.aika.elements.synapses.types.PatternCategoryInputSynapse;
-import network.aika.fields.link.FieldLink;
-import network.aika.statistic.AverageCoveredSpace;
-import network.aika.statistic.NeuronStatistic;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
-import static network.aika.elements.neurons.RefType.*;
-import static network.aika.utils.ToleranceUtils.TOLERANCE;
-
 /**
  *
  * @author Lukas Molzberger
  */
+/*
 public class PatternNeuron extends ConjunctiveNeuron {
 
 
@@ -115,3 +96,4 @@ public class PatternNeuron extends ConjunctiveNeuron {
         setModified();
     }
 }
+*/

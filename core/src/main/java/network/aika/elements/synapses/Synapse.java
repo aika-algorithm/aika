@@ -81,6 +81,9 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
 
     protected boolean trainingAllowed = true;
 
+    private int latentProxySynapseId;
+
+
     public Synapse() {
     }
 
@@ -440,6 +443,7 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
                 );
     }
 
+
     @Override
     public Model getModel() {
         return output != null ?
@@ -537,5 +541,9 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
 
     private String getArrow() {
         return "-->";
+    }
+
+    public void setLatentProxySynapseId(int synapseId) {
+
     }
 }

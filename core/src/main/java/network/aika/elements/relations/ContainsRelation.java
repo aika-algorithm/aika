@@ -58,7 +58,7 @@ public class ContainsRelation extends Relation {
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction vDir) {
+    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation toPreAct, Direction vDir) {
         Range r = ref.getTokenPosRange();
         Direction dir = relationDir.combine(vDir);
 
