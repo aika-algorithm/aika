@@ -239,6 +239,18 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     protected void initFromTemplate(Neuron templateN) {
+        initParamsFromTemplate(templateN);
+
+        CategoryInputSynapse cis = templateN.getCategoryInputSynapse();
+        if(cis == null)
+            throw new MissingInputCategoryNeuron(templateN);
+
+        createCategorySynapse()
+                .setWeight(cis.getInitialCategorySynapseWeight())
+                .link(this, cis.getInput());
+    }
+
+    protected void initParamsFromTemplate(Neuron templateN) {
         bias.setInitialValue(
                 templateN.getBias().getUpdatedValue()
         );
@@ -247,14 +259,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
             InitParams ip = templateN.initParams;
             setTargetNet(ip.targetNet);
         }
-
-        CategoryInputSynapse cis = templateN.getCategoryInputSynapse();
-        if(cis == null)
-            throw new MissingInputCategoryNeuron(templateN);
-
-        createCategorySynapse()
-                .setWeight(cis.getInitialInstanceWeight())
-                .link(this, cis.getInput());
     }
 
     public N setInstantiable(boolean instantiable) {
@@ -263,13 +267,15 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return (N) this;
     }
 
-    public N setInstantiable(boolean instantiable, boolean includeSyns) {
-        if (includeSyns)
-            getInputSynapses().forEach(s ->
-                    s.setInstantiable(instantiable)
-            );
+    public N setInputSynapsesInstantiable(boolean inputSideInstantiable, boolean outputSideInstantiable) {
+        getInputSynapses()
+                .stream()
+                .filter(s -> !(s instanceof CategoryInputSynapse))
+                .forEach(s ->
+                        s.setInstantiable(inputSideInstantiable, outputSideInstantiable)
+                );
 
-        return setInstantiable(instantiable);
+        return (N) this;
     }
 
     public boolean isInstantiable() {

@@ -44,6 +44,10 @@ public abstract class CategoryNeuron extends DisjunctiveNeuron<CategoryNeuron, C
         return getOutputSynapseByType(CategoryInputSynapse.class);
     }
 
+    protected void initFromTemplate(Neuron templateN) {
+        initParamsFromTemplate(templateN);
+    }
+
     @Override
     public CategorySynapse createCategorySynapse() {
         throw new UnsupportedOperationException();

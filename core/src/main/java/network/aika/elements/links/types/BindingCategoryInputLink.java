@@ -39,8 +39,4 @@ public class BindingCategoryInputLink extends ConjunctiveCategoryInputLink<Bindi
         return new BindingCategorySynapse();
     }
 
-    @Override
-    public void instantiateTemplate(CategoryActivation iAct, BindingActivation oAct) {
-        instantiateTemplate(iAct, oAct, this);
-    }
 }

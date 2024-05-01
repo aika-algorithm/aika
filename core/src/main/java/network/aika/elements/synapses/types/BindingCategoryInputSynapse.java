@@ -74,7 +74,7 @@ public class BindingCategoryInputSynapse extends ConjunctiveCategoryInputSynapse
     }
 
     @Override
-    public double getInitialInstanceWeight() {
+    public double getInitialCategorySynapseWeight() {
         return initialCategorySynapseWeight;
     }
 

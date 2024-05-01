@@ -37,9 +37,6 @@ public class Instantiation extends ElementStep<Activation> {
 
         act.instantiationIsQueued = true;
 
-        if(act.getActiveTemplateInstance() != null)
-            return;
-
         add(new Instantiation(act));
     }
 

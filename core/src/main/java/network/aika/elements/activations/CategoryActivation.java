@@ -18,6 +18,8 @@ package network.aika.elements.activations;
 
 import network.aika.Document;
 import network.aika.elements.links.*;
+import network.aika.elements.synapses.CategoryInputSynapse;
+import network.aika.elements.synapses.Synapse;
 import network.aika.text.TextReference;
 import network.aika.elements.neurons.CategoryNeuron;
 
@@ -39,6 +41,42 @@ public abstract class CategoryActivation extends DisjunctiveActivation<CategoryN
     }
 
     @Override
+    protected void linkTemplateAndInstance(Activation<CategoryNeuron> ti) {
+        if(ti.getOutputLinksByType(CategoryInputLink.class)
+                .count() == 0)
+            createCategoryInputLink(ti);
+    }
+
+    public void createCategoryInputLink(Activation<CategoryNeuron> ti) {
+        CategoryInputSynapse cis = ti.getNeuron().getOutgoingCategoryInputSynapse();
+        if(cis == null) {
+            instantiateCategoryInputSynapse(ti);
+            return;
+        }
+
+        Synapse s = ((Synapse)cis);
+        Activation catInputAct = getActiveCategoryInput();
+
+        s.createAndInitLink(ti, catInputAct);
+    }
+
+    private void instantiateCategoryInputSynapse(Activation<CategoryNeuron> ti) {
+        Link cil = (Link) getOutputLinksByType(CategoryInputLink.class)
+                .findFirst()
+                .orElse(null);
+
+        if(cil == null)
+            return;
+
+        Activation catInputAct = getActiveCategoryInput();
+
+        cil.instantiateTemplate(
+                ti,
+                catInputAct
+        );
+    }
+
+    @Override
     public Activation getTemplate() {
         return getOutputLinksByType(CategoryInputLink.class)
                 .map(CategoryInputLink::getOutput)
@@ -48,6 +86,18 @@ public abstract class CategoryActivation extends DisjunctiveActivation<CategoryN
 
     @Override
     public Activation getActiveTemplateInstance() {
+        Activation inputAct = getActiveCategoryInput();
+        if(inputAct == null)
+            return null;
+
+        CategoryInputLink cil = inputAct.getActiveCategoryInputLink();
+        if(cil == null)
+            return null;
+
+        return cil.getInput();
+    }
+
+    public Activation getActiveCategoryInput() {
         return getCategoryInputs()
                 .filter(Activation::isActiveTemplateInstance)
                 .max(

@@ -18,6 +18,7 @@ package network.aika.debugger.neurons.properties.synapses;
 
 import network.aika.debugger.properties.AbstractPropertyPanel;
 import network.aika.elements.links.Link;
+import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.SynapseTypeDefinition;
@@ -57,8 +58,13 @@ public class SynapsePropertyPanel<E extends Synapse> extends AbstractPropertyPan
         if(s.getRelation() != null)
             addConstant("Relation: ", "" + s.getRelation());
 
-        addConstant("Instantiable: ", "" + s.isInstantiable());
-        addConstant("Initial Instance Weight: ", "" + StringUtils.doubleToString(s.getInitialInstanceWeight()));
+        addConstant("Input Side Instantiable: ", "" + s.isInputSideInstantiable());
+        addConstant("Output Side Instantiable: ", "" + s.isOutputSideInstantiable());
+
+        if(s instanceof CategoryInputSynapse) {
+            CategoryInputSynapse cis = (CategoryInputSynapse) s;
+            addConstant("Initial Category Synapse Weight: ", "" + StringUtils.doubleToString(cis.getInitialCategorySynapseWeight()));
+        }
     }
 
     protected void initSynapseTypeProperties(SynapseTypeDefinition st) {

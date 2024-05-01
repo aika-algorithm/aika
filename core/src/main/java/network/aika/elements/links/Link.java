@@ -21,6 +21,7 @@ import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.Type;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
@@ -147,9 +148,6 @@ public abstract class Link<
 
     public void instantiateTemplate(I iAct, O oAct) {
         if(iAct == null || oAct == null)
-            return;
-
-        if(!synapse.isInstantiable())
             return;
 
         S s = (S) synapse.instantiateTemplate(

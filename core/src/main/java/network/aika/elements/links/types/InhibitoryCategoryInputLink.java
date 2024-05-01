@@ -23,7 +23,6 @@ import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.types.InhibitoryCategoryInputSynapse;
 import network.aika.elements.synapses.types.InhibitoryCategorySynapse;
-import network.aika.fields.Field;
 
 import static network.aika.elements.activations.types.InhibitoryActivation.crossConnectFields;
 
@@ -47,8 +46,4 @@ public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCateg
         return new InhibitoryCategorySynapse();
     }
 
-    @Override
-    public void instantiateTemplate(CategoryActivation iAct, InhibitoryActivation oAct) {
-        instantiateTemplate(iAct, oAct, this);
-    }
 }

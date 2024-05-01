@@ -77,7 +77,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     private Relation relation;
 
-    private boolean instantiable = true;
+    private boolean inputSideInstantiable = true;
+    private boolean outputSideInstantiable = true;
 
     protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
             .setQueued(getQueue(), TRAINING, false)
@@ -276,22 +277,23 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             relation = templateSyn.relation.instantiate();
 
         weight.setValue(
-                templateSyn.getInitialInstanceWeight()
+                templateSyn.weight.getUpdatedValue()
         );
     }
 
-    public double getInitialInstanceWeight() {
-        return weight.getUpdatedValue();
-    }
-
-    public S setInstantiable(boolean instantiable) {
-        this.instantiable = instantiable;
+    public S setInstantiable(boolean inputSideInstantiable, boolean outputSideInstantiable) {
+        this.inputSideInstantiable = inputSideInstantiable;
+        this.outputSideInstantiable = outputSideInstantiable;
 
         return (S) this;
     }
 
-    public boolean isInstantiable() {
-        return instantiable;
+    public boolean isInputSideInstantiable() {
+        return inputSideInstantiable;
+    }
+
+    public boolean isOutputSideInstantiable() {
+        return outputSideInstantiable;
     }
 
     public S link(Neuron input, Neuron output) {
@@ -445,7 +447,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         out.writeLong(output.getId());
 
         weight.write(out);
-        out.writeBoolean(instantiable);
+        out.writeBoolean(inputSideInstantiable);
+        out.writeBoolean(outputSideInstantiable);
 
         out.writeBoolean(relation != null);
         if(relation != null)
@@ -467,7 +470,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         output = m.lookupNeuronProvider(in.readLong(), SYNAPSE_OUT);
 
         weight.readFields(in);
-        instantiable = in.readBoolean();
+        inputSideInstantiable = in.readBoolean();
+        outputSideInstantiable = in.readBoolean();
 
         if(in.readBoolean())
             relation = Relation.read(in, m);

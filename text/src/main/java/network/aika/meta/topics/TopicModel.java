@@ -127,14 +127,16 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
     private void setNotInstantiableForInputEntity(BindingNeuron topicBN, boolean instantiable) {
         InputObjectSynapse ios = topicBN.getInputSynapseByType(InputObjectSynapse.class);
-        ios.setInstantiable(instantiable);
+        ios.setInstantiable(instantiable, instantiable);
 
         entityModel.setInstantiable(instantiable);
     }
 
     public void setInstantiable(boolean instantiable) {
-        topicPatternN.setInstantiable(instantiable, true);
-        topicBN.setInstantiable(instantiable, true);
+        topicPatternN.setInstantiable(instantiable);
+        topicPatternN.setInputSynapsesInstantiable(instantiable, instantiable);
+        topicBN.setInstantiable(instantiable);
+        topicBN.setInputSynapsesInstantiable(instantiable, instantiable);
     }
 
     @Override
@@ -148,8 +150,10 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
         topicPatternN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(topicPatternN.getType()))
+                .setInstantiable(false, false)
                 .getInput()
-                .setPersistent(true);
+                .setPersistent(true)
+                .setInstantiable(false);
 
         topicBN = addBindingNeuron(
                 model,
@@ -160,7 +164,10 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
         topicBN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()))
-                .adjustBias();
+                .adjustBias()
+                .setInstantiable(false, false)
+                .getInput()
+                .setInstantiable(false);
 
         addPositiveFeedbackLoop(
                 topicBN,
@@ -177,7 +184,10 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 .setTypeDescription("Abstract Entity -> Topic InhibN");
 
         inhibitoryN.makeAbstract()
-                .setWeight(1.0);
+                .setWeight(1.0)
+                .setInstantiable(false, false)
+                .getInput()
+                .setInstantiable(false);
 
         addInhibitoryLoop(
                 topicBN,

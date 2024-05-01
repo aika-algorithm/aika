@@ -75,7 +75,7 @@ public class PatternCategoryInputSynapse
     }
 
     @Override
-    public double getInitialInstanceWeight() {
+    public double getInitialCategorySynapseWeight() {
         return initialCategorySynapseWeight;
     }
 

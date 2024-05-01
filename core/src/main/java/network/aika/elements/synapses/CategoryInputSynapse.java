@@ -35,7 +35,7 @@ public interface CategoryInputSynapse<S extends Synapse> {
 
     void setInitialCategorySynapseWeight(double initialCategorySynapseWeight);
 
-    double getInitialInstanceWeight();
+    double getInitialCategorySynapseWeight();
 
     S setWeight(double w);
 

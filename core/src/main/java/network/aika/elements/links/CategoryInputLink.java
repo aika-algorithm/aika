@@ -18,8 +18,10 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.CategoryActivation;
+import network.aika.elements.synapses.CategoryInputSynapse;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.Synapse;
+import network.aika.queue.steps.Instantiation;
 
 /**
  *
@@ -35,17 +37,25 @@ public interface CategoryInputLink {
 
     CategorySynapse createCategorySynapse();
 
-    default void instantiateTemplate(CategoryActivation iAct, Activation oAct, Link template) {
-        if(iAct == null || oAct == null)
+    default void instantiateCategoryLink(Activation instanceAct) {
+        Link tl = (Link) this;
+        CategoryActivation categoryAct = (CategoryActivation) tl.getInput();
+
+        if(categoryAct == null || instanceAct == null)
             return;
 
-        Link l = iAct.getInputLink(oAct, getSynapse().getSynapseId());
+        Link l = categoryAct.getInputLink(instanceAct, getSynapse().getSynapseId());
         if(l != null)
             return;
 
         CategorySynapse s = createCategorySynapse();
-        s.initFromTemplate(oAct.getNeuron(), iAct.getNeuron(), getSynapse());
+        s.initFromTemplate(instanceAct.getNeuron(), categoryAct.getNeuron(), getSynapse());
 
-        s.createLinkFromTemplate(oAct, iAct, template);
+        CategoryInputSynapse cis = (CategoryInputSynapse) getSynapse();
+        s.setWeight(cis.getInitialCategorySynapseWeight());
+
+        s.createLinkFromTemplate(instanceAct, categoryAct, tl);
+
+        Instantiation.add(categoryAct);
     }
 }

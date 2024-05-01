@@ -81,7 +81,7 @@ public class InhibitoryCategoryInputSynapse extends DisjunctiveSynapse<
     }
 
     @Override
-    public double getInitialInstanceWeight() {
+    public double getInitialCategorySynapseWeight() {
         return initialCategorySynapseWeight;
     }
 

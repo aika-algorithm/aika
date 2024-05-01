@@ -381,7 +381,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return true;
     }
 
-    public <IL extends Link> Optional<IL> getInputLinkByType(Class<IL> linkType) {
+    public <IL> Optional<IL> getInputLinkByType(Class<IL> linkType) {
         return getInputLinksByType(linkType)
                 .findAny();
     }
@@ -519,8 +519,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public abstract CategoryInputLink getActiveCategoryInputLink();
 
-    public Activation<N> resolveAbstractInputActivation() {
-        return isInstantiable() ?
+    public Activation<N> resolveAbstractInputActivation(boolean isSynapseInstantiable) {
+        return isSynapseInstantiable && neuron.isInstantiable() ?
                 getActiveTemplateInstance() :
                 this;
     }
@@ -528,12 +528,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
     public Activation getActiveTemplateInstance() {
         CategoryInputLink l = getActiveCategoryInputLink();
         return l != null && l.getInput() != null ?
-                l.getInput().getActiveTemplateInstance() :
+                l.getInput().getActiveCategoryInput() :
                 null;
-    }
-
-    public boolean isInstantiable() {
-        return neuron.isInstantiable() && neuron.isAbstract();
     }
 
     public Activation<N> instantiateTemplateNode() {
@@ -574,12 +570,12 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return ti;
     }
 
-    private void linkTemplateAndInstance(Activation<N> ti) {
+    protected void linkTemplateAndInstance(Activation<N> ti) {
         CategoryInputLink cl = getActiveCategoryInputLink();
         if(cl == null)
             cl = createCategoryInputLink();
 
-        cl.instantiateTemplate(cl.getInput(), ti, (Link) cl);
+        cl.instantiateCategoryLink(ti);
     }
 
     public CategoryInputLink createCategoryInputLink() {
@@ -595,11 +591,14 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public void instantiateTemplateEdges(Activation<N> instanceAct) {
         getInputLinks()
+                .filter(l -> l.getSynapse().isOutputSideInstantiable())
                 .filter(l -> l.getInput() != null)
-                .filter(l -> l.getInput().isFired(INNER_FEEDBACK))
+                .filter(l -> l.getInput().isFired(INNER_FEEDBACK) || l instanceof CategoryInputLink) // Should this condition rely on the annealing value instead of instanceof?
                 .forEach(l ->
                         l.instantiateTemplate(
-                                l.getInput().resolveAbstractInputActivation(),
+                                l.getInput().resolveAbstractInputActivation(
+                                        l.getSynapse().isInputSideInstantiable()
+                                ),
                                 instanceAct
                         )
                 );
@@ -607,12 +606,15 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         instanceAct.initFromTemplate(this);
 
         getOutputLinks()
+                .filter(l -> l.getSynapse().isInputSideInstantiable())
                 .filter(l -> !(l instanceof CategoryLink))
                 .filter(l -> l.getOutput().isFired(INNER_FEEDBACK))
                 .forEach(l ->
                         l.instantiateTemplate(
                                 instanceAct,
-                                l.getOutput().resolveAbstractInputActivation()
+                                l.getOutput().resolveAbstractInputActivation(
+                                        l.getSynapse().isOutputSideInstantiable()
+                                )
                         )
                 );
     }

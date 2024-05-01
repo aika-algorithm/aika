@@ -133,6 +133,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
         entityPattern.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(entityPattern.getType()))
                 .adjustBias()
+                .setInstantiable(true, true)
                 .getInput()
                 .setPersistent(true);
 
@@ -153,7 +154,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         entityBN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(entityBN.getType()))
-                .adjustBias();
+                .adjustBias()
+                .setInstantiable(true, true);
 
         addPositiveFeedbackLoop(
                 entityBN,
@@ -170,6 +172,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 .setTypeDescription("Abstract Phrase -> Entity InhibN");
 
         inhibitoryN.makeAbstract()
+                .setInstantiable(true, true)
                 .setWeight(1.0);
 
         addInhibitoryLoop(
@@ -186,7 +189,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         topicBN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()))
-                .adjustBias();
+                .adjustBias()
+                .setInstantiable(true, true);
 
         disable();
     }
@@ -204,15 +208,6 @@ public class EntityModel extends TemplateModel<EntityModel> {
     @Override
     protected String getLabelPostfix() {
         return " " + ENTITY_LABEL;
-    }
-
-    @Override
-    public void onInstantiation(Activation tAct, Activation iAct) {
-        super.onInstantiation(tAct, iAct);
-
-        iAct.getNeuron().makeAbstract()
-                .setWeight(getDefaultInputCategorySynapseWeight(tAct.getType()))
-                .adjustBias();
     }
 
     @Override
@@ -252,10 +247,13 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         Synapse s = entityPattern.getOutputSynapse(getTopicModel().getTopicBindingNeuron().getProvider());
         if(s != null)
-            s.setInstantiable(false);
+            s.setInstantiable(false, false);
 
         entityBN = lookupInstance(doc, parent.entityBN);
         entityBN.setPersistent(true);
+
+        entityBN.getInputSynapseByType(InputObjectSynapse.class)
+                .setInstantiable(false, true);
 
         topicBN = lookupInstance(doc, parent.topicBN);
         topicBN.setPersistent(true);
@@ -286,9 +284,14 @@ public class EntityModel extends TemplateModel<EntityModel> {
     }
 
     public void setInstantiable(boolean instantiable) {
-        entityPattern.setInstantiable(instantiable, true);
-        entityBN.setInstantiable(instantiable, true);
-        topicBN.setInstantiable(instantiable, true);
+        entityPattern.setInstantiable(instantiable);
+        entityPattern.setInputSynapsesInstantiable(instantiable, instantiable);
+
+        entityBN.setInstantiable(instantiable);
+        entityBN.setInputSynapsesInstantiable(instantiable, instantiable);
+
+        topicBN.setInstantiable(instantiable);
+        topicBN.setInputSynapsesInstantiable(instantiable, instantiable);
     }
 
     public Model getModel() {

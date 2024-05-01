@@ -41,9 +41,4 @@ public class PatternCategoryInputLink extends ConjunctiveCategoryInputLink<Patte
     @Override
     protected void connectGradientFields() {
     }
-
-    @Override
-    public void instantiateTemplate(CategoryActivation iAct, PatternActivation oAct) {
-        instantiateTemplate(iAct, oAct, this);
-    }
 }
