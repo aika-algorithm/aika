@@ -385,7 +385,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         return true;
     }
 
-    public <IL extends Link> Optional<IL> getInputLinkByType(Class<IL> linkType) {
+    public <IL> Optional<IL> getInputLinkByType(Class<IL> linkType) {
         return getInputLinksByType(linkType)
                 .findAny();
     }
@@ -502,7 +502,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         if(cil == null || cil.getInput() == null)
             return Stream.empty();
 
-        return cil.getInput()
+        return ((CategoryActivation)cil.getInput())
                 .getCategoryInputs();
     }
 
@@ -513,8 +513,8 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
 
     public abstract Link getActiveCategoryInputLink();
 
-    public Activation resolveAbstractInputActivation() {
-        return isInstantiable() ?
+    public Activation resolveAbstractInputActivation(boolean isSynapseInstantiable) {
+        return isSynapseInstantiable && neuron.isInstantiable() ?
                 getActiveTemplateInstance() :
                 this;
     }
@@ -522,12 +522,8 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     public Activation getActiveTemplateInstance() {
         Link l = getActiveCategoryInputLink();
         return l != null && l.getInput() != null ?
-                l.getInput().getActiveTemplateInstance() :
+                ((CategoryActivation)l.getInput()).getActiveCategoryInput() :
                 null;
-    }
-
-    public boolean isInstantiable() {
-        return neuron.isInstantiable() && neuron.isAbstract();
     }
 
     public Activation instantiateTemplateNode() {
@@ -568,12 +564,12 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         return ti;
     }
 
-    private void linkTemplateAndInstance(Activation ti) {
+    protected void linkTemplateAndInstance(Activation ti) {
         Link cl = getActiveCategoryInputLink();
         if(cl == null)
             cl = createCategoryInputLink();
 
-        cl.instantiateTemplate(cl.getInput(), ti);
+        cl.instantiateCategoryLink(ti);
     }
 
     public Link createCategoryInputLink() {
@@ -582,16 +578,20 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
             return null;
 
         Activation catAct = cis.getInput().createActivation(doc);
+
         return cis.createAndInitLink(catAct, this);
     }
 
     public void instantiateTemplateEdges(Activation instanceAct) {
         getInputLinks()
+                .filter(l -> l.getSynapse().isOutputSideInstantiable())
                 .filter(l -> l.getInput() != null)
-                .filter(l -> l.getInput().isFired(INNER_FEEDBACK))
+                .filter(l -> l.getInput().isFired(INNER_FEEDBACK) || l instanceof CategoryInputLink) // Should this condition rely on the annealing value instead of instanceof?
                 .forEach(l ->
                         l.instantiateTemplate(
-                                l.getInput().resolveAbstractInputActivation(),
+                                l.getInput().resolveAbstractInputActivation(
+                                        l.getSynapse().isInputSideInstantiable()
+                                ),
                                 instanceAct
                         )
                 );
@@ -599,12 +599,15 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         instanceAct.initFromTemplate(this);
 
         getOutputLinks()
+                .filter(l -> l.getSynapse().isInputSideInstantiable())
                 .filter(l -> !(l instanceof CategoryLink))
                 .filter(l -> l.getOutput().isFired(INNER_FEEDBACK))
                 .forEach(l ->
                         l.instantiateTemplate(
                                 instanceAct,
-                                l.getOutput().resolveAbstractInputActivation()
+                                l.getOutput().resolveAbstractInputActivation(
+                                        l.getSynapse().isOutputSideInstantiable()
+                                )
                         )
                 );
     }

@@ -21,6 +21,7 @@ import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.RegisterInputSlot;
@@ -40,6 +41,7 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.fields.link.FieldLink;
 import network.aika.queue.Queue;
 import network.aika.queue.Timestamp;
+import network.aika.queue.steps.Instantiation;
 import network.aika.queue.steps.LinkUpdate;
 import network.aika.visitor.Visitor;
 
@@ -150,15 +152,6 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
         if(iAct == null || oAct == null)
             return;
 
-        if(!synapse.isInstantiable())
-            return;
-
-        /* TODO: check if necessary
-        Link l = iAct.getInputLink(oAct, getSynapse().getSynapseId());
-        if(l != null)
-            return;
-         */
-
         Synapse s = synapse.instantiateTemplate(
                 iAct.getNeuron(),
                 oAct.getNeuron()
@@ -169,6 +162,28 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
             return;
 
         s.createLinkFromTemplate(iAct, oAct, this);
+    }
+
+    void instantiateCategoryLink(Activation instanceAct) {
+        Link tl = (Link) this;
+        CategoryActivation categoryAct = (CategoryActivation) tl.getInput();
+
+        if(categoryAct == null || instanceAct == null)
+            return;
+
+        Link l = categoryAct.getInputLink(instanceAct, getSynapse().getSynapseId());
+        if(l != null)
+            return;
+
+        CategorySynapse s = createCategorySynapse();
+        s.initFromTemplate(instanceAct.getNeuron(), categoryAct.getNeuron(), getSynapse());
+
+        Synapse cis = getSynapse();
+        s.setWeight(cis.getInitialCategorySynapseWeight());
+
+        s.createLinkFromTemplate(instanceAct, categoryAct, tl);
+
+        Instantiation.add(categoryAct);
     }
 
     public abstract void connectWeightUpdate();
