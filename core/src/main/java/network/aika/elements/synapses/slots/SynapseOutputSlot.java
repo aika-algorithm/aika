@@ -17,6 +17,7 @@
 package network.aika.elements.synapses.slots;
 
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.direction.Direction;
@@ -34,7 +35,7 @@ public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends Conjuncti
 
     protected Field outputNet;
 
-    public SynapseOutputSlot(Activation act, S synapse) {
+    public SynapseOutputSlot(ConjunctiveActivation act, S synapse) {
         super(
                 act,
                 synapse,
@@ -56,6 +57,8 @@ public class SynapseOutputSlot<S extends ConjunctiveSynapse, L extends Conjuncti
                 ),
                 synapse.getWeight()
         );
+
+        synapse.initSynapseBias((ConjunctiveActivation) act);
     }
 
     public Field getOutputNet() {

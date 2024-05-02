@@ -25,12 +25,17 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.meta.exceptions.FailedInstantiationException;
 import network.aika.queue.steps.InstantiationTrigger;
 import network.aika.utils.Writable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Lukas Molzberger
  */
 public abstract class TemplateModel<T extends TemplateModel> implements InstantiationCallback, Writable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TemplateModel.class);
+
 
     protected String label;
 
@@ -122,11 +127,17 @@ public abstract class TemplateModel<T extends TemplateModel> implements Instanti
     protected abstract String getLabelPostfix();
 
     protected static <N extends Neuron<?, ?>> N lookupInstance(Document doc, N templateN) {
-        return (N) templateN.getActivations(doc)
+        Activation templateInstance = templateN.getActivations(doc)
                 .stream()
                 .findFirst()
                 .orElse(null)
-                .getActiveTemplateInstance()
-                .getNeuron();
+                .getActiveTemplateInstance();
+
+        if(templateInstance == null) {
+            LOG.warn("Unable to find instance for template Neuron: " + templateN);
+            return null;
+        }
+
+        return (N) templateInstance.getNeuron();
     }
 }

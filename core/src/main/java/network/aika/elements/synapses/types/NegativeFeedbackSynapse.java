@@ -17,6 +17,7 @@
 package network.aika.elements.synapses.types;
 
 import network.aika.Model;
+import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.links.types.NegativeFeedbackLink;
@@ -83,11 +84,9 @@ public class NegativeFeedbackSynapse extends ConjunctiveSynapse<
     }
 
     @Override
-    public void initBiasInput(BindingActivation act) {
+    public void initSynapseBias(ConjunctiveActivation act) {
         linkAndConnect(weight, act.getNet(synapseType.outputState()))
                 .setPropagateUpdates(false);
-
-        act.registerInputSlot(this);
     }
 
     @Override

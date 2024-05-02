@@ -62,13 +62,6 @@ public class OuterPositiveFeedbackSynapse extends PositiveFeedbackSynapse<
     }
 
     @Override
-    public void initBiasInput(BindingActivation act) {
-        super.initBiasInput(act);
-
-        act.registerInputSlot(this);
-    }
-
-    @Override
     public SynapseSlot createOutputSlot(BindingActivation oAct) {
         return new AnnealingSynapseOutputSlot(oAct, this, AnnealingType.OUTER_FEEDBACK);
     }

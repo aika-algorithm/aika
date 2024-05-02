@@ -106,13 +106,13 @@ public abstract class ConjunctiveLink<S extends ConjunctiveSynapse, IA extends A
             );
 
         if(synapse.isOptional())
-            synapse.initBiasInput(output);
+            synapse.initSlots(output);
     }
 
     public void initFromTemplate(Link template) {
         super.initFromTemplate(template);
 
-        synapse.initBiasInput(output);
+        synapse.initSlots(output);
     }
 
     @Override

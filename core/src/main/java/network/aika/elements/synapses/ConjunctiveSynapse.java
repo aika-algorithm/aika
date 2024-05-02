@@ -21,7 +21,6 @@ import network.aika.elements.activations.StateType;
 import network.aika.elements.synapses.slots.SynapseInputSlot;
 import network.aika.elements.synapses.slots.SynapseOutputSlot;
 import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.enums.direction.Direction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.activations.Activation;
@@ -35,7 +34,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
 import static network.aika.queue.Phase.TRAINING;
 import static network.aika.utils.Utils.TOLERANCE;
@@ -88,7 +86,11 @@ public abstract class ConjunctiveSynapse<
         return slot;
     }
 
-    public void initBiasInput(OA act) {
+    public void initSlots(OA act) {
+        act.registerInputSlot(this);
+    }
+
+    public void initSynapseBias(ConjunctiveActivation act) {
         linkAndConnect(synapseBias, act.getNet(synapseType.outputState()))
                 .setPropagateUpdates(false);
     }

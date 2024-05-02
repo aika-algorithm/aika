@@ -137,6 +137,8 @@ public class TopicModel extends TemplateModel<TopicModel> {
         topicPatternN.setInputSynapsesInstantiable(instantiable, instantiable);
         topicBN.setInstantiable(instantiable);
         topicBN.setInputSynapsesInstantiable(instantiable, instantiable);
+        inhibitoryN.setInstantiable(instantiable);
+        inhibitoryN.setInputSynapsesInstantiable(instantiable, instantiable);
     }
 
     @Override
@@ -194,6 +196,8 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 inhibitoryN,
                 NEG_MARGIN * -topicBN.getTargetNet()
         );
+
+        setInstantiable(false);
     }
 
     @Override

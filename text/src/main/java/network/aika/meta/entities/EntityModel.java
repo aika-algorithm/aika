@@ -142,7 +142,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 topicModel.getTopicBindingNeuron(),
                 10.0,
                 true
-        );
+        )
+                .setInstantiable(false, false);
 
         entityBN = addBindingNeuron(
                 phraseModel.getPatternNeuron(),
@@ -256,7 +257,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 .setInstantiable(false, true);
 
         topicBN = lookupInstance(doc, parent.topicBN);
-        topicBN.setPersistent(true);
+        if(topicBN != null)
+            topicBN.setPersistent(true);
 
         inhibitoryN = lookupInstance(doc, parent.inhibitoryN);
         inhibitoryN.setPersistent(true);

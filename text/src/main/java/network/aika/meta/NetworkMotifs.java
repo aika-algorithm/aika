@@ -18,7 +18,6 @@ package network.aika.meta;
 
 import network.aika.Model;
 import network.aika.elements.Type;
-import network.aika.elements.neurons.RefType;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
@@ -37,7 +36,7 @@ import static network.aika.meta.sequences.SequenceModel.POS_MARGIN;
  * @author Lukas Molzberger
  */
 public class NetworkMotifs {
-    private static final Logger log = LoggerFactory.getLogger(NetworkMotifs.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NetworkMotifs.class);
 
     public static double DEFAULT_BINDING_INPUT_CATEGORY_SYNAPSE_WEIGHT = 5.0;
     public static double DEFAULT_PATTERN_INPUT_CATEGORY_SYNAPSE_WEIGHT = 5.0;
@@ -79,8 +78,8 @@ public class NetworkMotifs {
         return bn;
     }
 
-    public static void addInputObjectSynapse(PatternNeuron input, BindingNeuron bn, double weight, boolean propagable) {
-        new InputObjectSynapse()
+    public static InputObjectSynapse addInputObjectSynapse(PatternNeuron input, BindingNeuron bn, double weight, boolean propagable) {
+        return new InputObjectSynapse()
                 .setWeight(weight)
                 .link(input, bn)
                 .setPropagable(propagable)
@@ -156,7 +155,7 @@ public class NetworkMotifs {
                 .setPropagable(true)
                 .adjustBias(bn.getTargetValue() + weakInputMargin);
 
-        log.info("  " + pSyn + " targetNetContr:" + -pSyn.getSynapseBias().getValue());
+        LOG.info("  " + pSyn + " targetNetContr:" + -pSyn.getSynapseBias().getValue());
 
         InnerPositiveFeedbackSynapse posFeedSyn = new InnerPositiveFeedbackSynapse()
                 .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), pn.getTargetValue()))
@@ -169,7 +168,7 @@ public class NetworkMotifs {
                 .setInstantiable(instantiable, instantiable)
                 .adjustBias();
 
-        log.info("  " + posFeedSyn + " targetNetContr:" + -posFeedSyn.getSynapseBias().getValue());
+        LOG.info("  " + posFeedSyn + " targetNetContr:" + -posFeedSyn.getSynapseBias().getValue());
 
         return posFeedSyn;
     }
@@ -211,6 +210,6 @@ public class NetworkMotifs {
 
         rel.linkRelation(spSyn, relSyn);
 
-        log.info("  " + spSyn + " targetNetContr:" + -spSyn.getSynapseBias().getValue());
+        LOG.info("  " + spSyn + " targetNetContr:" + -spSyn.getSynapseBias().getValue());
     }
 }

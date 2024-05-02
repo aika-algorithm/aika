@@ -99,7 +99,7 @@ public abstract class ConjunctiveActivation<N extends ConjunctiveNeuron<N, ?>> e
     protected void initBiases() {
         neuron.getSynapseBiasSynapses()
                 .forEach(s ->
-                        s.initBiasInput(this)
+                        s.initSlots(this)
                 );
 
         super.initBiases();

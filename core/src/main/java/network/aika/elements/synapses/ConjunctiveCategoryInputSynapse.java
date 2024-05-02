@@ -42,11 +42,4 @@ public abstract class ConjunctiveCategoryInputSynapse<
     public SynapseSlot createOutputSlot(OA oAct) {
         return new AnnealingSynapseOutputSlot(oAct, this, AnnealingType.CATEGORY_INPUT);
     }
-
-    @Override
-    public void initBiasInput(OA act) {
-        super.initBiasInput(act);
-
-        act.registerInputSlot(this);
-    }
 }
