@@ -188,14 +188,14 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         );
     }
 
-    public void propagateBindingSignal(Scope t, PatternActivation bs, boolean state) {
+    public void propagateBindingSignal(Scope t, Activation bs, boolean state) {
         getOutputLinks()
                 .forEach(l ->
                         l.propagateBindingSignal(bs, t, state)
                 );
     }
 
-    public PatternActivation getBindingSignal(Scope t) {
+    public Activation getBindingSignal(Scope t) {
         SingleBSSlot slot = (SingleBSSlot) getBindingSignalSlot(t);
 
         return slot != null ?
@@ -260,6 +260,10 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
             return states[states.length - 1];
 
         return states[st.ordinal()];
+    }
+
+    public void setNet(StateType stateType, double net) {
+
     }
 /*
     public Field getValue(StateType st) {

@@ -17,7 +17,7 @@
 package network.aika.queue.steps;
 
 import network.aika.Document;
-import network.aika.elements.activations.types.BindingActivation;
+import network.aika.elements.activations.Activation;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 
@@ -29,16 +29,16 @@ import static network.aika.utils.StringUtils.doubleToString;
  *
  * @author Lukas Molzberger
  */
-public class Anneal extends ElementStep<BindingActivation> {
+public class Anneal extends ElementStep<Activation> {
 
 
-    public static void add(BindingActivation act) {
+    public static void add(Activation act) {
         double v = act.getOuterFeedbackAnnealingValue().getValue();
         if (v <= 1.0)
             add(new Anneal(act));
     }
 
-    public Anneal(BindingActivation act) {
+    public Anneal(Activation act) {
         super(act);
     }
 
@@ -49,7 +49,7 @@ public class Anneal extends ElementStep<BindingActivation> {
 
     @Override
     public void process() {
-        BindingActivation act = getElement();
+        Activation act = getElement();
         Document doc = act.getDocument();
 
         double v = act.getOuterFeedbackAnnealingValue().getValue();

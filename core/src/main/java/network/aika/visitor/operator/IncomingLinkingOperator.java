@@ -18,7 +18,6 @@ package network.aika.visitor.operator;
 
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.Synapse;
@@ -36,7 +35,7 @@ public class IncomingLinkingOperator extends LinkingOperator {
 
     private Synapse sourceSyn; // Set only during latent linking
 
-    public IncomingLinkingOperator(Activation sourceAct, Synapse sourceSyn, Synapse targetSyn, PatternActivation bindingSignal) {
+    public IncomingLinkingOperator(Activation sourceAct, Synapse sourceSyn, Synapse targetSyn, Activation bindingSignal) {
         super(sourceAct, targetSyn, bindingSignal);
         this.sourceSyn = sourceSyn;
     }

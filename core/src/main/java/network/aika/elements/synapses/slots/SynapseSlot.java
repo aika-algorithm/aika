@@ -42,10 +42,6 @@ public interface SynapseSlot extends Type<SynapseSlotTypeDefinition, SynapseSlot
 
     Link getLink(Activation act);
 
-    Field getInputField();
-
-    Field getOutputField();
-
     Link getSelectedLink();
 
     Synapse getSynapse();

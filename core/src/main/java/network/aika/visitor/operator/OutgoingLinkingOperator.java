@@ -17,7 +17,6 @@
 package network.aika.visitor.operator;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.Synapse;
@@ -30,7 +29,7 @@ import network.aika.visitor.UpVisitor;
  */
 public class OutgoingLinkingOperator extends LinkingOperator {
 
-    public OutgoingLinkingOperator(Activation sourceAct, Synapse targetSyn, PatternActivation bindingSignal) {
+    public OutgoingLinkingOperator(Activation sourceAct, Synapse targetSyn, Activation bindingSignal) {
         super(sourceAct, targetSyn, bindingSignal);
     }
 

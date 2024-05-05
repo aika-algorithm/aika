@@ -16,7 +16,6 @@
  */
 package network.aika.elements.typedef.model;
 
-import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.typedef.StateTypeDefinition;
 import network.aika.fielddefs.FieldDefinition;

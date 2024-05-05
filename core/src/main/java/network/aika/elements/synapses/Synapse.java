@@ -20,7 +20,6 @@ import network.aika.Model;
 import network.aika.elements.PreActivation;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.relations.Relation;
 import network.aika.Document;
@@ -34,8 +33,6 @@ import network.aika.enums.Scope;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.Field;
-import network.aika.fields.FieldOutput;
-import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.Trigger;
@@ -76,7 +73,8 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
 
     private Relation relation;
 
-    private boolean instantiable = true;
+    private boolean inputSideInstantiable = true;
+    private boolean outputSideInstantiable = true;
 
 
     protected boolean trainingAllowed = true;
@@ -150,18 +148,6 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         SynapseSlot slot = createOutputSlot(oAct);
         slot.init();
         return slot;
-    }
-
-    public SumField getOutputNet(Activation act) {
-        return act.getNet(synapseType.outputState());
-    }
-
-    public FieldOutput getInputValue(Activation input) {
-        return input.getValue();
-    }
-
-    public FieldOutput getInputValue(Activation input, StateType t) {
-        return input.getValue(t);
     }
 
     public void checkWeight() {
@@ -298,14 +284,19 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         return getWeight().getUpdatedValue();
     }
 
-    public Synapse setInstantiable(boolean instantiable) {
-        this.instantiable = instantiable;
+    public Synapse setInstantiable(boolean inputSideInstantiable, boolean outputSideInstantiable) {
+        this.inputSideInstantiable = inputSideInstantiable;
+        this.outputSideInstantiable = outputSideInstantiable;
 
         return this;
     }
 
-    public boolean isInstantiable() {
-        return instantiable;
+    public boolean isInputSideInstantiable() {
+        return inputSideInstantiable;
+    }
+
+    public boolean isOutputSideInstantiable() {
+        return outputSideInstantiable;
     }
 
     public Synapse link(Neuron input, Neuron output) {
@@ -467,7 +458,7 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         return false;
     }
 
-    public void initBiasInput(Activation output) {
+    public void initSlots(Activation output) {
     }
 
     @Override
@@ -479,7 +470,8 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         out.writeLong(output.getId());
 
         getWeight().write(out);
-        out.writeBoolean(instantiable);
+        out.writeBoolean(inputSideInstantiable);
+        out.writeBoolean(outputSideInstantiable);
 
         out.writeBoolean(relation != null);
         if(relation != null)
@@ -501,7 +493,8 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         output = m.lookupNeuronProvider(in.readLong(), SYNAPSE_OUT);
 
         getWeight().readFields(in);
-        instantiable = in.readBoolean();
+        inputSideInstantiable = in.readBoolean();
+        outputSideInstantiable = in.readBoolean();
 
         if(in.readBoolean())
             relation = Relation.read(in, m);

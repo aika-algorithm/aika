@@ -14,19 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.links.types;
+package network.aika.elements.typedef.model;
 
+import network.aika.elements.typedef.ActivationTypeDefinition;
+import network.aika.elements.typedef.LinkTypeDefinition;
+import network.aika.elements.typedef.NeuronTypeDefinition;
+import network.aika.elements.typedef.SynapseTypeDefinition;
 
 /**
+ *
  * @author Lukas Molzberger
  */
-/*
-public class InhibitoryCategoryLink extends CategoryLink<InhibitoryCategorySynapse, InhibitoryActivation> {
+public interface TypeDefinition {
 
-    public InhibitoryCategoryLink(InhibitoryCategorySynapse s, InhibitoryActivation input, CategoryActivation output) {
-        super(s, input, output);
+    ActivationTypeDefinition getActivation();
 
-        crossConnectFields(input, (InhibitoryActivation) output.getTemplate());
-    }
+    NeuronTypeDefinition getNeuron();
+
+    ActivationTypeDefinition getCategoryActivation();
+
+    NeuronTypeDefinition getCategoryNeuron();
+
+    LinkTypeDefinition getLink();
+
+    SynapseTypeDefinition getSynapse();
+
+    LinkTypeDefinition getCategoryInputLink();
+
+    SynapseTypeDefinition getCategoryInputSynapse();
+
+    LinkTypeDefinition getCategoryLink();
+
+    SynapseTypeDefinition getCategorySynapse();
+
 }
-*/

@@ -31,10 +31,8 @@ import static network.aika.fields.link.FieldLink.linkAndConnect;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveActivation extends Activation {
+public class ConjunctiveActivation extends Activation {
 
-    protected InputField outerFeedbackAnnealingValue;
-    protected InputField instantiationAnnealingValue;
 
     public ConjunctiveActivation(int id, Document doc, ConjunctiveNeuron n) {
         super(id, doc, n);
@@ -44,62 +42,10 @@ public abstract class ConjunctiveActivation extends Activation {
         }
     }
 
-    @Override
-    protected void initNet() {
-        instantiationAnnealingValue = new InputField(this, "instantiation annealing value", 1.0);
-        super.initNet();
-    }
-
-    public Field getAnnealingValue(AnnealingType at) {
-        return switch (at) {
-            case CATEGORY_INPUT -> instantiationAnnealingValue;
-            case OUTER_FEEDBACK -> outerFeedbackAnnealingValue;
-        };
-    }
-
-    public InputField getInstantiationAnnealingValue() {
-        return instantiationAnnealingValue;
-    }
-
-    public InputField getOuterFeedbackAnnealingValue() {
-        return outerFeedbackAnnealingValue;
-    }
-
-    public AnnealingSynapseOutputSlot getActiveCategoryInputSlot() {
-        return getInputSlotsByType(AnnealingSynapseOutputSlot.class)
-                .filter(as -> as.getAnnealingType() == AnnealingType.CATEGORY_INPUT)
-                .findFirst()
-                .orElse(null);
-    }
 
     @Override
     public CategoryInputLink getActiveCategoryInputLink() {
         AnnealingSynapseOutputSlot sl = getActiveCategoryInputSlot();
         return sl != null ? (CategoryInputLink) sl.getSelectedLink() : null;
     }
-/*
-    @Override
-    protected void connectWeightUpdate() {
-        negUpdateValue = scale(
-                this,
-                "-updateValue",
-                -1.0,
-                updateValue
-        );
-
-        linkAndConnect(
-                updateValue,
-                getNeuron().getBias()
-        );
-    }
-
-    @Override
-    protected void initBiases() {
-        ((ConjunctiveNeuron)neuron).getSynapseBiasSynapses()
-                .forEach(s ->
-                        s.initBiasInput(this)
-                );
-
-        super.initBiases();
-    }*/
 }

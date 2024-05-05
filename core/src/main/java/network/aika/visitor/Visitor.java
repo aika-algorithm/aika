@@ -40,7 +40,7 @@ public abstract class Visitor {
         return operator;
     }
 
-    public void start(Activation<?> act, Scope s) {
+    public void start(Activation act, Scope s) {
         next(act,null, s, 0);
     }
 
@@ -52,7 +52,7 @@ public abstract class Visitor {
         return v;
     }
 
-    public abstract void next(Activation<?> act, Link lastLink, Scope s, int depth);
+    public abstract void next(Activation act, Link lastLink, Scope s, int depth);
 
     public abstract void next(Link l, Scope s, int depth);
 

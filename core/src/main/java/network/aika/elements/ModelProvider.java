@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses.types;
+package network.aika.elements;
 
+import network.aika.Config;
+import network.aika.Model;
 
 /**
- * The Same Object Binding Neuron Synapse is an inner synapse between two binding neurons of the same object.
- *
- * @author Lukas Molzberger
+ *  @author Lukas Molzberger
  */
-/*
-public class SameObjectSynapse extends ConjunctiveSynapse{
-    @Override
-    public FieldOutput getInputValue(BindingActivation input) {
-        return input.getValue(OUTER_FEEDBACK);
+public interface ModelProvider {
+
+    Model getModel();
+
+    default Config getConfig() {
+        return getModel().getConfig();
     }
 }
-*/

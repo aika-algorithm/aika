@@ -16,19 +16,10 @@
  */
 package network.aika.elements.typedef.model;
 
-import network.aika.elements.activations.State;
-import network.aika.elements.activations.StateType;
 import network.aika.elements.typedef.StateTypeDefinition;
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fields.SumField;
 
-import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.fielddefs.FieldLinkDefinition.link;
-import static network.aika.fielddefs.Operators.func;
-import static network.aika.fields.Fields.isTrue;
-import static network.aika.queue.Phase.INFERENCE;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *

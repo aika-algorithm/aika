@@ -72,12 +72,15 @@ public class ConjunctiveSynapse extends Synapse
         return slot;
     }
 
-    public void initBiasInput(Activation act) {
-        linkAndConnect(synapseBias, act.getNet(synapseType.outputState()))
-                .setPropagateUpdates(false);
-
+    @Override
+    public void initSlots(Activation act) {
         if(synapseType.getRegisterInputSlot() == RegisterInputSlot.ON_INIT)
             act.registerInputSlot(this);
+    }
+
+    public void initSynapseBias(ConjunctiveActivation act) {
+        linkAndConnect(synapseBias, act.getNet(synapseType.outputState()))
+                .setPropagateUpdates(false);
     }
 
     public Synapse setSynapseBias(double b) {

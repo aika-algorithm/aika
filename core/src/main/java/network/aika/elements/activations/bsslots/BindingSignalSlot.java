@@ -62,13 +62,13 @@ public abstract class BindingSignalSlot {
 
     public abstract boolean isSet();
 
-    public abstract boolean isSet(PatternActivation bs);
+    public abstract boolean isSet(Activation bs);
 
-    public abstract Stream<PatternActivation> getBindingSignals();
+    public abstract Stream<Activation> getBindingSignals();
 
-    public abstract void updateBindingSignal(PatternActivation bs, boolean state);
+    public abstract void updateBindingSignal(Activation bs, boolean state);
 
-    protected void onBindingSignalSlotUpdate(PatternActivation bs, boolean state) {
+    protected void onBindingSignalSlotUpdate(Activation bs, boolean state) {
         if(!state)
             return;
 
@@ -79,9 +79,9 @@ public abstract class BindingSignalSlot {
     }
 
     public void onFired(State s) {
-        Stream<PatternActivation> bindingSignals =
+        Stream<Activation> bindingSignals =
                 isFeedback() && !isSet() ?
-                        Stream.of((PatternActivation) null) :
+                        Stream.of((Activation) null) :
                         getBindingSignals();
 
         bindingSignals.forEach(bs ->

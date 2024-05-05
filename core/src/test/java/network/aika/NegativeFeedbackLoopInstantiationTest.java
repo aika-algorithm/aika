@@ -20,13 +20,9 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.RefType;
 import network.aika.elements.typedef.model.TypeModel;
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldObjectDefinition;
-import network.aika.fields.SumField;
 import org.junit.jupiter.api.Test;
 
 import static network.aika.fielddefs.Operators.func;
-import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
@@ -39,10 +35,10 @@ public class NegativeFeedbackLoopInstantiationTest {
 
         Model m = new Model();
 
-        Neuron bn1 = typeModel.getBindingDef().getBindingNeuron().instantiate(m, RefType.NEURON);
+        Neuron bn1 = typeModel.getBindingDef().getNeuron().instantiate(m, RefType.NEURON);
 
 
         Document doc = new Document(m, "Bla");
-        Activation bAct1 = typeModel.getBindingDef().getBindingActivation().instantiate(1, doc, bn1);
+        Activation bAct1 = typeModel.getBindingDef().getActivation().instantiate(1, doc, bn1);
     }
 }

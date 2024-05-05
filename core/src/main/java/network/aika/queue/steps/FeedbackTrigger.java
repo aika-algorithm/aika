@@ -42,7 +42,7 @@ public class FeedbackTrigger extends ElementStep<ConjunctiveActivation> {
 
     @Override
     public void process() {
-        ConjunctiveActivation<?> act = getElement();
+        ConjunctiveActivation act = getElement();
         AnnealingSynapseOutputSlot ciSlot = act.getActiveCategoryInputSlot();
         if(ciSlot == null)
             return;

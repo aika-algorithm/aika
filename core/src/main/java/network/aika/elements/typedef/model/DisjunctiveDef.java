@@ -22,6 +22,7 @@ import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.neurons.DisjunctiveNeuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.DisjunctiveSynapse;
+import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.IdentityFunction;

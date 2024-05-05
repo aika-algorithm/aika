@@ -58,7 +58,7 @@ import static network.aika.queue.Timestamp.MIN;
  *
  * @author Lukas Molzberger
  */
-public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Element, Writable {
+public abstract class Neuron extends FieldObjectImpl<Neuron, NeuronTypeDefinition> implements Type<NeuronTypeDefinition, Neuron>, Element, Writable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
 
@@ -268,13 +268,15 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
         return this;
     }
 
-    public Neuron setInstantiable(boolean instantiable, boolean includeSyns) {
-        if (includeSyns)
-            getInputSynapses().forEach(s ->
-                    s.setInstantiable(instantiable)
-            );
+    public Neuron setInputSynapsesInstantiable(boolean inputSideInstantiable, boolean outputSideInstantiable) {
+        getInputSynapses()
+                .stream()
+                .filter(s -> !(s instanceof CategoryInputSynapse))
+                .forEach(s ->
+                        s.setInstantiable(inputSideInstantiable, outputSideInstantiable)
+                );
 
-        return setInstantiable(instantiable);
+        return this;
     }
 
     public boolean isInstantiable() {

@@ -93,16 +93,6 @@ public abstract class ConjunctiveSynapseSlot extends AbstractMaxField<ArgumentFi
     }
 
     @Override
-    public AbstractMaxField getInputField() {
-        return this;
-    }
-
-    @Override
-    public AbstractMaxField getOutputField() {
-        return this;
-    }
-
-    @Override
     public Comparator<ArgumentFieldLink<Link>> getComparator() {
         Comparator<ArgumentFieldLink<Link>> valueComp = comparingInt(fl ->
                 ApproximateComparisonValueUtil.convert(fl.getUpdatedInputValue())

@@ -49,7 +49,7 @@ public class Instantiation extends ElementStep<Activation> {
 
     @Override
     public void process() {
-        Activation<?> act = getElement();
+        Activation act = getElement();
         act.instantiateTemplateNode();
 
         if(act instanceof ConjunctiveActivation) {
