@@ -25,6 +25,7 @@ import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.typedef.NeuronTypeDefinition;
+import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
@@ -573,15 +574,15 @@ public abstract class Neuron extends FieldObjectImpl<Neuron, NeuronTypeDefinitio
         return provider.getInputSynapse(n);
     }
 
-    public <IS extends Synapse> IS getInputSynapseByType(Class<IS> synapseType) {
+    public Synapse getInputSynapseByType(SynapseTypeDefinition synapseType) {
         return provider.getInputSynapseByType(synapseType);
     }
 
-    public <IS extends Synapse> Stream<IS> getInputSynapsesByType(Class<IS> synapseType) {
+    public Stream<Synapse> getInputSynapsesByType(SynapseTypeDefinition synapseType) {
         return provider.getInputSynapsesByType(synapseType);
     }
 
-    public <OS> OS getOutputSynapseByType(Class<OS> synapseType) {
+    public Synapse getOutputSynapseByType(SynapseTypeDefinition synapseType) {
         return provider.getOutputSynapseByType(synapseType);
     }
 

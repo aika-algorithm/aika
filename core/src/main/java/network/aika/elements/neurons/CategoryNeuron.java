@@ -41,12 +41,21 @@ public abstract class CategoryNeuron extends DisjunctiveNeuron<CategoryNeuron, C
     }
 
     public Synapse getOutgoingCategoryInputSynapse() {
-        return getOutputSynapseByType(CategoryInputSynapse.class);
+        return getOutputSynapseByType(
+                getModel()
+                .getTypeModel()
+                .getCategoryDef()
+                        .getCategoryInputSynapse()
+        );
     }
 
     @Override
     public CategorySynapse createCategorySynapse() {
-        throw new UnsupportedOperationException();
+        return (CategorySynapse) getModel()
+                .getTypeModel()
+                .getCategoryDef()
+                .getCategorySynapse()
+                .instantiate();
     }
 
     @Override

@@ -143,27 +143,6 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
         s.createLinkFromTemplate(iAct, oAct, this);
     }
 
-    void instantiateCategoryLink(Activation instanceAct) {
-        Link tl = (Link) this;
-        CategoryActivation categoryAct = (CategoryActivation) tl.getInput();
-
-        if(categoryAct == null || instanceAct == null)
-            return;
-
-        Link l = categoryAct.getInputLink(instanceAct, getSynapse().getSynapseId());
-        if(l != null)
-            return;
-
-        CategorySynapse s = createCategorySynapse();
-        s.initFromTemplate(instanceAct.getNeuron(), categoryAct.getNeuron(), getSynapse());
-
-        Synapse cis = getSynapse();
-//        s.setWeight(cis.getInitialCategorySynapseWeight());
-
-        s.createLinkFromTemplate(instanceAct, categoryAct, tl);
-
-        Instantiation.add(categoryAct);
-    }
 
     public StateType inputState() {
         return getSynapse().getSynapseType().getTrigger().getType();

@@ -18,6 +18,9 @@ package network.aika.elements.activations;
 
 import network.aika.Document;
 import network.aika.elements.links.*;
+import network.aika.elements.synapses.CategorySynapse;
+import network.aika.elements.synapses.Synapse;
+import network.aika.queue.steps.Instantiation;
 import network.aika.text.TextReference;
 import network.aika.elements.neurons.CategoryNeuron;
 
@@ -31,6 +34,21 @@ public abstract class CategoryActivation extends DisjunctiveActivation {
 
     public CategoryActivation(int id, Document doc, CategoryNeuron neuron) {
         super(id, doc, neuron);
+    }
+
+    void instantiateCategoryLink(Activation instanceAct) {
+        if(instanceAct == null)
+            return;
+
+        CategorySynapse s = getNeuron().createCategorySynapse();
+        s.initFromTemplate(instanceAct.getNeuron(), getNeuron(), getSynapse());
+
+        Synapse cis = getSynapse();
+//        s.setWeight(cis.getInitialCategorySynapseWeight());
+
+        s.createLinkFromTemplate(instanceAct, categoryAct, tl);
+
+        Instantiation.add(categoryAct);
     }
 
     @Override
@@ -59,7 +77,7 @@ public abstract class CategoryActivation extends DisjunctiveActivation {
     }
 
     private void instantiateCategoryInputSynapse(Activation<CategoryNeuron> ti) {
-        Link cil = (Link) getOutputLinksByType(CategoryInputLink.class)
+        Link cil = getOutputLinksByType(CategoryInputLink.class)
                 .findFirst()
                 .orElse(null);
 

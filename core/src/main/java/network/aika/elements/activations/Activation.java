@@ -31,6 +31,7 @@ import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.ActivationTypeDefinition;
+import network.aika.elements.typedef.LinkTypeDefinition;
 import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.queue.Queue;
@@ -38,7 +39,6 @@ import network.aika.queue.Timestamp;
 import network.aika.queue.steps.InactiveLinks;
 import network.aika.text.TextReference;
 import network.aika.Range;
-import network.aika.fields.*;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -48,10 +48,8 @@ import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.elements.neurons.RefType.TEMPLATE;
 import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.queue.Phase.*;
 import static network.aika.queue.Timestamp.NOT_SET;
 import static network.aika.text.TextReference.join;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
@@ -389,7 +387,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         return true;
     }
 
-    public <IL> Optional<IL> getInputLinkByType(Class<IL> linkType) {
+    public Optional<Link> getInputLinkByType(LinkTypeDefinition linkType) {
         return getInputLinksByType(linkType)
                 .findAny();
     }
@@ -429,12 +427,6 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
                 .stream();
     }
 
-    public <OS extends SynapseSlot> Stream<OS> getOutputSlotsByType(Class<OS> slotType) {
-        return getOutputSlots()
-                .filter(slotType::isInstance)
-                .map(slotType::cast);
-    }
-
     public Link getInputLink(Activation iAct, int synapseId) {
         SynapseSlot synSlot = inputSlots.get(synapseId);
         return synSlot != null ?
@@ -449,16 +441,14 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
                 Stream.empty();
     }
 
-    public <IL> Stream<IL> getInputLinksByType(Class<IL> linkType) {
+    public Stream<Link> getInputLinksByType(LinkTypeDefinition linkType) {
         return getInputLinks()
-                .filter(linkType::isInstance)
-                .map(linkType::cast);
+                .filter(l -> l.getTypeDefinition() == linkType);
     }
 
-    public <OL> Stream<OL> getOutputLinksByType(Class<OL> linkType) {
+    public Stream<Link> getOutputLinksByType(LinkTypeDefinition linkType) {
         return getOutputLinks()
-                .filter(linkType::isInstance)
-                .map(linkType::cast);
+                .filter(l -> l.getTypeDefinition() == linkType);
     }
 
     public Stream<Link> getOutputLinks(Neuron n) {
@@ -472,21 +462,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         return getOutputLinks(s.getOutput())
                 .filter(l -> l.getSynapse() == s);
     }
-/*
-    @Override
-    public void disconnect() {
-        for(State s: states)
-            s.disconnect();
 
-        if(updateValue != null)
-            updateValue.disconnectAndUnlinkOutputs(false);
-
-        if(negUpdateValue != null)
-            negUpdateValue.disconnectAndUnlinkOutputs(false);
-
-        getInputSlots().forEach(SynapseSlot::disconnect);
-    }
-*/
     public Activation getTemplate() {
         return getCategoryActivations()
                 .map(CategoryActivation::getTemplate)
@@ -496,7 +472,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     }
 
     public Stream<CategoryActivation> getCategoryActivations() {
-        return getOutputLinksByType(CategoryLink.class)
+        return getOutputLinksByType(getModel().getTypeModel().getCategoryDef().getCategoryLink())
                 .map(l -> (CategoryActivation) l.getOutput())
                 .filter(Objects::nonNull);
     }
@@ -569,11 +545,12 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     }
 
     protected void linkTemplateAndInstance(Activation ti) {
-        Link cl = getActiveCategoryInputLink();
-        if(cl == null)
-            cl = createCategoryInputLink();
+        Link cil = getActiveCategoryInputLink();
+        if(cil == null)
+            cil = createCategoryInputLink();
 
-        cl.instantiateCategoryLink(ti);
+        CategoryActivation cAct = (CategoryActivation) cil.getOutput();
+        cAct.instantiateCategoryLink(ti);
     }
 
     public Link createCategoryInputLink() {
@@ -590,7 +567,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         getInputLinks()
                 .filter(l -> l.getSynapse().isOutputSideInstantiable())
                 .filter(l -> l.getInput() != null)
-                .filter(l -> l.getInput().isFired(INNER_FEEDBACK) || l instanceof CategoryInputLink) // Should this condition rely on the annealing value instead of instanceof?
+                .filter(l -> l.getInput().isFired(INNER_FEEDBACK)) // Should this condition rely on the annealing value instead of instanceof?
                 .forEach(l ->
                         l.instantiateTemplate(
                                 l.getInput().resolveAbstractInputActivation(
