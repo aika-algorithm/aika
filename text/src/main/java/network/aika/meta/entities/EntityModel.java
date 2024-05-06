@@ -135,7 +135,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 .adjustBias()
                 .setInstantiable(true, true)
                 .getInput()
-                .setPersistent(true);
+                .setPersistent(true)
+                .setInstantiable(true);
 
         addInputObjectSynapse(
                 entityPattern,
@@ -151,12 +152,15 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 10.0,
                 BINDING_NET_TARGET,
                 true
-        ).setTypeDescription("Abstract Phrase -> Entity BN");
+        )
+                .setTypeDescription("Abstract Phrase -> Entity BN");
 
         entityBN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(entityBN.getType()))
                 .adjustBias()
-                .setInstantiable(true, true);
+                .setInstantiable(true, true)
+                .getInput()
+                .setInstantiable(true);
 
         addPositiveFeedbackLoop(
                 entityBN,
@@ -164,7 +168,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 2.5,
                 0.0,
                 false,
-                false
+                false,
+                true
         );
 
         inhibitoryN = new InhibitoryNeuron(getModel(), TEMPLATE_MODEL)
@@ -174,12 +179,15 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         inhibitoryN.makeAbstract()
                 .setInstantiable(true, true)
-                .setWeight(1.0);
+                .setWeight(1.0)
+                .getInput()
+                .setInstantiable(true);
 
         addInhibitoryLoop(
                 entityBN,
                 inhibitoryN,
-                NEG_MARGIN * -entityBN.getTargetNet()
+                NEG_MARGIN * -entityBN.getTargetNet(),
+                true
         );
 
         topicBN = addBindingNeuron(
@@ -191,7 +199,9 @@ public class EntityModel extends TemplateModel<EntityModel> {
         topicBN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()))
                 .adjustBias()
-                .setInstantiable(true, true);
+                .setInstantiable(true, true)
+                .getInput()
+                .setInstantiable(true);
 
         disable();
     }
@@ -202,7 +212,8 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 entityPattern,
                 topicBN,
                 topicModel.getTopicPatternNeuron(),
-                2.5
+                2.5,
+                true
         );
     }
 
@@ -231,19 +242,20 @@ public class EntityModel extends TemplateModel<EntityModel> {
     @Override
     public void prepareInstantiation() {
         setInstantiable(true);
-        phraseModel.getEntityBN().setInstantiable(false);
-        phraseModel.getPatternNeuron().setInstantiable(false);
+        phraseModel.setInstantiable(false);
     }
 
     @Override
     public void mapResults(Document doc) {
         phraseModel.getEntityBN().setInstantiable(false);
         phraseModel.getPatternNeuron().setInstantiable(true);
+        phraseModel.getInhibitoryNeuron().setInstantiable(false);
 
         entityPattern = lookupInstance(doc, parent.entityPattern);
         entityPattern.setPersistent(true);
 
         entityPattern.getOutputSynapseByType(OuterPositiveFeedbackSynapse.class)
+                .setInstantiable(true, true)
                 .setOptional(true);
 
         Synapse s = entityPattern.getOutputSynapse(getTopicModel().getTopicBindingNeuron().getProvider());
@@ -294,6 +306,9 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
         topicBN.setInstantiable(instantiable);
         topicBN.setInputSynapsesInstantiable(instantiable, instantiable);
+
+        inhibitoryN.setInstantiable(instantiable);
+        inhibitoryN.setInputSynapsesInstantiable(instantiable, instantiable);
     }
 
     public Model getModel() {

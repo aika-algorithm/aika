@@ -16,7 +16,6 @@
  */
 package network.aika.elements.synapses.slots;
 
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.synapses.ConjunctiveSynapse;

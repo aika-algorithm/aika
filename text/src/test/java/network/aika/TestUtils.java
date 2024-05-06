@@ -52,7 +52,7 @@ public class TestUtils {
             return null;
 
         for(BindingNeuron bn: bns) {
-            NetworkMotifs.addInhibitoryLoop(bn, inhibN, -20.0);
+            NetworkMotifs.addInhibitoryLoop(bn, inhibN, -20.0, true);
         }
         return inhibN;
     }
@@ -68,7 +68,8 @@ public class TestUtils {
                     10.0,
                     0.1,
                     false,
-                    false
+                    false,
+                    true
             );
         }
         return patternN;

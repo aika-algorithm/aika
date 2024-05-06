@@ -177,6 +177,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 2.5,
                 0.0,
                 false,
+                true,
                 true
         );
 
@@ -194,7 +195,8 @@ public class TopicModel extends TemplateModel<TopicModel> {
         addInhibitoryLoop(
                 topicBN,
                 inhibitoryN,
-                NEG_MARGIN * -topicBN.getTargetNet()
+                NEG_MARGIN * -topicBN.getTargetNet(),
+                true
         );
 
         setInstantiable(false);

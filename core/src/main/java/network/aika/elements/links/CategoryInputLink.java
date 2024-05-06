@@ -44,10 +44,6 @@ public interface CategoryInputLink {
         if(categoryAct == null || instanceAct == null)
             return;
 
-        Link l = categoryAct.getInputLink(instanceAct, getSynapse().getSynapseId());
-        if(l != null)
-            return;
-
         CategorySynapse s = createCategorySynapse();
         s.initFromTemplate(instanceAct.getNeuron(), categoryAct.getNeuron(), getSynapse());
 

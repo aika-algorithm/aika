@@ -59,6 +59,12 @@ public class PhraseModel extends SequenceModel {
         return entityBN;
     }
 
+    public void setInstantiable(boolean instantiable) {
+        entityBN.setInstantiable(instantiable);
+        sequencePatternN.setInstantiable(instantiable);
+        inhibitoryN.setInstantiable(instantiable);
+    }
+
     @Override
     public String getPatternType() {
         return "Phrase";
@@ -78,6 +84,8 @@ public class PhraseModel extends SequenceModel {
         entityBN.makeAbstract()
                 .setWeight(getDefaultInputCategorySynapseWeight(entityBN.getType()))
                 .adjustBias();
+
+        setInstantiable(true);
     }
 
     @Override
@@ -86,7 +94,8 @@ public class PhraseModel extends SequenceModel {
                 sequencePatternN,
                 entityBN,
                 entityModel.getEntityPattern(),
-                2.5
+                2.5,
+                true
         ).setOptional(true);
     }
 

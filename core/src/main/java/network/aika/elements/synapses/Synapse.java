@@ -77,8 +77,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     private Relation relation;
 
-    private boolean inputSideInstantiable = true;
-    private boolean outputSideInstantiable = true;
+    private boolean inputSideInstantiable;
+    private boolean outputSideInstantiable;
 
     protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
             .setQueued(getQueue(), TRAINING, false)

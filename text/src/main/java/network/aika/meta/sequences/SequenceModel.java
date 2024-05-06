@@ -223,6 +223,7 @@ public abstract class SequenceModel implements Writable {
                 2.5,
                 0.0,
                 false,
+                true,
                 true
         );
 
@@ -303,7 +304,8 @@ public abstract class SequenceModel implements Writable {
         addInhibitoryLoop(
                 bn,
                 inhibitoryN,
-                getNegMargin(pos) * -bn.getTargetNet()
+                getNegMargin(pos) * -bn.getTargetNet(),
+                true
         );
 
         addPositiveFeedbackLoop(
@@ -312,7 +314,8 @@ public abstract class SequenceModel implements Writable {
                 p.pfWeight,
                 p.weakInputMargin,
                 allowRelaxedMatching,
-                isOptional
+                isOptional,
+                true
         );
 
         return bn;

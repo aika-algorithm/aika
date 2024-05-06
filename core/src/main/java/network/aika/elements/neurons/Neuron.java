@@ -83,7 +83,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     protected boolean allowTraining = true;
 
-    private boolean instantiable = true;
+    private boolean instantiable;
 
     protected InitParams initParams;
 

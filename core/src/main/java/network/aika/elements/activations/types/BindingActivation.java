@@ -131,7 +131,7 @@ public class BindingActivation extends ConjunctiveActivation<BindingNeuron> {
     private boolean isPosFeedbackSlotBlocked() {
         SynapseSlot<InnerPositiveFeedbackSynapse, InnerPositiveFeedbackLink> slot = getInputSlotBySynapseType(InnerPositiveFeedbackSynapse.class);
 
-        if(slot == null)
+        if(slot == null || slot.getLinks().count() == 0)
             return false;
 
         InnerPositiveFeedbackLink l = slot.getSelectedLink();

@@ -90,7 +90,8 @@ public class NetworkMotifs {
             PatternNeuron pn,
             BindingNeuron bn,
             PatternNeuron feedbackPN,
-            double psWeight
+            double psWeight,
+            boolean instantiable
     ) {
         addPositiveFeedbackLoop(
                 bn,
@@ -99,43 +100,27 @@ public class NetworkMotifs {
                 0.0,
                 false,
                 false,
-                true
+                instantiable
         ).setPropagable(true);
 
         return new OuterPositiveFeedbackSynapse()
                 .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), bn.getTargetValue()))
                 .link(feedbackPN, bn)
+                .setInstantiable(true, true)
                 .adjustBias();
     }
 
-    public static void addInhibitoryLoop(BindingNeuron bn, InhibitoryNeuron in, double weight) {
+    public static void addInhibitoryLoop(BindingNeuron bn, InhibitoryNeuron in, double weight, boolean instantiable) {
         new InhibitorySynapse()
                 .setWeight(1.0)
-                .link(bn, in);
+                .link(bn, in)
+                .setInstantiable(instantiable, instantiable);
 
         new NegativeFeedbackSynapse()
                 .setWeight(weight)
                 .link(in, bn)
-                .adjustBias();
-    }
-
-    public static InnerPositiveFeedbackSynapse addPositiveFeedbackLoop(
-            BindingNeuron bn,
-            PatternNeuron pn,
-            double weight,
-            double weakInputMargin,
-            boolean allowRelaxedMatching,
-            boolean isOptional
-    ) {
-        return addPositiveFeedbackLoop(
-                bn,
-                pn,
-                weight,
-                weakInputMargin,
-                allowRelaxedMatching,
-                isOptional,
-                true
-        );
+                .adjustBias()
+                .setInstantiable(instantiable, instantiable);
     }
 
     public static InnerPositiveFeedbackSynapse addPositiveFeedbackLoop(
