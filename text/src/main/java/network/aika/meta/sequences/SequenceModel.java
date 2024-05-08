@@ -174,7 +174,7 @@ public abstract class SequenceModel implements Writable {
         sequencePatternN = PatternNeuron.create(model, getPatternType());
         sequencePatternN.setBias(PATTERN_NET_TARGET);
         sequencePatternN.setTargetNet(PATTERN_NET_TARGET);
-        sequencePatternN.makeAbstract()
+        sequencePatternN.makeAbstract(false)
                 .setWeight(10.0)
                 .adjustBias();
 
@@ -182,7 +182,7 @@ public abstract class SequenceModel implements Writable {
                 .setLabel("I")
                 .setPersistent(true);
 
-        inhibitoryN.makeAbstract()
+        inhibitoryN.makeAbstract(false)
                 .setWeight(1.0);
 
         new PrimaryInhibitorySynapse()
@@ -203,6 +203,17 @@ public abstract class SequenceModel implements Writable {
         initTemplateBindingNeurons();
     }
 
+    public void setInstantiable(boolean instantiable) {
+        primaryBN.setInstantiable(instantiable);
+        primaryBN.setInputSynapsesInstantiable(instantiable, instantiable);
+
+        sequencePatternN.setInstantiable(instantiable);
+        sequencePatternN.setInputSynapsesInstantiable(instantiable, instantiable);
+
+        inhibitoryN.setInstantiable(instantiable);
+        inhibitoryN.setInputSynapsesInstantiable(instantiable, instantiable);
+    }
+
     protected abstract void initTemplateBindingNeurons();
 
     protected BindingNeuron createSubPhraseBindingNeuron() {
@@ -213,7 +224,7 @@ public abstract class SequenceModel implements Writable {
                 2.5,
                 true
         );
-        bn.makeAbstract()
+        bn.makeAbstract(false)
                 .setWeight(getDefaultInputCategorySynapseWeight(bn.getType()))
                 .adjustBias();
 
@@ -297,7 +308,7 @@ public abstract class SequenceModel implements Writable {
                 p.netTarget,
                 p.isPrimary
         );
-        bn.makeAbstract()
+        bn.makeAbstract(false)
                 .setWeight(getDefaultInputCategorySynapseWeight(bn.getType()))
                 .adjustBias();
 

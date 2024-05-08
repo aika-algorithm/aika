@@ -78,12 +78,16 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
     }
 
     @Override
-    public PatternCategoryInputSynapse makeAbstract() {
+    public PatternCategoryInputSynapse makeAbstract(boolean instantiable) {
+        setInstantiable(true);
+
         PatternCategoryNeuron patternCategory = new PatternCategoryNeuron(getModel(), CATEGORY)
+                .setInstantiable(instantiable)
                 .setLabel(getCategoryLabel(getLabel()));
 
         PatternCategoryInputSynapse s = new PatternCategoryInputSynapse()
-                .link(patternCategory, this);
+                .link(patternCategory, this)
+                .setInstantiable(instantiable, instantiable);
 
         s.setInitialCategorySynapseWeight(1.0);
 

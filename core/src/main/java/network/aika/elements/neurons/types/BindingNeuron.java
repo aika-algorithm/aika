@@ -90,12 +90,16 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
     }
 
     @Override
-    public BindingCategoryInputSynapse makeAbstract() {
+    public BindingCategoryInputSynapse makeAbstract(boolean instantiable) {
+        setInstantiable(true);
+
         BindingCategoryNeuron bindingCategory = new BindingCategoryNeuron(getModel(), CATEGORY)
+                .setInstantiable(instantiable)
                 .setLabel(getLabel() + CATEGORY_LABEL);
 
         BindingCategoryInputSynapse s = new BindingCategoryInputSynapse()
-                .link(bindingCategory, this);
+                .link(bindingCategory, this)
+                .setInstantiable(instantiable, instantiable);
 
         s.setInitialCategorySynapseWeight(1.0);
 

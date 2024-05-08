@@ -55,12 +55,16 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
     }
 
     @Override
-    public InhibitoryCategoryInputSynapse makeAbstract() {
+    public InhibitoryCategoryInputSynapse makeAbstract(boolean instantiable) {
+        setInstantiable(true);
+
         InhibitoryCategoryNeuron inhibCategory = new InhibitoryCategoryNeuron(getModel(), CATEGORY)
+                .setInstantiable(instantiable)
                 .setLabel(getLabel() + CATEGORY_LABEL);
 
         InhibitoryCategoryInputSynapse s = new InhibitoryCategoryInputSynapse()
-                .link(inhibCategory, this);
+                .link(inhibCategory, this)
+                .setInstantiable(instantiable, instantiable);
 
         s.setInitialCategorySynapseWeight(1.0);
 

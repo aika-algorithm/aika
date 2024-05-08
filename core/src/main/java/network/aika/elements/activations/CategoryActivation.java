@@ -37,7 +37,7 @@ public abstract class CategoryActivation extends DisjunctiveActivation<CategoryN
 
     @Override
     public CategoryInputLink getActiveCategoryInputLink() {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override

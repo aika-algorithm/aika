@@ -303,7 +303,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return getCategoryInputSynapse() != null;
     }
 
-    public abstract CategoryInputSynapse makeAbstract();
+    public abstract CategoryInputSynapse makeAbstract(boolean instantiable);
 
     public abstract CategoryInputSynapse getCategoryInputSynapse();
 

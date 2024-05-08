@@ -22,6 +22,8 @@ import network.aika.fields.Field;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 
+import java.util.stream.Stream;
+
 import static network.aika.queue.Phase.INSTANTIATION;
 
 
@@ -31,11 +33,16 @@ import static network.aika.queue.Phase.INSTANTIATION;
  */
 public class Instantiation extends ElementStep<Activation> {
 
-    public static void add(Activation act) {
+    public static void add(Activation<?> act) {
         if(act.instantiationIsQueued)
             return;
 
         act.instantiationIsQueued = true;
+
+        if(act.getTemplateInstances()
+                .anyMatch(Activation::isActiveTemplateInstance)
+        )
+            return;
 
         add(new Instantiation(act));
     }

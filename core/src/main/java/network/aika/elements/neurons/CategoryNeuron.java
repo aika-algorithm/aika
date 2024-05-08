@@ -36,7 +36,7 @@ public abstract class CategoryNeuron extends DisjunctiveNeuron<CategoryNeuron, C
     }
 
     @Override
-    public CategoryInputSynapse makeAbstract() {
+    public CategoryInputSynapse makeAbstract(boolean instantiable) {
         throw new UnsupportedOperationException();
     }
 

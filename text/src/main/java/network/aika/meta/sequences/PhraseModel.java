@@ -59,10 +59,12 @@ public class PhraseModel extends SequenceModel {
         return entityBN;
     }
 
+    @Override
     public void setInstantiable(boolean instantiable) {
+        super.setInstantiable(instantiable);
+
         entityBN.setInstantiable(instantiable);
-        sequencePatternN.setInstantiable(instantiable);
-        inhibitoryN.setInstantiable(instantiable);
+        entityBN.setInputSynapsesInstantiable(instantiable, instantiable);
     }
 
     @Override
@@ -81,7 +83,7 @@ public class PhraseModel extends SequenceModel {
         entityBN = addBindingNeuron(model, "Entity (Phrase)", 2.5)
                 .setTypeDescription("Abstract Entity -> Phrase BN");
 
-        entityBN.makeAbstract()
+        entityBN.makeAbstract(false)
                 .setWeight(getDefaultInputCategorySynapseWeight(entityBN.getType()))
                 .adjustBias();
 

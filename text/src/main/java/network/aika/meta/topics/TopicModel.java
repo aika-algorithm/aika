@@ -150,12 +150,10 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 .setPersistent(true)
                 .setTypeDescription("Abstract Topic PN");
 
-        topicPatternN.makeAbstract()
+        topicPatternN.makeAbstract(false)
                 .setWeight(getDefaultInputCategorySynapseWeight(topicPatternN.getType()))
-                .setInstantiable(false, false)
                 .getInput()
-                .setPersistent(true)
-                .setInstantiable(false);
+                .setPersistent(true);
 
         topicBN = addBindingNeuron(
                 model,
@@ -164,12 +162,10 @@ public class TopicModel extends TemplateModel<TopicModel> {
         )
                 .setTypeDescription("Abstract Entity -> Topic BN");
 
-        topicBN.makeAbstract()
+        topicBN.makeAbstract(false)
                 .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()))
                 .adjustBias()
-                .setInstantiable(false, false)
-                .getInput()
-                .setInstantiable(false);
+                .getInput();
 
         addPositiveFeedbackLoop(
                 topicBN,
@@ -186,11 +182,9 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 .setPersistent(true)
                 .setTypeDescription("Abstract Entity -> Topic InhibN");
 
-        inhibitoryN.makeAbstract()
+        inhibitoryN.makeAbstract(false)
                 .setWeight(1.0)
-                .setInstantiable(false, false)
-                .getInput()
-                .setInstantiable(false);
+                .getInput();
 
         addInhibitoryLoop(
                 topicBN,

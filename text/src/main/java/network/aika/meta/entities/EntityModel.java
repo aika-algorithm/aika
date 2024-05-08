@@ -130,21 +130,18 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 .setPersistent(true)
                 .setTypeDescription("Abstract Entity Pattern Neuron");
 
-        entityPattern.makeAbstract()
+        entityPattern.makeAbstract(true)
                 .setWeight(getDefaultInputCategorySynapseWeight(entityPattern.getType()))
                 .adjustBias()
-                .setInstantiable(true, true)
                 .getInput()
-                .setPersistent(true)
-                .setInstantiable(true);
+                .setPersistent(true);
 
         addInputObjectSynapse(
                 entityPattern,
                 topicModel.getTopicBindingNeuron(),
                 10.0,
                 true
-        )
-                .setInstantiable(false, false);
+        );
 
         entityBN = addBindingNeuron(
                 phraseModel.getPatternNeuron(),
@@ -155,12 +152,10 @@ public class EntityModel extends TemplateModel<EntityModel> {
         )
                 .setTypeDescription("Abstract Phrase -> Entity BN");
 
-        entityBN.makeAbstract()
+        entityBN.makeAbstract(true)
                 .setWeight(getDefaultInputCategorySynapseWeight(entityBN.getType()))
                 .adjustBias()
-                .setInstantiable(true, true)
-                .getInput()
-                .setInstantiable(true);
+                .getInput();
 
         addPositiveFeedbackLoop(
                 entityBN,
@@ -177,11 +172,9 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 .setPersistent(true)
                 .setTypeDescription("Abstract Phrase -> Entity InhibN");
 
-        inhibitoryN.makeAbstract()
-                .setInstantiable(true, true)
+        inhibitoryN.makeAbstract(true)
                 .setWeight(1.0)
-                .getInput()
-                .setInstantiable(true);
+                .getInput();
 
         addInhibitoryLoop(
                 entityBN,
@@ -196,12 +189,10 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 BINDING_NET_TARGET
         ).setTypeDescription("Abstract Topic -> Entity BN");
 
-        topicBN.makeAbstract()
+        topicBN.makeAbstract(true)
                 .setWeight(getDefaultInputCategorySynapseWeight(topicBN.getType()))
                 .adjustBias()
-                .setInstantiable(true, true)
-                .getInput()
-                .setInstantiable(true);
+                .getInput();
 
         disable();
     }
