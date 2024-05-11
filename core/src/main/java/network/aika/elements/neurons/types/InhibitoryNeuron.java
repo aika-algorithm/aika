@@ -63,8 +63,7 @@ public class InhibitoryNeuron extends DisjunctiveNeuron<InhibitoryNeuron, Inhibi
                 .setLabel(getLabel() + CATEGORY_LABEL);
 
         InhibitoryCategoryInputSynapse s = new InhibitoryCategoryInputSynapse()
-                .link(inhibCategory, this)
-                .setInstantiable(instantiable, instantiable);
+                .link(inhibCategory, this);
 
         s.setInitialCategorySynapseWeight(1.0);
 

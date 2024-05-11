@@ -86,8 +86,7 @@ public class PatternNeuron extends ConjunctiveNeuron<PatternNeuron, PatternActiv
                 .setLabel(getCategoryLabel(getLabel()));
 
         PatternCategoryInputSynapse s = new PatternCategoryInputSynapse()
-                .link(patternCategory, this)
-                .setInstantiable(instantiable, instantiable);
+                .link(patternCategory, this);
 
         s.setInitialCategorySynapseWeight(1.0);
 

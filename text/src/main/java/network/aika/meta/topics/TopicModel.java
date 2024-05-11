@@ -127,18 +127,15 @@ public class TopicModel extends TemplateModel<TopicModel> {
 
     private void setNotInstantiableForInputEntity(BindingNeuron topicBN, boolean instantiable) {
         InputObjectSynapse ios = topicBN.getInputSynapseByType(InputObjectSynapse.class);
-        ios.setInstantiable(instantiable, instantiable);
+        ios.setInputSideInstantiable(instantiable);
 
         entityModel.setInstantiable(instantiable);
     }
 
     public void setInstantiable(boolean instantiable) {
         topicPatternN.setInstantiable(instantiable);
-        topicPatternN.setInputSynapsesInstantiable(instantiable, instantiable);
         topicBN.setInstantiable(instantiable);
-        topicBN.setInputSynapsesInstantiable(instantiable, instantiable);
         inhibitoryN.setInstantiable(instantiable);
-        inhibitoryN.setInputSynapsesInstantiable(instantiable, instantiable);
     }
 
     @Override
@@ -173,7 +170,6 @@ public class TopicModel extends TemplateModel<TopicModel> {
                 2.5,
                 0.0,
                 false,
-                true,
                 true
         );
 
@@ -189,8 +185,7 @@ public class TopicModel extends TemplateModel<TopicModel> {
         addInhibitoryLoop(
                 topicBN,
                 inhibitoryN,
-                NEG_MARGIN * -topicBN.getTargetNet(),
-                true
+                NEG_MARGIN * -topicBN.getTargetNet()
         );
 
         setInstantiable(false);

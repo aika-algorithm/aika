@@ -34,11 +34,6 @@ public class PatternCategoryInputLink extends ConjunctiveCategoryInputLink<Patte
     }
 
     @Override
-    public CategorySynapse createCategorySynapse() {
-        return new PatternCategorySynapse();
-    }
-
-    @Override
     protected void connectGradientFields() {
     }
 }

@@ -163,8 +163,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 2.5,
                 0.0,
                 false,
-                false,
-                true
+                false
         );
 
         inhibitoryN = new InhibitoryNeuron(getModel(), TEMPLATE_MODEL)
@@ -179,8 +178,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
         addInhibitoryLoop(
                 entityBN,
                 inhibitoryN,
-                NEG_MARGIN * -entityBN.getTargetNet(),
-                true
+                NEG_MARGIN * -entityBN.getTargetNet()
         );
 
         topicBN = addBindingNeuron(
@@ -203,8 +201,7 @@ public class EntityModel extends TemplateModel<EntityModel> {
                 entityPattern,
                 topicBN,
                 topicModel.getTopicPatternNeuron(),
-                2.5,
-                true
+                2.5
         );
     }
 
@@ -246,18 +243,18 @@ public class EntityModel extends TemplateModel<EntityModel> {
         entityPattern.setPersistent(true);
 
         entityPattern.getOutputSynapseByType(OuterPositiveFeedbackSynapse.class)
-                .setInstantiable(true, true)
                 .setOptional(true);
 
         Synapse s = entityPattern.getOutputSynapse(getTopicModel().getTopicBindingNeuron().getProvider());
         if(s != null)
-            s.setInstantiable(false, false);
+            s.setInputSideInstantiable(false)
+                    .setOutputSideInstantiable(false);
 
         entityBN = lookupInstance(doc, parent.entityBN);
         entityBN.setPersistent(true);
 
         entityBN.getInputSynapseByType(InputObjectSynapse.class)
-                .setInstantiable(false, true);
+                .setInputSideInstantiable(false);
 
         topicBN = lookupInstance(doc, parent.topicBN);
         if(topicBN != null)
@@ -290,16 +287,9 @@ public class EntityModel extends TemplateModel<EntityModel> {
 
     public void setInstantiable(boolean instantiable) {
         entityPattern.setInstantiable(instantiable);
-        entityPattern.setInputSynapsesInstantiable(instantiable, instantiable);
-
         entityBN.setInstantiable(instantiable);
-        entityBN.setInputSynapsesInstantiable(instantiable, instantiable);
-
         topicBN.setInstantiable(instantiable);
-        topicBN.setInputSynapsesInstantiable(instantiable, instantiable);
-
         inhibitoryN.setInstantiable(instantiable);
-        inhibitoryN.setInputSynapsesInstantiable(instantiable, instantiable);
     }
 
     public Model getModel() {

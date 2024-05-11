@@ -35,8 +35,6 @@ public interface CategoryInputLink {
 
     Synapse getSynapse();
 
-    CategorySynapse createCategorySynapse();
-
     default void instantiateCategoryLink(Activation instanceAct) {
         Link tl = (Link) this;
         CategoryActivation categoryAct = (CategoryActivation) tl.getInput();
@@ -44,8 +42,12 @@ public interface CategoryInputLink {
         if(categoryAct == null || instanceAct == null)
             return;
 
-        CategorySynapse s = createCategorySynapse();
+        CategorySynapse s = getOutput().getNeuron().createCategorySynapse();
+
         s.initFromTemplate(instanceAct.getNeuron(), categoryAct.getNeuron(), getSynapse());
+
+        s.setInputSideInstantiable(false);
+        s.setOutputSideInstantiable(false);
 
         CategoryInputSynapse cis = (CategoryInputSynapse) getSynapse();
         s.setWeight(cis.getInitialCategorySynapseWeight());

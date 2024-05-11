@@ -34,9 +34,4 @@ public class BindingCategoryInputLink extends ConjunctiveCategoryInputLink<Bindi
         super(s, input, output);
     }
 
-    @Override
-    public CategorySynapse createCategorySynapse() {
-        return new BindingCategorySynapse();
-    }
-
 }

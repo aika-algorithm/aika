@@ -64,7 +64,6 @@ public class PhraseModel extends SequenceModel {
         super.setInstantiable(instantiable);
 
         entityBN.setInstantiable(instantiable);
-        entityBN.setInputSynapsesInstantiable(instantiable, instantiable);
     }
 
     @Override
@@ -96,8 +95,7 @@ public class PhraseModel extends SequenceModel {
                 sequencePatternN,
                 entityBN,
                 entityModel.getEntityPattern(),
-                2.5,
-                true
+                2.5
         ).setOptional(true);
     }
 

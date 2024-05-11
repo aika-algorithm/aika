@@ -40,10 +40,4 @@ public class InhibitoryCategoryInputLink extends DisjunctiveLink<InhibitoryCateg
                         crossConnectFields((InhibitoryActivation) act, output)
                 );
     }
-
-    @Override
-    public CategorySynapse createCategorySynapse() {
-        return new InhibitoryCategorySynapse();
-    }
-
 }

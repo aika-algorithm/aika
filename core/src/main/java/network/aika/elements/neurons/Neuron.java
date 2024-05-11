@@ -247,6 +247,8 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
         createCategorySynapse()
                 .setWeight(cis.getInitialCategorySynapseWeight())
+                .setInputSideInstantiable(false)
+                .setOutputSideInstantiable(false)
                 .link(this, cis.getInput());
     }
 
@@ -263,17 +265,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     public N setInstantiable(boolean instantiable) {
         this.instantiable = instantiable;
-
-        return (N) this;
-    }
-
-    public N setInputSynapsesInstantiable(boolean inputSideInstantiable, boolean outputSideInstantiable) {
-        getInputSynapses()
-                .stream()
-                .filter(s -> !(s instanceof CategoryInputSynapse))
-                .forEach(s ->
-                        s.setInstantiable(inputSideInstantiable, outputSideInstantiable)
-                );
 
         return (N) this;
     }

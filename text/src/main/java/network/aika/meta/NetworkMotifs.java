@@ -90,8 +90,7 @@ public class NetworkMotifs {
             PatternNeuron pn,
             BindingNeuron bn,
             PatternNeuron feedbackPN,
-            double psWeight,
-            boolean instantiable
+            double psWeight
     ) {
         addPositiveFeedbackLoop(
                 bn,
@@ -99,28 +98,24 @@ public class NetworkMotifs {
                 psWeight,
                 0.0,
                 false,
-                false,
-                instantiable
+                false
         ).setPropagable(true);
 
         return new OuterPositiveFeedbackSynapse()
                 .setWeight(getPositiveFeedbackWeight(bn.getTargetNet(), bn.getTargetValue()))
                 .link(feedbackPN, bn)
-                .setInstantiable(true, true)
                 .adjustBias();
     }
 
-    public static void addInhibitoryLoop(BindingNeuron bn, InhibitoryNeuron in, double weight, boolean instantiable) {
+    public static void addInhibitoryLoop(BindingNeuron bn, InhibitoryNeuron in, double weight) {
         new InhibitorySynapse()
                 .setWeight(1.0)
-                .link(bn, in)
-                .setInstantiable(instantiable, instantiable);
+                .link(bn, in);
 
         new NegativeFeedbackSynapse()
                 .setWeight(weight)
                 .link(in, bn)
-                .adjustBias()
-                .setInstantiable(instantiable, instantiable);
+                .adjustBias();
     }
 
     public static InnerPositiveFeedbackSynapse addPositiveFeedbackLoop(
@@ -129,14 +124,12 @@ public class NetworkMotifs {
             double weight,
             double weakInputMargin,
             boolean allowRelaxedMatching,
-            boolean isOptional,
-            boolean instantiable
+            boolean isOptional
     ) {
         PatternSynapse pSyn = new PatternSynapse()
                 .setWeight(weight)
                 .setOptional(isOptional)
                 .link(bn, pn)
-                .setInstantiable(instantiable, instantiable)
                 .setPropagable(true)
                 .adjustBias(bn.getTargetValue() + weakInputMargin);
 
@@ -150,7 +143,6 @@ public class NetworkMotifs {
                                 null
                 )
                 .link(pn, bn)
-                .setInstantiable(instantiable, instantiable)
                 .adjustBias();
 
         LOG.info("  " + posFeedSyn + " targetNetContr:" + -posFeedSyn.getSynapseBias().getValue());
@@ -171,12 +163,10 @@ public class NetworkMotifs {
             BindingNeuron bn,
             LatentRelationNeuron relN,
             double relWeight,
-            double spsWeight,
-            boolean instantiable
+            double spsWeight
     ) {
         RelationInputSynapse relSyn = new RelationInputSynapse()
                 .setWeight(relWeight)
-                .setInstantiable(instantiable, instantiable)
                 .link(relN, bn)
                 .adjustBias();
 
@@ -188,7 +178,6 @@ public class NetworkMotifs {
         SameObjectSynapse spSyn = new SameObjectSynapse()
                 .setWeight(spsWeight)
                 .setRelation(rel)
-                .setInstantiable(instantiable, instantiable)
                 .link(lastBN, bn)
                 .setPropagable(true)
                 .adjustBias(prevValueTarget);

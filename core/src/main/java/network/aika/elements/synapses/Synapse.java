@@ -77,8 +77,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
 
     private Relation relation;
 
-    private boolean inputSideInstantiable;
-    private boolean outputSideInstantiable;
+    private Boolean inputSideInstantiable;
+    private Boolean outputSideInstantiable;
 
     protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
             .setQueued(getQueue(), TRAINING, false)
@@ -193,6 +193,10 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return false;
     }
 
+    public boolean isOptional() {
+        return false;
+    }
+
     public static Link getLatentLink(Synapse synA, Synapse synB, Activation iActA, Activation iActB) {
         Stream<Link> linksA = iActA.getOutputLinks(synA);
         return linksA.filter(l -> synB.getLink(iActB, l.getOutput()) != null)
@@ -271,6 +275,9 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         setInput(input);
         setOutput(output);
 
+        inputSideInstantiable = templateSyn.inputSideInstantiable;
+        outputSideInstantiable = templateSyn.outputSideInstantiable;
+
         link();
 
         if(templateSyn.relation != null)
@@ -281,19 +288,31 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         );
     }
 
-    public S setInstantiable(boolean inputSideInstantiable, boolean outputSideInstantiable) {
-        this.inputSideInstantiable = inputSideInstantiable;
-        this.outputSideInstantiable = outputSideInstantiable;
+    public S setInputSideInstantiable(Boolean instantiable) {
+        this.inputSideInstantiable = instantiable;
 
         return (S) this;
     }
 
-    public boolean isInputSideInstantiable() {
-        return inputSideInstantiable;
+    public Boolean isInputSideInstantiable() {
+        return inputSideInstantiable != null ?
+                inputSideInstantiable :
+                input.getNeuron().isInstantiable() &&
+                        (output.getNeuron().isInstantiable() || isOptional());
     }
 
-    public boolean isOutputSideInstantiable() {
-        return outputSideInstantiable;
+    public S setOutputSideInstantiable(Boolean instantiable) {
+        this.outputSideInstantiable = instantiable;
+
+        return (S) this;
+    }
+
+    public Boolean isOutputSideInstantiable() {
+        boolean cis = this instanceof CategoryInputSynapse;
+
+        return outputSideInstantiable != null ?
+                outputSideInstantiable :
+                output.getNeuron().isInstantiable() && (!cis || input.getNeuron().isInstantiable());
     }
 
     public S link(Neuron input, Neuron output) {
@@ -447,8 +466,15 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         out.writeLong(output.getId());
 
         weight.write(out);
-        out.writeBoolean(inputSideInstantiable);
-        out.writeBoolean(outputSideInstantiable);
+
+        out.writeBoolean(inputSideInstantiable != null);
+        if(inputSideInstantiable != null)
+            out.writeBoolean(inputSideInstantiable);
+
+        out.writeBoolean(outputSideInstantiable != null);
+
+        if(outputSideInstantiable != null)
+            out.writeBoolean(outputSideInstantiable);
 
         out.writeBoolean(relation != null);
         if(relation != null)
@@ -470,8 +496,12 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         output = m.lookupNeuronProvider(in.readLong(), SYNAPSE_OUT);
 
         weight.readFields(in);
-        inputSideInstantiable = in.readBoolean();
-        outputSideInstantiable = in.readBoolean();
+
+        if(in.readBoolean())
+            inputSideInstantiable = in.readBoolean();
+
+        if(in.readBoolean())
+            outputSideInstantiable = in.readBoolean();
 
         if(in.readBoolean())
             relation = Relation.read(in, m);

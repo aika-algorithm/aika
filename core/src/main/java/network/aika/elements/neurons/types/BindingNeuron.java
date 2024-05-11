@@ -98,8 +98,7 @@ public class BindingNeuron extends ConjunctiveNeuron<BindingNeuron, BindingActiv
                 .setLabel(getLabel() + CATEGORY_LABEL);
 
         BindingCategoryInputSynapse s = new BindingCategoryInputSynapse()
-                .link(bindingCategory, this)
-                .setInstantiable(instantiable, instantiable);
+                .link(bindingCategory, this);
 
         s.setInitialCategorySynapseWeight(1.0);
 

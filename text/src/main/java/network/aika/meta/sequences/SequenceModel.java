@@ -205,13 +205,8 @@ public abstract class SequenceModel implements Writable {
 
     public void setInstantiable(boolean instantiable) {
         primaryBN.setInstantiable(instantiable);
-        primaryBN.setInputSynapsesInstantiable(instantiable, instantiable);
-
         sequencePatternN.setInstantiable(instantiable);
-        sequencePatternN.setInputSynapsesInstantiable(instantiable, instantiable);
-
         inhibitoryN.setInstantiable(instantiable);
-        inhibitoryN.setInputSynapsesInstantiable(instantiable, instantiable);
     }
 
     protected abstract void initTemplateBindingNeurons();
@@ -234,7 +229,6 @@ public abstract class SequenceModel implements Writable {
                 2.5,
                 0.0,
                 false,
-                true,
                 true
         );
 
@@ -286,8 +280,7 @@ public abstract class SequenceModel implements Writable {
                 bn,
                 rel,
                 5.0,
-                p.sosRelWeight,
-                true
+                p.sosRelWeight
         );
 
         return bn;
@@ -315,8 +308,7 @@ public abstract class SequenceModel implements Writable {
         addInhibitoryLoop(
                 bn,
                 inhibitoryN,
-                getNegMargin(pos) * -bn.getTargetNet(),
-                true
+                getNegMargin(pos) * -bn.getTargetNet()
         );
 
         addPositiveFeedbackLoop(
@@ -325,8 +317,7 @@ public abstract class SequenceModel implements Writable {
                 p.pfWeight,
                 p.weakInputMargin,
                 allowRelaxedMatching,
-                isOptional,
-                true
+                isOptional
         );
 
         return bn;

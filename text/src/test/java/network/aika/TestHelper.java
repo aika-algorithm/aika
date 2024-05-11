@@ -195,8 +195,8 @@ public class TestHelper {
 
         PatternNeuron theDogP = initPatternLoop(m, "the dog", theBN, dogBN);
 
-        addInhibitoryLoop(theBN, inhibNThe, -10.0, true);
-        addInhibitoryLoop(theBN, new InhibitoryNeuron(m, NEURON_EXTERNAL).setLabel("I-the (tg)"), -10.0, true);
+        addInhibitoryLoop(theBN, inhibNThe, -10.0);
+        addInhibitoryLoop(theBN, new InhibitoryNeuron(m, NEURON_EXTERNAL).setLabel("I-the (tg)"), -10.0);
 
         theDogP.setBias(3.0);
 

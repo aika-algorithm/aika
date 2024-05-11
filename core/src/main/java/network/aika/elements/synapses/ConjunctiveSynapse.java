@@ -140,6 +140,7 @@ public abstract class ConjunctiveSynapse<
         return synapseBias;
     }
 
+    @Override
     public boolean isOptional() {
         return optional;
     }
