@@ -16,19 +16,10 @@
  */
 package network.aika.elements.typedef.model;
 
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.DisjunctiveActivation;
-import network.aika.elements.links.CategoryLink;
 import network.aika.elements.links.DisjunctiveLink;
-import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.DisjunctiveNeuron;
-import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.typedef.ActivationTypeDefinition;
-import network.aika.elements.typedef.LinkTypeDefinition;
-import network.aika.elements.typedef.NeuronTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.*;
 
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.elements.NeuronType.*;
@@ -188,6 +179,18 @@ public class InhibitoryDef implements TypeDefinition {
                 .setTrainingAllowed(false)
                 .setInstanceSynapseType(categorySynapse)
                 .setDebugStyle("fill-color: rgb(110,200,220); ");
+
+        TemplateRelationDefinition templateRelationDef = new TemplateRelationDefinition()
+                .setAbstractSynapseType(categoryInputSynapse)
+                .setInstanceSynapseType(categorySynapse);
+
+        neuron.setTemplateRelation(templateRelationDef);
+
+        TemplateRelationDefinition categoryTemplateRelationDef = new TemplateRelationDefinition()
+                .setAbstractSynapseType(categorySynapse)
+                .setInstanceSynapseType(categoryInputSynapse);
+
+        categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
     }
 
 

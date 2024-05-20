@@ -18,7 +18,6 @@ package network.aika.debugger.neurons;
 
 import network.aika.debugger.AbstractGraphManager;
 import network.aika.debugger.AbstractParticleLink;
-import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 import org.graphstream.graph.Edge;

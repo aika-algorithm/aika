@@ -17,10 +17,8 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.Scope;
-import network.aika.fields.*;
 import network.aika.fields.link.ArgumentFieldLink;
 import network.aika.visitor.Visitor;
 
@@ -28,7 +26,6 @@ import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.fields.link.AbstractFieldLink.updateConnected;
 import static network.aika.fields.link.ArgumentFieldLink.linkAndConnect;
-import static network.aika.fields.Fields.*;
 import static network.aika.visitor.operator.SubsumesOperator.subsumes;
 
 

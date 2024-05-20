@@ -19,29 +19,16 @@ package network.aika.elements.synapses;
 import network.aika.Model;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.RegisterInputSlot;
-import network.aika.elements.links.ConjunctiveLink;
-import network.aika.elements.synapses.slots.SynapseInputSlot;
-import network.aika.elements.synapses.slots.SynapseOutputSlot;
 import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.enums.direction.Direction;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.ConjunctiveNeuron;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
 import network.aika.queue.Timestamp;
 import network.aika.fields.Field;
-import network.aika.fields.SumField;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
-import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.queue.Phase.TRAINING;
-import static network.aika.utils.Utils.TOLERANCE;
-
 
 /**
  *
@@ -49,9 +36,6 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public class ConjunctiveSynapse extends Synapse
 {
-
-    protected Field synapseBias = new SumField(this, "synapseBias", TOLERANCE)
-            .setQueued(getQueue(), TRAINING, false);
 
     private boolean optional;
 
@@ -61,32 +45,11 @@ public class ConjunctiveSynapse extends Synapse
     protected Integer relActTimeN;
 
 
-    public ConjunctiveSynapse() {
-        synapseBias.setValue(0.0);
-    }
-
-    @Override
-    public SynapseSlot createAndInitOutputSlot(Activation oAct) {
-        SynapseOutputSlot slot = (SynapseOutputSlot) super.createAndInitOutputSlot(oAct);
-        slot.connectToActivation();
-        return slot;
-    }
 
     @Override
     public void initSlots(Activation act) {
-        if(synapseType.getRegisterInputSlot() == RegisterInputSlot.ON_INIT)
+        if(typeDef.getRegisterInputSlot() == RegisterInputSlot.ON_INIT)
             act.registerInputSlot(this);
-    }
-
-    public void initSynapseBias(ConjunctiveActivation act) {
-        linkAndConnect(synapseBias, act.getNet(synapseType.outputState()))
-                .setPropagateUpdates(false);
-    }
-
-    public Synapse setSynapseBias(double b) {
-        synapseBias.setValue(b);
-
-        return this;
     }
 
     @Override
@@ -122,10 +85,6 @@ public class ConjunctiveSynapse extends Synapse
             return null;
 
         return ((float) relActTimeSum) / ((float) relActTimeN);
-    }
-
-    public Field getSynapseBias() {
-        return synapseBias;
     }
 
     public boolean isOptional() {
@@ -185,7 +144,6 @@ public class ConjunctiveSynapse extends Synapse
     public void write(DataOutput out) throws IOException {
         super.write(out);
 
-        synapseBias.write(out);
         out.writeBoolean(propagable);
         out.writeBoolean(optional);
 
@@ -200,7 +158,6 @@ public class ConjunctiveSynapse extends Synapse
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
 
-        synapseBias.readFields(in);
         propagable = in.readBoolean();
         optional = in.readBoolean();
 

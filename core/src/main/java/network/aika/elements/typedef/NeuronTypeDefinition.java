@@ -44,6 +44,8 @@ public class NeuronTypeDefinition extends TypeDefinition<NeuronTypeDefinition, N
 
     private String debugStyle;
 
+    private TemplateRelationDefinition templateRelation;
+
     public NeuronTypeDefinition(String name, Class<? extends Neuron> clazz) {
         super(name, clazz);
     }
@@ -105,6 +107,15 @@ public class NeuronTypeDefinition extends TypeDefinition<NeuronTypeDefinition, N
 
     public String getDebugStyle() {
         return debugStyle;
+    }
+
+    public TemplateRelationDefinition getTemplateRelation() {
+        return templateRelation;
+    }
+
+    public NeuronTypeDefinition setTemplateRelation(TemplateRelationDefinition templateRelation) {
+        this.templateRelation = templateRelation;
+        return this;
     }
 
     public Neuron instantiate(Model m, RefType refType) {

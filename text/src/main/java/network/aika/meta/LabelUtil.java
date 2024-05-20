@@ -17,7 +17,6 @@
 package network.aika.meta;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.activations.types.PatternActivation;

@@ -17,6 +17,8 @@
 package network.aika.elements;
 
 
+import network.aika.fielddefs.FieldObjectDefinition;
+import network.aika.fields.FieldObject;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 
@@ -25,7 +27,7 @@ import network.aika.queue.Timestamp;
  *
  *  @author Lukas Molzberger
  */
-public interface Element extends ModelProvider, QueueProvider {
+public interface Element<R extends FieldObject<R, D>, D extends FieldObjectDefinition<R>> extends FieldObject<R, D>, ModelProvider, QueueProvider {
 
     Timestamp getCreated();
 

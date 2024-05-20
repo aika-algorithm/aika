@@ -23,7 +23,6 @@ import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
-import network.aika.elements.links.CategoryLink;
 import network.aika.elements.links.Link;
 import network.aika.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
@@ -54,7 +53,7 @@ import static network.aika.text.TextReference.join;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Activation implements Type<ActivationTypeDefinition, Activation>, Element, Comparable<Activation> {
+public abstract class Activation extends Type<ActivationTypeDefinition, Activation> implements Element<Activation, ActivationTypeDefinition>, Comparable<Activation> {
 
     public static final Comparator<Activation> ID_COMPARATOR = Comparator.comparingInt(Activation::getId);
 
@@ -62,21 +61,9 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     protected Neuron neuron;
     protected Document doc;
 
-    private ActivationTypeDefinition activationType;
-
     protected Timestamp created = NOT_SET;
 
     protected State[] states = new State[numberOfStates()];
-
-    /*
-    protected FieldFunction netOuterGradient;
-    protected Field gradient;
-
-    protected Field updateValue;
-
-    protected FieldOutput negUpdateValue;
-
-     */
 
     protected NavigableMap<Integer, SynapseSlot> inputSlots = new TreeMap<>();
     protected NavigableMap<Long, SynapseSlot> outputSlots = new TreeMap<>();
@@ -100,18 +87,12 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
 
         setCreated(doc.getCurrentTimestamp());
 
-        initNet();
+        initStates();
 
-//        initBiases();
 
         initBindingSignalSlots();
-/*
-        gradient = new SumField(this, "gradient", TOLERANCE)
-                .setQueued(getQueue(), TRAINING, false);
-*/
+
         if (getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
-//            connectGradientFields();
-//            connectWeightUpdate();
             InactiveLinks.add(this);
         }
 
@@ -121,10 +102,6 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
 
     public NeuronType getType() {
         return neuron.getType();
-    }
-
-    public void setTypeDefinition(ActivationTypeDefinition typeDef) {
-        activationType = typeDef;
     }
 
     protected void connectWeightUpdate() {
@@ -165,20 +142,15 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         );
     }
 
-    protected void initNet() {
-        Stream.of(activationType.getStateTypes())
+    protected void initStates() {
+        Stream.of(typeDef.getStateTypes())
                 .forEach(sd -> states[sd.getType().ordinal()] = sd.instantiate(this));
     }
 
     protected final int numberOfStates() {
-        return activationType.getStateTypes().length;
+        return typeDef.getStateTypes().length;
     }
-/*
-    protected void initBiases() {
-        linkAndConnect(getNeuron().getBias(), getNet(PRE_FEEDBACK))
-                .setPropagateUpdates(false);
-    }
-*/
+
     protected void initBindingSignalSlots() {
         Stream<BSSlotDefinition> bsSlots = neuron.getBindingSignalSlots();
         bsSlots.forEach(slotDef ->
@@ -209,34 +181,6 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         return neuron.isAbstract();
     }
 
-    /*
-    protected void connectGradientFields() {
-        netOuterGradient =
-                func(
-                        this,
-                        "f'(net)",
-                        TOLERANCE,
-                        getNet(PRE_FEEDBACK),
-                        x -> getNeuron().getActivationFunction().outerGrad(x)
-        );
-    }
-
-    public FieldFunction getNetOuterGradient() {
-        return netOuterGradient;
-    }
-
-    public Field getGradient() {
-        return gradient;
-    }
-
-    public Field getUpdateValue() {
-        return updateValue;
-    }
-
-    public FieldOutput getNegUpdateValue() {
-        return negUpdateValue;
-    }
-*/
     public int getId() {
         return id;
     }
@@ -248,11 +192,7 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
     public void setCreated(Timestamp ts) {
         this.created = ts;
     }
-/*
-    public Field getValue() {
-        return getValue(PRE_FEEDBACK);
-    }
-*/
+
     public State getState(StateType st) {
         if(st.ordinal() >= states.length)
             return states[states.length - 1];
@@ -260,25 +200,6 @@ public abstract class Activation implements Type<ActivationTypeDefinition, Activ
         return states[st.ordinal()];
     }
 
-    public void setNet(StateType stateType, double net) {
-
-    }
-/*
-    public Field getValue(StateType st) {
-        if(st == null)
-            return getValue();
-
-        return getState(st).value;
-    }
-
-    public void setNet(StateType st, double v) {
-        getNet(st).setValue(v);
-    }
-
-    public SumField getNet(StateType st) {
-        return getState(st).net;
-    }
-*/
     public void setFired(StateType st, Timestamp fired) {
         getState(st).fired = fired;
     }

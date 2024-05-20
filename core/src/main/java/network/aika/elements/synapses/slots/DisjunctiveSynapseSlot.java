@@ -34,26 +34,13 @@ import java.util.stream.Stream;
  * @author Lukas Molzberger
  */
 
-public class DisjunctiveSynapseSlot implements SynapseSlot {
+public class DisjunctiveSynapseSlot extends SynapseSlot {
 
-    SynapseSlotTypeDefinition synapseSlotType;
-
-    private Direction dir;
 
     private Link link;
 
     public DisjunctiveSynapseSlot(Direction dir) {
         this.dir = dir;
-    }
-
-    @Override
-    public void setTypeDefinition(SynapseSlotTypeDefinition typeDef) {
-        synapseSlotType = typeDef;
-    }
-
-    @Override
-    public void init() {
-
     }
 
     @Override
@@ -72,21 +59,6 @@ public class DisjunctiveSynapseSlot implements SynapseSlot {
     }
 
     @Override
-    public Synapse getSynapse() {
-        return link.getSynapse();
-    }
-
-    @Override
-    public Activation getActivation() {
-        return dir.getActivation(link);
-    }
-
-    @Override
-    public Direction getDirection() {
-        return dir;
-    }
-
-    @Override
     public Link getSelectedLink() {
         return link;
     }
@@ -94,10 +66,5 @@ public class DisjunctiveSynapseSlot implements SynapseSlot {
     @Override
     public Queue getQueue() {
         return link.getQueue();
-    }
-
-    @Override
-    public void disconnect() {
-        link.disconnect();
     }
 }

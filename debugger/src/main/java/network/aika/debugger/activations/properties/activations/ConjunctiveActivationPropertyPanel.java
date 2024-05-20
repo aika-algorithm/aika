@@ -16,9 +16,6 @@
  */
 package network.aika.debugger.activations.properties.activations;
 
-import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.synapses.slots.AnnealingType;
-
 /**
  * @author Lukas Molzberger
  */

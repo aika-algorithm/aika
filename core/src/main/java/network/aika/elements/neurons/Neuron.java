@@ -21,9 +21,7 @@ import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.PreActivation;
 import network.aika.elements.NeuronType;
-import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
-import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.elements.typedef.Type;
@@ -59,13 +57,11 @@ import static network.aika.queue.Timestamp.MIN;
  *
  * @author Lukas Molzberger
  */
-public abstract class Neuron extends FieldObjectImpl<Neuron, NeuronTypeDefinition> implements Type<NeuronTypeDefinition, Neuron>, Element, Writable {
+public abstract class Neuron extends Type<NeuronTypeDefinition, Neuron> implements Element<Neuron, NeuronTypeDefinition>, Writable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
 
     protected static final String CATEGORY_LABEL = " Category";
-
-    private NeuronTypeDefinition neuronType;
 
     private int synapseIdCounter = 0;
 
@@ -102,20 +98,13 @@ public abstract class Neuron extends FieldObjectImpl<Neuron, NeuronTypeDefinitio
         setBias(0.0);
     }
 
-    public void setTypeDefinition(NeuronTypeDefinition typeDef) {
-        neuronType = typeDef;
-    }
-
-    public NeuronTypeDefinition getNeuronType() {
-        return neuronType;
-    }
 
     public NeuronType getType() {
-        return neuronType.getType();
+        return typeDef.getType();
     }
 
     public Stream<BSSlotDefinition> getBindingSignalSlots() {
-        return Arrays.stream(neuronType.getBindingSignalSlots());
+        return Arrays.stream(typeDef.getBindingSignalSlots());
     }
 
     public Long getId() {
@@ -322,23 +311,19 @@ public abstract class Neuron extends FieldObjectImpl<Neuron, NeuronTypeDefinitio
         return s;
     }
 
-    public abstract Synapse getCategoryInputSynapse();
-
-    public abstract CategorySynapse getCategoryOutputSynapse();
-
     public final boolean isTrainingAllowed() {
-        return neuronType.isTrainingAllowed();
+        return typeDef.isTrainingAllowed();
     }
 
     public final Activation createActivation(Document doc) {
-        return neuronType.getActivationType()
+        return typeDef.getActivationType()
                 .instantiate(doc.createActivationId(), doc, this);
     }
 
     public abstract void addInactiveLinks(Activation act);
 
     public final ActivationFunction getActivationFunction() {
-        return neuronType.getActivationFunction();
+        return typeDef.getActivationFunction();
     }
 
     public void count(Activation act) {

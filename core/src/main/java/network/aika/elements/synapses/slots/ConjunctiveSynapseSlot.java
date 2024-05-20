@@ -23,6 +23,7 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.SynapseSlotTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.Type;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.AbstractMaxField;
 import network.aika.fields.link.ArgumentFieldLink;
@@ -43,17 +44,7 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveSynapseSlot extends AbstractMaxField<ArgumentFieldLink<Link>> implements SynapseSlot {
-
-    protected SynapseSlotTypeDefinition synapseSlotType;
-
-    protected Activation act;
-
-    protected Synapse synapse;
-
-    protected Direction dir;
-
-    protected NavigableMap<LinkKey, ArgumentFieldLink<Link>> links;
+public class ConjunctiveSynapseSlot extends SynapseSlot {
 
     public ConjunctiveSynapseSlot(Activation act, Synapse synapse, String label, Direction dir) {
         super(null, label, TOLERANCE);
@@ -61,17 +52,10 @@ public abstract class ConjunctiveSynapseSlot extends AbstractMaxField<ArgumentFi
         this.act = act;
         this.synapse = synapse;
         this.dir = dir;
-
-        links = new TreeMap<>();
     }
 
     @Override
-    public void setTypeDefinition(SynapseSlotTypeDefinition typeDef) {
-        synapseSlotType = typeDef;
-    }
-
-    @Override
-    protected void updateSelectedInput(ArgumentFieldLink<Link> si, boolean state) {
+    protected void updateSelectedInput(ArgumentFieldLink<LinkKey, Link> si, boolean state) {
         if (si == null)
             return;
 
@@ -129,21 +113,6 @@ public abstract class ConjunctiveSynapseSlot extends AbstractMaxField<ArgumentFi
     @Override
     public Link getSelectedLink() {
         return getLink(getSelectedInput());
-    }
-
-    @Override
-    public Synapse getSynapse() {
-        return synapse;
-    }
-
-    @Override
-    public Activation getActivation() {
-        return act;
-    }
-
-    @Override
-    public Direction getDirection() {
-        return dir;
     }
 
     @Override

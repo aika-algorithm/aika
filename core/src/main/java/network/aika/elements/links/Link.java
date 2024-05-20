@@ -21,24 +21,19 @@ import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.RegisterInputSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.relations.Relation;
-import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.LinkTypeDefinition;
 import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
-import network.aika.fields.link.FieldLink;
 import network.aika.queue.Queue;
 import network.aika.queue.Timestamp;
-import network.aika.queue.steps.Instantiation;
 import network.aika.queue.steps.LinkUpdate;
 import network.aika.visitor.Visitor;
 
@@ -53,9 +48,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  *
  * @author Lukas Molzberger
  */
-public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
-
-    protected LinkTypeDefinition linkType;
+public abstract class Link extends Type<LinkTypeDefinition, Link> implements Element<Link, LinkTypeDefinition> {
 
     protected Synapse synapse;
 
@@ -82,11 +75,6 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
 
         propagateRanges();
         getDocument().onElementEvent(CREATE, this);
-    }
-
-    @Override
-    public void setTypeDefinition(LinkTypeDefinition typeDef) {
-        linkType = typeDef;
     }
 
     public LinkUpdate getLinkUpdateStep(Direction dir) {

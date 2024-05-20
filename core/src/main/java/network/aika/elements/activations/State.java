@@ -34,9 +34,7 @@ import static network.aika.queue.Timestamp.NOT_SET;
  *
  * @author Lukas Molzberger
  */
-public class State extends FieldObjectImpl<State, StateTypeDefinition> implements Type<StateTypeDefinition, State>, QueueProvider {
-
-    protected StateTypeDefinition type;
+public class State extends Type<StateTypeDefinition, State> implements QueueProvider {
 
     protected Activation act;
 
@@ -63,10 +61,6 @@ public class State extends FieldObjectImpl<State, StateTypeDefinition> implement
         doc.addStep(firedStep);
     }
 
-    public StateType getType() {
-        return type.getType();
-    }
-
     public Timestamp getFired() {
         return fired;
     }
@@ -80,7 +74,7 @@ public class State extends FieldObjectImpl<State, StateTypeDefinition> implement
     }
 
     public boolean isFired() {
-        return isTrue(getField(type.value), true);
+        return isTrue(getField(typeDef.value), true);
     }
 
     @Override
@@ -90,7 +84,7 @@ public class State extends FieldObjectImpl<State, StateTypeDefinition> implement
 
     @Override
     public boolean isNextRound() {
-        return type.getActivationType().isNextRound() && type.isNextRound();
+        return typeDef.getActivationType().isNextRound() && typeDef.isNextRound();
     }
 
     public Document getDocument() {
@@ -102,6 +96,6 @@ public class State extends FieldObjectImpl<State, StateTypeDefinition> implement
     }
 
     public String toString() {
-        return act.toString() + " type:" + type;
+        return act.toString() + " type:" + typeDef;
     }
 }

@@ -16,13 +16,7 @@
  */
 package network.aika.elements.typedef.model;
 
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.links.CategoryLink;
 import network.aika.elements.links.ConjunctiveLink;
-import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
@@ -354,6 +348,19 @@ public class BindingDef implements TypeDefinition {
                 .setRegisterInputSlot(ON_INIT)
                 .setInstanceSynapseType(categorySynapse)
                 .setDebugStyle("fill-color: rgb(110,200,220);");
+
+
+        TemplateRelationDefinition templateRelationDef = new TemplateRelationDefinition()
+                .setAbstractSynapseType(categoryInputSynapse)
+                        .setInstanceSynapseType(categorySynapse);
+
+        neuron.setTemplateRelation(templateRelationDef);
+
+        TemplateRelationDefinition categoryTemplateRelationDef = new TemplateRelationDefinition()
+                .setAbstractSynapseType(categorySynapse)
+                .setInstanceSynapseType(categoryInputSynapse);
+
+        categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
     }
 
     public ActivationTypeDefinition getLatentRelationActivation() {

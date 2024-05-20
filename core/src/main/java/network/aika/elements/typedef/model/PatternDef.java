@@ -16,19 +16,13 @@
  */
 package network.aika.elements.typedef.model;
 
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.links.CategoryLink;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
-import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.elements.typedef.ActivationTypeDefinition;
-import network.aika.elements.typedef.LinkTypeDefinition;
-import network.aika.elements.typedef.NeuronTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.synapses.Synapse;
+import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.statistic.AverageCoveredSpace;
 import network.aika.statistic.NeuronStatistic;
@@ -86,13 +80,13 @@ public class PatternDef implements TypeDefinition {
 
         activation = new ActivationTypeDefinition(
                 "PatternActivation",
-                ConjunctiveActivation.class
+                Activation.class
         )
                 .addStateType(typeModel.states.getPreFeedbackState());
 
         neuron = new NeuronTypeDefinition(
                 "PatternNeuron",
-                ConjunctiveNeuron.class
+                Neuron.class
         )
                 .setNeuronType(PATTERN)
                 .setActivationType(activation)
@@ -119,13 +113,13 @@ public class PatternDef implements TypeDefinition {
 
         categoryActivation = new ActivationTypeDefinition(
                 "PatternCategoryActivation",
-                CategoryActivation.class
+                Activation.class
         )
                 .addStateType(typeModel.states.getPreFeedbackState());
 
         categoryNeuron = new NeuronTypeDefinition(
                 "PatternCategoryNeuron",
-                CategoryNeuron.class
+                Neuron.class
         )
                 .setNeuronType(CATEGORY)
                 .setActivationType(categoryActivation)
@@ -160,14 +154,14 @@ public class PatternDef implements TypeDefinition {
 
         categoryLink = new LinkTypeDefinition(
                 "PatternCategoryLink",
-                CategoryLink.class
+                Link.class
         )
                 .setInputDef(activation)
                 .setOutputDef(categoryActivation);
 
         categorySynapse = new SynapseTypeDefinition(
                 "PatternCategorySynapse",
-                CategorySynapse.class
+                Synapse.class
         )
                 .setLinkType(categoryLink)
                 .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
@@ -206,6 +200,18 @@ public class PatternDef implements TypeDefinition {
                 .setRegisterInputSlot(ON_INIT)
                 .setInstanceSynapseType(categorySynapse)
                 .setDebugStyle("fill-color: rgb(110,200,220);");
+
+        TemplateRelationDefinition templateRelationDef = new TemplateRelationDefinition()
+                .setAbstractSynapseType(categoryInputSynapse)
+                .setInstanceSynapseType(categorySynapse);
+
+        neuron.setTemplateRelation(templateRelationDef);
+
+        TemplateRelationDefinition categoryTemplateRelationDef = new TemplateRelationDefinition()
+                .setAbstractSynapseType(categorySynapse)
+                .setInstanceSynapseType(categoryInputSynapse);
+
+        categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
     }
 
 
