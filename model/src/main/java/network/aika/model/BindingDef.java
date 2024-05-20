@@ -14,9 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.typedef.model;
+package network.aika.model;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.Link;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
@@ -91,7 +94,7 @@ public class BindingDef implements TypeDefinition {
     public void init() {
         activation = new ActivationTypeDefinition(
                 "BindingActivation",
-                ConjunctiveActivation.class
+                Activation.class
         )
                 .addStateType(typeModel.states.getPreFeedbackState())
                 .addStateType(typeModel.states.getOuterFeedbackState())
@@ -100,7 +103,7 @@ public class BindingDef implements TypeDefinition {
 
         neuron = new NeuronTypeDefinition(
                 "BindingNeuron",
-                ConjunctiveNeuron.class
+                Neuron.class
         )
                 .setNeuronType(BINDING)
                 .setActivationType(activation)
@@ -118,13 +121,13 @@ public class BindingDef implements TypeDefinition {
 
         categoryActivation = new ActivationTypeDefinition(
                 "BindingCategoryActivation",
-                CategoryActivation.class
+                Activation.class
         )
                 .addStateType(typeModel.states.getPreFeedbackState());
 
         categoryNeuron = new NeuronTypeDefinition(
                 "BindingCategoryNeuron",
-                CategoryNeuron.class
+                Neuron.class
         )
                 .setNeuronType(CATEGORY)
                 .setActivationType(categoryActivation)
@@ -135,14 +138,14 @@ public class BindingDef implements TypeDefinition {
 
         latentRelationActivation = new ActivationTypeDefinition(
                 "LatentRelationActivation",
-                ConjunctiveActivation.class
+                Activation.class
         )
                 .addStateType(typeModel.states.getPreFeedbackState())
                 .addParent(typeModel.conjunctiveDef.getConjunctiveActivation());
 
         latentRelationNeuron = new NeuronTypeDefinition(
                 "LatentRelationNeuron",
-                ConjunctiveNeuron.class
+                Neuron.class
         )
                 .setNeuronType(BINDING)
                 .setActivationType(latentRelationActivation)
@@ -305,13 +308,13 @@ public class BindingDef implements TypeDefinition {
 
         categoryLink = new LinkTypeDefinition(
                 "BindingCategoryLink",
-                CategoryLink.class)
+                Link.class)
                 .setInputDef(typeModel.bindingDef.getCategoryActivation())
                 .setOutputDef(typeModel.bindingDef.getActivation());
 
         categorySynapse = new SynapseTypeDefinition(
                 "BindingCategorySynapse",
-                CategorySynapse.class
+                Synapse.class
         )
                 .setLinkType(categoryLink)
                 .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())

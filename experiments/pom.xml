@@ -21,7 +21,12 @@
     <dependencies>
         <dependency>
             <groupId>network.aika</groupId>
-            <artifactId>aika</artifactId>
+            <artifactId>aika-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>network.aika</groupId>
+            <artifactId>aika-model</artifactId>
         </dependency>
 
         <dependency>

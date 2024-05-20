@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.typedef.model;
+package network.aika.model;
 
 import network.aika.elements.typedef.ActivationTypeDefinition;
 import network.aika.elements.typedef.LinkTypeDefinition;

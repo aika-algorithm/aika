@@ -9,7 +9,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>fields</artifactId>
+    <artifactId>aika-fields</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
