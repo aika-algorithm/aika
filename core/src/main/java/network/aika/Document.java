@@ -50,7 +50,6 @@ import static network.aika.elements.activations.StateType.*;
  *
  * @author Lukas Molzberger
  */
-public class Document extends Queue implements Element, QueueProvider {
 public class Document extends Queue implements ModelProvider, QueueProvider {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Document.class);

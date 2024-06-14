@@ -19,8 +19,8 @@ package network.aika.elements.activations;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.Element;
+import network.aika.elements.ModelProvider;
 import network.aika.elements.NeuronType;
-import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.links.Link;
@@ -51,7 +51,7 @@ import static network.aika.text.TextReference.join;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Activation> implements Element, QueueProvider, Comparable<Activation> {
+public abstract class Activation extends Type<ActivationTypeDefinition, Activation> implements Element, ModelProvider, QueueProvider, Comparable<Activation> {
 
     public static final Comparator<Activation> ID_COMPARATOR = Comparator.comparingInt(Activation::getId);
 
@@ -84,15 +84,6 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
         doc.register(this);
 
         setCreated(doc.getCurrentTimestamp());
-
-        initStates();
-
-
-        initBindingSignalSlots();
-
-        if (getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
-            InactiveLinks.add(this);
-        }
 
         doc.onElementEvent(CREATE, this);
     }
@@ -146,12 +137,6 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
         return getTypeDefinition().getStateTypes().length;
     }
 
-    protected void initBindingSignalSlots() {
-        Stream<BSSlotDefinition> bsSlots = neuron.getBindingSignalSlots();
-        bsSlots.forEach(slotDef ->
-                bindingSignalSlots[slotDef.getScope().ordinal()] = BindingSignalSlot.create(this, slotDef)
-        );
-    }
 
     public void propagateBindingSignal(Scope t, Activation bs, boolean state) {
         getOutputLinks()
@@ -170,10 +155,6 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
 
     public boolean isNewInstance() {
         return isNewInstance;
-    }
-
-    public boolean isAbstract() {
-        return neuron.isAbstract();
     }
 
     public int getId() {
@@ -299,10 +280,6 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
         return neuron.getProvider();
     }
 
-    public boolean checkPrimary() {
-        return true;
-    }
-
     public Optional<Link> getInputLinkByType(TypeDefinition<LinkTypeDefinition, Link> linkType) {
         return getInputLinksByType(linkType)
                 .findAny();
@@ -397,10 +374,7 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
     }
 
     public Activation getActiveTemplateInstance() {
-        Link l = getActiveCategoryInputLink();
-        return l != null && l.getInput() != null ?
-                ((CategoryActivation)l.getInput()).getActiveCategoryInput() :
-                null;
+        return null;
     }
 
     public Activation instantiateTemplateNode() {

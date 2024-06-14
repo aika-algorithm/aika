@@ -23,7 +23,7 @@ import network.aika.queue.keys.FiredQueueKey;
  *
  * @author Lukas Molzberger
  */
-public abstract class ElementStep<E extends Element> extends Step<E> {
+public abstract class ElementStep<E extends Element & QueueProvider> extends Step<E> {
 
     private E element;
 

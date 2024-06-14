@@ -47,85 +47,21 @@ import static network.aika.utils.Utils.TOLERANCE;
 public class ConjunctiveSynapseSlot extends SynapseSlot {
 
     public ConjunctiveSynapseSlot(Activation act, Synapse synapse, String label, Direction dir) {
-        super(null, label, TOLERANCE);
 
         this.act = act;
         this.synapse = synapse;
         this.dir = dir;
     }
 
-    @Override
-    protected void updateSelectedInput(ArgumentFieldLink<LinkKey, Link> si, boolean state) {
-        if (si == null)
-            return;
-
-        si.getArgumentRef()
-                .setState(
-                        dir,
-                        state
-                );
-    }
-
-    @Override
-    public ConjunctiveSynapseSlot getReference() {
-        return this;
-    }
-
-    @Override
-    protected boolean isNegativeInputAllowed() {
-        return dir == INPUT;
-    }
-
-    @Override
-    public Comparator<ArgumentFieldLink<Link>> getComparator() {
-        Comparator<ArgumentFieldLink<Link>> valueComp = comparingInt(fl ->
-                ApproximateComparisonValueUtil.convert(fl.getUpdatedInputValue())
-        );
-        Comparator<ArgumentFieldLink<Link>> firedComp = comparing(fl -> fl.getArgumentRef().getFired());
-        return valueComp.thenComparing(firedComp.reversed());
-    }
-
-    @Override
-    public synchronized Stream<Link> getLinks() {
-        return getInputs()
-                .stream()
-                .map(ArgumentFieldLink::getArgumentRef);
-    }
 
     @Override
     public Link getLink(Activation act) {
-        ArgumentFieldLink<Link> fl = links.get(
-                new LinkKey(
-                        act.getNeuron(),
-                        act
-                )
-        );
-
-        return getLink(fl);
-    }
-
-    private Link getLink(ArgumentFieldLink<Link> fl) {
-        return fl != null ?
-                fl.getArgumentRef() :
-                null;
+        return null;
     }
 
     @Override
     public Link getSelectedLink() {
-        return getLink(getSelectedInput());
-    }
-
-    @Override
-    public void disconnect() {
-        unlinkInputs();
-
-        getLinks()
-                .forEach(Link::disconnect);
-    }
-
-    @Override
-    public Queue getQueue() {
-        return act.getQueue();
+       return null;
     }
 
 
@@ -134,35 +70,8 @@ public class ConjunctiveSynapseSlot extends SynapseSlot {
     }
 
     @Override
-    public void addInput(ArgumentFieldLink<Link> fl) {
-        Link l = fl.getArgumentRef();
-
-        Direction d = dir.invert();
-        ArgumentFieldLink<Link> el = links.put(
-                new LinkKey(
-                        d.getNeuron(l.getSynapse()),
-                        d.getActivation(l)
-                ),
-                fl
-        );
-        assert el == null;
-    }
-
-    @Override
-    public void removeInput(ArgumentFieldLink<Link> fl) {
-        links.remove(
-                new LinkKey(fl, dir)
-        );
-    }
-
-    @Override
-    public Collection<ArgumentFieldLink<Link>> getInputs() {
-        return links.values();
-    }
-
-    @Override
-    public int size() {
-        return links.size();
+    public Stream<Link> getLinks() {
+        return null;
     }
 
     @Override

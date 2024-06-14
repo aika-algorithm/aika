@@ -19,6 +19,7 @@ package network.aika.elements.links;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.Element;
+import network.aika.elements.ModelProvider;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
@@ -29,7 +30,6 @@ import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.LinkTypeDefinition;
 import network.aika.elements.typedef.Type;
-import network.aika.elements.typedef.TypeImpl;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.synapses.Synapse;
@@ -50,7 +50,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  *
  * @author Lukas Molzberger
  */
-public abstract class Link extends TypeImpl<LinkTypeDefinition, Link> implements Element, QueueProvider {
+public abstract class Link extends Type<LinkTypeDefinition, Link> implements Element, ModelProvider, QueueProvider {
 
     protected Synapse synapse;
 

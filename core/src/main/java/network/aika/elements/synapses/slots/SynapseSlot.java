@@ -25,6 +25,7 @@ import network.aika.elements.typedef.Type;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
+import network.aika.queue.Queue;
 
 import java.util.stream.Stream;
 
@@ -59,4 +60,15 @@ public abstract class SynapseSlot extends Type<SynapseSlotTypeDefinition, Synaps
     public abstract Link getLink(Activation act);
 
     public abstract Link getSelectedLink();
+
+
+    @Override
+    public Queue getQueue() {
+        return act.getQueue();
+    }
+
+    @Override
+    public boolean isNextRound() {
+        return false;
+    }
 }

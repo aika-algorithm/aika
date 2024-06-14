@@ -32,38 +32,10 @@ import network.aika.queue.steps.FeedbackTrigger;
  */
 public abstract class ConjunctiveActivation extends Activation {
 
-    protected InputField outerFeedbackAnnealingValue;
-    protected InputField instantiationAnnealingValue;
 
     public ConjunctiveActivation(int id, Document doc, ConjunctiveNeuron n) {
         super(id, doc, n);
 
-        if(getConfig().isMetaInstantiationEnabled()) {
-            FeedbackTrigger.add(this, true);
-        }
     }
-
-    @Override
-    protected void initNet() {
-        instantiationAnnealingValue = new InputField(this, "instantiation annealing value", 1.0);
-        super.initNet();
-    }
-
-    public Field getAnnealingValue(AnnealingType at) {
-        return switch (at) {
-            case CATEGORY_INPUT -> instantiationAnnealingValue;
-            case OUTER_FEEDBACK -> outerFeedbackAnnealingValue;
-        };
-    }
-
-    public InputField getInstantiationAnnealingValue() {
-        return instantiationAnnealingValue;
-    }
-
-    public InputField getOuterFeedbackAnnealingValue() {
-        return outerFeedbackAnnealingValue;
-    }
-
-
 
 }

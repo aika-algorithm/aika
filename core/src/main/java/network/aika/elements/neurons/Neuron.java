@@ -19,18 +19,16 @@ package network.aika.elements.neurons;
 import network.aika.ActivationFunction;
 import network.aika.Model;
 import network.aika.Document;
+import network.aika.elements.ModelProvider;
 import network.aika.elements.PreActivation;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.elements.typedef.TypeDefinition;
-import network.aika.elements.typedef.TypeImpl;
-import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
-import network.aika.exceptions.MissingInputCategoryNeuron;
 import network.aika.exceptions.NeuronExistsTwiceException;
 import network.aika.fields.*;
 import network.aika.elements.activations.Activation;
@@ -61,7 +59,7 @@ import static network.aika.queue.Timestamp.MIN;
  *
  * @author Lukas Molzberger
  */
-public abstract class Neuron extends TypeImpl<NeuronTypeDefinition, Neuron> implements Element, QueueProvider, Writable {
+public abstract class Neuron extends Type<NeuronTypeDefinition, Neuron> implements Element, ModelProvider, QueueProvider, Writable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
 
@@ -257,16 +255,7 @@ public abstract class Neuron extends TypeImpl<NeuronTypeDefinition, Neuron> impl
         return this;
     }
 
-    public Neuron setInputSynapsesInstantiable(boolean inputSideInstantiable, boolean outputSideInstantiable) {
-        getInputSynapses()
-                .stream()
-                .filter(s -> !(s instanceof CategoryInputSynapse))
-                .forEach(s ->
-                        s.setInstantiable(inputSideInstantiable, outputSideInstantiable)
-                );
 
-        return this;
-    }
 
     public boolean isInstantiable() {
         return instantiable;
@@ -274,7 +263,6 @@ public abstract class Neuron extends TypeImpl<NeuronTypeDefinition, Neuron> impl
 
 
 
-    public abstract CategorySynapse createCategorySynapse();
 
     public final boolean isTrainingAllowed() {
         return getTypeDefinition().isTrainingAllowed();

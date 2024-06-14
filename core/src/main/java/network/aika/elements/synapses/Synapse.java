@@ -17,6 +17,7 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.ModelProvider;
 import network.aika.elements.PreActivation;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
@@ -26,7 +27,7 @@ import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.typedef.SynapseTypeDefinition;
-import network.aika.elements.typedef.TypeImpl;
+import network.aika.elements.typedef.Type;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.elements.synapses.slots.SynapseSlot;
@@ -59,7 +60,7 @@ import static network.aika.elements.neurons.RefType.SYNAPSE_OUT;
  *
  * @author Lukas Molzberger
  */
-public abstract class Synapse extends TypeImpl<SynapseTypeDefinition, Synapse> implements Element, QueueProvider, Writable {
+public abstract class Synapse extends Type<SynapseTypeDefinition, Synapse> implements Element, ModelProvider, QueueProvider, Writable {
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
@@ -115,11 +116,6 @@ public abstract class Synapse extends TypeImpl<SynapseTypeDefinition, Synapse> i
                 .instantiate(iAct, this);
     }
 
-    public SynapseSlot createAndInitInputSlot(Activation iAct) {
-        SynapseSlot slot = createInputSlot(iAct);
-        slot.init();
-        return slot;
-    }
 
     public Stream<BindingSignalSlot> transitionBindingSignal(Activation oAct, Scope is) {
         return Arrays.stream(getTypeDefinition().getTransition())
@@ -133,17 +129,6 @@ public abstract class Synapse extends TypeImpl<SynapseTypeDefinition, Synapse> i
         return getTypeDefinition()
                 .getOutputSlotType()
                 .instantiate(iAct, this);
-    }
-
-    public SynapseSlot createAndInitOutputSlot(Activation oAct) {
-        SynapseSlot slot = createOutputSlot(oAct);
-        slot.init();
-        return slot;
-    }
-
-    public void checkWeight() {
-        if(isNegative())
-            delete();
     }
 
     public Trigger getTrigger() {
@@ -420,7 +405,6 @@ public abstract class Synapse extends TypeImpl<SynapseTypeDefinition, Synapse> i
         out.writeLong(input.getId());
         out.writeLong(output.getId());
 
-        getWeight().write(out);
         out.writeBoolean(inputSideInstantiable);
         out.writeBoolean(outputSideInstantiable);
 
