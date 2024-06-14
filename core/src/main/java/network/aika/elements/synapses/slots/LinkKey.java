@@ -45,7 +45,7 @@ public class LinkKey implements Comparable<LinkKey> {
         );
     }
 
-    public LinkKey(ArgumentFieldLink<? extends Link> fl, Direction dir) {
+    public LinkKey(ArgumentFieldLink<Link> fl, Direction dir) {
         this(
                 fl.getArgumentRef(),
                 dir.invert()

@@ -18,7 +18,6 @@ package network.aika;
 
 import network.aika.elements.neurons.RefType;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.typedef.model.TypeModel;
 import network.aika.suspension.InMemorySuspensionCallback;
 import network.aika.suspension.SuspensionCallback;
 import network.aika.elements.neurons.Neuron;
@@ -63,18 +62,12 @@ public class Model extends Queue implements Writable {
 
     private Supplier<Writable> customDataInstanceSupplier;
 
-    private TypeModel typeModel = new TypeModel();
-
     public Model() {
         this(new InMemorySuspensionCallback());
     }
 
     public Model(SuspensionCallback sc) {
         suspensionCallback = sc;
-    }
-
-    public TypeModel getTypeModel() {
-        return typeModel;
     }
 
     @Override
