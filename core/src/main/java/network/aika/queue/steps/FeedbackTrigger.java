@@ -16,8 +16,6 @@
  */
 package network.aika.queue.steps;
 
-import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
 import network.aika.fields.Field;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
@@ -42,7 +40,7 @@ public class FeedbackTrigger extends ElementStep<ConjunctiveActivation> {
 
     @Override
     public void process() {
-        ConjunctiveActivation<?> act = getElement();
+        ConjunctiveActivation act = getElement();
         AnnealingSynapseOutputSlot ciSlot = act.getActiveCategoryInputSlot();
         if(ciSlot == null)
             return;

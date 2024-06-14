@@ -64,10 +64,6 @@ public class State extends TypeImpl<StateTypeDefinition, State> implements Queue
         doc.addStep(firedStep);
     }
 
-    public StateType getType() {
-        return type.getType();
-    }
-
     public Timestamp getFired() {
         return fired;
     }
@@ -81,7 +77,7 @@ public class State extends TypeImpl<StateTypeDefinition, State> implements Queue
     }
 
     public boolean isFired() {
-        return isTrue(getField(type.value), true);
+        return isTrue(getField(typeDef.value), true);
     }
 
     @Override
@@ -91,7 +87,7 @@ public class State extends TypeImpl<StateTypeDefinition, State> implements Queue
 
     @Override
     public boolean isNextRound() {
-        return type.getActivationType().isNextRound() && type.isNextRound();
+        return typeDef.getActivationType().isNextRound() && typeDef.isNextRound();
     }
 
     public Document getDocument() {
@@ -103,6 +99,6 @@ public class State extends TypeImpl<StateTypeDefinition, State> implements Queue
     }
 
     public String toString() {
-        return act.toString() + " type:" + type;
+        return act.toString() + " type:" + typeDef;
     }
 }

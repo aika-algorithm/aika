@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.typedef.model;
+package network.aika.model;
 
-import network.aika.elements.activations.ConjunctiveActivation;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
-import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
@@ -50,12 +50,12 @@ public class ConjunctiveDef {
     public void init() {
         conjunctiveActivation = new ActivationTypeDefinition(
                 "ConjunctiveActivation",
-                ConjunctiveActivation.class
+                Activation.class
         );
 
         conjunctiveNeuron = new NeuronTypeDefinition(
                 "ConjunctiveNeuron",
-                ConjunctiveNeuron.class
+                Neuron.class
         );
 
         conjunctiveSynapseInputSlot = new SynapseSlotTypeDefinition(

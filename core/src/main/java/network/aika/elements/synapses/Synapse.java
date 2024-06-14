@@ -69,7 +69,8 @@ public abstract class Synapse extends TypeImpl<SynapseTypeDefinition, Synapse> i
 
     private Relation relation;
 
-    private boolean instantiable = true;
+    private boolean inputSideInstantiable = true;
+    private boolean outputSideInstantiable = true;
 
 
     protected boolean trainingAllowed = true;
@@ -138,6 +139,11 @@ public abstract class Synapse extends TypeImpl<SynapseTypeDefinition, Synapse> i
         SynapseSlot slot = createOutputSlot(oAct);
         slot.init();
         return slot;
+    }
+
+    public void checkWeight() {
+        if(isNegative())
+            delete();
     }
 
     public Trigger getTrigger() {
@@ -260,14 +266,19 @@ public abstract class Synapse extends TypeImpl<SynapseTypeDefinition, Synapse> i
             relation = templateSyn.relation.instantiate();
     }
 
-    public Synapse setInstantiable(boolean instantiable) {
-        this.instantiable = instantiable;
+    public Synapse setInstantiable(boolean inputSideInstantiable, boolean outputSideInstantiable) {
+        this.inputSideInstantiable = inputSideInstantiable;
+        this.outputSideInstantiable = outputSideInstantiable;
 
         return this;
     }
 
-    public boolean isInstantiable() {
-        return instantiable;
+    public boolean isInputSideInstantiable() {
+        return inputSideInstantiable;
+    }
+
+    public boolean isOutputSideInstantiable() {
+        return outputSideInstantiable;
     }
 
     public Synapse link(Neuron input, Neuron output) {
@@ -398,7 +409,7 @@ public abstract class Synapse extends TypeImpl<SynapseTypeDefinition, Synapse> i
         return false;
     }
 
-    public void initBiasInput(Activation output) {
+    public void initSlots(Activation output) {
     }
 
     @Override
@@ -409,7 +420,9 @@ public abstract class Synapse extends TypeImpl<SynapseTypeDefinition, Synapse> i
         out.writeLong(input.getId());
         out.writeLong(output.getId());
 
-        out.writeBoolean(instantiable);
+        getWeight().write(out);
+        out.writeBoolean(inputSideInstantiable);
+        out.writeBoolean(outputSideInstantiable);
 
         out.writeBoolean(relation != null);
         if(relation != null)
@@ -430,7 +443,8 @@ public abstract class Synapse extends TypeImpl<SynapseTypeDefinition, Synapse> i
         input = m.lookupNeuronProvider(in.readLong(), SYNAPSE_IN);
         output = m.lookupNeuronProvider(in.readLong(), SYNAPSE_OUT);
 
-        instantiable = in.readBoolean();
+        inputSideInstantiable = in.readBoolean();
+        outputSideInstantiable = in.readBoolean();
 
         if(in.readBoolean())
             relation = Relation.read(in, m);

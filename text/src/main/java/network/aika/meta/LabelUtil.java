@@ -17,10 +17,10 @@
 package network.aika.meta;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.InhibitoryActivation;
 import network.aika.elements.activations.types.PatternActivation;
+import network.aika.elements.neurons.Neuron;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.links.Link;
 import network.aika.elements.links.types.InnerPositiveFeedbackLink;
@@ -70,25 +70,25 @@ public class LabelUtil {
         }
     }
 
-    private static String extractContext(Activation<?> act) {
+    private static String extractContext(Activation act) {
         Document doc = act.getDocument();
 
-        Activation<?> tAct = act.getTemplate();
+        Activation tAct = act.getTemplate();
         if(tAct == null)
             return "...";
 
-        InnerPositiveFeedbackLink pfl = tAct.getInputLinkByType(InnerPositiveFeedbackLink.class)
+        Link pfl = tAct.getInputLinkByType(act.getModel().getTypeModel().getBindingDef().getInnerPositiveFeedbackLink())
                 .orElse(null);
 
         if(pfl == null || pfl.getInput() == null)
             return "...";
 
-        PatternActivation pAct = pfl.getInput();
+        Activation pAct = pfl.getInput();
         return doc.getTextSegment(pAct.getTextReference().getCharRange());
     }
 
-    public static String generateLabel(PatternActivation pAct, boolean fired, boolean netPreAnneal) {
-        PatternNeuron pn = pAct.getNeuron();
+    public static String generateLabel(Activation pAct, boolean fired, boolean netPreAnneal) {
+        Neuron pn = pAct.getNeuron();
         return generateLabel(pn, bn -> {
             Link l = pAct.getInputLinks()
                     .filter(il -> il.getInput().getNeuron() == bn)
@@ -98,22 +98,22 @@ public class LabelUtil {
             if(l == null)
                 return false;
 
-            BindingActivation act = (BindingActivation) l.getInput();
+            Activation act = l.getInput();
             return act != null &&
                     (!fired || act.isFired(INNER_FEEDBACK)) &&
                     (!netPreAnneal || act.getNet(PRE_FEEDBACK).getValue() > 0.0);
         });
     }
 
-    public static String generateLabel(PatternNeuron pn) {
+    public static String generateLabel(Neuron pn) {
         return generateLabel(pn, bn -> {
-            PatternSynapse s = (PatternSynapse) bn.getOutputSynapse(pn.getProvider());
+            Synapse s = bn.getOutputSynapse(pn.getProvider());
             return (-s.getSynapseBias().getValue() > pn.getBias().getValue());
         });
     }
 
-    public static String generateLabel(PatternNeuron pn, Predicate<BindingNeuron> test) {
-        BindingNeuron[] bn = getOrderedBindingNeurons(pn);
+    public static String generateLabel(Neuron pn, Predicate<Neuron> test) {
+        Neuron[] bn = getOrderedBindingNeurons(pn);
 
         StringBuilder sb = new StringBuilder();
         boolean first = true;
@@ -126,16 +126,16 @@ public class LabelUtil {
         return sb.toString();
     }
 
-    private static BindingNeuron[] getOrderedBindingNeurons(PatternNeuron pn) {
-        BindingNeuron[] bn = pn.getInputSynapsesByType(PatternSynapse.class)
+    private static Neuron[] getOrderedBindingNeurons(Neuron pn) {
+        Neuron[] bn = pn.getInputSynapsesByType(pn.getModel().getTypeModel().getPatternDef().getSynapse())
                 .map(Synapse::getInput)
                 .toList()
-                .toArray(new BindingNeuron[0]);
+                .toArray(new Neuron[0]);
 
         for (int i = 0; i < bn.length - 1; i++) {
             for (int j = i + 1; j < bn.length; j++) {
-                BindingNeuron a = bn[i];
-                BindingNeuron b = bn[j];
+                Neuron a = bn[i];
+                Neuron b = bn[j];
                 if ((a.getInputSynapse(b.getProvider()) != null && getDirection(b) == INPUT) ||
                         (b.getInputSynapse(a.getProvider()) != null && getDirection(a) == INPUT)) {
                     bn[i] = b;
@@ -146,8 +146,8 @@ public class LabelUtil {
         return bn;
     }
 
-    private static Direction getDirection(BindingNeuron n) {
-        RelationInputSynapse rs = n.getInputSynapseByType(RelationInputSynapse.class);
+    private static Direction getDirection(Neuron n) {
+        Synapse rs = n.getInputSynapseByType(n.getModel().getTypeModel().getBindingDef().getRelationInputSynapse());
 
         if (rs == null)
             return null;

@@ -14,18 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.typedef.model;
+package network.aika.model;
 
-import network.aika.elements.activations.DisjunctiveActivation;
-import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.links.DisjunctiveLink;
-import network.aika.elements.neurons.DisjunctiveNeuron;
-import network.aika.elements.synapses.ConjunctiveSynapse;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fields.IdentityFunction;
 
 import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.Operators.mul;
@@ -56,12 +53,12 @@ public class DisjunctiveDef {
     public void init() {
         disjunctiveActivation = new ActivationTypeDefinition(
                 "DisjunctiveActivation",
-                DisjunctiveActivation.class
+                Activation.class
         );
 
         disjunctiveNeuron = new NeuronTypeDefinition(
                 "DisjunctiveNeuron",
-                DisjunctiveNeuron.class
+                Neuron.class
         );
 
         disjunctiveSynapseInputSlot = new SynapseSlotTypeDefinition(

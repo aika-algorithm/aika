@@ -1,18 +1,28 @@
-package network.aika.elements.typedef.model;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package network.aika.model;
 
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.DisjunctiveActivation;
-import network.aika.elements.links.CategoryLink;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.links.DisjunctiveLink;
-import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.DisjunctiveNeuron;
-import network.aika.elements.synapses.CategorySynapse;
+import network.aika.elements.links.Link;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.typedef.ActivationTypeDefinition;
-import network.aika.elements.typedef.LinkTypeDefinition;
-import network.aika.elements.typedef.NeuronTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.*;
 
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.elements.NeuronType.*;
@@ -25,23 +35,27 @@ import static network.aika.enums.Trigger.NOT_FIRED;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 
-public class InhibitoryDef {
+/**
+ *
+ * @author Lukas Molzberger
+ */
+public class InhibitoryDef implements TypeDefinition {
 
     private TypeModel typeModel;
 
-    private ActivationTypeDefinition inhibitoryActivation;
-    private NeuronTypeDefinition inhibitoryNeuron;
-    private ActivationTypeDefinition inhibitoryCategoryActivation;
-    private NeuronTypeDefinition inhibitoryCategoryNeuron;
+    private ActivationTypeDefinition activation;
+    private NeuronTypeDefinition neuron;
+    private ActivationTypeDefinition categoryActivation;
+    private NeuronTypeDefinition categoryNeuron;
 
-    private LinkTypeDefinition inhibitoryLink;
-    private SynapseTypeDefinition inhibitorySynapse;
-    private LinkTypeDefinition primaryInhibitoryLink;
-    private SynapseTypeDefinition primaryInhibitorySynapse;
-    private LinkTypeDefinition inhibitoryCategoryInputLink;
-    private SynapseTypeDefinition inhibitoryCategoryInputSynapse;
-    private LinkTypeDefinition inhibitoryCategoryLink;
-    private SynapseTypeDefinition inhibitoryCategorySynapse;
+    private LinkTypeDefinition link;
+    private SynapseTypeDefinition synapse;
+    private LinkTypeDefinition primaryLink;
+    private SynapseTypeDefinition primarySynapse;
+    private LinkTypeDefinition categoryInputLink;
+    private SynapseTypeDefinition categoryInputSynapse;
+    private LinkTypeDefinition categoryLink;
+    private SynapseTypeDefinition categorySynapse;
 
     public InhibitoryDef(TypeModel typeModel) {
         this.typeModel = typeModel;
@@ -49,53 +63,53 @@ public class InhibitoryDef {
 
     public void init() {
 
-        inhibitoryActivation = new ActivationTypeDefinition(
+        activation = new ActivationTypeDefinition(
                 "InhibitoryActivation",
-                DisjunctiveActivation.class
+                Activation.class
         )
                 .addStateType(typeModel.states.getPreFeedbackState());
 
-        inhibitoryNeuron = new NeuronTypeDefinition(
+        neuron = new NeuronTypeDefinition(
                 "InhibitoryNeuron",
-                DisjunctiveNeuron.class
+                Neuron.class
         )
                 .setNeuronType(INHIBITORY)
-                .setActivationType(inhibitoryActivation)
+                .setActivationType(activation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setTrainingAllowed(false)
                 .setDebugStyle("fill-color: rgb(100,100,255);");
 
 
-        inhibitoryCategoryActivation = new ActivationTypeDefinition(
+        categoryActivation = new ActivationTypeDefinition(
                 "InhibitoryCategoryActivation",
-                CategoryActivation.class
+                Activation.class
         )
                 .addStateType(typeModel.states.getPreFeedbackState());
 
-        inhibitoryCategoryNeuron = new NeuronTypeDefinition(
+        categoryNeuron = new NeuronTypeDefinition(
                 "InhibitoryCategoryNeuron",
-                CategoryNeuron.class
+                Neuron.class
         )
                 .setNeuronType(CATEGORY)
-                .setActivationType(inhibitoryCategoryActivation)
+                .setActivationType(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_INPUT)
                 .setTrainingAllowed(false)
                 .setDebugStyle("fill-color: rgb(100,0,200);");
 
 
-        inhibitoryLink = new LinkTypeDefinition(
+        link = new LinkTypeDefinition(
                 "InhibitoryLink",
                 DisjunctiveLink.class
         )
-                .setInputDef(typeModel.bindingDef.getBindingActivation())
-                .setOutputDef(inhibitoryActivation);
+                .setInputDef(typeModel.bindingDef.getActivation())
+                .setOutputDef(activation);
 
-        inhibitorySynapse = new SynapseTypeDefinition(
+        synapse = new SynapseTypeDefinition(
                 "InhibitorySynapse",
                 DisjunctiveSynapse.class
         )
-                .setLinkType(inhibitoryLink)
+                .setLinkType(link)
                 .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
                 .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
                 .setInputNeuronType(BINDING)
@@ -107,15 +121,15 @@ public class InhibitoryDef {
                 .setDebugStyle("fill-color: rgb(100,100,255);");
 
 
-        primaryInhibitoryLink = new LinkTypeDefinition(
+        primaryLink = new LinkTypeDefinition(
                 "PrimaryInhibitoryLink",
                 DisjunctiveLink.class);
 
-        primaryInhibitorySynapse = new SynapseTypeDefinition(
+        primarySynapse = new SynapseTypeDefinition(
                 "PrimaryInhibitorySynapse",
                 DisjunctiveSynapse.class
         )
-                .setLinkType(primaryInhibitoryLink)
+                .setLinkType(primaryLink)
                 .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
                 .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
                 .setInputNeuronType(PATTERN)
@@ -127,15 +141,15 @@ public class InhibitoryDef {
                 .setDebugStyle("fill-color: rgb(70,70,210);");
 
 
-        inhibitoryCategoryLink = new LinkTypeDefinition(
+        categoryLink = new LinkTypeDefinition(
                 "InhibitoryCategoryLink",
-                CategoryLink.class);
+                Link.class);
 
-        inhibitoryCategorySynapse = new SynapseTypeDefinition(
+        categorySynapse = new SynapseTypeDefinition(
                 "InhibitoryCategorySynapse",
-                CategorySynapse.class
+                Synapse.class
         )
-                .setLinkType(inhibitoryCategoryLink)
+                .setLinkType(categoryLink)
                 .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
                 .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
                 .setInputNeuronType(INHIBITORY)
@@ -147,15 +161,15 @@ public class InhibitoryDef {
                 .setDebugStyle("fill-color: rgb(110,0,220);");
 
 
-        inhibitoryCategoryInputLink = new LinkTypeDefinition(
+        categoryInputLink = new LinkTypeDefinition(
                 "InhibitoryCategoryInputLink",
                 DisjunctiveLink.class);
 
-        inhibitoryCategoryInputSynapse = new SynapseTypeDefinition(
+        categoryInputSynapse = new SynapseTypeDefinition(
                 "InhibitoryCategoryInputSynapse",
                 Synapse.class
         )
-                .setLinkType(inhibitoryCategoryInputLink)
+                .setLinkType(categoryInputLink)
                 .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
                 .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
                 .setInputNeuronType(CATEGORY)
@@ -166,57 +180,69 @@ public class InhibitoryDef {
                 .setTrigger(FIRED_PRE_FEEDBACK)
                 .setStoredAt(OUTPUT)
                 .setTrainingAllowed(false)
-                .setInstanceSynapseType(inhibitoryCategorySynapse)
+                .setInstanceSynapseType(categorySynapse)
                 .setDebugStyle("fill-color: rgb(110,200,220); ");
+
+        TemplateRelationDefinition templateRelationDef = new TemplateRelationDefinition()
+                .setAbstractSynapseType(categoryInputSynapse)
+                .setInstanceSynapseType(categorySynapse);
+
+        neuron.setTemplateRelation(templateRelationDef);
+
+        TemplateRelationDefinition categoryTemplateRelationDef = new TemplateRelationDefinition()
+                .setAbstractSynapseType(categorySynapse)
+                .setInstanceSynapseType(categoryInputSynapse);
+
+        categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
     }
 
 
-    public ActivationTypeDefinition getInhibitoryActivation() {
-        return inhibitoryActivation;
+    public ActivationTypeDefinition getActivation() {
+        return activation;
     }
 
-    public NeuronTypeDefinition getInhibitoryNeuron() {
-        return inhibitoryNeuron;
+    public NeuronTypeDefinition getNeuron() {
+        return neuron;
     }
 
-    public ActivationTypeDefinition getInhibitoryCategoryActivation() {
-        return inhibitoryCategoryActivation;
+    public ActivationTypeDefinition getCategoryActivation() {
+        return categoryActivation;
     }
 
-    public NeuronTypeDefinition getInhibitoryCategoryNeuron() {
-        return inhibitoryCategoryNeuron;
+    public NeuronTypeDefinition getCategoryNeuron() {
+        return categoryNeuron;
     }
 
-    public LinkTypeDefinition getInhibitoryLink() {
-        return inhibitoryLink;
+    public LinkTypeDefinition getLink() {
+        return link;
     }
 
-    public SynapseTypeDefinition getInhibitorySynapse() {
-        return inhibitorySynapse;
+    public SynapseTypeDefinition getSynapse() {
+        return synapse;
     }
 
-    public LinkTypeDefinition getPrimaryInhibitoryLink() {
-        return primaryInhibitoryLink;
+    public LinkTypeDefinition getPrimaryLink() {
+        return primaryLink;
     }
 
-    public SynapseTypeDefinition getPrimaryInhibitorySynapse() {
-        return primaryInhibitorySynapse;
+    public SynapseTypeDefinition getPrimarySynapse() {
+        return primarySynapse;
     }
 
-    public LinkTypeDefinition getInhibitoryCategoryInputLink() {
-        return inhibitoryCategoryInputLink;
+    public LinkTypeDefinition getCategoryInputLink() {
+        return categoryInputLink;
     }
 
-    public SynapseTypeDefinition getInhibitoryCategoryInputSynapse() {
-        return inhibitoryCategoryInputSynapse;
+    public SynapseTypeDefinition getCategoryInputSynapse() {
+        return categoryInputSynapse;
     }
 
-    public LinkTypeDefinition getInhibitoryCategoryLink() {
-        return inhibitoryCategoryLink;
+    public LinkTypeDefinition getCategoryLink() {
+        return categoryLink;
     }
 
-    public SynapseTypeDefinition getInhibitoryCategorySynapse() {
-        return inhibitoryCategorySynapse;
+    public SynapseTypeDefinition getCategorySynapse() {
+        return categorySynapse;
     }
 
 }

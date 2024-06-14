@@ -17,7 +17,6 @@
 package network.aika.queue.steps;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.fields.Field;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
@@ -49,7 +48,7 @@ public class Instantiation extends ElementStep<Activation> {
 
     @Override
     public void process() {
-        Activation<?> act = getElement();
+        Activation act = getElement();
         act.instantiateTemplateNode();
 
         if(act instanceof ConjunctiveActivation) {

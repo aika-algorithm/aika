@@ -85,18 +85,12 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
 
         setCreated(doc.getCurrentTimestamp());
 
-        initNet();
+        initStates();
 
-//        initBiases();
 
         initBindingSignalSlots();
-/*
-        gradient = new SumField(this, "gradient", TOLERANCE)
-                .setQueued(getQueue(), TRAINING, false);
-*/
+
         if (getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
-//            connectGradientFields();
-//            connectWeightUpdate();
             InactiveLinks.add(this);
         }
 
@@ -143,7 +137,7 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
         );
     }
 
-    protected void initNet() {
+    protected void initStates() {
         Stream.of(getTypeDefinition().getStateTypes())
                 .forEach(sd -> states[sd.getType().ordinal()] = sd.instantiate(this));
     }
@@ -151,12 +145,7 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
     protected final int numberOfStates() {
         return getTypeDefinition().getStateTypes().length;
     }
-/*
-    protected void initBiases() {
-        linkAndConnect(getNeuron().getBias(), getNet(PRE_FEEDBACK))
-                .setPropagateUpdates(false);
-    }
-*/
+
     protected void initBindingSignalSlots() {
         Stream<BSSlotDefinition> bsSlots = neuron.getBindingSignalSlots();
         bsSlots.forEach(slotDef ->
@@ -401,8 +390,8 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
 
     public abstract Link getActiveCategoryInputLink();
 
-    public Activation resolveAbstractInputActivation() {
-        return isInstantiable() ?
+    public Activation resolveAbstractInputActivation(boolean isSynapseInstantiable) {
+        return isSynapseInstantiable && neuron.isInstantiable() ?
                 getActiveTemplateInstance() :
                 this;
     }
@@ -410,12 +399,8 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
     public Activation getActiveTemplateInstance() {
         Link l = getActiveCategoryInputLink();
         return l != null && l.getInput() != null ?
-                l.getInput().getActiveTemplateInstance() :
+                ((CategoryActivation)l.getInput()).getActiveCategoryInput() :
                 null;
-    }
-
-    public boolean isInstantiable() {
-        return neuron.isInstantiable() && neuron.isAbstract();
     }
 
     public Activation instantiateTemplateNode() {
@@ -456,12 +441,13 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
         return ti;
     }
 
-    private void linkTemplateAndInstance(Activation ti) {
-        Link cl = getActiveCategoryInputLink();
-        if(cl == null)
-            cl = createCategoryInputLink();
+    protected void linkTemplateAndInstance(Activation ti) {
+        Link cil = getActiveCategoryInputLink();
+        if(cil == null)
+            cil = createCategoryInputLink();
 
-        cl.instantiateTemplate(cl.getInput(), ti);
+        CategoryActivation cAct = (CategoryActivation) cil.getOutput();
+        cAct.instantiateCategoryLink(ti);
     }
 
     public Link createCategoryInputLink() {
@@ -470,16 +456,20 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
             return null;
 
         Activation catAct = cis.getInput().createActivation(doc);
+
         return cis.createAndInitLink(catAct, this);
     }
 
     public void instantiateTemplateEdges(Activation instanceAct) {
         getInputLinks()
+                .filter(l -> l.getSynapse().isOutputSideInstantiable())
                 .filter(l -> l.getInput() != null)
-                .filter(l -> l.getInput().isFired(INNER_FEEDBACK))
+                .filter(l -> l.getInput().isFired(INNER_FEEDBACK)) // Should this condition rely on the annealing value instead of instanceof?
                 .forEach(l ->
                         l.instantiateTemplate(
-                                l.getInput().resolveAbstractInputActivation(),
+                                l.getInput().resolveAbstractInputActivation(
+                                        l.getSynapse().isInputSideInstantiable()
+                                ),
                                 instanceAct
                         )
                 );
@@ -487,12 +477,15 @@ public abstract class Activation extends TypeImpl<ActivationTypeDefinition, Acti
         instanceAct.initFromTemplate(this);
 
         getOutputLinks()
-  //              .filter(l -> !(l instanceof CategoryLink))
+                .filter(l -> l.getSynapse().isInputSideInstantiable())
+//                .filter(l -> !(l instanceof CategoryLink))
                 .filter(l -> l.getOutput().isFired(INNER_FEEDBACK))
                 .forEach(l ->
                         l.instantiateTemplate(
                                 instanceAct,
-                                l.getOutput().resolveAbstractInputActivation()
+                                l.getOutput().resolveAbstractInputActivation(
+                                        l.getSynapse().isOutputSideInstantiable()
+                                )
                         )
                 );
     }

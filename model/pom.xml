@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>aika-debugger</artifactId>
+    <artifactId>aika-model</artifactId>
     <version>${revision}</version>
 
     <properties>
@@ -21,30 +21,12 @@
     <dependencies>
         <dependency>
             <groupId>network.aika</groupId>
+            <artifactId>aika-fields</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>network.aika</groupId>
             <artifactId>aika-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>network.aika</groupId>
-            <artifactId>aika-model</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.graphstream</groupId>
-            <artifactId>gs-algo</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>network.aika</groupId>
-            <artifactId>gs-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>network.aika</groupId>
-            <artifactId>gs-ui-swing</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
         </dependency>
 
         <dependency>
@@ -58,28 +40,35 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
 
+        <!-- dependencies for tests: -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-        </dependency>
-
-        <!-- dependencies for tests: -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

@@ -16,9 +16,10 @@
  */
 package network.aika.elements;
 
-import network.aika.Config;
-import network.aika.Model;
+
+import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fields.FieldObject;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 
 /**
@@ -32,9 +33,4 @@ public interface Element {
 
     Timestamp getFired();
 
-    Model getModel();
-
-    default Config getConfig() {
-        return getModel().getConfig();
-    }
 }

@@ -22,11 +22,12 @@ import network.aika.Document;
 import network.aika.elements.PreActivation;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
-import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.elements.typedef.TypeDefinition;
 import network.aika.elements.typedef.TypeImpl;
+import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
 import network.aika.exceptions.MissingInputCategoryNeuron;
@@ -256,13 +257,15 @@ public abstract class Neuron extends TypeImpl<NeuronTypeDefinition, Neuron> impl
         return this;
     }
 
-    public Neuron setInstantiable(boolean instantiable, boolean includeSyns) {
-        if (includeSyns)
-            getInputSynapses().forEach(s ->
-                    s.setInstantiable(instantiable)
-            );
+    public Neuron setInputSynapsesInstantiable(boolean inputSideInstantiable, boolean outputSideInstantiable) {
+        getInputSynapses()
+                .stream()
+                .filter(s -> !(s instanceof CategoryInputSynapse))
+                .forEach(s ->
+                        s.setInstantiable(inputSideInstantiable, outputSideInstantiable)
+                );
 
-        return setInstantiable(instantiable);
+        return this;
     }
 
     public boolean isInstantiable() {

@@ -32,25 +32,31 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public interface SynapseSlot extends Type<SynapseSlotTypeDefinition, SynapseSlot> {
+public abstract class SynapseSlot extends Type<SynapseSlotTypeDefinition, SynapseSlot> {
 
-    void init();
+    protected Activation act;
 
-    void addLink(Link l);
+    protected Synapse synapse;
 
-    Stream<Link> getLinks();
+    protected Direction dir;
 
-    Link getLink(Activation act);
+    public Synapse getSynapse() {
+        return synapse;
+    }
 
-    Field getInputField();
+    public Activation getActivation() {
+        return act;
+    }
 
-    Field getOutputField();
+    public Direction getDirection() {
+        return dir;
+    }
 
-    Link getSelectedLink();
+    public abstract void addLink(Link l);
 
-    Synapse getSynapse();
+    public abstract Stream<Link> getLinks();
 
-    Activation getActivation();
+    public abstract Link getLink(Activation act);
 
-    Direction getDirection();
+    public abstract Link getSelectedLink();
 }

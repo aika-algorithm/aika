@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses;
+package network.aika.elements;
+
+import network.aika.Config;
+import network.aika.Model;
 
 /**
- *
- * @author Lukas Molzberger
+ *  @author Lukas Molzberger
  */
-public class CategorySynapse
-        extends DisjunctiveSynapse
-{
+public interface ModelProvider {
 
-    @Override
-    public void link() {
-        input.addOutputSynapse(this);
+    Model getModel();
+
+    default Config getConfig() {
+        return getModel().getConfig();
     }
-
 }

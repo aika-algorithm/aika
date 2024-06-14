@@ -14,21 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.typedef.model;
+package network.aika.model;
 
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.links.CategoryLink;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
-import network.aika.elements.neurons.CategoryNeuron;
-import network.aika.elements.neurons.ConjunctiveNeuron;
+import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.elements.typedef.ActivationTypeDefinition;
-import network.aika.elements.typedef.LinkTypeDefinition;
-import network.aika.elements.typedef.NeuronTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.synapses.Synapse;
+import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.statistic.AverageCoveredSpace;
 import network.aika.statistic.NeuronStatistic;
@@ -53,23 +47,23 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public class PatternDef {
+public class PatternDef implements TypeDefinition {
 
     private TypeModel typeModel;
 
-    private ActivationTypeDefinition patternActivation;
-    private NeuronTypeDefinition patternNeuron;
+    private ActivationTypeDefinition activation;
+    private NeuronTypeDefinition neuron;
 
-    private ActivationTypeDefinition patternCategoryActivation;
-    private NeuronTypeDefinition patternCategoryNeuron;
+    private ActivationTypeDefinition categoryActivation;
+    private NeuronTypeDefinition categoryNeuron;
 
-    private LinkTypeDefinition patternLink;
-    private SynapseTypeDefinition patternSynapse;
-    private LinkTypeDefinition patternCategoryInputLink;
-    private SynapseTypeDefinition patternCategoryInputSynapse;
+    private LinkTypeDefinition link;
+    private SynapseTypeDefinition synapse;
+    private LinkTypeDefinition categoryInputLink;
+    private SynapseTypeDefinition categoryInputSynapse;
 
-    private LinkTypeDefinition patternCategoryLink;
-    private SynapseTypeDefinition patternCategorySynapse;
+    private LinkTypeDefinition categoryLink;
+    private SynapseTypeDefinition categorySynapse;
 
 
     FieldDefinition<Neuron, AverageCoveredSpace> averageCoveredSpace;
@@ -84,24 +78,24 @@ public class PatternDef {
 
     public void init() {
 
-        patternActivation = new ActivationTypeDefinition(
+        activation = new ActivationTypeDefinition(
                 "PatternActivation",
-                ConjunctiveActivation.class
+                Activation.class
         )
                 .addStateType(typeModel.states.getPreFeedbackState());
 
-        patternNeuron = new NeuronTypeDefinition(
+        neuron = new NeuronTypeDefinition(
                 "PatternNeuron",
-                ConjunctiveNeuron.class
+                Neuron.class
         )
                 .setNeuronType(PATTERN)
-                .setActivationType(patternActivation)
+                .setActivationType(activation)
                 .setActivationFunction(RECTIFIED_HYPERBOLIC_TANGENT)
                 .setBindingSignalSlots(SINGLE_SAME, MULTI_INPUT)
                 .setDebugStyle("fill-color: rgb(224, 34, 245);");
 
 
-        averageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, patternNeuron, "avgCoveredSpace");
+        averageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, neuron, "avgCoveredSpace");
 
         /*
             private NeuronStatistic statistic = new NeuronStatistic(
@@ -112,23 +106,23 @@ public class PatternDef {
     );
         */
 
-        neuronStatistic = new FieldDefinition(NeuronStatistic.class, patternNeuron, "statistic", TOLERANCE);
+        neuronStatistic = new FieldDefinition(NeuronStatistic.class, neuron, "statistic", TOLERANCE);
 
         link(averageCoveredSpace, neuronStatistic);
 
 
-        patternCategoryActivation = new ActivationTypeDefinition(
+        categoryActivation = new ActivationTypeDefinition(
                 "PatternCategoryActivation",
-                CategoryActivation.class
+                Activation.class
         )
                 .addStateType(typeModel.states.getPreFeedbackState());
 
-        patternCategoryNeuron = new NeuronTypeDefinition(
+        categoryNeuron = new NeuronTypeDefinition(
                 "PatternCategoryNeuron",
-                CategoryNeuron.class
+                Neuron.class
         )
                 .setNeuronType(CATEGORY)
-                .setActivationType(patternCategoryActivation)
+                .setActivationType(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_SAME)
                 .setTrainingAllowed(false)
@@ -136,18 +130,18 @@ public class PatternDef {
 
 
 
-        patternLink = new LinkTypeDefinition(
+        link = new LinkTypeDefinition(
                 "PatternLink",
                 ConjunctiveLink.class
         )
-                .setInputDef(typeModel.bindingDef.getBindingActivation())
-                .setOutputDef(typeModel.patternDef.patternActivation);
+                .setInputDef(typeModel.bindingDef.getActivation())
+                .setOutputDef(typeModel.patternDef.activation);
 
-        patternSynapse = new SynapseTypeDefinition(
+        synapse = new SynapseTypeDefinition(
                 "PatternSynapse",
                 ConjunctiveSynapse.class
         )
-                .setLinkType(patternLink)
+                .setLinkType(link)
                 .setInputSlotType(typeModel.conjunctiveDef.getConjunctiveSynapseInputSlot())
                 .setOutputSlotType(typeModel.conjunctiveDef.getConjunctiveSynapseOutputSlot())
                 .setInputNeuronType(BINDING)
@@ -158,18 +152,18 @@ public class PatternDef {
                 .setStoredAt(OUTPUT)
                 .setDebugStyle("fill-color: rgb(224, 34, 245);");
 
-        patternCategoryLink = new LinkTypeDefinition(
+        categoryLink = new LinkTypeDefinition(
                 "PatternCategoryLink",
-                CategoryLink.class
+                Link.class
         )
-                .setInputDef(patternActivation)
-                .setOutputDef(patternCategoryActivation);
+                .setInputDef(activation)
+                .setOutputDef(categoryActivation);
 
-        patternCategorySynapse = new SynapseTypeDefinition(
+        categorySynapse = new SynapseTypeDefinition(
                 "PatternCategorySynapse",
-                CategorySynapse.class
+                Synapse.class
         )
-                .setLinkType(patternCategoryLink)
+                .setLinkType(categoryLink)
                 .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
                 .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
                 .setInputNeuronType(PATTERN)
@@ -181,18 +175,18 @@ public class PatternDef {
                 .setDebugStyle("fill-color: rgb(100,0,200);");
 
 
-        patternCategoryInputLink = new LinkTypeDefinition(
+        categoryInputLink = new LinkTypeDefinition(
                 "PatternCategoryInputLink",
                 ConjunctiveLink.class
         )
-                .setInputDef(patternCategoryActivation)
-                .setOutputDef(patternActivation);
+                .setInputDef(categoryActivation)
+                .setOutputDef(activation);
 
-        patternCategoryInputSynapse = new SynapseTypeDefinition(
+        categoryInputSynapse = new SynapseTypeDefinition(
                 "PatternCategoryInputSynapse",
                 ConjunctiveSynapse.class
         )
-                .setLinkType(patternCategoryInputLink)
+                .setLinkType(categoryInputLink)
                 .setInputSlotType(typeModel.conjunctiveDef.getConjunctiveSynapseInputSlot())
                 .setOutputSlotType(typeModel.categoryDef.getCategoryInputAnnealingSynapseOutputSlot())
                 .setInputNeuronType(CATEGORY)
@@ -204,49 +198,61 @@ public class PatternDef {
                 .setStoredAt(OUTPUT)
                 .setTrainingAllowed(false)
                 .setRegisterInputSlot(ON_INIT)
-                .setInstanceSynapseType(patternCategorySynapse)
+                .setInstanceSynapseType(categorySynapse)
                 .setDebugStyle("fill-color: rgb(110,200,220);");
+
+        TemplateRelationDefinition templateRelationDef = new TemplateRelationDefinition()
+                .setAbstractSynapseType(categoryInputSynapse)
+                .setInstanceSynapseType(categorySynapse);
+
+        neuron.setTemplateRelation(templateRelationDef);
+
+        TemplateRelationDefinition categoryTemplateRelationDef = new TemplateRelationDefinition()
+                .setAbstractSynapseType(categorySynapse)
+                .setInstanceSynapseType(categoryInputSynapse);
+
+        categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
     }
 
 
-    public ActivationTypeDefinition getPatternActivation() {
-        return patternActivation;
+    public ActivationTypeDefinition getActivation() {
+        return activation;
     }
 
-    public NeuronTypeDefinition getPatternNeuron() {
-        return patternNeuron;
+    public NeuronTypeDefinition getNeuron() {
+        return neuron;
     }
 
-    public ActivationTypeDefinition getPatternCategoryActivation() {
-        return patternCategoryActivation;
+    public ActivationTypeDefinition getCategoryActivation() {
+        return categoryActivation;
     }
 
-    public NeuronTypeDefinition getPatternCategoryNeuron() {
-        return patternCategoryNeuron;
+    public NeuronTypeDefinition getCategoryNeuron() {
+        return categoryNeuron;
     }
 
-    public LinkTypeDefinition getPatternLink() {
-        return patternLink;
+    public LinkTypeDefinition getLink() {
+        return link;
     }
 
-    public SynapseTypeDefinition getPatternSynapse() {
-        return patternSynapse;
+    public SynapseTypeDefinition getSynapse() {
+        return synapse;
     }
 
-    public LinkTypeDefinition getPatternCategoryInputLink() {
-        return patternCategoryInputLink;
+    public LinkTypeDefinition getCategoryInputLink() {
+        return categoryInputLink;
     }
 
-    public SynapseTypeDefinition getPatternCategoryInputSynapse() {
-        return patternCategoryInputSynapse;
+    public SynapseTypeDefinition getCategoryInputSynapse() {
+        return categoryInputSynapse;
     }
 
-    public LinkTypeDefinition getPatternCategoryLink() {
-        return patternCategoryLink;
+    public LinkTypeDefinition getCategoryLink() {
+        return categoryLink;
     }
 
-    public SynapseTypeDefinition getPatternCategorySynapse() {
-        return patternCategorySynapse;
+    public SynapseTypeDefinition getCategorySynapse() {
+        return categorySynapse;
     }
 
 }

@@ -98,9 +98,4 @@ public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, D
     public Queue getQueue() {
         return link.getQueue();
     }
-
-    @Override
-    public void disconnect() {
-        link.disconnect();
-    }
 }

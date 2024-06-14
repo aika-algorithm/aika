@@ -16,6 +16,7 @@
  */
 package network.aika;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
@@ -44,26 +45,27 @@ public class PropagateBindingSignalTest {
     @Test
     public void testPropagateBindingSignalOnLinkStateChange() {
         Model m = new Model();
-        PatternNeuron bsN = new PatternNeuron(m, NEURON_EXTERNAL);
-        BindingNeuron in = new BindingNeuron(m, NEURON_EXTERNAL);
-        PatternNeuron on = new PatternNeuron(m, NEURON_EXTERNAL);
-        PatternSynapse s = new PatternSynapse()
+        TypeModel tm = m.getTypeModel();
+        Neuron bsN = tm.getPatternDef().getNeuron().instantiate(m, NEURON_EXTERNAL);
+        Neuron in = tm.getBindingDef().getNeuron().instantiate(m, NEURON_EXTERNAL);
+        Neuron on = tm.getPatternDef().getNeuron().instantiate(m, NEURON_EXTERNAL);
+        Synapse s = tm.getPatternDef().getSynapse().instantiate()
                 .setWeight(1.0)
                 .link(in, on);
 
         Document doc = new Document(m, "Bla");
 
-        PatternActivation bs = new PatternActivation(0, doc, bsN);
+        Activation bs = tm.getPatternDef().getActivation().instantiate(0, doc, bsN);
 
-        BindingActivation iAct = new BindingActivation(1, doc, in);
-        PatternActivation oAct = new PatternActivation(2, doc, on);
+        Activation iAct = tm.getBindingDef().getActivation().instantiate(1, doc, in);
+        Activation oAct = tm.getPatternDef().getActivation().instantiate(2, doc, on);
 
         iAct.getBindingSignalSlot(Scope.INPUT).updateBindingSignal(bs, true);
 
-        PatternLink l = s.createLink(iAct, oAct);
+        Link l = s.createLink(iAct, oAct);
 
         l.getInputValue().setValue(1.0);
-        oAct.getState(StateType.PRE_FEEDBACK).setNet(1.0);
+        oAct.setNet(StateType.PRE_FEEDBACK, 1.0);
 
         l.getLinkUpdateStep(Direction.INPUT).process();
         l.getLinkUpdateStep(Direction.OUTPUT).process();
@@ -77,24 +79,26 @@ public class PropagateBindingSignalTest {
     @Test
     public void testPropagateBindingSignalOnBSArrived() {
         Model m = new Model();
-        PatternNeuron bsN = new PatternNeuron(m, NEURON_EXTERNAL);
-        BindingNeuron in = new BindingNeuron(m, NEURON_EXTERNAL);
-        PatternNeuron on = new PatternNeuron(m, NEURON_EXTERNAL);
-        PatternSynapse s = new PatternSynapse()
+        TypeModel tm = m.getTypeModel();
+
+        Neuron bsN = tm.getPatternDef().getNeuron().instantiate(m, NEURON_EXTERNAL);
+        Neuron in = tm.getBindingDef().getNeuron().instantiate(m, NEURON_EXTERNAL);
+        Neuron on = tm.getPatternDef().getNeuron().instantiate(m, NEURON_EXTERNAL);
+        Synapse s = tm.getPatternDef().getSynapse().instantiate()
                 .setWeight(1.0)
                 .link(in, on);
 
         Document doc = new Document(m, "Bla");
 
-        PatternActivation bs = new PatternActivation(0, doc, bsN);
+        Activation bs = tm.getPatternDef().getActivation().instantiate(0, doc, bsN);
 
-        BindingActivation iAct = new BindingActivation(1, doc, in);
-        PatternActivation oAct = new PatternActivation(2, doc, on);
+        Activation iAct = tm.getBindingDef().getActivation().instantiate(1, doc, in);
+        Activation oAct = tm.getPatternDef().getActivation().instantiate(2, doc, on);
 
-        PatternLink l = s.createLink(iAct, oAct);
+        Link l = s.createLink(iAct, oAct);
 
         l.getInputValue().setValue(1.0);
-        oAct.getState(StateType.PRE_FEEDBACK).setNet(1.0);
+        oAct.setNet(StateType.PRE_FEEDBACK, 1.0);
 
         l.getLinkUpdateStep(Direction.INPUT).process();
         l.getLinkUpdateStep(Direction.OUTPUT).process();
@@ -112,19 +116,21 @@ public class PropagateBindingSignalTest {
     @Test
     public void testPropagateBindingSignalOnLinkCreation() {
         Model m = new Model();
-        Neuron in = new Neuron(m, NEURON_EXTERNAL);
-        Neuron on = new Neuron(m, NEURON_EXTERNAL);
-        InnerPositiveFeedbackSynapse s = new InnerPositiveFeedbackSynapse()
+        TypeModel tm = m.getTypeModel();
+
+        Neuron in = tm.getPatternDef().getNeuron().instantiate(m, NEURON_EXTERNAL);
+        Neuron on = tm.getBindingDef().getNeuron().instantiate(m, NEURON_EXTERNAL);
+        Synapse s = tm.getBindingDef().getInnerPositiveFeedbackSynapse().instantiate()
                 .setWeight(1.0)
                 .link(in, on);
 
         Document doc = new Document(m, "Bla");
 
-        PatternActivation iAct = new PatternActivation(0, doc, in);
-        PatternActivation bs = iAct;
-        BindingActivation oAct = new BindingActivation(1, doc, on);
+        Activation iAct = tm.getPatternDef().getActivation().instantiate(0, doc, in);
+        Activation bs = iAct;
+        Activation oAct = tm.getBindingDef().getActivation().instantiate(1, doc, on);
 
-        InnerPositiveFeedbackLink l = s.createLink(iAct, oAct);
+        Link l = s.createLink(iAct, oAct);
 
         l.getInputValue().setValue(1.0);
         l.getLinkUpdateStep(Direction.INPUT).process();

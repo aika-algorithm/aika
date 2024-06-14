@@ -29,12 +29,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.queue.Phase.TRAINING;
-import static network.aika.utils.Utils.TOLERANCE;
-
-
 /**
  *
  * @author Lukas Molzberger

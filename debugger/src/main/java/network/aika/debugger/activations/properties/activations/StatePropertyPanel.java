@@ -17,7 +17,6 @@
 package network.aika.debugger.activations.properties.activations;
 
 import network.aika.debugger.properties.AbstractPropertyPanel;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.activations.State;
 
 /**

@@ -32,9 +32,7 @@ import network.aika.elements.typedef.Type;
 import network.aika.elements.typedef.TypeImpl;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
-import network.aika.fields.link.FieldLink;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
@@ -121,15 +119,6 @@ public abstract class Link extends TypeImpl<LinkTypeDefinition, Link> implements
     public void instantiateTemplate(Activation iAct, Activation oAct) {
         if(iAct == null || oAct == null)
             return;
-
-        if(!synapse.isInstantiable())
-            return;
-
-        /* TODO: check if necessary
-        Link l = iAct.getInputLink(oAct, getSynapse().getSynapseId());
-        if(l != null)
-            return;
-         */
 
         Synapse s = synapse.instantiateTemplate(
                 iAct.getNeuron(),

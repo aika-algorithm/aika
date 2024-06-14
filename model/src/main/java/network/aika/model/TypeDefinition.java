@@ -14,28 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.neurons;
+package network.aika.model;
 
-import network.aika.ActivationFunction;
-import network.aika.Model;
-import network.aika.elements.activations.Activation;
-
+import network.aika.elements.typedef.ActivationTypeDefinition;
+import network.aika.elements.typedef.LinkTypeDefinition;
+import network.aika.elements.typedef.NeuronTypeDefinition;
+import network.aika.elements.typedef.SynapseTypeDefinition;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class DisjunctiveNeuron<N extends DisjunctiveNeuron, A extends Activation> extends Neuron {
+public interface TypeDefinition {
 
-    public DisjunctiveNeuron(NeuronProvider np) {
-        super(np);
-    }
+    ActivationTypeDefinition getActivation();
 
-    public DisjunctiveNeuron(Model m, RefType rt) {
-        super(m, rt);
-    }
+    NeuronTypeDefinition getNeuron();
 
-    @Override
-    public void addInactiveLinks(Activation act) {
-    }
+    ActivationTypeDefinition getCategoryActivation();
+
+    NeuronTypeDefinition getCategoryNeuron();
+
+    LinkTypeDefinition getLink();
+
+    SynapseTypeDefinition getSynapse();
+
+    LinkTypeDefinition getCategoryInputLink();
+
+    SynapseTypeDefinition getCategoryInputSynapse();
+
+    LinkTypeDefinition getCategoryLink();
+
+    SynapseTypeDefinition getCategorySynapse();
+
 }

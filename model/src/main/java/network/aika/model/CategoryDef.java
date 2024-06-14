@@ -1,8 +1,6 @@
-package network.aika.elements.typedef.model;
+package network.aika.model;
 
-import network.aika.elements.links.CategoryLink;
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 import network.aika.elements.typedef.LinkTypeDefinition;
@@ -57,11 +55,11 @@ public class CategoryDef {
 
         categoryLink = new LinkTypeDefinition(
                 "CategoryLink",
-                CategoryLink.class);
+                Link.class);
 
         categorySynapse = new SynapseTypeDefinition(
                 "CategorySynapse",
-                CategorySynapse.class
+                Synapse.class
         );
     }
 

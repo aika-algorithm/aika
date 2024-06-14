@@ -16,7 +16,6 @@
  */
 package network.aika.debugger.neurons.properties.slots;
 
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.synapses.slots.AnnealingSynapseOutputSlot;
 
 

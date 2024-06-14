@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>aika</artifactId>
+    <artifactId>aika-core</artifactId>
     <version>${revision}</version>
 
     <properties>
@@ -21,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>network.aika</groupId>
-            <artifactId>fields</artifactId>
+            <artifactId>aika-fields</artifactId>
         </dependency>
 
         <dependency>

@@ -22,29 +22,35 @@ import network.aika.fields.FieldOutput;
 /**
  * @author Lukas Molzberger
  */
-public class ArgumentFieldLink<A> extends FieldLink {
+public class ArgumentFieldLink<K, V> extends FieldLink {
 
-    private final A argumentRef;
+    private final K key;
+    private final V value;
 
-    public ArgumentFieldLink(FieldOutput input, int arg, A argRef, FieldInput<ArgumentFieldLink<A>> output) {
+    public ArgumentFieldLink(FieldOutput input, int arg, K key, V value, FieldInput<ArgumentFieldLink<K, V>> output) {
         super(input, arg, output);
 
-        argumentRef = argRef;
+        this.key = key;
+        this.value = value;
     }
 
-    public A getArgumentRef() {
-        return argumentRef;
+    public K getKey() {
+        return key;
     }
 
-    public static <A> ArgumentFieldLink<A> link(FieldOutput in, int arg, A argRef, FieldInput<ArgumentFieldLink<A>> out) {
-        ArgumentFieldLink<A> fl = new ArgumentFieldLink(in, arg, argRef, out);
+    public V getValue() {
+        return value;
+    }
+
+    public static <K, V> ArgumentFieldLink<K, V> link(FieldOutput in, int arg, K key, V value, FieldInput<ArgumentFieldLink<K, V>> out) {
+        ArgumentFieldLink<K, V> fl = new ArgumentFieldLink(in, arg, key, value, out);
         out.addInput(fl);
         in.addOutput(fl);
         return fl;
     }
 
-    public static <A> ArgumentFieldLink<A> linkAndConnect(FieldOutput in, A argRef, FieldInput<ArgumentFieldLink<A>> out) {
-        ArgumentFieldLink<A> fl = link(in, out.size(), argRef, out);
+    public static <K, V> ArgumentFieldLink<K, V> linkAndConnect(FieldOutput in, K key, V value, FieldInput<ArgumentFieldLink<K, V>> out) {
+        ArgumentFieldLink<K, V> fl = link(in, out.size(), key, value, out);
 
         fl.connect(true);
         return fl;

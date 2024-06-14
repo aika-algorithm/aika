@@ -14,19 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.activations;
-
-import network.aika.Document;
-import network.aika.elements.neurons.DisjunctiveNeuron;
+package network.aika.elements.typedef;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class DisjunctiveActivation extends Activation {
+public class TemplateRelationDefinition {
 
-    public DisjunctiveActivation(int id, Document doc, DisjunctiveNeuron neuron) {
-        super(id, doc, neuron);
+
+    private SynapseTypeDefinition abstractSynapseType;
+
+    private SynapseTypeDefinition instanceSynapseType;
+
+    public TemplateRelationDefinition setAbstractSynapseType(SynapseTypeDefinition abstractSynapseType) {
+        this.abstractSynapseType = abstractSynapseType;
+
+        return this;
     }
 
+    public SynapseTypeDefinition getAbstractSynapseType() {
+        return abstractSynapseType;
+    }
+
+    public TemplateRelationDefinition setInstanceSynapseType(SynapseTypeDefinition instanceSynapseType) {
+        this.instanceSynapseType = instanceSynapseType;
+
+        return this;
+    }
+
+    public SynapseTypeDefinition getInstanceSynapseType() {
+        return instanceSynapseType;
+    }
 }

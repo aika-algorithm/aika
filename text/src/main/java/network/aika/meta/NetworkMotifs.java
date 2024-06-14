@@ -23,7 +23,6 @@ import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.InhibitoryNeuron;
 import network.aika.elements.neurons.types.LatentRelationNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.elements.relations.LatentProxyRelation;
 import network.aika.elements.relations.NearRelation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.types.*;

@@ -17,11 +17,8 @@
 package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.Scope;
-import network.aika.fields.*;
 import network.aika.fields.link.ArgumentFieldLink;
 import network.aika.visitor.Visitor;
 
@@ -29,7 +26,6 @@ import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.fields.link.AbstractFieldLink.updateConnected;
 import static network.aika.fields.link.ArgumentFieldLink.linkAndConnect;
-import static network.aika.fields.Fields.*;
 import static network.aika.visitor.operator.SubsumesOperator.subsumes;
 
 
@@ -40,17 +36,13 @@ public abstract class ConjunctiveLink extends Link {
 
     protected ArgumentFieldLink<ConjunctiveLink> inputSlotFL;
 
-    private FieldOutput weightUpdatePosCase;
-    private FieldOutput weightUpdateNegCase;
-    private FieldOutput biasUpdateNegCase;
-
 
     public ConjunctiveLink(ConjunctiveSynapse s, Activation input, ConjunctiveActivation output) {
         super(s, input, output);
     }
 
     @Override
-    public void onOutputBindingSignalUpdate(Scope bsType, PatternActivation nBS, boolean state) {
+    public void onOutputBindingSignalUpdate(Scope bsType, Activation nBS, boolean state) {
         if(input == null)
             return;
 
@@ -58,7 +50,7 @@ public abstract class ConjunctiveLink extends Link {
         if(inputBSType == null)
             return;
 
-        PatternActivation bs = input.getBindingSignal(inputBSType);
+        Activation bs = input.getBindingSignal(inputBSType);
         if(bs == null)
             return;
 
@@ -90,80 +82,9 @@ public abstract class ConjunctiveLink extends Link {
             v.next(this, s, depth);
     }
 
-    @Override
-    protected void initWeightInput() {
-        super.initWeightInput();
-
-        if (synInputSlot != null)
-            inputSlotFL = linkAndConnect(
-                    synOutputSlot.getOutputNet(),
-                    this,
-                    synInputSlot.getInputField()
-            );
-
-        if(synapse.isOptional())
-            synapse.initBiasInput(output);
-    }
-
     public void initFromTemplate(Link template) {
         super.initFromTemplate(template);
 
-        synapse.initBiasInput(output);
-    }
-
-    @Override
-    public void connectWeightUpdate() {
-        weightUpdatePosCase = mul(
-                this,
-                "weight update (pos case)",
-                getInputValue(),
-                getOutput().getUpdateValue(),
-                synapse.getWeight()
-        );
-
-        weightUpdateNegCase = scale(
-                this,
-                "weight update (neg case)",
-                -1.0,
-                mul(
-                        this,
-                        "weight update (neg case)",
-                        getNegInputIsFired(),
-                        getOutput().getNegUpdateValue()
-                ),
-                synapse.getWeight()
-        );
-
-        biasUpdateNegCase = mul(
-                this,
-                "bias update (neg case)",
-                getNegInputIsFired(),
-                getOutput().getNegUpdateValue(),
-                getSynapse().getSynapseBias()
-        );
-    }
-
-    @Override
-    public void disconnect() {
-        super.disconnect();
-
-        if(weightUpdatePosCase != null)
-            weightUpdatePosCase.disconnectAndUnlinkOutputs(false);
-        if(weightUpdateNegCase != null)
-            weightUpdateNegCase.disconnectAndUnlinkOutputs(false);
-        if(biasUpdateNegCase != null)
-            biasUpdateNegCase.disconnectAndUnlinkOutputs(false);
-    }
-
-    public FieldOutput getWeightUpdatePosCase() {
-        return weightUpdatePosCase;
-    }
-
-    public FieldOutput getWeightUpdateNegCase() {
-        return weightUpdateNegCase;
-    }
-
-    public FieldOutput getBiasUpdateNegCase() {
-        return biasUpdateNegCase;
+        synapse.initSlots(output);
     }
 }
