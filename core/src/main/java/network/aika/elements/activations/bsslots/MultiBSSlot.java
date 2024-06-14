@@ -17,7 +17,6 @@
 package network.aika.elements.activations.bsslots;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.types.PatternActivation;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +28,7 @@ import java.util.stream.Stream;
  */
 public class MultiBSSlot extends BindingSignalSlot {
 
-    private Set<PatternActivation> bindingSignals = new HashSet<>();
+    private Set<Activation> bindingSignals = new HashSet<>();
 
     public MultiBSSlot(Activation act, BSSlotDefinition slotDef) {
         super(act, slotDef);
@@ -41,18 +40,18 @@ public class MultiBSSlot extends BindingSignalSlot {
     }
 
     @Override
-    public boolean isSet(PatternActivation bs) {
+    public boolean isSet(Activation bs) {
         return getBindingSignals()
                 .anyMatch(bsa -> bsa == bs);
     }
 
     @Override
-    public Stream<PatternActivation> getBindingSignals() {
+    public Stream<Activation> getBindingSignals() {
         return bindingSignals.stream();
     }
 
     @Override
-    public void updateBindingSignal(PatternActivation bs, boolean state) {
+    public void updateBindingSignal(Activation bs, boolean state) {
         if (state)
             bindingSignals.add(bs);
         else

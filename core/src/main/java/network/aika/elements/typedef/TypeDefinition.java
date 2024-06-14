@@ -40,6 +40,13 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
         this.clazz = clazz;
     }
 
+    public boolean isInstance(T type) {
+        return this == type.getTypeDefinition() ||
+                parents.stream().anyMatch(p ->
+                        p.isInstance(type)
+                );
+    }
+
     public String getName() {
         return name;
     }

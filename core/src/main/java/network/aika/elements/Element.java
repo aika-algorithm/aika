@@ -26,7 +26,7 @@ import network.aika.queue.Timestamp;
  *
  *  @author Lukas Molzberger
  */
-public interface Element extends FieldObject {
+public interface Element {
 
     Timestamp getCreated();
 

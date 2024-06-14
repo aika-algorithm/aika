@@ -21,6 +21,7 @@ import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.types.InnerPositiveFeedbackLink;
 import network.aika.elements.links.types.PatternLink;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.RefType;
 import network.aika.elements.neurons.types.BindingNeuron;
 import network.aika.elements.neurons.types.PatternNeuron;
@@ -111,8 +112,8 @@ public class PropagateBindingSignalTest {
     @Test
     public void testPropagateBindingSignalOnLinkCreation() {
         Model m = new Model();
-        PatternNeuron in = new PatternNeuron(m, NEURON_EXTERNAL);
-        BindingNeuron on = new BindingNeuron(m, NEURON_EXTERNAL);
+        Neuron in = new Neuron(m, NEURON_EXTERNAL);
+        Neuron on = new Neuron(m, NEURON_EXTERNAL);
         InnerPositiveFeedbackSynapse s = new InnerPositiveFeedbackSynapse()
                 .setWeight(1.0)
                 .link(in, on);

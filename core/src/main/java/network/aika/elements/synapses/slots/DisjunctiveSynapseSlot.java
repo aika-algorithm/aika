@@ -18,7 +18,9 @@ package network.aika.elements.synapses.slots;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.DisjunctiveLink;
+import network.aika.elements.links.Link;
 import network.aika.elements.synapses.DisjunctiveSynapse;
+import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.SynapseSlotTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.enums.direction.Direction;
@@ -31,22 +33,15 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-/*
-public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, DisjunctiveLink> {
 
-    SynapseSlotTypeDefinition synapseSlotType;
+public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, DisjunctiveLink> {
 
     private Direction dir;
 
-    private DisjunctiveLink<DisjunctiveSynapse, ?, ?> link;
+    private Link link;
 
     public DisjunctiveSynapseSlot(Direction dir) {
         this.dir = dir;
-    }
-
-    @Override
-    public void setTypeDefinition(SynapseSlotTypeDefinition typeDef) {
-        synapseSlotType = typeDef;
     }
 
     @Override
@@ -55,22 +50,22 @@ public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, D
     }
 
     @Override
-    public void addLink(DisjunctiveLink l) {
+    public void addLink(Link l) {
         link = l;
     }
 
     @Override
-    public Stream<DisjunctiveLink> getLinks() {
+    public Stream<Link> getLinks() {
         return Stream.of(link);
     }
 
     @Override
-    public DisjunctiveLink getLink(Activation act) {
+    public Link getLink(Activation act) {
         return link;
     }
 
     @Override
-    public DisjunctiveSynapse getSynapse() {
+    public Synapse getSynapse() {
         return link.getSynapse();
     }
 
@@ -95,7 +90,7 @@ public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, D
     }
 
     @Override
-    public DisjunctiveLink getSelectedLink() {
+    public Link getSelectedLink() {
         return link;
     }
 
@@ -109,4 +104,3 @@ public class DisjunctiveSynapseSlot implements SynapseSlot<DisjunctiveSynapse, D
         link.disconnect();
     }
 }
-*/

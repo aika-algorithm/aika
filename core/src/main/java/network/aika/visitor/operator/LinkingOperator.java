@@ -16,10 +16,8 @@
  */
 package network.aika.visitor.operator;
 
-import network.aika.Document;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.activations.Activation;
@@ -36,20 +34,20 @@ import static network.aika.elements.synapses.Synapse.getLatentLink;
  */
 public abstract class LinkingOperator implements Operator {
 
-    protected PatternActivation bindingSignal;
+    protected Activation bindingSignal;
 
     protected Activation sourceAct;
 
     protected Synapse targetSyn;
 
-    public LinkingOperator(Activation sourceAct, Synapse targetSyn, PatternActivation bindingSignal) {
+    public LinkingOperator(Activation sourceAct, Synapse targetSyn, Activation bindingSignal) {
         this.sourceAct = sourceAct;
         this.targetSyn = targetSyn;
         this.bindingSignal = bindingSignal;
     }
 
     @Override
-    public PatternActivation getBindingSignal() {
+    public Activation getBindingSignal() {
         return bindingSignal;
     }
 
@@ -65,7 +63,7 @@ public abstract class LinkingOperator implements Operator {
 
     public abstract void relationCheck(Relation rel, Synapse relSyn, Activation toAct, Direction relDir);
 
-    protected boolean checkBSMatches(Activation<?> iAct, Activation<?> oAct) {
+    protected boolean checkBSMatches(Activation iAct, Activation oAct) {
         return iAct.getBindingSignalSlots()
                 .filter(BindingSignalSlot::isSet)
                 .filter(SingleBSSlot.class::isInstance)
@@ -74,7 +72,7 @@ public abstract class LinkingOperator implements Operator {
                 );
     }
 
-    private boolean checkBSMatch(Activation<?> oAct, SingleBSSlot inputBSSlot) {
+    private boolean checkBSMatch(Activation oAct, SingleBSSlot inputBSSlot) {
         Stream<BindingSignalSlot> outputBSSlots = targetSyn.transitionBindingSignal(oAct, inputBSSlot.getType());
         return outputBSSlots.filter(BindingSignalSlot::isSet)
                 .allMatch(outputBSSlot ->

@@ -19,10 +19,8 @@ package network.aika.elements.relations;
 import network.aika.Model;
 import network.aika.elements.PreActivation;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.types.BindingActivation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.synapses.types.RelationInputSynapse;
 import network.aika.enums.direction.Direction;
 import network.aika.text.TextReference;
 
@@ -83,14 +81,14 @@ public class LatentProxyRelation extends Relation {
         assert relationSynId != null;
 
         Synapse ris = s.getPOutput().getSynapseBySynId(relationSynId);
-        return ris.getInput().getRelation()
-                .evaluateLatentRelation(s, ref, fromAct, toPreAct, dir);
+        return null; //ris.getInput().getRelation()
+                //.evaluateLatentRelation(s, ref, fromAct, toPreAct, dir);
     }
 
     @Override
     public void createLatentRelation(Activation oAct, Activation fromOriginAct, Activation toOriginAct) {
-        BindingActivation bAct = (BindingActivation) oAct;
-        bAct.createLatentRelation(relationSynId, fromOriginAct, toOriginAct);
+//        BindingActivation bAct = (BindingActivation) oAct;
+//        bAct.createLatentRelation(relationSynId, fromOriginAct, toOriginAct);
     }
 
     @Override

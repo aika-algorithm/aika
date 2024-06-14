@@ -24,7 +24,6 @@ import network.aika.fields.Field;
 import network.aika.fields.InputField;
 import network.aika.queue.steps.FeedbackTrigger;
 
-import static network.aika.fields.link.FieldLink.linkAndConnect;
 
 
 /**
@@ -65,41 +64,6 @@ public abstract class ConjunctiveActivation extends Activation {
         return outerFeedbackAnnealingValue;
     }
 
-    public AnnealingSynapseOutputSlot getActiveCategoryInputSlot() {
-        return getInputSlotsByType(AnnealingSynapseOutputSlot.class)
-                .filter(as -> as.getAnnealingType() == AnnealingType.CATEGORY_INPUT)
-                .findFirst()
-                .orElse(null);
-    }
 
-    @Override
-    public CategoryInputLink getActiveCategoryInputLink() {
-        AnnealingSynapseOutputSlot sl = getActiveCategoryInputSlot();
-        return sl != null ? (CategoryInputLink) sl.getSelectedLink() : null;
-    }
-/*
-    @Override
-    protected void connectWeightUpdate() {
-        negUpdateValue = scale(
-                this,
-                "-updateValue",
-                -1.0,
-                updateValue
-        );
 
-        linkAndConnect(
-                updateValue,
-                getNeuron().getBias()
-        );
-    }
-
-    @Override
-    protected void initBiases() {
-        ((ConjunctiveNeuron)neuron).getSynapseBiasSynapses()
-                .forEach(s ->
-                        s.initBiasInput(this)
-                );
-
-        super.initBiases();
-    }*/
 }

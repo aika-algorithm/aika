@@ -17,7 +17,6 @@
 package network.aika.elements.activations.bsslots;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.types.PatternActivation;
 
 import java.util.stream.Stream;
 
@@ -27,7 +26,7 @@ import java.util.stream.Stream;
  */
 public class SingleBSSlot extends BindingSignalSlot {
 
-    private PatternActivation bindingSignal;
+    private Activation bindingSignal;
 
     private int sourcesCount;
 
@@ -36,7 +35,7 @@ public class SingleBSSlot extends BindingSignalSlot {
     }
 
     @Override
-    protected void onBindingSignalSlotUpdate(PatternActivation bs, boolean state) {
+    protected void onBindingSignalSlotUpdate(Activation bs, boolean state) {
         super.onBindingSignalSlotUpdate(bs, state);
 
         act.propagateBindingSignal(getType(), bs, state);
@@ -48,23 +47,23 @@ public class SingleBSSlot extends BindingSignalSlot {
     }
 
     @Override
-    public boolean isSet(PatternActivation bs) {
+    public boolean isSet(Activation bs) {
         return bindingSignal == bs;
     }
 
-    public PatternActivation getBindingSignal() {
+    public Activation getBindingSignal() {
         return bindingSignal;
     }
 
     @Override
-    public Stream<PatternActivation> getBindingSignals() {
+    public Stream<Activation> getBindingSignals() {
         return bindingSignal != null ?
                 Stream.of(bindingSignal) :
                 Stream.empty();
     }
 
     @Override
-    public void updateBindingSignal(PatternActivation bs, boolean state) {
+    public void updateBindingSignal(Activation bs, boolean state) {
         if(bs == null)
             return;
 

@@ -22,13 +22,12 @@ import network.aika.debugger.EventType;
 import network.aika.callbacks.InstantiationCallback;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.fields.Field;
 import network.aika.queue.Queue;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.queue.Step;
 import network.aika.text.TextReference;
@@ -50,7 +49,7 @@ import static network.aika.elements.activations.StateType.*;
  *
  * @author Lukas Molzberger
  */
-public class Document extends Queue implements Element {
+public class Document extends Queue implements Element, QueueProvider {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Document.class);
 
@@ -164,7 +163,7 @@ public class Document extends Queue implements Element {
         activationsById.put(act.getId(), act);
     }
 
-    public void register(Neuron n, PreActivation<? extends Activation> acts) {
+    public void register(Neuron n, PreActivation acts) {
         PreActivation existingPreAct = actsPerNeuron.put(n.getProvider(), acts);
 
         if(existingPreAct != null)
@@ -208,6 +207,11 @@ public class Document extends Queue implements Element {
         return this;
     }
 
+    @Override
+    public boolean isNextRound() {
+        return false;
+    }
+
     public String activationsToString() {
         return getActivations()
                 .stream()
@@ -247,16 +251,16 @@ public class Document extends Queue implements Element {
         return content.substring((int) r.getBegin(), (int) r.getEnd());
     }
 
-    public static String getText(Activation<?> act) {
+    public static String getText(Activation act) {
         return act.getDocument().getTextSegment(act.getTextReference().getCharRange());
     }
 
-    public PatternActivation addToken(PatternNeuron n, TextReference textReference) {
+    public Activation addToken(Neuron n, TextReference textReference) {
         return addToken(n, textReference, n.getTargetNet());
     }
 
-    public PatternActivation addToken(PatternNeuron n, TextReference textReference, double inputNet) {
-        PatternActivation act = n.createActivation(this);
+    public Activation addToken(Neuron n, TextReference textReference, double inputNet) {
+        Activation act = n.createActivation(this);
 
         act.updateRanges(textReference);
 

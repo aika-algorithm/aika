@@ -21,11 +21,12 @@ import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.PreActivation;
 import network.aika.elements.NeuronType;
-import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.typedef.NeuronTypeDefinition;
-import network.aika.elements.typedef.Type;
+import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.TypeDefinition;
+import network.aika.elements.typedef.TypeImpl;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
 import network.aika.exceptions.MissingInputCategoryNeuron;
@@ -35,6 +36,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
 import network.aika.elements.synapses.Synapse;
 import network.aika.queue.Queue;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.queue.steps.Save;
 import network.aika.utils.Writable;
@@ -58,13 +60,11 @@ import static network.aika.queue.Timestamp.MIN;
  *
  * @author Lukas Molzberger
  */
-public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Element, Writable {
+public abstract class Neuron extends TypeImpl<NeuronTypeDefinition, Neuron> implements Element, QueueProvider, Writable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
 
     protected static final String CATEGORY_LABEL = " Category";
-
-    private NeuronTypeDefinition neuronType;
 
     private int synapseIdCounter = 0;
 
@@ -101,28 +101,16 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
         setBias(0.0);
     }
 
-    public void setTypeDefinition(NeuronTypeDefinition typeDef) {
-        neuronType = typeDef;
-    }
-
-    public NeuronTypeDefinition getNeuronType() {
-        return neuronType;
-    }
-
     public NeuronType getType() {
-        return neuronType.getType();
+        return getTypeDefinition().getType();
     }
 
     public Stream<BSSlotDefinition> getBindingSignalSlots() {
-        return Arrays.stream(neuronType.getBindingSignalSlots());
+        return Arrays.stream(getTypeDefinition().getBindingSignalSlots());
     }
 
     public Long getId() {
         return provider.getId();
-    }
-
-    @Override
-    public void disconnect() {
     }
 
     public void updatePropagable(NeuronProvider np, boolean isPropagable) {
@@ -252,14 +240,14 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
             InitParams ip = templateN.initParams;
             setTargetNet(ip.targetNet);
         }
-
+/*
         Synapse cis = templateN.getCategoryInputSynapse();
         if(cis == null)
             throw new MissingInputCategoryNeuron(templateN);
 
         createCategorySynapse()
                 .setWeight(cis.getInitialInstanceWeight())
-                .link(this, cis.getInput());
+                .link(this, cis.getInput());*/
     }
 
     public Neuron setInstantiable(boolean instantiable) {
@@ -281,61 +269,23 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
         return instantiable;
     }
 
-    public Stream<Activation> getInstanceActivations(Document doc) {
-        assert isAbstract();
-        Synapse cis = getCategoryInputSynapse();
-        if(cis == null)
-            return Stream.empty();
 
-        Neuron cn = cis.getInput();
-        if(cn == null)
-            return Stream.empty();
-
-        return cn.getActivations(doc)
-                .stream()
-                .flatMap(CategoryActivation::getCategoryInputs);
-    }
 
     public abstract CategorySynapse createCategorySynapse();
 
-    public boolean isAbstract() {
-        return getCategoryInputSynapse() != null;
-    }
-
-
-    public abstract CategoryNeuron createCategoryNeuron();
-
-    public abstract Synapse createCategoryInputSynapse();
-
-    public Synapse makeAbstract() {
-        CategoryNeuron category = createCategoryNeuron();
-
-        Synapse s = createCategoryInputSynapse()
-                .link(category, this);
-
-        s.setInitialCategorySynapseWeight(1.0);
-
-        category.getProvider().decreaseRefCount(CATEGORY);
-        return s;
-    }
-
-    public abstract Synapse getCategoryInputSynapse();
-
-    public abstract CategorySynapse getCategoryOutputSynapse();
-
     public final boolean isTrainingAllowed() {
-        return neuronType.isTrainingAllowed();
+        return getTypeDefinition().isTrainingAllowed();
     }
 
     public final Activation createActivation(Document doc) {
-        return neuronType.getActivationType()
+        return getTypeDefinition().getActivationType()
                 .instantiate(doc.createActivationId(), doc, this);
     }
 
     public abstract void addInactiveLinks(Activation act);
 
     public final ActivationFunction getActivationFunction() {
-        return neuronType.getActivationFunction();
+        return getTypeDefinition().getActivationFunction();
     }
 
     public void count(Activation act) {
@@ -571,15 +521,15 @@ public abstract class Neuron implements Type<NeuronTypeDefinition, Neuron>, Elem
         return provider.getInputSynapse(n);
     }
 
-    public <IS extends Synapse> IS getInputSynapseByType(Class<IS> synapseType) {
+    public Synapse getInputSynapseByType(TypeDefinition<SynapseTypeDefinition, Synapse> synapseType) {
         return provider.getInputSynapseByType(synapseType);
     }
 
-    public <IS extends Synapse> Stream<IS> getInputSynapsesByType(Class<IS> synapseType) {
+    public Stream<Synapse> getInputSynapsesByType(TypeDefinition<SynapseTypeDefinition, Synapse> synapseType) {
         return provider.getInputSynapsesByType(synapseType);
     }
 
-    public <OS> OS getOutputSynapseByType(Class<OS> synapseType) {
+    public Synapse getOutputSynapseByType(TypeDefinition<SynapseTypeDefinition, Synapse> synapseType) {
         return provider.getOutputSynapseByType(synapseType);
     }
 

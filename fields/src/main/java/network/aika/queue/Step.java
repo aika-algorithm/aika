@@ -23,7 +23,7 @@ import network.aika.queue.keys.QueueKey;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Step<E extends FieldObject> {
+public abstract class Step<E extends QueueProvider> {
 
     protected boolean isQueued;
     protected QueueKey queueKey;

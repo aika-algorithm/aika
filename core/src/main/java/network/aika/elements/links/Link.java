@@ -25,20 +25,18 @@ import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.RegisterInputSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
-import network.aika.elements.synapses.CategorySynapse;
 import network.aika.elements.synapses.slots.SynapseSlot;
-import network.aika.elements.typedef.ActivationTypeDefinition;
 import network.aika.elements.typedef.LinkTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.elements.typedef.Type;
+import network.aika.elements.typedef.TypeImpl;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fields.link.FieldLink;
 import network.aika.queue.Queue;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.queue.steps.LinkUpdate;
 import network.aika.visitor.Visitor;
@@ -49,17 +47,12 @@ import static network.aika.debugger.EventType.CREATE;
 import static network.aika.elements.links.BSLinkEvent.ON_CREATE;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.fields.link.ArgumentFieldLink.linkAndConnect;
-import static network.aika.fields.Fields.*;
-import static network.aika.fields.ThresholdOperator.Type.ABOVE;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
-
-    protected LinkTypeDefinition linkType;
+public abstract class Link extends TypeImpl<LinkTypeDefinition, Link> implements Element, QueueProvider {
 
     protected Synapse synapse;
 
@@ -82,22 +75,8 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
 
         link();
 
-        if(output != null) {
-            initWeightInput();
-
-            if (s.getModel().getConfig().isTrainingEnabled() && getSynapse().isTrainingAllowed()) {
-                connectGradientFields();
-                connectWeightUpdate();
-            }
-        }
-
         propagateRanges();
         getDocument().onElementEvent(CREATE, this);
-    }
-
-    @Override
-    public void setTypeDefinition(LinkTypeDefinition typeDef) {
-        linkType = typeDef;
     }
 
     public LinkUpdate getLinkUpdateStep(Direction dir) {
@@ -131,20 +110,13 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
         return synapse.getOutputType();
     }
 
-    public void onOutputBindingSignalUpdate(Scope bsType, PatternActivation nBS, boolean state) {
+    public void onOutputBindingSignalUpdate(Scope bsType, Activation nBS, boolean state) {
     }
 
     public void visit(Visitor v, Scope s, int depth) {
         v.next(this, s, depth);
     }
 
-    protected void connectGradientFields() {
-    }
-
-    @Override
-    public void disconnect() {
-        weightedInput.unlinkInputs();
-    }
 
     public void instantiateTemplate(Activation iAct, Activation oAct) {
         if(iAct == null || oAct == null)
@@ -173,51 +145,12 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
 
     public abstract void connectWeightUpdate();
 
-    protected void initWeightInput() {
-        initInputValue();
-
-        initWeightedInput();
-        initWeightedOutput();
-
-        if(input != null)
-            connectInputValue();
-    }
-
-    protected void initWeightedOutput() {
-        linkAndConnect(weightedInput, this, synOutputSlot.getInputField());
-    }
-
     public StateType inputState() {
-        return getSynapse().getSynapseType().getTrigger().getType();
+        return getSynapse().getTypeDefinition().getTrigger().getType();
     }
 
     public StateType outputState() {
-        return getSynapse().getSynapseType().outputState();
-    }
-
-    protected void initInputValue() {
-        inputValue = new IdentityFunction(this, "input value");
-    }
-
-    protected void connectInputValue() {
-        linkAndConnect(
-                synapse.getInputValue(input),
-                0,
-                inputValue
-        );
-    }
-
-    protected void initWeightedInput() {
-        weightedInput = mul(
-                this,
-                "iAct(" + getInputKeyString() + ").value * s.weight",
-                inputValue, isInputSideActive(), true,
-                synapse.getWeight(), true, false
-        );
-    }
-
-    public FieldLink getInputValueLink() {
-        return weightedInput.getInputLinkByArg(0);
+        return getSynapse().getTypeDefinition().outputState();
     }
 
     public void init() {
@@ -274,7 +207,7 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
                 );
     }
 
-    public void propagateBindingSignal(PatternActivation bs, Scope is, boolean state) {
+    public void propagateBindingSignal(Activation bs, Scope is, boolean state) {
         Stream<BindingSignalSlot> slots = synapse.transitionBindingSignal(output, is);
 
         if(!isActive())
@@ -283,14 +216,6 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
         slots.forEach(oBSSlot ->
                 oBSSlot.updateBindingSignal(bs, state)
         );
-    }
-
-    public Field getWeightedInput() {
-        return weightedInput;
-    }
-
-    public Field getGradient() {
-        return gradient;
     }
 
     @Override
@@ -303,18 +228,6 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
     @Override
     public Timestamp getCreated() {
         return input != null && isCausal() ? input.getCreated() : output.getCreated();
-    }
-
-    public Field getInputValue() {
-        return inputValue;
-    }
-
-    public FieldOutput getInputIsFired() {
-        return inputIsFired;
-    }
-
-    public FieldOutput getNegInputIsFired() {
-        return negInputIsFired;
     }
 
     public Synapse getSynapse() {
@@ -348,7 +261,7 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
     }
 
     public void linkOutput() {
-        if(synapse.getSynapseType().getRegisterInputSlot() == RegisterInputSlot.ON_LINKING)
+        if(synapse.getTypeDefinition().getRegisterInputSlot() == RegisterInputSlot.ON_LINKING)
             synOutputSlot = output.registerInputSlot(synapse);
 
         synOutputSlot.addLink(this);
@@ -376,10 +289,6 @@ public abstract class Link implements Type<LinkTypeDefinition, Link>, Element {
     }
 
     public void checkPrimarySuppression() {
-    }
-
-    public boolean isNegative() {
-        return synapse.isNegative();
     }
 
     public Document getDocument() {

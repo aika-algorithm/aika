@@ -20,28 +20,24 @@ import network.aika.Model;
 import network.aika.elements.PreActivation;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.relations.Relation;
 import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.typedef.SynapseTypeDefinition;
-import network.aika.elements.typedef.Type;
+import network.aika.elements.typedef.TypeImpl;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.Field;
-import network.aika.fields.FieldOutput;
-import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.Trigger;
 import network.aika.queue.Queue;
 import network.aika.text.TextReference;
-import network.aika.utils.Utils;
 import network.aika.utils.Writable;
 import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
@@ -58,17 +54,14 @@ import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_IN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_OUT;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, Element, Writable {
+public abstract class Synapse extends TypeImpl<SynapseTypeDefinition, Synapse> implements Element, QueueProvider, Writable {
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
-
-    protected SynapseTypeDefinition synapseType;
 
     protected int synapseId;
     protected NeuronProvider input;
@@ -87,11 +80,6 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
     public Synapse() {
     }
 
-    @Override
-    public void setTypeDefinition(SynapseTypeDefinition typeDef) {
-        synapseType = typeDef;
-    }
-
     public int getSynapseId() {
         return synapseId;
     }
@@ -101,27 +89,27 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
     }
 
     public NeuronType getInputType() {
-        return synapseType.getInputType();
+        return getTypeDefinition().getInputType();
     }
 
     public NeuronType getOutputType() {
-        return synapseType.getOutputType();
+        return getTypeDefinition().getOutputType();
     }
 
     public Transition[] getTransition() {
-        return synapseType.getTransition();
+        return getTypeDefinition().getTransition();
     }
 
     public Transition getRequired() {
-        return synapseType.getRequired();
+        return getTypeDefinition().getRequired();
     }
 
     public boolean isPropagateRange() {
-        return synapseType.isPropagateRange();
+        return getTypeDefinition().isPropagateRange();
     }
 
     public final SynapseSlot createInputSlot(Activation iAct) {
-        return synapseType
+        return getTypeDefinition()
                 .getInputSlotType()
                 .instantiate(iAct, this);
     }
@@ -133,7 +121,7 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
     }
 
     public Stream<BindingSignalSlot> transitionBindingSignal(Activation oAct, Scope is) {
-        return Arrays.stream(getSynapseType().getTransition())
+        return Arrays.stream(getTypeDefinition().getTransition())
                 .filter(t -> is == t.getFrom())
                 .map(Transition::getTo)
                 .map(oAct::getBindingSignalSlot)
@@ -141,7 +129,7 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
     }
 
     public final SynapseSlot createOutputSlot(Activation iAct) {
-        return synapseType
+        return getTypeDefinition()
                 .getOutputSlotType()
                 .instantiate(iAct, this);
     }
@@ -152,25 +140,8 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         return slot;
     }
 
-    public SumField getOutputNet(Activation act) {
-        return act.getNet(synapseType.outputState());
-    }
-
-    public FieldOutput getInputValue(Activation input) {
-        return input.getValue();
-    }
-
-    public FieldOutput getInputValue(Activation input, StateType t) {
-        return input.getValue(t);
-    }
-
-    public void checkWeight() {
-        if(isNegative())
-            delete();
-    }
-
     public Trigger getTrigger() {
-        return synapseType.getTrigger();
+        return getTypeDefinition().getTrigger();
     }
 
     @Override
@@ -266,9 +237,9 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         if(s != null)
             return s;
 
-        SynapseTypeDefinition std = synapseType.getInstanceSynapseType() != null ?
-                synapseType.getInstanceSynapseType() :
-                synapseType;
+        SynapseTypeDefinition std = getTypeDefinition().getInstanceSynapseType() != null ?
+                getTypeDefinition().getInstanceSynapseType() :
+                getTypeDefinition();
 
         s = std.instantiate();
 
@@ -287,15 +258,6 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
 
         if(templateSyn.relation != null)
             relation = templateSyn.relation.instantiate();
-
-        getWeight()
-                .setValue(
-                        templateSyn.getInitialInstanceWeight()
-                );
-    }
-
-    public double getInitialInstanceWeight() {
-        return getWeight().getUpdatedValue();
     }
 
     public Synapse setInstantiable(boolean instantiable) {
@@ -336,7 +298,7 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
     }
 
     public final Link createLink(Activation input, Activation output) {
-        return synapseType
+        return getTypeDefinition()
                 .getLinkType()
                 .instantiate(this, input, output);
     }
@@ -353,12 +315,6 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         return l;
     }
 
-    public Synapse setWeight(double w) {
-        getWeight().setValue(w);
-
-        return this;
-    }
-
     public Synapse setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
         throw new UnsupportedOperationException();
     }
@@ -367,20 +323,8 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         throw new UnsupportedOperationException();
     }
 
-    public Synapse adjustBias() {
-        return this;
-    }
-
-    public Field getWeight() {
-        return getField(synapseType.weight);
-    }
-
-    public Field getWeightForAnnealing() {
-        return getWeight();
-    }
-
     public final boolean isTrainingAllowed() {
-        return trainingAllowed && synapseType.isTrainingAllowed() && getOutput().isTrainingAllowed();
+        return trainingAllowed && getTypeDefinition().isTrainingAllowed() && getOutput().isTrainingAllowed();
     }
 
     public void setTrainingAllowed(boolean trainingAllowed) {
@@ -388,7 +332,7 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
     }
 
     public final Direction getStoredAt() {
-        return synapseType.getStoredAt();
+        return getTypeDefinition().getStoredAt();
     }
 
     public NeuronProvider getPInput() {
@@ -450,19 +394,6 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
                 output.getModel() :
                 null;
     }
-
-    public boolean isZero() {
-        return Utils.belowTolerance(TOLERANCE, getWeight().getValue());
-    }
-
-    public boolean isNegative() {
-        return getWeight().getUpdatedValue() < 0.0;
-    }
-
-    public SynapseTypeDefinition getSynapseType() {
-        return synapseType;
-    }
-
     public boolean isOptional() {
         return false;
     }
@@ -478,7 +409,6 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         out.writeLong(input.getId());
         out.writeLong(output.getId());
 
-        getWeight().write(out);
         out.writeBoolean(instantiable);
 
         out.writeBoolean(relation != null);
@@ -500,7 +430,6 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
         input = m.lookupNeuronProvider(in.readLong(), SYNAPSE_IN);
         output = m.lookupNeuronProvider(in.readLong(), SYNAPSE_OUT);
 
-        getWeight().readFields(in);
         instantiable = in.readBoolean();
 
         if(in.readBoolean())
@@ -530,6 +459,11 @@ public abstract class Synapse implements Type<SynapseTypeDefinition, Synapse>, E
     @Override
     public Queue getQueue() {
         return getModel();
+    }
+
+    @Override
+    public boolean isNextRound() {
+        return false;
     }
 
     public String toString() {
