@@ -265,7 +265,7 @@ public class Document extends Queue implements ModelProvider, QueueProvider {
 
         act.updateRanges(textReference);
 
-        act.setNet(INNER_FEEDBACK, inputNet);
+//        act.setNet(INNER_FEEDBACK, inputNet);
 
         return act;
     }

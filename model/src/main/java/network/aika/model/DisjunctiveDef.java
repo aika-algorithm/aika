@@ -76,10 +76,10 @@ public class DisjunctiveDef {
                 DisjunctiveLink.class);
 
         weightUpdate = mul(
-                this,
+                disjunctiveLink,
                 "weight update",
                 typeModel.neuron.getLink().inputIsFired,
-                getOutput().getUpdateValue()
+                disjunctiveLink.getOutputDef().updateValue
         );
         link(
                 weightUpdate,

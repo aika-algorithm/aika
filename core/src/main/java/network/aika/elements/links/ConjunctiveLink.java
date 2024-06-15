@@ -20,6 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.Scope;
 import network.aika.fields.link.ArgumentFieldLink;
+import network.aika.queue.keys.QueueKey;
 import network.aika.visitor.Visitor;
 
 import static network.aika.enums.Scope.SAME;
@@ -34,10 +35,10 @@ import static network.aika.visitor.operator.SubsumesOperator.subsumes;
  */
 public abstract class ConjunctiveLink extends Link {
 
-    protected ArgumentFieldLink<ConjunctiveLink> inputSlotFL;
+    protected ArgumentFieldLink<QueueKey, ConjunctiveLink> inputSlotFL;
 
 
-    public ConjunctiveLink(ConjunctiveSynapse s, Activation input, ConjunctiveActivation output) {
+    public ConjunctiveLink(ConjunctiveSynapse s, Activation input, Activation output) {
         super(s, input, output);
     }
 
@@ -53,13 +54,14 @@ public abstract class ConjunctiveLink extends Link {
         Activation bs = input.getBindingSignal(inputBSType);
         if(bs == null)
             return;
-
+/*
         updateConnected(
                 inputSlotFL,
                 state && (
                         subsumes(SAME, nBS, bs) || subsumes(SAME, bs, nBS)
                 )
         );
+*/
     }
 
     public boolean isInputSideActive() {

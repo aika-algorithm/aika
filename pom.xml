@@ -9,7 +9,6 @@
         <module>fields</module>
         <module>core</module>
         <module>model</module>
-        <module>text</module>
     </modules>
     <name>aika-project</name>
     <url>https://aika.network</url>

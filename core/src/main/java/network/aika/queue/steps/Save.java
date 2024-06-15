@@ -14,17 +14,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.tokenizer;
+package network.aika.queue.steps;
 
-import network.aika.elements.neurons.types.PatternNeuron;
-import network.aika.text.TextReference;
+import network.aika.elements.neurons.Neuron;
+import network.aika.queue.ElementStep;
+import network.aika.queue.Phase;
+import network.aika.queue.Step;
+
+import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
+ * Store model
  *
  * @author Lukas Molzberger
  */
-public interface TokenConsumer {
+public class Save extends ElementStep<Neuron> {
 
-    void processToken(String token, TextReference ref);
+    public static void add(Neuron n) {
+        Step.add(new Save(n));
+    }
 
+    private Save(Neuron n) {
+        super(n);
+    }
+
+    @Override
+    public Phase getPhase() {
+        return Phase.SAVE;
+    }
+
+    @Override
+    public void process() {
+        getElement()
+                .getProvider()
+                .save();
+    }
 }

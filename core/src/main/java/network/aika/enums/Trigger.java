@@ -69,6 +69,6 @@ public enum Trigger {
     }
 
     public boolean checkPrimary(Activation act) {
-        return !checkPrimary || act.checkPrimary();
+        return true; //!checkPrimary || act.checkPrimary();
     }
 }

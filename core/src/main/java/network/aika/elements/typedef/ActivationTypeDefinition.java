@@ -22,6 +22,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.neurons.Neuron;
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldOutputDefinition;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import java.util.List;
  */
 public class ActivationTypeDefinition extends TypeDefinition<ActivationTypeDefinition, Activation> {
 
+    public FieldDefinition updateValue;
     private NeuronTypeDefinition neuronType;
 
     private List<StateTypeDefinition> stateTypes = new ArrayList<>();

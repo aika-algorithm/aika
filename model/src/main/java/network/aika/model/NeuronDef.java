@@ -77,10 +77,10 @@ public class NeuronDef {
                 Synapse.class
         );
 
-        synapse.weight = new FieldDefinition<Synapse, SumField>(SumField.class, synapse, "weight", TOLERANCE)
+        synapse.weight = new FieldDefinition<>(SumField.class, synapse, "weight", TOLERANCE)
                 .setQueued(TRAINING)
                 .addListener("onWeightModified", (r, fl, u) -> {
-                    r.checkWeight();
+//                    r.checkWeight();
                     r.setModified();
                 });
     }

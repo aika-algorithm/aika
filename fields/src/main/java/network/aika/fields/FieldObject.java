@@ -29,7 +29,7 @@ public interface FieldObject<R extends FieldObject<R, D>, D extends FieldObjectD
 
     void setTypeDefinition(D typeDef);
 
-    D typeDef;
+    D getTypeDefinition();
 
     void setField(int i, Field f);
 

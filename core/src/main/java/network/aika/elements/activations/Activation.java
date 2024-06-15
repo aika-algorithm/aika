@@ -34,7 +34,6 @@ import network.aika.enums.Scope;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
-import network.aika.queue.steps.InactiveLinks;
 import network.aika.text.TextReference;
 import network.aika.Range;
 
@@ -117,15 +116,17 @@ public abstract class Activation extends Type<ActivationTypeDefinition, Activati
     }
 
     public SynapseSlot registerOutputSlot(Synapse syn) {
-        return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId ->
+        return null;
+/*        return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId ->
                 syn.createAndInitInputSlot(this)
-        );
+        );*/
     }
 
     public SynapseSlot registerInputSlot(Synapse syn) {
-        return inputSlots.computeIfAbsent(syn.getSynapseId(), nId ->
+        return null;
+/*        return inputSlots.computeIfAbsent(syn.getSynapseId(), nId ->
             syn.createAndInitOutputSlot(this)
-        );
+        );*/
     }
 
     protected void initStates() {
@@ -416,23 +417,14 @@ public abstract class Activation extends Type<ActivationTypeDefinition, Activati
     }
 
     protected void linkTemplateAndInstance(Activation ti) {
-        Link cil = getActiveCategoryInputLink();
+/*        Link cil = getActiveCategoryInputLink();
         if(cil == null)
             cil = createCategoryInputLink();
 
         CategoryActivation cAct = (CategoryActivation) cil.getOutput();
-        cAct.instantiateCategoryLink(ti);
+        cAct.instantiateCategoryLink(ti);*/
     }
 
-    public Link createCategoryInputLink() {
-        Synapse cis = getNeuron().getCategoryInputSynapse();
-        if(cis == null)
-            return null;
-
-        Activation catAct = cis.getInput().createActivation(doc);
-
-        return cis.createAndInitLink(catAct, this);
-    }
 
     public void instantiateTemplateEdges(Activation instanceAct) {
         getInputLinks()

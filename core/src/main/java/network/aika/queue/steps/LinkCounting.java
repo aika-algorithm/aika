@@ -14,14 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.parser;
+package network.aika.queue.steps;
+
+import network.aika.elements.links.Link;
+import network.aika.queue.ElementStep;
+import network.aika.queue.Phase;
 
 /**
+ * Counts the number of activations a particular neuron has encountered.
  *
  * @author Lukas Molzberger
  */
-public enum ParserPhase {
-    INFERENCE,
-    COUNTING,
-    TRAINING
+public class LinkCounting extends ElementStep<Link> {
+
+    public static void add(Link l) {
+        if (l.getConfig().isCountingEnabled() /*&& !l.getOutput().getNeuron().isAbstract()*/)
+            add(new LinkCounting(l));
+    }
+
+    private LinkCounting(Link l) {
+        super(l);
+    }
+
+    @Override
+    public Phase getPhase() {
+        return Phase.COUNTING;
+    }
+
+    @Override
+    public void process() {
+        Link l = getElement();
+
+        l.getSynapse()
+                .count(l);
+    }
 }
