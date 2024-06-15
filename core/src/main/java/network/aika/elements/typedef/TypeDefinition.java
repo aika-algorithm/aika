@@ -41,7 +41,7 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
     }
 
     public boolean isInstance(T type) {
-        return this == type.getTypeDefinition() ||
+        return this == type.typeDef ||
                 parents.stream().anyMatch(p ->
                         p.isInstance(type)
                 );

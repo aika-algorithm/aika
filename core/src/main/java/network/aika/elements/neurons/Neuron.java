@@ -101,11 +101,11 @@ public abstract class Neuron extends Type<NeuronTypeDefinition, Neuron> implemen
     }
 
     public NeuronType getType() {
-        return getTypeDefinition().getType();
+        return typeDef.getType();
     }
 
     public Stream<BSSlotDefinition> getBindingSignalSlots() {
-        return Arrays.stream(getTypeDefinition().getBindingSignalSlots());
+        return Arrays.stream(typeDef.getBindingSignalSlots());
     }
 
     public Long getId() {
@@ -265,18 +265,18 @@ public abstract class Neuron extends Type<NeuronTypeDefinition, Neuron> implemen
 
 
     public final boolean isTrainingAllowed() {
-        return getTypeDefinition().isTrainingAllowed();
+        return typeDef.isTrainingAllowed();
     }
 
     public final Activation createActivation(Document doc) {
-        return getTypeDefinition().getActivationType()
+        return typeDef.getActivationType()
                 .instantiate(doc.createActivationId(), doc, this);
     }
 
     public abstract void addInactiveLinks(Activation act);
 
     public final ActivationFunction getActivationFunction() {
-        return getTypeDefinition().getActivationFunction();
+        return typeDef.getActivationFunction();
     }
 
     public void count(Activation act) {

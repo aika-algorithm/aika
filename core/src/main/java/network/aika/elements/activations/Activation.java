@@ -129,12 +129,12 @@ public abstract class Activation extends Type<ActivationTypeDefinition, Activati
     }
 
     protected void initStates() {
-        Stream.of(getTypeDefinition().getStateTypes())
+        Stream.of(typeDef.getStateTypes())
                 .forEach(sd -> states[sd.getType().ordinal()] = sd.instantiate(this));
     }
 
     protected final int numberOfStates() {
-        return getTypeDefinition().getStateTypes().length;
+        return typeDef.getStateTypes().length;
     }
 
 

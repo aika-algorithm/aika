@@ -35,8 +35,6 @@ import static network.aika.queue.Timestamp.NOT_SET;
  */
 public class State extends Type<StateTypeDefinition, State> implements QueueProvider {
 
-    protected StateTypeDefinition type;
-
     protected Activation act;
 
     protected Timestamp fired = NOT_SET;
@@ -60,6 +58,10 @@ public class State extends Type<StateTypeDefinition, State> implements QueueProv
 
         firedStep.updateNet(net.getUpdatedValue());
         doc.addStep(firedStep);
+    }
+
+    public StateType getType() {
+        return typeDef.getType();
     }
 
     public Timestamp getFired() {

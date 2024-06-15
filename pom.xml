@@ -10,8 +10,6 @@
         <module>core</module>
         <module>model</module>
         <module>text</module>
-        <module>debugger</module>
-        <module>experiments</module>
     </modules>
     <name>aika-project</name>
     <url>https://aika.network</url>

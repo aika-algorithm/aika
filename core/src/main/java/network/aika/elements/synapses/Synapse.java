@@ -91,34 +91,34 @@ public abstract class Synapse extends Type<SynapseTypeDefinition, Synapse> imple
     }
 
     public NeuronType getInputType() {
-        return getTypeDefinition().getInputType();
+        return typeDef.getInputType();
     }
 
     public NeuronType getOutputType() {
-        return getTypeDefinition().getOutputType();
+        return typeDef.getOutputType();
     }
 
     public Transition[] getTransition() {
-        return getTypeDefinition().getTransition();
+        return typeDef.getTransition();
     }
 
     public Transition getRequired() {
-        return getTypeDefinition().getRequired();
+        return typeDef.getRequired();
     }
 
     public boolean isPropagateRange() {
-        return getTypeDefinition().isPropagateRange();
+        return typeDef.isPropagateRange();
     }
 
     public final SynapseSlot createInputSlot(Activation iAct) {
-        return getTypeDefinition()
+        return typeDef
                 .getInputSlotType()
                 .instantiate(iAct, this);
     }
 
 
     public Stream<BindingSignalSlot> transitionBindingSignal(Activation oAct, Scope is) {
-        return Arrays.stream(getTypeDefinition().getTransition())
+        return Arrays.stream(typeDef.getTransition())
                 .filter(t -> is == t.getFrom())
                 .map(Transition::getTo)
                 .map(oAct::getBindingSignalSlot)
@@ -126,13 +126,13 @@ public abstract class Synapse extends Type<SynapseTypeDefinition, Synapse> imple
     }
 
     public final SynapseSlot createOutputSlot(Activation iAct) {
-        return getTypeDefinition()
+        return typeDef
                 .getOutputSlotType()
                 .instantiate(iAct, this);
     }
 
     public Trigger getTrigger() {
-        return getTypeDefinition().getTrigger();
+        return typeDef.getTrigger();
     }
 
     @Override
@@ -228,9 +228,9 @@ public abstract class Synapse extends Type<SynapseTypeDefinition, Synapse> imple
         if(s != null)
             return s;
 
-        SynapseTypeDefinition std = getTypeDefinition().getInstanceSynapseType() != null ?
-                getTypeDefinition().getInstanceSynapseType() :
-                getTypeDefinition();
+        SynapseTypeDefinition std = typeDef.getInstanceSynapseType() != null ?
+                typeDef.getInstanceSynapseType() :
+                typeDef;
 
         s = std.instantiate();
 
@@ -294,7 +294,7 @@ public abstract class Synapse extends Type<SynapseTypeDefinition, Synapse> imple
     }
 
     public final Link createLink(Activation input, Activation output) {
-        return getTypeDefinition()
+        return typeDef
                 .getLinkType()
                 .instantiate(this, input, output);
     }
@@ -320,7 +320,7 @@ public abstract class Synapse extends Type<SynapseTypeDefinition, Synapse> imple
     }
 
     public final boolean isTrainingAllowed() {
-        return trainingAllowed && getTypeDefinition().isTrainingAllowed() && getOutput().isTrainingAllowed();
+        return trainingAllowed && typeDef.isTrainingAllowed() && getOutput().isTrainingAllowed();
     }
 
     public void setTrainingAllowed(boolean trainingAllowed) {
@@ -328,7 +328,7 @@ public abstract class Synapse extends Type<SynapseTypeDefinition, Synapse> imple
     }
 
     public final Direction getStoredAt() {
-        return getTypeDefinition().getStoredAt();
+        return typeDef.getStoredAt();
     }
 
     public NeuronProvider getPInput() {
