@@ -27,9 +27,9 @@ public class TypeModel {
 
     NeuronDef neuron = new NeuronDef(this);
 
-    ConjunctiveDef conjunctiveDef = new ConjunctiveDef(this);
+    ConjunctiveDef conjunctiveDef = new ConjunctiveDef(neuron);
 
-    DisjunctiveDef disjunctiveDef = new DisjunctiveDef(this);
+    DisjunctiveDef disjunctiveDef = new DisjunctiveDef(neuron);
 
     CategoryDef categoryDef = new CategoryDef(this);
     BindingDef bindingDef = new BindingDef(this);

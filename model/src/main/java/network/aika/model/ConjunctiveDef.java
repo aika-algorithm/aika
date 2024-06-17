@@ -29,7 +29,7 @@ import network.aika.elements.typedef.*;
  */
 public class ConjunctiveDef {
 
-    private TypeModel typeModel;
+    private NeuronDef neuronDef;
 
     ActivationTypeDefinition conjunctiveActivation;
     NeuronTypeDefinition conjunctiveNeuron;
@@ -43,8 +43,9 @@ public class ConjunctiveDef {
     SynapseTypeDefinition conjunctiveSynapse;
 
 
-    public ConjunctiveDef(TypeModel typeModel) {
-        this.typeModel = typeModel;
+    public ConjunctiveDef(NeuronDef neuronDef) {
+        this.neuronDef = neuronDef;
+        this.neuronDef.conjunctiveDef = this;
     }
 
     public void init() {

@@ -42,7 +42,12 @@ public class NeuronDef {
 
     TypeModel typeModel;
 
+    ConjunctiveDef conjunctiveDef;
+
+    DisjunctiveDef disjunctiveDef;
+
     ActivationTypeDefinition activation;
+
     NeuronTypeDefinition neuron;
 
     LinkTypeDefinition link;
