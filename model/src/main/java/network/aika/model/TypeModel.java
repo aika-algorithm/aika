@@ -31,10 +31,10 @@ public class TypeModel {
 
     DisjunctiveDef disjunctive = new DisjunctiveDef(neuron);
 
-    CategoryDef category = new CategoryDef(this);
+    CategoryDef category = new CategoryDef(this, disjunctive);
     BindingDef binding = new BindingDef(this, conjunctive);
     PatternDef pattern = new PatternDef(this, conjunctive);
-    InhibitoryDef inhibitory = new InhibitoryDef(this);
+    InhibitoryDef inhibitory = new InhibitoryDef(this, disjunctive);
 
     public TypeModel() {
         states.init();

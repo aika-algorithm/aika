@@ -43,6 +43,8 @@ public class InhibitoryDef implements TypeDefinition {
 
     private TypeModel typeModel;
 
+    private DisjunctiveDef superType;
+
     private ActivationTypeDefinition activation;
     private NeuronTypeDefinition neuron;
     private ActivationTypeDefinition categoryActivation;
@@ -57,8 +59,9 @@ public class InhibitoryDef implements TypeDefinition {
     private LinkTypeDefinition categoryLink;
     private SynapseTypeDefinition categorySynapse;
 
-    public InhibitoryDef(TypeModel typeModel) {
+    public InhibitoryDef(TypeModel typeModel, DisjunctiveDef superType) {
         this.typeModel = typeModel;
+        this.superType = superType;
     }
 
     public void init() {
