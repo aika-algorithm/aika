@@ -51,6 +51,8 @@ public class PatternDef implements TypeDefinition {
 
     private TypeModel typeModel;
 
+    private ConjunctiveDef superType;
+
     private ActivationTypeDefinition activation;
     private NeuronTypeDefinition neuron;
 
@@ -71,8 +73,9 @@ public class PatternDef implements TypeDefinition {
     FieldDefinition<Neuron, NeuronStatistic> neuronStatistic;
 
 
-    public PatternDef(TypeModel typeModel) {
+    public PatternDef(TypeModel typeModel, ConjunctiveDef superType) {
         this.typeModel = typeModel;
+        this.superType = superType;
     }
 
 
@@ -132,16 +135,16 @@ public class PatternDef implements TypeDefinition {
                 "PatternLink",
                 ConjunctiveLink.class
         )
-                .setInputDef(typeModel.bindingDef.getActivation())
-                .setOutputDef(typeModel.patternDef.activation);
+                .setInputDef(typeModel.binding.getActivation())
+                .setOutputDef(typeModel.pattern.activation);
 
         synapse = new SynapseTypeDefinition(
                 "PatternSynapse",
                 ConjunctiveSynapse.class
         )
                 .setLinkType(link)
-                .setInputSlotType(typeModel.conjunctiveDef.getConjunctiveSynapseInputSlot())
-                .setOutputSlotType(typeModel.conjunctiveDef.getConjunctiveSynapseOutputSlot())
+                .setInputSlotType(typeModel.conjunctive.getSynapseInputSlot())
+                .setOutputSlotType(typeModel.conjunctive.getSynapseOutputSlot())
                 .setInputNeuronType(BINDING)
                 .setOutputNeuronType(PATTERN)
                 .setTransition(SAME_SAME, INPUT_INPUT)
@@ -161,8 +164,8 @@ public class PatternDef implements TypeDefinition {
                 Synapse.class
         )
                 .setLinkType(categoryLink)
-                .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
-                .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
+                .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
+                .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
                 .setInputNeuronType(PATTERN)
                 .setOutputNeuronType(CATEGORY)
                 .setTransition(SAME_SAME)
@@ -183,8 +186,8 @@ public class PatternDef implements TypeDefinition {
                 ConjunctiveSynapse.class
         )
                 .setLinkType(categoryInputLink)
-                .setInputSlotType(typeModel.conjunctiveDef.getConjunctiveSynapseInputSlot())
-                .setOutputSlotType(typeModel.categoryDef.getCategoryInputAnnealingSynapseOutputSlot())
+                .setInputSlotType(superType.getSynapseInputSlot())
+                .setOutputSlotType(superType.getSynapseOutputSlot())
                 .setInputNeuronType(CATEGORY)
                 .setOutputNeuronType(PATTERN)
                 .setTransition(SAME_SAME)

@@ -33,92 +33,92 @@ import static network.aika.fielddefs.Operators.mul;
  */
 public class DisjunctiveDef {
 
-    NeuronDef neuronDef;
+    NeuronDef superType;
 
-    ActivationTypeDefinition disjunctiveActivation;
-    NeuronTypeDefinition disjunctiveNeuron;
+    ActivationTypeDefinition activation;
+    NeuronTypeDefinition neuron;
 
-    SynapseSlotTypeDefinition disjunctiveSynapseInputSlot;
-    SynapseSlotTypeDefinition disjunctiveSynapseOutputSlot;
+    SynapseSlotTypeDefinition synapseInputSlot;
+    SynapseSlotTypeDefinition synapseOutputSlot;
 
-    LinkTypeDefinition disjunctiveLink;
-    SynapseTypeDefinition disjunctiveSynapse;
+    LinkTypeDefinition link;
+    SynapseTypeDefinition synapse;
 
     FieldDefinition weightUpdate;
 
-    public DisjunctiveDef(NeuronDef neuronDef) {
-        this.neuronDef = neuronDef;
-        this.neuronDef.disjunctiveDef = this;
+    public DisjunctiveDef(NeuronDef superType) {
+        this.superType = superType;
+        this.superType.disjunctiveDef = this;
     }
 
     public void init() {
-        disjunctiveActivation = new ActivationTypeDefinition(
+        activation = new ActivationTypeDefinition(
                 "DisjunctiveActivation",
                 Activation.class
         );
 
-        disjunctiveNeuron = new NeuronTypeDefinition(
+        neuron = new NeuronTypeDefinition(
                 "DisjunctiveNeuron",
                 Neuron.class
         );
 
-        disjunctiveSynapseInputSlot = new SynapseSlotTypeDefinition(
+        synapseInputSlot = new SynapseSlotTypeDefinition(
                 "DisjunctiveSynapseInputSlot",
                 DisjunctiveSynapseSlot.class
         );
 
-        disjunctiveSynapseOutputSlot = new SynapseSlotTypeDefinition(
+        synapseOutputSlot = new SynapseSlotTypeDefinition(
                 "DisjunctiveSynapseOutputSlot",
                 DisjunctiveSynapseSlot.class
         );
 
-        disjunctiveLink = new LinkTypeDefinition(
+        link = new LinkTypeDefinition(
                 "DisjunctiveLink",
                 DisjunctiveLink.class)
-                .setSynapseDef(disjunctiveSynapse)
-                .setInputDef(neuronDef.conjunctiveDef.conjunctiveActivation)
-                .setOutputDef(disjunctiveActivation);
+                .setSynapseDef(synapse)
+                .setInputDef(superType.conjunctiveDef.activation)
+                .setOutputDef(activation);
 
         weightUpdate = mul(
-                disjunctiveLink,
+                link,
                 "weight update",
-                neuronDef.getLink().inputIsFired,
-                disjunctiveLink.getOutputDef().updateValue
+                superType.getLink().inputIsFired,
+                link.getOutputDef().updateValue
         );
         link(
                 weightUpdate,
-                neuronDef.synapse.weight
+                superType.synapse.weight
         );
 
-        disjunctiveSynapse = new SynapseTypeDefinition(
+        synapse = new SynapseTypeDefinition(
                 "DisjunctiveSynapse",
                 DisjunctiveSynapse.class
         );
     }
 
-    public ActivationTypeDefinition getDisjunctiveActivation() {
-        return disjunctiveActivation;
+    public ActivationTypeDefinition getActivation() {
+        return activation;
     }
 
-    public NeuronTypeDefinition getDisjunctiveNeuron() {
-        return disjunctiveNeuron;
+    public NeuronTypeDefinition getNeuron() {
+        return neuron;
     }
 
-    public SynapseSlotTypeDefinition getDisjunctiveSynapseInputSlot() {
-        return disjunctiveSynapseInputSlot;
+    public SynapseSlotTypeDefinition getSynapseInputSlot() {
+        return synapseInputSlot;
     }
 
-    public SynapseSlotTypeDefinition getDisjunctiveSynapseOutputSlot() {
-        return disjunctiveSynapseOutputSlot;
+    public SynapseSlotTypeDefinition getSynapseOutputSlot() {
+        return synapseOutputSlot;
     }
 
 
-    public LinkTypeDefinition getDisjunctiveLink() {
-        return disjunctiveLink;
+    public LinkTypeDefinition getLink() {
+        return link;
     }
 
-    public SynapseTypeDefinition getDisjunctiveSynapse() {
-        return disjunctiveSynapse;
+    public SynapseTypeDefinition getSynapse() {
+        return synapse;
     }
 
 }

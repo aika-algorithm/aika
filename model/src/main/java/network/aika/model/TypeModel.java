@@ -27,23 +27,23 @@ public class TypeModel {
 
     NeuronDef neuron = new NeuronDef(this);
 
-    ConjunctiveDef conjunctiveDef = new ConjunctiveDef(neuron);
+    ConjunctiveDef conjunctive = new ConjunctiveDef(neuron);
 
-    DisjunctiveDef disjunctiveDef = new DisjunctiveDef(neuron);
+    DisjunctiveDef disjunctive = new DisjunctiveDef(neuron);
 
-    CategoryDef categoryDef = new CategoryDef(this);
-    BindingDef bindingDef = new BindingDef(this);
-    PatternDef patternDef = new PatternDef(this);
-    InhibitoryDef inhibitoryDef = new InhibitoryDef(this);
+    CategoryDef category = new CategoryDef(this);
+    BindingDef binding = new BindingDef(this, conjunctive);
+    PatternDef pattern = new PatternDef(this, conjunctive);
+    InhibitoryDef inhibitory = new InhibitoryDef(this);
 
     public TypeModel() {
         states.init();
         neuron.init();
-        conjunctiveDef.init();
-        disjunctiveDef.init();
-        bindingDef.init();
-        patternDef.init();
-        inhibitoryDef.init();
+        conjunctive.init();
+        disjunctive.init();
+        binding.init();
+        pattern.init();
+        inhibitory.init();
     }
 
 
@@ -55,27 +55,27 @@ public class TypeModel {
         return neuron;
     }
 
-    public ConjunctiveDef getConjunctiveDef() {
-        return conjunctiveDef;
+    public ConjunctiveDef getConjunctive() {
+        return conjunctive;
     }
 
-    public DisjunctiveDef getDisjunctiveDef() {
-        return disjunctiveDef;
+    public DisjunctiveDef getDisjunctive() {
+        return disjunctive;
     }
 
-    public CategoryDef getCategoryDef() {
-        return categoryDef;
+    public CategoryDef getCategory() {
+        return category;
     }
 
-    public BindingDef getBindingDef() {
-        return bindingDef;
+    public BindingDef getBinding() {
+        return binding;
     }
 
-    public PatternDef getPatternDef() {
-        return patternDef;
+    public PatternDef getPattern() {
+        return pattern;
     }
 
-    public InhibitoryDef getInhibitoryDef() {
-        return inhibitoryDef;
+    public InhibitoryDef getInhibitory() {
+        return inhibitory;
     }
 }

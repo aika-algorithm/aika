@@ -15,7 +15,7 @@ public class CategoryDef {
 
     private TypeModel typeModel;
 
-    private SynapseSlotTypeDefinition categoryInputAnnealingSynapseOutputSlot;
+    private DisjunctiveDef superType;
 
     private LinkTypeDefinition categoryInputLink;
     private SynapseTypeDefinition categoryInputSynapse;
@@ -24,18 +24,13 @@ public class CategoryDef {
     private SynapseTypeDefinition categorySynapse;
 
 
-    public CategoryDef(TypeModel typeModel) {
+    public CategoryDef(TypeModel typeModel, DisjunctiveDef superType) {
         this.typeModel = typeModel;
+        this.superType = superType;
     }
 
 
     public void init() {
-        categoryInputAnnealingSynapseOutputSlot = new SynapseSlotTypeDefinition(
-                "CategoryInputAnnealingSynapseOutputSlot",
-                ConjunctiveSynapseSlot.class
-        )
-                .addParent(typeModel.conjunctiveDef.getAnnealingSynapseOutputSlot());
-
         categoryInputLink = new LinkTypeDefinition(
                 "CategoryInputLink",
                 Link.class
@@ -65,10 +60,6 @@ public class CategoryDef {
 
     public TypeModel getTypeModel() {
         return typeModel;
-    }
-
-    public SynapseSlotTypeDefinition getCategoryInputAnnealingSynapseOutputSlot() {
-        return categoryInputAnnealingSynapseOutputSlot;
     }
 
     public LinkTypeDefinition getCategoryInputLink() {

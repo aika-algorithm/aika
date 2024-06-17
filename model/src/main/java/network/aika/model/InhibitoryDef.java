@@ -100,7 +100,7 @@ public class InhibitoryDef implements TypeDefinition {
                 "InhibitoryLink",
                 DisjunctiveLink.class
         )
-                .setInputDef(typeModel.bindingDef.getActivation())
+                .setInputDef(typeModel.binding.getActivation())
                 .setOutputDef(activation);
 
         synapse = new SynapseTypeDefinition(
@@ -108,8 +108,8 @@ public class InhibitoryDef implements TypeDefinition {
                 DisjunctiveSynapse.class
         )
                 .setLinkType(link)
-                .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
-                .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
+                .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
+                .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
                 .setInputNeuronType(BINDING)
                 .setOutputNeuronType(INHIBITORY)
                 .setTransition(INPUT_INPUT)
@@ -127,8 +127,8 @@ public class InhibitoryDef implements TypeDefinition {
                 DisjunctiveSynapse.class
         )
                 .setLinkType(primaryLink)
-                .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
-                .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
+                .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
+                .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
                 .setInputNeuronType(PATTERN)
                 .setOutputNeuronType(INHIBITORY)
                 .setTransition(SAME_INPUT)
@@ -146,8 +146,8 @@ public class InhibitoryDef implements TypeDefinition {
                 Synapse.class
         )
                 .setLinkType(categoryLink)
-                .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
-                .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
+                .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
+                .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
                 .setInputNeuronType(INHIBITORY)
                 .setOutputNeuronType(CATEGORY)
                 .setTransition(INPUT_INPUT)
@@ -165,8 +165,8 @@ public class InhibitoryDef implements TypeDefinition {
                 Synapse.class
         )
                 .setLinkType(categoryInputLink)
-                .setInputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseInputSlot())
-                .setOutputSlotType(typeModel.disjunctiveDef.getDisjunctiveSynapseOutputSlot())
+                .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
+                .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
                 .setInputNeuronType(CATEGORY)
                 .setOutputNeuronType(BINDING)
                 .setTransition(INPUT_INPUT)

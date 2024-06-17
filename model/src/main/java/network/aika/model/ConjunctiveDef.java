@@ -29,90 +29,77 @@ import network.aika.elements.typedef.*;
  */
 public class ConjunctiveDef {
 
-    private NeuronDef neuronDef;
+    private NeuronDef superType;
 
-    ActivationTypeDefinition conjunctiveActivation;
-    NeuronTypeDefinition conjunctiveNeuron;
+    ActivationTypeDefinition activation;
+    NeuronTypeDefinition neuron;
 
-    SynapseSlotTypeDefinition conjunctiveSynapseInputSlot;
-    SynapseSlotTypeDefinition conjunctiveSynapseOutputSlot;
+    SynapseSlotTypeDefinition synapseInputSlot;
+    SynapseSlotTypeDefinition synapseOutputSlot;
 
-    SynapseSlotTypeDefinition annealingSynapseOutputSlot;
-
-    LinkTypeDefinition conjunctiveLink;
-    SynapseTypeDefinition conjunctiveSynapse;
+    LinkTypeDefinition link;
+    SynapseTypeDefinition synapse;
 
 
-    public ConjunctiveDef(NeuronDef neuronDef) {
-        this.neuronDef = neuronDef;
-        this.neuronDef.conjunctiveDef = this;
+    public ConjunctiveDef(NeuronDef superType) {
+        this.superType = superType;
+        this.superType.conjunctiveDef = this;
     }
 
     public void init() {
-        conjunctiveActivation = new ActivationTypeDefinition(
+        activation = new ActivationTypeDefinition(
                 "ConjunctiveActivation",
                 Activation.class
         );
 
-        conjunctiveNeuron = new NeuronTypeDefinition(
+        neuron = new NeuronTypeDefinition(
                 "ConjunctiveNeuron",
                 Neuron.class
         );
 
-        conjunctiveSynapseInputSlot = new SynapseSlotTypeDefinition(
+        synapseInputSlot = new SynapseSlotTypeDefinition(
                 "ConjunctiveSynapseInputSlot",
                 ConjunctiveSynapseSlot.class
         );
 
-        conjunctiveSynapseOutputSlot = new SynapseSlotTypeDefinition(
+        synapseOutputSlot = new SynapseSlotTypeDefinition(
                 "ConjunctiveSynapseOutputSlot",
                 ConjunctiveSynapseSlot.class
         );
 
-        annealingSynapseOutputSlot = new SynapseSlotTypeDefinition(
-                "AnnealingSynapseOutputSlot",
-                ConjunctiveSynapseSlot.class
-        )
-                .addParent(conjunctiveSynapseOutputSlot);
-
-
-        conjunctiveLink = new LinkTypeDefinition(
+        link = new LinkTypeDefinition(
                 "ConjunctiveLink",
                 ConjunctiveLink.class);
 
-        conjunctiveSynapse = new SynapseTypeDefinition(
+        synapse = new SynapseTypeDefinition(
                 "ConjunctiveSynapse",
                 ConjunctiveSynapse.class
         );
     }
 
 
-    public ActivationTypeDefinition getConjunctiveActivation() {
-        return conjunctiveActivation;
+    public ActivationTypeDefinition getActivation() {
+        return activation;
     }
 
-    public NeuronTypeDefinition getConjunctiveNeuron() {
-        return conjunctiveNeuron;
+    public NeuronTypeDefinition getNeuron() {
+        return neuron;
     }
 
-    public SynapseSlotTypeDefinition getConjunctiveSynapseInputSlot() {
-        return conjunctiveSynapseInputSlot;
+    public SynapseSlotTypeDefinition getSynapseInputSlot() {
+        return synapseInputSlot;
     }
 
-    public SynapseSlotTypeDefinition getConjunctiveSynapseOutputSlot() {
-        return conjunctiveSynapseOutputSlot;
+    public SynapseSlotTypeDefinition getSynapseOutputSlot() {
+        return synapseOutputSlot;
     }
 
-    public SynapseSlotTypeDefinition getAnnealingSynapseOutputSlot() {
-        return annealingSynapseOutputSlot;
+    public LinkTypeDefinition getLink() {
+        return link;
     }
 
-    public LinkTypeDefinition getConjunctiveLink() {
-        return conjunctiveLink;
-    }
-
-    public SynapseTypeDefinition getConjunctiveSynapse() {
-        return conjunctiveSynapse;
+    public SynapseTypeDefinition getSynapse() {
+        return synapse;
     }
 
 }
