@@ -109,8 +109,7 @@ public class BindingDef implements TypeDefinition {
                 .setActivationType(activation)
                 .setActivationFunction(RECTIFIED_HYPERBOLIC_TANGENT)
                 .setBindingSignalSlots(SINGLE_INPUT, SINGLE_SAME_FEEDBACK)
-                .addParent(typeModel.conjunctiveDef.getConjunctiveNeuron())
-                .setDebugStyle("fill-color: rgb(0,205,0);");
+                .addParent(typeModel.conjunctiveDef.getConjunctiveNeuron());
 
 
         outerFeedbackAnnealingSynapseOutputSlot = new SynapseSlotTypeDefinition(
@@ -133,8 +132,7 @@ public class BindingDef implements TypeDefinition {
                 .setActivationType(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_INPUT, SINGLE_SAME)
-                .setTrainingAllowed(false)
-                .setDebugStyle("fill-color: rgb(100,0,200);");
+                .setTrainingAllowed(false);
 
         latentRelationActivation = new ActivationTypeDefinition(
                 "LatentRelationActivation",
@@ -151,8 +149,7 @@ public class BindingDef implements TypeDefinition {
                 .setActivationType(latentRelationActivation)
                 .setActivationFunction(RECTIFIED_HYPERBOLIC_TANGENT)
                 .setBindingSignalSlots()
-                .addParent(typeModel.conjunctiveDef.getConjunctiveNeuron())
-                .setDebugStyle("fill-color: rgb(10,170,0);");
+                .addParent(typeModel.conjunctiveDef.getConjunctiveNeuron());
 
 
 
@@ -177,8 +174,7 @@ public class BindingDef implements TypeDefinition {
                 .setRequired(SAME_INPUT)
                 .setTrigger(FIRED_PRE_FEEDBACK)
                 .setStoredAt(OUTPUT)
-                .addParent(typeModel.conjunctiveDef.getConjunctiveSynapse())
-                .setDebugStyle("fill-color: rgb(0,150,00);");
+                .addParent(typeModel.conjunctiveDef.getConjunctiveSynapse());
 
 
         sameObjectLink = new LinkTypeDefinition(
@@ -201,8 +197,7 @@ public class BindingDef implements TypeDefinition {
                 .setRequired(INPUT_INPUT)
                 .setTrigger(PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK)
                 .setStoredAt(OUTPUT)
-                .setPropagateRange(false)
-                .setDebugStyle("fill-color: rgb(50,200,120);");
+                .setPropagateRange(false);
 
         innerPositiveFeedbackLink = new LinkTypeDefinition(
                 "InnerPositiveFeedbackLink",
@@ -224,8 +219,7 @@ public class BindingDef implements TypeDefinition {
                 .setTrigger(NOT_FIRED)
                 .setOutputState(INNER_FEEDBACK)
                 .setStoredAt(OUTPUT)
-                .setPropagateRange(false)
-                .setDebugStyle("fill-color: rgb(120,200,50); arrow-shape: diamond;");
+                .setPropagateRange(false);
 
 
         outerPositiveFeedbackLink = new LinkTypeDefinition(
@@ -249,8 +243,7 @@ public class BindingDef implements TypeDefinition {
                 .setTrigger(FIRED_PRE_FEEDBACK)
                 .setOutputState(OUTER_FEEDBACK)
                 .setStoredAt(OUTPUT)
-                .setRegisterInputSlot(ON_INIT)
-                .setDebugStyle("fill-color: rgb(90,200,20); arrow-shape: diamond;");
+                .setRegisterInputSlot(ON_INIT);
 
         negativeFeedbackLink = new LinkTypeDefinition(
                 "NegativeFeedbackLink",
@@ -277,8 +270,7 @@ public class BindingDef implements TypeDefinition {
                 .setOutputState(OUTER_FEEDBACK)
                 .setPropagateRange(false)
                 .setStoredAt(OUTPUT)
-                .setRegisterInputSlot(ON_INIT)
-                .setDebugStyle("fill-color: rgb(185,0,0); arrow-shape: diamond;");
+                .setRegisterInputSlot(ON_INIT);
 
         negativeWeight = scale(negativeFeedbackSynapse, "weight", -1, typeModel.neuron.getSynapse().weight);
         link(typeModel.neuron.getSynapse().weight, negativeFeedbackLink.getOutputDef().getNet(negativeFeedbackSynapse.outputState()))
@@ -303,8 +295,7 @@ public class BindingDef implements TypeDefinition {
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
                 .setPropagateRange(false)
-                .setStoredAt(OUTPUT)
-                .setDebugStyle("fill-color: rgb(50,230,50);");
+                .setStoredAt(OUTPUT);
 
         categoryLink = new LinkTypeDefinition(
                 "BindingCategoryLink",
@@ -324,8 +315,7 @@ public class BindingDef implements TypeDefinition {
                 .setTransition(INPUT_INPUT, SAME_SAME)
                 .setRequired(INPUT_INPUT)
                 .setTrigger(FIRED_PRE_FEEDBACK)
-                .setStoredAt(INPUT)
-                .setDebugStyle("fill-color: rgb(110,0,220);");
+                .setStoredAt(INPUT);
 
 
         categoryInputLink = new LinkTypeDefinition(
@@ -349,8 +339,7 @@ public class BindingDef implements TypeDefinition {
                 .setStoredAt(OUTPUT)
                 .setTrainingAllowed(false)
                 .setRegisterInputSlot(ON_INIT)
-                .setInstanceSynapseType(categorySynapse)
-                .setDebugStyle("fill-color: rgb(110,200,220);");
+                .setInstanceSynapseType(categorySynapse);
 
 
         TemplateRelationDefinition templateRelationDef = new TemplateRelationDefinition()

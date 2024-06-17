@@ -31,16 +31,16 @@ public class ConjunctiveDef {
 
     private TypeModel typeModel;
 
-    private ActivationTypeDefinition conjunctiveActivation;
-    private NeuronTypeDefinition conjunctiveNeuron;
+    ActivationTypeDefinition conjunctiveActivation;
+    NeuronTypeDefinition conjunctiveNeuron;
 
-    private SynapseSlotTypeDefinition conjunctiveSynapseInputSlot;
-    private SynapseSlotTypeDefinition conjunctiveSynapseOutputSlot;
+    SynapseSlotTypeDefinition conjunctiveSynapseInputSlot;
+    SynapseSlotTypeDefinition conjunctiveSynapseOutputSlot;
 
-    private SynapseSlotTypeDefinition annealingSynapseOutputSlot;
+    SynapseSlotTypeDefinition annealingSynapseOutputSlot;
 
-    private LinkTypeDefinition conjunctiveLink;
-    private SynapseTypeDefinition conjunctiveSynapse;
+    LinkTypeDefinition conjunctiveLink;
+    SynapseTypeDefinition conjunctiveSynapse;
 
 
     public ConjunctiveDef(TypeModel typeModel) {

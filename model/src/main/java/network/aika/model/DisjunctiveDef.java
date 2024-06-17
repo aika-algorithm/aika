@@ -33,18 +33,18 @@ import static network.aika.fielddefs.Operators.mul;
  */
 public class DisjunctiveDef {
 
-    private TypeModel typeModel;
+    TypeModel typeModel;
 
-    private ActivationTypeDefinition disjunctiveActivation;
-    private NeuronTypeDefinition disjunctiveNeuron;
+    ActivationTypeDefinition disjunctiveActivation;
+    NeuronTypeDefinition disjunctiveNeuron;
 
-    private SynapseSlotTypeDefinition disjunctiveSynapseInputSlot;
-    private SynapseSlotTypeDefinition disjunctiveSynapseOutputSlot;
+    SynapseSlotTypeDefinition disjunctiveSynapseInputSlot;
+    SynapseSlotTypeDefinition disjunctiveSynapseOutputSlot;
 
-    private LinkTypeDefinition disjunctiveLink;
-    private SynapseTypeDefinition disjunctiveSynapse;
+    LinkTypeDefinition disjunctiveLink;
+    SynapseTypeDefinition disjunctiveSynapse;
 
-    private FieldDefinition weightUpdate;
+    FieldDefinition weightUpdate;
 
     public DisjunctiveDef(TypeModel typeModel) {
         this.typeModel = typeModel;
@@ -73,7 +73,10 @@ public class DisjunctiveDef {
 
         disjunctiveLink = new LinkTypeDefinition(
                 "DisjunctiveLink",
-                DisjunctiveLink.class);
+                DisjunctiveLink.class)
+                .setSynapseDef(disjunctiveSynapse)
+                .setInputDef(typeModel.conjunctiveDef.conjunctiveActivation)
+                .setOutputDef(disjunctiveActivation);
 
         weightUpdate = mul(
                 disjunctiveLink,
@@ -83,7 +86,7 @@ public class DisjunctiveDef {
         );
         link(
                 weightUpdate,
-                typeModel.neuron.getSynapse().weight
+                typeModel.neuron.synapse.weight
         );
 
         disjunctiveSynapse = new SynapseTypeDefinition(

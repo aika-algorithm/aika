@@ -42,12 +42,12 @@ public class NeuronDef {
 
     TypeModel typeModel;
 
-    private ActivationTypeDefinition activation;
-    private NeuronTypeDefinition neuron;
+    ActivationTypeDefinition activation;
+    NeuronTypeDefinition neuron;
 
-    private LinkTypeDefinition link;
+    LinkTypeDefinition link;
 
-    private SynapseTypeDefinition synapse;
+    SynapseTypeDefinition synapse;
 
     public NeuronDef(TypeModel typeModel) {
         this.typeModel = typeModel;

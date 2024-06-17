@@ -30,8 +30,9 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class LinkTypeDefinition extends TypeDefinition<LinkTypeDefinition, Link> {
 
-    ActivationTypeDefinition inputDef;
-    ActivationTypeDefinition outputDef;
+    private SynapseTypeDefinition synapseDef;
+    private ActivationTypeDefinition inputDef;
+    private ActivationTypeDefinition outputDef;
 
     public FieldDefinition inputValue;
     public FieldDefinition inputIsFired;
@@ -61,6 +62,16 @@ public class LinkTypeDefinition extends TypeDefinition<LinkTypeDefinition, Link>
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public SynapseTypeDefinition getSynapseDef() {
+        return synapseDef;
+    }
+
+    public LinkTypeDefinition setSynapseDef(SynapseTypeDefinition synapseDef) {
+        this.synapseDef = synapseDef;
+
+        return this;
     }
 
     public ActivationTypeDefinition getInputDef() {

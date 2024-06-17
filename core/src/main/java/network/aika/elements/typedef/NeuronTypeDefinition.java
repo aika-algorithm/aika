@@ -40,11 +40,10 @@ public class NeuronTypeDefinition extends TypeDefinition<NeuronTypeDefinition, N
 
     private boolean trainingAllowed;
 
-    private ActivationTypeDefinition activationType;
+    public ActivationTypeDefinition activationType;
 
-    private String debugStyle;
 
-    private TemplateRelationDefinition templateRelation;
+    public TemplateRelationDefinition templateRelation;
 
     public NeuronTypeDefinition(String name, Class<? extends Neuron> clazz) {
         super(name, clazz);
@@ -98,15 +97,6 @@ public class NeuronTypeDefinition extends TypeDefinition<NeuronTypeDefinition, N
 
     public boolean isTrainingAllowed() {
         return trainingAllowed;
-    }
-
-    public NeuronTypeDefinition setDebugStyle(String c) {
-        debugStyle = c;
-        return this;
-    }
-
-    public String getDebugStyle() {
-        return debugStyle;
     }
 
     public TemplateRelationDefinition getTemplateRelation() {

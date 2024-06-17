@@ -91,8 +91,7 @@ public class PatternDef implements TypeDefinition {
                 .setNeuronType(PATTERN)
                 .setActivationType(activation)
                 .setActivationFunction(RECTIFIED_HYPERBOLIC_TANGENT)
-                .setBindingSignalSlots(SINGLE_SAME, MULTI_INPUT)
-                .setDebugStyle("fill-color: rgb(224, 34, 245);");
+                .setBindingSignalSlots(SINGLE_SAME, MULTI_INPUT);
 
 
         averageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, neuron, "avgCoveredSpace");
@@ -125,8 +124,7 @@ public class PatternDef implements TypeDefinition {
                 .setActivationType(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_SAME)
-                .setTrainingAllowed(false)
-                .setDebugStyle("fill-color: rgb(100,0,200);");
+                .setTrainingAllowed(false);
 
 
 
@@ -149,8 +147,7 @@ public class PatternDef implements TypeDefinition {
                 .setTransition(SAME_SAME, INPUT_INPUT)
                 .setRequired(SAME_SAME)
                 .setTrigger(PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK)
-                .setStoredAt(OUTPUT)
-                .setDebugStyle("fill-color: rgb(224, 34, 245);");
+                .setStoredAt(OUTPUT);
 
         categoryLink = new LinkTypeDefinition(
                 "PatternCategoryLink",
@@ -171,8 +168,7 @@ public class PatternDef implements TypeDefinition {
                 .setTransition(SAME_SAME)
                 .setRequired(SAME_SAME)
                 .setTrigger(FIRED_PRE_FEEDBACK)
-                .setStoredAt(INPUT)
-                .setDebugStyle("fill-color: rgb(100,0,200);");
+                .setStoredAt(INPUT);
 
 
         categoryInputLink = new LinkTypeDefinition(
@@ -198,8 +194,7 @@ public class PatternDef implements TypeDefinition {
                 .setStoredAt(OUTPUT)
                 .setTrainingAllowed(false)
                 .setRegisterInputSlot(ON_INIT)
-                .setInstanceSynapseType(categorySynapse)
-                .setDebugStyle("fill-color: rgb(110,200,220);");
+                .setInstanceSynapseType(categorySynapse);
 
         TemplateRelationDefinition templateRelationDef = new TemplateRelationDefinition()
                 .setAbstractSynapseType(categoryInputSynapse)

@@ -76,8 +76,7 @@ public class InhibitoryDef implements TypeDefinition {
                 .setNeuronType(INHIBITORY)
                 .setActivationType(activation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
-                .setTrainingAllowed(false)
-                .setDebugStyle("fill-color: rgb(100,100,255);");
+                .setTrainingAllowed(false);
 
 
         categoryActivation = new ActivationTypeDefinition(
@@ -94,8 +93,7 @@ public class InhibitoryDef implements TypeDefinition {
                 .setActivationType(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_INPUT)
-                .setTrainingAllowed(false)
-                .setDebugStyle("fill-color: rgb(100,0,200);");
+                .setTrainingAllowed(false);
 
 
         link = new LinkTypeDefinition(
@@ -117,8 +115,7 @@ public class InhibitoryDef implements TypeDefinition {
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
                 .setTrigger(FIRED_PRE_FEEDBACK)
-                .setStoredAt(INPUT)
-                .setDebugStyle("fill-color: rgb(100,100,255);");
+                .setStoredAt(INPUT);
 
 
         primaryLink = new LinkTypeDefinition(
@@ -137,8 +134,7 @@ public class InhibitoryDef implements TypeDefinition {
                 .setTransition(SAME_INPUT)
                 .setRequired(SAME_INPUT)
                 .setTrigger(FIRED_PRE_FEEDBACK)
-                .setStoredAt(OUTPUT)
-                .setDebugStyle("fill-color: rgb(70,70,210);");
+                .setStoredAt(OUTPUT);
 
 
         categoryLink = new LinkTypeDefinition(
@@ -157,8 +153,7 @@ public class InhibitoryDef implements TypeDefinition {
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
                 .setTrigger(NOT_FIRED)
-                .setStoredAt(INPUT)
-                .setDebugStyle("fill-color: rgb(110,0,220);");
+                .setStoredAt(INPUT);
 
 
         categoryInputLink = new LinkTypeDefinition(
@@ -180,8 +175,7 @@ public class InhibitoryDef implements TypeDefinition {
                 .setTrigger(FIRED_PRE_FEEDBACK)
                 .setStoredAt(OUTPUT)
                 .setTrainingAllowed(false)
-                .setInstanceSynapseType(categorySynapse)
-                .setDebugStyle("fill-color: rgb(110,200,220); ");
+                .setInstanceSynapseType(categorySynapse);
 
         TemplateRelationDefinition templateRelationDef = new TemplateRelationDefinition()
                 .setAbstractSynapseType(categoryInputSynapse)

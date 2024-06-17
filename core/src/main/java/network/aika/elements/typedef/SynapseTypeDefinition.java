@@ -59,8 +59,6 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     private boolean trainingAllowed;
 
-    private String debugStyle;
-
     private RegisterInputSlot registerInputSlot = RegisterInputSlot.ON_LINKING;
 
     private SynapseTypeDefinition instanceSynapseType;
@@ -192,16 +190,6 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
     public boolean isTrainingAllowed() {
         return trainingAllowed;
     }
-
-    public SynapseTypeDefinition setDebugStyle(String c) {
-        debugStyle = c;
-        return this;
-    }
-
-    public String getDebugStyle() {
-        return debugStyle;
-    }
-
 
     public RegisterInputSlot getRegisterInputSlot() {
         return registerInputSlot;
