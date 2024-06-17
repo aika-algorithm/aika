@@ -28,22 +28,15 @@ import static network.aika.elements.activations.StateType.*;
 public enum Trigger {
     FIRED_PRE_FEEDBACK(PRE_FEEDBACK),
     FIRED_OUTER_FEEDBACK(OUTER_FEEDBACK),
-    PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK(OUTER_FEEDBACK, true),
     FIRED_INNER_FEEDBACK(INNER_FEEDBACK),
     NOT_FIRED(null);
 
-    private boolean checkPrimary;
     private StateType type;
 
     Trigger(StateType type) {
         this.type = type;
         if(type != null)
             type.addTrigger(this);
-    }
-
-    Trigger(StateType type, boolean checkPrimary) {
-        this(type);
-        this.checkPrimary = checkPrimary;
     }
 
     public void setType(StateType type) {
@@ -55,9 +48,6 @@ public enum Trigger {
     }
 
     public boolean check(Activation act) {
-        if(!checkPrimary(act))
-            return false;
-
         if(type == null)
             return true;
 
@@ -65,10 +55,6 @@ public enum Trigger {
     }
 
     public boolean match(Trigger t) {
-        return type == t.type && checkPrimary == t.checkPrimary;
-    }
-
-    public boolean checkPrimary(Activation act) {
-        return true; //!checkPrimary || act.checkPrimary();
+        return type == t.type;
     }
 }

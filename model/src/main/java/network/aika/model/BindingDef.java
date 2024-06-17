@@ -187,7 +187,7 @@ public class BindingDef implements TypeDefinition {
                 .setOutputNeuronType(BINDING)
                 .setTransition(SAME_SAME)
                 .setRequired(INPUT_INPUT)
-                .setTrigger(PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK)
+                .setTrigger(FIRED_OUTER_FEEDBACK)
                 .setStoredAt(OUTPUT)
                 .setPropagateRange(false);
 

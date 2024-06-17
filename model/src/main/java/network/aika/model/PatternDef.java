@@ -36,8 +36,8 @@ import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_
 import static network.aika.elements.activations.bsslots.RegisterInputSlot.ON_INIT;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_SAME;
+import static network.aika.enums.Trigger.FIRED_OUTER_FEEDBACK;
 import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
-import static network.aika.enums.Trigger.PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fielddefs.FieldLinkDefinition.link;
@@ -149,7 +149,7 @@ public class PatternDef implements TypeDefinition {
                 .setOutputNeuronType(PATTERN)
                 .setTransition(SAME_SAME, INPUT_INPUT)
                 .setRequired(SAME_SAME)
-                .setTrigger(PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK)
+                .setTrigger(FIRED_OUTER_FEEDBACK)
                 .setStoredAt(OUTPUT);
 
         categoryLink = new LinkTypeDefinition(
