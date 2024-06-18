@@ -28,7 +28,6 @@ import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.Field;
 import network.aika.fields.IdentityFunction;
 import network.aika.fields.SumField;
-import network.aika.model.types.SynapseTypeDef;
 
 import static network.aika.fielddefs.Operators.invert;
 import static network.aika.fielddefs.Operators.threshold;
@@ -54,11 +53,11 @@ public class NeuronDef {
 
     LinkTypeDefinition link;
 
-    SynapseTypeDef synapse;
+    SynapseTypeDefinition synapse;
 
-    FieldDefinition<Synapse, SumField> weight;
+    public static final String WEIGHT = "weight";
 
-    FieldDefinition<Synapse, Field> initialCategorySynapseWeight;
+    public static final String INITIAL_CATEGORY_SYNAPSE_WEIGHT = "initialCategorySynapseWeight";
 
 
     public NeuronDef(TypeModel typeModel) {
@@ -89,12 +88,13 @@ public class NeuronDef {
                 Synapse.class
         );
 
-        synapse.weight = new FieldDefinition<>(SumField.class, synapse, "weight", TOLERANCE)
+        synapse.addFieldDefinition(new FieldDefinition<>(SumField.class, synapse, WEIGHT, TOLERANCE)
                 .setQueued(TRAINING)
                 .addListener("onWeightModified", (r, fl, u) -> {
 //                    r.checkWeight();
                     r.setModified();
-                });
+                })
+        );
     }
 
     public TypeModel getTypeModel() {

@@ -27,6 +27,7 @@ import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.Field;
 import network.aika.fields.MaxField;
 
+
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;
@@ -40,6 +41,7 @@ import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.Operators.scale;
+import static network.aika.model.NeuronDef.WEIGHT;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -263,8 +265,8 @@ public class BindingDef implements TypeDefinition {
                 .setStoredAt(OUTPUT)
                 .setRegisterInputSlot(ON_INIT);
 
-        negativeWeight = scale(negativeFeedbackSynapse, "weight", -1, typeModel.neuron.getSynapse().weight);
-        link(typeModel.neuron.getSynapse().weight, negativeFeedbackLink.getOutputDef().getNet(negativeFeedbackSynapse.outputState()))
+        negativeWeight = scale(negativeFeedbackSynapse, "weight", -1, typeModel.neuron.getSynapse().getFieldDef(WEIGHT));
+        link(typeModel.neuron.getSynapse().getFieldDef(WEIGHT), negativeFeedbackLink.getOutputDef().getNet(negativeFeedbackSynapse.outputState()))
                 .setPropagateUpdates(false);
 
 
