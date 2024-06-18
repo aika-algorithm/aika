@@ -72,8 +72,6 @@ public abstract class BindingSignalSlot {
         if(!state)
             return;
 
-        Linking.add(act, getType(), bs, NOT_FIRED);
-
         if(act.isFired(NON_FEEDBACK))
             Linking.add(act, getType(), bs, FIRED_NON_FEEDBACK);
     }

@@ -25,8 +25,10 @@ import network.aika.elements.typedef.LinkTypeDefinition;
 import network.aika.elements.typedef.NeuronTypeDefinition;
 import network.aika.elements.typedef.SynapseTypeDefinition;
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fields.Field;
 import network.aika.fields.IdentityFunction;
 import network.aika.fields.SumField;
+import network.aika.model.types.SynapseTypeDef;
 
 import static network.aika.fielddefs.Operators.invert;
 import static network.aika.fielddefs.Operators.threshold;
@@ -52,7 +54,12 @@ public class NeuronDef {
 
     LinkTypeDefinition link;
 
-    SynapseTypeDefinition synapse;
+    SynapseTypeDef synapse;
+
+    FieldDefinition<Synapse, SumField> weight;
+
+    FieldDefinition<Synapse, Field> initialCategorySynapseWeight;
+
 
     public NeuronDef(TypeModel typeModel) {
         this.typeModel = typeModel;

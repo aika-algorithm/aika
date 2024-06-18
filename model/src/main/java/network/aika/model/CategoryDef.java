@@ -41,7 +41,7 @@ public class CategoryDef {
                 Synapse.class
         );
 
-        categoryInputSynapse.initialCategorySynapseWeight = new FieldDefinition<Synapse, Field>(
+        categoryInputSynapse.initialCategorySynapseWeight = new FieldDefinition<>(
                 Field.class,
                 categoryInputSynapse,
                 "initialCategorySynapseWeight",

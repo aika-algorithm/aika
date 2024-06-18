@@ -31,7 +31,6 @@ import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_INPUT;
 import static network.aika.enums.Trigger.FIRED_NON_FEEDBACK;
-import static network.aika.enums.Trigger.NOT_FIRED;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 

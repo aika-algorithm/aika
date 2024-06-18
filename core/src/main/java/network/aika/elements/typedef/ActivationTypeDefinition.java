@@ -64,6 +64,10 @@ public class ActivationTypeDefinition extends TypeDefinition<ActivationTypeDefin
         return this;
     }
 
+    public FieldDefinition getNet(StateType stateType) {
+        return stateTypes.get(stateType.ordinal()).net;
+    }
+
     public Activation instantiate(int id, Document doc, Neuron n) {
         try {
             Activation instance = clazz
