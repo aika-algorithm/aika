@@ -42,7 +42,6 @@ public class NeuronTypeDefinition extends TypeDefinition<NeuronTypeDefinition, N
 
     public ActivationTypeDefinition activationType;
 
-
     public TemplateRelationDefinition templateRelation;
 
     public NeuronTypeDefinition(String name, Class<? extends Neuron> clazz) {

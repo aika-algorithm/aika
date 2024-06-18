@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
+import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.enums.Trigger.*;
 
 /**
@@ -74,8 +74,8 @@ public abstract class BindingSignalSlot {
 
         Linking.add(act, getType(), bs, NOT_FIRED);
 
-        if(act.isFired(PRE_FEEDBACK))
-            Linking.add(act, getType(), bs, FIRED_PRE_FEEDBACK);
+        if(act.isFired(NON_FEEDBACK))
+            Linking.add(act, getType(), bs, FIRED_NON_FEEDBACK);
     }
 
     public void onFired(State s) {

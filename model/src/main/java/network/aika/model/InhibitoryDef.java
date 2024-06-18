@@ -26,11 +26,11 @@ import network.aika.elements.typedef.*;
 
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.elements.NeuronType.*;
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
+import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_INPUT;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
+import static network.aika.enums.Trigger.FIRED_NON_FEEDBACK;
 import static network.aika.enums.Trigger.NOT_FIRED;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
@@ -70,7 +70,7 @@ public class InhibitoryDef implements TypeDefinition {
                 "InhibitoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getPreFeedbackState());
+                .addStateType(typeModel.states.getNonFeedbackState());
 
         neuron = new NeuronTypeDefinition(
                 "InhibitoryNeuron",
@@ -86,7 +86,7 @@ public class InhibitoryDef implements TypeDefinition {
                 "InhibitoryCategoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getPreFeedbackState());
+                .addStateType(typeModel.states.getNonFeedbackState());
 
         categoryNeuron = new NeuronTypeDefinition(
                 "InhibitoryCategoryNeuron",
@@ -117,7 +117,7 @@ public class InhibitoryDef implements TypeDefinition {
                 .setOutputNeuronType(INHIBITORY)
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
-                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setStoredAt(INPUT);
 
 
@@ -136,7 +136,7 @@ public class InhibitoryDef implements TypeDefinition {
                 .setOutputNeuronType(INHIBITORY)
                 .setTransition(SAME_INPUT)
                 .setRequired(SAME_INPUT)
-                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setStoredAt(OUTPUT);
 
 
@@ -155,7 +155,7 @@ public class InhibitoryDef implements TypeDefinition {
                 .setOutputNeuronType(CATEGORY)
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
-                .setTrigger(NOT_FIRED)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setStoredAt(INPUT);
 
 
@@ -174,8 +174,8 @@ public class InhibitoryDef implements TypeDefinition {
                 .setOutputNeuronType(BINDING)
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
-                .setOutputState(PRE_FEEDBACK)
-                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setOutputState(NON_FEEDBACK)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setStoredAt(OUTPUT)
                 .setTrainingAllowed(false)
                 .setInstanceSynapseType(categorySynapse);

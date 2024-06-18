@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * @author Lukas Molzberger
  */
 public enum StateType {
-    PRE_FEEDBACK(),
+    NON_FEEDBACK(),
     OUTER_FEEDBACK(),
     INNER_FEEDBACK();
 

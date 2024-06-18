@@ -26,10 +26,9 @@ import static network.aika.elements.activations.StateType.*;
  * @author Lukas Molzberger
  */
 public enum Trigger {
-    FIRED_PRE_FEEDBACK(PRE_FEEDBACK),
+    FIRED_NON_FEEDBACK(NON_FEEDBACK),
     FIRED_OUTER_FEEDBACK(OUTER_FEEDBACK),
-    FIRED_INNER_FEEDBACK(INNER_FEEDBACK),
-    NOT_FIRED(null);
+    FIRED_INNER_FEEDBACK(INNER_FEEDBACK);
 
     private StateType type;
 

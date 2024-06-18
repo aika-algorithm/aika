@@ -45,7 +45,7 @@ public class StateDef {
 
     public void init(String name, StateType stateType) {
         state = new StateTypeDefinition(name, stateType)
-                .setNextRound(stateType == PRE_FEEDBACK);
+                .setNextRound(stateType == OUTER_FEEDBACK);
 
         state.net = new FieldDefinition<>(SumField.class, state, "net");
 

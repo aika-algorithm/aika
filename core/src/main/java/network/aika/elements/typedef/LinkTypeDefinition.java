@@ -34,13 +34,6 @@ public class LinkTypeDefinition extends TypeDefinition<LinkTypeDefinition, Link>
     private ActivationTypeDefinition inputDef;
     private ActivationTypeDefinition outputDef;
 
-    public FieldDefinition inputValue;
-    public FieldDefinition inputIsFired;
-    public FieldDefinition negInputIsFired;
-    public FieldDefinition weightedInput;
-
-    public FieldDefinition gradient;
-
     public LinkTypeDefinition(String name, Class<? extends Link> clazz) {
         super(name, clazz);
     }

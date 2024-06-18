@@ -34,12 +34,9 @@ import java.util.List;
  */
 public class ActivationTypeDefinition extends TypeDefinition<ActivationTypeDefinition, Activation> {
 
-    public FieldDefinition updateValue;
     private NeuronTypeDefinition neuronType;
 
     private List<StateTypeDefinition> stateTypes = new ArrayList<>();
-
-    private boolean isNextRound;
 
 
     public ActivationTypeDefinition(String name, Class<? extends Activation> clazz) {
@@ -65,20 +62,6 @@ public class ActivationTypeDefinition extends TypeDefinition<ActivationTypeDefin
         stateType.setActivationType(this);
 
         return this;
-    }
-
-    public ActivationTypeDefinition setNextRound(boolean nextRound) {
-        isNextRound = nextRound;
-
-        return this;
-    }
-
-    public boolean isNextRound() {
-        return isNextRound;
-    }
-
-    public FieldDefinition getNet(StateType stateType) {
-        return stateTypes.get(stateType.ordinal()).net;
     }
 
     public Activation instantiate(int id, Document doc, Neuron n) {

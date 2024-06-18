@@ -41,7 +41,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static network.aika.debugger.EventType.*;
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
+import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.elements.neurons.RefType.TEMPLATE;
 import static network.aika.queue.Timestamp.NOT_SET;
@@ -190,7 +190,7 @@ public abstract class Activation extends Type<ActivationTypeDefinition, Activati
 
     @Override
     public Timestamp getFired() {
-        return getFired(PRE_FEEDBACK);
+        return getFired(NON_FEEDBACK);
     }
 
     public boolean isFired(StateType st) {

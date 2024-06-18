@@ -29,7 +29,7 @@ public class StatesDef {
 
     TypeModel typeModel;
 
-    StateDef preFeedbackState = new StateDef(typeModel);
+    StateDef nonFeedbackState = new StateDef(typeModel);
     StateDef outerFeedbackState = new StateDef(typeModel);
     StateDef innerFeedbackState = new StateDef(typeModel);
 
@@ -38,12 +38,12 @@ public class StatesDef {
     }
 
     public void init() {
-        preFeedbackState.init("PreFeedbackState", PRE_FEEDBACK);
+        nonFeedbackState.init("NonFeedbackState", NON_FEEDBACK);
         outerFeedbackState.init("OuterFeedbackState", OUTER_FEEDBACK);
         innerFeedbackState.init("InnerFeedbackState", INNER_FEEDBACK);
 
         link(
-                preFeedbackState.state.getFieldDef("net"),
+                nonFeedbackState.state.getFieldDef("net"),
                 outerFeedbackState.state.getFieldDef("net")
         );
 
@@ -53,8 +53,8 @@ public class StatesDef {
         );
     }
 
-    public StateTypeDefinition getPreFeedbackState() {
-        return preFeedbackState.state;
+    public StateTypeDefinition getNonFeedbackState() {
+        return nonFeedbackState.state;
     }
 
     public StateTypeDefinition getOuterFeedbackState() {
@@ -64,6 +64,5 @@ public class StatesDef {
     public StateTypeDefinition getInnerFeedbackState() {
         return innerFeedbackState.state;
     }
-
 
 }

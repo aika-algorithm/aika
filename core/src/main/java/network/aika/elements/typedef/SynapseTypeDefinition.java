@@ -63,9 +63,6 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     private SynapseTypeDefinition instanceSynapseType;
 
-    public FieldDefinition<Synapse, SumField> weight;
-
-    public FieldDefinition<Synapse, Field> initialCategorySynapseWeight;
 
     public SynapseTypeDefinition(String name, Class<? extends Synapse> clazz) {
         super(name, clazz);

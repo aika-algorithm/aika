@@ -87,7 +87,7 @@ public class State extends Type<StateTypeDefinition, State> implements QueueProv
 
     @Override
     public boolean isNextRound() {
-        return typeDef.getActivationType().isNextRound() && typeDef.isNextRound();
+        return typeDef.isNextRound();
     }
 
     public Document getDocument() {

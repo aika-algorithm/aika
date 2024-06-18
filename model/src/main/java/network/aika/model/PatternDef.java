@@ -30,14 +30,14 @@ import network.aika.statistic.NeuronStatistic;
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
+import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.MULTI_INPUT;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_SAME;
 import static network.aika.elements.activations.bsslots.RegisterInputSlot.ON_INIT;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_SAME;
 import static network.aika.enums.Trigger.FIRED_OUTER_FEEDBACK;
-import static network.aika.enums.Trigger.FIRED_PRE_FEEDBACK;
+import static network.aika.enums.Trigger.FIRED_NON_FEEDBACK;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fielddefs.FieldLinkDefinition.link;
@@ -85,7 +85,7 @@ public class PatternDef implements TypeDefinition {
                 "PatternActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getPreFeedbackState());
+                .addStateType(typeModel.states.getNonFeedbackState());
 
         neuron = new NeuronTypeDefinition(
                 "PatternNeuron",
@@ -117,7 +117,7 @@ public class PatternDef implements TypeDefinition {
                 "PatternCategoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getPreFeedbackState());
+                .addStateType(typeModel.states.getNonFeedbackState());
 
         categoryNeuron = new NeuronTypeDefinition(
                 "PatternCategoryNeuron",
@@ -170,7 +170,7 @@ public class PatternDef implements TypeDefinition {
                 .setOutputNeuronType(CATEGORY)
                 .setTransition(SAME_SAME)
                 .setRequired(SAME_SAME)
-                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setStoredAt(INPUT);
 
 
@@ -192,8 +192,8 @@ public class PatternDef implements TypeDefinition {
                 .setOutputNeuronType(PATTERN)
                 .setTransition(SAME_SAME)
                 .setRequired(SAME_SAME)
-                .setOutputState(PRE_FEEDBACK)
-                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setOutputState(NON_FEEDBACK)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setStoredAt(OUTPUT)
                 .setTrainingAllowed(false)
                 .setRegisterInputSlot(ON_INIT)

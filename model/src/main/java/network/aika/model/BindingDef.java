@@ -22,7 +22,6 @@ import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.Field;
@@ -95,7 +94,7 @@ public class BindingDef implements TypeDefinition {
                 "BindingActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getPreFeedbackState())
+                .addStateType(typeModel.states.getNonFeedbackState())
                 .addStateType(typeModel.states.getOuterFeedbackState())
                 .addStateType(typeModel.states.getInnerFeedbackState())
                 .addParent(superType.getActivation());
@@ -114,7 +113,7 @@ public class BindingDef implements TypeDefinition {
                 "BindingCategoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getPreFeedbackState());
+                .addStateType(typeModel.states.getNonFeedbackState());
 
         categoryNeuron = new NeuronTypeDefinition(
                 "BindingCategoryNeuron",
@@ -130,7 +129,7 @@ public class BindingDef implements TypeDefinition {
                 "LatentRelationActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getPreFeedbackState())
+                .addStateType(typeModel.states.getNonFeedbackState())
                 .addParent(typeModel.conjunctive.getActivation());
 
         latentRelationNeuron = new NeuronTypeDefinition(
@@ -164,7 +163,7 @@ public class BindingDef implements TypeDefinition {
                 .setOutputNeuronType(BINDING)
                 .setTransition(SAME_INPUT)
                 .setRequired(SAME_INPUT)
-                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setStoredAt(OUTPUT)
                 .addParent(typeModel.conjunctive.getSynapse());
 
@@ -208,7 +207,7 @@ public class BindingDef implements TypeDefinition {
                 .setOutputNeuronType(BINDING)
                 .setTransition(SAME_SAME)
                 .setRequired(SAME_SAME)
-                .setTrigger(NOT_FIRED)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setOutputState(INNER_FEEDBACK)
                 .setStoredAt(OUTPUT)
                 .setPropagateRange(false);
@@ -232,7 +231,7 @@ public class BindingDef implements TypeDefinition {
                 .setOutputNeuronType(BINDING)
                 .setTransition(SAME_INPUT)
                 .setRequired(INPUT_SAME)
-                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setOutputState(OUTER_FEEDBACK)
                 .setStoredAt(OUTPUT)
                 .setRegisterInputSlot(ON_INIT);
@@ -258,7 +257,7 @@ public class BindingDef implements TypeDefinition {
                 .setOutputNeuronType(BINDING)
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
-                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setOutputState(OUTER_FEEDBACK)
                 .setPropagateRange(false)
                 .setStoredAt(OUTPUT)
@@ -306,7 +305,7 @@ public class BindingDef implements TypeDefinition {
                 .setOutputNeuronType(CATEGORY)
                 .setTransition(INPUT_INPUT, SAME_SAME)
                 .setRequired(INPUT_INPUT)
-                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setStoredAt(INPUT);
 
 
@@ -326,8 +325,8 @@ public class BindingDef implements TypeDefinition {
                 .setOutputNeuronType(BINDING)
                 .setTransition(INPUT_INPUT, SAME_SAME)
                 .setRequired(INPUT_INPUT)
-                .setOutputState(PRE_FEEDBACK)
-                .setTrigger(FIRED_PRE_FEEDBACK)
+                .setOutputState(NON_FEEDBACK)
+                .setTrigger(FIRED_NON_FEEDBACK)
                 .setStoredAt(OUTPUT)
                 .setTrainingAllowed(false)
                 .setRegisterInputSlot(ON_INIT)

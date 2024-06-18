@@ -18,10 +18,7 @@ package network.aika.elements.synapses;
 
 import network.aika.Model;
 import network.aika.elements.activations.StateType;
-import network.aika.elements.activations.bsslots.RegisterInputSlot;
-import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.queue.Timestamp;
 
@@ -54,8 +51,8 @@ public class ConjunctiveSynapse extends Synapse
         if(l.getInput() == null)
             return;
 
-        Timestamp inFired = l.getInput().getFired(StateType.PRE_FEEDBACK);
-        Timestamp outFired = l.getOutput().getFired(StateType.PRE_FEEDBACK);
+        Timestamp inFired = l.getInput().getFired(StateType.NON_FEEDBACK);
+        Timestamp outFired = l.getOutput().getFired(StateType.NON_FEEDBACK);
 
         if(inFired != null && outFired != null) {
             if(relActTimeSum == null) {
