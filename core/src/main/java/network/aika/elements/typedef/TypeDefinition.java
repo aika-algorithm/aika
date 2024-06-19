@@ -16,11 +16,13 @@
  */
 package network.aika.elements.typedef;
 
+import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fields.FieldObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -38,6 +40,19 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
     public TypeDefinition(String name, Class<? extends T> clazz) {
         this.name = name;
         this.clazz = clazz;
+    }
+
+    @Override
+    public FieldDefinition<T, ?> getFieldDef(String name) {
+        FieldDefinition<T, ?> fieldDef = getFieldDef(name);
+        if(fieldDef != null)
+            return fieldDef;
+
+        return parents.stream()
+                .map(p -> p.getFieldDef(name))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 
     public boolean isInstance(T type) {
