@@ -24,14 +24,14 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class FieldObjectDefinition<R extends FieldObject> {
+public class FieldObjectDefinition<O extends FieldObject> {
 
-    List<FieldDefinition<R, ?>> fieldDefs = new ArrayList<>();
+    List<FieldDefinition<?>> fieldDefs = new ArrayList<>();
 
     List<FieldObjectRelationDefinition> relations = new ArrayList<>();
 
 
-    public void addFieldDefinition(FieldDefinition<R, ?> fieldDef) {
+    public void addFieldDefinition(FieldDefinition<?> fieldDef) {
         fieldDef.setFieldId(fieldDefs.size());
         fieldDefs.add(fieldDef);
     }
@@ -40,7 +40,7 @@ public class FieldObjectDefinition<R extends FieldObject> {
         return fieldDefs.size();
     }
 
-    public FieldDefinition<R, ?> getFieldDef(String name) {
+    public FieldDefinition<?> getFieldDef(String name) {
         return fieldDefs.stream()
                 .filter(fd -> fd.getFieldName() == name)
                 .findFirst()

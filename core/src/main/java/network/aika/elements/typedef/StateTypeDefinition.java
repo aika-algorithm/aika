@@ -37,9 +37,9 @@ public class StateTypeDefinition extends TypeDefinition<StateTypeDefinition, Sta
 
     private ActivationTypeDefinition activationType;
 
-    public FieldDefinition<State, SumField> net;
+    public FieldDefinition<SumField> net;
 
-    public FieldDefinition<State, SumField> value;
+    public FieldDefinition<SumField> value;
 
     public StateTypeDefinition(String name, StateType type) {
         super(name, State.class);

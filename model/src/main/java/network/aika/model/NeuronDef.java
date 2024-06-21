@@ -53,6 +53,11 @@ public class NeuronDef {
 
     LinkTypeDefinition link;
 
+    public static final String INPUT_VALUE = "inputValue";
+    public static final String INPUT_IS_FIRED = "inputIsFired";
+    public static final String NEG_INPUT_IS_FIRED = "negInputIsFired";
+
+
     SynapseTypeDefinition synapse;
 
     public static final String WEIGHT = "weight";
@@ -79,7 +84,7 @@ public class NeuronDef {
                 "Link",
                 Link.class);
 
-        link.inputValue = new FieldDefinition(IdentityFunction.class, link, "input value");
+        link.addFieldDefinition(new FieldDefinition(IdentityFunction.class, link, INPUT_VALUE));
         link.inputIsFired = threshold(link, "inputIsFired", 0.0, ABOVE, link.inputValue);
         link.negInputIsFired = invert(link,"!inputIsFired", link.inputIsFired);
 
@@ -88,12 +93,13 @@ public class NeuronDef {
                 Synapse.class
         );
 
-        synapse.addFieldDefinition(new FieldDefinition<>(SumField.class, synapse, WEIGHT, TOLERANCE)
-                .setQueued(TRAINING)
-                .addListener("onWeightModified", (r, fl, u) -> {
+        synapse.addFieldDefinition(
+                new FieldDefinition<>(SumField.class, synapse, WEIGHT, TOLERANCE)
+                        .setQueued(TRAINING)
+                        .addListener("onWeightModified", (r, fl, u) -> {
 //                    r.checkWeight();
-                    r.setModified();
-                })
+                            r.setModified();
+                        })
         );
     }
 

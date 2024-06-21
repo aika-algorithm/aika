@@ -21,7 +21,7 @@ import network.aika.fields.link.AbstractFieldLink;
 /**
  * @author Lukas Molzberger
  */
-public interface ReferencedUpdateListener<R extends FieldObject, F extends AbstractFieldLink> {
+public interface ReferencedUpdateListener<F extends AbstractFieldLink> {
 
-    void receiveUpdate(R ref, F fl, double u);
+    void receiveUpdate(FieldObject ref, F fl, double u);
 }

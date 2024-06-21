@@ -4,7 +4,7 @@ package network.aika.fields;
 /**
  * @author Lukas Molzberger
  */
-public interface ReferencedBiFunction<R extends FieldObject> {
+public interface ReferencedBiFunction {
 
-    double f(R ref, double a, double b);
+    double f(FieldObject ref, double a, double b);
 }

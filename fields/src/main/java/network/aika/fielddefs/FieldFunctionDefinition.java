@@ -20,29 +20,28 @@ import network.aika.fields.FieldFunction;
 import network.aika.fields.FieldObject;
 import network.aika.fields.ReferencedFunction;
 
-import java.util.function.DoubleUnaryOperator;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldFunctionDefinition<R extends FieldObject> extends FieldDefinition<R, FieldFunction> {
+public class FieldFunctionDefinition extends FieldDefinition<FieldFunction> {
 
-    ReferencedFunction<R> f;
+    ReferencedFunction f;
 
-    public FieldFunctionDefinition(FieldObjectDefinition<R> ref, String name, ReferencedFunction<R> f) {
+    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, ReferencedFunction f) {
         super(FieldFunction.class, ref, name);
 
         this.f = f;
     }
 
-    public FieldFunctionDefinition(FieldObjectDefinition<R> ref, String name, double tolerance, ReferencedFunction<R> f) {
+    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, double tolerance, ReferencedFunction f) {
         super(FieldFunction.class, ref, name, tolerance);
 
         this.f = f;
     }
 
     @Override
-    public FieldFunction<R> instantiate(R reference) {
+    public FieldFunction instantiate(FieldObject reference) {
         FieldFunction ff = super.instantiate(reference);
         ff.setFunction(f);
         return ff;

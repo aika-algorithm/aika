@@ -29,7 +29,7 @@ import java.util.Objects;
  *
  * @author Lukas Molzberger
  */
-public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends Type<D, T> & FieldObject<T, D>> extends FieldObjectDefinition<T> {
+public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends Type<D, T> & FieldObject> extends FieldObjectDefinition<T> {
 
     private String name;
 
@@ -43,8 +43,8 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
     }
 
     @Override
-    public FieldDefinition<T, ?> getFieldDef(String name) {
-        FieldDefinition<T, ?> fieldDef = getFieldDef(name);
+    public FieldDefinition<?> getFieldDef(String name) {
+        FieldDefinition<?> fieldDef = getFieldDef(name);
         if(fieldDef != null)
             return fieldDef;
 

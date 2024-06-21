@@ -24,20 +24,20 @@ import network.aika.queue.QueueProvider;
 /**
  * @author Lukas Molzberger
  */
-public abstract class FieldObjectImpl<R extends FieldObject<R, D>, D extends FieldObjectDefinition<R>> implements FieldObject<R, D>, QueueProvider {
+public abstract class FieldObjectImpl implements FieldObject, QueueProvider {
 
-    private D typeDefinition;
+    private FieldObjectDefinition typeDefinition;
 
     private Field[] fields;
 
     @Override
-    public void setTypeDefinition(D typeDef) {
+    public void setTypeDefinition(FieldObjectDefinition typeDef) {
         this.fields = new Field[typeDef.getNumberOfFields()];
         this.typeDefinition = typeDef;
     }
 
     @Override
-    public D getTypeDefinition() {
+    public FieldObjectDefinition getTypeDefinition() {
         return typeDefinition;
     }
 

@@ -24,24 +24,24 @@ import java.util.function.DoubleFunction;
 /**
  * @author Lukas Molzberger
  */
-public class BiFunctionFieldDefinition<R extends FieldObject> extends FieldDefinition<R, BiFunction> {
+public class BiFunctionFieldDefinition extends FieldDefinition<BiFunction> {
 
-    ReferencedBiFunction<R> f;
+    ReferencedBiFunction f;
 
-    public BiFunctionFieldDefinition(FieldObjectDefinition<R> ref, String name, ReferencedBiFunction<R> f) {
+    public BiFunctionFieldDefinition(FieldObjectDefinition ref, String name, ReferencedBiFunction f) {
         super(BiFunction.class, ref, name);
 
         this.f = f;
     }
 
-    public BiFunctionFieldDefinition(FieldObjectDefinition<R> ref, String name, double tolerance, ReferencedBiFunction<R> f) {
+    public BiFunctionFieldDefinition(FieldObjectDefinition ref, String name, double tolerance, ReferencedBiFunction f) {
         super(BiFunction.class, ref, name, tolerance);
 
         this.f = f;
     }
 
     @Override
-    public BiFunction instantiate(R reference) {
+    public BiFunction instantiate(FieldObject reference) {
         BiFunction ff = super.instantiate(reference);
         ff.setFunction(f);
         return ff;

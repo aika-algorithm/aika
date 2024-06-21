@@ -23,11 +23,11 @@ import java.util.function.DoubleUnaryOperator;
 /**
  * @author Lukas Molzberger
  */
-public class FieldFunction<R extends FieldObject> extends AbstractFunction<R> {
+public class FieldFunction extends AbstractFunction {
 
     private ReferencedFunction function;
 
-    public FieldFunction(R ref, String label, Double tolerance) {
+    public FieldFunction(FieldObject ref, String label, Double tolerance) {
         super(ref, label, tolerance);
     }
 

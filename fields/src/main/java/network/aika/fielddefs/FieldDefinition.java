@@ -30,13 +30,13 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<R extends FieldObject, F extends Field> implements FieldInputDefinition, FieldOutputDefinition {
+public class FieldDefinition<F extends Field> implements FieldInputDefinition, FieldOutputDefinition {
 
     protected int fieldId;
 
     protected Class<F> clazz;
 
-    protected FieldObjectDefinition<R> ref;
+    protected FieldObjectDefinition ref;
 
     protected String fieldName;
 
@@ -49,7 +49,7 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
     protected boolean isNextRound;
 
 
-    public FieldDefinition(Class<F> clazz, FieldObjectDefinition<R> ref, String name) {
+    public FieldDefinition(Class<F> clazz, FieldObjectDefinition ref, String name) {
         this.clazz = clazz;
         this.fieldName = name;
         this.ref = ref;
@@ -57,13 +57,13 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         ref.addFieldDefinition(this);
     }
 
-    public FieldDefinition(Class<F> clazz, FieldObjectDefinition<R> ref, String name, double tolerance) {
+    public FieldDefinition(Class<F> clazz, FieldObjectDefinition ref, String name, double tolerance) {
         this(clazz, ref, name);
 
         this.tolerance = tolerance;
     }
 
-    public F instantiate(R reference) {
+    public F instantiate(FieldObject reference) {
         try {
             F instance = clazz
                     .getConstructor(FieldObject.class)
@@ -82,13 +82,13 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         }
     }
 
-    public FieldDefinition<R, F> setFieldId(int id) {
+    public FieldDefinition<F> setFieldId(int id) {
         fieldId = id;
 
         return this;
     }
 
-    public FieldDefinition<R, F> addListener(String name, ReferencedUpdateListener<R, ?> listener) {
+    public FieldDefinition<F> addListener(String name, ReferencedUpdateListener<?> listener) {
 
         return this;
     }
@@ -101,17 +101,17 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         return clazz;
     }
 
-    public FieldDefinition<R, F> setClazz(Class<F> clazz) {
+    public FieldDefinition<F> setClazz(Class<F> clazz) {
         this.clazz = clazz;
 
         return this;
     }
 
-    public FieldObjectDefinition<R> getReference() {
+    public FieldObjectDefinition getReference() {
         return ref;
     }
 
-    public FieldDefinition<R, F> setRef(FieldObjectDefinition<R> ref) {
+    public FieldDefinition<F> setRef(FieldObjectDefinition ref) {
         this.ref = ref;
 
         return this;
@@ -121,7 +121,7 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         return fieldName;
     }
 
-    public FieldDefinition<R, F> setFieldName(String fieldName) {
+    public FieldDefinition<F> setFieldName(String fieldName) {
         this.fieldName = fieldName;
 
         return this;
@@ -131,7 +131,7 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         return tolerance;
     }
 
-    public FieldDefinition<R, F> setTolerance(Double tolerance) {
+    public FieldDefinition<F> setTolerance(Double tolerance) {
         this.tolerance = tolerance;
 
         return this;
@@ -141,7 +141,7 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         return phase;
     }
 
-    public FieldDefinition<R, F> setPhase(ProcessingPhase phase) {
+    public FieldDefinition<F> setPhase(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;
@@ -151,13 +151,13 @@ public class FieldDefinition<R extends FieldObject, F extends Field> implements 
         return isNextRound;
     }
 
-    public FieldDefinition<R, F> setNextRound(boolean nextRound) {
+    public FieldDefinition<F> setNextRound(boolean nextRound) {
         isNextRound = nextRound;
 
         return this;
     }
 
-    public FieldDefinition<R, F> setQueued(ProcessingPhase phase) {
+    public FieldDefinition<F> setQueued(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;

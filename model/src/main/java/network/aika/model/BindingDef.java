@@ -26,6 +26,7 @@ import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.Field;
 import network.aika.fields.MaxField;
+import network.aika.fields.ScaleFunction;
 
 
 import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
@@ -83,7 +84,7 @@ public class BindingDef implements TypeDefinition {
     private SynapseTypeDefinition categorySynapse;
 
 
-    FieldDefinition<Synapse, Field> negativeWeight;
+    FieldDefinition<ScaleFunction> negativeWeight;
 
     public BindingDef(TypeModel typeModel, ConjunctiveDef superType) {
         this.typeModel = typeModel;

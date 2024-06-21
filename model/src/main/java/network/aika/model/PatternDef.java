@@ -68,9 +68,9 @@ public class PatternDef implements TypeDefinition {
     private SynapseTypeDefinition categorySynapse;
 
 
-    FieldDefinition<Neuron, AverageCoveredSpace> averageCoveredSpace;
+    FieldDefinition<AverageCoveredSpace> averageCoveredSpace;
 
-    FieldDefinition<Neuron, NeuronStatistic> neuronStatistic;
+    FieldDefinition<NeuronStatistic> neuronStatistic;
 
 
     public PatternDef(TypeModel typeModel, ConjunctiveDef superType) {

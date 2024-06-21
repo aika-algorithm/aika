@@ -23,7 +23,7 @@ import network.aika.fields.FieldObjectImpl;
  *
  * @author Lukas Molzberger
  */
-public abstract class Type<D extends TypeDefinition<D, T>, T extends Type<D, T> & FieldObject<T, D>> extends FieldObjectImpl<T, D> implements FieldObject<T, D> {
+public abstract class Type<D extends TypeDefinition<D, T>, T extends Type<D, T> & FieldObject> extends FieldObjectImpl {
 
     protected D typeDef;
 

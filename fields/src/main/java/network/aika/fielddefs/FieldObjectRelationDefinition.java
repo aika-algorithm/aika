@@ -16,18 +16,17 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.fields.FieldObject;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldObjectRelationDefinition<R extends FieldObject> {
+public class FieldObjectRelationDefinition {
 
     private int relId;
 
-    private FieldObjectDefinition<R> relatedObject;
+    private FieldObjectDefinition relatedObject;
 
-    public FieldObjectRelationDefinition(int relId, FieldObjectDefinition<R> relatedObject) {
+    public FieldObjectRelationDefinition(int relId, FieldObjectDefinition relatedObject) {
         this.relId = relId;
         this.relatedObject = relatedObject;
     }
@@ -36,7 +35,7 @@ public class FieldObjectRelationDefinition<R extends FieldObject> {
         return relId;
     }
 
-    public FieldObjectDefinition<R> getRelatedObject() {
+    public FieldObjectDefinition getRelatedObject() {
         return relatedObject;
     }
 }
