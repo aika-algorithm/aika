@@ -29,7 +29,7 @@ import java.util.Objects;
  *
  * @author Lukas Molzberger
  */
-public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends Type<D, T> & FieldObject> extends FieldObjectDefinition<T> {
+public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends Type<D, T> & FieldObject> extends FieldObjectDefinition {
 
     private String name;
 

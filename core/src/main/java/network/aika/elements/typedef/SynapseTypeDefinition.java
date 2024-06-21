@@ -28,6 +28,7 @@ import network.aika.fields.Field;
 import network.aika.fields.SumField;
 
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
 
 /**
  *
@@ -37,11 +38,11 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     private LinkTypeDefinition linkType;
 
-    private NeuronType inputNeuronType;
+    private NeuronTypeDefinition inputDef;
 
     private SynapseSlotTypeDefinition inputSlotType;
 
-    private NeuronType outputNeuronType;
+    private NeuronTypeDefinition outputDef;
 
     private SynapseSlotTypeDefinition outputSlotType;
 
@@ -66,6 +67,15 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     public SynapseTypeDefinition(String name, Class<? extends Synapse> clazz) {
         super(name, clazz);
+    }
+
+
+    public NeuronTypeDefinition getInput(Path pathCollector) {
+        return inputDef;
+    }
+
+    public NeuronTypeDefinition getOutput(Path pathCollector) {
+        return outputDef;
     }
 
     public SynapseSlotTypeDefinition getInputSlotType() {
@@ -94,14 +104,22 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
         return this;
     }
 
-    public SynapseTypeDefinition setInputNeuronType(NeuronType inputNeuronType) {
-        this.inputNeuronType = inputNeuronType;
+    public NeuronTypeDefinition getInputDef() {
+        return inputDef;
+    }
+
+    public SynapseTypeDefinition setInputDef(NeuronTypeDefinition inputDef) {
+        this.inputDef = inputDef;
 
         return this;
     }
 
-    public SynapseTypeDefinition setOutputNeuronType(NeuronType outputNeuronType) {
-        this.outputNeuronType = outputNeuronType;
+    public NeuronTypeDefinition getOutputDef() {
+        return outputDef;
+    }
+
+    public SynapseTypeDefinition setOutputDef(NeuronTypeDefinition outputDef) {
+        this.outputDef = outputDef;
 
         return this;
     }
@@ -150,14 +168,6 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     public LinkTypeDefinition getLinkType() {
         return linkType;
-    }
-
-    public NeuronType getInputType() {
-        return inputNeuronType;
-    }
-
-    public NeuronType getOutputType() {
-        return outputNeuronType;
     }
 
     public Transition[] getTransition() {

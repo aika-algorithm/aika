@@ -34,6 +34,9 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public class StateDef {
 
+    public static final String NET = "net";
+
+
     TypeModel typeModel;
 
     StateTypeDefinition state;
@@ -47,7 +50,7 @@ public class StateDef {
         state = new StateTypeDefinition(name, stateType)
                 .setNextRound(stateType == OUTER_FEEDBACK);
 
-        state.net = new FieldDefinition<>(SumField.class, state, "net");
+        state.net = new FieldDefinition<>(SumField.class, state, NET);
 
         state.net.addListener("onFired", (r, fl, u) ->
                 r.updateFiredStep(fl)

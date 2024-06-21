@@ -17,35 +17,49 @@
 package network.aika.fielddefs;
 
 
+import java.util.function.BiConsumer;
+
 /**
  * @author Lukas Molzberger
  */
 public class FieldLinkDefinition {
 
+    private Path objectPath;
+
+    private FieldOutputDefinition in;
+
+    private FieldInputDefinition out;
+
     boolean propagateUpdates;
 
-    public FieldLinkDefinition(FieldOutputDefinition in, int arg, FieldInputDefinition out) {
-
+    public FieldLinkDefinition(Path path, FieldOutputDefinition in, int arg, FieldInputDefinition out) {
+        this.objectPath = path;
+        this.in = in;
+        this.out = out;
     }
 
-    public static FieldLinkDefinition link(FieldOutputDefinition in, int arg, FieldInputDefinition out) {
-        FieldLinkDefinition fl = new FieldLinkDefinition(in, arg, out);
+    public static <O extends FieldObjectDefinition> FieldLinkDefinition link(O o, BiConsumer<O, Path> pathProvider, String inLabel, Integer arg, String outLabel) {
+        Path objectPath = new Path();
+        pathProvider.accept(o, objectPath);
+
+        FieldOutputDefinition in = o.getFieldDef(inLabel);
+        FieldInputDefinition out = objectPath.getToObject().getFieldDef(outLabel);
+
+        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, in, arg, out);
         out.addInput(fl);
         in.addOutput(fl);
         return fl;
     }
 
-    public static FieldLinkDefinition link(FieldOutputDefinition in, FieldInputDefinition out) {
-        return link(in, out.size(), out);
+    public static <O extends FieldObjectDefinition> FieldLinkDefinition link(O o, BiConsumer<O, Path> pathProvider, String inLabel, String outLabel) {
+        return link(o, pathProvider, inLabel, null, outLabel);
     }
 
 
-    public static void linkAll(FieldOutputDefinition in, FieldInputDefinition... out) {
-        assert in != null;
-
-        for(FieldInputDefinition o : out) {
+    public static <O extends FieldObjectDefinition> void linkAll(O o, BiConsumer<O, Path> pathProvider, String inLabel, String... outLabels) {
+        for(String outLabel : outLabels) {
             if(o != null) {
-                link(in, 0, o);
+                link(o, pathProvider, inLabel, 0, outLabel);
             }
         }
     }

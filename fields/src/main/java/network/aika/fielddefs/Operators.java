@@ -19,6 +19,7 @@ package network.aika.fielddefs;
 import network.aika.fields.*;
 import network.aika.utils.ToleranceUtils;
 
+import java.util.function.BiConsumer;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 
@@ -113,7 +114,7 @@ public class Operators {
         return mul;
     }
 
-    public static <F extends Field> FieldDefinition<F> mul(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, boolean connect1, boolean propagateUpdates1, FieldOutputDefinition in2, boolean connect2, boolean propagateUpdates2) {
+    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> mul(O ref, String label, FieldOutputDefinition in1, boolean connect1, boolean propagateUpdates1, FieldOutputDefinition in2, boolean connect2, boolean propagateUpdates2) {
         if(in1 == null || in2 == null)
             return null;
 
@@ -127,19 +128,19 @@ public class Operators {
         return mul;
     }
 
-    public static <F extends Field> FieldDefinition<F> mul(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
+    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> mul(O ref, String label, BiConsumer<O, Path> pathProvider1, FieldOutputDefinition in1, BiConsumer<O, Path> pathProvider2, FieldOutputDefinition in2) {
         if(in1 == null || in2 == null)
             return null;
 
         FieldDefinition mul = new FieldDefinition(Multiplication.class, ref, label);
-        link(in1, 0, mul);
-        link(in2, 1, mul);
+        link(pathProvider1, in1, 0, mul);
+        link(pathProvider2, in2, 1, mul);
 
         return mul;
     }
 
-    public static <F extends Field> FieldDefinition<F> mul(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2, FieldInputDefinition... out) {
-        FieldDefinition mul = mul(ref, label, in1, in2);
+    public static <F extends Field> FieldDefinition<F> mul(FieldObjectDefinition ref, String label, BiConsumer<FieldLinkDefinition, Path> pathProvider1, FieldOutputDefinition in1, BiConsumer<FieldLinkDefinition, Path> pathProvider2, FieldOutputDefinition in2, FieldInputDefinition... out) {
+        FieldDefinition mul = mul(ref, label, pathProvider1, in1, pathProvider2, in2);
         linkAll(mul, out);
         return mul;
     }

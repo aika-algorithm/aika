@@ -20,6 +20,7 @@ import network.aika.elements.typedef.StateTypeDefinition;
 
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.fielddefs.FieldLinkDefinition.link;
+import static network.aika.model.StateDef.NET;
 
 /**
  *
@@ -43,13 +44,13 @@ public class StatesDef {
         innerFeedbackState.init("InnerFeedbackState", INNER_FEEDBACK);
 
         link(
-                nonFeedbackState.state.getFieldDef("net"),
-                outerFeedbackState.state.getFieldDef("net")
+                nonFeedbackState.state.getFieldDef(NET),
+                outerFeedbackState.state.getFieldDef(NET)
         );
 
         link(
-                outerFeedbackState.state.getFieldDef("net"),
-                innerFeedbackState.state.getFieldDef("net")
+                outerFeedbackState.state.getFieldDef(NET),
+                innerFeedbackState.state.getFieldDef(NET)
         );
     }
 

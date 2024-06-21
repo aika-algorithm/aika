@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class FieldObjectDefinition<O extends FieldObject> {
+public class FieldObjectDefinition {
 
     List<FieldDefinition<?>> fieldDefs = new ArrayList<>();
 

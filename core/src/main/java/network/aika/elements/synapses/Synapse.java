@@ -91,11 +91,11 @@ public abstract class Synapse extends Type<SynapseTypeDefinition, Synapse> imple
     }
 
     public NeuronType getInputType() {
-        return typeDef.getInputType();
+        return typeDef.getInputDef().getType();
     }
 
     public NeuronType getOutputType() {
-        return typeDef.getOutputType();
+        return typeDef.getOutputDef().getType();
     }
 
     public Transition[] getTransition() {
