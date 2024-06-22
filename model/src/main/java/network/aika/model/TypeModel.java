@@ -23,8 +23,6 @@ package network.aika.model;
  */
 public class TypeModel {
 
-    StatesDef states = new StatesDef(this);
-
     NeuronDef neuron = new NeuronDef(this);
 
     ConjunctiveDef conjunctive = new ConjunctiveDef(neuron);
@@ -37,18 +35,12 @@ public class TypeModel {
     InhibitoryDef inhibitory = new InhibitoryDef(this, disjunctive);
 
     public TypeModel() {
-        states.init();
         neuron.init();
         conjunctive.init();
         disjunctive.init();
         binding.init();
         pattern.init();
         inhibitory.init();
-    }
-
-
-    public StatesDef getStates() {
-        return states;
     }
 
     public NeuronDef getNeuron() {

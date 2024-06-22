@@ -40,6 +40,7 @@ public class FieldLinkDefinition {
 
     public static <O extends FieldObjectDefinition> FieldLinkDefinition link(O o, BiConsumer<O, Path> pathProvider, String inLabel, Integer arg, String outLabel) {
         Path objectPath = new Path();
+        objectPath.add(o);
         pathProvider.accept(o, objectPath);
 
         FieldOutputDefinition in = o.getFieldDef(inLabel);

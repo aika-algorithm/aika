@@ -20,15 +20,13 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.typedef.ActivationTypeDefinition;
-import network.aika.elements.typedef.LinkTypeDefinition;
-import network.aika.elements.typedef.NeuronTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.Field;
 import network.aika.fields.IdentityFunction;
 import network.aika.fields.SumField;
 
+import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.fielddefs.Operators.invert;
 import static network.aika.fielddefs.Operators.threshold;
 import static network.aika.fields.ThresholdOperator.Type.ABOVE;
@@ -42,6 +40,8 @@ import static network.aika.utils.Utils.TOLERANCE;
 public class NeuronDef {
 
     TypeModel typeModel;
+
+    StateDef nonFeedbackState = new StateDef(typeModel);
 
     ConjunctiveDef conjunctiveDef;
 
@@ -70,6 +70,8 @@ public class NeuronDef {
     }
 
     public void init() {
+        nonFeedbackState.init("NonFeedbackState", NON_FEEDBACK);
+
         activation = new ActivationTypeDefinition(
                 "Activation",
                 Activation.class
@@ -105,6 +107,10 @@ public class NeuronDef {
 
     public TypeModel getTypeModel() {
         return typeModel;
+    }
+
+    public StateTypeDefinition getNonFeedbackState() {
+        return nonFeedbackState.state;
     }
 
     public ActivationTypeDefinition getActivation() {

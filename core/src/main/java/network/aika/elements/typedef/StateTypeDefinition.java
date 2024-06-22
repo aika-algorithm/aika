@@ -21,6 +21,7 @@ import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldObjectDefinition;
+import network.aika.fielddefs.Path;
 import network.aika.fields.SumField;
 
 import java.lang.reflect.InvocationTargetException;
@@ -56,6 +57,12 @@ public class StateTypeDefinition extends TypeDefinition<StateTypeDefinition, Sta
     }
 
     public ActivationTypeDefinition getActivationType() {
+        return activationType;
+    }
+
+    public ActivationTypeDefinition getActivationType(Path p) {
+        p.add(activationType);
+
         return activationType;
     }
 

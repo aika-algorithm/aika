@@ -43,6 +43,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.Operators.scale;
 import static network.aika.model.NeuronDef.WEIGHT;
+import static network.aika.model.StateDef.NET;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -54,6 +55,9 @@ public class BindingDef implements TypeDefinition {
     private TypeModel typeModel;
 
     private ConjunctiveDef superType;
+
+    StateDef outerFeedbackState = new StateDef(typeModel);
+    StateDef innerFeedbackState = new StateDef(typeModel);
 
     private ActivationTypeDefinition activation;
     private NeuronTypeDefinition neuron;
@@ -91,15 +95,31 @@ public class BindingDef implements TypeDefinition {
         this.superType = superType;
     }
 
-
     public void init() {
+        outerFeedbackState.init("OuterFeedbackState", OUTER_FEEDBACK);
+        innerFeedbackState.init("InnerFeedbackState", INNER_FEEDBACK);
+
+        link(
+                activation.getStateType(NON_FEEDBACK),
+                (o,p) -> o.getActivationType(p).getStateType(p, OUTER_FEEDBACK),
+                NET,
+                NET
+        );
+
+        link(
+                activation.getStateType(OUTER_FEEDBACK),
+                (o,p) -> o.getActivationType(p).getStateType(p, INNER_FEEDBACK),
+                NET,
+                NET
+        );
+
         activation = new ActivationTypeDefinition(
                 "BindingActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getNonFeedbackState())
-                .addStateType(typeModel.states.getOuterFeedbackState())
-                .addStateType(typeModel.states.getInnerFeedbackState())
+                .addStateType(activation.getStateType(NON_FEEDBACK))
+                .addStateType(outerFeedbackState.state)
+                .addStateType(innerFeedbackState.state)
                 .addParent(superType.getActivation());
 
         neuron = new NeuronTypeDefinition(
@@ -116,7 +136,7 @@ public class BindingDef implements TypeDefinition {
                 "BindingCategoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getNonFeedbackState());
+                .addStateType(activation.getStateType(NON_FEEDBACK));
 
         categoryNeuron = new NeuronTypeDefinition(
                 "BindingCategoryNeuron",
@@ -132,7 +152,7 @@ public class BindingDef implements TypeDefinition {
                 "LatentRelationActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getNonFeedbackState())
+                .addStateType(activation.getStateType(NON_FEEDBACK))
                 .addParent(typeModel.conjunctive.getActivation());
 
         latentRelationNeuron = new NeuronTypeDefinition(
@@ -347,6 +367,14 @@ public class BindingDef implements TypeDefinition {
                 .setInstanceSynapseType(categoryInputSynapse);
 
         categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
+    }
+
+    public StateTypeDefinition getOuterFeedbackState() {
+        return outerFeedbackState.state;
+    }
+
+    public StateTypeDefinition getInnerFeedbackState() {
+        return innerFeedbackState.state;
     }
 
     public ActivationTypeDefinition getLatentRelationActivation() {

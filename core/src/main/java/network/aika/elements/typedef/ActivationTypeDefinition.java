@@ -23,6 +23,7 @@ import network.aika.elements.activations.StateType;
 import network.aika.elements.neurons.Neuron;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldOutputDefinition;
+import network.aika.fielddefs.Path;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -62,6 +63,16 @@ public class ActivationTypeDefinition extends TypeDefinition<ActivationTypeDefin
         stateType.setActivationType(this);
 
         return this;
+    }
+
+    public StateTypeDefinition getStateType(StateType stateType) {
+        return stateTypes.get(stateType.ordinal());
+    }
+
+    public StateTypeDefinition getStateType(Path p, StateType stateType) {
+        StateTypeDefinition s = getStateType(stateType);
+        p.add(s);
+        return s;
     }
 
     public FieldDefinition getNet(StateType stateType) {
