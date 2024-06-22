@@ -69,7 +69,7 @@ public class InhibitoryDef implements TypeDefinition {
                 "InhibitoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getNonFeedbackState());
+                .addStateType(typeModel.neuron.getNonFeedbackState());
 
         neuron = new NeuronTypeDefinition(
                 "InhibitoryNeuron",
@@ -85,7 +85,7 @@ public class InhibitoryDef implements TypeDefinition {
                 "InhibitoryCategoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getNonFeedbackState());
+                .addStateType(typeModel.neuron.getNonFeedbackState());
 
         categoryNeuron = new NeuronTypeDefinition(
                 "InhibitoryCategoryNeuron",
@@ -112,8 +112,8 @@ public class InhibitoryDef implements TypeDefinition {
                 .setLinkType(link)
                 .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
                 .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(BINDING)
-                .setOutputNeuronType(INHIBITORY)
+                .setInputNeuronType(typeModel.binding.getNeuron())
+                .setOutputNeuronType(neuron)
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
                 .setTrigger(FIRED_NON_FEEDBACK)
@@ -131,8 +131,8 @@ public class InhibitoryDef implements TypeDefinition {
                 .setLinkType(primaryLink)
                 .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
                 .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(PATTERN)
-                .setOutputNeuronType(INHIBITORY)
+                .setInputNeuronType(typeModel.pattern.getNeuron())
+                .setOutputNeuronType(neuron)
                 .setTransition(SAME_INPUT)
                 .setRequired(SAME_INPUT)
                 .setTrigger(FIRED_NON_FEEDBACK)
@@ -150,8 +150,8 @@ public class InhibitoryDef implements TypeDefinition {
                 .setLinkType(categoryLink)
                 .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
                 .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(INHIBITORY)
-                .setOutputNeuronType(CATEGORY)
+                .setInputNeuronType(neuron)
+                .setOutputNeuronType(categoryNeuron)
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
                 .setTrigger(FIRED_NON_FEEDBACK)
@@ -169,8 +169,8 @@ public class InhibitoryDef implements TypeDefinition {
                 .setLinkType(categoryInputLink)
                 .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
                 .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(CATEGORY)
-                .setOutputNeuronType(BINDING)
+                .setInputNeuronType(categoryNeuron)
+                .setOutputNeuronType(typeModel.binding.getNeuron())
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
                 .setOutputState(NON_FEEDBACK)

@@ -16,16 +16,12 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.elements.NeuronType;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.RegisterInputSlot;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fields.Field;
-import network.aika.fields.SumField;
 
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
@@ -108,7 +104,7 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
         return inputDef;
     }
 
-    public SynapseTypeDefinition setInputDef(NeuronTypeDefinition inputDef) {
+    public SynapseTypeDefinition setInputNeuronType(NeuronTypeDefinition inputDef) {
         this.inputDef = inputDef;
 
         return this;
@@ -118,7 +114,7 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
         return outputDef;
     }
 
-    public SynapseTypeDefinition setOutputDef(NeuronTypeDefinition outputDef) {
+    public SynapseTypeDefinition setOutputNeuronType(NeuronTypeDefinition outputDef) {
         this.outputDef = outputDef;
 
         return this;

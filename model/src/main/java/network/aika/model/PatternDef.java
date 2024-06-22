@@ -85,7 +85,7 @@ public class PatternDef implements TypeDefinition {
                 "PatternActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getNonFeedbackState());
+                .addStateType(typeModel.neuron.getNonFeedbackState());
 
         neuron = new NeuronTypeDefinition(
                 "PatternNeuron",
@@ -117,7 +117,7 @@ public class PatternDef implements TypeDefinition {
                 "PatternCategoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.states.getNonFeedbackState());
+                .addStateType(typeModel.neuron.getNonFeedbackState());
 
         categoryNeuron = new NeuronTypeDefinition(
                 "PatternCategoryNeuron",
@@ -145,8 +145,8 @@ public class PatternDef implements TypeDefinition {
                 .setLinkType(link)
                 .setInputSlotType(typeModel.conjunctive.getSynapseInputSlot())
                 .setOutputSlotType(typeModel.conjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(BINDING)
-                .setOutputNeuronType(PATTERN)
+                .setInputNeuronType(typeModel.binding.getNeuron())
+                .setOutputNeuronType(neuron)
                 .setTransition(SAME_SAME, INPUT_INPUT)
                 .setRequired(SAME_SAME)
                 .setTrigger(FIRED_OUTER_FEEDBACK)
@@ -166,8 +166,8 @@ public class PatternDef implements TypeDefinition {
                 .setLinkType(categoryLink)
                 .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
                 .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(PATTERN)
-                .setOutputNeuronType(CATEGORY)
+                .setInputNeuronType(neuron)
+                .setOutputNeuronType(categoryNeuron)
                 .setTransition(SAME_SAME)
                 .setRequired(SAME_SAME)
                 .setTrigger(FIRED_NON_FEEDBACK)
@@ -188,8 +188,8 @@ public class PatternDef implements TypeDefinition {
                 .setLinkType(categoryInputLink)
                 .setInputSlotType(superType.getSynapseInputSlot())
                 .setOutputSlotType(superType.getSynapseOutputSlot())
-                .setInputNeuronType(CATEGORY)
-                .setOutputNeuronType(PATTERN)
+                .setInputNeuronType(categoryNeuron)
+                .setOutputNeuronType(neuron)
                 .setTransition(SAME_SAME)
                 .setRequired(SAME_SAME)
                 .setOutputState(NON_FEEDBACK)
