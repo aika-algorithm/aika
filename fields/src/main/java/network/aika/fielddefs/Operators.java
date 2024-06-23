@@ -31,7 +31,7 @@ import static network.aika.fielddefs.FieldLinkDefinition.linkAll;
  */
 public class Operators {
 
-    public static <F extends Field> FieldDefinition<F> max(FieldObjectDefinition ref, String label, FieldOutputDefinition... in) {
+    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> max(O ref, String label, String... in) {
         if(in == null)
             return null;
 
@@ -42,184 +42,145 @@ public class Operators {
         return max;
     }
 
-    public static <F extends Field> FieldDefinition<F> add(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
+    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> add(O ref, String label, BiConsumer<O, Path> pathProvider1, String in1, BiConsumer<O, Path> pathProvider2, String in2) {
         if(in1 == null || in2 == null)
             return null;
 
         FieldDefinition add = new FieldDefinition(Addition.class, ref, label);
-        link(in1, 0, add);
-        link(in2, 1, add);
+        link(ref, pathProvider1, in1, 0, label);
+        link(ref, pathProvider2, in2, 1, label);
 
         return add;
     }
 
-    public static <F extends Field> FieldDefinition<F> add(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2, FieldInputDefinition... out) {
-        FieldDefinition add = add(ref, label, in1, in2);
-        linkAll(add, out);
-        return add;
-    }
-
-    public static <F extends Field> FieldDefinition<F> sub(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
+    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> sub(O ref, String label, BiConsumer<O, Path> pathProvider1, String in1, BiConsumer<O, Path> pathProvider2, String in2) {
         if(in1 == null || in2 == null)
             return null;
 
         FieldDefinition sub = new FieldDefinition(Subtraction.class, ref, label);
-        link(in1, 0, sub);
-        link(in2, 1, sub);
+        link(ref, pathProvider1, in1, 0, label);
+        link(ref, pathProvider2, in2, 1, label);
 
         return sub;
     }
 
-    public static <F extends Field> FieldDefinition<F> mix(FieldObjectDefinition ref, String label, FieldOutputDefinition x, FieldOutputDefinition in1, FieldOutputDefinition in2) {
+    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> mix(O ref, String label, BiConsumer<O, Path> pathProviderX, String x, BiConsumer<O, Path> pathProvider1, String in1, BiConsumer<O, Path> pathProvider2, String in2) {
         if(in1 == null || in2 == null)
             return null;
 
         FieldDefinition mix = new FieldDefinition(MixFunction.class, ref, label);
 
-        link(x, 0, mix);
-        link(in1, 1, mix);
-        link(in2, 2, mix);
+        link(ref, pathProviderX, x, 0, label);
+        link(ref, pathProvider1, in1, 1, label);
+        link(ref, pathProvider2, in2, 2, label);
 
         return mix;
     }
 
-    public static <F extends Field> FieldDefinition<F> mix(FieldObjectDefinition ref, String label, FieldOutputDefinition x, FieldOutputDefinition in1, FieldOutputDefinition in2, FieldInputDefinition... out) {
-        FieldDefinition mix = mix(ref, label, x, in1, in2);
-        linkAll(mix, out);
-        return mix;
-    }
-
-    public static <F extends Field> FieldDefinition<F> excludeInput(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2) {
+    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> excludeInput(O ref, String label, BiConsumer<O, Path> pathProvider1, String in1, BiConsumer<O, Path> pathProvider2, String in2) {
         if(in1 == null || in2 == null)
             return null;
 
         FieldDefinition sub = new FieldDefinition(ExcludeInput.class, ref, label);
-        link(in1, 0, sub);
-        link(in2, 1, sub);
+        link(ref, pathProvider1, in1, 0, label);
+        link(ref, pathProvider2, in2, 1, label);
 
         return sub;
     }
 
-    public static <F extends Field> FieldDefinition<F> mul(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, boolean propagateUpdates1, FieldOutputDefinition in2, boolean propagateUpdates2) {
+    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> mul(O ref, String label, BiConsumer<O, Path> pathProvider1, String in1, boolean propagateUpdates1, BiConsumer<O, Path> pathProvider2, String in2, boolean propagateUpdates2) {
         if(in1 == null || in2 == null)
             return null;
 
         FieldDefinition mul = new FieldDefinition(Multiplication.class, ref, label);
-        FieldLinkDefinition fl1 = link(in1, 0, mul);
+        FieldLinkDefinition fl1 = link(ref, pathProvider1, in1, 0, label);
         fl1.setPropagateUpdates(propagateUpdates1);
 
-        FieldLinkDefinition fl2 = link(in2, 1, mul);
+        FieldLinkDefinition fl2 = link(ref, pathProvider2, in2, 1, label);
         fl2.setPropagateUpdates(propagateUpdates2);
 
         return mul;
     }
 
-    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> mul(O ref, String label, FieldOutputDefinition in1, boolean connect1, boolean propagateUpdates1, FieldOutputDefinition in2, boolean connect2, boolean propagateUpdates2) {
+    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> mul(O ref, String label, BiConsumer<O, Path> pathProvider1, String in1, boolean connect1, boolean propagateUpdates1, BiConsumer<O, Path> pathProvider2, String in2, boolean connect2, boolean propagateUpdates2) {
         if(in1 == null || in2 == null)
             return null;
 
         FieldDefinition mul = new FieldDefinition(Multiplication.class, ref, label);
-        FieldLinkDefinition fl1 = link(in1, 0, mul);
+        FieldLinkDefinition fl1 = link(ref, pathProvider1, in1, 0, label);
         fl1.setPropagateUpdates(propagateUpdates1);
 
-        FieldLinkDefinition fl2 = link(in2, 1, mul);
+        FieldLinkDefinition fl2 = link(ref, pathProvider2, in2, 1, label);
         fl2.setPropagateUpdates(propagateUpdates2);
 
         return mul;
     }
 
-    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> mul(O ref, String label, BiConsumer<O, Path> pathProvider1, FieldOutputDefinition in1, BiConsumer<O, Path> pathProvider2, FieldOutputDefinition in2) {
+    public static <O extends FieldObjectDefinition, F extends Field> FieldDefinition<F> mul(O ref, String label, BiConsumer<O, Path> pathProvider1, String in1, BiConsumer<O, Path> pathProvider2, String in2) {
         if(in1 == null || in2 == null)
             return null;
 
         FieldDefinition mul = new FieldDefinition(Multiplication.class, ref, label);
-        link(pathProvider1, in1, 0, mul);
-        link(pathProvider2, in2, 1, mul);
+        link(ref, pathProvider1, in1, 0, label);
+        link(ref, pathProvider2, in2, 1, label);
 
         return mul;
     }
 
-    public static <F extends Field> FieldDefinition<F> mul(FieldObjectDefinition ref, String label, BiConsumer<FieldLinkDefinition, Path> pathProvider1, FieldOutputDefinition in1, BiConsumer<FieldLinkDefinition, Path> pathProvider2, FieldOutputDefinition in2, FieldInputDefinition... out) {
-        FieldDefinition mul = mul(ref, label, pathProvider1, in1, pathProvider2, in2);
-        linkAll(mul, out);
-        return mul;
-    }
-
-    public static FieldDefinition<FieldFunction> func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, ReferencedFunction f) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<FieldFunction> func(O ref, String label, Double tolerance, BiConsumer<O, Path> pathProvider, String in, ReferencedFunction f) {
         if(in == null)
             return null;
 
         FieldDefinition<FieldFunction> func = new FieldFunctionDefinition(ref, label, tolerance, f);
-        link(in, 0, func);
+        link(ref, pathProvider,in, 0, label);
 
         return func;
     }
 
-    public static <F extends Field> FieldDefinition<FieldFunction> func(FieldObjectDefinition ref, String label, Double tolerance, FieldOutputDefinition in, ReferencedFunction f, FieldInputDefinition... out) {
-        if(in == null)
-            return null;
-
-        FieldDefinition<FieldFunction> func = func(ref, label, tolerance, in, f);
-        linkAll(func, out);
-        return func;
-    }
-
-    public static FieldDefinition<BiFunction> func(FieldObjectDefinition ref, String label, FieldOutputDefinition in1, FieldOutputDefinition in2, ReferencedBiFunction f) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<BiFunction> func(O ref, String label, BiConsumer<O, Path> pathProvider1, String in1, BiConsumer<O, Path> pathProvider2, String in2, ReferencedBiFunction f) {
         if(in1 == null || in2 == null)
             return null;
 
         FieldDefinition<BiFunction> func = new BiFunctionFieldDefinition(ref, label, f);
-        link(in1, 0, func);
-        link(in2, 1, func);
+        link(ref, pathProvider1, in1, 0, label);
+        link(ref, pathProvider1, in2, 1, label);
 
         return func;
     }
 
-    public static FieldDefinition<BiFunction> func(FieldObjectDefinition ref, String label, FieldOutput in1, FieldOutput in2, ReferencedFunction f, FieldInputDefinition... out) {
-        FieldDefinition<BiFunction> func = func(ref, label, in1, in2, f);
-        linkAll(func, out);
-        return func;
-    }
-
-    public static FieldDefinition<ThresholdOperator> threshold(FieldObjectDefinition ref, String label, double threshold, ThresholdOperator.Type type, FieldOutputDefinition in) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<ThresholdOperator> threshold(O ref, String label, double threshold, ThresholdOperator.Type type, BiConsumer<O, Path> pathProvider, String in) {
         if(in == null)
             return null;
 
         FieldDefinition<ThresholdOperator> op = new ThresholdOperatorFieldDefinition(ref, label, threshold, type);
-        link(in, 0, op);
+        link(ref, pathProvider, in, 0, label);
         return op;
     }
 
-    public static FieldDefinition<ThresholdOperator> threshold(FieldObjectDefinition ref, String label, double threshold, ThresholdOperator.Type type, boolean isFinal, FieldOutputDefinition in) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<ThresholdOperator> threshold(O ref, String label, double threshold, ThresholdOperator.Type type, boolean isFinal, BiConsumer<O, Path> pathProvider, String in) {
         if(in == null)
             return null;
 
         FieldDefinition<ThresholdOperator> op = new ThresholdOperatorFieldDefinition(ref, label, threshold, type, isFinal);
-        link(in, 0, op);
+        link(ref, pathProvider, in, 0, label);
         return op;
     }
 
-    public static FieldDefinition<ThresholdOperator> invert(FieldObjectDefinition ref, String label, FieldOutputDefinition in) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<ThresholdOperator> invert(O ref, String label, BiConsumer<O, Path> pathProvider, String in) {
         if(in == null)
             return null;
 
         FieldDefinition<ThresholdOperator> f = new FieldDefinition(ThresholdOperator.class, ref, label);
-        link(in, 0, f);
+        link(ref, pathProvider, in, 0, label);
         return f;
     }
 
-    public static FieldDefinition<ScaleFunction> scale(FieldObjectDefinition ref, String label, double scale, FieldOutputDefinition in) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<ScaleFunction> scale(O ref, String label, double scale, BiConsumer<O, Path> pathProvider, String in) {
         if(in == null)
             return null;
 
         FieldDefinition<ScaleFunction> f = new FieldDefinition(ScaleFunction.class, ref, label, scale);
-        link(in, 0, f);
-        return f;
-    }
-
-    public static FieldDefinition<ScaleFunction> scale(FieldObjectDefinition ref, String label, double scale, FieldOutputDefinition in, FieldInputDefinition... out) {
-        FieldDefinition<ScaleFunction> f = scale(ref, label, scale, in);
-        linkAll(f, out);
+        link(ref, pathProvider, in, 0, label);
         return f;
     }
 }

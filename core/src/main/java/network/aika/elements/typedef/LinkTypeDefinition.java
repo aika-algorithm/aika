@@ -20,6 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.Path;
 import network.aika.fields.AbstractFunction;
 
 import java.lang.reflect.InvocationTargetException;
@@ -67,6 +68,12 @@ public class LinkTypeDefinition extends TypeDefinition<LinkTypeDefinition, Link>
         return this;
     }
 
+    public ActivationTypeDefinition getInput(Path p) {
+        p.add(inputDef);
+
+        return inputDef;
+    }
+
     public ActivationTypeDefinition getInputDef() {
         return inputDef;
     }
@@ -75,6 +82,11 @@ public class LinkTypeDefinition extends TypeDefinition<LinkTypeDefinition, Link>
         this.inputDef = inputDef;
 
         return this;
+    }
+
+    public ActivationTypeDefinition getOutput(Path p) {
+        p.add(outputDef);
+        return outputDef;
     }
 
     public ActivationTypeDefinition getOutputDef() {

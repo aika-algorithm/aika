@@ -41,6 +41,7 @@ import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.Operators.scale;
+import static network.aika.model.NeuronDef.INPUT_VALUE;
 import static network.aika.model.NeuronDef.WEIGHT;
 import static network.aika.model.StateDef.NET;
 import static network.aika.utils.Utils.TOLERANCE;
@@ -50,6 +51,8 @@ import static network.aika.utils.Utils.TOLERANCE;
  * @author Lukas Molzberger
  */
 public class BindingDef implements TypeDefinition {
+
+    public static final String NEG_WEIGHT = "negative weight";
 
     private TypeModel typeModel;
 
@@ -265,8 +268,9 @@ public class BindingDef implements TypeDefinition {
                 .setInputDef(typeModel.inhibitory.getActivation())
                 .setOutputDef(activation);
 
-        negativeFeedbackLink.inputValue = new FieldDefinition(MaxField.class, negativeFeedbackLink, "max-input-value", TOLERANCE);
-
+        negativeFeedbackLink.addFieldDefinition(
+                new FieldDefinition(MaxField.class, negativeFeedbackLink, INPUT_VALUE, TOLERANCE)
+        );
 
         negativeFeedbackSynapse = new SynapseTypeDefinition(
                 "NegativeFeedbackSynapse",
@@ -285,8 +289,13 @@ public class BindingDef implements TypeDefinition {
                 .setStoredAt(OUTPUT)
                 .setRegisterInputSlot(ON_INIT);
 
-        negativeWeight = scale(negativeFeedbackSynapse, "weight", -1, typeModel.neuron.getSynapse().getFieldDef(WEIGHT));
-        link(typeModel.neuron.getSynapse().getFieldDef(WEIGHT), negativeFeedbackLink.getOutputDef().getNet(negativeFeedbackSynapse.outputState()))
+        negativeWeight = scale(negativeFeedbackSynapse, NEG_WEIGHT, -1, typeModel.neuron.getSynapse().getFieldDef(WEIGHT));
+        link(
+                negativeFeedbackSynapse,
+                (o, p) -> o.getLinkType(p).getOutput(p).getStateType(p, negativeFeedbackSynapse.outputState()),
+                WEIGHT,
+                NET
+        )
                 .setPropagateUpdates(false);
 
 

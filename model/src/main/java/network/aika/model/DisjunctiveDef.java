@@ -44,8 +44,6 @@ public class DisjunctiveDef {
     LinkTypeDefinition link;
     SynapseTypeDefinition synapse;
 
-    FieldDefinition weightUpdate;
-
     public DisjunctiveDef(NeuronDef superType) {
         this.superType = superType;
         this.superType.disjunctiveDef = this;

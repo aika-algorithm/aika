@@ -22,9 +22,9 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
+import network.aika.fielddefs.Path;
 
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Path;
 
 /**
  *
@@ -66,11 +66,13 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
     }
 
 
-    public NeuronTypeDefinition getInput(Path pathCollector) {
+    public NeuronTypeDefinition getInput(Path p) {
+        p.add(inputDef);
         return inputDef;
     }
 
-    public NeuronTypeDefinition getOutput(Path pathCollector) {
+    public NeuronTypeDefinition getOutput(Path p) {
+        p.add(outputDef);
         return outputDef;
     }
 
@@ -163,6 +165,11 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
     }
 
     public LinkTypeDefinition getLinkType() {
+        return linkType;
+    }
+
+    public LinkTypeDefinition getLinkType(Path p) {
+        p.add(linkType);
         return linkType;
     }
 
