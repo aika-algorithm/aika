@@ -19,12 +19,9 @@ package network.aika.elements.synapses.slots;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.typedef.SynapseSlotTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.SynapseSlotDefinition;
 import network.aika.elements.typedef.Type;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.Field;
-import network.aika.fields.FieldObject;
 import network.aika.queue.Queue;
 
 import java.util.stream.Stream;
@@ -33,7 +30,7 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public abstract class SynapseSlot extends Type<SynapseSlotTypeDefinition, SynapseSlot> {
+public abstract class SynapseSlot extends Type<SynapseSlotDefinition, SynapseSlot> {
 
     protected Activation act;
 

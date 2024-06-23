@@ -24,6 +24,7 @@ import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.Path;
+import network.aika.fields.SumField;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -31,17 +32,17 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Lukas Molzberger
  */
-public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition, Synapse> {
+public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse> {
 
-    private LinkTypeDefinition linkType;
+    private LinkDefinition linkType;
 
-    private NeuronTypeDefinition inputDef;
+    private NeuronDefinition inputDef;
 
-    private SynapseSlotTypeDefinition inputSlotType;
+    private SynapseSlotDefinition inputSlotType;
 
-    private NeuronTypeDefinition outputDef;
+    private NeuronDefinition outputDef;
 
-    private SynapseSlotTypeDefinition outputSlotType;
+    private SynapseSlotDefinition outputSlotType;
 
     private Transition[] transition;
 
@@ -59,121 +60,126 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
 
     private RegisterInputSlot registerInputSlot = RegisterInputSlot.ON_LINKING;
 
-    private SynapseTypeDefinition instanceSynapseType;
+    private SynapseDefinition instanceSynapseType;
 
+    private FieldDefinition<SynapseDefinition, SumField> weight;
 
-    public SynapseTypeDefinition(String name, Class<? extends Synapse> clazz) {
+    public SynapseDefinition(String name, Class<? extends Synapse> clazz) {
         super(name, clazz);
     }
 
 
-    public NeuronTypeDefinition getInput(Path p) {
+    public NeuronDefinition getInput(Path p) {
         p.add(inputDef);
         return inputDef;
     }
 
-    public NeuronTypeDefinition getOutput(Path p) {
+    public NeuronDefinition getOutput(Path p) {
         p.add(outputDef);
         return outputDef;
     }
 
-    public FieldDefinition getWeight() {
-        return null;
+    public FieldDefinition<SynapseDefinition, SumField> getWeight() {
+        return weight;
     }
 
-    public SynapseSlotTypeDefinition getInputSlotType() {
+    public void setWeight(FieldDefinition<SynapseDefinition, SumField> weight) {
+        this.weight = weight;
+    }
+
+    public SynapseSlotDefinition getInputSlotType() {
         return inputSlotType;
     }
 
-    public SynapseTypeDefinition setInputSlotType(SynapseSlotTypeDefinition inputSlotType) {
+    public SynapseDefinition setInputSlotType(SynapseSlotDefinition inputSlotType) {
         this.inputSlotType = inputSlotType;
 
         return this;
     }
 
-    public SynapseSlotTypeDefinition getOutputSlotType() {
+    public SynapseSlotDefinition getOutputSlotType() {
         return outputSlotType;
     }
 
-    public SynapseTypeDefinition setOutputSlotType(SynapseSlotTypeDefinition outputSlotType) {
+    public SynapseDefinition setOutputSlotType(SynapseSlotDefinition outputSlotType) {
         this.outputSlotType = outputSlotType;
 
         return this;
     }
 
-    public SynapseTypeDefinition setLinkType(LinkTypeDefinition linkType) {
+    public SynapseDefinition setLinkType(LinkDefinition linkType) {
         this.linkType = linkType;
 
         return this;
     }
 
-    public NeuronTypeDefinition getInputDef() {
+    public NeuronDefinition getInputDef() {
         return inputDef;
     }
 
-    public SynapseTypeDefinition setInputNeuronType(NeuronTypeDefinition inputDef) {
+    public SynapseDefinition setInputNeuronType(NeuronDefinition inputDef) {
         this.inputDef = inputDef;
 
         return this;
     }
 
-    public NeuronTypeDefinition getOutputDef() {
+    public NeuronDefinition getOutputDef() {
         return outputDef;
     }
 
-    public SynapseTypeDefinition setOutputNeuronType(NeuronTypeDefinition outputDef) {
+    public SynapseDefinition setOutputNeuronType(NeuronDefinition outputDef) {
         this.outputDef = outputDef;
 
         return this;
     }
 
-    public SynapseTypeDefinition setTransition(Transition... transition) {
+    public SynapseDefinition setTransition(Transition... transition) {
         this.transition = transition;
 
         return this;
     }
 
-    public SynapseTypeDefinition setRequired(Transition required) {
+    public SynapseDefinition setRequired(Transition required) {
         this.required = required;
 
         return this;
     }
 
-    public SynapseTypeDefinition setTrigger(Trigger trigger) {
+    public SynapseDefinition setTrigger(Trigger trigger) {
         this.trigger = trigger;
 
         return this;
     }
 
-    public SynapseTypeDefinition setOutputState(StateType outputState) {
+    public SynapseDefinition setOutputState(StateType outputState) {
         this.outputState = outputState;
 
         return this;
     }
 
-    public SynapseTypeDefinition setPropagateRange(boolean propagateRange) {
+    public SynapseDefinition setPropagateRange(boolean propagateRange) {
         this.propagateRange = propagateRange;
 
         return this;
     }
 
-    public SynapseTypeDefinition setStoredAt(Direction storedAt) {
+    public SynapseDefinition setStoredAt(Direction storedAt) {
         this.storedAt = storedAt;
 
         return this;
     }
 
-    public SynapseTypeDefinition setTrainingAllowed(boolean trainingAllowed) {
+    public SynapseDefinition setTrainingAllowed(boolean trainingAllowed) {
         this.trainingAllowed = trainingAllowed;
 
         return this;
     }
 
-    public LinkTypeDefinition getLinkType() {
+    public LinkDefinition getLinkType() {
         return linkType;
     }
 
-    public LinkTypeDefinition getLinkType(Path p) {
+    public LinkDefinition getLinkType(Path p) {
         p.add(linkType);
         return linkType;
     }
@@ -210,17 +216,17 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
         return registerInputSlot;
     }
 
-    public SynapseTypeDefinition setRegisterInputSlot(RegisterInputSlot registerInputSlot) {
+    public SynapseDefinition setRegisterInputSlot(RegisterInputSlot registerInputSlot) {
         this.registerInputSlot = registerInputSlot;
 
         return this;
     }
 
-    public SynapseTypeDefinition getInstanceSynapseType() {
+    public SynapseDefinition getInstanceSynapseType() {
         return instanceSynapseType;
     }
 
-    public SynapseTypeDefinition setInstanceSynapseType(SynapseTypeDefinition instanceSynapseType) {
+    public SynapseDefinition setInstanceSynapseType(SynapseDefinition instanceSynapseType) {
         this.instanceSynapseType = instanceSynapseType;
 
         return this;

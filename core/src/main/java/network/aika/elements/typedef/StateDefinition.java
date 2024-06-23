@@ -20,7 +20,6 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fielddefs.Path;
 import network.aika.fields.SumField;
 
@@ -30,43 +29,60 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Lukas Molzberger
  */
-public class StateTypeDefinition extends TypeDefinition<StateTypeDefinition, State> {
+public class StateDefinition extends TypeDefinition<StateDefinition, State> {
 
     private StateType type;
 
     private boolean isNextRound;
 
-    private ActivationTypeDefinition activationType;
+    private ActivationDefinition activation;
 
-    public FieldDefinition<SumField> net;
+    private FieldDefinition<StateDefinition, SumField> net;
 
-    public FieldDefinition<SumField> value;
+    private FieldDefinition<StateDefinition, SumField> value;
 
-    public StateTypeDefinition(String name, StateType type) {
+    public StateDefinition(String name, StateType type) {
         super(name, State.class);
         this.type = type;
     }
+
+    public FieldDefinition<StateDefinition, SumField> getNet() {
+        return net;
+    }
+
+    public void setNet(FieldDefinition<StateDefinition, SumField> net) {
+        this.net = net;
+    }
+
+    public FieldDefinition<StateDefinition, SumField> getValue() {
+        return value;
+    }
+
+    public void setValue(FieldDefinition<StateDefinition, SumField> value) {
+        this.value = value;
+    }
+
 
     public StateType getType() {
         return type;
     }
 
-    public StateTypeDefinition setActivationType(ActivationTypeDefinition activationType) {
-        this.activationType = activationType;
+    public StateDefinition setActivation(ActivationDefinition activation) {
+        this.activation = activation;
         return this;
     }
 
-    public ActivationTypeDefinition getActivationType() {
-        return activationType;
+    public ActivationDefinition getActivation() {
+        return activation;
     }
 
-    public ActivationTypeDefinition getActivationType(Path p) {
-        p.add(activationType);
+    public ActivationDefinition getActivation(Path p) {
+        p.add(activation);
 
-        return activationType;
+        return activation;
     }
 
-    public StateTypeDefinition setNextRound(boolean nextRound) {
+    public StateDefinition setNextRound(boolean nextRound) {
         isNextRound = nextRound;
 
         return this;

@@ -2,10 +2,8 @@ package network.aika.model;
 
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
-import network.aika.elements.typedef.LinkTypeDefinition;
-import network.aika.elements.typedef.SynapseSlotTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.LinkDefinition;
+import network.aika.elements.typedef.SynapseDefinition;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.Field;
 
@@ -17,11 +15,11 @@ public class CategoryDef {
 
     private DisjunctiveDef superType;
 
-    private LinkTypeDefinition categoryInputLink;
-    private SynapseTypeDefinition categoryInputSynapse;
+    private LinkDefinition categoryInputLink;
+    private SynapseDefinition categoryInputSynapse;
 
-    private LinkTypeDefinition categoryLink;
-    private SynapseTypeDefinition categorySynapse;
+    private LinkDefinition categoryLink;
+    private SynapseDefinition categorySynapse;
 
 
     public CategoryDef(TypeModel typeModel, DisjunctiveDef superType) {
@@ -31,12 +29,12 @@ public class CategoryDef {
 
 
     public void init() {
-        categoryInputLink = new LinkTypeDefinition(
+        categoryInputLink = new LinkDefinition(
                 "CategoryInputLink",
                 Link.class
         );
 
-        categoryInputSynapse = new SynapseTypeDefinition(
+        categoryInputSynapse = new SynapseDefinition(
                 "CategoryInputSynapse",
                 Synapse.class
         );
@@ -48,11 +46,11 @@ public class CategoryDef {
                 TOLERANCE
         );
 
-        categoryLink = new LinkTypeDefinition(
+        categoryLink = new LinkDefinition(
                 "CategoryLink",
                 Link.class);
 
-        categorySynapse = new SynapseTypeDefinition(
+        categorySynapse = new SynapseDefinition(
                 "CategorySynapse",
                 Synapse.class
         );
@@ -62,20 +60,20 @@ public class CategoryDef {
         return typeModel;
     }
 
-    public LinkTypeDefinition getCategoryInputLink() {
+    public LinkDefinition getCategoryInputLink() {
         return categoryInputLink;
     }
 
-    public SynapseTypeDefinition getCategoryInputSynapse() {
+    public SynapseDefinition getCategoryInputSynapse() {
         return categoryInputSynapse;
     }
 
 
-    public LinkTypeDefinition getCategoryLink() {
+    public LinkDefinition getCategoryLink() {
         return categoryLink;
     }
 
-    public SynapseTypeDefinition getCategorySynapse() {
+    public SynapseDefinition getCategorySynapse() {
         return categorySynapse;
     }
 }

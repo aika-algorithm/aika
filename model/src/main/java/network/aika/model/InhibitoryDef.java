@@ -44,19 +44,19 @@ public class InhibitoryDef implements TypeDefinition {
 
     private DisjunctiveDef superType;
 
-    private ActivationTypeDefinition activation;
-    private NeuronTypeDefinition neuron;
-    private ActivationTypeDefinition categoryActivation;
-    private NeuronTypeDefinition categoryNeuron;
+    private ActivationDefinition activation;
+    private NeuronDefinition neuron;
+    private ActivationDefinition categoryActivation;
+    private NeuronDefinition categoryNeuron;
 
-    private LinkTypeDefinition link;
-    private SynapseTypeDefinition synapse;
-    private LinkTypeDefinition primaryLink;
-    private SynapseTypeDefinition primarySynapse;
-    private LinkTypeDefinition categoryInputLink;
-    private SynapseTypeDefinition categoryInputSynapse;
-    private LinkTypeDefinition categoryLink;
-    private SynapseTypeDefinition categorySynapse;
+    private LinkDefinition link;
+    private SynapseDefinition synapse;
+    private LinkDefinition primaryLink;
+    private SynapseDefinition primarySynapse;
+    private LinkDefinition categoryInputLink;
+    private SynapseDefinition categoryInputSynapse;
+    private LinkDefinition categoryLink;
+    private SynapseDefinition categorySynapse;
 
     public InhibitoryDef(TypeModel typeModel, DisjunctiveDef superType) {
         this.typeModel = typeModel;
@@ -65,47 +65,47 @@ public class InhibitoryDef implements TypeDefinition {
 
     public void init() {
 
-        activation = new ActivationTypeDefinition(
+        activation = new ActivationDefinition(
                 "InhibitoryActivation",
                 Activation.class
         )
                 .addStateType(typeModel.neuron.getNonFeedbackState());
 
-        neuron = new NeuronTypeDefinition(
+        neuron = new NeuronDefinition(
                 "InhibitoryNeuron",
                 Neuron.class
         )
                 .setNeuronType(INHIBITORY)
-                .setActivationType(activation)
+                .setActivation(activation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setTrainingAllowed(false);
 
 
-        categoryActivation = new ActivationTypeDefinition(
+        categoryActivation = new ActivationDefinition(
                 "InhibitoryCategoryActivation",
                 Activation.class
         )
                 .addStateType(typeModel.neuron.getNonFeedbackState());
 
-        categoryNeuron = new NeuronTypeDefinition(
+        categoryNeuron = new NeuronDefinition(
                 "InhibitoryCategoryNeuron",
                 Neuron.class
         )
                 .setNeuronType(CATEGORY)
-                .setActivationType(categoryActivation)
+                .setActivation(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_INPUT)
                 .setTrainingAllowed(false);
 
 
-        link = new LinkTypeDefinition(
+        link = new LinkDefinition(
                 "InhibitoryLink",
                 DisjunctiveLink.class
         )
-                .setInputDef(typeModel.binding.getActivation())
-                .setOutputDef(activation);
+                .setInput(typeModel.binding.getActivation())
+                .setOutput(activation);
 
-        synapse = new SynapseTypeDefinition(
+        synapse = new SynapseDefinition(
                 "InhibitorySynapse",
                 DisjunctiveSynapse.class
         )
@@ -120,11 +120,11 @@ public class InhibitoryDef implements TypeDefinition {
                 .setStoredAt(INPUT);
 
 
-        primaryLink = new LinkTypeDefinition(
+        primaryLink = new LinkDefinition(
                 "PrimaryInhibitoryLink",
                 DisjunctiveLink.class);
 
-        primarySynapse = new SynapseTypeDefinition(
+        primarySynapse = new SynapseDefinition(
                 "PrimaryInhibitorySynapse",
                 DisjunctiveSynapse.class
         )
@@ -139,11 +139,11 @@ public class InhibitoryDef implements TypeDefinition {
                 .setStoredAt(OUTPUT);
 
 
-        categoryLink = new LinkTypeDefinition(
+        categoryLink = new LinkDefinition(
                 "InhibitoryCategoryLink",
                 Link.class);
 
-        categorySynapse = new SynapseTypeDefinition(
+        categorySynapse = new SynapseDefinition(
                 "InhibitoryCategorySynapse",
                 Synapse.class
         )
@@ -158,11 +158,11 @@ public class InhibitoryDef implements TypeDefinition {
                 .setStoredAt(INPUT);
 
 
-        categoryInputLink = new LinkTypeDefinition(
+        categoryInputLink = new LinkDefinition(
                 "InhibitoryCategoryInputLink",
                 DisjunctiveLink.class);
 
-        categoryInputSynapse = new SynapseTypeDefinition(
+        categoryInputSynapse = new SynapseDefinition(
                 "InhibitoryCategoryInputSynapse",
                 Synapse.class
         )
@@ -193,51 +193,51 @@ public class InhibitoryDef implements TypeDefinition {
     }
 
 
-    public ActivationTypeDefinition getActivation() {
+    public ActivationDefinition getActivation() {
         return activation;
     }
 
-    public NeuronTypeDefinition getNeuron() {
+    public NeuronDefinition getNeuron() {
         return neuron;
     }
 
-    public ActivationTypeDefinition getCategoryActivation() {
+    public ActivationDefinition getCategoryActivation() {
         return categoryActivation;
     }
 
-    public NeuronTypeDefinition getCategoryNeuron() {
+    public NeuronDefinition getCategoryNeuron() {
         return categoryNeuron;
     }
 
-    public LinkTypeDefinition getLink() {
+    public LinkDefinition getLink() {
         return link;
     }
 
-    public SynapseTypeDefinition getSynapse() {
+    public SynapseDefinition getSynapse() {
         return synapse;
     }
 
-    public LinkTypeDefinition getPrimaryLink() {
+    public LinkDefinition getPrimaryLink() {
         return primaryLink;
     }
 
-    public SynapseTypeDefinition getPrimarySynapse() {
+    public SynapseDefinition getPrimarySynapse() {
         return primarySynapse;
     }
 
-    public LinkTypeDefinition getCategoryInputLink() {
+    public LinkDefinition getCategoryInputLink() {
         return categoryInputLink;
     }
 
-    public SynapseTypeDefinition getCategoryInputSynapse() {
+    public SynapseDefinition getCategoryInputSynapse() {
         return categoryInputSynapse;
     }
 
-    public LinkTypeDefinition getCategoryLink() {
+    public LinkDefinition getCategoryLink() {
         return categoryLink;
     }
 
-    public SynapseTypeDefinition getCategorySynapse() {
+    public SynapseDefinition getCategorySynapse() {
         return categorySynapse;
     }
 

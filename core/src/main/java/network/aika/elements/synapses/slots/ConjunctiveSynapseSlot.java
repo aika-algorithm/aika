@@ -17,28 +17,11 @@
 package network.aika.elements.synapses.slots;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.typedef.SynapseSlotTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
-import network.aika.elements.typedef.Type;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.AbstractMaxField;
-import network.aika.fields.link.ArgumentFieldLink;
-import network.aika.queue.Queue;
-import network.aika.utils.ApproximateComparisonValueUtil;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.NavigableMap;
-import java.util.TreeMap;
 import java.util.stream.Stream;
-
-import static java.util.Comparator.*;
-import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *

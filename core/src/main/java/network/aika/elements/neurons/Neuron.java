@@ -23,8 +23,8 @@ import network.aika.elements.ModelProvider;
 import network.aika.elements.PreActivation;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
-import network.aika.elements.typedef.NeuronTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.NeuronDefinition;
+import network.aika.elements.typedef.SynapseDefinition;
 import network.aika.elements.typedef.TypeDefinition;
 import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
@@ -59,7 +59,7 @@ import static network.aika.queue.Timestamp.MIN;
  *
  * @author Lukas Molzberger
  */
-public abstract class Neuron extends Type<NeuronTypeDefinition, Neuron> implements Element, ModelProvider, QueueProvider, Writable {
+public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements Element, ModelProvider, QueueProvider, Writable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
 
@@ -512,15 +512,15 @@ public abstract class Neuron extends Type<NeuronTypeDefinition, Neuron> implemen
         return provider.getInputSynapse(n);
     }
 
-    public Synapse getInputSynapseByType(TypeDefinition<SynapseTypeDefinition, Synapse> synapseType) {
+    public Synapse getInputSynapseByType(TypeDefinition<SynapseDefinition, Synapse> synapseType) {
         return provider.getInputSynapseByType(synapseType);
     }
 
-    public Stream<Synapse> getInputSynapsesByType(TypeDefinition<SynapseTypeDefinition, Synapse> synapseType) {
+    public Stream<Synapse> getInputSynapsesByType(TypeDefinition<SynapseDefinition, Synapse> synapseType) {
         return provider.getInputSynapsesByType(synapseType);
     }
 
-    public Synapse getOutputSynapseByType(TypeDefinition<SynapseTypeDefinition, Synapse> synapseType) {
+    public Synapse getOutputSynapseByType(TypeDefinition<SynapseDefinition, Synapse> synapseType) {
         return provider.getOutputSynapseByType(synapseType);
     }
 

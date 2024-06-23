@@ -16,8 +16,6 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.fields.FieldObject;
-
 import java.util.ArrayList;
 import java.util.List;
 

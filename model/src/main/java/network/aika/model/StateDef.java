@@ -17,7 +17,7 @@
 package network.aika.model;
 
 import network.aika.elements.activations.StateType;
-import network.aika.elements.typedef.StateTypeDefinition;
+import network.aika.elements.typedef.StateDefinition;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.SumField;
 
@@ -39,7 +39,7 @@ public class StateDef {
 
     TypeModel typeModel;
 
-    StateTypeDefinition state;
+    StateDefinition state;
 
 
     public StateDef(TypeModel typeModel) {
@@ -47,7 +47,7 @@ public class StateDef {
     }
 
     public void init(String name, StateType stateType) {
-        state = new StateTypeDefinition(name, stateType)
+        state = new StateDefinition(name, stateType)
                 .setNextRound(stateType == OUTER_FEEDBACK);
 
         state.net = new FieldDefinition<>(SumField.class, state, NET);

@@ -19,7 +19,6 @@ package network.aika.elements.typedef;
 import network.aika.ActivationFunction;
 import network.aika.Model;
 import network.aika.elements.NeuronType;
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.RefType;
@@ -30,7 +29,7 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Lukas Molzberger
  */
-public class NeuronTypeDefinition extends TypeDefinition<NeuronTypeDefinition, Neuron> {
+public class NeuronDefinition extends TypeDefinition<NeuronDefinition, Neuron> {
 
     private NeuronType neuronType;
 
@@ -40,43 +39,43 @@ public class NeuronTypeDefinition extends TypeDefinition<NeuronTypeDefinition, N
 
     private boolean trainingAllowed;
 
-    public ActivationTypeDefinition activationType;
+    public ActivationDefinition activationType;
 
     public TemplateRelationDefinition templateRelation;
 
-    public NeuronTypeDefinition(String name, Class<? extends Neuron> clazz) {
+    public NeuronDefinition(String name, Class<? extends Neuron> clazz) {
         super(name, clazz);
     }
 
-    public ActivationTypeDefinition getActivationType() {
+    public ActivationDefinition getActivationType() {
         return activationType;
     }
 
-    public NeuronTypeDefinition setActivationType(ActivationTypeDefinition activationType) {
+    public NeuronDefinition setActivation(ActivationDefinition activationType) {
         this.activationType = activationType;
-        this.activationType.setNeuronType(this);
+        this.activationType.setNeuron(this);
         return this;
     }
 
-    public NeuronTypeDefinition setNeuronType(NeuronType neuronType) {
+    public NeuronDefinition setNeuronType(NeuronType neuronType) {
         this.neuronType = neuronType;
 
         return this;
     }
 
-    public NeuronTypeDefinition setActivationFunction(ActivationFunction activationFunction) {
+    public NeuronDefinition setActivationFunction(ActivationFunction activationFunction) {
         this.activationFunction = activationFunction;
 
         return this;
     }
 
-    public NeuronTypeDefinition setBindingSignalSlots(BSSlotDefinition... bindingSignalSlots) {
+    public NeuronDefinition setBindingSignalSlots(BSSlotDefinition... bindingSignalSlots) {
         this.bindingSignalSlots = bindingSignalSlots;
 
         return this;
     }
 
-    public NeuronTypeDefinition setTrainingAllowed(boolean trainingAllowed) {
+    public NeuronDefinition setTrainingAllowed(boolean trainingAllowed) {
         this.trainingAllowed = trainingAllowed;
 
         return this;
@@ -102,7 +101,7 @@ public class NeuronTypeDefinition extends TypeDefinition<NeuronTypeDefinition, N
         return templateRelation;
     }
 
-    public NeuronTypeDefinition setTemplateRelation(TemplateRelationDefinition templateRelation) {
+    public NeuronDefinition setTemplateRelation(TemplateRelationDefinition templateRelation) {
         this.templateRelation = templateRelation;
         return this;
     }

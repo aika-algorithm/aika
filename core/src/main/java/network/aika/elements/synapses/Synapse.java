@@ -26,7 +26,7 @@ import network.aika.elements.relations.Relation;
 import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
-import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.SynapseDefinition;
 import network.aika.elements.typedef.Type;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
@@ -60,7 +60,7 @@ import static network.aika.elements.neurons.RefType.SYNAPSE_OUT;
  *
  * @author Lukas Molzberger
  */
-public abstract class Synapse extends Type<SynapseTypeDefinition, Synapse> implements Element, ModelProvider, QueueProvider, Writable {
+public abstract class Synapse extends Type<SynapseDefinition, Synapse> implements Element, ModelProvider, QueueProvider, Writable {
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
@@ -228,7 +228,7 @@ public abstract class Synapse extends Type<SynapseTypeDefinition, Synapse> imple
         if(s != null)
             return s;
 
-        SynapseTypeDefinition std = typeDef.getInstanceSynapseType() != null ?
+        SynapseDefinition std = typeDef.getInstanceSynapseType() != null ?
                 typeDef.getInstanceSynapseType() :
                 typeDef;
 

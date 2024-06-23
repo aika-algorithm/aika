@@ -39,10 +39,8 @@ import static network.aika.enums.Transition.*;
 import static network.aika.enums.Trigger.*;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
+import static network.aika.fielddefs.Operators.max;
 import static network.aika.fielddefs.Operators.scale;
-import static network.aika.model.NeuronDef.INPUT_VALUE;
-import static network.aika.model.NeuronDef.WEIGHT;
-import static network.aika.model.StateDef.NET;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -51,7 +49,6 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public class BindingDef implements TypeDefinition {
 
-    public static final String NEG_WEIGHT = "negative weight";
 
     private TypeModel typeModel;
 
@@ -60,36 +57,36 @@ public class BindingDef implements TypeDefinition {
     StateDef outerFeedbackState = new StateDef(typeModel);
     StateDef innerFeedbackState = new StateDef(typeModel);
 
-    private ActivationTypeDefinition activation;
-    private NeuronTypeDefinition neuron;
+    private ActivationDefinition activation;
+    private NeuronDefinition neuron;
 
-    private LinkTypeDefinition categoryInputLink;
-    private SynapseTypeDefinition categoryInputSynapse;
+    private LinkDefinition categoryInputLink;
+    private SynapseDefinition categoryInputSynapse;
 
-    private ActivationTypeDefinition categoryActivation;
-    private NeuronTypeDefinition categoryNeuron;
+    private ActivationDefinition categoryActivation;
+    private NeuronDefinition categoryNeuron;
 
-    private ActivationTypeDefinition latentRelationActivation;
-    private NeuronTypeDefinition latentRelationNeuron;
+    private ActivationDefinition latentRelationActivation;
+    private NeuronDefinition latentRelationNeuron;
 
-    private LinkTypeDefinition inputObjectLink;
-    private SynapseTypeDefinition inputObjectSynapse;
-    private LinkTypeDefinition sameObjectLink;
-    private SynapseTypeDefinition sameObjectSynapse;
-    private LinkTypeDefinition innerPositiveFeedbackLink;
-    private SynapseTypeDefinition innerPositiveFeedbackSynapse;
-    private LinkTypeDefinition outerPositiveFeedbackLink;
-    private SynapseTypeDefinition outerPositiveFeedbackSynapse;
-    private LinkTypeDefinition negativeFeedbackLink;
-    private SynapseTypeDefinition negativeFeedbackSynapse;
-    private LinkTypeDefinition relationInputLink;
-    private SynapseTypeDefinition relationInputSynapse;
+    private LinkDefinition inputObjectLink;
+    private SynapseDefinition inputObjectSynapse;
+    private LinkDefinition sameObjectLink;
+    private SynapseDefinition sameObjectSynapse;
+    private LinkDefinition innerPositiveFeedbackLink;
+    private SynapseDefinition innerPositiveFeedbackSynapse;
+    private LinkDefinition outerPositiveFeedbackLink;
+    private SynapseDefinition outerPositiveFeedbackSynapse;
+    private LinkDefinition negativeFeedbackLink;
+    private SynapseDefinition negativeFeedbackSynapse;
+    private LinkDefinition relationInputLink;
+    private SynapseDefinition relationInputSynapse;
 
-    private LinkTypeDefinition categoryLink;
-    private SynapseTypeDefinition categorySynapse;
+    private LinkDefinition categoryLink;
+    private SynapseDefinition categorySynapse;
 
 
-    FieldDefinition<SynapseTypeDefinition, ScaleFunction> negativeWeight;
+    FieldDefinition<SynapseDefinition> negativeWeight;
 
     public BindingDef(TypeModel typeModel, ConjunctiveDef superType) {
         this.typeModel = typeModel;
@@ -100,83 +97,75 @@ public class BindingDef implements TypeDefinition {
         outerFeedbackState.init("OuterFeedbackState", OUTER_FEEDBACK);
         innerFeedbackState.init("InnerFeedbackState", INNER_FEEDBACK);
 
-        link(
-                activation.getStateType(NON_FEEDBACK),
-                (o,p) -> o.getActivationType(p).getStateType(p, OUTER_FEEDBACK),
-                NET,
-                NET
-        );
+        activation.getState(NON_FEEDBACK).getNet()
+                .out(null, (o,p) -> o.getActivation(p).getState(p, OUTER_FEEDBACK).getNet());
 
-        link(
-                activation.getStateType(OUTER_FEEDBACK),
-                (o,p) -> o.getActivationType(p).getStateType(p, INNER_FEEDBACK),
-                NET,
-                NET
-        );
+        activation.getState(OUTER_FEEDBACK).getNet()
+                .out(null, (o,p) -> o.getActivation(p).getState(p, INNER_FEEDBACK).getNet());
 
-        activation = new ActivationTypeDefinition(
+        activation = new ActivationDefinition(
                 "BindingActivation",
                 Activation.class
         )
-                .addStateType(activation.getStateType(NON_FEEDBACK))
+                .addStateType(activation.getState(NON_FEEDBACK))
                 .addStateType(outerFeedbackState.state)
                 .addStateType(innerFeedbackState.state)
                 .addParent(superType.getActivation());
 
-        neuron = new NeuronTypeDefinition(
+        neuron = new NeuronDefinition(
                 "BindingNeuron",
                 Neuron.class
         )
                 .setNeuronType(BINDING)
-                .setActivationType(activation)
+                .setActivation(activation)
                 .setActivationFunction(RECTIFIED_HYPERBOLIC_TANGENT)
                 .setBindingSignalSlots(SINGLE_INPUT, SINGLE_SAME_FEEDBACK)
                 .addParent(superType.getNeuron());
 
-        categoryActivation = new ActivationTypeDefinition(
+        categoryActivation = new ActivationDefinition(
                 "BindingCategoryActivation",
                 Activation.class
         )
-                .addStateType(activation.getStateType(NON_FEEDBACK));
+                .addStateType(activation.getState(NON_FEEDBACK));
 
-        categoryNeuron = new NeuronTypeDefinition(
+        categoryNeuron = new NeuronDefinition(
                 "BindingCategoryNeuron",
                 Neuron.class
         )
                 .setNeuronType(CATEGORY)
-                .setActivationType(categoryActivation)
+                .setActivation(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_INPUT, SINGLE_SAME)
                 .setTrainingAllowed(false);
 
-        latentRelationActivation = new ActivationTypeDefinition(
+        latentRelationActivation = new ActivationDefinition(
                 "LatentRelationActivation",
                 Activation.class
         )
-                .addStateType(activation.getStateType(NON_FEEDBACK))
+                .addStateType(activation.getState(NON_FEEDBACK))
                 .addParent(typeModel.conjunctive.getActivation());
 
-        latentRelationNeuron = new NeuronTypeDefinition(
+        latentRelationNeuron = new NeuronDefinition(
                 "LatentRelationNeuron",
                 Neuron.class
         )
                 .setNeuronType(BINDING)
-                .setActivationType(latentRelationActivation)
+                .setActivation(latentRelationActivation)
                 .setActivationFunction(RECTIFIED_HYPERBOLIC_TANGENT)
                 .setBindingSignalSlots()
                 .addParent(typeModel.conjunctive.getNeuron());
 
 
 
-        inputObjectLink = new LinkTypeDefinition(
+        inputObjectLink = new LinkDefinition(
                 "InputObjectLink",
                 ConjunctiveLink.class
         )
-                .setInputDef(typeModel.pattern.getActivation())
-                .setOutputDef(activation)
+                .setInput(typeModel.pattern.getActivation())
+                .setOutput(activation)
                 .addParent(typeModel.conjunctive.getLink());
 
-        inputObjectSynapse = new SynapseTypeDefinition(
+        inputObjectSynapse = new SynapseDefinition(
                 "InputObjectSynapse",
                 ConjunctiveSynapse.class
         )
@@ -192,14 +181,14 @@ public class BindingDef implements TypeDefinition {
                 .addParent(typeModel.conjunctive.getSynapse());
 
 
-        sameObjectLink = new LinkTypeDefinition(
+        sameObjectLink = new LinkDefinition(
                 "SameObjectLink",
                 ConjunctiveLink.class
         )
-                .setInputDef(activation)
-                .setOutputDef(activation);
+                .setInput(activation)
+                .setOutput(activation);
 
-        sameObjectSynapse = new SynapseTypeDefinition(
+        sameObjectSynapse = new SynapseDefinition(
                 "SameObjectSynapse",
                 ConjunctiveSynapse.class
         )
@@ -214,13 +203,13 @@ public class BindingDef implements TypeDefinition {
                 .setStoredAt(OUTPUT)
                 .setPropagateRange(false);
 
-        innerPositiveFeedbackLink = new LinkTypeDefinition(
+        innerPositiveFeedbackLink = new LinkDefinition(
                 "InnerPositiveFeedbackLink",
                 ConjunctiveLink.class)
-                .setInputDef(typeModel.pattern.getActivation())
-                .setOutputDef(typeModel.binding.getActivation());
+                .setInput(typeModel.pattern.getActivation())
+                .setOutput(typeModel.binding.getActivation());
 
-        innerPositiveFeedbackSynapse = new SynapseTypeDefinition(
+        innerPositiveFeedbackSynapse = new SynapseDefinition(
                 "InnerPositiveFeedbackSynapse",
                 ConjunctiveSynapse.class
         )
@@ -237,14 +226,14 @@ public class BindingDef implements TypeDefinition {
                 .setPropagateRange(false);
 
 
-        outerPositiveFeedbackLink = new LinkTypeDefinition(
+        outerPositiveFeedbackLink = new LinkDefinition(
                 "OuterPositiveFeedbackLink",
                 ConjunctiveLink.class
         )
-                .setInputDef(typeModel.pattern.getActivation())
-                .setOutputDef(typeModel.binding.getActivation());
+                .setInput(typeModel.pattern.getActivation())
+                .setOutput(typeModel.binding.getActivation());
 
-        outerPositiveFeedbackSynapse = new SynapseTypeDefinition(
+        outerPositiveFeedbackSynapse = new SynapseDefinition(
                 "OuterPositiveFeedbackSynapse",
                 ConjunctiveSynapse.class
         )
@@ -260,18 +249,16 @@ public class BindingDef implements TypeDefinition {
                 .setStoredAt(OUTPUT)
                 .setRegisterInputSlot(ON_INIT);
 
-        negativeFeedbackLink = new LinkTypeDefinition(
+        negativeFeedbackLink = new LinkDefinition(
                 "NegativeFeedbackLink",
                 ConjunctiveLink.class
         )
-                .setInputDef(typeModel.inhibitory.getActivation())
-                .setOutputDef(activation);
+                .setInput(typeModel.inhibitory.getActivation())
+                .setOutput(activation);
 
-        negativeFeedbackLink.addFieldDefinition(
-                new FieldDefinition(MaxField.class, negativeFeedbackLink, INPUT_VALUE, TOLERANCE)
-        );
+        negativeFeedbackLink.setInputValue(max(negativeFeedbackLink, "inputValue"));
 
-        negativeFeedbackSynapse = new SynapseTypeDefinition(
+        negativeFeedbackSynapse = new SynapseDefinition(
                 "NegativeFeedbackSynapse",
                 ConjunctiveSynapse.class
         )
@@ -288,17 +275,17 @@ public class BindingDef implements TypeDefinition {
                 .setStoredAt(OUTPUT)
                 .setRegisterInputSlot(ON_INIT);
 
-        negativeWeight = scale(negativeFeedbackSynapse, NEG_WEIGHT, -1)
+        negativeWeight = scale(negativeFeedbackSynapse, "negative weight", -1)
                 .in(0, (o, p) -> o.getWeight())
-                .out(null, (o, p) -> o.getLinkType(p).getOutput(p).getStateType(p, negativeFeedbackSynapse.outputState()).net, false);
+                .out(null, (o, p) -> o.getLinkType(p).getOutput(p).getState(p, negativeFeedbackSynapse.outputState()).getNet(), false);
 
-        relationInputLink = new LinkTypeDefinition(
+        relationInputLink = new LinkDefinition(
                 "RelationInputLink",
                 ConjunctiveLink.class)
-                .setInputDef(activation)
-                .setOutputDef(activation);
+                .setInput(activation)
+                .setOutput(activation);
 
-        relationInputSynapse = new SynapseTypeDefinition(
+        relationInputSynapse = new SynapseDefinition(
                 "RelationInputSynapse",
                 ConjunctiveSynapse.class
         )
@@ -312,13 +299,13 @@ public class BindingDef implements TypeDefinition {
                 .setPropagateRange(false)
                 .setStoredAt(OUTPUT);
 
-        categoryLink = new LinkTypeDefinition(
+        categoryLink = new LinkDefinition(
                 "BindingCategoryLink",
                 Link.class)
-                .setInputDef(typeModel.binding.getCategoryActivation())
-                .setOutputDef(typeModel.binding.getActivation());
+                .setInput(typeModel.binding.getCategoryActivation())
+                .setOutput(typeModel.binding.getActivation());
 
-        categorySynapse = new SynapseTypeDefinition(
+        categorySynapse = new SynapseDefinition(
                 "BindingCategorySynapse",
                 Synapse.class
         )
@@ -333,12 +320,12 @@ public class BindingDef implements TypeDefinition {
                 .setStoredAt(INPUT);
 
 
-        categoryInputLink = new LinkTypeDefinition(
+        categoryInputLink = new LinkDefinition(
                 "BindingCategoryInputLink",
                 ConjunctiveLink.class
         );
 
-        categoryInputSynapse = new SynapseTypeDefinition(
+        categoryInputSynapse = new SynapseDefinition(
                 "BindingCategoryInputSynapse",
                 ConjunctiveSynapse.class
         )
@@ -370,109 +357,109 @@ public class BindingDef implements TypeDefinition {
         categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
     }
 
-    public StateTypeDefinition getOuterFeedbackState() {
+    public StateDefinition getOuterFeedbackState() {
         return outerFeedbackState.state;
     }
 
-    public StateTypeDefinition getInnerFeedbackState() {
+    public StateDefinition getInnerFeedbackState() {
         return innerFeedbackState.state;
     }
 
-    public ActivationTypeDefinition getLatentRelationActivation() {
+    public ActivationDefinition getLatentRelationActivation() {
         return latentRelationActivation;
     }
 
-    public NeuronTypeDefinition getLatentRelationNeuron() {
+    public NeuronDefinition getLatentRelationNeuron() {
         return latentRelationNeuron;
     }
 
-    public ActivationTypeDefinition getActivation() {
+    public ActivationDefinition getActivation() {
         return activation;
     }
 
-    public NeuronTypeDefinition getNeuron() {
+    public NeuronDefinition getNeuron() {
         return neuron;
     }
 
-    public ActivationTypeDefinition getCategoryActivation() {
+    public ActivationDefinition getCategoryActivation() {
         return categoryActivation;
     }
 
-    public NeuronTypeDefinition getCategoryNeuron() {
+    public NeuronDefinition getCategoryNeuron() {
         return categoryNeuron;
     }
 
 
-    public LinkTypeDefinition getCategoryInputLink() {
+    public LinkDefinition getCategoryInputLink() {
         return categoryInputLink;
     }
 
-    public SynapseTypeDefinition getCategoryInputSynapse() {
+    public SynapseDefinition getCategoryInputSynapse() {
         return categoryInputSynapse;
     }
 
-    public LinkTypeDefinition getLink() {
+    public LinkDefinition getLink() {
         return inputObjectLink;
     }
 
-    public SynapseTypeDefinition getSynapse() {
+    public SynapseDefinition getSynapse() {
         return inputObjectSynapse;
     }
 
-    public LinkTypeDefinition getInputObjectLink() {
+    public LinkDefinition getInputObjectLink() {
         return inputObjectLink;
     }
 
-    public SynapseTypeDefinition getInputObjectSynapse() {
+    public SynapseDefinition getInputObjectSynapse() {
         return inputObjectSynapse;
     }
 
-    public LinkTypeDefinition getSameObjectLink() {
+    public LinkDefinition getSameObjectLink() {
         return sameObjectLink;
     }
 
-    public SynapseTypeDefinition getSameObjectSynapse() {
+    public SynapseDefinition getSameObjectSynapse() {
         return sameObjectSynapse;
     }
 
-    public LinkTypeDefinition getInnerPositiveFeedbackLink() {
+    public LinkDefinition getInnerPositiveFeedbackLink() {
         return innerPositiveFeedbackLink;
     }
 
-    public SynapseTypeDefinition getInnerPositiveFeedbackSynapse() {
+    public SynapseDefinition getInnerPositiveFeedbackSynapse() {
         return innerPositiveFeedbackSynapse;
     }
 
-    public LinkTypeDefinition getOuterPositiveFeedbackLink() {
+    public LinkDefinition getOuterPositiveFeedbackLink() {
         return outerPositiveFeedbackLink;
     }
 
-    public SynapseTypeDefinition getOuterPositiveFeedbackSynapse() {
+    public SynapseDefinition getOuterPositiveFeedbackSynapse() {
         return outerPositiveFeedbackSynapse;
     }
 
-    public LinkTypeDefinition getNegativeFeedbackLink() {
+    public LinkDefinition getNegativeFeedbackLink() {
         return negativeFeedbackLink;
     }
 
-    public SynapseTypeDefinition getNegativeFeedbackSynapse() {
+    public SynapseDefinition getNegativeFeedbackSynapse() {
         return negativeFeedbackSynapse;
     }
 
-    public LinkTypeDefinition getRelationInputLink() {
+    public LinkDefinition getRelationInputLink() {
         return relationInputLink;
     }
 
-    public SynapseTypeDefinition getRelationInputSynapse() {
+    public SynapseDefinition getRelationInputSynapse() {
         return relationInputSynapse;
     }
 
 
-    public LinkTypeDefinition getCategoryLink() {
+    public LinkDefinition getCategoryLink() {
         return categoryLink;
     }
 
-    public SynapseTypeDefinition getCategorySynapse() {
+    public SynapseDefinition getCategorySynapse() {
         return categorySynapse;
     }
 

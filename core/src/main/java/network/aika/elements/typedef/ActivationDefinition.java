@@ -22,7 +22,6 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.neurons.Neuron;
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldOutputDefinition;
 import network.aika.fielddefs.Path;
 
 import java.lang.reflect.InvocationTargetException;
@@ -33,50 +32,59 @@ import java.util.List;
  *
  * @author Lukas Molzberger
  */
-public class ActivationTypeDefinition extends TypeDefinition<ActivationTypeDefinition, Activation> {
+public class ActivationDefinition extends TypeDefinition<ActivationDefinition, Activation> {
 
-    private NeuronTypeDefinition neuronType;
+    private NeuronDefinition neuron;
 
-    private List<StateTypeDefinition> stateTypes = new ArrayList<>();
+    private List<StateDefinition> states = new ArrayList<>();
 
+    private FieldDefinition<LinkDefinition> updateValue;
 
-    public ActivationTypeDefinition(String name, Class<? extends Activation> clazz) {
+    public ActivationDefinition(String name, Class<? extends Activation> clazz) {
         super(name, clazz);
     }
 
-    public ActivationTypeDefinition setNeuronType(NeuronTypeDefinition neuronType) {
-        this.neuronType = neuronType;
+    public ActivationDefinition setNeuron(NeuronDefinition neuron) {
+        this.neuron = neuron;
 
         return this;
+    }
+
+    public FieldDefinition<LinkDefinition> getUpdateValue() {
+        return updateValue;
+    }
+
+    public void setUpdateValue(FieldDefinition<LinkDefinition> updateValue) {
+        this.updateValue = updateValue;
     }
 
     public NeuronType getType() {
-        return neuronType.getType();
+        return neuron.getType();
     }
 
-    public StateTypeDefinition[] getStateTypes() {
-        return stateTypes.toArray(new StateTypeDefinition[0]);
+    public StateDefinition[] getStates() {
+        return states.toArray(new StateDefinition[0]);
     }
 
-    public ActivationTypeDefinition addStateType(StateTypeDefinition stateType) {
-        stateTypes.add(stateType);
-        stateType.setActivationType(this);
+    public ActivationDefinition addStateType(StateDefinition state) {
+        states.add(state);
+        state.setActivation(this);
 
         return this;
     }
 
-    public StateTypeDefinition getStateType(StateType stateType) {
-        return stateTypes.get(stateType.ordinal());
+    public StateDefinition getState(StateType stateType) {
+        return states.get(stateType.ordinal());
     }
 
-    public StateTypeDefinition getStateType(Path p, StateType stateType) {
-        StateTypeDefinition s = getStateType(stateType);
+    public StateDefinition getState(Path p, StateType stateType) {
+        StateDefinition s = getState(stateType);
         p.add(s);
         return s;
     }
 
     public FieldDefinition getNet(StateType stateType) {
-        return stateTypes.get(stateType.ordinal()).net;
+        return states.get(stateType.ordinal()).getNet();
     }
 
     public Activation instantiate(int id, Document doc, Neuron n) {

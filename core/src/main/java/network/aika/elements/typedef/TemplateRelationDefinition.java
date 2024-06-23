@@ -23,27 +23,27 @@ package network.aika.elements.typedef;
 public class TemplateRelationDefinition {
 
 
-    private SynapseTypeDefinition abstractSynapseType;
+    private SynapseDefinition abstractSynapseType;
 
-    private SynapseTypeDefinition instanceSynapseType;
+    private SynapseDefinition instanceSynapseType;
 
-    public TemplateRelationDefinition setAbstractSynapseType(SynapseTypeDefinition abstractSynapseType) {
+    public TemplateRelationDefinition setAbstractSynapseType(SynapseDefinition abstractSynapseType) {
         this.abstractSynapseType = abstractSynapseType;
 
         return this;
     }
 
-    public SynapseTypeDefinition getAbstractSynapseType() {
+    public SynapseDefinition getAbstractSynapseType() {
         return abstractSynapseType;
     }
 
-    public TemplateRelationDefinition setInstanceSynapseType(SynapseTypeDefinition instanceSynapseType) {
+    public TemplateRelationDefinition setInstanceSynapseType(SynapseDefinition instanceSynapseType) {
         this.instanceSynapseType = instanceSynapseType;
 
         return this;
     }
 
-    public SynapseTypeDefinition getInstanceSynapseType() {
+    public SynapseDefinition getInstanceSynapseType() {
         return instanceSynapseType;
     }
 }

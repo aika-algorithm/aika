@@ -21,17 +21,27 @@ import network.aika.utils.ToleranceUtils;
 
 import java.util.function.BiConsumer;
 
+import static network.aika.utils.ToleranceUtils.TOLERANCE;
+
 /**
  * @author Lukas Molzberger
  */
 public class Operators {
+
+    public static <O extends FieldObjectDefinition> FieldDefinition<O, IdentityFunction> identity(O ref, String label) {
+        return new FieldDefinition<>(IdentityFunction.class, ref, label);
+    }
+
+    public static <O extends FieldObjectDefinition> FieldDefinition<O, SumField> sum(O ref, String label) {
+        return new FieldDefinition<>(SumField.class, ref, label, TOLERANCE);
+    }
 
     public static <O extends FieldObjectDefinition> FieldDefinition<O, MaxField> max(O ref, String label) {
         return new FieldDefinition<>(
                 MaxField.class,
                 ref,
                 label,
-                ToleranceUtils.TOLERANCE
+                TOLERANCE
         );
     }
 

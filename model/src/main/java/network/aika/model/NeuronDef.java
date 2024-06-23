@@ -21,17 +21,11 @@ import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fields.Field;
-import network.aika.fields.IdentityFunction;
-import network.aika.fields.SumField;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
-import static network.aika.fielddefs.Operators.invert;
-import static network.aika.fielddefs.Operators.threshold;
+import static network.aika.fielddefs.Operators.*;
 import static network.aika.fields.ThresholdOperator.Type.ABOVE;
 import static network.aika.queue.Phase.TRAINING;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
@@ -47,20 +41,17 @@ public class NeuronDef {
 
     DisjunctiveDef disjunctiveDef;
 
-    ActivationTypeDefinition activation;
+    ActivationDefinition activation;
 
-    NeuronTypeDefinition neuron;
+    NeuronDefinition neuron;
 
-    LinkTypeDefinition link;
+    LinkDefinition link;
 
-    public static final String INPUT_VALUE = "inputValue";
     public static final String INPUT_IS_FIRED = "inputIsFired";
     public static final String NEG_INPUT_IS_FIRED = "negInputIsFired";
 
 
-    SynapseTypeDefinition synapse;
-
-    public static final String WEIGHT = "weight";
+    SynapseDefinition synapse;
 
     public static final String INITIAL_CATEGORY_SYNAPSE_WEIGHT = "initialCategorySynapseWeight";
 
@@ -72,36 +63,38 @@ public class NeuronDef {
     public void init() {
         nonFeedbackState.init("NonFeedbackState", NON_FEEDBACK);
 
-        activation = new ActivationTypeDefinition(
+        activation = new ActivationDefinition(
                 "Activation",
                 Activation.class
         );
 
-        neuron = new NeuronTypeDefinition(
+        neuron = new NeuronDefinition(
                 "Neuron",
                 Neuron.class
         );
 
-        link = new LinkTypeDefinition(
+        link = new LinkDefinition(
                 "Link",
                 Link.class);
 
-        link.addFieldDefinition(new FieldDefinition(IdentityFunction.class, link, INPUT_VALUE));
-        link.inputIsFired = threshold(link, "inputIsFired", 0.0, ABOVE, link.inputValue);
-        link.negInputIsFired = invert(link,"!inputIsFired", link.inputIsFired);
+        link.setInputValue(identity(link, "inputValue"));
+        link.setInputIsFired(
+                threshold(link, "inputIsFired", 0.0, ABOVE)
+                        .in(0, (o, p) -> o.getInputValue())
+        );
+        link.setNegInputIsFired(
+                invert(link,"!inputIsFired")
+                        .in(0, (o, p) -> o.getInputIsFired())
+        );
 
-        synapse = new SynapseTypeDefinition(
+        synapse = new SynapseDefinition(
                 "Synapse",
                 Synapse.class
         );
 
-        synapse.addFieldDefinition(
-                new FieldDefinition<>(SumField.class, synapse, WEIGHT, TOLERANCE)
+        synapse.setWeight(
+                sum(synapse, "weight")
                         .setQueued(TRAINING)
-                        .addListener("onWeightModified", (r, fl, u) -> {
-//                    r.checkWeight();
-                            r.setModified();
-                        })
         );
     }
 
@@ -109,23 +102,23 @@ public class NeuronDef {
         return typeModel;
     }
 
-    public StateTypeDefinition getNonFeedbackState() {
+    public StateDefinition getNonFeedbackState() {
         return nonFeedbackState.state;
     }
 
-    public ActivationTypeDefinition getActivation() {
+    public ActivationDefinition getActivation() {
         return activation;
     }
 
-    public NeuronTypeDefinition getNeuron() {
+    public NeuronDefinition getNeuron() {
         return neuron;
     }
 
-    public LinkTypeDefinition getLink() {
+    public LinkDefinition getLink() {
         return link;
     }
 
-    public SynapseTypeDefinition getSynapse() {
+    public SynapseDefinition getSynapse() {
         return synapse;
     }
 }

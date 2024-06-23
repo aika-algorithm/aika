@@ -16,10 +16,10 @@
  */
 package network.aika.model;
 
-import network.aika.elements.typedef.ActivationTypeDefinition;
-import network.aika.elements.typedef.LinkTypeDefinition;
-import network.aika.elements.typedef.NeuronTypeDefinition;
-import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.ActivationDefinition;
+import network.aika.elements.typedef.LinkDefinition;
+import network.aika.elements.typedef.NeuronDefinition;
+import network.aika.elements.typedef.SynapseDefinition;
 
 /**
  *
@@ -27,24 +27,24 @@ import network.aika.elements.typedef.SynapseTypeDefinition;
  */
 public interface TypeDefinition {
 
-    ActivationTypeDefinition getActivation();
+    ActivationDefinition getActivation();
 
-    NeuronTypeDefinition getNeuron();
+    NeuronDefinition getNeuron();
 
-    ActivationTypeDefinition getCategoryActivation();
+    ActivationDefinition getCategoryActivation();
 
-    NeuronTypeDefinition getCategoryNeuron();
+    NeuronDefinition getCategoryNeuron();
 
-    LinkTypeDefinition getLink();
+    LinkDefinition getLink();
 
-    SynapseTypeDefinition getSynapse();
+    SynapseDefinition getSynapse();
 
-    LinkTypeDefinition getCategoryInputLink();
+    LinkDefinition getCategoryInputLink();
 
-    SynapseTypeDefinition getCategoryInputSynapse();
+    SynapseDefinition getCategoryInputSynapse();
 
-    LinkTypeDefinition getCategoryLink();
+    LinkDefinition getCategoryLink();
 
-    SynapseTypeDefinition getCategorySynapse();
+    SynapseDefinition getCategorySynapse();
 
 }

@@ -19,24 +19,21 @@ package network.aika.fielddefs;
 import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
 import network.aika.fields.ReferencedUpdateListener;
-import network.aika.fields.UpdateListener;
 import network.aika.queue.ProcessingPhase;
-import network.aika.queue.QueueProvider;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> implements FieldInputDefinition, FieldOutputDefinition {
+public class FieldDefinition<O extends FieldObjectDefinition> implements FieldInputDefinition, FieldOutputDefinition {
 
     protected int fieldId;
 
-    protected Class<F> clazz;
+    protected Class<? extends Field> clazz;
 
     protected O ref;
 
@@ -51,7 +48,7 @@ public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> i
     protected boolean isNextRound;
 
 
-    public FieldDefinition(Class<F> clazz, O ref, String name) {
+    public FieldDefinition(Class<? extends Field> clazz, O ref, String name) {
         this.clazz = clazz;
         this.fieldName = name;
         this.ref = ref;
@@ -59,13 +56,13 @@ public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> i
         ref.addFieldDefinition(this);
     }
 
-    public FieldDefinition(Class<F> clazz, O ref, String name, double tolerance) {
+    public FieldDefinition(Class<? extends Field> clazz, O ref, String name, double tolerance) {
         this(clazz, ref, name);
 
         this.tolerance = tolerance;
     }
 
-    public FieldDefinition<O, F> in(Integer arg, BiFunction<O, Path, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
+    public FieldDefinition<O> in(Integer arg, BiFunction<O, Path, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
         Path objectPath = new Path();
         objectPath.add(ref);
         FieldOutputDefinition in = pathProvider.apply(ref, objectPath);
@@ -77,11 +74,11 @@ public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> i
         return this;
     }
 
-    public FieldDefinition<O, F> in(Integer arg, BiFunction<O, Path, FieldOutputDefinition> pathProvider) {
+    public FieldDefinition<O> in(Integer arg, BiFunction<O, Path, FieldOutputDefinition> pathProvider) {
         return in(arg, pathProvider, true);
     }
 
-    public FieldDefinition<O, F> out(Integer arg, BiFunction<O, Path, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
+    public FieldDefinition<O> out(Integer arg, BiFunction<O, Path, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
         Path objectPath = new Path();
         objectPath.add(ref);
         FieldInputDefinition out = pathProvider.apply(ref, objectPath);
@@ -93,13 +90,13 @@ public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> i
         return this;
     }
 
-    public FieldDefinition<O, F> out(Integer arg, BiFunction<O, Path, FieldInputDefinition> pathProvider) {
+    public FieldDefinition<O> out(Integer arg, BiFunction<O, Path, FieldInputDefinition> pathProvider) {
         return out(arg, pathProvider, true);
     }
 
-    public F instantiate(FieldObject reference) {
+    public Field instantiate(FieldObject reference) {
         try {
-            F instance = clazz
+            Field instance = clazz
                     .getConstructor(FieldObject.class)
                     .newInstance(reference);
 
@@ -116,13 +113,13 @@ public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> i
         }
     }
 
-    public FieldDefinition<O, F> setFieldId(int id) {
+    public FieldDefinition<O> setFieldId(int id) {
         fieldId = id;
 
         return this;
     }
 
-    public FieldDefinition<O, F> addListener(String name, ReferencedUpdateListener<?> listener) {
+    public FieldDefinition<O> addListener(String name, ReferencedUpdateListener<?> listener) {
 
         return this;
     }
@@ -131,11 +128,11 @@ public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> i
         return fieldId;
     }
 
-    public Class<F> getClazz() {
+    public Class<? extends Field> getClazz() {
         return clazz;
     }
 
-    public FieldDefinition<O, F> setClazz(Class<F> clazz) {
+    public FieldDefinition<O> setClazz(Class<? extends Field> clazz) {
         this.clazz = clazz;
 
         return this;
@@ -145,7 +142,7 @@ public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> i
         return ref;
     }
 
-    public FieldDefinition<O, F> setRef(O ref) {
+    public FieldDefinition<O> setRef(O ref) {
         this.ref = ref;
 
         return this;
@@ -155,7 +152,7 @@ public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> i
         return fieldName;
     }
 
-    public FieldDefinition<O, F> setFieldName(String fieldName) {
+    public FieldDefinition<O> setFieldName(String fieldName) {
         this.fieldName = fieldName;
 
         return this;
@@ -165,7 +162,7 @@ public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> i
         return tolerance;
     }
 
-    public FieldDefinition<O, F> setTolerance(Double tolerance) {
+    public FieldDefinition<O> setTolerance(Double tolerance) {
         this.tolerance = tolerance;
 
         return this;
@@ -175,7 +172,7 @@ public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> i
         return phase;
     }
 
-    public FieldDefinition<O, F> setPhase(ProcessingPhase phase) {
+    public FieldDefinition<O> setPhase(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;
@@ -185,13 +182,13 @@ public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> i
         return isNextRound;
     }
 
-    public FieldDefinition<O, F> setNextRound(boolean nextRound) {
+    public FieldDefinition<O> setNextRound(boolean nextRound) {
         isNextRound = nextRound;
 
         return this;
     }
 
-    public FieldDefinition<O, F> setQueued(ProcessingPhase phase) {
+    public FieldDefinition<O> setQueued(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;

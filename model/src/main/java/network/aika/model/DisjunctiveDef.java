@@ -22,9 +22,7 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
-import network.aika.fielddefs.FieldDefinition;
 
-import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.Operators.mul;
 
 /**
@@ -35,14 +33,14 @@ public class DisjunctiveDef {
 
     NeuronDef superType;
 
-    ActivationTypeDefinition activation;
-    NeuronTypeDefinition neuron;
+    ActivationDefinition activation;
+    NeuronDefinition neuron;
 
-    SynapseSlotTypeDefinition synapseInputSlot;
-    SynapseSlotTypeDefinition synapseOutputSlot;
+    SynapseSlotDefinition synapseInputSlot;
+    SynapseSlotDefinition synapseOutputSlot;
 
-    LinkTypeDefinition link;
-    SynapseTypeDefinition synapse;
+    LinkDefinition link;
+    SynapseDefinition synapse;
 
     public DisjunctiveDef(NeuronDef superType) {
         this.superType = superType;
@@ -50,72 +48,66 @@ public class DisjunctiveDef {
     }
 
     public void init() {
-        activation = new ActivationTypeDefinition(
+        activation = new ActivationDefinition(
                 "DisjunctiveActivation",
                 Activation.class
         );
 
-        neuron = new NeuronTypeDefinition(
+        neuron = new NeuronDefinition(
                 "DisjunctiveNeuron",
                 Neuron.class
         );
 
-        synapseInputSlot = new SynapseSlotTypeDefinition(
+        synapseInputSlot = new SynapseSlotDefinition(
                 "DisjunctiveSynapseInputSlot",
                 DisjunctiveSynapseSlot.class
         );
 
-        synapseOutputSlot = new SynapseSlotTypeDefinition(
+        synapseOutputSlot = new SynapseSlotDefinition(
                 "DisjunctiveSynapseOutputSlot",
                 DisjunctiveSynapseSlot.class
         );
 
-        link = new LinkTypeDefinition(
+        link = new LinkDefinition(
                 "DisjunctiveLink",
                 DisjunctiveLink.class)
-                .setSynapseDef(synapse)
-                .setInputDef(superType.conjunctiveDef.activation)
-                .setOutputDef(activation);
+                .setSynapse(synapse)
+                .setInput(superType.conjunctiveDef.activation)
+                .setOutput(activation);
 
-        weightUpdate = mul(
-                link,
-                "weight update",
-                superType.getLink().inputIsFired,
-                link.getOutputDef().updateValue
-        );
-        link(
-                weightUpdate,
-                superType.synapse.weight
-        );
+        mul(link, "weight update")
+                .in(0, (o, p) -> o.getInputIsFired())
+                .in(1, (o, p) -> o.getOutput(p).getUpdateValue())
+                .out(null, (o, p) -> o.getSynapse(p).getWeight());
 
-        synapse = new SynapseTypeDefinition(
+        synapse = new SynapseDefinition(
                 "DisjunctiveSynapse",
                 DisjunctiveSynapse.class
         );
     }
 
-    public ActivationTypeDefinition getActivation() {
+    public ActivationDefinition getActivation() {
         return activation;
     }
 
-    public NeuronTypeDefinition getNeuron() {
+    public NeuronDefinition getNeuron() {
         return neuron;
     }
 
-    public SynapseSlotTypeDefinition getSynapseInputSlot() {
+    public SynapseSlotDefinition getSynapseInputSlot() {
         return synapseInputSlot;
     }
 
-    public SynapseSlotTypeDefinition getSynapseOutputSlot() {
+    public SynapseSlotDefinition getSynapseOutputSlot() {
         return synapseOutputSlot;
     }
 
 
-    public LinkTypeDefinition getLink() {
+    public LinkDefinition getLink() {
         return link;
     }
 
-    public SynapseTypeDefinition getSynapse() {
+    public SynapseDefinition getSynapse() {
         return synapse;
     }
 

@@ -31,14 +31,14 @@ public class ConjunctiveDef {
 
     private NeuronDef superType;
 
-    ActivationTypeDefinition activation;
-    NeuronTypeDefinition neuron;
+    ActivationDefinition activation;
+    NeuronDefinition neuron;
 
-    SynapseSlotTypeDefinition synapseInputSlot;
-    SynapseSlotTypeDefinition synapseOutputSlot;
+    SynapseSlotDefinition synapseInputSlot;
+    SynapseSlotDefinition synapseOutputSlot;
 
-    LinkTypeDefinition link;
-    SynapseTypeDefinition synapse;
+    LinkDefinition link;
+    SynapseDefinition synapse;
 
 
     public ConjunctiveDef(NeuronDef superType) {
@@ -47,58 +47,58 @@ public class ConjunctiveDef {
     }
 
     public void init() {
-        activation = new ActivationTypeDefinition(
+        activation = new ActivationDefinition(
                 "ConjunctiveActivation",
                 Activation.class
         );
 
-        neuron = new NeuronTypeDefinition(
+        neuron = new NeuronDefinition(
                 "ConjunctiveNeuron",
                 Neuron.class
         );
 
-        synapseInputSlot = new SynapseSlotTypeDefinition(
+        synapseInputSlot = new SynapseSlotDefinition(
                 "ConjunctiveSynapseInputSlot",
                 ConjunctiveSynapseSlot.class
         );
 
-        synapseOutputSlot = new SynapseSlotTypeDefinition(
+        synapseOutputSlot = new SynapseSlotDefinition(
                 "ConjunctiveSynapseOutputSlot",
                 ConjunctiveSynapseSlot.class
         );
 
-        link = new LinkTypeDefinition(
+        link = new LinkDefinition(
                 "ConjunctiveLink",
                 ConjunctiveLink.class);
 
-        synapse = new SynapseTypeDefinition(
+        synapse = new SynapseDefinition(
                 "ConjunctiveSynapse",
                 ConjunctiveSynapse.class
         );
     }
 
 
-    public ActivationTypeDefinition getActivation() {
+    public ActivationDefinition getActivation() {
         return activation;
     }
 
-    public NeuronTypeDefinition getNeuron() {
+    public NeuronDefinition getNeuron() {
         return neuron;
     }
 
-    public SynapseSlotTypeDefinition getSynapseInputSlot() {
+    public SynapseSlotDefinition getSynapseInputSlot() {
         return synapseInputSlot;
     }
 
-    public SynapseSlotTypeDefinition getSynapseOutputSlot() {
+    public SynapseSlotDefinition getSynapseOutputSlot() {
         return synapseOutputSlot;
     }
 
-    public LinkTypeDefinition getLink() {
+    public LinkDefinition getLink() {
         return link;
     }
 
-    public SynapseTypeDefinition getSynapse() {
+    public SynapseDefinition getSynapse() {
         return synapse;
     }
 

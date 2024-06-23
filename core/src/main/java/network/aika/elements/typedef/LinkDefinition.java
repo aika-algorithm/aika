@@ -21,7 +21,6 @@ import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.Path;
-import network.aika.fields.AbstractFunction;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -29,14 +28,45 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Lukas Molzberger
  */
-public class LinkTypeDefinition extends TypeDefinition<LinkTypeDefinition, Link> {
+public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
 
-    private SynapseTypeDefinition synapseDef;
-    private ActivationTypeDefinition inputDef;
-    private ActivationTypeDefinition outputDef;
+    private SynapseDefinition synapse;
+    private ActivationDefinition input;
+    private ActivationDefinition output;
 
-    public LinkTypeDefinition(String name, Class<? extends Link> clazz) {
+    private FieldDefinition<LinkDefinition> inputValue;
+
+    private FieldDefinition<LinkDefinition> inputIsFired;
+
+    private FieldDefinition<LinkDefinition> negInputIsFired;
+
+
+    public LinkDefinition(String name, Class<? extends Link> clazz) {
         super(name, clazz);
+    }
+
+    public FieldDefinition<LinkDefinition> getInputValue() {
+        return inputValue;
+    }
+
+    public void setInputValue(FieldDefinition<LinkDefinition> inputValue) {
+        this.inputValue = inputValue;
+    }
+
+    public FieldDefinition<LinkDefinition> getInputIsFired() {
+        return inputIsFired;
+    }
+
+    public void setInputIsFired(FieldDefinition<LinkDefinition> inputIsFired) {
+        this.inputIsFired = inputIsFired;
+    }
+
+    public FieldDefinition<LinkDefinition> getNegInputIsFired() {
+        return negInputIsFired;
+    }
+
+    public void setNegInputIsFired(FieldDefinition<LinkDefinition> negInputIsFired) {
+        this.negInputIsFired = negInputIsFired;
     }
 
     public Link instantiate(Synapse s, Activation iAct, Activation oAct) {
@@ -58,43 +88,48 @@ public class LinkTypeDefinition extends TypeDefinition<LinkTypeDefinition, Link>
         }
     }
 
-    public SynapseTypeDefinition getSynapseDef() {
-        return synapseDef;
+    public SynapseDefinition getSynapse() {
+        return synapse;
     }
 
-    public LinkTypeDefinition setSynapseDef(SynapseTypeDefinition synapseDef) {
-        this.synapseDef = synapseDef;
+    public SynapseDefinition getSynapse(Path p) {
+        p.add(synapse);
+        return synapse;
+    }
+
+    public LinkDefinition setSynapse(SynapseDefinition synapse) {
+        this.synapse = synapse;
 
         return this;
     }
 
-    public ActivationTypeDefinition getInput(Path p) {
-        p.add(inputDef);
+    public ActivationDefinition getInput(Path p) {
+        p.add(input);
 
-        return inputDef;
+        return input;
     }
 
-    public ActivationTypeDefinition getInputDef() {
-        return inputDef;
+    public ActivationDefinition getInput() {
+        return input;
     }
 
-    public LinkTypeDefinition setInputDef(ActivationTypeDefinition inputDef) {
-        this.inputDef = inputDef;
+    public LinkDefinition setInput(ActivationDefinition input) {
+        this.input = input;
 
         return this;
     }
 
-    public ActivationTypeDefinition getOutput(Path p) {
-        p.add(outputDef);
-        return outputDef;
+    public ActivationDefinition getOutput(Path p) {
+        p.add(output);
+        return output;
     }
 
-    public ActivationTypeDefinition getOutputDef() {
-        return outputDef;
+    public ActivationDefinition getOutput() {
+        return output;
     }
 
-    public LinkTypeDefinition setOutputDef(ActivationTypeDefinition outputDef) {
-        this.outputDef = outputDef;
+    public LinkDefinition setOutput(ActivationDefinition output) {
+        this.output = output;
 
         return this;
     }

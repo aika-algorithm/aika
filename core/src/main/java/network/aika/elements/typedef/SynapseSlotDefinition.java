@@ -26,9 +26,9 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Lukas Molzberger
  */
-public class SynapseSlotTypeDefinition extends TypeDefinition<SynapseSlotTypeDefinition, SynapseSlot> {
+public class SynapseSlotDefinition extends TypeDefinition<SynapseSlotDefinition, SynapseSlot> {
 
-    public SynapseSlotTypeDefinition(String name, Class<? extends SynapseSlot> clazz) {
+    public SynapseSlotDefinition(String name, Class<? extends SynapseSlot> clazz) {
         super(name, clazz);
     }
 
