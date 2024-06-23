@@ -29,7 +29,7 @@ public class FieldInstantiationTest {
 
     @Test
     public void testFieldInstantiation() {
-        FieldObjectDefinition<?> state = new FieldObjectDefinition();
+        FieldObjectDefinition state = new FieldObjectDefinition();
 
         FieldDefinition net = new FieldDefinition(SumField.class, state, "net");
 

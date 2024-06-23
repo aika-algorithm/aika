@@ -26,17 +26,19 @@ import network.aika.queue.QueueProvider;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<F extends Field> implements FieldInputDefinition, FieldOutputDefinition {
+public class FieldDefinition<O extends FieldObjectDefinition, F extends Field> implements FieldInputDefinition, FieldOutputDefinition {
 
     protected int fieldId;
 
     protected Class<F> clazz;
 
-    protected FieldObjectDefinition ref;
+    protected O ref;
 
     protected String fieldName;
 
@@ -49,7 +51,7 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
     protected boolean isNextRound;
 
 
-    public FieldDefinition(Class<F> clazz, FieldObjectDefinition ref, String name) {
+    public FieldDefinition(Class<F> clazz, O ref, String name) {
         this.clazz = clazz;
         this.fieldName = name;
         this.ref = ref;
@@ -57,10 +59,42 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
         ref.addFieldDefinition(this);
     }
 
-    public FieldDefinition(Class<F> clazz, FieldObjectDefinition ref, String name, double tolerance) {
+    public FieldDefinition(Class<F> clazz, O ref, String name, double tolerance) {
         this(clazz, ref, name);
 
         this.tolerance = tolerance;
+    }
+
+    public FieldDefinition<O, F> in(Integer arg, BiFunction<O, Path, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
+        Path objectPath = new Path();
+        objectPath.add(ref);
+        FieldOutputDefinition in = pathProvider.apply(ref, objectPath);
+
+        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, in, arg, this, propagateUpdates);
+        addInput(fl);
+        in.addOutput(fl);
+
+        return this;
+    }
+
+    public FieldDefinition<O, F> in(Integer arg, BiFunction<O, Path, FieldOutputDefinition> pathProvider) {
+        return in(arg, pathProvider, true);
+    }
+
+    public FieldDefinition<O, F> out(Integer arg, BiFunction<O, Path, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
+        Path objectPath = new Path();
+        objectPath.add(ref);
+        FieldInputDefinition out = pathProvider.apply(ref, objectPath);
+
+        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, this, arg, out, propagateUpdates);
+        out.addInput(fl);
+        addOutput(fl);
+
+        return this;
+    }
+
+    public FieldDefinition<O, F> out(Integer arg, BiFunction<O, Path, FieldInputDefinition> pathProvider) {
+        return out(arg, pathProvider, true);
     }
 
     public F instantiate(FieldObject reference) {
@@ -82,13 +116,13 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
         }
     }
 
-    public FieldDefinition<F> setFieldId(int id) {
+    public FieldDefinition<O, F> setFieldId(int id) {
         fieldId = id;
 
         return this;
     }
 
-    public FieldDefinition<F> addListener(String name, ReferencedUpdateListener<?> listener) {
+    public FieldDefinition<O, F> addListener(String name, ReferencedUpdateListener<?> listener) {
 
         return this;
     }
@@ -101,7 +135,7 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
         return clazz;
     }
 
-    public FieldDefinition<F> setClazz(Class<F> clazz) {
+    public FieldDefinition<O, F> setClazz(Class<F> clazz) {
         this.clazz = clazz;
 
         return this;
@@ -111,7 +145,7 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
         return ref;
     }
 
-    public FieldDefinition<F> setRef(FieldObjectDefinition ref) {
+    public FieldDefinition<O, F> setRef(O ref) {
         this.ref = ref;
 
         return this;
@@ -121,7 +155,7 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
         return fieldName;
     }
 
-    public FieldDefinition<F> setFieldName(String fieldName) {
+    public FieldDefinition<O, F> setFieldName(String fieldName) {
         this.fieldName = fieldName;
 
         return this;
@@ -131,7 +165,7 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
         return tolerance;
     }
 
-    public FieldDefinition<F> setTolerance(Double tolerance) {
+    public FieldDefinition<O, F> setTolerance(Double tolerance) {
         this.tolerance = tolerance;
 
         return this;
@@ -141,7 +175,7 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
         return phase;
     }
 
-    public FieldDefinition<F> setPhase(ProcessingPhase phase) {
+    public FieldDefinition<O, F> setPhase(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;
@@ -151,13 +185,13 @@ public class FieldDefinition<F extends Field> implements FieldInputDefinition, F
         return isNextRound;
     }
 
-    public FieldDefinition<F> setNextRound(boolean nextRound) {
+    public FieldDefinition<O, F> setNextRound(boolean nextRound) {
         isNextRound = nextRound;
 
         return this;
     }
 
-    public FieldDefinition<F> setQueued(ProcessingPhase phase) {
+    public FieldDefinition<O, F> setQueued(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;

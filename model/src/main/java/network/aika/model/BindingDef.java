@@ -39,7 +39,6 @@ import static network.aika.enums.Transition.*;
 import static network.aika.enums.Trigger.*;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.fielddefs.Operators.scale;
 import static network.aika.model.NeuronDef.INPUT_VALUE;
 import static network.aika.model.NeuronDef.WEIGHT;
@@ -90,7 +89,7 @@ public class BindingDef implements TypeDefinition {
     private SynapseTypeDefinition categorySynapse;
 
 
-    FieldDefinition<ScaleFunction> negativeWeight;
+    FieldDefinition<SynapseTypeDefinition, ScaleFunction> negativeWeight;
 
     public BindingDef(TypeModel typeModel, ConjunctiveDef superType) {
         this.typeModel = typeModel;
@@ -289,15 +288,9 @@ public class BindingDef implements TypeDefinition {
                 .setStoredAt(OUTPUT)
                 .setRegisterInputSlot(ON_INIT);
 
-        negativeWeight = scale(negativeFeedbackSynapse, NEG_WEIGHT, -1, typeModel.neuron.getSynapse().getFieldDef(WEIGHT));
-        link(
-                negativeFeedbackSynapse,
-                (o, p) -> o.getLinkType(p).getOutput(p).getStateType(p, negativeFeedbackSynapse.outputState()),
-                WEIGHT,
-                NET
-        )
-                .setPropagateUpdates(false);
-
+        negativeWeight = scale(negativeFeedbackSynapse, NEG_WEIGHT, -1)
+                .in(0, (o, p) -> o.getWeight())
+                .out(null, (o, p) -> o.getLinkType(p).getOutput(p).getStateType(p, negativeFeedbackSynapse.outputState()).net, false);
 
         relationInputLink = new LinkTypeDefinition(
                 "RelationInputLink",

@@ -22,6 +22,7 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
+import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.Path;
 
 import java.lang.reflect.InvocationTargetException;
@@ -74,6 +75,10 @@ public class SynapseTypeDefinition extends TypeDefinition<SynapseTypeDefinition,
     public NeuronTypeDefinition getOutput(Path p) {
         p.add(outputDef);
         return outputDef;
+    }
+
+    public FieldDefinition getWeight() {
+        return null;
     }
 
     public SynapseSlotTypeDefinition getInputSlotType() {

@@ -17,8 +17,6 @@
 package network.aika.fielddefs;
 
 
-import java.util.function.BiConsumer;
-
 /**
  * @author Lukas Molzberger
  */
@@ -26,46 +24,19 @@ public class FieldLinkDefinition {
 
     private Path objectPath;
 
+    private Integer arg;
+
     private FieldOutputDefinition in;
 
     private FieldInputDefinition out;
 
     boolean propagateUpdates;
 
-    public FieldLinkDefinition(Path path, FieldOutputDefinition in, int arg, FieldInputDefinition out) {
+    public FieldLinkDefinition(Path path, FieldOutputDefinition in, Integer arg, FieldInputDefinition out, boolean propagateUpdates) {
         this.objectPath = path;
+        this.arg = arg;
         this.in = in;
         this.out = out;
-    }
-
-    public static <O extends FieldObjectDefinition> FieldLinkDefinition link(O o, BiConsumer<O, Path> pathProvider, String inLabel, Integer arg, String outLabel) {
-        Path objectPath = new Path();
-        objectPath.add(o);
-        pathProvider.accept(o, objectPath);
-
-        FieldOutputDefinition in = o.getFieldDef(inLabel);
-        FieldInputDefinition out = objectPath.getToObject().getFieldDef(outLabel);
-
-        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, in, arg, out);
-        out.addInput(fl);
-        in.addOutput(fl);
-        return fl;
-    }
-
-    public static <O extends FieldObjectDefinition> FieldLinkDefinition link(O o, BiConsumer<O, Path> pathProvider, String inLabel, String outLabel) {
-        return link(o, pathProvider, inLabel, null, outLabel);
-    }
-
-
-    public static <O extends FieldObjectDefinition> void linkAll(O o, BiConsumer<O, Path> pathProvider, String inLabel, String... outLabels) {
-        for(String outLabel : outLabels) {
-            if(o != null) {
-                link(o, pathProvider, inLabel, 0, outLabel);
-            }
-        }
-    }
-
-    public void setPropagateUpdates(boolean propagateUpdates) {
         this.propagateUpdates = propagateUpdates;
     }
 }

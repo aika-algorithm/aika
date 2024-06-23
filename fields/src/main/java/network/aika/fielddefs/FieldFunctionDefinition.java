@@ -24,17 +24,17 @@ import network.aika.fields.ReferencedFunction;
 /**
  * @author Lukas Molzberger
  */
-public class FieldFunctionDefinition extends FieldDefinition<FieldFunction> {
+public class FieldFunctionDefinition<O extends FieldObjectDefinition> extends FieldDefinition<O, FieldFunction> {
 
     ReferencedFunction f;
 
-    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, ReferencedFunction f) {
+    public FieldFunctionDefinition(O ref, String name, ReferencedFunction f) {
         super(FieldFunction.class, ref, name);
 
         this.f = f;
     }
 
-    public FieldFunctionDefinition(FieldObjectDefinition ref, String name, double tolerance, ReferencedFunction f) {
+    public FieldFunctionDefinition(O ref, String name, double tolerance, ReferencedFunction f) {
         super(FieldFunction.class, ref, name, tolerance);
 
         this.f = f;
