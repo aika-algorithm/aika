@@ -24,7 +24,10 @@ import network.aika.elements.typedef.*;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.fielddefs.Operators.*;
+import static network.aika.fields.IdentityFunction.identity;
+import static network.aika.fields.SumField.sum;
 import static network.aika.fields.ThresholdOperator.Type.ABOVE;
+import static network.aika.fields.ThresholdOperator.threshold;
 import static network.aika.queue.Phase.TRAINING;
 
 /**

@@ -23,7 +23,8 @@ import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
 
-import static network.aika.fielddefs.Operators.mul;
+import static network.aika.fields.Multiplication.mul;
+
 
 /**
  *

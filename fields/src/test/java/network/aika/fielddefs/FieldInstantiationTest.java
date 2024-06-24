@@ -19,7 +19,6 @@ package network.aika.fielddefs;
 import network.aika.fields.SumField;
 import org.junit.jupiter.api.Test;
 
-import static network.aika.fielddefs.Operators.func;
 import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
 /**

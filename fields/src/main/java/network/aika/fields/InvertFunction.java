@@ -16,12 +16,18 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fields.link.FieldLink;
 
 /**
  * @author Lukas Molzberger
  */
 public class InvertFunction<O extends FieldObject> extends AbstractFunction<O> {
+
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> invert(O ref, String label) {
+        return new FieldDefinition<>(InvertFunction.class, ref, label);
+    }
 
     public InvertFunction(O ref, String label) {
         super(ref, label);

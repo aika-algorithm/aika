@@ -17,14 +17,21 @@
 package network.aika.fields;
 
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fields.link.FieldLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class ExcludeInput extends Subtraction {
+public class ExcludeInput<O extends FieldObject> extends Subtraction<O> {
 
-    public ExcludeInput(FieldObject ref, String label) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> excludeInput(O ref, String label) {
+        return new FieldDefinition<>(ExcludeInput.class, ref, label);
+    }
+
+
+    public ExcludeInput(O ref, String label) {
         super(ref, label);
     }
 

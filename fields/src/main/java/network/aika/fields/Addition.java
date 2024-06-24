@@ -16,14 +16,20 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fields.link.FieldLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class Addition extends AbstractFunction {
+public class Addition<O extends FieldObject> extends AbstractFunction<O> {
 
-    public Addition(FieldObject ref, String label) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> add(O ref, String label) {
+        return new FieldDefinition<>(Addition.class, ref, label);
+    }
+
+    public Addition(O ref, String label) {
         super(ref, label);
     }
 

@@ -16,6 +16,9 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldFunctionDefinition;
+import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fields.link.FieldLink;
 
 import java.util.function.DoubleUnaryOperator;
@@ -23,11 +26,15 @@ import java.util.function.DoubleUnaryOperator;
 /**
  * @author Lukas Molzberger
  */
-public class FieldFunction extends AbstractFunction {
+public class FieldFunction<O extends FieldObject> extends AbstractFunction<O> {
+
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> func(O ref, String label, Double tolerance) {
+        return new FieldFunctionDefinition<>(ref, label, tolerance);
+    }
 
     private ReferencedFunction function;
 
-    public FieldFunction(FieldObject ref, String label, Double tolerance) {
+    public FieldFunction(O ref, String label, Double tolerance) {
         super(ref, label, tolerance);
     }
 

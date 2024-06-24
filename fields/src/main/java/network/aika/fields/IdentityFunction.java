@@ -16,12 +16,18 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fields.link.FieldLink;
 
 /**
  * @author Lukas Molzberger
  */
 public class IdentityFunction<O extends FieldObject> extends AbstractFunction<O> {
+
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> identity(O ref, String label) {
+        return new FieldDefinition<>(IdentityFunction.class, ref, label);
+    }
 
     public IdentityFunction(O ref, String label) {
         super(ref, label);

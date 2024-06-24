@@ -16,6 +16,9 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.BiFunctionFieldDefinition;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fields.link.FieldLink;
 
 import java.util.function.DoubleBinaryOperator;
@@ -23,11 +26,15 @@ import java.util.function.DoubleBinaryOperator;
 /**
  * @author Lukas Molzberger
  */
-public class BiFunction extends AbstractFunction {
+public class BiFunction<O extends FieldObject> extends AbstractFunction<O> {
+
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> func(O ref, String label) {
+        return new BiFunctionFieldDefinition<>(ref, label, null);
+    }
 
     private ReferencedBiFunction function;
 
-    public BiFunction(FieldObject ref, String label) {
+    public BiFunction(O ref, String label) {
         super(ref, label);
     }
 

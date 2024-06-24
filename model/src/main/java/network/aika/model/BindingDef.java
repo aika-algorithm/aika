@@ -39,9 +39,8 @@ import static network.aika.enums.Transition.*;
 import static network.aika.enums.Trigger.*;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.fielddefs.Operators.max;
-import static network.aika.fielddefs.Operators.scale;
-import static network.aika.utils.Utils.TOLERANCE;
+import static network.aika.fields.MaxField.max;
+import static network.aika.fields.ScaleFunction.scale;
 
 /**
  *
@@ -277,7 +276,7 @@ public class BindingDef implements TypeDefinition {
 
         negativeWeight = scale(negativeFeedbackSynapse, "negative weight", -1)
                 .in(0, (o, p) -> o.getWeight())
-                .out(null, (o, p) -> o.getLinkType(p).getOutput(p).getState(p, negativeFeedbackSynapse.outputState()).getNet(), false);
+                .out((o, p) -> o.getLinkType(p).getOutput(p).getState(p, negativeFeedbackSynapse.outputState()).getNet(), false);
 
         relationInputLink = new LinkDefinition(
                 "RelationInputLink",

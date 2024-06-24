@@ -18,12 +18,7 @@ package network.aika.enums.sign;
 
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldObjectDefinition;
-import network.aika.fielddefs.FieldOutputDefinition;
-import network.aika.fielddefs.Operators;
-import network.aika.fields.Field;
-import network.aika.fields.FieldObject;
-import network.aika.fields.FieldOutput;
-import network.aika.fields.Fields;
+import network.aika.fields.InvertFunction;
 
 /**
  *
@@ -37,7 +32,7 @@ public class Negative implements Sign {
 
     @Override
     public <O extends FieldObjectDefinition> FieldDefinition<O> getValue(O ref, FieldDefinition<O> v) {
-        return Operators.invert(ref, "neg")
+        return InvertFunction.invert(ref, "neg")
                 .in(0, (o, p) -> v);
     }
 

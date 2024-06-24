@@ -16,15 +16,23 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fields.link.FieldLink;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static network.aika.utils.ToleranceUtils.TOLERANCE;
+
 /**
  * @author Lukas Molzberger
  */
 public class SumField<O extends FieldObject> extends Field<O, FieldLink> {
+
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> sum(O ref, String label) {
+        return new FieldDefinition<>(SumField.class, ref, label, TOLERANCE);
+    }
 
     private List<FieldLink> inputs;
 

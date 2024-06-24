@@ -40,7 +40,6 @@ import static network.aika.enums.Trigger.FIRED_OUTER_FEEDBACK;
 import static network.aika.enums.Trigger.FIRED_NON_FEEDBACK;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.fielddefs.FieldLinkDefinition.link;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -68,9 +67,9 @@ public class PatternDef implements TypeDefinition {
     private SynapseDefinition categorySynapse;
 
 
-    FieldDefinition<AverageCoveredSpace> averageCoveredSpace;
+    FieldDefinition<SynapseDefinition> averageCoveredSpace;
 
-    FieldDefinition<NeuronStatistic> neuronStatistic;
+    FieldDefinition<NeuronDefinition> neuronStatistic;
 
 
     public PatternDef(TypeModel typeModel, ConjunctiveDef superType) {
