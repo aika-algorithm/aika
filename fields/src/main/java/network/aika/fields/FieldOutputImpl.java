@@ -26,12 +26,12 @@ import java.util.Collection;
 /**
  * @author Lukas Molzberger
  */
-public abstract class FieldOutputImpl implements FieldOutput {
+public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOutput {
 
     private static double MIN_TOLERANCE = 0.0000000001;
 
     private String label;
-    private FieldObject reference;
+    private O reference;
 
     protected double value;
 
@@ -44,7 +44,7 @@ public abstract class FieldOutputImpl implements FieldOutput {
 
     private Collection<AbstractFieldLink> receivers;
 
-    public FieldOutputImpl(FieldObject reference, String label, Double tolerance) {
+    public FieldOutputImpl(O reference, String label, Double tolerance) {
         this.reference = reference;
         this.label = label;
 
@@ -57,11 +57,11 @@ public abstract class FieldOutputImpl implements FieldOutput {
     }
 
     @Override
-    public FieldObject getReference() {
+    public O getReference() {
         return reference;
     }
 
-    public void setReference(FieldObject reference) {
+    public void setReference(O reference) {
         this.reference = reference;
     }
 

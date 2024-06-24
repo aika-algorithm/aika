@@ -24,9 +24,9 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class InputField extends Field<FieldLink> {
+public class InputField<O extends FieldObject> extends Field<O, FieldLink> {
 
-    public InputField(FieldObject ref, String label, double value) {
+    public InputField(O ref, String label, double value) {
         super(ref, label, null);
         setInitialValue(value);
     }

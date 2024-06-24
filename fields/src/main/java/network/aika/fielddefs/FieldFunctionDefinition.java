@@ -16,35 +16,21 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.fields.Field;
+
 import network.aika.fields.FieldFunction;
-import network.aika.fields.FieldObject;
-import network.aika.fields.ReferencedFunction;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldFunctionDefinition<O extends FieldObjectDefinition> extends FieldDefinition<O> {
+public abstract class FieldFunctionDefinition<O extends FieldObjectDefinition> extends FieldDefinition<O> {
 
-    ReferencedFunction f;
 
-    public FieldFunctionDefinition(O ref, String name, ReferencedFunction f) {
+    public FieldFunctionDefinition(O ref, String name) {
         super(FieldFunction.class, ref, name);
-
-        this.f = f;
     }
 
-    public FieldFunctionDefinition(O ref, String name, double tolerance, ReferencedFunction f) {
+    public FieldFunctionDefinition(O ref, String name, double tolerance) {
         super(FieldFunction.class, ref, name, tolerance);
-
-        this.f = f;
-    }
-
-    @Override
-    public Field instantiate(FieldObject reference) {
-        FieldFunction ff = (FieldFunction) super.instantiate(reference);
-        ff.setFunction(f);
-        return ff;
     }
 }

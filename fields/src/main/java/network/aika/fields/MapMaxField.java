@@ -25,11 +25,11 @@ import java.util.*;
  * @author Lukas Molzberger
  *
  */
-public class MapMaxField<K, V> extends AbstractMaxField<ArgumentFieldLink<K, V>> {
+public class MapMaxField<O extends FieldObject, K, V> extends AbstractMaxField<O, ArgumentFieldLink<K, V>> {
 
     private Map<K, ArgumentFieldLink<K, V>> inputs;
 
-    public MapMaxField(FieldObject ref, String label, Double tolerance) {
+    public MapMaxField(O ref, String label, Double tolerance) {
         super(ref, label, tolerance);
     }
 

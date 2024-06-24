@@ -21,9 +21,9 @@ import network.aika.fields.link.FieldLink;
 /**
  * @author Lukas Molzberger
  */
-public class InvertFunction extends AbstractFunction {
+public class InvertFunction<O extends FieldObject> extends AbstractFunction<O> {
 
-    public InvertFunction(FieldObject ref, String label) {
+    public InvertFunction(O ref, String label) {
         super(ref, label);
         setInitialValue(1.0);
     }

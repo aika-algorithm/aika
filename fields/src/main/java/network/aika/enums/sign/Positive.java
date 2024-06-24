@@ -34,7 +34,7 @@ public class Positive implements Sign {
     }
 
     @Override
-    public <D extends FieldObjectDefinition, F extends Field> FieldDefinition<F> getValue(D ref, FieldDefinition v) {
+    public <O extends FieldObjectDefinition> FieldDefinition<O> getValue(O ref, FieldDefinition<O> v) {
         return v;
     }
 

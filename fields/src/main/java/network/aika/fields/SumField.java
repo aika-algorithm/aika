@@ -24,11 +24,11 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class SumField extends Field {
+public class SumField<O extends FieldObject> extends Field<O, FieldLink> {
 
     private List<FieldLink> inputs;
 
-    public SumField(FieldObject reference, String label, Double tolerance) {
+    public SumField(O reference, String label, Double tolerance) {
         super(reference, label, tolerance);
     }
 

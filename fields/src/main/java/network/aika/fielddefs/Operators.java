@@ -28,15 +28,15 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  */
 public class Operators {
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, IdentityFunction> identity(O ref, String label) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> identity(O ref, String label) {
         return new FieldDefinition<>(IdentityFunction.class, ref, label);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, SumField> sum(O ref, String label) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> sum(O ref, String label) {
         return new FieldDefinition<>(SumField.class, ref, label, TOLERANCE);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, MaxField> max(O ref, String label) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> max(O ref, String label) {
         return new FieldDefinition<>(
                 MaxField.class,
                 ref,
@@ -45,47 +45,47 @@ public class Operators {
         );
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, Addition> add(O ref, String label) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> add(O ref, String label) {
         return new FieldDefinition<>(Addition.class, ref, label);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, Subtraction> sub(O ref, String label) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> sub(O ref, String label) {
         return new FieldDefinition<>(Subtraction.class, ref, label);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, MixFunction> mix(O ref, String label) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> mix(O ref, String label) {
         return new FieldDefinition<>(MixFunction.class, ref, label);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, ExcludeInput> excludeInput(O ref, String label) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> excludeInput(O ref, String label) {
         return new FieldDefinition<>(ExcludeInput.class, ref, label);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, Multiplication> mul(O ref, String label) {
-        return new FieldDefinition(Multiplication.class, ref, label);
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> mul(O ref, String label) {
+        return new FieldDefinition<>(Multiplication.class, ref, label);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, FieldFunction> func(O ref, String label, Double tolerance) {
-        return new FieldFunctionDefinition(ref, label, tolerance, null);
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> func(O ref, String label, Double tolerance) {
+        return new FieldFunctionDefinition<>(ref, label, tolerance);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, BiFunction> func(O ref, String label) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> func(O ref, String label) {
         return new BiFunctionFieldDefinition<>(ref, label, null);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, ThresholdOperator> threshold(O ref, String label, double threshold, ThresholdOperator.Type type) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> threshold(O ref, String label, double threshold, ThresholdOperator.Type type) {
         return new ThresholdOperatorFieldDefinition<>(ref, label, threshold, type);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, ThresholdOperator> threshold(O ref, String label, double threshold, ThresholdOperator.Type type, boolean isFinal, BiConsumer<O, Path> pathProvider, String in) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> threshold(O ref, String label, double threshold, ThresholdOperator.Type type, boolean isFinal, BiConsumer<O, Path> pathProvider, String in) {
         return new ThresholdOperatorFieldDefinition<>(ref, label, threshold, type, isFinal);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, InvertFunction> invert(O ref, String label) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> invert(O ref, String label) {
         return new FieldDefinition<>(InvertFunction.class, ref, label);
     }
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O, ScaleFunction> scale(O ref, String label, double scale) {
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> scale(O ref, String label, double scale) {
         return new FieldDefinition(ScaleFunction.class, ref, label, scale);
     }
 }

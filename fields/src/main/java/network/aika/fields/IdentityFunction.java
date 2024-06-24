@@ -21,9 +21,9 @@ import network.aika.fields.link.FieldLink;
 /**
  * @author Lukas Molzberger
  */
-public class IdentityFunction extends AbstractFunction {
+public class IdentityFunction<O extends FieldObject> extends AbstractFunction<O> {
 
-    public IdentityFunction(FieldObject ref, String label) {
+    public IdentityFunction(O ref, String label) {
         super(ref, label);
     }
 

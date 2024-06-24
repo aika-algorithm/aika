@@ -30,7 +30,7 @@ import static network.aika.utils.StringUtils.roundToString;
  *
  * @author Lukas Molzberger
  */
-public class FieldUpdate<E extends FieldObject<?, ?> & QueueProvider> extends Step<E> {
+public class FieldUpdate<E extends FieldObject & QueueProvider> extends Step<E> {
 
     private QueueInterceptor interceptor;
 

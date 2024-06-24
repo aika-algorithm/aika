@@ -22,7 +22,7 @@ import network.aika.fields.ThresholdOperator;
 /**
  * @author Lukas Molzberger
  */
-public class ThresholdOperatorFieldDefinition<O extends FieldObjectDefinition> extends FieldDefinition<O, ThresholdOperator> {
+public class ThresholdOperatorFieldDefinition<O extends FieldObjectDefinition> extends FieldDefinition<O> {
 
     double threshold;
     ThresholdOperator.Type type;
@@ -53,7 +53,7 @@ public class ThresholdOperatorFieldDefinition<O extends FieldObjectDefinition> e
 
     @Override
     public ThresholdOperator instantiate(FieldObject reference) {
-        ThresholdOperator to = super.instantiate(reference);
+        ThresholdOperator to = (ThresholdOperator) super.instantiate(reference);
         to.init(threshold, type, isFinal);
         return to;
     }

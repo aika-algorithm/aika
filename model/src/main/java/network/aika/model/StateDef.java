@@ -24,6 +24,7 @@ import network.aika.fields.SumField;
 import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.fielddefs.Operators.func;
+import static network.aika.fielddefs.Operators.sum;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.queue.Phase.INFERENCE;
 import static network.aika.utils.Utils.TOLERANCE;
@@ -33,9 +34,6 @@ import static network.aika.utils.Utils.TOLERANCE;
  * @author Lukas Molzberger
  */
 public class StateDef {
-
-    public static final String NET = "net";
-
 
     TypeModel typeModel;
 
@@ -50,11 +48,14 @@ public class StateDef {
         state = new StateDefinition(name, stateType)
                 .setNextRound(stateType == OUTER_FEEDBACK);
 
-        state.net = new FieldDefinition<>(SumField.class, state, NET);
+        state.setNet(sum(state, "net"));
 
+        /*
         state.net.addListener("onFired", (r, fl, u) ->
                 r.updateFiredStep(fl)
         );
+*/
+        state.setValue();
 
         state.value = func(
                 state,

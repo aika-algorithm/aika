@@ -24,11 +24,11 @@ import java.util.List;
  * @author Lukas Molzberger
  *
  */
-public class MaxField extends AbstractMaxField<FieldLink> {
+public class MaxField<O extends FieldObject> extends AbstractMaxField<O, FieldLink> {
 
     private List<FieldLink> inputs;
 
-    public MaxField(FieldObject ref, String label, Double tolerance) {
+    public MaxField(O ref, String label, Double tolerance) {
         super(ref, label, tolerance);
     }
 

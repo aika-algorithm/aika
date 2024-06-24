@@ -22,9 +22,9 @@ import network.aika.fields.link.FieldLink;
 /**
  * @author Lukas Molzberger
  */
-public class MixFunction extends AbstractFunction {
+public class MixFunction<O extends FieldObject> extends AbstractFunction<O> {
 
-    public MixFunction(FieldObject ref, String label) {
+    public MixFunction(O ref, String label) {
         super(ref, label);
     }
 

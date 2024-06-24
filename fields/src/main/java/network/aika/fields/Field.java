@@ -30,13 +30,13 @@ import java.io.IOException;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Field<F extends FieldLink> extends FieldOutputImpl implements FieldInput<F>, FieldOutput, FieldWritable {
+public abstract class Field<O extends FieldObject, F extends FieldLink> extends FieldOutputImpl<O> implements FieldInput<F>, FieldOutput, FieldWritable {
 
     private boolean blocked;
 
     QueueInterceptor interceptor;
 
-    public Field(FieldObject reference, String label, Double tolerance) {
+    public Field(O reference, String label, Double tolerance) {
         super(reference, label, tolerance);
     }
 

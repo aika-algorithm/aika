@@ -26,7 +26,7 @@ import java.util.stream.Stream;
  * @author Lukas Molzberger
  *
  */
-public abstract class AbstractMaxField<F extends FieldLink> extends Field<F> {
+public abstract class AbstractMaxField<O extends FieldObject, F extends FieldLink> extends Field<O, F> {
 
     private F selectedInput;
 
@@ -34,7 +34,7 @@ public abstract class AbstractMaxField<F extends FieldLink> extends Field<F> {
             ApproximateComparisonValueUtil.convert(fl.getUpdatedInputValue())
     );
 
-    public AbstractMaxField(FieldObject ref, String label, Double tolerance) {
+    public AbstractMaxField(O ref, String label, Double tolerance) {
         super(ref, label, tolerance);
     }
 
