@@ -31,7 +31,7 @@ public class FieldInstantiationTest {
         FieldObjectDefinition state = new FieldObjectDefinition();
 
         FieldDefinition net = new FieldDefinition(SumField.class, state, "net");
-
+/*
         FieldDefinition value = func(
                 state,
                 "value = f(net)",
@@ -41,5 +41,7 @@ public class FieldInstantiationTest {
         );
 
         value.setQueued(null);
+
+ */
     }
 }

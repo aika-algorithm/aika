@@ -16,7 +16,8 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fields.link.ListenerFieldLink;
 
 import java.util.Collection;
 
@@ -33,17 +34,28 @@ public interface FieldOutput {
 
     double getUpdatedValue();
 
-    void addOutput(FieldLink fl);
+    void addOutput(AbstractFieldLink fl);
 
-    void removeOutput(FieldLink fl);
+    void removeOutput(AbstractFieldLink fl);
 
-    Collection<FieldLink> getReceivers();
+    Collection<AbstractFieldLink> getReceivers();
 
     FieldObject getReference();
 
     void disconnectAndUnlinkOutputs(boolean deinitialize);
 
     boolean isWithinUpdate();
+
+    default FieldOutput addListener(String listenerName, UpdateListener fieldListener) {
+        return addListener(listenerName, fieldListener, false);
+    }
+
+    default FieldOutput addListener(String listenerName, UpdateListener fieldListener, boolean assumeInitialized) {
+        ListenerFieldLink fl = new ListenerFieldLink(this, listenerName, fieldListener);
+        addOutput(fl);
+        fl.connect(!assumeInitialized);
+        return this;
+    }
 
     default boolean exceedsThreshold() {
         return getUpdatedValue() > 0.0;

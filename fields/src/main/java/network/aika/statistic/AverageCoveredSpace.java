@@ -20,6 +20,8 @@ package network.aika.statistic;
 import network.aika.Range;
 import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
+import network.aika.fields.FieldOutputImpl;
+import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.FieldLink;
 import network.aika.utils.FieldWritable;
 
@@ -85,7 +87,7 @@ public class AverageCoveredSpace extends Field implements FieldWritable {
     }
 
     @Override
-    public void receiveUpdate(FieldLink fl, double u) {
+    public void receiveUpdate(AbstractFieldLink fl, double u) {
 
     }
 }

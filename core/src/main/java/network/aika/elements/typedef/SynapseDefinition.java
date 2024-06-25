@@ -62,7 +62,7 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
 
     private SynapseDefinition instanceSynapseType;
 
-    private FieldDefinition<SynapseDefinition, SumField> weight;
+    private FieldDefinition<SynapseDefinition> weight;
 
     public SynapseDefinition(String name, Class<? extends Synapse> clazz) {
         super(name, clazz);
@@ -79,11 +79,11 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
         return outputDef;
     }
 
-    public FieldDefinition<SynapseDefinition, SumField> getWeight() {
+    public FieldDefinition<SynapseDefinition> getWeight() {
         return weight;
     }
 
-    public void setWeight(FieldDefinition<SynapseDefinition, SumField> weight) {
+    public void setWeight(FieldDefinition<SynapseDefinition> weight) {
         this.weight = weight;
     }
 

@@ -16,7 +16,7 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.AbstractFieldLink;
 import network.aika.utils.StringUtils;
 import network.aika.utils.ToleranceUtils;
 
@@ -42,7 +42,7 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
     protected Double tolerance;
 
 
-    private Collection<FieldLink> receivers;
+    private Collection<AbstractFieldLink> receivers;
 
     public FieldOutputImpl(O reference, String label, Double tolerance) {
         this.reference = reference;
@@ -112,29 +112,29 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
         }
     }
 
-    public Collection<FieldLink> getReceivers() {
+    public Collection<AbstractFieldLink> getReceivers() {
         return receivers;
     }
 
     @Override
-    public void addOutput(FieldLink fl) {
+    public void addOutput(AbstractFieldLink fl) {
         synchronized (this.receivers) {
             this.receivers.add(fl);
         }
     }
 
     @Override
-    public void removeOutput(FieldLink fl) {
+    public void removeOutput(AbstractFieldLink fl) {
         synchronized (this.receivers) {
             this.receivers.remove(fl);
         }
     }
 
     protected void propagateUpdate(double update) {
-        FieldLink[] recs;
+        AbstractFieldLink[] recs;
 
         synchronized (this.receivers) {
-            recs = receivers.toArray(new FieldLink[0]);
+            recs = receivers.toArray(new AbstractFieldLink[0]);
         }
 
         for(int i = 0; i < recs.length; i++) {

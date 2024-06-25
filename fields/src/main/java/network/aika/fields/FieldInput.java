@@ -27,6 +27,9 @@ public interface FieldInput<F extends FieldLink> extends UpdateListener<F> {
 
     String getLabel();
 
+    void addInput(F fl);
+
+    void removeInput(F fl);
 
     Collection<F> getInputs();
 
