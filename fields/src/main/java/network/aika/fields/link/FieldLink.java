@@ -18,30 +18,122 @@ package network.aika.fields.link;
 
 import network.aika.fields.FieldInput;
 import network.aika.fields.FieldOutput;
+import network.aika.fields.UpdateListener;
+
+import java.util.Objects;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldLink extends AbstractFieldLink {
+public class FieldLink {
 
-    FieldInput output;
+    private Integer port;
+
+    protected FieldOutput input;
+
+    protected UpdateListener output;
+
+    private int arg;
+
+    protected boolean connected;
+    protected boolean withinConnectionChange;
+
+    protected boolean propagateUpdates = true;
 
     public FieldLink(FieldOutput input, int arg, FieldInput output) {
-        super(input, arg);
-
+        this.input = input;
+        this.arg = arg;
         this.output = output;
     }
 
     public FieldLink(FieldOutput input, Integer port, int arg, FieldInput output) {
-        super(input, port, arg);
-
+        this.input = input;
+        this.port = port;
+        this.arg = arg;
         this.output = output;
     }
 
-    @Override
     protected void propagateUpdate(double u) {
         output.receiveUpdate(this, u);
     }
+
+    public void setPropagateUpdates(boolean propagateUpdates) {
+        this.propagateUpdates = propagateUpdates;
+    }
+
+    public boolean isPropagateUpdates() {
+        return propagateUpdates;
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void receiveUpdate(double u) {
+        if(connected && propagateUpdates)
+            propagateUpdate(u);
+    }
+
+    public static void updateConnected(FieldLink fl, boolean newConnected, boolean initialize) {
+        if(fl != null)
+            fl.updateConnected(newConnected, initialize);
+    }
+
+    public void updateConnected(boolean newConnected, boolean initialize) {
+        if(!connected && newConnected)
+            connect(initialize);
+        else if(connected && !newConnected)
+            disconnect(initialize);
+    }
+
+    public void connect(boolean initialize) {
+        if(connected)
+            return;
+
+        withinConnectionChange = true;
+        if(initialize) {
+            double cv = input.getValue();
+            propagateUpdate(cv);
+        }
+        withinConnectionChange = false;
+
+        connected = true;
+    }
+
+    public void disconnect(boolean deinitialize) {
+        if(!connected)
+            return;
+
+        withinConnectionChange = true;
+        if(deinitialize) {
+            double cv = input.getValue();
+            propagateUpdate(-cv);
+        }
+        withinConnectionChange = false;
+
+        connected = false;
+    }
+
+    public double getInputValue() {
+        return connected ?
+                input.getValue() :
+                0.0;
+    }
+
+    public double getUpdatedInputValue() {
+        return connected != withinConnectionChange ?
+                input.getUpdatedValue() :
+                0.0;
+    }
+
+    public int getArgument() {
+        return arg;
+    }
+
+    public FieldOutput getInput() {
+        return input;
+    }
+
 
     public static FieldLink linkAndConnect(FieldOutput in, FieldInput out) {
         FieldLink fl = link(in, out.size(), out);
@@ -88,26 +180,29 @@ public class FieldLink extends AbstractFieldLink {
         }
     }
 
-    @Override
+    public void unlinkInput() {
+        input.removeOutput(this);
+    }
+
     public void unlinkOutput() {
         output.removeInput(this);
     }
 
     @Override
     public boolean equals(Object o) {
-        if(o == null)
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FieldLink fieldLink = (FieldLink) o;
+        return arg == fieldLink.arg && Objects.equals(port, fieldLink.port) && Objects.equals(input, fieldLink.input) && Objects.equals(output, fieldLink.output);
+    }
 
-        if(!super.equals(o))
-            return false;
-
-        FieldLink fLink = (FieldLink) o;
-
-        return output.equals(fLink.output);
+    @Override
+    public int hashCode() {
+        return Objects.hash(port, input, output, arg);
     }
 
     @Override
     public String toString() {
-        return super.toString() + "--> " + output;
+        return input + " --" + arg + "-->" + output;
     }
 }

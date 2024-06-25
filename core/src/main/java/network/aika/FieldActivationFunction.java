@@ -19,10 +19,7 @@ package network.aika;
 import network.aika.elements.activations.State;
 import network.aika.elements.typedef.StateDefinition;
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fields.AbstractFunction;
-import network.aika.fields.FieldObject;
-import network.aika.fields.ReferencedFunction;
 import network.aika.fields.link.FieldLink;
 
 /**

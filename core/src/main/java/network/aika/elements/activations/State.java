@@ -21,11 +21,16 @@ import network.aika.elements.typedef.StateDefinition;
 import network.aika.elements.typedef.Type;
 import network.aika.fields.*;
 import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.ListenerFieldLink;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.queue.steps.Fired;
 
+import java.util.Collection;
+
+import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.queue.Timestamp.NOT_SET;
 
@@ -34,6 +39,11 @@ import static network.aika.queue.Timestamp.NOT_SET;
  * @author Lukas Molzberger
  */
 public class State extends Type<StateDefinition, State> implements QueueProvider {
+
+    UpdateListener firedListener = (fl, u) -> {
+        if (isTrue(getValue(), false) != isTrue(getValue(), true))
+            getDocument().onElementEvent(UPDATE, getActivation());
+    };
 
     protected Activation act;
 
@@ -44,6 +54,14 @@ public class State extends Type<StateDefinition, State> implements QueueProvider
     public State(Activation act) {
         super();
         this.act = act;
+    }
+
+    public UpdateListener getFiredListener() {
+        return firedListener;
+    }
+
+    private Field getValue() {
+        return getField(getTypeDefinition().getValue());
     }
 
 
@@ -77,7 +95,7 @@ public class State extends Type<StateDefinition, State> implements QueueProvider
     }
 
     public boolean isFired() {
-        return isTrue(getField(typeDef.value), true);
+        return isTrue(getValue(), true);
     }
 
     @Override

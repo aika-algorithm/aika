@@ -16,7 +16,7 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fields.link.FieldLink;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -62,17 +62,17 @@ public class ConstantField implements FieldOutput {
     }
 
     @Override
-    public void addOutput(AbstractFieldLink fl) {
+    public void addOutput(FieldLink fl) {
 
     }
 
     @Override
-    public void removeOutput(AbstractFieldLink fl) {
+    public void removeOutput(FieldLink fl) {
 
     }
 
     @Override
-    public Collection<AbstractFieldLink> getReceivers() {
+    public Collection<FieldLink> getReceivers() {
         return Collections.emptyList();
     }
 
