@@ -19,9 +19,9 @@ package network.aika.model;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.typedef.StateDefinition;
 
+import static network.aika.FieldActivationFunction.actFunc;
 import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.activations.StateType.*;
-import static network.aika.fields.FieldFunction.func;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.fields.SumField.sum;
 import static network.aika.queue.Phase.INFERENCE;
@@ -53,22 +53,20 @@ public class StateDef {
                 r.updateFiredStep(fl)
         );
 */
-        state.setValue();
-
-        state.value = func(
-                state,
-                "value = f(net)",
-                TOLERANCE,
-                state.net,
-                (r, x) ->
-                        r.getActivation().getActivationFunction().f(x)
+        state.setValue(
+                actFunc(
+                        state,
+                        "value = f(net)",
+                        TOLERANCE
+                )
+                        .in(0, (o, p) -> o.getNet())
         );
 
-        state.value.addListener("onFired", (r, fl, u) -> {
+        state.getValue().addListener("onFired", (r, fl, u) -> {
             if (isTrue(r.getField(state.value), false) != isTrue(r.getField(state.value), true))
                 r.getDocument().onElementEvent(UPDATE, r.getActivation());
         });
 
-        state.value.setQueued(INFERENCE);
+        state.getValue().setQueued(INFERENCE);
     }
 }

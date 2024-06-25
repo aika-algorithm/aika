@@ -37,28 +37,28 @@ public class StateDefinition extends TypeDefinition<StateDefinition, State> {
 
     private ActivationDefinition activation;
 
-    private FieldDefinition<StateDefinition, SumField> net;
+    private FieldDefinition<StateDefinition> net;
 
-    private FieldDefinition<StateDefinition, SumField> value;
+    private FieldDefinition<StateDefinition> value;
 
     public StateDefinition(String name, StateType type) {
         super(name, State.class);
         this.type = type;
     }
 
-    public FieldDefinition<StateDefinition, SumField> getNet() {
+    public FieldDefinition<StateDefinition> getNet() {
         return net;
     }
 
-    public void setNet(FieldDefinition<StateDefinition, SumField> net) {
+    public void setNet(FieldDefinition<StateDefinition> net) {
         this.net = net;
     }
 
-    public FieldDefinition<StateDefinition, SumField> getValue() {
+    public FieldDefinition<StateDefinition> getValue() {
         return value;
     }
 
-    public void setValue(FieldDefinition<StateDefinition, SumField> value) {
+    public void setValue(FieldDefinition<StateDefinition> value) {
         this.value = value;
     }
 

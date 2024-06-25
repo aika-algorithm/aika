@@ -14,36 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika;
 
+import network.aika.elements.activations.State;
+import network.aika.elements.typedef.StateDefinition;
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldFunctionDefinition;
 import network.aika.fielddefs.FieldObjectDefinition;
+import network.aika.fields.AbstractFunction;
+import network.aika.fields.FieldObject;
+import network.aika.fields.ReferencedFunction;
 import network.aika.fields.link.FieldLink;
-
-import java.util.function.DoubleUnaryOperator;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldFunction<O extends FieldObject> extends AbstractFunction<O> {
+public class FieldActivationFunction extends AbstractFunction<State> {
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O> func(O ref, String label, Double tolerance) {
-        return new FieldFunctionDefinition<>(ref, label, tolerance);
+    public static FieldDefinition<StateDefinition> actFunc(StateDefinition ref, String label, Double tolerance) {
+        return new FieldDefinition<>(FieldActivationFunction.class, ref, label, tolerance);
     }
 
-    private ReferencedFunction function;
-
-    public FieldFunction(O ref, String label, Double tolerance) {
+    public FieldActivationFunction(State ref, String label, Double tolerance) {
         super(ref, label, tolerance);
     }
 
     @Override
     protected double computeUpdate(FieldLink fl, double u) {
-        return function.f(getReference(), fl.getUpdatedInputValue()) - value;
-    }
-
-    public void setFunction(ReferencedFunction f) {
-        function = f;
+        return getReference().getActivation().getActivationFunction().f(fl.getUpdatedInputValue()) - value;
     }
 }

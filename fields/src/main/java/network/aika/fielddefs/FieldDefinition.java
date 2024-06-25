@@ -18,7 +18,6 @@ package network.aika.fielddefs;
 
 import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
-import network.aika.fields.ReferencedUpdateListener;
 import network.aika.queue.ProcessingPhase;
 
 import java.lang.reflect.InvocationTargetException;
@@ -128,11 +127,6 @@ public class FieldDefinition<O extends FieldObjectDefinition> implements FieldIn
 
     public FieldDefinition<O> setFieldId(int id) {
         fieldId = id;
-
-        return this;
-    }
-
-    public FieldDefinition<O> addListener(String name, ReferencedUpdateListener<?> listener) {
 
         return this;
     }
