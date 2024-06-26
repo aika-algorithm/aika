@@ -47,7 +47,7 @@ public abstract class AbstractMaxField<O extends FieldObject, F extends FieldLin
     }
 
     @Override
-    public void receiveUpdate(F ufl, double u) {
+    public void receiveUpdate(FieldLink ufl, double u) {
         assert interceptor == null; // Not supported to avoid having to calculate the max twice.
 
         triggerUpdate(0.0);

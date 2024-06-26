@@ -18,6 +18,7 @@ package network.aika.model;
 
 import network.aika.elements.activations.StateType;
 import network.aika.elements.typedef.StateDefinition;
+import network.aika.fields.UpdateListener;
 
 import static network.aika.FieldActivationFunction.actFunc;
 import static network.aika.debugger.EventType.UPDATE;

@@ -285,7 +285,7 @@ public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements E
     protected Field initBias() {
         return (SumField) new SumField(this, "bias", TOLERANCE)
                 .setQueued(getQueue(), TRAINING, false)
-                .addListener("onBiasModified", (r, fl, u) ->
+                .addListener("onBiasModified", (fl, u) ->
                         setModified()
                 , true);
     }

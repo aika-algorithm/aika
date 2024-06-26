@@ -23,11 +23,7 @@ import network.aika.fields.link.ArgumentFieldLink;
 import network.aika.queue.keys.QueueKey;
 import network.aika.visitor.Visitor;
 
-import static network.aika.enums.Scope.SAME;
 import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.fields.link.AbstractFieldLink.updateConnected;
-import static network.aika.fields.link.ArgumentFieldLink.linkAndConnect;
-import static network.aika.visitor.operator.SubsumesOperator.subsumes;
 
 
 /**

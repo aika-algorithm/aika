@@ -20,8 +20,6 @@ package network.aika.statistic;
 import network.aika.Range;
 import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
-import network.aika.fields.FieldOutputImpl;
-import network.aika.fields.link.AbstractFieldLink;
 import network.aika.fields.link.FieldLink;
 import network.aika.utils.FieldWritable;
 
@@ -36,12 +34,12 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public class AverageCoveredSpace extends Field implements FieldWritable {
+public class AverageCoveredSpace<O extends FieldObject> extends Field<O, FieldLink> implements FieldWritable {
 
     private long n;
     private long coveredSpace;
 
-    public AverageCoveredSpace(FieldObject reference, String label) {
+    public AverageCoveredSpace(O reference, String label) {
         super(reference, label, TOLERANCE);
     }
 
@@ -87,7 +85,7 @@ public class AverageCoveredSpace extends Field implements FieldWritable {
     }
 
     @Override
-    public void receiveUpdate(AbstractFieldLink fl, double u) {
+    public void receiveUpdate(FieldLink fl, double u) {
 
     }
 }
