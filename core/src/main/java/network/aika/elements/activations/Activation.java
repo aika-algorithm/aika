@@ -24,7 +24,7 @@ import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.links.Link;
-import network.aika.ActivationFunction;
+import network.aika.fields.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.*;

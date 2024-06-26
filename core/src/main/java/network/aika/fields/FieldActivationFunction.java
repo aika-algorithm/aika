@@ -14,12 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika;
+package network.aika.fields;
 
 import network.aika.elements.activations.State;
 import network.aika.elements.typedef.StateDefinition;
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fields.AbstractFunction;
 import network.aika.fields.link.FieldLink;
 
 /**

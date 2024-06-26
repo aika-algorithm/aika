@@ -16,7 +16,7 @@
  */
 package network.aika.elements.neurons;
 
-import network.aika.ActivationFunction;
+import network.aika.fields.ActivationFunction;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.ModelProvider;
@@ -50,8 +50,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static network.aika.elements.neurons.RefType.*;
-import static network.aika.queue.Phase.TRAINING;
-import static network.aika.utils.Utils.TOLERANCE;
 import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 
@@ -280,14 +278,6 @@ public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements E
     }
 
     public void count(Activation act) {
-    }
-
-    protected Field initBias() {
-        return (SumField) new SumField(this, "bias", TOLERANCE)
-                .setQueued(getQueue(), TRAINING, false)
-                .addListener("onBiasModified", (fl, u) ->
-                        setModified()
-                , true);
     }
 
     public void setAllowTraining(boolean allowTraining) {

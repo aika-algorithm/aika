@@ -24,7 +24,7 @@ import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
 
-import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
+import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.elements.NeuronType.*;
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;

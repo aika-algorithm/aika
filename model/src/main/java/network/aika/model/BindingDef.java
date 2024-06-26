@@ -24,12 +24,10 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fields.MaxField;
-import network.aika.fields.ScaleFunction;
 
 
-import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
-import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
+import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
+import static network.aika.fields.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;

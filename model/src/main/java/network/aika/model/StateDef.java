@@ -16,14 +16,17 @@
  */
 package network.aika.model;
 
+import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.typedef.StateDefinition;
-import network.aika.fields.UpdateListener;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fields.Field;
 
-import static network.aika.FieldActivationFunction.actFunc;
+import static network.aika.fields.FieldActivationFunction.actFunc;
 import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.fields.Fields.isTrue;
+import static network.aika.fields.FiredListener.firedListener;
 import static network.aika.fields.SumField.sum;
 import static network.aika.queue.Phase.INFERENCE;
 import static network.aika.utils.Utils.TOLERANCE;
@@ -63,10 +66,8 @@ public class StateDef {
                         .in(0, (o, p) -> o.getNet())
         );
 
-        state.getValue().addListener("onFired", (r, fl, u) -> {
-            if (isTrue(r.getField(state.value), false) != isTrue(r.getField(state.value), true))
-                r.getDocument().onElementEvent(UPDATE, r.getActivation());
-        });
+        state.getValue()
+                .out((o, p) -> firedListener(o, "fired", TOLERANCE));
 
         state.getValue().setQueued(INFERENCE);
     }

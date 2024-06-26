@@ -76,6 +76,16 @@ public class NeuronDef {
                 Neuron.class
         );
 
+        /*
+        *     protected Field initBias() {
+        return (SumField) new SumField(this, "bias", TOLERANCE)
+                .setQueued(getQueue(), TRAINING, false)
+                .addListener("onBiasModified", (fl, u) ->
+                        setModified()
+                , true);
+    }
+*/
+
         link = new LinkDefinition(
                 "Link",
                 Link.class);

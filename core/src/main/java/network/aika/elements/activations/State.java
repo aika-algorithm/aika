@@ -49,14 +49,9 @@ public class State extends Type<StateDefinition, State> implements QueueProvider
         this.act = act;
     }
 
-    public UpdateListener getFiredListener() {
-        return firedListener;
-    }
-
     private Field getValue() {
         return getField(getTypeDefinition().getValue());
     }
-
 
     public void updateFiredStep(FieldLink fl) {
         FieldOutput net = fl.getInput();

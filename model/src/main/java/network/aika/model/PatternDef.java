@@ -27,8 +27,8 @@ import network.aika.fielddefs.FieldDefinition;
 import network.aika.statistic.AverageCoveredSpace;
 import network.aika.statistic.NeuronStatistic;
 
-import static network.aika.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
-import static network.aika.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
+import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
+import static network.aika.fields.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.activations.bsslots.BSSlotDefinition.MULTI_INPUT;
