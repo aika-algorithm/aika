@@ -33,7 +33,7 @@ import java.io.IOException;
  */
 public abstract class Field<O extends FieldObject, F extends FieldLink> extends FieldOutputImpl<O> implements FieldInput<F>, FieldOutput, FieldWritable {
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O> field(O ref, String label) {
+    public static <O extends FieldObjectDefinition<O>> FieldDefinition<O> field(O ref, String label) {
         return new FieldDefinition<>(Field.class, ref, label);
     }
 

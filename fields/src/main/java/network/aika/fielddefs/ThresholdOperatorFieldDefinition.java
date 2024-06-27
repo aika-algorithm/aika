@@ -22,7 +22,7 @@ import network.aika.fields.ThresholdOperator;
 /**
  * @author Lukas Molzberger
  */
-public class ThresholdOperatorFieldDefinition<O extends FieldObjectDefinition> extends FieldDefinition<O> {
+public class ThresholdOperatorFieldDefinition<O extends FieldObjectDefinition<O>> extends FieldDefinition<O> {
 
     double threshold;
     ThresholdOperator.Type type;

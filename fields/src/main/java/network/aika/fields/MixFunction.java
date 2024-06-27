@@ -26,7 +26,7 @@ import network.aika.fields.link.FieldLink;
  */
 public class MixFunction<O extends FieldObject> extends AbstractFunction<O> {
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O> mix(O ref, String label) {
+    public static <O extends FieldObjectDefinition<O>> FieldDefinition<O> mix(O ref, String label) {
         return new FieldDefinition<>(MixFunction.class, ref, label);
     }
 

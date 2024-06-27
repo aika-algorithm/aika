@@ -28,7 +28,7 @@ import java.util.function.BiFunction;
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<O extends FieldObjectDefinition> implements FieldInputDefinition, FieldOutputDefinition {
+public class FieldDefinition<O extends FieldObjectDefinition<O>> implements FieldInputDefinition, FieldOutputDefinition {
 
     protected int fieldId;
 
@@ -93,7 +93,6 @@ public class FieldDefinition<O extends FieldObjectDefinition> implements FieldIn
         return this;
     }
 
-
     public FieldDefinition<O> out(BiFunction<O, Path, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
         return out(null, null, pathProvider, propagateUpdates);
     }
@@ -106,7 +105,7 @@ public class FieldDefinition<O extends FieldObjectDefinition> implements FieldIn
         return out(null, pathProvider);
     }
 
-    public Field instantiate(O reference) {
+    public Field instantiate(FieldObject reference) {
         try {
             Field instance = clazz
                     .getConstructor(FieldObject.class)

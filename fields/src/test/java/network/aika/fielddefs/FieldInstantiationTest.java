@@ -19,6 +19,7 @@ package network.aika.fielddefs;
 import network.aika.fields.SumField;
 import org.junit.jupiter.api.Test;
 
+import static network.aika.fields.Field.field;
 import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
 /**
@@ -28,20 +29,12 @@ public class FieldInstantiationTest {
 
     @Test
     public void testFieldInstantiation() {
-        FieldObjectDefinition state = new FieldObjectDefinition();
+        FieldObjectDefinition x = new FieldObjectDefinition();
 
-        FieldDefinition net = new FieldDefinition(SumField.class, state, "net");
-/*
-        FieldDefinition value = func(
-                state,
-                "value = f(net)",
-                TOLERANCE,
-                net,
-                (r, x) -> Math.max(0.0, Math.tanh(x))
-        );
+        FieldDefinition a = field(x, "a");
+        FieldDefinition b = field(x, "b")
+                .in(0, (o,p) -> a);
 
-        value.setQueued(null);
 
- */
     }
 }

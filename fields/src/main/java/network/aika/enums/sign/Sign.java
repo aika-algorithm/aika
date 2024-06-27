@@ -41,7 +41,7 @@ public interface Sign {
         return x >= 0.0 ? POS : NEG;
     }
 
-    <O extends FieldObjectDefinition> FieldDefinition<O> getValue(O ref, FieldDefinition<O> v);
+    <O extends FieldObjectDefinition<O>> FieldDefinition<O> getValue(O ref, FieldDefinition<O> v);
 
     int index();
 }

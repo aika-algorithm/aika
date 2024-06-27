@@ -25,7 +25,7 @@ import network.aika.fields.link.FieldLink;
  */
 public class Multiplication<O extends FieldObject> extends AbstractFunction<O> {
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O> mul(O ref, String label) {
+    public static <O extends FieldObjectDefinition<O>> FieldDefinition<O> mul(O ref, String label) {
         return new FieldDefinition<>(Multiplication.class, ref, label);
     }
 

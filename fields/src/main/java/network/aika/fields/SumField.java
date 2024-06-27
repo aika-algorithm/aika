@@ -30,7 +30,7 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  */
 public class SumField<O extends FieldObject> extends Field<O, FieldLink> {
 
-    public static <O extends FieldObjectDefinition> FieldDefinition<O> sum(O ref, String label) {
+    public static <O extends FieldObjectDefinition<O>> FieldDefinition<O> sum(O ref, String label) {
         return new FieldDefinition<>(SumField.class, ref, label, TOLERANCE);
     }
 

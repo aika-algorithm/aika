@@ -16,20 +16,27 @@
  */
 package network.aika.fielddefs;
 
+import network.aika.fields.FieldObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldObjectDefinition {
+public class FieldObjectDefinition<O extends FieldObjectDefinition<O>> {
 
-    List<FieldDefinition<?>> fieldDefs = new ArrayList<>();
+    List<FieldDefinition<O>> fieldDefs = new ArrayList<>();
 
     List<FieldObjectRelationDefinition> relations = new ArrayList<>();
 
+    public void instantiateFields(FieldObject fo) {
+        fieldDefs.forEach(fd ->
+                fd.instantiate(fo)
+        );
+    }
 
-    public void addFieldDefinition(FieldDefinition<?> fieldDef) {
+    public void addFieldDefinition(FieldDefinition<O> fieldDef) {
         fieldDef.setFieldId(fieldDefs.size());
         fieldDefs.add(fieldDef);
     }
@@ -38,7 +45,7 @@ public class FieldObjectDefinition {
         return fieldDefs.size();
     }
 
-    public FieldDefinition<?> getFieldDef(String name) {
+    public FieldDefinition<O> getFieldDef(String name) {
         return fieldDefs.stream()
                 .filter(fd -> fd.getFieldName() == name)
                 .findFirst()
