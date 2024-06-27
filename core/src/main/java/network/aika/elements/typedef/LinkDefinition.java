@@ -30,6 +30,10 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
 
+    public final static int INPUT = 0;
+    public final static int OUTPUT = 1;
+    public final static int SYNAPSE = 2;
+
     private SynapseDefinition synapse;
     private ActivationDefinition input;
     private ActivationDefinition output;
@@ -93,7 +97,7 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public SynapseDefinition getSynapse(Path p) {
-        p.add(synapse);
+        p.add(SYNAPSE, synapse);
         return synapse;
     }
 
@@ -104,7 +108,7 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public ActivationDefinition getInput(Path p) {
-        p.add(input);
+        p.add(INPUT, input);
 
         return input;
     }
@@ -120,7 +124,7 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public ActivationDefinition getOutput(Path p) {
-        p.add(output);
+        p.add(OUTPUT, output);
         return output;
     }
 

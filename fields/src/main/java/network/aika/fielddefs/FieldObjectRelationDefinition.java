@@ -22,16 +22,16 @@ package network.aika.fielddefs;
  */
 public class FieldObjectRelationDefinition {
 
-    private int relId;
+    private Integer relId;
 
     private FieldObjectDefinition relatedObject;
 
-    public FieldObjectRelationDefinition(int relId, FieldObjectDefinition relatedObject) {
+    public FieldObjectRelationDefinition(Integer relId, FieldObjectDefinition relatedObject) {
         this.relId = relId;
         this.relatedObject = relatedObject;
     }
 
-    public int getRelId() {
+    public Integer getRelId() {
         return relId;
     }
 

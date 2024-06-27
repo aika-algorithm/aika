@@ -5,17 +5,17 @@ import java.util.List;
 
 public class Path {
 
-    private List<FieldObjectDefinition> path = new ArrayList<>();
+    private List<FieldObjectRelationDefinition> path = new ArrayList<>();
 
     public FieldObjectDefinition getFromObject() {
-        return path.getFirst();
+        return path.getFirst().getRelatedObject();
     }
 
     public FieldObjectDefinition getToObject() {
-        return path.getLast();
+        return path.getLast().getRelatedObject();
     }
 
-    public void add(FieldObjectDefinition o) {
-        path.add(o);
+    public void add(Integer relId, FieldObjectDefinition o) {
+        path.add(new FieldObjectRelationDefinition(relId, o));
     }
 }

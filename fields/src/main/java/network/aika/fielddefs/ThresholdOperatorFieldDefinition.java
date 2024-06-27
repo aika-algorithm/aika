@@ -52,7 +52,7 @@ public class ThresholdOperatorFieldDefinition<O extends FieldObjectDefinition<O>
     }
 
     @Override
-    public ThresholdOperator instantiate(O reference) {
+    public ThresholdOperator instantiate(FieldObject reference) {
         ThresholdOperator to = (ThresholdOperator) super.instantiate(reference);
         to.init(threshold, type, isFinal);
         return to;

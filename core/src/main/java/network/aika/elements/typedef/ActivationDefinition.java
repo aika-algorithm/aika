@@ -34,6 +34,12 @@ import java.util.List;
  */
 public class ActivationDefinition extends TypeDefinition<ActivationDefinition, Activation> {
 
+    public final static int INPUT = 0;
+    public final static int OUTPUT = 1;
+    public final static int NEURON = 2;
+    public final static int STATE = 3;
+
+
     private NeuronDefinition neuron;
 
     private List<StateDefinition> states = new ArrayList<>();
@@ -73,13 +79,22 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
         return this;
     }
 
+    public NeuronDefinition getNeuron() {
+        return neuron;
+    }
+
+    public NeuronDefinition getNeuron(Path p) {
+        p.add(NEURON, neuron);
+        return neuron;
+    }
+
     public StateDefinition getState(StateType stateType) {
         return states.get(stateType.ordinal());
     }
 
     public StateDefinition getState(Path p, StateType stateType) {
         StateDefinition s = getState(stateType);
-        p.add(s);
+        p.add(STATE, s);
         return s;
     }
 
