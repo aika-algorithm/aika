@@ -52,11 +52,9 @@ public class StateDef {
 
         state.setNet(sum(state, "net"));
 
-        /*
-        state.net.addListener("onFired", (r, fl, u) ->
-                r.updateFiredStep(fl)
-        );
-*/
+        state.getNet()
+                .out((o, p) -> firedListener(o, "fired", TOLERANCE));
+
         state.setValue(
                 actFunc(
                         state,
@@ -65,9 +63,6 @@ public class StateDef {
                 )
                         .in(0, (o, p) -> o.getNet())
         );
-
-        state.getValue()
-                .out((o, p) -> firedListener(o, "fired", TOLERANCE));
 
         state.getValue().setQueued(INFERENCE);
     }

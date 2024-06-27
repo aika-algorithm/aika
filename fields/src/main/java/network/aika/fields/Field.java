@@ -17,6 +17,7 @@
 package network.aika.fields;
 
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fields.link.FieldLink;
 import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
@@ -31,6 +32,10 @@ import java.io.IOException;
  * @author Lukas Molzberger
  */
 public abstract class Field<O extends FieldObject, F extends FieldLink> extends FieldOutputImpl<O> implements FieldInput<F>, FieldOutput, FieldWritable {
+
+    public static <O extends FieldObjectDefinition> FieldDefinition<O> field(O ref, String label) {
+        return new FieldDefinition<>(Field.class, ref, label);
+    }
 
     private boolean blocked;
 

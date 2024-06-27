@@ -1,12 +1,18 @@
 package network.aika.model;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
+import network.aika.elements.typedef.ActivationDefinition;
 import network.aika.elements.typedef.LinkDefinition;
+import network.aika.elements.typedef.NeuronDefinition;
 import network.aika.elements.typedef.SynapseDefinition;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.Field;
 
+import static network.aika.elements.activations.StateType.NON_FEEDBACK;
+import static network.aika.fields.Field.field;
 import static network.aika.utils.Utils.TOLERANCE;
 
 public class CategoryDef {
@@ -15,11 +21,15 @@ public class CategoryDef {
 
     private DisjunctiveDef superType;
 
-    private LinkDefinition categoryInputLink;
-    private SynapseDefinition categoryInputSynapse;
+    private ActivationDefinition activation;
 
-    private LinkDefinition categoryLink;
-    private SynapseDefinition categorySynapse;
+    private NeuronDefinition neuron;
+
+    private LinkDefinition link;
+    private SynapseDefinition synapse;
+
+    private LinkDefinition inputLink;
+    private SynapseDefinition inputSynapse;
 
 
     public CategoryDef(TypeModel typeModel, DisjunctiveDef superType) {
@@ -29,28 +39,37 @@ public class CategoryDef {
 
 
     public void init() {
-        categoryInputLink = new LinkDefinition(
+        activation = new ActivationDefinition(
+                "BindingCategoryActivation",
+                Activation.class
+        )
+                .addStateType(activation.getState(NON_FEEDBACK));
+
+        neuron = new NeuronDefinition(
+                "BindingCategoryNeuron",
+                Neuron.class
+        );
+
+        field(
+                neuron,
+                "initialCategorySynapseWeight"
+        );
+
+        inputLink = new LinkDefinition(
                 "CategoryInputLink",
                 Link.class
         );
 
-        categoryInputSynapse = new SynapseDefinition(
+        inputSynapse = new SynapseDefinition(
                 "CategoryInputSynapse",
                 Synapse.class
         );
 
-        categoryInputSynapse.initialCategorySynapseWeight = new FieldDefinition<>(
-                Field.class,
-                categoryInputSynapse,
-                "initialCategorySynapseWeight",
-                TOLERANCE
-        );
-
-        categoryLink = new LinkDefinition(
+        link = new LinkDefinition(
                 "CategoryLink",
                 Link.class);
 
-        categorySynapse = new SynapseDefinition(
+        synapse = new SynapseDefinition(
                 "CategorySynapse",
                 Synapse.class
         );
@@ -60,20 +79,27 @@ public class CategoryDef {
         return typeModel;
     }
 
-    public LinkDefinition getCategoryInputLink() {
-        return categoryInputLink;
+    public ActivationDefinition getActivation() {
+        return activation;
     }
 
-    public SynapseDefinition getCategoryInputSynapse() {
-        return categoryInputSynapse;
+    public NeuronDefinition getNeuron() {
+        return neuron;
     }
 
-
-    public LinkDefinition getCategoryLink() {
-        return categoryLink;
+    public LinkDefinition getLink() {
+        return link;
     }
 
-    public SynapseDefinition getCategorySynapse() {
-        return categorySynapse;
+    public SynapseDefinition getSynapse() {
+        return synapse;
+    }
+
+    public LinkDefinition getInputLink() {
+        return inputLink;
+    }
+
+    public SynapseDefinition getInputSynapse() {
+        return inputSynapse;
     }
 }

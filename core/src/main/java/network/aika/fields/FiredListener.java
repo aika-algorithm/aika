@@ -21,9 +21,6 @@ import network.aika.elements.typedef.StateDefinition;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.link.FieldLink;
 
-import static network.aika.debugger.EventType.UPDATE;
-import static network.aika.fields.Fields.isTrue;
-
 /**
  * @author Lukas Molzberger
  */
@@ -40,8 +37,6 @@ public class FiredListener extends AbstractListener<State> {
     @Override
     public void receiveUpdate(FieldLink fl, double u) {
         State s = getReference();
-        Field value = s.getField(s.getTypeDefinition().getValue());
-        if (isTrue(value, false) != isTrue(value, true))
-            s.getDocument().onElementEvent(UPDATE, s.getActivation());
+        s.updateFiredStep(fl);
     }
 }

@@ -51,6 +51,9 @@ public class BindingDef implements TypeDefinition {
 
     private ConjunctiveDef superType;
 
+    private CategoryDef categoryDef;
+
+
     StateDef outerFeedbackState = new StateDef(typeModel);
     StateDef innerFeedbackState = new StateDef(typeModel);
 
@@ -85,9 +88,10 @@ public class BindingDef implements TypeDefinition {
 
     FieldDefinition<SynapseDefinition> negativeWeight;
 
-    public BindingDef(TypeModel typeModel, ConjunctiveDef superType) {
+    public BindingDef(TypeModel typeModel, ConjunctiveDef superType, CategoryDef categoryDef) {
         this.typeModel = typeModel;
         this.superType = superType;
+        this.categoryDef = categoryDef;
     }
 
     public void init() {
@@ -123,7 +127,8 @@ public class BindingDef implements TypeDefinition {
                 "BindingCategoryActivation",
                 Activation.class
         )
-                .addStateType(activation.getState(NON_FEEDBACK));
+                .addStateType(activation.getState(NON_FEEDBACK))
+                .addParent(categoryDef.getActivation());
 
         categoryNeuron = new NeuronDefinition(
                 "BindingCategoryNeuron",
@@ -133,7 +138,8 @@ public class BindingDef implements TypeDefinition {
                 .setActivation(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_INPUT, SINGLE_SAME)
-                .setTrainingAllowed(false);
+                .setTrainingAllowed(false)
+                .addParent(categoryDef.getNeuron());
 
         latentRelationActivation = new ActivationDefinition(
                 "LatentRelationActivation",

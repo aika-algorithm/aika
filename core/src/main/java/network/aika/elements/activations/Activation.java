@@ -83,8 +83,6 @@ public abstract class Activation extends Type<ActivationDefinition, Activation> 
         doc.register(this);
 
         setCreated(doc.getCurrentTimestamp());
-
-        doc.onElementEvent(CREATE, this);
     }
 
 
@@ -219,7 +217,6 @@ public abstract class Activation extends Type<ActivationDefinition, Activation> 
 
             propagateRanges();
         }
-        doc.onElementEvent(TOKEN_POSITION, this);
     }
 
     protected void registerPosRange(TextReference oldTextReference, TextReference newTextReference) {
@@ -399,8 +396,6 @@ public abstract class Activation extends Type<ActivationDefinition, Activation> 
         ti.isNewInstance = true;
         ti.setFired(INNER_FEEDBACK, getFired(INNER_FEEDBACK));
 
-        doc.onElementEvent(TOKEN_POSITION, ti);
-
         linkTemplateAndInstance(ti);
         instantiateTemplateEdges(ti);
 
@@ -458,7 +453,6 @@ public abstract class Activation extends Type<ActivationDefinition, Activation> 
 
     public void initFromTemplate(Activation templateAct) {
         setFired(INNER_FEEDBACK, templateAct.getFired(INNER_FEEDBACK));
-        doc.onElementEvent(UPDATE, this);
     }
 
     @Override

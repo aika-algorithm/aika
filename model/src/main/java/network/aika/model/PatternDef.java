@@ -52,6 +52,8 @@ public class PatternDef implements TypeDefinition {
 
     private ConjunctiveDef superType;
 
+    private CategoryDef categoryDef;
+
     private ActivationDefinition activation;
     private NeuronDefinition neuron;
 
@@ -72,11 +74,11 @@ public class PatternDef implements TypeDefinition {
     FieldDefinition<NeuronDefinition> neuronStatistic;
 
 
-    public PatternDef(TypeModel typeModel, ConjunctiveDef superType) {
+    public PatternDef(TypeModel typeModel, ConjunctiveDef superType, CategoryDef categoryDef) {
         this.typeModel = typeModel;
         this.superType = superType;
+        this.categoryDef = categoryDef;
     }
-
 
     public void init() {
 
@@ -109,14 +111,15 @@ public class PatternDef implements TypeDefinition {
 
         neuronStatistic = new FieldDefinition(NeuronStatistic.class, neuron, "statistic", TOLERANCE);
 
-        link(averageCoveredSpace, neuronStatistic);
-
+        averageCoveredSpace
+                .out(null, 0, (o, p) -> neuronStatistic, true);
 
         categoryActivation = new ActivationDefinition(
                 "PatternCategoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.neuron.getNonFeedbackState());
+                .addStateType(typeModel.neuron.getNonFeedbackState())
+                .addParent(categoryDef.getActivation());
 
         categoryNeuron = new NeuronDefinition(
                 "PatternCategoryNeuron",
@@ -126,7 +129,8 @@ public class PatternDef implements TypeDefinition {
                 .setActivation(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_SAME)
-                .setTrainingAllowed(false);
+                .setTrainingAllowed(false)
+                .addParent(categoryDef.getNeuron());
 
 
 

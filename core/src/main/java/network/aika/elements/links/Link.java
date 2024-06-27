@@ -74,7 +74,6 @@ public abstract class Link extends Type<LinkDefinition, Link> implements Element
         link();
 
         propagateRanges();
-        getDocument().onElementEvent(CREATE, this);
     }
 
     public LinkUpdate getLinkUpdateStep(Direction dir) {

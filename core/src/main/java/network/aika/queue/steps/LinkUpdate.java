@@ -26,8 +26,6 @@ import network.aika.queue.Step;
 import network.aika.queue.keys.LinkUpdateQueueKey;
 
 import static network.aika.elements.links.BSLinkEvent.ON_STATE_CHANGE;
-import static network.aika.fields.link.AbstractFieldLink.updateConnected;
-
 
 /**
  *
@@ -77,8 +75,6 @@ public class LinkUpdate extends ElementStep<Link> {
         }
 
         l.updateBindingSignals(ON_STATE_CHANGE, targetState);
-
-        l.getDocument().onElementEvent(EventType.UPDATE, l);
     }
 
     @Override

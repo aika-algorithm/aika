@@ -73,8 +73,6 @@ public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements E
 
     private Writable customData;
 
-    protected Field bias = initBias();
-
     protected boolean allowTraining = true;
 
     private boolean instantiable = true;
@@ -89,13 +87,11 @@ public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements E
 
     public Neuron(NeuronProvider np) {
         provider = np;
-        setBias(0.0);
     }
 
     public Neuron(Model m, RefType rt) {
         provider = new NeuronProvider(m, this, rt);
         setModified();
-        setBias(0.0);
     }
 
     public NeuronType getType() {
@@ -229,10 +225,10 @@ public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements E
     }
 
     protected void initFromTemplate(Neuron templateN) {
-        bias.setInitialValue(
+/*        bias.setInitialValue(
                 templateN.getBias().getUpdatedValue()
         );
-
+*/
         if(templateN.initParams != null) {
             InitParams ip = templateN.initParams;
             setTargetNet(ip.targetNet);
@@ -336,14 +332,6 @@ public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements E
         return modified;
     }
 
-    public Field getBias() {
-        return bias;
-    }
-
-    public double getCurrentCompleteBias() {
-        return getBias().getUpdatedValue();
-    }
-
     public void suspend() {
         for (Synapse s : provider.getInputSynapsesStoredAtOutputSide()) {
             NeuronProvider in = s.getPInput();
@@ -384,8 +372,6 @@ public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements E
         out.writeBoolean(label != null);
         if(label != null)
             out.writeUTF(label);
-
-        bias.write(out);
 
         for (Synapse s : getProvider().getInputSynapsesStoredAtOutputSide()) {
             out.writeBoolean(true);
@@ -431,8 +417,6 @@ public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements E
     public void readFields(DataInput in, Model m) throws Exception {
         if(in.readBoolean())
             label = in.readUTF();
-
-        bias.readFields(in);
 
         while (in.readBoolean()) {
             Synapse syn = Synapse.read(in, m);
@@ -546,11 +530,6 @@ public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements E
 
     public Neuron  setLabel(String label) {
         this.label = label;
-        return this;
-    }
-
-    public Neuron setBias(double bias) {
-        getBias().setValue(bias);
         return this;
     }
 

@@ -44,6 +44,8 @@ public class InhibitoryDef implements TypeDefinition {
 
     private DisjunctiveDef superType;
 
+    private CategoryDef categoryDef;
+
     private ActivationDefinition activation;
     private NeuronDefinition neuron;
     private ActivationDefinition categoryActivation;
@@ -58,9 +60,10 @@ public class InhibitoryDef implements TypeDefinition {
     private LinkDefinition categoryLink;
     private SynapseDefinition categorySynapse;
 
-    public InhibitoryDef(TypeModel typeModel, DisjunctiveDef superType) {
+    public InhibitoryDef(TypeModel typeModel, DisjunctiveDef superType, CategoryDef categoryDef) {
         this.typeModel = typeModel;
         this.superType = superType;
+        this.categoryDef = categoryDef;
     }
 
     public void init() {
@@ -85,7 +88,8 @@ public class InhibitoryDef implements TypeDefinition {
                 "InhibitoryCategoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.neuron.getNonFeedbackState());
+                .addStateType(typeModel.neuron.getNonFeedbackState())
+                .addParent(categoryDef.getActivation());
 
         categoryNeuron = new NeuronDefinition(
                 "InhibitoryCategoryNeuron",
@@ -95,7 +99,8 @@ public class InhibitoryDef implements TypeDefinition {
                 .setActivation(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_INPUT)
-                .setTrainingAllowed(false);
+                .setTrainingAllowed(false)
+                .addParent(categoryDef.getNeuron());
 
 
         link = new LinkDefinition(

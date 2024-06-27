@@ -26,13 +26,12 @@ public class TypeModel {
     NeuronDef neuron = new NeuronDef(this);
 
     ConjunctiveDef conjunctive = new ConjunctiveDef(neuron);
-
     DisjunctiveDef disjunctive = new DisjunctiveDef(neuron);
-
     CategoryDef category = new CategoryDef(this, disjunctive);
-    BindingDef binding = new BindingDef(this, conjunctive);
-    PatternDef pattern = new PatternDef(this, conjunctive);
-    InhibitoryDef inhibitory = new InhibitoryDef(this, disjunctive);
+
+    BindingDef binding = new BindingDef(this, conjunctive, category);
+    PatternDef pattern = new PatternDef(this, conjunctive, category);
+    InhibitoryDef inhibitory = new InhibitoryDef(this, disjunctive, category);
 
     public TypeModel() {
         neuron.init();

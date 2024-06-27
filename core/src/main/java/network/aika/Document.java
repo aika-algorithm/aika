@@ -17,21 +17,15 @@
 package network.aika;
 
 
-import network.aika.debugger.EventListener;
-import network.aika.debugger.EventType;
 import network.aika.callbacks.InstantiationCallback;
 import network.aika.elements.ModelProvider;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.Element;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
-import network.aika.queue.Timestamp;
-import network.aika.queue.QueueProvider;
 import network.aika.queue.Step;
-import network.aika.queue.Timestamp;
 import network.aika.text.TextReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,18 +116,6 @@ public class Document extends Queue implements ModelProvider, QueueProvider {
 
     public Step getCurrentStep() {
         return currentStep;
-    }
-
-    public void queueEvent(EventType et, Step s) {
-        callEventListener(el ->
-                el.onQueueEvent(et, s)
-        );
-    }
-
-    public void onElementEvent(EventType et, Element e) {
-        callEventListener(el ->
-                el.onElementEvent(et, e)
-        );
     }
 
     public InstantiationCallback getInstantiationCallback() {
