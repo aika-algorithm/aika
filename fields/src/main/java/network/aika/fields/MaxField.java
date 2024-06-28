@@ -39,18 +39,7 @@ public class MaxField<O extends FieldObject> extends AbstractMaxField<O, FieldLi
         );
     }
 
-    private List<FieldLink> inputs;
-
-    public MaxField(O ref, String label, Double tolerance) {
-        super(ref, label, tolerance);
-    }
-
-    @Override
-    protected void initIO() {
-        super.initIO();
-
-        inputs = new ArrayList<>();
-    }
+    private List<FieldLink> inputs = new ArrayList<>();
 
     @Override
     public int size() {

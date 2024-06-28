@@ -48,14 +48,17 @@ public class ThresholdOperator<O extends FieldObject> extends AbstractFunction<O
     private Type type;
     private boolean isFinal = false;
 
-    public ThresholdOperator(O ref, String label) {
-        super(ref, label);
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
     }
 
-    public void init(double threshold, Type type, boolean isFinal) {
-        this.threshold = threshold;
+    public void setType(Type type) {
         this.type = type;
-        this.isFinal = isFinal;
+    }
+
+    public void setFinal(boolean aFinal) {
+        isFinal = aFinal;
     }
 
     @Override

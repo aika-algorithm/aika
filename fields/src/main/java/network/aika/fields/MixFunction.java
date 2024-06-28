@@ -30,10 +30,6 @@ public class MixFunction<O extends FieldObject> extends AbstractFunction<O> {
         return new FieldDefinition<>(MixFunction.class, ref, label);
     }
 
-    public MixFunction(O ref, String label) {
-        super(ref, label);
-    }
-
     @Override
     protected int getNumberOfFunctionArguments() {
         return 3;

@@ -26,10 +26,10 @@ import java.util.List;
  */
 public class InputField<O extends FieldObject> extends Field<O, FieldLink> {
 
+    /*
     public InputField(O ref, String label, double value) {
-        super(ref, label, null);
         setInitialValue(value);
-    }
+    }*/
 
     @Override
     public void addInput(FieldLink fl) {

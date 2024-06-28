@@ -37,13 +37,12 @@ public abstract class Field<O extends FieldObject, F extends FieldLink> extends 
         return new FieldDefinition<>(Field.class, ref, label);
     }
 
+    private FieldDefinition fieldDefinition;
+
     private boolean blocked;
 
     QueueInterceptor interceptor;
 
-    public Field(O reference, String label, Double tolerance) {
-        super(reference, label, tolerance);
-    }
 
     public <F extends Field> F setQueued(Queue q, ProcessingPhase phase, boolean isNextRound) {
         interceptor = new QueueInterceptor(q, this, phase, isNextRound);
@@ -56,7 +55,11 @@ public abstract class Field<O extends FieldObject, F extends FieldLink> extends 
     }
 
     public void setFieldDefinition(FieldDefinition fieldDefinition) {
+        this.fieldDefinition = fieldDefinition;
+    }
 
+    public FieldDefinition getFieldDefinition() {
+        return fieldDefinition;
     }
 
     public void setValue(double v) {

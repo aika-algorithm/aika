@@ -46,9 +46,7 @@ public class SynapseStatistic extends AbstractFunction implements FieldWritable 
 
     protected SampleSpace sampleSpace = new SampleSpace();
 
-    public SynapseStatistic(FieldObject ref, String label, Double alpha, Double tolerance) {
-        super(ref, label, tolerance);
-
+    public void setAlpha(Double alpha) {
         this.alpha = alpha;
     }
 

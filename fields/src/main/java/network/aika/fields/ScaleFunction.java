@@ -31,8 +31,7 @@ public class ScaleFunction<O extends FieldObject> extends AbstractFunction<O> {
 
     private double scale;
 
-    public ScaleFunction(O ref, String label, double scale) {
-        super(ref, label);
+    public void setScale(double scale) {
         this.scale = scale;
     }
 

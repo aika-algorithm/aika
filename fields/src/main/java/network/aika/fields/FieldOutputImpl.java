@@ -41,14 +41,18 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
 
     protected Double tolerance;
 
+    private Collection<FieldLink> receivers = new ArrayList<>();
 
-    private Collection<FieldLink> receivers;
-
-    public FieldOutputImpl(O reference, String label, Double tolerance) {
-        this.reference = reference;
+    public void setLabel(String label) {
         this.label = label;
+    }
 
-        initIO();
+    public void setFieldObject(O fo) {
+        reference = fo;
+    }
+
+    public void setTolerance(Double tolerance) {
+        this.tolerance = tolerance;
     }
 
     @Override
@@ -82,9 +86,6 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
                 value;
     }
 
-    protected void initIO() {
-        receivers = new ArrayList<>();
-    }
 
     public void triggerUpdate(double u) {
         if(ToleranceUtils.belowTolerance(tolerance, u))

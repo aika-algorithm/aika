@@ -29,10 +29,6 @@ public class Subtraction<O extends FieldObject> extends AbstractFunction<O> {
         return new FieldDefinition<>(Subtraction.class, ref, label);
     }
 
-    public Subtraction(O ref, String label) {
-        super(ref, label);
-    }
-
     @Override
     protected int getNumberOfFunctionArguments() {
         return 2;

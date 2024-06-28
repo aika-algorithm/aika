@@ -27,18 +27,8 @@ import java.util.*;
  */
 public class MapMaxField<O extends FieldObject, K, V> extends AbstractMaxField<O, ArgumentFieldLink<K, V>> {
 
-    private Map<K, ArgumentFieldLink<K, V>> inputs;
+    private Map<K, ArgumentFieldLink<K, V>> inputs = new TreeMap<>();
 
-    public MapMaxField(O ref, String label, Double tolerance) {
-        super(ref, label, tolerance);
-    }
-
-    @Override
-    protected void initIO() {
-        super.initIO();
-
-        inputs = new TreeMap<>();
-    }
 
     @Override
     public int size() {

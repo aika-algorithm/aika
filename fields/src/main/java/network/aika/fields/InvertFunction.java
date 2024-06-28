@@ -29,8 +29,9 @@ public class InvertFunction<O extends FieldObject> extends AbstractFunction<O> {
         return new FieldDefinition<>(InvertFunction.class, ref, label);
     }
 
-    public InvertFunction(O ref, String label) {
-        super(ref, label);
+    public InvertFunction() {
+        super();
+
         setInitialValue(1.0);
     }
 

@@ -34,18 +34,7 @@ public class SumField<O extends FieldObject> extends Field<O, FieldLink> {
         return new FieldDefinition<>(SumField.class, ref, label, TOLERANCE);
     }
 
-    private List<FieldLink> inputs;
-
-    public SumField(O reference, String label, Double tolerance) {
-        super(reference, label, tolerance);
-    }
-
-    @Override
-    protected synchronized void initIO() {
-        super.initIO();
-
-        inputs = new ArrayList<>();
-    }
+    private List<FieldLink> inputs = new ArrayList<>();
 
     @Override
     public synchronized int size() {

@@ -29,10 +29,6 @@ public class IdentityFunction<O extends FieldObject> extends AbstractFunction<O>
         return new FieldDefinition<>(IdentityFunction.class, ref, label);
     }
 
-    public IdentityFunction(O ref, String label) {
-        super(ref, label);
-    }
-
     @Override
     protected double computeUpdate(FieldLink fl, double u) {
         return u;

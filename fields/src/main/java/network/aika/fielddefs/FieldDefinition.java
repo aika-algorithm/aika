@@ -105,23 +105,23 @@ public class FieldDefinition<O extends FieldObjectDefinition<O>> implements Fiel
         return out(null, pathProvider);
     }
 
-    public Field instantiate(FieldObject reference) {
+    public Field instantiate(FieldObject fo) {
         try {
-            Field instance = clazz
-                    .getConstructor(FieldObject.class)
-                    .newInstance(reference);
+            Field instance = clazz.newInstance();
 
+            instance.setFieldObject(fo);
             instance.setFieldDefinition(this);
+
             return instance;
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
         }
+    }
+
+    public void instantiateLinks(Field f) {
+
     }
 
     public FieldDefinition<O> setFieldId(int id) {
@@ -214,4 +214,5 @@ public class FieldDefinition<O extends FieldObjectDefinition<O>> implements Fiel
     public void addOutput(FieldLinkDefinition fl) {
         outputs.add(fl);
     }
+
 }

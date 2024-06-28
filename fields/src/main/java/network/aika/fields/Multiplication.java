@@ -29,10 +29,6 @@ public class Multiplication<O extends FieldObject> extends AbstractFunction<O> {
         return new FieldDefinition<>(Multiplication.class, ref, label);
     }
 
-    public Multiplication(O ref, String label) {
-        super(ref, label);
-    }
-
     @Override
     protected int getNumberOfFunctionArguments() {
         return 2;

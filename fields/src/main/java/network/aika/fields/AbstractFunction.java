@@ -26,21 +26,7 @@ import java.util.List;
  */
 public abstract class AbstractFunction<O extends FieldObject> extends Field<O, FieldLink> {
 
-    private FieldLink[] inputs;
-
-    public AbstractFunction(O ref, String label, Double tolerance) {
-        super(ref, label, tolerance);
-    }
-
-    public AbstractFunction(O ref, String label) {
-        this(ref, label, null);
-    }
-
-    @Override
-    protected void initIO() {
-        super.initIO();
-        inputs = new FieldLink[getNumberOfFunctionArguments()];
-    }
+    private FieldLink[] inputs = new FieldLink[getNumberOfFunctionArguments()];
 
     protected int getNumberOfFunctionArguments() {
         return 1;

@@ -39,10 +39,6 @@ public class AverageCoveredSpace<O extends FieldObject> extends Field<O, FieldLi
     private long n;
     private long coveredSpace;
 
-    public AverageCoveredSpace(O reference, String label) {
-        super(reference, label, TOLERANCE);
-    }
-
     public void count(Range r) {
         n++;
         coveredSpace += Range.length(r);

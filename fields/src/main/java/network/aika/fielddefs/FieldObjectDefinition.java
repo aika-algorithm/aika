@@ -31,9 +31,13 @@ public class FieldObjectDefinition<O extends FieldObjectDefinition<O>> {
     List<FieldObjectRelationDefinition> relations = new ArrayList<>();
 
     public void instantiateFields(FieldObject fo) {
-        fieldDefs.forEach(fd ->
-                fd.instantiate(fo)
-        );
+        fieldDefs.stream()
+                .map(fd ->
+                        fd.instantiate(fo)
+                ).toList().stream()
+                .forEach(f -> f.getFieldDefinition().instantiateLinks(f));
+
+
     }
 
     public void addFieldDefinition(FieldDefinition<O> fieldDef) {

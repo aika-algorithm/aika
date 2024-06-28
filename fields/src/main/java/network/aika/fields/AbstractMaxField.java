@@ -34,10 +34,6 @@ public abstract class AbstractMaxField<O extends FieldObject, F extends FieldLin
             ApproximateComparisonValueUtil.convert(fl.getUpdatedInputValue())
     );
 
-    public AbstractMaxField(O ref, String label, Double tolerance) {
-        super(ref, label, tolerance);
-    }
-
     protected void updateSelectedInput(F si, boolean state) {
 
     }

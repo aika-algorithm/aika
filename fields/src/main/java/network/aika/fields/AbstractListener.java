@@ -9,9 +9,6 @@ public abstract class AbstractListener<O extends FieldObject> extends Field<O, F
 
     private FieldLink input;
 
-    public AbstractListener(O reference, String label, Double tolerance) {
-        super(reference, label, tolerance);
-    }
 
     @Override
     public int size() {

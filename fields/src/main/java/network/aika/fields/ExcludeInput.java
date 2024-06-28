@@ -30,11 +30,6 @@ public class ExcludeInput<O extends FieldObject> extends Subtraction<O> {
         return new FieldDefinition<>(ExcludeInput.class, ref, label);
     }
 
-
-    public ExcludeInput(O ref, String label) {
-        super(ref, label);
-    }
-
     @Override
     protected double computeUpdate(FieldLink fl, double u) {
         return fl.getArgument() == 0 &&
