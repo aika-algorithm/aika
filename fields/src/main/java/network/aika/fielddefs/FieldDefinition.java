@@ -16,11 +16,11 @@
  */
 package network.aika.fielddefs;
 
+import network.aika.enums.Direction;
 import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
 import network.aika.queue.ProcessingPhase;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -62,8 +62,8 @@ public class FieldDefinition<O extends FieldObjectDefinition<O>> implements Fiel
     }
 
     public FieldDefinition<O> in(Integer port, Integer arg, BiFunction<O, Path, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
-        Path objectPath = new Path();
-        objectPath.add(null, ref);
+        Path objectPath = new Path(Direction.INPUT);
+        objectPath.add(ref, o -> o);
         FieldOutputDefinition in = pathProvider.apply(ref, objectPath);
 
         FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, port, in, arg, this, propagateUpdates);
@@ -82,8 +82,8 @@ public class FieldDefinition<O extends FieldObjectDefinition<O>> implements Fiel
     }
 
     public FieldDefinition<O> out(Integer port, Integer arg, BiFunction<O, Path, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
-        Path objectPath = new Path();
-        objectPath.add(null, ref);
+        Path objectPath = new Path(Direction.OUTPUT);
+        objectPath.add(ref, o -> o);
         FieldInputDefinition out = pathProvider.apply(ref, objectPath);
 
         FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, port, this, arg, out, propagateUpdates);
@@ -111,6 +111,8 @@ public class FieldDefinition<O extends FieldObjectDefinition<O>> implements Fiel
 
             instance.setFieldObject(fo);
             instance.setFieldDefinition(this);
+            instance.setFieldName(fieldName);
+            instance.setTolerance(tolerance);
 
             return instance;
         } catch (InstantiationException e) {
@@ -121,7 +123,7 @@ public class FieldDefinition<O extends FieldObjectDefinition<O>> implements Fiel
     }
 
     public void instantiateLinks(Field f) {
-
+        inputs.forEach(fl ->  fl.);
     }
 
     public FieldDefinition<O> setFieldId(int id) {

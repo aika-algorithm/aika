@@ -31,6 +31,8 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class StateDefinition extends TypeDefinition<StateDefinition, State> {
 
+    public final static int ACTIVATION = 0;
+
     private StateType type;
 
     private boolean isNextRound;
@@ -77,7 +79,7 @@ public class StateDefinition extends TypeDefinition<StateDefinition, State> {
     }
 
     public ActivationDefinition getActivation(Path p) {
-        p.add(activation);
+        p.add(ACTIVATION, activation);
 
         return activation;
     }

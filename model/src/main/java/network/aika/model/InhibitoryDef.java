@@ -115,8 +115,8 @@ public class InhibitoryDef implements TypeDefinition {
                 DisjunctiveSynapse.class
         )
                 .setLinkType(link)
-                .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
-                .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
+                .setInputSlot(typeModel.disjunctive.getSynapseInputSlot())
+                .setOutputSlot(typeModel.disjunctive.getSynapseOutputSlot())
                 .setInputNeuronType(typeModel.binding.getNeuron())
                 .setOutputNeuronType(neuron)
                 .setTransition(INPUT_INPUT)
@@ -134,8 +134,8 @@ public class InhibitoryDef implements TypeDefinition {
                 DisjunctiveSynapse.class
         )
                 .setLinkType(primaryLink)
-                .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
-                .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
+                .setInputSlot(typeModel.disjunctive.getSynapseInputSlot())
+                .setOutputSlot(typeModel.disjunctive.getSynapseOutputSlot())
                 .setInputNeuronType(typeModel.pattern.getNeuron())
                 .setOutputNeuronType(neuron)
                 .setTransition(SAME_INPUT)
@@ -153,8 +153,8 @@ public class InhibitoryDef implements TypeDefinition {
                 Synapse.class
         )
                 .setLinkType(categoryLink)
-                .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
-                .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
+                .setInputSlot(typeModel.disjunctive.getSynapseInputSlot())
+                .setOutputSlot(typeModel.disjunctive.getSynapseOutputSlot())
                 .setInputNeuronType(neuron)
                 .setOutputNeuronType(categoryNeuron)
                 .setTransition(INPUT_INPUT)
@@ -172,8 +172,8 @@ public class InhibitoryDef implements TypeDefinition {
                 Synapse.class
         )
                 .setLinkType(categoryInputLink)
-                .setInputSlotType(typeModel.disjunctive.getSynapseInputSlot())
-                .setOutputSlotType(typeModel.disjunctive.getSynapseOutputSlot())
+                .setInputSlot(typeModel.disjunctive.getSynapseInputSlot())
+                .setOutputSlot(typeModel.disjunctive.getSynapseOutputSlot())
                 .setInputNeuronType(categoryNeuron)
                 .setOutputNeuronType(typeModel.binding.getNeuron())
                 .setTransition(INPUT_INPUT)

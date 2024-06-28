@@ -24,18 +24,19 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class FieldObjectDefinition<O extends FieldObjectDefinition<O>> {
+public abstract class FieldObjectDefinition<O extends FieldObjectDefinition<O>> {
 
     List<FieldDefinition<O>> fieldDefs = new ArrayList<>();
-
-    List<FieldObjectRelationDefinition> relations = new ArrayList<>();
 
     public void instantiateFields(FieldObject fo) {
         fieldDefs.stream()
                 .map(fd ->
                         fd.instantiate(fo)
-                ).toList().stream()
-                .forEach(f -> f.getFieldDefinition().instantiateLinks(f));
+                )
+                .toList().stream()
+                .forEach(f ->
+                        f.getFieldDefinition().instantiateLinks(f)
+                );
 
 
     }
@@ -54,13 +55,5 @@ public class FieldObjectDefinition<O extends FieldObjectDefinition<O>> {
                 .filter(fd -> fd.getFieldName() == name)
                 .findFirst()
                 .orElse(null);
-    }
-
-    public void addRelation(FieldObjectDefinition relObjDef) {
-        relations.add(new FieldObjectRelationDefinition(relations.size(), relObjDef));
-    }
-
-    public List<FieldObjectRelationDefinition> getRelations() {
-        return relations;
     }
 }

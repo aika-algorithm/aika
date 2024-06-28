@@ -112,7 +112,7 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
 
     public final SynapseSlot createInputSlot(Activation iAct) {
         return typeDef
-                .getInputSlotType()
+                .getInputSlot()
                 .instantiate(iAct, this);
     }
 
@@ -127,7 +127,7 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
 
     public final SynapseSlot createOutputSlot(Activation iAct) {
         return typeDef
-                .getOutputSlotType()
+                .getOutputSlot()
                 .instantiate(iAct, this);
     }
 
@@ -295,7 +295,7 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
 
     public final Link createLink(Activation input, Activation output) {
         return typeDef
-                .getLinkType()
+                .getLink()
                 .instantiate(this, input, output);
     }
 

@@ -31,6 +31,7 @@ import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.*;
 import network.aika.enums.Scope;
+import network.aika.fields.FieldObject;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
@@ -50,7 +51,7 @@ import static network.aika.text.TextReference.join;
 /**
  * @author Lukas Molzberger
  */
-public abstract class Activation extends Type<ActivationDefinition, Activation> implements Element, ModelProvider, QueueProvider, Comparable<Activation> {
+public class Activation extends Type<ActivationDefinition, Activation> implements Element, ModelProvider, QueueProvider, Comparable<Activation> {
 
     public static final Comparator<Activation> ID_COMPARATOR = Comparator.comparingInt(Activation::getId);
 
@@ -202,6 +203,11 @@ public abstract class Activation extends Type<ActivationDefinition, Activation> 
     @Override
     public Queue getQueue() {
         return doc;
+    }
+
+    @Override
+    public boolean isNextRound() {
+        return false;
     }
 
     public TextReference getTextReference() {
@@ -362,8 +368,6 @@ public abstract class Activation extends Type<ActivationDefinition, Activation> 
         return isNewInstance ||
                 isFired(INNER_FEEDBACK);
     }
-
-    public abstract Link getActiveCategoryInputLink();
 
     public Activation resolveAbstractInputActivation(boolean isSynapseInstantiable) {
         return isSynapseInstantiable && neuron.isInstantiable() ?

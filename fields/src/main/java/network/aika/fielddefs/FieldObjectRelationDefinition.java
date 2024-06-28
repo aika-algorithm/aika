@@ -17,25 +17,29 @@
 package network.aika.fielddefs;
 
 
+import network.aika.fields.FieldObject;
+
+import java.util.function.Function;
+
 /**
  * @author Lukas Molzberger
  */
-public class FieldObjectRelationDefinition {
+public class FieldObjectRelationDefinition<O extends FieldObject> {
 
-    private Integer relId;
+    private Function<O, FieldObject> mapping;
 
     private FieldObjectDefinition relatedObject;
 
-    public FieldObjectRelationDefinition(Integer relId, FieldObjectDefinition relatedObject) {
-        this.relId = relId;
+    public FieldObjectRelationDefinition(FieldObjectDefinition relatedObject, Function<O, FieldObject> mapping) {
         this.relatedObject = relatedObject;
-    }
-
-    public Integer getRelId() {
-        return relId;
+        this.mapping = mapping;
     }
 
     public FieldObjectDefinition getRelatedObject() {
         return relatedObject;
+    }
+
+    public FieldObject followRelation(O fo) {
+        return mapping.apply(fo);
     }
 }

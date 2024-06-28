@@ -22,7 +22,9 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.neurons.Neuron;
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldObjectDefinition;
 import network.aika.fielddefs.Path;
+import network.aika.fields.FieldObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -33,12 +35,6 @@ import java.util.List;
  * @author Lukas Molzberger
  */
 public class ActivationDefinition extends TypeDefinition<ActivationDefinition, Activation> {
-
-    public final static int INPUT = 0;
-    public final static int OUTPUT = 1;
-    public final static int NEURON = 2;
-    public final static int STATE = 3;
-
 
     private NeuronDefinition neuron;
 
@@ -84,7 +80,7 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
     }
 
     public NeuronDefinition getNeuron(Path p) {
-        p.add(NEURON, neuron);
+        addPathEntry(p, neuron, Activation::getNeuron);
         return neuron;
     }
 
@@ -94,7 +90,7 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
 
     public StateDefinition getState(Path p, StateType stateType) {
         StateDefinition s = getState(stateType);
-        p.add(STATE, s);
+        addPathEntry(p, neuron, act -> act.getState(stateType));
         return s;
     }
 

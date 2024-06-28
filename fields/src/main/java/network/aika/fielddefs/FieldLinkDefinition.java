@@ -17,6 +17,8 @@
 package network.aika.fielddefs;
 
 
+import network.aika.enums.Direction;
+
 /**
  * @author Lukas Molzberger
  */

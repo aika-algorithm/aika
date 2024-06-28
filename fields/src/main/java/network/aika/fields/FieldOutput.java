@@ -25,7 +25,7 @@ import java.util.Collection;
  */
 public interface FieldOutput {
 
-    String getLabel();
+    String getFieldName();
 
     String getValueString();
 

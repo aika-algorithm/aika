@@ -42,7 +42,7 @@ public class ConstantField implements FieldOutput {
     }
 
     @Override
-    public String getLabel() {
+    public String getFieldName() {
         return label;
     }
 

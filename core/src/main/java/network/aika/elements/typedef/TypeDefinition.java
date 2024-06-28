@@ -18,11 +18,14 @@ package network.aika.elements.typedef;
 
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldObjectDefinition;
+import network.aika.fielddefs.FieldObjectRelationDefinition;
+import network.aika.fielddefs.Path;
 import network.aika.fields.FieldObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 
 /**
@@ -60,6 +63,10 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
                 parents.stream().anyMatch(p ->
                         p.isInstance(type)
                 );
+    }
+
+    protected void addPathEntry(Path path, FieldObjectDefinition relatedObject, Function<T, FieldObject> mapping) {
+        path.add(new FieldObjectRelationDefinition(relatedObject, mapping));
     }
 
     public String getName() {

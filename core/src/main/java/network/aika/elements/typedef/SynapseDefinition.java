@@ -24,7 +24,6 @@ import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.Path;
-import network.aika.fields.SumField;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -34,15 +33,21 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse> {
 
+    public final static int INPUT = 0;
+    public final static int OUTPUT = 1;
+    public final static int LINK = 2;
+    public final static int INPUT_SLOT = 3;
+    public final static int OUTPUT_SLOT = 4;
+
     private LinkDefinition linkType;
 
     private NeuronDefinition inputDef;
 
-    private SynapseSlotDefinition inputSlotType;
+    private SynapseSlotDefinition inputSlot;
 
     private NeuronDefinition outputDef;
 
-    private SynapseSlotDefinition outputSlotType;
+    private SynapseSlotDefinition outputSlot;
 
     private Transition[] transition;
 
@@ -70,12 +75,12 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
 
 
     public NeuronDefinition getInput(Path p) {
-        p.add(inputDef);
+        p.add(INPUT, inputDef);
         return inputDef;
     }
 
     public NeuronDefinition getOutput(Path p) {
-        p.add(outputDef);
+        p.add(OUTPUT, outputDef);
         return outputDef;
     }
 
@@ -87,22 +92,33 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
         this.weight = weight;
     }
 
-    public SynapseSlotDefinition getInputSlotType() {
-        return inputSlotType;
+    public SynapseSlotDefinition getInputSlot() {
+        return inputSlot;
     }
 
-    public SynapseDefinition setInputSlotType(SynapseSlotDefinition inputSlotType) {
-        this.inputSlotType = inputSlotType;
+    public SynapseSlotDefinition getInputSlot(Path p) {
+        p.add(INPUT_SLOT, inputSlot);
+        return inputSlot;
+    }
+
+    public SynapseDefinition setInputSlot(SynapseSlotDefinition inputSlot) {
+        this.inputSlot = inputSlot;
 
         return this;
     }
 
-    public SynapseSlotDefinition getOutputSlotType() {
-        return outputSlotType;
+    public SynapseSlotDefinition getOutputSlot() {
+        return outputSlot;
     }
 
-    public SynapseDefinition setOutputSlotType(SynapseSlotDefinition outputSlotType) {
-        this.outputSlotType = outputSlotType;
+    public SynapseSlotDefinition getOutputSlot(Path p) {
+        p.add(OUTPUT_SLOT, outputSlot);
+        return outputSlot;
+    }
+
+
+    public SynapseDefinition setOutputSlot(SynapseSlotDefinition outputSlot) {
+        this.outputSlot = outputSlot;
 
         return this;
     }
@@ -175,12 +191,12 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
         return this;
     }
 
-    public LinkDefinition getLinkType() {
+    public LinkDefinition getLink() {
         return linkType;
     }
 
-    public LinkDefinition getLinkType(Path p) {
-        p.add(linkType);
+    public LinkDefinition getLink(Path p) {
+        p.add(LINK, linkType);
         return linkType;
     }
 
