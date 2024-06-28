@@ -90,7 +90,7 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
 
     public StateDefinition getState(Path p, StateType stateType) {
         StateDefinition s = getState(stateType);
-        addPathEntry(p, neuron, act -> act.getState(stateType));
+        addPathEntry(p, s, act -> act.getState(stateType));
         return s;
     }
 

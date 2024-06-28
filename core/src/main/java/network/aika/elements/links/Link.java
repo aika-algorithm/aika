@@ -41,7 +41,6 @@ import network.aika.visitor.Visitor;
 
 import java.util.stream.Stream;
 
-import static network.aika.debugger.EventType.CREATE;
 import static network.aika.elements.links.BSLinkEvent.ON_CREATE;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
@@ -61,9 +60,9 @@ public abstract class Link extends Type<LinkDefinition, Link> implements Element
 
     protected LinkUpdate outputStep = new LinkUpdate(this, OUTPUT);
 
-    protected SynapseSlot synInputSlot;
+    protected SynapseSlot inputSlot;
 
-    protected SynapseSlot synOutputSlot;
+    protected SynapseSlot outputSlot;
 
 
     public Link(Synapse s, Activation input, Activation output) {
@@ -243,24 +242,24 @@ public abstract class Link extends Type<LinkDefinition, Link> implements Element
     }
 
     public void linkInput() {
-        synInputSlot = input.registerOutputSlot(synapse);
-        synInputSlot.addLink(this);
+        inputSlot = input.registerOutputSlot(synapse);
+        inputSlot.addLink(this);
         updateBindingSignals(ON_CREATE, true);
     }
 
     public void linkOutput() {
         if(synapse.getTypeDefinition().getRegisterInputSlot() == RegisterInputSlot.ON_LINKING)
-            synOutputSlot = output.registerInputSlot(synapse);
+            outputSlot = output.registerInputSlot(synapse);
 
-        synOutputSlot.addLink(this);
+        outputSlot.addLink(this);
     }
 
-    public SynapseSlot getSynInputSlot() {
-        return synInputSlot;
+    public SynapseSlot getInputSlot() {
+        return inputSlot;
     }
 
-    public SynapseSlot getSynOutputSlot() {
-        return synOutputSlot;
+    public SynapseSlot getOutputSlot() {
+        return outputSlot;
     }
 
     public void propagateRanges() {

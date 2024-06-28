@@ -91,11 +91,11 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
     }
 
     public NeuronType getInputType() {
-        return typeDef.getInputDef().getType();
+        return typeDef.getInput().getType();
     }
 
     public NeuronType getOutputType() {
-        return typeDef.getOutputDef().getType();
+        return typeDef.getOutput().getType();
     }
 
     public Transition[] getTransition() {
@@ -112,6 +112,7 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
 
     public final SynapseSlot createInputSlot(Activation iAct) {
         return typeDef
+                .getLink()
                 .getInputSlot()
                 .instantiate(iAct, this);
     }
@@ -127,6 +128,7 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
 
     public final SynapseSlot createOutputSlot(Activation iAct) {
         return typeDef
+                .getLink()
                 .getOutputSlot()
                 .instantiate(iAct, this);
     }

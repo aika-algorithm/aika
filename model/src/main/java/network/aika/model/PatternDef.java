@@ -139,17 +139,17 @@ public class PatternDef implements TypeDefinition {
                 ConjunctiveLink.class
         )
                 .setInput(typeModel.binding.getActivation())
-                .setOutput(typeModel.pattern.activation);
+                .setOutput(typeModel.pattern.activation)
+                .setInputSlot(typeModel.conjunctive.getInputSlot())
+                .setOutputSlot(typeModel.conjunctive.getOutputSlot());
 
         synapse = new SynapseDefinition(
                 "PatternSynapse",
                 ConjunctiveSynapse.class
         )
-                .setLinkType(link)
-                .setInputSlot(typeModel.conjunctive.getSynapseInputSlot())
-                .setOutputSlot(typeModel.conjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(typeModel.binding.getNeuron())
-                .setOutputNeuronType(neuron)
+                .setLink(link)
+                .setInput(typeModel.binding.getNeuron())
+                .setOutput(neuron)
                 .setTransition(SAME_SAME, INPUT_INPUT)
                 .setRequired(SAME_SAME)
                 .setTrigger(FIRED_OUTER_FEEDBACK)
@@ -160,17 +160,17 @@ public class PatternDef implements TypeDefinition {
                 Link.class
         )
                 .setInput(activation)
-                .setOutput(categoryActivation);
+                .setOutput(categoryActivation)
+                .setInputSlot(typeModel.disjunctive.getInputSlot())
+                .setOutputSlot(typeModel.disjunctive.getOutputSlot());
 
         categorySynapse = new SynapseDefinition(
                 "PatternCategorySynapse",
                 Synapse.class
         )
-                .setLinkType(categoryLink)
-                .setInputSlot(typeModel.disjunctive.getSynapseInputSlot())
-                .setOutputSlot(typeModel.disjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(neuron)
-                .setOutputNeuronType(categoryNeuron)
+                .setLink(categoryLink)
+                .setInput(neuron)
+                .setOutput(categoryNeuron)
                 .setTransition(SAME_SAME)
                 .setRequired(SAME_SAME)
                 .setTrigger(FIRED_NON_FEEDBACK)
@@ -182,17 +182,17 @@ public class PatternDef implements TypeDefinition {
                 ConjunctiveLink.class
         )
                 .setInput(categoryActivation)
-                .setOutput(activation);
+                .setOutput(activation)
+                .setInputSlot(superType.getInputSlot())
+                .setOutputSlot(superType.getOutputSlot());
 
         categoryInputSynapse = new SynapseDefinition(
                 "PatternCategoryInputSynapse",
                 ConjunctiveSynapse.class
         )
-                .setLinkType(categoryInputLink)
-                .setInputSlot(superType.getSynapseInputSlot())
-                .setOutputSlot(superType.getSynapseOutputSlot())
-                .setInputNeuronType(categoryNeuron)
-                .setOutputNeuronType(neuron)
+                .setLink(categoryInputLink)
+                .setInput(categoryNeuron)
+                .setOutput(neuron)
                 .setTransition(SAME_SAME)
                 .setRequired(SAME_SAME)
                 .setOutputState(NON_FEEDBACK)

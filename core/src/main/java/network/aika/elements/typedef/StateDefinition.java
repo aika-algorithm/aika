@@ -79,8 +79,7 @@ public class StateDefinition extends TypeDefinition<StateDefinition, State> {
     }
 
     public ActivationDefinition getActivation(Path p) {
-        p.add(ACTIVATION, activation);
-
+        addPathEntry(p, activation, State::getActivation);
         return activation;
     }
 

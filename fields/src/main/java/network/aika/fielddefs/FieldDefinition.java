@@ -63,7 +63,7 @@ public class FieldDefinition<O extends FieldObjectDefinition<O>> implements Fiel
 
     public FieldDefinition<O> in(Integer port, Integer arg, BiFunction<O, Path, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
         Path objectPath = new Path(Direction.INPUT);
-        objectPath.add(ref, o -> o);
+        objectPath.add(new FieldObjectRelationDefinition(ref, o -> o));
         FieldOutputDefinition in = pathProvider.apply(ref, objectPath);
 
         FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, port, in, arg, this, propagateUpdates);
@@ -83,7 +83,7 @@ public class FieldDefinition<O extends FieldObjectDefinition<O>> implements Fiel
 
     public FieldDefinition<O> out(Integer port, Integer arg, BiFunction<O, Path, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
         Path objectPath = new Path(Direction.OUTPUT);
-        objectPath.add(ref, o -> o);
+        objectPath.add(new FieldObjectRelationDefinition(ref, o -> o));
         FieldInputDefinition out = pathProvider.apply(ref, objectPath);
 
         FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, port, this, arg, out, propagateUpdates);

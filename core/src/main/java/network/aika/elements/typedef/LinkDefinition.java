@@ -30,13 +30,13 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
 
-    public final static int INPUT = 0;
-    public final static int OUTPUT = 1;
-    public final static int SYNAPSE = 2;
-
     private SynapseDefinition synapse;
     private ActivationDefinition input;
     private ActivationDefinition output;
+
+    private SynapseSlotDefinition inputSlot;
+    private SynapseSlotDefinition outputSlot;
+
 
     private FieldDefinition<LinkDefinition> inputValue;
 
@@ -97,7 +97,7 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public SynapseDefinition getSynapse(Path p) {
-        p.add(SYNAPSE, synapse);
+        addPathEntry(p, synapse, Link::getSynapse);
         return synapse;
     }
 
@@ -108,8 +108,7 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public ActivationDefinition getInput(Path p) {
-        p.add(INPUT, input);
-
+        addPathEntry(p, input, Link::getInput);
         return input;
     }
 
@@ -124,7 +123,7 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public ActivationDefinition getOutput(Path p) {
-        p.add(OUTPUT, output);
+        addPathEntry(p, output, Link::getOutput);
         return output;
     }
 
@@ -134,6 +133,38 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
 
     public LinkDefinition setOutput(ActivationDefinition output) {
         this.output = output;
+
+        return this;
+    }
+
+
+    public SynapseSlotDefinition getInputSlot() {
+        return inputSlot;
+    }
+
+    public SynapseSlotDefinition getInputSlot(Path p) {
+        addPathEntry(p, inputSlot, Link::getInputSlot);
+        return inputSlot;
+    }
+
+    public LinkDefinition setInputSlot(SynapseSlotDefinition inputSlot) {
+        this.inputSlot = inputSlot;
+
+        return this;
+    }
+
+    public SynapseSlotDefinition getOutputSlot() {
+        return outputSlot;
+    }
+
+    public SynapseSlotDefinition getOutputSlot(Path p) {
+        addPathEntry(p, outputSlot, Link::getOutputSlot);
+        return outputSlot;
+    }
+
+
+    public LinkDefinition setOutputSlot(SynapseSlotDefinition outputSlot) {
+        this.outputSlot = outputSlot;
 
         return this;
     }

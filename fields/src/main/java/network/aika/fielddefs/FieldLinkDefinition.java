@@ -44,4 +44,28 @@ public class FieldLinkDefinition {
         this.out = out;
         this.propagateUpdates = propagateUpdates;
     }
+
+    public Path getObjectPath() {
+        return objectPath;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public Integer getArg() {
+        return arg;
+    }
+
+    public FieldOutputDefinition getIn() {
+        return in;
+    }
+
+    public FieldInputDefinition getOut() {
+        return out;
+    }
+
+    public boolean isPropagateUpdates() {
+        return propagateUpdates;
+    }
 }

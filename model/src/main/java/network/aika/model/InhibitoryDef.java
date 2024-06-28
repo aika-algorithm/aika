@@ -108,17 +108,17 @@ public class InhibitoryDef implements TypeDefinition {
                 DisjunctiveLink.class
         )
                 .setInput(typeModel.binding.getActivation())
-                .setOutput(activation);
+                .setOutput(activation)
+                .setInputSlot(typeModel.disjunctive.getInputSlot())
+                .setOutputSlot(typeModel.disjunctive.getOutputSlot());
 
         synapse = new SynapseDefinition(
                 "InhibitorySynapse",
                 DisjunctiveSynapse.class
         )
-                .setLinkType(link)
-                .setInputSlot(typeModel.disjunctive.getSynapseInputSlot())
-                .setOutputSlot(typeModel.disjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(typeModel.binding.getNeuron())
-                .setOutputNeuronType(neuron)
+                .setLink(link)
+                .setInput(typeModel.binding.getNeuron())
+                .setOutput(neuron)
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
                 .setTrigger(FIRED_NON_FEEDBACK)
@@ -127,17 +127,17 @@ public class InhibitoryDef implements TypeDefinition {
 
         primaryLink = new LinkDefinition(
                 "PrimaryInhibitoryLink",
-                DisjunctiveLink.class);
+                DisjunctiveLink.class)
+                .setInputSlot(typeModel.disjunctive.getInputSlot())
+                .setOutputSlot(typeModel.disjunctive.getOutputSlot());
 
         primarySynapse = new SynapseDefinition(
                 "PrimaryInhibitorySynapse",
                 DisjunctiveSynapse.class
         )
-                .setLinkType(primaryLink)
-                .setInputSlot(typeModel.disjunctive.getSynapseInputSlot())
-                .setOutputSlot(typeModel.disjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(typeModel.pattern.getNeuron())
-                .setOutputNeuronType(neuron)
+                .setLink(primaryLink)
+                .setInput(typeModel.pattern.getNeuron())
+                .setOutput(neuron)
                 .setTransition(SAME_INPUT)
                 .setRequired(SAME_INPUT)
                 .setTrigger(FIRED_NON_FEEDBACK)
@@ -146,17 +146,17 @@ public class InhibitoryDef implements TypeDefinition {
 
         categoryLink = new LinkDefinition(
                 "InhibitoryCategoryLink",
-                Link.class);
+                Link.class)
+                .setInputSlot(typeModel.disjunctive.getInputSlot())
+                .setOutputSlot(typeModel.disjunctive.getOutputSlot());
 
         categorySynapse = new SynapseDefinition(
                 "InhibitoryCategorySynapse",
                 Synapse.class
         )
-                .setLinkType(categoryLink)
-                .setInputSlot(typeModel.disjunctive.getSynapseInputSlot())
-                .setOutputSlot(typeModel.disjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(neuron)
-                .setOutputNeuronType(categoryNeuron)
+                .setLink(categoryLink)
+                .setInput(neuron)
+                .setOutput(categoryNeuron)
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
                 .setTrigger(FIRED_NON_FEEDBACK)
@@ -165,17 +165,17 @@ public class InhibitoryDef implements TypeDefinition {
 
         categoryInputLink = new LinkDefinition(
                 "InhibitoryCategoryInputLink",
-                DisjunctiveLink.class);
+                DisjunctiveLink.class)
+                .setInputSlot(typeModel.disjunctive.getInputSlot())
+                .setOutputSlot(typeModel.disjunctive.getOutputSlot());
 
         categoryInputSynapse = new SynapseDefinition(
                 "InhibitoryCategoryInputSynapse",
                 Synapse.class
         )
-                .setLinkType(categoryInputLink)
-                .setInputSlot(typeModel.disjunctive.getSynapseInputSlot())
-                .setOutputSlot(typeModel.disjunctive.getSynapseOutputSlot())
-                .setInputNeuronType(categoryNeuron)
-                .setOutputNeuronType(typeModel.binding.getNeuron())
+                .setLink(categoryInputLink)
+                .setInput(categoryNeuron)
+                .setOutput(typeModel.binding.getNeuron())
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
                 .setOutputState(NON_FEEDBACK)

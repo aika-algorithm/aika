@@ -34,8 +34,8 @@ public class ConjunctiveDef {
     ActivationDefinition activation;
     NeuronDefinition neuron;
 
-    SynapseSlotDefinition synapseInputSlot;
-    SynapseSlotDefinition synapseOutputSlot;
+    SynapseSlotDefinition inputSlot;
+    SynapseSlotDefinition outputSlot;
 
     LinkDefinition link;
     SynapseDefinition synapse;
@@ -57,12 +57,12 @@ public class ConjunctiveDef {
                 Neuron.class
         );
 
-        synapseInputSlot = new SynapseSlotDefinition(
+        inputSlot = new SynapseSlotDefinition(
                 "ConjunctiveSynapseInputSlot",
                 ConjunctiveSynapseSlot.class
         );
 
-        synapseOutputSlot = new SynapseSlotDefinition(
+        outputSlot = new SynapseSlotDefinition(
                 "ConjunctiveSynapseOutputSlot",
                 ConjunctiveSynapseSlot.class
         );
@@ -86,12 +86,12 @@ public class ConjunctiveDef {
         return neuron;
     }
 
-    public SynapseSlotDefinition getSynapseInputSlot() {
-        return synapseInputSlot;
+    public SynapseSlotDefinition getInputSlot() {
+        return inputSlot;
     }
 
-    public SynapseSlotDefinition getSynapseOutputSlot() {
-        return synapseOutputSlot;
+    public SynapseSlotDefinition getOutputSlot() {
+        return outputSlot;
     }
 
     public LinkDefinition getLink() {

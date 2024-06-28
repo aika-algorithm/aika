@@ -64,11 +64,11 @@ public abstract class ConjunctiveLink extends Link {
         if(input == null)
             return true;
 
-        return synInputSlot != null && synInputSlot.getSelectedLink() == this;
+        return inputSlot != null && inputSlot.getSelectedLink() == this;
     }
 
     public boolean isOutputSideActive() {
-        return synOutputSlot != null && synOutputSlot.getSelectedLink() == this;
+        return outputSlot != null && outputSlot.getSelectedLink() == this;
     }
 
     @Override

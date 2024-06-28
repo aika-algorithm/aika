@@ -37,8 +37,8 @@ public class DisjunctiveDef {
     ActivationDefinition activation;
     NeuronDefinition neuron;
 
-    SynapseSlotDefinition synapseInputSlot;
-    SynapseSlotDefinition synapseOutputSlot;
+    SynapseSlotDefinition inputSlot;
+    SynapseSlotDefinition outputSlot;
 
     LinkDefinition link;
     SynapseDefinition synapse;
@@ -59,12 +59,12 @@ public class DisjunctiveDef {
                 Neuron.class
         );
 
-        synapseInputSlot = new SynapseSlotDefinition(
+        inputSlot = new SynapseSlotDefinition(
                 "DisjunctiveSynapseInputSlot",
                 DisjunctiveSynapseSlot.class
         );
 
-        synapseOutputSlot = new SynapseSlotDefinition(
+        outputSlot = new SynapseSlotDefinition(
                 "DisjunctiveSynapseOutputSlot",
                 DisjunctiveSynapseSlot.class
         );
@@ -95,12 +95,12 @@ public class DisjunctiveDef {
         return neuron;
     }
 
-    public SynapseSlotDefinition getSynapseInputSlot() {
-        return synapseInputSlot;
+    public SynapseSlotDefinition getInputSlot() {
+        return inputSlot;
     }
 
-    public SynapseSlotDefinition getSynapseOutputSlot() {
-        return synapseOutputSlot;
+    public SynapseSlotDefinition getOutputSlot() {
+        return outputSlot;
     }
 
 
