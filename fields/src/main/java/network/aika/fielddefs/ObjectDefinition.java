@@ -52,7 +52,7 @@ public abstract class ObjectDefinition<O extends ObjectDefinition<O>> {
 
     public FieldDefinition<O> getFieldDefinition(String name) {
         return fieldDefinitions.stream()
-                .filter(fd -> fd.getFieldName() == name)
+                .filter(fd -> fd.getLabel() == name)
                 .findFirst()
                 .orElse(null);
     }

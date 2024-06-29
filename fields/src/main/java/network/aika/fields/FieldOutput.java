@@ -25,7 +25,7 @@ import java.util.Collection;
  */
 public interface FieldOutput {
 
-    String getFieldName();
+    String getLabel();
 
     String getValueString();
 
@@ -39,7 +39,7 @@ public interface FieldOutput {
 
     Collection<FieldLink> getReceivers();
 
-    FieldObject getReference();
+    FieldObject getObject();
 
     void disconnectAndUnlinkOutputs(boolean deinitialize);
 

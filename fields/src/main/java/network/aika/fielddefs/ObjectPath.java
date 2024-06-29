@@ -4,7 +4,10 @@ import network.aika.enums.Direction;
 import network.aika.fields.FieldObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ObjectPath {
 
@@ -32,10 +35,15 @@ public class ObjectPath {
         path.add(rel);
     }
 
-    public FieldObject resolve(FieldObject fo) {
+    public List<FieldObject> resolve(FieldObject startObject) {
+        List<FieldObject> current = List.of(startObject);
         for(ObjectRelationDefinition e: path) {
-            fo = e.followRelation(fo);
+
+            current = current.stream()
+                    .flatMap(o -> e.followRelation(o).stream())
+                    .toList();
         }
-        return fo;
+
+        return current;
     }
 }

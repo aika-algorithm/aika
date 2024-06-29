@@ -23,6 +23,7 @@ import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 
 /**
  *
@@ -97,7 +98,7 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public SynapseDefinition getSynapse(ObjectPath p) {
-        addPathEntry(p, synapse, Link::getSynapse);
+        addPathEntry(p, synapse, l -> Set.of(l.getSynapse()));
         return synapse;
     }
 
@@ -108,7 +109,7 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public ActivationDefinition getInput(ObjectPath p) {
-        addPathEntry(p, input, Link::getInput);
+        addPathEntry(p, input, l -> Set.of(l.getInput()));
         return input;
     }
 
@@ -123,7 +124,7 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public ActivationDefinition getOutput(ObjectPath p) {
-        addPathEntry(p, output, Link::getOutput);
+        addPathEntry(p, output, l -> Set.of(l.getOutput()));
         return output;
     }
 
@@ -143,7 +144,7 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public SynapseSlotDefinition getInputSlot(ObjectPath p) {
-        addPathEntry(p, inputSlot, Link::getInputSlot);
+        addPathEntry(p, inputSlot, l -> Set.of(l.getInputSlot()));
         return inputSlot;
     }
 
@@ -158,7 +159,7 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public SynapseSlotDefinition getOutputSlot(ObjectPath p) {
-        addPathEntry(p, outputSlot, Link::getOutputSlot);
+        addPathEntry(p, outputSlot, l -> Set.of(l.getOutputSlot()));
         return outputSlot;
     }
 

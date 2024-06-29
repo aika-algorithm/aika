@@ -26,6 +26,7 @@ import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 
 /**
  *
@@ -65,12 +66,12 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
 
 
     public NeuronDefinition getInput(ObjectPath p) {
-        addPathEntry(p, input, Synapse::getInput);
+        addPathEntry(p, input, s -> Set.of(s.getInput()));
         return input;
     }
 
     public NeuronDefinition getOutput(ObjectPath p) {
-        addPathEntry(p, output, Synapse::getOutput);
+        addPathEntry(p, output, s -> Set.of(s.getOutput()));
         return output;
     }
 

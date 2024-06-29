@@ -27,6 +27,7 @@ import network.aika.fielddefs.ObjectPath;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -78,7 +79,7 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
     }
 
     public NeuronDefinition getNeuron(ObjectPath p) {
-        addPathEntry(p, neuron, Activation::getNeuron);
+        addPathEntry(p, neuron, act -> Set.of(act.getNeuron()));
         return neuron;
     }
 
@@ -88,7 +89,7 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
 
     public StateDefinition getState(ObjectPath p, StateType stateType) {
         StateDefinition s = getState(stateType);
-        addPathEntry(p, s, act -> act.getState(stateType));
+        addPathEntry(p, s, act -> Set.of(act.getState(stateType)));
         return s;
     }
 

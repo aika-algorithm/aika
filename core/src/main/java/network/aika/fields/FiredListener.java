@@ -36,7 +36,7 @@ public class FiredListener extends AbstractListener<State> {
 
     @Override
     public void receiveUpdate(FieldLink fl, double u) {
-        State s = getReference();
+        State s = getObject();
         s.updateFiredStep(fl);
     }
 }

@@ -30,7 +30,7 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
 
     private static double MIN_TOLERANCE = 0.0000000001;
 
-    private String fieldName;
+    private String label;
     private O reference;
 
     protected double value;
@@ -43,8 +43,8 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
 
     private Collection<FieldLink> receivers = new ArrayList<>();
 
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public void setFieldObject(O fo) {
@@ -56,12 +56,12 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
     }
 
     @Override
-    public String getFieldName() {
-        return fieldName;
+    public String getLabel() {
+        return label;
     }
 
     @Override
-    public O getReference() {
+    public O getObject() {
         return reference;
     }
 
@@ -145,7 +145,7 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
 
     @Override
     public String toString() {
-        return getFieldName() + ": " + getValueString();
+        return getLabel() + ": " + getValueString();
     }
 
     public String getValueString() {

@@ -36,7 +36,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
 
     protected O object;
 
-    protected String fieldName;
+    protected String label;
 
     protected Double tolerance;
 
@@ -47,9 +47,9 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
     protected boolean isNextRound;
 
 
-    public FieldDefinition(Class<? extends Field> clazz, O object, String name) {
+    public FieldDefinition(Class<? extends Field> clazz, O object, String label) {
         this.clazz = clazz;
-        this.fieldName = name;
+        this.label = label;
         this.object = object;
 
         object.addFieldDefinition(this);
@@ -111,7 +111,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
 
             instance.setFieldObject(fo);
             instance.setFieldDefinition(this);
-            instance.setFieldName(fieldName);
+            instance.setLabel(label);
             instance.setTolerance(tolerance);
 
             return instance;
@@ -123,9 +123,9 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
     }
 
     public void instantiateLinks(Field f) {
-
-
-        inputs.forEach(fl ->  {fl.});
+        inputs.forEach(fl ->
+                fl.getObjectPath().resolve(f.getObject())
+        );
     }
 
     public FieldDefinition<O> setFieldId(int id) {
@@ -158,12 +158,12 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         return this;
     }
 
-    public String getFieldName() {
-        return fieldName;
+    public String getLabel() {
+        return label;
     }
 
-    public FieldDefinition<O> setFieldName(String fieldName) {
-        this.fieldName = fieldName;
+    public FieldDefinition<O> setLabel(String label) {
+        this.label = label;
 
         return this;
     }

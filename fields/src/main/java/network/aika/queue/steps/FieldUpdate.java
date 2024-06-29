@@ -105,7 +105,7 @@ public class FieldUpdate<E extends FieldObject & QueueProvider> extends Step<E> 
 
     @Override
     public E getElement() {
-        return (E) interceptor.getField().getReference();
+        return (E) interceptor.getField().getObject();
     }
 
     public double getDelta() {
@@ -124,6 +124,6 @@ public class FieldUpdate<E extends FieldObject & QueueProvider> extends Step<E> 
     public String toString() {
         return getElement() + " Delta:" + doubleToString(delta) +
                 " Field: " + interceptor.getField() +
-                " Ref:" + interceptor.getField().getReference();
+                " Ref:" + interceptor.getField().getObject();
     }
 }

@@ -19,6 +19,8 @@ package network.aika.fielddefs;
 
 import network.aika.fields.FieldObject;
 
+import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -26,11 +28,11 @@ import java.util.function.Function;
  */
 public class ObjectRelationDefinition<O extends FieldObject> {
 
-    private Function<O, FieldObject> mapping;
+    private Function<O, List<FieldObject>> mapping;
 
     private ObjectDefinition relatedObject;
 
-    public ObjectRelationDefinition(ObjectDefinition relatedObject, Function<O, FieldObject> mapping) {
+    public ObjectRelationDefinition(ObjectDefinition relatedObject, Function<O, List<FieldObject>> mapping) {
         this.relatedObject = relatedObject;
         this.mapping = mapping;
     }
@@ -39,7 +41,7 @@ public class ObjectRelationDefinition<O extends FieldObject> {
         return relatedObject;
     }
 
-    public FieldObject followRelation(O fo) {
-        return mapping.apply(fo);
+    public List<FieldObject> followRelation(O o) {
+        return mapping.apply(o);
     }
 }

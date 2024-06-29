@@ -25,6 +25,7 @@ import network.aika.fields.FieldObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 
 
@@ -65,7 +66,7 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
                 );
     }
 
-    protected void addPathEntry(ObjectPath objectPath, ObjectDefinition relatedObject, Function<T, FieldObject> mapping) {
+    protected void addPathEntry(ObjectPath objectPath, ObjectDefinition relatedObject, Function<T, Set<FieldObject>> mapping) {
         objectPath.add(new ObjectRelationDefinition(relatedObject, mapping));
     }
 
