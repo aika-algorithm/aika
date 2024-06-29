@@ -18,13 +18,12 @@ package network.aika.elements.typedef;
 
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.RegisterInputSlot;
-import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.Path;
+import network.aika.fielddefs.ObjectPath;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -65,12 +64,12 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
     }
 
 
-    public NeuronDefinition getInput(Path p) {
+    public NeuronDefinition getInput(ObjectPath p) {
         addPathEntry(p, input, Synapse::getInput);
         return input;
     }
 
-    public NeuronDefinition getOutput(Path p) {
+    public NeuronDefinition getOutput(ObjectPath p) {
         addPathEntry(p, output, Synapse::getOutput);
         return output;
     }

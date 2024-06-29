@@ -133,11 +133,11 @@ public abstract class Link extends Type<LinkDefinition, Link> implements Element
     public abstract void connectWeightUpdate();
 
     public StateType inputState() {
-        return getSynapse().getTypeDefinition().getTrigger().getType();
+        return getSynapse().getObjectDefinition().getTrigger().getType();
     }
 
     public StateType outputState() {
-        return getSynapse().getTypeDefinition().outputState();
+        return getSynapse().getObjectDefinition().outputState();
     }
 
     public void init() {
@@ -248,7 +248,7 @@ public abstract class Link extends Type<LinkDefinition, Link> implements Element
     }
 
     public void linkOutput() {
-        if(synapse.getTypeDefinition().getRegisterInputSlot() == RegisterInputSlot.ON_LINKING)
+        if(synapse.getObjectDefinition().getRegisterInputSlot() == RegisterInputSlot.ON_LINKING)
             outputSlot = output.registerInputSlot(synapse);
 
         outputSlot.addLink(this);

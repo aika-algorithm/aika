@@ -31,7 +31,7 @@ public abstract class Type<D extends TypeDefinition<D, T>, T extends Type<D, T> 
         this.typeDef = typeDef;
     }
 
-    public D getTypeDefinition() {
+    public D getObjectDefinition() {
         return typeDef;
     }
 }

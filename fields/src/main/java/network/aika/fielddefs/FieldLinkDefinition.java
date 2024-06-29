@@ -17,14 +17,12 @@
 package network.aika.fielddefs;
 
 
-import network.aika.enums.Direction;
-
 /**
  * @author Lukas Molzberger
  */
 public class FieldLinkDefinition {
 
-    private Path objectPath;
+    private ObjectPath objectPath;
 
     private Integer port;
 
@@ -36,8 +34,8 @@ public class FieldLinkDefinition {
 
     boolean propagateUpdates;
 
-    public FieldLinkDefinition(Path path, Integer port, FieldOutputDefinition in, Integer arg, FieldInputDefinition out, boolean propagateUpdates) {
-        this.objectPath = path;
+    public FieldLinkDefinition(ObjectPath objectPath, Integer port, FieldOutputDefinition in, Integer arg, FieldInputDefinition out, boolean propagateUpdates) {
+        this.objectPath = objectPath;
         this.port = port;
         this.arg = arg;
         this.in = in;
@@ -45,7 +43,7 @@ public class FieldLinkDefinition {
         this.propagateUpdates = propagateUpdates;
     }
 
-    public Path getObjectPath() {
+    public ObjectPath getObjectPath() {
         return objectPath;
     }
 

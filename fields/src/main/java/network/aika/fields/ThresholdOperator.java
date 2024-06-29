@@ -17,8 +17,8 @@
 package network.aika.fields;
 
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldObjectDefinition;
-import network.aika.fielddefs.Path;
+import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.ObjectPath;
 import network.aika.fielddefs.ThresholdOperatorFieldDefinition;
 import network.aika.fields.link.FieldLink;
 
@@ -29,11 +29,11 @@ import java.util.function.BiConsumer;
  */
 public class ThresholdOperator<O extends FieldObject> extends AbstractFunction<O> {
 
-    public static <O extends FieldObjectDefinition<O>> FieldDefinition<O> threshold(O ref, String label, double threshold, ThresholdOperator.Type type) {
+    public static <O extends ObjectDefinition<O>> FieldDefinition<O> threshold(O ref, String label, double threshold, ThresholdOperator.Type type) {
         return new ThresholdOperatorFieldDefinition<>(ref, label, threshold, type);
     }
 
-    public static <O extends FieldObjectDefinition<O>> FieldDefinition<O> threshold(O ref, String label, double threshold, ThresholdOperator.Type type, boolean isFinal, BiConsumer<O, Path> pathProvider, String in) {
+    public static <O extends ObjectDefinition<O>> FieldDefinition<O> threshold(O ref, String label, double threshold, ThresholdOperator.Type type, boolean isFinal, BiConsumer<O, ObjectPath> pathProvider, String in) {
         return new ThresholdOperatorFieldDefinition<>(ref, label, threshold, type, isFinal);
     }
 

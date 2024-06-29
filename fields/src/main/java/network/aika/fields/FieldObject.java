@@ -18,8 +18,7 @@ package network.aika.fields;
 
 
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldObjectDefinition;
-import network.aika.fielddefs.FieldObjectRelationDefinition;
+import network.aika.fielddefs.ObjectDefinition;
 import network.aika.queue.Queue;
 
 /**
@@ -28,9 +27,9 @@ import network.aika.queue.Queue;
  */
 public interface FieldObject {
 
-    void setTypeDefinition(FieldObjectDefinition typeDef);
+    void setObjectDefinition(ObjectDefinition typeDef);
 
-    FieldObjectDefinition getTypeDefinition();
+    ObjectDefinition getObjectDefinition();
 
     void setField(int i, Field f);
 

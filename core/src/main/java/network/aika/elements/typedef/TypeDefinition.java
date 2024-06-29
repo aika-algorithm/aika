@@ -17,9 +17,9 @@
 package network.aika.elements.typedef;
 
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldObjectDefinition;
-import network.aika.fielddefs.FieldObjectRelationDefinition;
-import network.aika.fielddefs.Path;
+import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.ObjectRelationDefinition;
+import network.aika.fielddefs.ObjectPath;
 import network.aika.fields.FieldObject;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import java.util.function.Function;
  *
  * @author Lukas Molzberger
  */
-public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends Type<D, T> & FieldObject> extends FieldObjectDefinition<D> {
+public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends Type<D, T> & FieldObject> extends ObjectDefinition<D> {
 
     private String name;
 
@@ -46,13 +46,13 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
     }
 
     @Override
-    public FieldDefinition<D> getFieldDef(String name) {
-        FieldDefinition<D> fieldDef = getFieldDef(name);
+    public FieldDefinition<D> getFieldDefinition(String name) {
+        FieldDefinition<D> fieldDef = getFieldDefinition(name);
         if(fieldDef != null)
             return fieldDef;
 
         return parents.stream()
-                .map(p -> p.getFieldDef(name))
+                .map(p -> p.getFieldDefinition(name))
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(null);
@@ -65,8 +65,8 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
                 );
     }
 
-    protected void addPathEntry(Path path, FieldObjectDefinition relatedObject, Function<T, FieldObject> mapping) {
-        path.add(new FieldObjectRelationDefinition(relatedObject, mapping));
+    protected void addPathEntry(ObjectPath objectPath, ObjectDefinition relatedObject, Function<T, FieldObject> mapping) {
+        objectPath.add(new ObjectRelationDefinition(relatedObject, mapping));
     }
 
     public String getName() {

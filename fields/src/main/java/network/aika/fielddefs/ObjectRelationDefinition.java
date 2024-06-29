@@ -24,18 +24,18 @@ import java.util.function.Function;
 /**
  * @author Lukas Molzberger
  */
-public class FieldObjectRelationDefinition<O extends FieldObject> {
+public class ObjectRelationDefinition<O extends FieldObject> {
 
     private Function<O, FieldObject> mapping;
 
-    private FieldObjectDefinition relatedObject;
+    private ObjectDefinition relatedObject;
 
-    public FieldObjectRelationDefinition(FieldObjectDefinition relatedObject, Function<O, FieldObject> mapping) {
+    public ObjectRelationDefinition(ObjectDefinition relatedObject, Function<O, FieldObject> mapping) {
         this.relatedObject = relatedObject;
         this.mapping = mapping;
     }
 
-    public FieldObjectDefinition getRelatedObject() {
+    public ObjectDefinition getRelatedObject() {
         return relatedObject;
     }
 

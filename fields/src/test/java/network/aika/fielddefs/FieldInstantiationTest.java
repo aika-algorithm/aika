@@ -16,11 +16,9 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.fields.SumField;
 import org.junit.jupiter.api.Test;
 
 import static network.aika.fields.Field.field;
-import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
@@ -29,7 +27,7 @@ public class FieldInstantiationTest {
 
     @Test
     public void testFieldInstantiation() {
-        FieldObjectDefinition x = new FieldObjectDefinition();
+        ObjectDefinition x = new ObjectDefinition();
 
         FieldDefinition a = field(x, "a");
         FieldDefinition b = field(x, "b")

@@ -26,9 +26,6 @@ import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.queue.steps.Fired;
 
-import java.util.Collection;
-
-import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.queue.Timestamp.NOT_SET;
 
@@ -50,7 +47,7 @@ public class State extends Type<StateDefinition, State> implements QueueProvider
     }
 
     private Field getValue() {
-        return getField(getTypeDefinition().getValue());
+        return getField(this.getObjectDefinition().getValue());
     }
 
     public void updateFiredStep(FieldLink fl) {

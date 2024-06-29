@@ -20,8 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.Path;
-import network.aika.fields.SumField;
+import network.aika.fielddefs.ObjectPath;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -78,7 +77,7 @@ public class StateDefinition extends TypeDefinition<StateDefinition, State> {
         return activation;
     }
 
-    public ActivationDefinition getActivation(Path p) {
+    public ActivationDefinition getActivation(ObjectPath p) {
         addPathEntry(p, activation, State::getActivation);
         return activation;
     }

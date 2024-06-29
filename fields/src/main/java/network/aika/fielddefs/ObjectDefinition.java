@@ -24,14 +24,14 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public abstract class FieldObjectDefinition<O extends FieldObjectDefinition<O>> {
+public abstract class ObjectDefinition<O extends ObjectDefinition<O>> {
 
-    List<FieldDefinition<O>> fieldDefs = new ArrayList<>();
+    List<FieldDefinition<O>> fieldDefinitions = new ArrayList<>();
 
-    public void instantiateFields(FieldObject fo) {
-        fieldDefs.stream()
+    public void instantiateFields(FieldObject o) {
+        fieldDefinitions.stream()
                 .map(fd ->
-                        fd.instantiate(fo)
+                        fd.instantiate(o)
                 )
                 .toList().stream()
                 .forEach(f ->
@@ -42,16 +42,16 @@ public abstract class FieldObjectDefinition<O extends FieldObjectDefinition<O>> 
     }
 
     public void addFieldDefinition(FieldDefinition<O> fieldDef) {
-        fieldDef.setFieldId(fieldDefs.size());
-        fieldDefs.add(fieldDef);
+        fieldDef.setFieldId(fieldDefinitions.size());
+        fieldDefinitions.add(fieldDef);
     }
 
     public int getNumberOfFields() {
-        return fieldDefs.size();
+        return fieldDefinitions.size();
     }
 
-    public FieldDefinition<O> getFieldDef(String name) {
-        return fieldDefs.stream()
+    public FieldDefinition<O> getFieldDefinition(String name) {
+        return fieldDefinitions.stream()
                 .filter(fd -> fd.getFieldName() == name)
                 .findFirst()
                 .orElse(null);

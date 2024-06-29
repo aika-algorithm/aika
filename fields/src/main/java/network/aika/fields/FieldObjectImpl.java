@@ -18,7 +18,7 @@ package network.aika.fields;
 
 
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldObjectDefinition;
+import network.aika.fielddefs.ObjectDefinition;
 import network.aika.queue.QueueProvider;
 
 /**
@@ -26,19 +26,19 @@ import network.aika.queue.QueueProvider;
  */
 public abstract class FieldObjectImpl implements FieldObject, QueueProvider {
 
-    private FieldObjectDefinition typeDefinition;
+    private ObjectDefinition objectDefinition;
 
     private Field[] fields;
 
     @Override
-    public void setTypeDefinition(FieldObjectDefinition typeDef) {
+    public void setObjectDefinition(ObjectDefinition typeDef) {
         this.fields = new Field[typeDef.getNumberOfFields()];
-        this.typeDefinition = typeDef;
+        this.objectDefinition = typeDef;
     }
 
     @Override
-    public FieldObjectDefinition getTypeDefinition() {
-        return typeDefinition;
+    public ObjectDefinition getObjectDefinition() {
+        return objectDefinition;
     }
 
     @Override

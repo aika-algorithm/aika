@@ -17,7 +17,7 @@
 package network.aika.fields;
 
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldObjectDefinition;
+import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  */
 public class SumField<O extends FieldObject> extends Field<O, FieldLink> {
 
-    public static <O extends FieldObjectDefinition<O>> FieldDefinition<O> sum(O ref, String label) {
+    public static <O extends ObjectDefinition<O>> FieldDefinition<O> sum(O ref, String label) {
         return new FieldDefinition<>(SumField.class, ref, label, TOLERANCE);
     }
 

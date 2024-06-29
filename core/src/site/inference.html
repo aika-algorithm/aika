@@ -219,7 +219,7 @@
 				in the text. There are two things needed for this. First, there needs to be a synapse from the pattern part
 				neuron "PP-the" to the pattern part neuron "PP-cat" that establishes the requirement of an relationship between
 				these two neurons. The second part is to verify this relationship during the linking process for the activations.
-				This is done by requiring a connecting path through the activation network between the input and the output
+				This is done by requiring a connecting objectPath through the activation network between the input and the output
 				activation of a potential new link. This verification is performed by a 'visitor' class that steps through
 				the activation network in search of such a connection. At each activation and each link a transition operation is
 				performed in order to check that all of the conditions for a certain neuron or synapse neuronType hold. When the visitor
@@ -229,7 +229,7 @@
 				<img src="images/pattern-the-cat.svg" width="60%" height="60%" style="float:none; margin-left:auto; margin-right:auto; display:block"/>
 			</div>
 			<p>
-				The red arrows depict the path of the visitor.
+				The red arrows depict the objectPath of the visitor.
 			</p>
         </div>
 	</div>

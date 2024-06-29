@@ -5,15 +5,14 @@ import network.aika.fields.FieldObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
-public class Path {
+public class ObjectPath {
 
     private Direction direction;
 
-    private List<FieldObjectRelationDefinition> path = new ArrayList<>();
+    private List<ObjectRelationDefinition> path = new ArrayList<>();
 
-    public Path(Direction direction) {
+    public ObjectPath(Direction direction) {
         this.direction = direction;
     }
 
@@ -21,20 +20,20 @@ public class Path {
         return direction;
     }
 
-    public FieldObjectDefinition getFromObject() {
+    public ObjectDefinition getFromObject() {
         return path.getFirst().getRelatedObject();
     }
 
-    public FieldObjectDefinition getToObject() {
+    public ObjectDefinition getToObject() {
         return path.getLast().getRelatedObject();
     }
 
-    public void add(FieldObjectRelationDefinition rel) {
+    public void add(ObjectRelationDefinition rel) {
         path.add(rel);
     }
 
     public FieldObject resolve(FieldObject fo) {
-        for(FieldObjectRelationDefinition e: path) {
+        for(ObjectRelationDefinition e: path) {
             fo = e.followRelation(fo);
         }
         return fo;
