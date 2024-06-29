@@ -31,7 +31,7 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
     private static double MIN_TOLERANCE = 0.0000000001;
 
     private String label;
-    private O reference;
+    private O object;
 
     protected double value;
 
@@ -48,7 +48,7 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
     }
 
     public void setFieldObject(O fo) {
-        reference = fo;
+        object = fo;
     }
 
     public void setTolerance(Double tolerance) {
@@ -62,11 +62,11 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
 
     @Override
     public O getObject() {
-        return reference;
+        return object;
     }
 
-    public void setReference(O reference) {
-        this.reference = reference;
+    public void setObject(O object) {
+        this.object = object;
     }
 
     @Override

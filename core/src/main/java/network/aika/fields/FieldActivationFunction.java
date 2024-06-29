@@ -30,10 +30,6 @@ public class FieldActivationFunction extends AbstractFunction<State> {
         return new FieldDefinition<>(FieldActivationFunction.class, ref, label, tolerance);
     }
 
-    public FieldActivationFunction(State ref, String label, Double tolerance) {
-        super(ref, label, tolerance);
-    }
-
     @Override
     protected double computeUpdate(FieldLink fl, double u) {
         return getObject().getActivation().getActivationFunction().f(fl.getUpdatedInputValue()) - value;

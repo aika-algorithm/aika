@@ -148,7 +148,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         return this;
     }
 
-    public ObjectDefinition getReference() {
+    public ObjectDefinition getObject() {
         return object;
     }
 

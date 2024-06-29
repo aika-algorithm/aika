@@ -30,10 +30,6 @@ public class FiredListener extends AbstractListener<State> {
         return new FieldDefinition<>(FiredListener.class, ref, label, tolerance);
     }
 
-    public FiredListener(State reference, String label, Double tolerance) {
-        super(reference, label, tolerance);
-    }
-
     @Override
     public void receiveUpdate(FieldLink fl, double u) {
         State s = getObject();

@@ -41,8 +41,6 @@ public interface FieldOutput {
 
     FieldObject getObject();
 
-    void disconnectAndUnlinkOutputs(boolean deinitialize);
-
     boolean isWithinUpdate();
 
     default boolean exceedsThreshold() {

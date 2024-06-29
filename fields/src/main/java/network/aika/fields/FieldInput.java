@@ -35,5 +35,5 @@ public interface FieldInput<F extends FieldLink> extends UpdateListener<F> {
 
     int size();
 
-    FieldObject getReference();
+    FieldObject getObject();
 }

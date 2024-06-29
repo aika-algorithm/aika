@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public abstract class ObjectDefinition<O extends ObjectDefinition<O>> {
+public class ObjectDefinition<O extends ObjectDefinition<O>> {
 
     List<FieldDefinition<O>> fieldDefinitions = new ArrayList<>();
 

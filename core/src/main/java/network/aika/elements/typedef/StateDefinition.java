@@ -23,6 +23,7 @@ import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 
 /**
  *
@@ -78,7 +79,7 @@ public class StateDefinition extends TypeDefinition<StateDefinition, State> {
     }
 
     public ActivationDefinition getActivation(ObjectPath p) {
-        addPathEntry(p, activation, State::getActivation);
+        addPathEntry(p, activation, s -> Set.of(s.getActivation()));
         return activation;
     }
 
