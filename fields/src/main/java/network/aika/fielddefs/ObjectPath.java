@@ -4,16 +4,13 @@ import network.aika.enums.Direction;
 import network.aika.fields.FieldObject;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ObjectPath {
 
     private Direction direction;
 
-    private List<ObjectRelationDefinition> path = new ArrayList<>();
+    private ArrayList<ObjectRelationDefinition> path = new ArrayList<>();
 
     public ObjectPath(Direction direction) {
         this.direction = direction;
