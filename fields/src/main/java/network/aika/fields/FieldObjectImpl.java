@@ -19,12 +19,13 @@ package network.aika.fields;
 
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
+import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class FieldObjectImpl implements FieldObject, QueueProvider {
+public class FieldObjectImpl implements FieldObject, QueueProvider {
 
     private ObjectDefinition objectDefinition;
 
@@ -61,5 +62,15 @@ public abstract class FieldObjectImpl implements FieldObject, QueueProvider {
         for(int i = 0; i < fields.length; i++) {
             fields[i].disconnectAndUnlinkInputs(false);
         }
+    }
+
+    @Override
+    public Queue getQueue() {
+        return null;
+    }
+
+    @Override
+    public boolean isNextRound() {
+        return false;
     }
 }

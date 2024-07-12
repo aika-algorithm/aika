@@ -24,6 +24,7 @@ import network.aika.queue.ProcessingPhase;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger
@@ -63,7 +64,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
 
     public FieldDefinition<O> in(Integer port, Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.INPUT);
-        objectPath.add(new ObjectRelationDefinition(object, o -> o));
+        objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
         FieldOutputDefinition in = pathProvider.apply(object, objectPath);
 
         FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, port, in, arg, this, propagateUpdates);
@@ -83,7 +84,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
 
     public FieldDefinition<O> out(Integer port, Integer arg, BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.OUTPUT);
-        objectPath.add(new ObjectRelationDefinition(object, o -> o));
+        objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
         FieldInputDefinition out = pathProvider.apply(object, objectPath);
 
         FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, port, this, arg, out, propagateUpdates);
@@ -123,8 +124,13 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
     }
 
     public void instantiateLinks(Field f) {
-        inputs.forEach(fl ->
-                fl.getObjectPath().resolve(f.getObject())
+        Stream.concat(
+                        inputs.stream(),
+                        outputs.stream()
+                )
+                .forEach(fl ->
+                        fl.getObjectPath().resolve(f.getObject()
+                        )
         );
     }
 

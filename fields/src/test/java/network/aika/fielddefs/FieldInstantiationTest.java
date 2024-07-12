@@ -16,9 +16,13 @@
  */
 package network.aika.fielddefs;
 
+import network.aika.fields.FieldObject;
+import network.aika.fields.FieldObjectImpl;
+import network.aika.queue.Queue;
 import org.junit.jupiter.api.Test;
 
-import static network.aika.fields.Field.field;
+import static network.aika.fields.SumField.sum;
+
 
 /**
  * @author Lukas Molzberger
@@ -27,12 +31,15 @@ public class FieldInstantiationTest {
 
     @Test
     public void testFieldInstantiation() {
-        ObjectDefinition x = new ObjectDefinition();
+        ObjectDefinition od = new ObjectDefinition();
 
-        FieldDefinition a = field(x, "a");
-        FieldDefinition b = field(x, "b")
+        FieldDefinition a = sum(od, "a");
+        FieldDefinition b = sum(od, "b")
                 .in(0, (o,p) -> a);
 
+        FieldObject o = new FieldObjectImpl();
+        o.setObjectDefinition(od);
 
+        od.instantiateFields(o);
     }
 }
