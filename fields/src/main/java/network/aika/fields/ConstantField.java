@@ -26,24 +26,16 @@ import java.util.Collections;
  */
 public class ConstantField implements FieldOutput {
 
-    public static final ConstantField ZERO = new ConstantField(null, "ZERO", 0.0);
-    public static final ConstantField ONE = new ConstantField(null, "ONE", 1.0);
+    public static final ConstantField ZERO = new ConstantField(null, 0.0);
+    public static final ConstantField ONE = new ConstantField(null, 1.0);
 
     private FieldObject reference;
 
-    private String label;
-
     private double value;
 
-    public ConstantField(FieldObject ref, String label, double value) {
+    public ConstantField(FieldObject ref, double value) {
         this.reference = ref;
-        this.label = label;
         this.value = value;
-    }
-
-    @Override
-    public String getLabel() {
-        return label;
     }
 
     @Override

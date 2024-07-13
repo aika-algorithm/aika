@@ -79,7 +79,7 @@ public class DisjunctiveDef {
         mul(link, "weight update")
                 .in(0, (o, p) -> o.getInputIsFired())
                 .in(1, (o, p) -> o.getOutput(p).getUpdateValue())
-                .out(null, (o, p) -> o.getSynapse(p).getWeight());
+                .out((o, p) -> o.getSynapse(p).getWeight());
 
         synapse = new SynapseDefinition(
                 "DisjunctiveSynapse",

@@ -99,10 +99,10 @@ public class BindingDef implements TypeDefinition {
         innerFeedbackState.init("InnerFeedbackState", INNER_FEEDBACK);
 
         activation.getState(NON_FEEDBACK).getNet()
-                .out(null, (o,p) -> o.getActivation(p).getState(p, OUTER_FEEDBACK).getNet());
+                .out((o,p) -> o.getActivation(p).getState(p, OUTER_FEEDBACK).getNet());
 
         activation.getState(OUTER_FEEDBACK).getNet()
-                .out(null, (o,p) -> o.getActivation(p).getState(p, INNER_FEEDBACK).getNet());
+                .out((o,p) -> o.getActivation(p).getState(p, INNER_FEEDBACK).getNet());
 
         activation = new ActivationDefinition(
                 "BindingActivation",

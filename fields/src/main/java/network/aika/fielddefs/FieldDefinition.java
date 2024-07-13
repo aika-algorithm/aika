@@ -62,32 +62,28 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         this.tolerance = tolerance;
     }
 
-    public FieldDefinition<O> in(Integer port, Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
+    public FieldDefinition<O> in(Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.INPUT);
         objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
         FieldOutputDefinition in = pathProvider.apply(object, objectPath);
 
-        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, port, in, arg, this, propagateUpdates);
+        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, in, arg, this, propagateUpdates);
         addInput(fl);
         in.addOutput(fl);
 
         return this;
     }
 
-    public FieldDefinition<O> in(Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
-        return in(null, arg, pathProvider, propagateUpdates);
-    }
-
     public FieldDefinition<O> in(Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider) {
         return in(arg, pathProvider, true);
     }
 
-    public FieldDefinition<O> out(Integer port, Integer arg, BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
+    public FieldDefinition<O> out(Integer arg, BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.OUTPUT);
         objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
         FieldInputDefinition out = pathProvider.apply(object, objectPath);
 
-        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, port, this, arg, out, propagateUpdates);
+        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, this, arg, out, propagateUpdates);
         out.addInput(fl);
         addOutput(fl);
 
@@ -95,15 +91,11 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
     }
 
     public FieldDefinition<O> out(BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
-        return out(null, null, pathProvider, propagateUpdates);
-    }
-
-    public FieldDefinition<O> out(Integer port, BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider) {
-        return out(port, null, pathProvider, true);
+        return out(null, pathProvider, propagateUpdates);
     }
 
     public FieldDefinition<O> out(BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider) {
-        return out(null, pathProvider);
+        return out(null, pathProvider, true);
     }
 
     public Field instantiate(FieldObject fo) {
@@ -112,8 +104,6 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
 
             instance.setFieldObject(fo);
             instance.setFieldDefinition(this);
-            instance.setLabel(label);
-            instance.setTolerance(tolerance);
 
             return instance;
         } catch (InstantiationException e) {

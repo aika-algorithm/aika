@@ -26,8 +26,6 @@ import java.util.Collection;
  */
 public interface FieldInput<I extends Inputs<F>, F extends FieldLink> extends UpdateListener<F> {
 
-    String getLabel();
-
     I getInputs();
 
     FieldObject getObject();

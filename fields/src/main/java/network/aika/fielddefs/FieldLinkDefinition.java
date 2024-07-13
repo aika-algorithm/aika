@@ -24,8 +24,6 @@ public class FieldLinkDefinition {
 
     private ObjectPath objectPath;
 
-    private Integer port;
-
     private Integer arg;
 
     private FieldOutputDefinition in;
@@ -34,9 +32,8 @@ public class FieldLinkDefinition {
 
     boolean propagateUpdates;
 
-    public FieldLinkDefinition(ObjectPath objectPath, Integer port, FieldOutputDefinition in, Integer arg, FieldInputDefinition out, boolean propagateUpdates) {
+    public FieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition in, Integer arg, FieldInputDefinition out, boolean propagateUpdates) {
         this.objectPath = objectPath;
-        this.port = port;
         this.arg = arg;
         this.in = in;
         this.out = out;
@@ -45,10 +42,6 @@ public class FieldLinkDefinition {
 
     public ObjectPath getObjectPath() {
         return objectPath;
-    }
-
-    public Integer getPort() {
-        return port;
     }
 
     public Integer getArg() {
