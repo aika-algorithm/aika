@@ -16,7 +16,6 @@
  */
 package network.aika.queue.steps;
 
-import network.aika.debugger.EventType;
 import network.aika.elements.links.Link;
 import network.aika.enums.direction.Direction;
 import network.aika.queue.ElementStep;

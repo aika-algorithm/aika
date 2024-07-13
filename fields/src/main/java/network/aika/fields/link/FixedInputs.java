@@ -14,27 +14,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.link;
 
-import network.aika.fields.link.FieldLink;
-import network.aika.fields.link.Inputs;
-import network.aika.fields.link.NoInputs;
-
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author Lukas Molzberger
  */
-public class InputField<O extends FieldObject> extends Field<O, NoInputs, FieldLink> {
+public class FixedInputs implements Inputs<FieldLink> {
 
-    public InputField() {
-        super(new NoInputs());
+    private FieldLink[] inputs;
+
+    public FixedInputs(int numArgs) {
+        this.inputs = new FieldLink[numArgs];
     }
 
-    /*
-    public InputField(O ref, String label, double value) {
-        setInitialValue(value);
-    }*/
+    @Override
+    public int size() {
+        return inputs.length;
+    }
+
+    @Override
+    public void addInput(FieldLink l) {
+        inputs[l.getArgument()] = l;
+    }
+
+    @Override
+    public void removeInput(FieldLink l) {
+        inputs[l.getArgument()] = null;
+    }
+
+    @Override
+    public List<FieldLink> getInputs() {
+        return Arrays.asList(inputs);
+    }
+
+    public double getInputValueByArg(int arg) {
+        return getInputLinkByArg(arg).getInputValue();
+    }
+
+    public FieldLink getInputLinkByArg(int arg) {
+        return inputs[arg];
+    }
 
 }

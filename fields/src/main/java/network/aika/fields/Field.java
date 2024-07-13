@@ -19,6 +19,7 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.Inputs;
 import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
 import network.aika.utils.FieldWritable;
@@ -26,12 +27,14 @@ import network.aika.utils.FieldWritable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class Field<O extends FieldObject, F extends FieldLink> extends FieldOutputImpl<O> implements FieldInput<F>, FieldOutput, FieldWritable {
+public class Field<O extends FieldObject, I extends Inputs<F>, F extends FieldLink> extends FieldOutputImpl<O> implements FieldInput<I, F>, FieldOutput, FieldWritable {
 
     private FieldDefinition fieldDefinition;
 
@@ -39,6 +42,16 @@ public abstract class Field<O extends FieldObject, F extends FieldLink> extends 
 
     QueueInterceptor interceptor;
 
+    private I inputs;
+
+    public Field(I inputs) {
+        this.inputs = inputs;
+    }
+
+    @Override
+    public I getInputs() {
+        return inputs;
+    }
 
     public <F extends Field> F setQueued(Queue q, ProcessingPhase phase, boolean isNextRound) {
         interceptor = new QueueInterceptor(q, this, phase, isNextRound);
@@ -68,32 +81,6 @@ public abstract class Field<O extends FieldObject, F extends FieldLink> extends 
 
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
-    }
-
-
-    public synchronized void connectInputs(boolean initialize) {
-        getInputs().forEach(fl ->
-                fl.connect(initialize)
-        );
-    }
-
-    public synchronized void disconnectInputs(boolean deinitialize) {
-        getInputs().forEach(fl ->
-                fl.disconnect(deinitialize)
-        );
-    }
-
-    public synchronized void disconnectAndUnlinkInputs(boolean deinitialize) {
-        getInputs().forEach(fl -> {
-            fl.disconnect(deinitialize);
-            fl.unlinkInput();
-        });
-    }
-
-    public synchronized void unlinkInputs() {
-        getInputs().forEach(fl ->
-            fl.unlinkInput()
-        );
     }
 
     public QueueInterceptor getInterceptor() {

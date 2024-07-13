@@ -19,6 +19,7 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedInputs;
 
 /**
  * @author Lukas Molzberger
@@ -30,6 +31,10 @@ public class ScaleFunction<O extends FieldObject> extends AbstractFunction<O> {
     }
 
     private double scale;
+
+    public ScaleFunction() {
+        super(1);
+    }
 
     public void setScale(double scale) {
         this.scale = scale;

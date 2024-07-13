@@ -17,6 +17,8 @@
 package network.aika.fields;
 
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedInputs;
+import network.aika.fields.link.Inputs;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,40 +26,10 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractFunction<O extends FieldObject> extends Field<O, FieldLink> {
+public abstract class AbstractFunction<O extends FieldObject> extends Field<O, FixedInputs, FieldLink> {
 
-    private FieldLink[] inputs = new FieldLink[getNumberOfFunctionArguments()];
-
-    protected int getNumberOfFunctionArguments() {
-        return 1;
-    }
-
-    @Override
-    public int size() {
-        return inputs.length;
-    }
-
-    @Override
-    public void addInput(FieldLink l) {
-        inputs[l.getArgument()] = l;
-    }
-
-    @Override
-    public void removeInput(FieldLink l) {
-        inputs[l.getArgument()] = null;
-    }
-
-    @Override
-    public List<FieldLink> getInputs() {
-        return Arrays.asList(inputs);
-    }
-
-    public double getInputValueByArg(int arg) {
-        return getInputLinkByArg(arg).getInputValue();
-    }
-
-    public FieldLink getInputLinkByArg(int arg) {
-        return inputs[arg];
+    public AbstractFunction(int numArgs) {
+        super(new FixedInputs(numArgs));
     }
 
     protected abstract double computeUpdate(FieldLink fl, double u);

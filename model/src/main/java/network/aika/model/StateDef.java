@@ -16,16 +16,11 @@
  */
 package network.aika.model;
 
-import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.typedef.StateDefinition;
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fields.Field;
 
 import static network.aika.fields.FieldActivationFunction.actFunc;
-import static network.aika.debugger.EventType.UPDATE;
 import static network.aika.elements.activations.StateType.*;
-import static network.aika.fields.Fields.isTrue;
 import static network.aika.fields.FiredListener.firedListener;
 import static network.aika.fields.SumField.sum;
 import static network.aika.queue.Phase.INFERENCE;

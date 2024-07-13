@@ -37,8 +37,6 @@ public class ObjectDefinition<O extends ObjectDefinition<O>> {
                 .forEach(f ->
                         f.getFieldDefinition().instantiateLinks(f)
                 );
-
-
     }
 
     public void addFieldDefinition(FieldDefinition<O> fieldDef) {

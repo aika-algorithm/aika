@@ -14,27 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.link;
 
-import network.aika.fields.link.FieldLink;
-import network.aika.fields.link.Inputs;
-import network.aika.fields.link.NoInputs;
-
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Lukas Molzberger
  */
-public class InputField<O extends FieldObject> extends Field<O, NoInputs, FieldLink> {
+public class VariableInputs implements Inputs<FieldLink> {
 
-    public InputField() {
-        super(new NoInputs());
+    private List<FieldLink> inputs = new ArrayList<>();
+
+    @Override
+    public synchronized int size() {
+        return inputs.size();
     }
 
-    /*
-    public InputField(O ref, String label, double value) {
-        setInitialValue(value);
-    }*/
+    @Override
+    public synchronized void addInput(FieldLink l) {
+        inputs.add(l);
+    }
 
+    @Override
+    public synchronized void removeInput(FieldLink l) {
+        inputs.remove(l);
+    }
+
+    @Override
+    public List<FieldLink> getInputs() {
+        return inputs;
+    }
 }

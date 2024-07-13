@@ -19,6 +19,7 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedInputs;
 
 /**
  * @author Lukas Molzberger
@@ -29,9 +30,8 @@ public class Addition<O extends FieldObject> extends AbstractFunction<O> {
         return new FieldDefinition<>(Addition.class, ref, label);
     }
 
-    @Override
-    protected int getNumberOfFunctionArguments() {
-        return 2;
+    public Addition() {
+        super(2);
     }
 
     @Override

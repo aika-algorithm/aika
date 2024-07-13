@@ -19,6 +19,7 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedInputs;
 
 /**
  * @author Lukas Molzberger
@@ -30,7 +31,7 @@ public class InvertFunction<O extends FieldObject> extends AbstractFunction<O> {
     }
 
     public InvertFunction() {
-        super();
+        super(1);
 
         setInitialValue(1.0);
     }

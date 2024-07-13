@@ -17,23 +17,18 @@
 package network.aika.fields;
 
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.Inputs;
 
 import java.util.Collection;
 
 /**
  * @author Lukas Molzberger
  */
-public interface FieldInput<F extends FieldLink> extends UpdateListener<F> {
+public interface FieldInput<I extends Inputs<F>, F extends FieldLink> extends UpdateListener<F> {
 
     String getLabel();
 
-    void addInput(F fl);
-
-    void removeInput(F fl);
-
-    Collection<F> getInputs();
-
-    int size();
+    I getInputs();
 
     FieldObject getObject();
 }

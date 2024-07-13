@@ -14,13 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.synapses.slots;
+package network.aika.fields.link;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
- *
  * @author Lukas Molzberger
  */
-public enum AnnealingType {
-    OUTER_FEEDBACK,
-    CATEGORY_INPUT
+public class NoInputs implements Inputs<FieldLink> {
+
+
+    @Override
+    public void addInput(FieldLink fl) {
+    }
+
+    @Override
+    public void removeInput(FieldLink fl) {
+    }
+
+    @Override
+    public List<FieldLink> getInputs() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public int size() {
+        return 0;
+    }
 }

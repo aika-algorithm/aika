@@ -18,6 +18,8 @@ package network.aika.fields;
 
 import network.aika.fields.link.ArgumentFieldLink;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.Inputs;
+import network.aika.fields.link.MapInputs;
 
 import java.util.*;
 
@@ -25,28 +27,10 @@ import java.util.*;
  * @author Lukas Molzberger
  *
  */
-public class MapMaxField<O extends FieldObject, K, V> extends AbstractMaxField<O, ArgumentFieldLink<K, V>> {
-
-    private Map<K, ArgumentFieldLink<K, V>> inputs = new TreeMap<>();
+public class MapMaxField<O extends FieldObject, K, V> extends AbstractMaxField<O, MapInputs<K, V>, ArgumentFieldLink<K, V>> {
 
 
-    @Override
-    public int size() {
-        return inputs.size();
-    }
-
-    @Override
-    public void addInput(ArgumentFieldLink<K, V> fl) {
-        inputs.put(fl.getKey(), fl);
-    }
-
-    @Override
-    public void removeInput(ArgumentFieldLink<K, V> fl) {
-        inputs.remove(fl.getKey());
-    }
-
-    @Override
-    public Collection<ArgumentFieldLink<K, V>> getInputs() {
-        return inputs.values();
+    public MapMaxField() {
+        super(new MapInputs<>());
     }
 }

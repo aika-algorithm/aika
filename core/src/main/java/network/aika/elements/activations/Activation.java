@@ -31,7 +31,6 @@ import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.*;
 import network.aika.enums.Scope;
-import network.aika.fields.FieldObject;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
@@ -41,7 +40,6 @@ import network.aika.Range;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static network.aika.debugger.EventType.*;
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.elements.neurons.RefType.TEMPLATE;

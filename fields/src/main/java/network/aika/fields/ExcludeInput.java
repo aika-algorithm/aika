@@ -33,7 +33,7 @@ public class ExcludeInput<O extends FieldObject> extends Subtraction<O> {
     @Override
     protected double computeUpdate(FieldLink fl, double u) {
         return fl.getArgument() == 0 &&
-                !getInputLinkByArg(1).getInput().isWithinUpdate() ?
+                !getInputs().getInputLinkByArg(1).getInput().isWithinUpdate() ?
                 u :
                 0;
     }

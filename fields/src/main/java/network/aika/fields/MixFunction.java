@@ -20,6 +20,7 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedInputs;
 
 /**
  * @author Lukas Molzberger
@@ -30,21 +31,21 @@ public class MixFunction<O extends FieldObject> extends AbstractFunction<O> {
         return new FieldDefinition<>(MixFunction.class, ref, label);
     }
 
-    @Override
-    protected int getNumberOfFunctionArguments() {
-        return 3;
+    public MixFunction() {
+        super(3);
     }
 
     @Override
     protected double computeUpdate(FieldLink fl, double u) {
+        FixedInputs in = getInputs();
         int arg = fl.getArgument();
         if(arg == 0) {
-            double a = getInputValueByArg(1);
-            double b = getInputValueByArg(2);
+            double a = in.getInputValueByArg(1);
+            double b = in.getInputValueByArg(2);
 
             return (-u * a + u * b);
         } else {
-            double x = getInputValueByArg(0);
+            double x = in.getInputValueByArg(0);
 
             return (arg == 2 ? x : 1 - x) * u;
         }

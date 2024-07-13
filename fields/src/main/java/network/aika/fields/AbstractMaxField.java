@@ -17,6 +17,7 @@
 package network.aika.fields;
 
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.Inputs;
 import network.aika.utils.ApproximateComparisonValueUtil;
 
 import java.util.Comparator;
@@ -26,13 +27,17 @@ import java.util.stream.Stream;
  * @author Lukas Molzberger
  *
  */
-public abstract class AbstractMaxField<O extends FieldObject, F extends FieldLink> extends Field<O, F> {
+public abstract class AbstractMaxField<O extends FieldObject, I extends Inputs<F>, F extends FieldLink> extends Field<O, I, F> {
 
     private F selectedInput;
 
     public static final Comparator<? extends FieldLink> INPUT_VALUE_COMPARATOR = Comparator.comparingInt(fl ->
             ApproximateComparisonValueUtil.convert(fl.getUpdatedInputValue())
     );
+
+    public AbstractMaxField(I inputs) {
+        super(inputs);
+    }
 
     protected void updateSelectedInput(F si, boolean state) {
 
@@ -84,7 +89,7 @@ public abstract class AbstractMaxField<O extends FieldObject, F extends FieldLin
     }
 
     private synchronized Stream<F> getCandidateInputs() {
-        Stream<F> inputs = getInputs().stream();
+        Stream<F> inputs = getInputs().getInputs().stream();
         return isNegativeInputAllowed() ?
                 inputs :
                 inputs.filter(fl -> fl.getUpdatedInputValue() > 0.0);

@@ -12,8 +12,6 @@ import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.Field;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
-import static network.aika.fields.Field.field;
-import static network.aika.utils.Utils.TOLERANCE;
 
 public class CategoryDef {
 

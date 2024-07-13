@@ -44,13 +44,13 @@ public class ArgumentFieldLink<K, V> extends FieldLink {
 
     public static <K, V> ArgumentFieldLink<K, V> link(FieldOutput in, int arg, K key, V value, FieldInput<ArgumentFieldLink<K, V>> out) {
         ArgumentFieldLink<K, V> fl = new ArgumentFieldLink(in, arg, key, value, out);
-        out.addInput(fl);
+        out.getInputs().addInput(fl);
         in.addOutput(fl);
         return fl;
     }
 
     public static <K, V> ArgumentFieldLink<K, V> linkAndConnect(FieldOutput in, K key, V value, FieldInput<ArgumentFieldLink<K, V>> out) {
-        ArgumentFieldLink<K, V> fl = link(in, out.size(), key, value, out);
+        ArgumentFieldLink<K, V> fl = link(in, out.getInputs().size(), key, value, out);
 
         fl.connect(true);
         return fl;

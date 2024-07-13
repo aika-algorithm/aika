@@ -14,27 +14,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.link;
 
-import network.aika.fields.link.FieldLink;
-import network.aika.fields.link.Inputs;
-import network.aika.fields.link.NoInputs;
-
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author Lukas Molzberger
  */
-public class InputField<O extends FieldObject> extends Field<O, NoInputs, FieldLink> {
+public interface Inputs<F extends FieldLink> {
 
-    public InputField() {
-        super(new NoInputs());
+    void addInput(F fl);
+
+    void removeInput(F fl);
+
+    Collection<F> getInputs();
+
+    int size();
+
+    default void connectInputs(boolean initialize) {
+        getInputs().forEach(fl ->
+                fl.connect(initialize)
+        );
     }
 
-    /*
-    public InputField(O ref, String label, double value) {
-        setInitialValue(value);
-    }*/
+    default void disconnectInputs(boolean deinitialize) {
+        getInputs().forEach(fl ->
+                fl.disconnect(deinitialize)
+        );
+    }
 
+    default void disconnectAndUnlinkInputs(boolean deinitialize) {
+        getInputs().forEach(fl -> {
+            fl.disconnect(deinitialize);
+            fl.unlinkInput();
+        });
+    }
+
+    default void unlinkInputs() {
+        getInputs().forEach(fl ->
+                fl.unlinkInput()
+        );
+    }
 }

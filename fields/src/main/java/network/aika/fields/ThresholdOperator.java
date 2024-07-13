@@ -21,6 +21,7 @@ import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fielddefs.ObjectPath;
 import network.aika.fielddefs.ThresholdOperatorFieldDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedInputs;
 
 import java.util.function.BiConsumer;
 
@@ -48,6 +49,9 @@ public class ThresholdOperator<O extends FieldObject> extends AbstractFunction<O
     private Type type;
     private boolean isFinal = false;
 
+    public ThresholdOperator() {
+        super(1);
+    }
 
     public void setThreshold(double threshold) {
         this.threshold = threshold;

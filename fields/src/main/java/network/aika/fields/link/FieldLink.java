@@ -32,20 +32,20 @@ public class FieldLink {
 
     protected FieldInput output;
 
-    private int arg;
+    private Integer arg;
 
     protected boolean connected;
     protected boolean withinConnectionChange;
 
     protected boolean propagateUpdates = true;
 
-    public FieldLink(FieldOutput input, int arg, FieldInput output) {
+    public FieldLink(FieldOutput input, Integer arg, FieldInput output) {
         this.input = input;
         this.arg = arg;
         this.output = output;
     }
 
-    public FieldLink(FieldOutput input, Integer port, int arg, FieldInput output) {
+    public FieldLink(FieldOutput input, Integer port, Integer arg, FieldInput output) {
         this.input = input;
         this.port = port;
         this.arg = arg;
@@ -135,14 +135,14 @@ public class FieldLink {
 
 
     public static FieldLink linkAndConnect(FieldOutput in, FieldInput out) {
-        FieldLink fl = link(in, out.size(), out);
+        FieldLink fl = link(in, out.getInputs().size(), out);
 
         fl.connect(true);
         return fl;
     }
 
     public static FieldLink link(FieldOutput in, FieldInput out) {
-        return link(in, out.size(), out);
+        return link(in, out.getInputs().size(), out);
     }
 
     public static FieldLink linkAndConnect(FieldOutput in, int arg, FieldInput out) {
@@ -153,7 +153,7 @@ public class FieldLink {
 
     public static FieldLink link(FieldOutput in, int arg, FieldInput out) {
         FieldLink fl = new FieldLink(in, arg, out);
-        out.addInput(fl);
+        out.getInputs().addInput(fl);
         in.addOutput(fl);
         return fl;
     }
@@ -184,7 +184,7 @@ public class FieldLink {
     }
 
     public void unlinkOutput() {
-        output.removeInput(this);
+        output.getInputs().removeInput(this);
     }
 
     @Override

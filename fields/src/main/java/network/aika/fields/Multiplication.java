@@ -19,6 +19,7 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedInputs;
 
 /**
  * @author Lukas Molzberger
@@ -29,13 +30,17 @@ public class Multiplication<O extends FieldObject> extends AbstractFunction<O> {
         return new FieldDefinition<>(Multiplication.class, ref, label);
     }
 
-    @Override
-    protected int getNumberOfFunctionArguments() {
-        return 2;
+    public Multiplication() {
+        super(2);
     }
 
     @Override
     protected double computeUpdate(FieldLink fl, double u) {
-        return u * getInputValueByArg(fl.getArgument() == 0 ? 1 : 0);
+        return u * getInputs()
+                .getInputValueByArg(
+                        fl.getArgument() == 0 ?
+                                1 :
+                                0
+                );
     }
 }

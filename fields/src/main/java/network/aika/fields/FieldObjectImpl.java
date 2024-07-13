@@ -60,7 +60,7 @@ public class FieldObjectImpl implements FieldObject, QueueProvider {
     @Override
     public void disconnect() {
         for(int i = 0; i < fields.length; i++) {
-            fields[i].disconnectAndUnlinkInputs(false);
+            fields[i].getInputs().disconnectAndUnlinkInputs(false);
         }
     }
 

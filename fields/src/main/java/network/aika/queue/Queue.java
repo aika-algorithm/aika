@@ -16,7 +16,6 @@
  */
 package network.aika.queue;
 
-import network.aika.debugger.EventType;
 import network.aika.exceptions.TimeoutException;
 import network.aika.queue.keys.QueueKey;
 
@@ -62,7 +61,6 @@ public class Queue {
         );
         queue.put(s.getQueueKey(), s);
         s.setQueued(true);
-        queueEvent(EventType.ADDED, s);
     }
 
     private int getRound(Step s) {
@@ -109,13 +107,10 @@ public class Queue {
             currentStep = queue.pollFirstEntry().getValue();
             currentStep.setQueued(false);
 
-            queueEvent(EventType.BEFORE, currentStep);
-
             timestampOnProcess = getCurrentTimestamp();
             if(filter == null || filter.test(currentStep))
                 currentStep.process();
 
-            queueEvent(EventType.AFTER, currentStep);
             currentStep = null;
         }
     }
@@ -130,7 +125,4 @@ public class Queue {
             throw new TimeoutException();
     }
 
-    public void queueEvent(EventType et, Step s) {
-
-    }
 }

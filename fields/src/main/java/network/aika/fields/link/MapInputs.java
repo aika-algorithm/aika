@@ -14,27 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.link;
 
-import network.aika.fields.link.FieldLink;
-import network.aika.fields.link.Inputs;
-import network.aika.fields.link.NoInputs;
-
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Lukas Molzberger
  */
-public class InputField<O extends FieldObject> extends Field<O, NoInputs, FieldLink> {
+public class MapInputs<K, V> implements Inputs<ArgumentFieldLink<K, V>> {
 
-    public InputField() {
-        super(new NoInputs());
+    private Map<K, ArgumentFieldLink<K, V>> inputs = new TreeMap<>();
+
+    @Override
+    public int size() {
+        return inputs.size();
     }
 
-    /*
-    public InputField(O ref, String label, double value) {
-        setInitialValue(value);
-    }*/
+    @Override
+    public void addInput(ArgumentFieldLink<K, V> fl) {
+        inputs.put(fl.getKey(), fl);
+    }
 
+    @Override
+    public void removeInput(ArgumentFieldLink<K, V> fl) {
+        inputs.remove(fl.getKey());
+    }
+
+    @Override
+    public Collection<ArgumentFieldLink<K, V>> getInputs() {
+        return inputs.values();
+    }
 }
