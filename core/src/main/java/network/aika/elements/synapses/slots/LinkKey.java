@@ -20,7 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.link.ArgumentFieldLink;
+import network.aika.fields.link.MapFieldLink;
 
 /**
  *
@@ -44,7 +44,7 @@ public class LinkKey implements Comparable<LinkKey> {
         );
     }
 
-    public LinkKey(ArgumentFieldLink<LinkKey, Link> fl, Direction dir) {
+    public LinkKey(MapFieldLink<LinkKey, Link> fl, Direction dir) {
         this(
                 fl.getValue(),
                 dir.invert()

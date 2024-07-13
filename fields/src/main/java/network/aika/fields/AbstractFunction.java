@@ -17,6 +17,7 @@
 package network.aika.fields;
 
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedFieldLink;
 import network.aika.fields.link.FixedInputs;
 import network.aika.fields.link.Inputs;
 
@@ -26,16 +27,16 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractFunction<O extends FieldObject> extends Field<O, FixedInputs, FieldLink> {
+public abstract class AbstractFunction<O extends FieldObject> extends Field<O, FixedInputs, FixedFieldLink> {
 
     public AbstractFunction(int numArgs) {
         super(new FixedInputs(numArgs));
     }
 
-    protected abstract double computeUpdate(FieldLink fl, double u);
+    protected abstract double computeUpdate(FixedFieldLink fl, double u);
 
     @Override
-    public void receiveUpdate(FieldLink fl, double u) {
+    public void receiveUpdate(FixedFieldLink fl, double u) {
         double update = computeUpdate(fl, u);
 
         if(interceptor != null) {

@@ -22,12 +22,12 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class FixedInputs implements Inputs<FieldLink> {
+public class FixedInputs implements Inputs<FixedFieldLink> {
 
-    private FieldLink[] inputs;
+    private FixedFieldLink[] inputs;
 
     public FixedInputs(int numArgs) {
-        this.inputs = new FieldLink[numArgs];
+        this.inputs = new FixedFieldLink[numArgs];
     }
 
     @Override
@@ -36,17 +36,17 @@ public class FixedInputs implements Inputs<FieldLink> {
     }
 
     @Override
-    public void addInput(FieldLink l) {
+    public void addInput(FixedFieldLink l) {
         inputs[l.getArgument()] = l;
     }
 
     @Override
-    public void removeInput(FieldLink l) {
+    public void removeInput(FixedFieldLink l) {
         inputs[l.getArgument()] = null;
     }
 
     @Override
-    public List<FieldLink> getInputs() {
+    public List<FixedFieldLink> getInputs() {
         return Arrays.asList(inputs);
     }
 

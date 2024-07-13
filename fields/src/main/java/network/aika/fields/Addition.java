@@ -19,6 +19,7 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedFieldLink;
 import network.aika.fields.link.FixedInputs;
 
 /**
@@ -35,7 +36,7 @@ public class Addition<O extends FieldObject> extends AbstractFunction<O> {
     }
 
     @Override
-    protected double computeUpdate(FieldLink fl, double u) {
+    protected double computeUpdate(FixedFieldLink fl, double u) {
         return u;
     }
 }

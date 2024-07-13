@@ -20,6 +20,7 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedFieldLink;
 
 /**
  * @author Lukas Molzberger
@@ -31,7 +32,7 @@ public class ExcludeInput<O extends FieldObject> extends Subtraction<O> {
     }
 
     @Override
-    protected double computeUpdate(FieldLink fl, double u) {
+    protected double computeUpdate(FixedFieldLink fl, double u) {
         return fl.getArgument() == 0 &&
                 !getInputs().getInputLinkByArg(1).getInput().isWithinUpdate() ?
                 u :

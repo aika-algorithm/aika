@@ -20,7 +20,7 @@ import network.aika.Range;
 import network.aika.enums.sign.Sign;
 import network.aika.fields.AbstractFunction;
 import network.aika.fields.FieldObject;
-import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedFieldLink;
 import network.aika.utils.Bound;
 import network.aika.utils.FieldWritable;
 import network.aika.utils.StatisticUtils;
@@ -52,7 +52,7 @@ public class NeuronStatistic<O extends FieldObject> extends AbstractFunction<O> 
     }
 
     @Override
-    protected double computeUpdate(FieldLink fl, double u) {
+    protected double computeUpdate(FixedFieldLink fl, double u) {
         return 0;
     }
 

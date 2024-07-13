@@ -26,29 +26,17 @@ import java.util.Objects;
  */
 public class FieldLink {
 
-    private Integer port;
 
     protected FieldOutput input;
-
     protected FieldInput output;
-
-    private Integer arg;
 
     protected boolean connected;
     protected boolean withinConnectionChange;
 
     protected boolean propagateUpdates = true;
 
-    public FieldLink(FieldOutput input, Integer arg, FieldInput output) {
+    public FieldLink(FieldOutput input, FieldInput output) {
         this.input = input;
-        this.arg = arg;
-        this.output = output;
-    }
-
-    public FieldLink(FieldOutput input, Integer port, Integer arg, FieldInput output) {
-        this.input = input;
-        this.port = port;
-        this.arg = arg;
         this.output = output;
     }
 
@@ -71,11 +59,6 @@ public class FieldLink {
     public void receiveUpdate(double u) {
         if(connected && propagateUpdates)
             propagateUpdate(u);
-    }
-
-    public static void updateConnected(FieldLink fl, boolean newConnected, boolean initialize) {
-        if(fl != null)
-            fl.updateConnected(newConnected, initialize);
     }
 
     public void updateConnected(boolean newConnected, boolean initialize) {
@@ -125,59 +108,11 @@ public class FieldLink {
                 0.0;
     }
 
-    public int getArgument() {
-        return arg;
-    }
 
     public FieldOutput getInput() {
         return input;
     }
 
-
-    public static FieldLink linkAndConnect(FieldOutput in, FieldInput out) {
-        FieldLink fl = link(in, out.getInputs().size(), out);
-
-        fl.connect(true);
-        return fl;
-    }
-
-    public static FieldLink link(FieldOutput in, FieldInput out) {
-        return link(in, out.getInputs().size(), out);
-    }
-
-    public static FieldLink linkAndConnect(FieldOutput in, int arg, FieldInput out) {
-        FieldLink fl = link(in, arg, out);
-        fl.connect(true);
-        return fl;
-    }
-
-    public static FieldLink link(FieldOutput in, int arg, FieldInput out) {
-        FieldLink fl = new FieldLink(in, arg, out);
-        out.getInputs().addInput(fl);
-        in.addOutput(fl);
-        return fl;
-    }
-
-    public static void linkAndConnectAll(FieldOutput in, FieldInput... out) {
-        assert in != null;
-
-        for(FieldInput o : out) {
-            if(o != null) {
-                link(in, 0, o)
-                        .connect(true);
-            }
-        }
-    }
-
-    public static void linkAll(FieldOutput in, FieldInput... out) {
-        assert in != null;
-
-        for(FieldInput o : out) {
-            if(o != null) {
-                link(in, 0, o);
-            }
-        }
-    }
 
     public void unlinkInput() {
         input.removeOutput(this);
@@ -192,16 +127,16 @@ public class FieldLink {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FieldLink fieldLink = (FieldLink) o;
-        return arg == fieldLink.arg && Objects.equals(port, fieldLink.port) && Objects.equals(input, fieldLink.input) && Objects.equals(output, fieldLink.output);
+        return Objects.equals(input, fieldLink.input) && Objects.equals(output, fieldLink.output);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(port, input, output, arg);
+        return Objects.hash(input, output);
     }
 
     @Override
     public String toString() {
-        return input + " --" + arg + "-->" + output;
+        return input + " --->" + output;
     }
 }

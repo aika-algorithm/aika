@@ -21,6 +21,7 @@ import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fielddefs.ObjectPath;
 import network.aika.fielddefs.ThresholdOperatorFieldDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedFieldLink;
 import network.aika.fields.link.FixedInputs;
 
 import java.util.function.BiConsumer;
@@ -66,7 +67,7 @@ public class ThresholdOperator<O extends FieldObject> extends AbstractFunction<O
     }
 
     @Override
-    protected double computeUpdate(FieldLink fl, double u) {
+    protected double computeUpdate(FixedFieldLink fl, double u) {
         if(isFinal && value > 0.5)
             return 0.0;
 

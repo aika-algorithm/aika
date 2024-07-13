@@ -23,9 +23,9 @@ import java.util.TreeMap;
 /**
  * @author Lukas Molzberger
  */
-public class MapInputs<K, V> implements Inputs<ArgumentFieldLink<K, V>> {
+public class MapInputs<K, V> implements Inputs<MapFieldLink<K, V>> {
 
-    private Map<K, ArgumentFieldLink<K, V>> inputs = new TreeMap<>();
+    private Map<K, MapFieldLink<K, V>> inputs = new TreeMap<>();
 
     @Override
     public int size() {
@@ -33,17 +33,17 @@ public class MapInputs<K, V> implements Inputs<ArgumentFieldLink<K, V>> {
     }
 
     @Override
-    public void addInput(ArgumentFieldLink<K, V> fl) {
+    public void addInput(MapFieldLink<K, V> fl) {
         inputs.put(fl.getKey(), fl);
     }
 
     @Override
-    public void removeInput(ArgumentFieldLink<K, V> fl) {
+    public void removeInput(MapFieldLink<K, V> fl) {
         inputs.remove(fl.getKey());
     }
 
     @Override
-    public Collection<ArgumentFieldLink<K, V>> getInputs() {
+    public Collection<MapFieldLink<K, V>> getInputs() {
         return inputs.values();
     }
 }

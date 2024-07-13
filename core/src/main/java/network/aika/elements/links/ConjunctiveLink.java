@@ -19,7 +19,7 @@ package network.aika.elements.links;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.enums.Scope;
-import network.aika.fields.link.ArgumentFieldLink;
+import network.aika.fields.link.MapFieldLink;
 import network.aika.queue.keys.QueueKey;
 import network.aika.visitor.Visitor;
 
@@ -31,7 +31,7 @@ import static network.aika.enums.direction.Direction.INPUT;
  */
 public abstract class ConjunctiveLink extends Link {
 
-    protected ArgumentFieldLink<QueueKey, ConjunctiveLink> inputSlotFL;
+    protected MapFieldLink<QueueKey, ConjunctiveLink> inputSlotFL;
 
 
     public ConjunctiveLink(ConjunctiveSynapse s, Activation input, Activation output) {

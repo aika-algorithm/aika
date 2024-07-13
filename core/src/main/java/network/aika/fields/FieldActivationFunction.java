@@ -20,6 +20,7 @@ import network.aika.elements.activations.State;
 import network.aika.elements.typedef.StateDefinition;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedFieldLink;
 
 /**
  * @author Lukas Molzberger
@@ -35,7 +36,7 @@ public class FieldActivationFunction extends AbstractFunction<State> {
     }
 
     @Override
-    protected double computeUpdate(FieldLink fl, double u) {
+    protected double computeUpdate(FixedFieldLink fl, double u) {
         return getObject().getActivation().getActivationFunction().f(fl.getUpdatedInputValue()) - value;
     }
 }

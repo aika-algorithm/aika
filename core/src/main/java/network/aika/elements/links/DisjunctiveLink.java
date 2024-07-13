@@ -20,8 +20,6 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.enums.direction.Direction;
 
-import static network.aika.fields.link.FieldLink.linkAndConnect;
-
 /**
  * @author Lukas Molzberger
  */

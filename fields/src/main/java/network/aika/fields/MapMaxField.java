@@ -16,18 +16,14 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.ArgumentFieldLink;
-import network.aika.fields.link.FieldLink;
-import network.aika.fields.link.Inputs;
+import network.aika.fields.link.MapFieldLink;
 import network.aika.fields.link.MapInputs;
-
-import java.util.*;
 
 /**
  * @author Lukas Molzberger
  *
  */
-public class MapMaxField<O extends FieldObject, K, V> extends AbstractMaxField<O, MapInputs<K, V>, ArgumentFieldLink<K, V>> {
+public class MapMaxField<O extends FieldObject, K, V> extends AbstractMaxField<O, MapInputs<K, V>, MapFieldLink<K, V>> {
 
 
     public MapMaxField() {

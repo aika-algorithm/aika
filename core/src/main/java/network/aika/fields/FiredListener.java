@@ -20,6 +20,7 @@ import network.aika.elements.activations.State;
 import network.aika.elements.typedef.StateDefinition;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FixedFieldLink;
 
 /**
  * @author Lukas Molzberger
@@ -31,7 +32,7 @@ public class FiredListener extends AbstractListener<State> {
     }
 
     @Override
-    public void receiveUpdate(FieldLink fl, double u) {
+    public void receiveUpdate(FixedFieldLink fl, double u) {
         State s = getObject();
         s.updateFiredStep(fl);
     }
