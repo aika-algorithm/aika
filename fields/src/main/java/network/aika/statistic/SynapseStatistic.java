@@ -36,7 +36,7 @@ import static network.aika.enums.sign.Sign.POS;
  *
  * @author Lukas Molzberger
  */
-public class SynapseStatistic extends AbstractFunction implements FieldWritable {
+public class SynapseStatistic<O extends FieldObject> extends AbstractFunction<O> implements FieldWritable {
 
     private Double alpha;
 
@@ -45,6 +45,10 @@ public class SynapseStatistic extends AbstractFunction implements FieldWritable 
     protected double frequencyINegOPos;
 
     protected SampleSpace sampleSpace = new SampleSpace();
+
+    public SynapseStatistic() {
+        super(1);
+    }
 
     public void setAlpha(Double alpha) {
         this.alpha = alpha;
@@ -111,7 +115,7 @@ public class SynapseStatistic extends AbstractFunction implements FieldWritable 
 
         sampleSpace.countSkippedInstances(
                 absoluteRange,
-                getInputValueByArg(0)
+                getInputs().getInputValueByArg(0)
         );
 
         sampleSpace.count();
@@ -130,7 +134,7 @@ public class SynapseStatistic extends AbstractFunction implements FieldWritable 
     public double getSurprisal(Sign inputSign, Sign outputSign, Range range, boolean addCurrentInstance) {
         double n = sampleSpace.getN(
                 range,
-                getInputValueByArg(0)
+                getInputs().getInputValueByArg(0)
         );
         double probability = getProbability(inputSign, outputSign, n, addCurrentInstance);
         return -StatisticUtils.surprisal(probability);

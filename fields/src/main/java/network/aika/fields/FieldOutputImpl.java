@@ -26,7 +26,7 @@ import java.util.Collection;
 /**
  * @author Lukas Molzberger
  */
-public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOutput {
+public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOutput<O> {
 
     private static double MIN_TOLERANCE = 0.0000000001;
 

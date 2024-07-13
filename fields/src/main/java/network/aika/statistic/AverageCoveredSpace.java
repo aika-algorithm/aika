@@ -21,6 +21,8 @@ import network.aika.Range;
 import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.Inputs;
+import network.aika.fields.link.NoInputs;
 import network.aika.utils.FieldWritable;
 
 import java.io.DataInput;
@@ -34,10 +36,14 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public class AverageCoveredSpace<O extends FieldObject> extends Field<O, FieldLink> implements FieldWritable {
+public class AverageCoveredSpace<O extends FieldObject> extends Field<O, NoInputs, FieldLink> implements FieldWritable {
 
     private long n;
     private long coveredSpace;
+
+    public AverageCoveredSpace() {
+        super(new NoInputs());
+    }
 
     public void count(Range r) {
         n++;
@@ -58,26 +64,6 @@ public class AverageCoveredSpace<O extends FieldObject> extends Field<O, FieldLi
     public void readFields(DataInput in) throws IOException {
         n = in.readLong();
         coveredSpace = in.readLong();
-    }
-
-    @Override
-    public void addInput(FieldLink fl) {
-
-    }
-
-    @Override
-    public void removeInput(FieldLink fl) {
-
-    }
-
-    @Override
-    public Collection getInputs() {
-        return null;
-    }
-
-    @Override
-    public int size() {
-        return 0;
     }
 
     @Override

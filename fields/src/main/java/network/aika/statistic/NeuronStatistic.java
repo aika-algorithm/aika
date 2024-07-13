@@ -35,13 +35,17 @@ import static network.aika.enums.sign.Sign.POS;
  *
  * @author Lukas Molzberger
  */
-public class NeuronStatistic extends AbstractFunction implements FieldWritable {
+public class NeuronStatistic<O extends FieldObject> extends AbstractFunction<O> implements FieldWritable {
 
     private Double alpha;
 
     protected double frequency;
 
     protected SampleSpace sampleSpace = new SampleSpace();
+
+    public NeuronStatistic() {
+        super(1);
+    }
 
     public void setAlpha(Double alpha) {
         this.alpha = alpha;
@@ -61,7 +65,7 @@ public class NeuronStatistic extends AbstractFunction implements FieldWritable {
 
         sampleSpace.countSkippedInstances(
                 absoluteRange,
-                getInputValueByArg(0)
+                getInputs().getInputValueByArg(0)
         );
 
         sampleSpace.count();
@@ -97,7 +101,7 @@ public class NeuronStatistic extends AbstractFunction implements FieldWritable {
     public double getSurprisal(Sign s, Range range, boolean addCurrentInstance) {
         double n = sampleSpace.getN(
                 range,
-                getInputValueByArg(0)
+                getInputs().getInputValueByArg(0)
         );
         double p = getProbability(
                 s,

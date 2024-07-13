@@ -27,7 +27,7 @@ public class ArgumentFieldLink<K, V> extends FieldLink {
     private final K key;
     private final V value;
 
-    public ArgumentFieldLink(FieldOutput input, int arg, K key, V value, FieldInput<ArgumentFieldLink<K, V>> output) {
+    public ArgumentFieldLink(FieldOutput input, int arg, K key, V value, FieldInput<MapInputs<K, V>, ArgumentFieldLink<K, V>> output) {
         super(input, arg, output);
 
         this.key = key;
@@ -42,14 +42,14 @@ public class ArgumentFieldLink<K, V> extends FieldLink {
         return value;
     }
 
-    public static <K, V> ArgumentFieldLink<K, V> link(FieldOutput in, int arg, K key, V value, FieldInput<ArgumentFieldLink<K, V>> out) {
+    public static <K, V> ArgumentFieldLink<K, V> link(FieldOutput in, int arg, K key, V value, FieldInput<MapInputs<K, V>, ArgumentFieldLink<K, V>> out) {
         ArgumentFieldLink<K, V> fl = new ArgumentFieldLink(in, arg, key, value, out);
         out.getInputs().addInput(fl);
         in.addOutput(fl);
         return fl;
     }
 
-    public static <K, V> ArgumentFieldLink<K, V> linkAndConnect(FieldOutput in, K key, V value, FieldInput<ArgumentFieldLink<K, V>> out) {
+    public static <K, V> ArgumentFieldLink<K, V> linkAndConnect(FieldOutput in, K key, V value, FieldInput<MapInputs<K, V>, ArgumentFieldLink<K, V>> out) {
         ArgumentFieldLink<K, V> fl = link(in, out.getInputs().size(), key, value, out);
 
         fl.connect(true);

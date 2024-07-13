@@ -12,6 +12,7 @@ import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.Field;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
+import static network.aika.fields.InputField.inputField;
 
 public class CategoryDef {
 
@@ -48,7 +49,7 @@ public class CategoryDef {
                 Neuron.class
         );
 
-        field(
+        inputField(
                 neuron,
                 "initialCategorySynapseWeight"
         );

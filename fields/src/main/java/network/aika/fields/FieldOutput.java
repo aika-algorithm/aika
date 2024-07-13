@@ -23,7 +23,7 @@ import java.util.Collection;
 /**
  * @author Lukas Molzberger
  */
-public interface FieldOutput {
+public interface FieldOutput<O extends FieldObject> {
 
     String getLabel();
 
@@ -39,7 +39,7 @@ public interface FieldOutput {
 
     Collection<FieldLink> getReceivers();
 
-    FieldObject getObject();
+    O getObject();
 
     boolean isWithinUpdate();
 

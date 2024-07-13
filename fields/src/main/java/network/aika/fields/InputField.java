@@ -16,6 +16,8 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.Inputs;
 import network.aika.fields.link.NoInputs;
@@ -27,6 +29,10 @@ import java.util.List;
  * @author Lukas Molzberger
  */
 public class InputField<O extends FieldObject> extends Field<O, NoInputs, FieldLink> {
+
+    public static <O extends ObjectDefinition<O>> FieldDefinition<O> inputField(O ref, String label) {
+        return new FieldDefinition<>(InputField.class, ref, label);
+    }
 
     public InputField() {
         super(new NoInputs());

@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class Field<O extends FieldObject, I extends Inputs<F>, F extends FieldLink> extends FieldOutputImpl<O> implements FieldInput<I, F>, FieldOutput, FieldWritable {
+public class Field<O extends FieldObject, I extends Inputs<F>, F extends FieldLink> extends FieldOutputImpl<O> implements FieldInput<I, F>, FieldOutput<O>, FieldWritable {
 
     private FieldDefinition fieldDefinition;
 
