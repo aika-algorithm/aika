@@ -18,8 +18,6 @@ package network.aika.elements.synapses.slots;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.Synapse;
-import network.aika.enums.direction.Direction;
 
 import java.util.stream.Stream;
 
@@ -28,13 +26,6 @@ import java.util.stream.Stream;
  * @author Lukas Molzberger
  */
 public class ConjunctiveSynapseSlot extends SynapseSlot {
-
-    public ConjunctiveSynapseSlot(Activation act, Synapse synapse, String label, Direction dir) {
-
-        this.act = act;
-        this.synapse = synapse;
-        this.dir = dir;
-    }
 
 
     @Override
@@ -59,6 +50,6 @@ public class ConjunctiveSynapseSlot extends SynapseSlot {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " Act-Id:" + act.getId() + " Act-Label:" + act.getLabel() + " Syn:" + synapse;
+        return getClass().getSimpleName() + " Act-Id:" + activation.getId() + " Act-Label:" + activation.getLabel() + " Syn:" + synapse;
     }
 }

@@ -32,18 +32,32 @@ import java.util.stream.Stream;
  */
 public abstract class SynapseSlot extends Type<SynapseSlotDefinition, SynapseSlot> {
 
-    protected Activation act;
+
+    protected Activation activation;
 
     protected Synapse synapse;
 
     protected Direction dir;
 
+
+    public Activation getActivation() {
+        return activation;
+    }
+
+    public void setActivation(Activation activation) {
+        this.activation = activation;
+    }
+
+    public void setSynapse(Synapse synapse) {
+        this.synapse = synapse;
+    }
+
     public Synapse getSynapse() {
         return synapse;
     }
 
-    public Activation getActivation() {
-        return act;
+    public void setDirection(Direction dir) {
+        this.dir = dir;
     }
 
     public Direction getDirection() {
@@ -61,7 +75,7 @@ public abstract class SynapseSlot extends Type<SynapseSlotDefinition, SynapseSlo
 
     @Override
     public Queue getQueue() {
-        return act.getQueue();
+        return activation.getQueue();
     }
 
     @Override

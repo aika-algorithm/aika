@@ -16,15 +16,12 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.Document;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
-import network.aika.elements.neurons.Neuron;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -95,24 +92,5 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
 
     public FieldDefinition getNet(StateType stateType) {
         return states.get(stateType.ordinal()).getNet();
-    }
-
-    public Activation instantiate(int id, Document doc, Neuron n) {
-        try {
-            Activation instance = clazz
-                    .getConstructor(Integer.class, Document.class, Neuron.class)
-                    .newInstance(id, doc, n);
-
-            instance.setTypeDefinition(this);
-            return instance;
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

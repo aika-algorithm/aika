@@ -25,7 +25,6 @@ import network.aika.enums.direction.Direction;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 /**
@@ -201,21 +200,5 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
         this.instanceSynapseType = instanceSynapseType;
 
         return this;
-    }
-
-    public Synapse instantiate() {
-        try {
-            Synapse instance = clazz.getConstructor().newInstance();
-            instance.setTypeDefinition(this);
-            return instance;
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

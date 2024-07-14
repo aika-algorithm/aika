@@ -16,13 +16,10 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
-import network.aika.elements.synapses.Synapse;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 /**
@@ -72,25 +69,6 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
 
     public void setNegInputIsFired(FieldDefinition<LinkDefinition> negInputIsFired) {
         this.negInputIsFired = negInputIsFired;
-    }
-
-    public Link instantiate(Synapse s, Activation iAct, Activation oAct) {
-        try {
-            Link instance = clazz
-                    .getConstructor(Synapse.class, Activation.class, Activation.class)
-                    .newInstance(s, iAct, oAct);
-
-            instance.setTypeDefinition(this);
-            return instance;
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public SynapseDefinition getSynapse() {

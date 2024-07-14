@@ -105,23 +105,4 @@ public class NeuronDefinition extends TypeDefinition<NeuronDefinition, Neuron> {
         this.templateRelation = templateRelation;
         return this;
     }
-
-    public Neuron instantiate(Model m, RefType refType) {
-        try {
-            Neuron instance = clazz
-                    .getConstructor(Model.class, RefType.class)
-                    .newInstance(m, refType);
-
-            instance.setTypeDefinition(this);
-            return instance;
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

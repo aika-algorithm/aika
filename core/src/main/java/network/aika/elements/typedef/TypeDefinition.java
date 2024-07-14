@@ -16,12 +16,14 @@
  */
 package network.aika.elements.typedef;
 
+import network.aika.elements.synapses.Synapse;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fielddefs.ObjectRelationDefinition;
 import network.aika.fielddefs.ObjectPath;
 import network.aika.fields.FieldObject;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -44,6 +46,22 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
     public TypeDefinition(String name, Class<? extends T> clazz) {
         this.name = name;
         this.clazz = clazz;
+    }
+
+    public T instantiate() {
+        try {
+            T instance = clazz.getConstructor().newInstance();
+            instance.setTypeDefinition((D) this);
+            return instance;
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
