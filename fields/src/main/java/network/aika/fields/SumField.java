@@ -19,24 +19,20 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
-import network.aika.fields.link.Inputs;
-import network.aika.fields.link.VariableInputs;
-
-import java.util.ArrayList;
-import java.util.List;
+import network.aika.fields.link.VariableFieldInputs;
 
 import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
  */
-public class SumField<O extends FieldObject> extends Field<O, VariableInputs, FieldLink> {
+public class SumField<O extends FieldObject> extends Field<O, VariableFieldInputs, FieldLink> {
 
     public static <O extends ObjectDefinition<O>> FieldDefinition<O> sum(O ref, String label) {
         return new FieldDefinition<>(SumField.class, ref, label, TOLERANCE);
     }
 
     public SumField() {
-        super(new VariableInputs());
+        super(new VariableFieldInputs());
     }
 }

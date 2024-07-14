@@ -23,7 +23,7 @@ import java.util.TreeMap;
 /**
  * @author Lukas Molzberger
  */
-public class MapInputs<K, V> implements Inputs<MapFieldLink<K, V>> {
+public class MapFieldInputs<K, V> implements FieldInputs<MapFieldLink<K, V>> {
 
     private Map<K, MapFieldLink<K, V>> inputs = new TreeMap<>();
 

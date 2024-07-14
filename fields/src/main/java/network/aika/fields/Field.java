@@ -18,7 +18,7 @@ package network.aika.fields;
 
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.link.FieldLink;
-import network.aika.fields.link.Inputs;
+import network.aika.fields.link.FieldInputs;
 import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
 import network.aika.utils.FieldWritable;
@@ -27,7 +27,7 @@ import network.aika.utils.FieldWritable;
 /**
  * @author Lukas Molzberger
  */
-public class Field<O extends FieldObject, I extends Inputs<F>, F extends FieldLink> extends FieldOutputImpl implements FieldInput<I, F>, FieldOutput, FieldWritable {
+public class Field<O extends FieldObject, I extends FieldInputs<F>, F extends FieldLink> extends FieldOutputImpl implements FieldInput<I, F>, FieldOutput, FieldWritable {
 
     private FieldDefinition fieldDefinition;
 

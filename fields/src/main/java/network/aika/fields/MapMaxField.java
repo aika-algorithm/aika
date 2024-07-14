@@ -17,16 +17,16 @@
 package network.aika.fields;
 
 import network.aika.fields.link.MapFieldLink;
-import network.aika.fields.link.MapInputs;
+import network.aika.fields.link.MapFieldInputs;
 
 /**
  * @author Lukas Molzberger
  *
  */
-public class MapMaxField<O extends FieldObject, K, V> extends AbstractMaxField<O, MapInputs<K, V>, MapFieldLink<K, V>> {
+public class MapMaxField<O extends FieldObject, K, V> extends AbstractMaxField<O, MapFieldInputs<K, V>, MapFieldLink<K, V>> {
 
 
     public MapMaxField() {
-        super(new MapInputs<>());
+        super(new MapFieldInputs<>());
     }
 }

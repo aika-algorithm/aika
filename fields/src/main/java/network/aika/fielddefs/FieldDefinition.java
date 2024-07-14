@@ -41,7 +41,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
 
     protected Double tolerance;
 
-    protected List<FieldLinkDefinition> inputs = new ArrayList<>();
+    protected FieldInputsDefinition<O> inputs;
     protected List<FieldLinkDefinition> outputs = new ArrayList<>();
 
     protected ProcessingPhase phase;
@@ -62,20 +62,9 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         this.tolerance = tolerance;
     }
 
-    public FieldDefinition<O> in(Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
-        ObjectPath objectPath = new ObjectPath(Direction.INPUT);
-        objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
-        FieldOutputDefinition in = pathProvider.apply(object, objectPath);
-
-        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, in, arg, this, propagateUpdates);
-        addInput(fl);
-        in.addOutput(fl);
-
-        return this;
-    }
-
-    public FieldDefinition<O> in(Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider) {
-        return in(arg, pathProvider, true);
+    @Override
+    public FieldInputsDefinition<O> getInputs() {
+        return inputs;
     }
 
     public FieldDefinition<O> out(Integer arg, BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
@@ -83,8 +72,8 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
         FieldInputDefinition out = pathProvider.apply(object, objectPath);
 
-        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, this, arg, out, propagateUpdates);
-        out.addInput(fl);
+        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, this, arg, out.getInputs(), propagateUpdates);
+        out.getInputs().addInput(fl);
         addOutput(fl);
 
         return this;
@@ -102,7 +91,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         try {
             Field instance = clazz.newInstance();
 
-            instance.setFieldObject(fo);
+            instance.setObject(fo);
             instance.setFieldDefinition(this);
 
             return instance;
@@ -114,13 +103,11 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
     }
 
     public void instantiateLinks(Field f) {
-        Stream.concat(
-                        inputs.stream(),
-                        outputs.stream()
+        inputs.instantiateLinks(f);
+
+        outputs.forEach(fl ->
+                fl.getObjectPath().resolve(f.getObject()
                 )
-                .forEach(fl ->
-                        fl.getObjectPath().resolve(f.getObject()
-                        )
         );
     }
 
@@ -144,6 +131,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         return this;
     }
 
+    @Override
     public ObjectDefinition getObject() {
         return object;
     }
@@ -198,16 +186,6 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         this.phase = phase;
 
         return this;
-    }
-
-    @Override
-    public void addInput(FieldLinkDefinition fl) {
-        inputs.add(fl);
-    }
-
-    @Override
-    public int size() {
-        return inputs.size();
     }
 
     @Override

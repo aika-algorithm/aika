@@ -2,14 +2,14 @@ package network.aika.fields;
 
 
 import network.aika.fields.link.FieldLink;
-import network.aika.fields.link.Inputs;
+import network.aika.fields.link.FieldInputs;
 import network.aika.utils.FieldWritable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public abstract class MultiField<O extends FieldObject, I extends Inputs<F>, F extends FieldLink> implements FieldInput<I, F>, FieldWritable {
+public abstract class MultiField<O extends FieldObject, I extends FieldInputs<F>, F extends FieldLink> implements FieldInput<I, F>, FieldWritable {
 
     protected I inputs;
 

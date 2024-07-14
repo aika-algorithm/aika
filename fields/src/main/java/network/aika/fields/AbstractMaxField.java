@@ -17,7 +17,7 @@
 package network.aika.fields;
 
 import network.aika.fields.link.FieldLink;
-import network.aika.fields.link.Inputs;
+import network.aika.fields.link.FieldInputs;
 import network.aika.utils.ApproximateComparisonValueUtil;
 
 import java.util.Comparator;
@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * @author Lukas Molzberger
  *
  */
-public abstract class AbstractMaxField<O extends FieldObject, I extends Inputs<F>, F extends FieldLink> extends Field<O, I, F> {
+public abstract class AbstractMaxField<O extends FieldObject, I extends FieldInputs<F>, F extends FieldLink> extends Field<O, I, F> {
 
     private F selectedInput;
 

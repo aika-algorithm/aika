@@ -20,9 +20,7 @@ import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fielddefs.ObjectPath;
 import network.aika.fielddefs.ThresholdOperatorFieldDefinition;
-import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.FixedFieldLink;
-import network.aika.fields.link.FixedInputs;
 
 import java.util.function.BiConsumer;
 

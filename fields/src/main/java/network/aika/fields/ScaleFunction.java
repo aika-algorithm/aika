@@ -18,9 +18,7 @@ package network.aika.fields;
 
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
-import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.FixedFieldLink;
-import network.aika.fields.link.FixedInputs;
 
 /**
  * @author Lukas Molzberger

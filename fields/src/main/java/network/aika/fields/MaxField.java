@@ -19,11 +19,7 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
-import network.aika.fields.link.Inputs;
-import network.aika.fields.link.VariableInputs;
-
-import java.util.ArrayList;
-import java.util.List;
+import network.aika.fields.link.VariableFieldInputs;
 
 import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
@@ -31,7 +27,7 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  * @author Lukas Molzberger
  *
  */
-public class MaxField<O extends FieldObject> extends AbstractMaxField<O, VariableInputs, FieldLink> {
+public class MaxField<O extends FieldObject> extends AbstractMaxField<O, VariableFieldInputs, FieldLink> {
 
 
     public static <O extends ObjectDefinition<O>> FieldDefinition<O> max(O ref, String label) {
@@ -44,6 +40,6 @@ public class MaxField<O extends FieldObject> extends AbstractMaxField<O, Variabl
     }
 
     public MaxField() {
-        super(new VariableInputs());
+        super(new VariableFieldInputs());
     }
 }

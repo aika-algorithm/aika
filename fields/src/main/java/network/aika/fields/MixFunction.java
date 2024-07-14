@@ -19,9 +19,8 @@ package network.aika.fields;
 
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
-import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.FixedFieldLink;
-import network.aika.fields.link.FixedInputs;
+import network.aika.fields.link.FixedFieldInputs;
 
 /**
  * @author Lukas Molzberger
@@ -38,7 +37,7 @@ public class MixFunction<O extends FieldObject> extends AbstractFunction<O> {
 
     @Override
     protected double computeUpdate(FixedFieldLink fl, double u) {
-        FixedInputs in = getInputs();
+        FixedFieldInputs in = getInputs();
         int arg = fl.getArgument();
         if(arg == 0) {
             double a = in.getInputValueByArg(1);

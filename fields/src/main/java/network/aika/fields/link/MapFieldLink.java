@@ -27,7 +27,7 @@ public class MapFieldLink<K, V> extends FieldLink {
     private final K key;
     private final V value;
 
-    public MapFieldLink(FieldOutput input, K key, V value, FieldInput<MapInputs<K, V>, MapFieldLink<K, V>> output) {
+    public MapFieldLink(FieldOutput input, K key, V value, FieldInput<MapFieldInputs<K, V>, MapFieldLink<K, V>> output) {
         super(input, output);
 
         this.key = key;

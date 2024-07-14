@@ -1,12 +1,12 @@
 package network.aika.fields;
 
 import network.aika.fields.link.FixedFieldLink;
-import network.aika.fields.link.FixedInputs;
+import network.aika.fields.link.FixedFieldInputs;
 
 
-public abstract class AbstractListener<O extends FieldObject> extends Field<O, FixedInputs, FixedFieldLink> {
+public abstract class AbstractListener<O extends FieldObject> extends Field<O, FixedFieldInputs, FixedFieldLink> {
 
     public AbstractListener() {
-        super(new FixedInputs(1));
+        super(new FixedFieldInputs(1));
     }
 }

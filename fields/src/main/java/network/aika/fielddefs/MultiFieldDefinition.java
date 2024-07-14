@@ -6,5 +6,8 @@ public class MultiFieldDefinition<O extends ObjectDefinition<O>> {
 
     protected Class<? extends Field> clazz;
 
-    private FieldDefinition<O>[] fieldDefinitions;
+    protected FieldInputsDefinition inputs;
+
+    private FieldDefinition<O>[] outputFieldDefinitions;
+
 }

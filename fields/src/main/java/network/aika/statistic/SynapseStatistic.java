@@ -22,7 +22,7 @@ import network.aika.fields.FieldObject;
 import network.aika.fields.FieldOutput;
 import network.aika.fields.MultiField;
 import network.aika.fields.link.FixedFieldLink;
-import network.aika.fields.link.FixedInputs;
+import network.aika.fields.link.FixedFieldInputs;
 import network.aika.utils.Bound;
 import network.aika.utils.FieldWritable;
 import network.aika.utils.StatisticUtils;
@@ -38,7 +38,7 @@ import static network.aika.enums.sign.Sign.POS;
  *
  * @author Lukas Molzberger
  */
-public class SynapseStatistic<O extends FieldObject> extends MultiField<O, FixedInputs, FixedFieldLink> implements FieldWritable {
+public class SynapseStatistic<O extends FieldObject> extends MultiField<O, FixedFieldInputs, FixedFieldLink> implements FieldWritable {
 
     private Double alpha;
 
@@ -49,7 +49,7 @@ public class SynapseStatistic<O extends FieldObject> extends MultiField<O, Fixed
     protected SampleSpace sampleSpace = new SampleSpace();
 
     public SynapseStatistic() {
-        super(new FixedInputs(1), new FieldOutput[4]);
+        super(new FixedFieldInputs(1), new FieldOutput[4]);
 
 
     }

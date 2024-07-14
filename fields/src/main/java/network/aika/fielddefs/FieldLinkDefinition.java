@@ -28,11 +28,11 @@ public class FieldLinkDefinition {
 
     private FieldOutputDefinition in;
 
-    private FieldInputDefinition out;
+    private FieldInputsDefinition out;
 
     boolean propagateUpdates;
 
-    public FieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition in, Integer arg, FieldInputDefinition out, boolean propagateUpdates) {
+    public FieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition in, Integer arg, FieldInputsDefinition out, boolean propagateUpdates) {
         this.objectPath = objectPath;
         this.arg = arg;
         this.in = in;
@@ -52,7 +52,7 @@ public class FieldLinkDefinition {
         return in;
     }
 
-    public FieldInputDefinition getOut() {
+    public FieldInputsDefinition getOut() {
         return out;
     }
 

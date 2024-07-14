@@ -16,46 +16,30 @@
  */
 package network.aika.fields.link;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Lukas Molzberger
  */
-public class FixedInputs implements Inputs<FixedFieldLink> {
+public class NoFieldInputs implements FieldInputs<FieldLink> {
 
-    private FixedFieldLink[] inputs;
 
-    public FixedInputs(int numArgs) {
-        this.inputs = new FixedFieldLink[numArgs];
+    @Override
+    public void addInput(FieldLink fl) {
+    }
+
+    @Override
+    public void removeInput(FieldLink fl) {
+    }
+
+    @Override
+    public List<FieldLink> getInputs() {
+        return Collections.emptyList();
     }
 
     @Override
     public int size() {
-        return inputs.length;
+        return 0;
     }
-
-    @Override
-    public void addInput(FixedFieldLink l) {
-        inputs[l.getArgument()] = l;
-    }
-
-    @Override
-    public void removeInput(FixedFieldLink l) {
-        inputs[l.getArgument()] = null;
-    }
-
-    @Override
-    public List<FixedFieldLink> getInputs() {
-        return Arrays.asList(inputs);
-    }
-
-    public double getInputValueByArg(int arg) {
-        return getInputLinkByArg(arg).getInputValue();
-    }
-
-    public FieldLink getInputLinkByArg(int arg) {
-        return inputs[arg];
-    }
-
 }

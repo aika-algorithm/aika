@@ -16,30 +16,33 @@
  */
 package network.aika.fields.link;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Lukas Molzberger
  */
-public class NoInputs implements Inputs<FieldLink> {
+public class VariableFieldInputs implements FieldInputs<FieldLink> {
 
+    private List<FieldLink> inputs = new ArrayList<>();
 
     @Override
-    public void addInput(FieldLink fl) {
+    public synchronized int size() {
+        return inputs.size();
     }
 
     @Override
-    public void removeInput(FieldLink fl) {
+    public synchronized void addInput(FieldLink l) {
+        inputs.add(l);
+    }
+
+    @Override
+    public synchronized void removeInput(FieldLink l) {
+        inputs.remove(l);
     }
 
     @Override
     public List<FieldLink> getInputs() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public int size() {
-        return 0;
+        return inputs;
     }
 }

@@ -16,43 +16,46 @@
  */
 package network.aika.fields.link;
 
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Lukas Molzberger
  */
-public interface Inputs<F extends FieldLink> {
+public class FixedFieldInputs implements FieldInputs<FixedFieldLink> {
 
-    void addInput(F fl);
+    private FixedFieldLink[] inputs;
 
-    void removeInput(F fl);
-
-    Collection<F> getInputs();
-
-    int size();
-
-    default void connectInputs(boolean initialize) {
-        getInputs().forEach(fl ->
-                fl.connect(initialize)
-        );
+    public FixedFieldInputs(int numArgs) {
+        this.inputs = new FixedFieldLink[numArgs];
     }
 
-    default void disconnectInputs(boolean deinitialize) {
-        getInputs().forEach(fl ->
-                fl.disconnect(deinitialize)
-        );
+    @Override
+    public int size() {
+        return inputs.length;
     }
 
-    default void disconnectAndUnlinkInputs(boolean deinitialize) {
-        getInputs().forEach(fl -> {
-            fl.disconnect(deinitialize);
-            fl.unlinkInput();
-        });
+    @Override
+    public void addInput(FixedFieldLink l) {
+        inputs[l.getArgument()] = l;
     }
 
-    default void unlinkInputs() {
-        getInputs().forEach(fl ->
-                fl.unlinkInput()
-        );
+    @Override
+    public void removeInput(FixedFieldLink l) {
+        inputs[l.getArgument()] = null;
     }
+
+    @Override
+    public List<FixedFieldLink> getInputs() {
+        return Arrays.asList(inputs);
+    }
+
+    public double getInputValueByArg(int arg) {
+        return getInputLinkByArg(arg).getInputValue();
+    }
+
+    public FieldLink getInputLinkByArg(int arg) {
+        return inputs[arg];
+    }
+
 }
