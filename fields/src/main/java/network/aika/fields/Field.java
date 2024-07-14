@@ -17,26 +17,21 @@
 package network.aika.fields;
 
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.Inputs;
 import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
 import network.aika.utils.FieldWritable;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * @author Lukas Molzberger
  */
-public class Field<O extends FieldObject, I extends Inputs<F>, F extends FieldLink> extends FieldOutputImpl<O> implements FieldInput<I, F>, FieldOutput<O>, FieldWritable {
+public class Field<O extends FieldObject, I extends Inputs<F>, F extends FieldLink> extends FieldOutputImpl implements FieldInput<I, F>, FieldOutput, FieldWritable {
 
     private FieldDefinition fieldDefinition;
+
+    private O object;
 
     private boolean blocked;
 
@@ -53,6 +48,16 @@ public class Field<O extends FieldObject, I extends Inputs<F>, F extends FieldLi
         return inputs;
     }
 
+    @Override
+    public O getObject() {
+        return object;
+    }
+
+    public void setObject(O object) {
+        this.object = object;
+    }
+
+
     public <F extends Field> F setQueued(Queue q, ProcessingPhase phase, boolean isNextRound) {
         interceptor = new QueueInterceptor(q, this, phase, isNextRound);
         return (F) this;
@@ -67,9 +72,16 @@ public class Field<O extends FieldObject, I extends Inputs<F>, F extends FieldLi
         this.fieldDefinition = fieldDefinition;
     }
 
-    @Override
     public FieldDefinition getFieldDefinition() {
         return fieldDefinition;
+    }
+
+    protected double getTolerance() {
+        return fieldDefinition.getTolerance();
+    }
+
+    protected String getLabel() {
+        return fieldDefinition.getLabel();
     }
 
     public void setValue(double v) {
@@ -104,15 +116,5 @@ public class Field<O extends FieldObject, I extends Inputs<F>, F extends FieldLi
 
         assert !withinUpdate;
         triggerUpdate(u);
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        out.writeDouble(value);
-    }
-
-    @Override
-    public void readFields(DataInput in) throws IOException {
-        value = in.readDouble();
     }
 }

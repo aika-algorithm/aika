@@ -24,9 +24,7 @@ import java.util.Collection;
 /**
  * @author Lukas Molzberger
  */
-public interface FieldOutput<O extends FieldObject> {
-
-    FieldDefinition getFieldDefinition();
+public interface FieldOutput {
 
     String getValueString();
 
@@ -39,8 +37,6 @@ public interface FieldOutput<O extends FieldObject> {
     void removeOutput(FieldLink fl);
 
     Collection<FieldLink> getReceivers();
-
-    O getObject();
 
     boolean isWithinUpdate();
 

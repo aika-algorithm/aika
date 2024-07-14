@@ -17,20 +17,22 @@
 package network.aika.fields;
 
 import network.aika.fields.link.FieldLink;
+import network.aika.utils.FieldWritable;
 import network.aika.utils.StringUtils;
 import network.aika.utils.ToleranceUtils;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOutput<O> {
+public abstract class FieldOutputImpl implements FieldOutput, FieldWritable {
 
     private static double MIN_TOLERANCE = 0.0000000001;
-
-    private O object;
 
     protected double value;
 
@@ -39,19 +41,6 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
     protected boolean withinUpdate;
 
     private Collection<FieldLink> receivers = new ArrayList<>();
-
-    public void setFieldObject(O fo) {
-        object = fo;
-    }
-
-    @Override
-    public O getObject() {
-        return object;
-    }
-
-    public void setObject(O object) {
-        this.object = object;
-    }
 
     @Override
     public boolean isWithinUpdate() {
@@ -70,9 +59,12 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
                 value;
     }
 
+    protected abstract double getTolerance();
+
+    protected abstract String getLabel();
 
     public void triggerUpdate(double u) {
-        if(ToleranceUtils.belowTolerance(getFieldDefinition().getTolerance(), u))
+        if(ToleranceUtils.belowTolerance(getTolerance(), u))
             return;
 
         withinUpdate = true;
@@ -128,8 +120,18 @@ public abstract class FieldOutputImpl<O extends FieldObject> implements FieldOut
     }
 
     @Override
+    public void write(DataOutput out) throws IOException {
+        out.writeDouble(value);
+    }
+
+    @Override
+    public void readFields(DataInput in) throws IOException {
+        value = in.readDouble();
+    }
+
+    @Override
     public String toString() {
-        return getFieldDefinition().getLabel() + ": " + getValueString();
+        return getLabel() + ": " + getValueString();
     }
 
     public String getValueString() {

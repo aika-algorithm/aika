@@ -9,24 +9,37 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class MultiField<O extends FieldObject, I extends Inputs<F>, F extends FieldLink> implements FieldInput<I, F>, FieldWritable {
+public abstract class MultiField<O extends FieldObject, I extends Inputs<F>, F extends FieldLink> implements FieldInput<I, F>, FieldWritable {
 
-    private Field[] field;
+    protected I inputs;
+
+    private O object;
+
+    protected FieldOutput[] outputFields;
+
+    public MultiField(I inputs, FieldOutput[] outputFields) {
+        this.inputs = inputs;
+        this.outputFields = outputFields;
+    }
 
     @Override
     public I getInputs() {
-        return null;
+        return inputs;
+    }
+
+    public FieldOutput[] getOutputFields() {
+        return outputFields;
     }
 
     @Override
     public FieldObject getObject() {
-        return null;
+        return object;
     }
 
-    @Override
-    public void receiveUpdate(F fl, double u) {
-
+    public void setObject(O object) {
+        this.object = object;
     }
+
 
     @Override
     public void write(DataOutput out) throws IOException {
