@@ -17,6 +17,7 @@
 package network.aika.fields;
 
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FunctionFieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FixedFieldLink;
 
@@ -25,8 +26,8 @@ import network.aika.fields.link.FixedFieldLink;
  */
 public class Subtraction<O extends FieldObject> extends AbstractFunction<O> {
 
-    public static <O extends ObjectDefinition<O>> FieldDefinition<O> sub(O ref, String label) {
-        return new FieldDefinition<>(Subtraction.class, ref, label);
+    public static <O extends ObjectDefinition<O>> FunctionFieldDefinition<O> sub(O ref, String label) {
+        return new FunctionFieldDefinition<>(Subtraction.class, ref, label);
     }
 
     public Subtraction() {

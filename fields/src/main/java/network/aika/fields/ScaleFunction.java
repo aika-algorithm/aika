@@ -17,6 +17,7 @@
 package network.aika.fields;
 
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FunctionFieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FixedFieldLink;
 
@@ -25,8 +26,8 @@ import network.aika.fields.link.FixedFieldLink;
  */
 public class ScaleFunction<O extends FieldObject> extends AbstractFunction<O> {
 
-    public static <O extends ObjectDefinition<O>> FieldDefinition<O> scale(O ref, String label, double scale) {
-        return new FieldDefinition(ScaleFunction.class, ref, label, scale);
+    public static <O extends ObjectDefinition<O>> FunctionFieldDefinition<O> scale(O ref, String label, double scale) {
+        return new FunctionFieldDefinition(ScaleFunction.class, ref, label, scale);
     }
 
     private double scale;

@@ -18,6 +18,7 @@ package network.aika.fields;
 
 
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FunctionFieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.FixedFieldLink;
@@ -27,8 +28,8 @@ import network.aika.fields.link.FixedFieldLink;
  */
 public class ExcludeInput<O extends FieldObject> extends Subtraction<O> {
 
-    public static <O extends ObjectDefinition<O>> FieldDefinition<O> excludeInput(O ref, String label) {
-        return new FieldDefinition<>(ExcludeInput.class, ref, label);
+    public static <O extends ObjectDefinition<O>> FunctionFieldDefinition<O> excludeInput(O ref, String label) {
+        return new FunctionFieldDefinition<>(ExcludeInput.class, ref, label);
     }
 
     @Override
