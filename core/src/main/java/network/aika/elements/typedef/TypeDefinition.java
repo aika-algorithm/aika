@@ -55,6 +55,8 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
 
             instance.setTypeDefinition((D) this);
 
+            instantiateFields(instance);
+
             return instance;
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
