@@ -114,13 +114,13 @@ public class Activation extends Type<ActivationDefinition, Activation> implement
 
     public SynapseSlot registerOutputSlot(Synapse syn) {
         return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId ->
-                syn.createAndInitInputSlot(this)
+                syn.createInputSlot(this)
         );
     }
 
     public SynapseSlot registerInputSlot(Synapse syn) {
         return inputSlots.computeIfAbsent(syn.getSynapseId(), nId ->
-            syn.createAndInitOutputSlot(this)
+            syn.createOutputSlot(this)
         );
     }
 
