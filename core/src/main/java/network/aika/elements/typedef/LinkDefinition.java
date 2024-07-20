@@ -16,10 +16,13 @@
  */
 package network.aika.elements.typedef;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.elements.synapses.Synapse;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -45,6 +48,13 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
 
     public LinkDefinition(String name, Class<? extends Link> clazz) {
         super(name, clazz);
+    }
+
+    public Link instantiate(Synapse synapse, Activation input, Activation output) {
+        return instantiate(
+                List.of(Synapse.class, Activation.class, Activation.class),
+                List.of(synapse, input, output)
+        );
     }
 
     public FieldDefinition<LinkDefinition> getInputValue() {
@@ -140,7 +150,6 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
         addPathEntry(p, outputSlot, l -> Set.of(l.getOutputSlot()));
         return outputSlot;
     }
-
 
     public LinkDefinition setOutputSlot(SynapseSlotDefinition outputSlot) {
         this.outputSlot = outputSlot;

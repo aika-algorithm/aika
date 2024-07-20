@@ -42,7 +42,6 @@ public class State extends Type<StateDefinition, State> implements QueueProvider
 
 
     public State(Activation act) {
-        super();
         this.act = act;
     }
 

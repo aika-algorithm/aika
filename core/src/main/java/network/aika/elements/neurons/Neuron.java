@@ -249,13 +249,9 @@ public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements E
         return this;
     }
 
-
-
     public boolean isInstantiable() {
         return instantiable;
     }
-
-
 
 
     public final boolean isTrainingAllowed() {

@@ -16,11 +16,13 @@
  */
 package network.aika.elements.typedef;
 
+import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -42,6 +44,13 @@ public class StateDefinition extends TypeDefinition<StateDefinition, State> {
     public StateDefinition(String name, StateType type) {
         super(name, State.class);
         this.type = type;
+    }
+
+    public State instantiate(Activation act) {
+        return instantiate(
+                List.of(Activation.class),
+                List.of(act)
+        );
     }
 
     public FieldDefinition<StateDefinition> getNet() {
@@ -88,5 +97,4 @@ public class StateDefinition extends TypeDefinition<StateDefinition, State> {
     public boolean isNextRound() {
         return isNextRound;
     }
-
 }

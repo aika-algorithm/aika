@@ -16,7 +16,12 @@
  */
 package network.aika.elements.typedef;
 
+import network.aika.elements.activations.Activation;
+import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.enums.direction.Direction;
+
+import java.util.List;
 
 
 /**
@@ -25,10 +30,26 @@ import network.aika.elements.synapses.slots.SynapseSlot;
  */
 public class SynapseSlotDefinition extends TypeDefinition<SynapseSlotDefinition, SynapseSlot> {
 
+    private Direction direction;
+
     public SynapseSlotDefinition(String name, Class<? extends SynapseSlot> clazz) {
         super(name, clazz);
     }
 
 
+    public SynapseSlot instantiate(Activation act, Synapse synapse) {
+        return instantiate(
+                List.of(Activation.class, Synapse.class),
+                List.of(act, synapse)
+        );
+    }
 
+    public SynapseSlotDefinition setDirection(Direction direction) {
+        this.direction = direction;
+        return this;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
 }

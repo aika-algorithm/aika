@@ -37,8 +37,10 @@ public abstract class SynapseSlot extends Type<SynapseSlotDefinition, SynapseSlo
 
     protected Synapse synapse;
 
-    protected Direction dir;
-
+    public SynapseSlot(Activation activation, Synapse synapse) {
+        this.activation = activation;
+        this.synapse = synapse;
+    }
 
     public Activation getActivation() {
         return activation;
@@ -56,12 +58,8 @@ public abstract class SynapseSlot extends Type<SynapseSlotDefinition, SynapseSlo
         return synapse;
     }
 
-    public void setDirection(Direction dir) {
-        this.dir = dir;
-    }
-
     public Direction getDirection() {
-        return dir;
+        return typeDef.getDirection();
     }
 
     public abstract void addLink(Link l);

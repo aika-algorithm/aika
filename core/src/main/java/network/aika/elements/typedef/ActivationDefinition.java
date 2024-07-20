@@ -16,9 +16,11 @@
  */
 package network.aika.elements.typedef;
 
+import network.aika.Document;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.neurons.Neuron;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
@@ -46,6 +48,13 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
         this.neuron = neuron;
 
         return this;
+    }
+
+    public Activation instantiate(int actId, Document doc, Neuron neuron) {
+        return instantiate(
+                List.of(Integer.class, Document.class, Neuron.class),
+                List.of(actId, doc, neuron)
+        );
     }
 
     public FieldDefinition<LinkDefinition> getUpdateValue() {

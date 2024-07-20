@@ -18,6 +18,7 @@ package network.aika.elements.synapses.slots;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
+import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
 import network.aika.queue.Queue;
 
@@ -30,11 +31,10 @@ import java.util.stream.Stream;
 
 public class DisjunctiveSynapseSlot extends SynapseSlot {
 
-
     private Link link;
 
-    public DisjunctiveSynapseSlot(Direction dir) {
-        this.dir = dir;
+    public DisjunctiveSynapseSlot(Activation activation, Synapse synapse) {
+        super(activation, synapse);
     }
 
     @Override

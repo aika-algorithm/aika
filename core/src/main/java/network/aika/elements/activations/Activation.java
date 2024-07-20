@@ -113,22 +113,22 @@ public class Activation extends Type<ActivationDefinition, Activation> implement
     }
 
     public SynapseSlot registerOutputSlot(Synapse syn) {
-        return null;
-/*        return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId ->
+        return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId ->
                 syn.createAndInitInputSlot(this)
-        );*/
+        );
     }
 
     public SynapseSlot registerInputSlot(Synapse syn) {
-        return null;
-/*        return inputSlots.computeIfAbsent(syn.getSynapseId(), nId ->
+        return inputSlots.computeIfAbsent(syn.getSynapseId(), nId ->
             syn.createAndInitOutputSlot(this)
-        );*/
+        );
     }
 
     protected void initStates() {
         Stream.of(typeDef.getStates())
-                .forEach(sd -> states[sd.getType().ordinal()] = sd.instantiate(this));
+                .forEach(sd ->
+                        states[sd.getType().ordinal()] = sd.instantiate(this)
+                );
     }
 
     protected final int numberOfStates() {

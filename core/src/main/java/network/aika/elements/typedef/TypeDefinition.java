@@ -48,9 +48,11 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
         this.clazz = clazz;
     }
 
-    public T instantiate() {
+    public T instantiate(List<Class<?>> parameterTypes, List<Object> parameters) {
         try {
-            T instance = clazz.getConstructor().newInstance();
+            T instance = clazz.getConstructor(parameterTypes.toArray(new Class[0]))
+                    .newInstance(parameters.toArray(new Object[0]));
+
             instance.setTypeDefinition((D) this);
             return instance;
         } catch (InstantiationException e) {
