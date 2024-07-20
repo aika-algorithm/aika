@@ -17,12 +17,18 @@
 package network.aika.elements.synapses;
 
 
+import network.aika.elements.neurons.Neuron;
+
 /**
  *
  * @author Lukas Molzberger
  */
 public class DisjunctiveSynapse extends Synapse
 {
+    public DisjunctiveSynapse(Neuron input, Neuron output) {
+        super(input, output);
+    }
+
     @Override
     public void link() {
         input.addOutputSynapse(this);

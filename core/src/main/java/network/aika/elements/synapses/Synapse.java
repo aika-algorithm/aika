@@ -82,6 +82,10 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
     public Synapse() {
     }
 
+    public Synapse(Neuron input, Neuron output) {
+        link(input, output);
+    }
+
     public int getSynapseId() {
         return synapseId;
     }
@@ -234,7 +238,7 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
                 typeDef.getInstanceSynapseType() :
                 typeDef;
 
-        s = std.instantiate();
+        s = std.instantiate(input, output);
 
         input.setModified();
         output.setModified();

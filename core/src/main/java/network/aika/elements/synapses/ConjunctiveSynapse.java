@@ -44,6 +44,10 @@ public class ConjunctiveSynapse extends Synapse
     public ConjunctiveSynapse() {
     }
 
+    public ConjunctiveSynapse(Neuron input, Neuron output) {
+        super(input, output);
+    }
+
     @Override
     public void count(Link l) {
         super.count(l);

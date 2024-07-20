@@ -54,6 +54,7 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
                     .newInstance(parameters.toArray(new Object[0]));
 
             instance.setTypeDefinition((D) this);
+
             return instance;
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
