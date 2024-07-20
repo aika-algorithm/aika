@@ -1,9 +1,12 @@
 package network.aika.fielddefs;
 
 
-public interface FieldInputDefinition<O extends ObjectDefinition<O>, I extends FieldInputsDefinition<O>> {
+import network.aika.fielddefs.link.FieldInputsDefinition;
+import network.aika.fielddefs.link.FieldLinkDefinition;
 
-    I getInputs();
+public interface FieldInputDefinition<O extends ObjectDefinition<O>, F extends FieldLinkDefinition<F>> {
+
+    FieldInputsDefinition<O, F> getInputs();
 
     O getObject();
 

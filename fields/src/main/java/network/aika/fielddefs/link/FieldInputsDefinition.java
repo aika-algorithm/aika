@@ -14,41 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fielddefs;
+package network.aika.fielddefs.link;
 
-import network.aika.enums.Direction;
+import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.Field;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldInputsDefinition<O extends ObjectDefinition<O>> {
+public class FieldInputsDefinition<O extends ObjectDefinition<O>, F extends FieldLinkDefinition<F>> {
 
-    private O object;
+    protected O object;
 
-    protected List<FieldLinkDefinition> inputs = new ArrayList<>();
+    protected List<F> inputs = new ArrayList<>();
 
-    public FieldInputsDefinition<O> in(Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
-        ObjectPath objectPath = new ObjectPath(Direction.INPUT);
-        objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
-        FieldOutputDefinition in = pathProvider.apply(object, objectPath);
 
-        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, in, arg, this, propagateUpdates);
-        addInput(fl);
-        in.addOutput(fl);
-
-        return this;
-    }
-
-    public FieldInputsDefinition<O> in(Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider) {
-        return in(arg, pathProvider, true);
-    }
-
-    public void addInput(FieldLinkDefinition fl) {
+    public void addInput(F fl) {
         inputs.add(fl);
     }
 

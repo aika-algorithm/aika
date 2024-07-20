@@ -17,6 +17,8 @@
 package network.aika.fielddefs;
 
 import network.aika.enums.Direction;
+import network.aika.fielddefs.link.FieldInputsDefinition;
+import network.aika.fielddefs.link.FieldLinkDefinition;
 import network.aika.fields.Field;
 import network.aika.fields.FieldObject;
 import network.aika.queue.ProcessingPhase;
@@ -24,7 +26,6 @@ import network.aika.queue.ProcessingPhase;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger
@@ -41,7 +42,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
 
     protected Double tolerance;
 
-    protected FieldInputsDefinition<O> inputs;
+    protected FieldInputsDefinition inputs;
     protected List<FieldLinkDefinition> outputs = new ArrayList<>();
 
     protected ProcessingPhase phase;
@@ -63,7 +64,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
     }
 
     @Override
-    public FieldInputsDefinition<O> getInputs() {
+    public FieldInputsDefinition getInputs() {
         return inputs;
     }
 
@@ -72,7 +73,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
         FieldInputDefinition out = pathProvider.apply(object, objectPath);
 
-        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, this, arg, out.getInputs(), propagateUpdates);
+        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, this, out.getInputs(), propagateUpdates);
         out.getInputs().addInput(fl);
         addOutput(fl);
 

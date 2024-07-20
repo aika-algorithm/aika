@@ -14,17 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fielddefs;
+package network.aika.fielddefs.link;
 
+
+import network.aika.fielddefs.FieldOutputDefinition;
+import network.aika.fielddefs.ObjectPath;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldLinkDefinition {
+public class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
 
     private ObjectPath objectPath;
-
-    private Integer arg;
 
     private FieldOutputDefinition in;
 
@@ -32,9 +33,8 @@ public class FieldLinkDefinition {
 
     boolean propagateUpdates;
 
-    public FieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition in, Integer arg, FieldInputsDefinition out, boolean propagateUpdates) {
+    public FieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition in, FieldInputsDefinition<?, F> out, boolean propagateUpdates) {
         this.objectPath = objectPath;
-        this.arg = arg;
         this.in = in;
         this.out = out;
         this.propagateUpdates = propagateUpdates;
@@ -42,10 +42,6 @@ public class FieldLinkDefinition {
 
     public ObjectPath getObjectPath() {
         return objectPath;
-    }
-
-    public Integer getArg() {
-        return arg;
     }
 
     public FieldOutputDefinition getIn() {

@@ -16,7 +16,7 @@ public class FunctionFieldDefinition<O extends ObjectDefinition<O>> extends Fiel
     }
 
     public FunctionFieldDefinition<O> in(Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
-        getInputs().in(arg, pathProvider, propagateUpdates);
+        ((FixedFieldInputsDefinition<O>)getInputs()).in(arg, pathProvider, propagateUpdates);
 
         return this;
     }

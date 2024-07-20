@@ -16,6 +16,8 @@
  */
 package network.aika.fielddefs;
 
+import network.aika.fielddefs.link.FieldLinkDefinition;
+
 /**
  * @author Lukas Molzberger
  */
