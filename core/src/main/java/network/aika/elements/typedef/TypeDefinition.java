@@ -16,7 +16,6 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.elements.synapses.Synapse;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fielddefs.ObjectRelationDefinition;
@@ -70,13 +69,13 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
     }
 
     @Override
-    public FieldDefinition<D> getFieldDefinition(String name) {
-        FieldDefinition<D> fieldDef = getFieldDefinition(name);
+    public FieldDefinition<D> getField(String name) {
+        FieldDefinition<D> fieldDef = super.getField(name);
         if(fieldDef != null)
             return fieldDef;
 
         return parents.stream()
-                .map(p -> p.getFieldDefinition(name))
+                .map(p -> p.getField(name))
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(null);

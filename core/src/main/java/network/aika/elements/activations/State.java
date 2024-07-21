@@ -46,7 +46,7 @@ public class State extends Type<StateDefinition, State> implements QueueProvider
     }
 
     private Field getValue() {
-        return getField(this.getObjectDefinition().getValue());
+        return getField(this.getObjectDefinition().getField(StateDefinition.VALUE));
     }
 
     public void updateFiredStep(FieldLink fl) {

@@ -24,7 +24,7 @@ import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
 
 import static network.aika.fields.Multiplication.mul;
-
+import static network.aika.model.NeuronDef.*;
 
 /**
  *
@@ -72,14 +72,15 @@ public class DisjunctiveDef {
         link = new LinkDefinition(
                 "DisjunctiveLink",
                 DisjunctiveLink.class)
+                .addParent(superType.link)
                 .setSynapse(synapse)
                 .setInput(superType.conjunctiveDef.activation)
                 .setOutput(activation);
 
         mul(link, "weight update")
-                .in(0, (o, p) -> o.getInputIsFired())
-                .in(1, (o, p) -> o.getOutput(p).getUpdateValue())
-                .out((o, p) -> o.getSynapse(p).getWeight());
+                .in(0, (o, p) -> o.getField(INPUT_IS_FIRED))
+                .in(1, (o, p) -> o.getOutput(p).getField(UPDATE_VALUE))
+                .out((o, p) -> o.getSynapse(p).getField(WEIGHT));
 
         synapse = new SynapseDefinition(
                 "DisjunctiveSynapse",

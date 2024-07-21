@@ -18,18 +18,18 @@ package network.aika.fielddefs;
 
 import network.aika.fields.FieldObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Lukas Molzberger
  */
 public class ObjectDefinition<O extends ObjectDefinition<O>> {
 
-    List<FieldDefinition<O>> fieldDefinitions = new ArrayList<>();
+    Map<String, FieldDefinition<O>> fieldDefinitions = new TreeMap<>();
 
     public void instantiateFields(FieldObject o) {
-        fieldDefinitions.stream()
+        fieldDefinitions.values().stream()
                 .map(fd ->
                         fd.instantiate(o)
                 )
@@ -39,19 +39,16 @@ public class ObjectDefinition<O extends ObjectDefinition<O>> {
                 );
     }
 
-    public void addFieldDefinition(FieldDefinition<O> fieldDef) {
+    public void setFieldDefinition(FieldDefinition<O> fieldDef) {
         fieldDef.setFieldId(fieldDefinitions.size());
-        fieldDefinitions.add(fieldDef);
+        fieldDefinitions.put(fieldDef.getLabel(), fieldDef);
     }
 
     public int getNumberOfFields() {
         return fieldDefinitions.size();
     }
 
-    public FieldDefinition<O> getFieldDefinition(String name) {
-        return fieldDefinitions.stream()
-                .filter(fd -> fd.getLabel() == name)
-                .findFirst()
-                .orElse(null);
+    public FieldDefinition<O> getField(String name) {
+        return fieldDefinitions.get(name);
     }
 }

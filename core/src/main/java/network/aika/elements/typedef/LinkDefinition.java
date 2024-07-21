@@ -19,7 +19,6 @@ package network.aika.elements.typedef;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
-import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
 import java.util.List;
@@ -39,13 +38,6 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     private SynapseSlotDefinition outputSlot;
 
 
-    private FieldDefinition<LinkDefinition> inputValue;
-
-    private FieldDefinition<LinkDefinition> inputIsFired;
-
-    private FieldDefinition<LinkDefinition> negInputIsFired;
-
-
     public LinkDefinition(String name, Class<? extends Link> clazz) {
         super(name, clazz);
     }
@@ -55,30 +47,6 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
                 List.of(Synapse.class, Activation.class, Activation.class),
                 List.of(synapse, input, output)
         );
-    }
-
-    public FieldDefinition<LinkDefinition> getInputValue() {
-        return inputValue;
-    }
-
-    public void setInputValue(FieldDefinition<LinkDefinition> inputValue) {
-        this.inputValue = inputValue;
-    }
-
-    public FieldDefinition<LinkDefinition> getInputIsFired() {
-        return inputIsFired;
-    }
-
-    public void setInputIsFired(FieldDefinition<LinkDefinition> inputIsFired) {
-        this.inputIsFired = inputIsFired;
-    }
-
-    public FieldDefinition<LinkDefinition> getNegInputIsFired() {
-        return negInputIsFired;
-    }
-
-    public void setNegInputIsFired(FieldDefinition<LinkDefinition> negInputIsFired) {
-        this.negInputIsFired = negInputIsFired;
     }
 
     public SynapseDefinition getSynapse() {

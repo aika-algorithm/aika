@@ -29,12 +29,23 @@ import static network.aika.fields.SumField.sum;
 import static network.aika.fields.ThresholdOperator.Type.ABOVE;
 import static network.aika.fields.ThresholdOperator.threshold;
 import static network.aika.queue.Phase.TRAINING;
+import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
  * @author Lukas Molzberger
  */
 public class NeuronDef {
+
+    public static final String WEIGHT = "weight";
+    public static final String INPUT_VALUE = "inputValue";
+    public static final String INPUT_IS_FIRED = "inputIsFired";
+    public static final String NEG_INPUT_IS_FIRED = "negInputIsFired";
+    public static final String INITIAL_CATEGORY_SYNAPSE_WEIGHT = "initialCategorySynapseWeight";
+    public static final String NET_OUTER_GRADIENT = "netOuterGradient";
+    public static final String GRADIENT = "gradient";
+    public static final String UPDATE_VALUE = "updateValue";
+    public static final String NEG_UPDATE_VALUE = "negUpdateValue";
 
     TypeModel typeModel;
 
@@ -50,14 +61,7 @@ public class NeuronDef {
 
     LinkDefinition link;
 
-    public static final String INPUT_IS_FIRED = "inputIsFired";
-    public static final String NEG_INPUT_IS_FIRED = "negInputIsFired";
-
-
     SynapseDefinition synapse;
-
-    public static final String INITIAL_CATEGORY_SYNAPSE_WEIGHT = "initialCategorySynapseWeight";
-
 
     public NeuronDef(TypeModel typeModel) {
         this.typeModel = typeModel;
@@ -71,6 +75,23 @@ public class NeuronDef {
                 Activation.class
         );
 
+/*
+        func(
+                activation,
+                NET_OUTER_GRADIENT,
+                TOLERANCE,
+                getNet(PRE_FEEDBACK),
+                x -> getNeuron().getActivationFunction().outerGrad(x)
+        );
+
+        gradient;
+
+        updateValue;
+
+        negUpdateValue;
+*/
+
+        
         neuron = new NeuronDefinition(
                 "Neuron",
                 Neuron.class
@@ -90,25 +111,20 @@ public class NeuronDef {
                 "Link",
                 Link.class);
 
-        link.setInputValue(identity(link, "inputValue"));
-        link.setInputIsFired(
-                threshold(link, "inputIsFired", 0.0, ABOVE)
-                        .in(0, (o, p) -> o.getInputValue())
-        );
-        link.setNegInputIsFired(
-                invert(link,"!inputIsFired")
-                        .in(0, (o, p) -> o.getInputIsFired())
-        );
+        identity(link, INPUT_VALUE);
+        threshold(link, INPUT_IS_FIRED, 0.0, ABOVE)
+                        .in(0, (o, p) -> o.getField(INPUT_VALUE));
+
+        invert(link,NEG_INPUT_IS_FIRED)
+                        .in(0, (o, p) -> o.getField(INPUT_IS_FIRED));
 
         synapse = new SynapseDefinition(
                 "Synapse",
                 Synapse.class
         );
 
-        synapse.setWeight(
-                sum(synapse, "weight")
-                        .setQueued(TRAINING)
-        );
+        sum(synapse, WEIGHT)
+                        .setQueued(TRAINING);
     }
 
     public TypeModel getTypeModel() {

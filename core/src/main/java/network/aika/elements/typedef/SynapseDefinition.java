@@ -61,8 +61,6 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
 
     private SynapseDefinition instanceSynapseType;
 
-    private FieldDefinition<SynapseDefinition> weight;
-
     public SynapseDefinition(String name, Class<? extends Synapse> clazz) {
         super(name, clazz);
     }
@@ -82,14 +80,6 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
     public NeuronDefinition getOutput(ObjectPath p) {
         addPathEntry(p, output, s -> Set.of(s.getOutput()));
         return output;
-    }
-
-    public FieldDefinition<SynapseDefinition> getWeight() {
-        return weight;
-    }
-
-    public void setWeight(FieldDefinition<SynapseDefinition> weight) {
-        this.weight = weight;
     }
 
     public SynapseDefinition setLink(LinkDefinition link) {

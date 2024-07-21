@@ -21,7 +21,6 @@ import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.neurons.Neuron;
-import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
 import java.util.ArrayList;
@@ -38,8 +37,6 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
 
     private List<StateDefinition> states = new ArrayList<>();
 
-    private FieldDefinition<LinkDefinition> updateValue;
-
     public ActivationDefinition(String name, Class<? extends Activation> clazz) {
         super(name, clazz);
     }
@@ -55,14 +52,6 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
                 List.of(Integer.class, Document.class, Neuron.class),
                 List.of(actId, doc, neuron)
         );
-    }
-
-    public FieldDefinition<LinkDefinition> getUpdateValue() {
-        return updateValue;
-    }
-
-    public void setUpdateValue(FieldDefinition<LinkDefinition> updateValue) {
-        this.updateValue = updateValue;
     }
 
     public NeuronType getType() {
@@ -97,9 +86,5 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
         StateDefinition s = getState(stateType);
         addPathEntry(p, s, act -> Set.of(act.getState(stateType)));
         return s;
-    }
-
-    public FieldDefinition getNet(StateType stateType) {
-        return states.get(stateType.ordinal()).getNet();
     }
 }

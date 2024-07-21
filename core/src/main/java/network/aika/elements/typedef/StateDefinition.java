@@ -31,15 +31,16 @@ import java.util.Set;
  */
 public class StateDefinition extends TypeDefinition<StateDefinition, State> {
 
+    public static final String NET = "net";
+    public static final String FIRED = "fired";
+    public static final String VALUE = "value";
+
+
     private StateType type;
 
     private boolean isNextRound;
 
     private ActivationDefinition activation;
-
-    private FieldDefinition<StateDefinition> net;
-
-    private FieldDefinition<StateDefinition> value;
 
     public StateDefinition(String name, StateType type) {
         super(name, State.class);
@@ -52,23 +53,6 @@ public class StateDefinition extends TypeDefinition<StateDefinition, State> {
                 List.of(act)
         );
     }
-
-    public FieldDefinition<StateDefinition> getNet() {
-        return net;
-    }
-
-    public void setNet(FieldDefinition<StateDefinition> net) {
-        this.net = net;
-    }
-
-    public FieldDefinition<StateDefinition> getValue() {
-        return value;
-    }
-
-    public void setValue(FieldDefinition<StateDefinition> value) {
-        this.value = value;
-    }
-
 
     public StateType getType() {
         return type;

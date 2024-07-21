@@ -56,7 +56,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         this.inputs = inputs;
 
         inputs.setObject(object);
-        object.addFieldDefinition(this);
+        object.setFieldDefinition(this);
     }
 
     public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<O, ?> inputs, O object, String label, double tolerance) {

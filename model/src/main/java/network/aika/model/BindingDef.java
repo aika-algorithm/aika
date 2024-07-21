@@ -26,6 +26,7 @@ import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
 
 
+import static network.aika.elements.typedef.StateDefinition.NET;
 import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.fields.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;
@@ -39,12 +40,17 @@ import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.MaxField.max;
 import static network.aika.fields.ScaleFunction.scale;
+import static network.aika.model.NeuronDef.INPUT_VALUE;
+import static network.aika.model.NeuronDef.WEIGHT;
 
 /**
  *
  * @author Lukas Molzberger
  */
 public class BindingDef implements TypeDefinition {
+
+
+    public static final String NEGATIVE_WEIGHT = "negative weight";
 
 
     private TypeModel typeModel;
@@ -98,11 +104,11 @@ public class BindingDef implements TypeDefinition {
         outerFeedbackState.init("OuterFeedbackState", OUTER_FEEDBACK);
         innerFeedbackState.init("InnerFeedbackState", INNER_FEEDBACK);
 
-        activation.getState(NON_FEEDBACK).getNet()
-                .out((o,p) -> o.getActivation(p).getState(p, OUTER_FEEDBACK).getNet());
+        activation.getState(NON_FEEDBACK).getField(NET)
+                .out((o,p) -> o.getActivation(p).getState(p, OUTER_FEEDBACK).getField(NET));
 
-        activation.getState(OUTER_FEEDBACK).getNet()
-                .out((o,p) -> o.getActivation(p).getState(p, INNER_FEEDBACK).getNet());
+        activation.getState(OUTER_FEEDBACK).getField(NET)
+                .out((o,p) -> o.getActivation(p).getState(p, INNER_FEEDBACK).getField(NET));
 
         activation = new ActivationDefinition(
                 "BindingActivation",
@@ -261,11 +267,11 @@ public class BindingDef implements TypeDefinition {
                 .setInputSlot(superType.getInputSlot())
                 .setOutputSlot(superType.getOutputSlot());
 
-        negativeFeedbackLink.setInputValue(max(negativeFeedbackLink, "inputValue"));
+        max(negativeFeedbackLink, INPUT_VALUE);
 
-        negativeWeight = scale(negativeFeedbackLink, "negative weight", -1)
-                .in(0, (o, p) -> o.getSynapse(p).getWeight())
-                .out((o, p) -> o.getOutput(p).getState(p, negativeFeedbackSynapse.outputState()).getNet(), false);
+        negativeWeight = scale(negativeFeedbackLink, NEGATIVE_WEIGHT, -1)
+                .in(0, (o, p) -> o.getSynapse(p).getField(WEIGHT))
+                .out((o, p) -> o.getOutput(p).getState(p, negativeFeedbackSynapse.outputState()).getField(NET), false);
 
         negativeFeedbackSynapse = new SynapseDefinition(
                 "NegativeFeedbackSynapse",
