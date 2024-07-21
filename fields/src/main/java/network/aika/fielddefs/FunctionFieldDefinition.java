@@ -1,18 +1,20 @@
 package network.aika.fielddefs;
 
+import network.aika.fielddefs.inputs.FixedFieldInputsDefinition;
+import network.aika.fielddefs.link.FixedFieldLinkDefinition;
 import network.aika.fields.Field;
 
 import java.util.function.BiFunction;
 
-public class FunctionFieldDefinition<O extends ObjectDefinition<O>> extends FieldDefinition<O> {
+public class FunctionFieldDefinition<O extends ObjectDefinition<O>> extends FieldDefinition<O, FunctionFieldDefinition<O>, FixedFieldLinkDefinition> {
 
 
     public FunctionFieldDefinition(Class<? extends Field> clazz, O object, String label) {
-        super(clazz, object, label);
+        super(clazz, new FixedFieldInputsDefinition<>(), object, label);
     }
 
     public FunctionFieldDefinition(Class<? extends Field> clazz, O object, String name, double tolerance) {
-        super(clazz, object, name, tolerance);
+        super(clazz, new FixedFieldInputsDefinition<>(), object, name, tolerance);
     }
 
     public FunctionFieldDefinition<O> in(Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {

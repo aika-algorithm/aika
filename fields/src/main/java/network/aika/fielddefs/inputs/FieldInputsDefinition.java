@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fielddefs.link;
+package network.aika.fielddefs.inputs;
 
 import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.link.FieldLinkDefinition;
 import network.aika.fields.Field;
 
 import java.util.ArrayList;

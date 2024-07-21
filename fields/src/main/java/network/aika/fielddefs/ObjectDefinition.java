@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class ObjectDefinition<O extends ObjectDefinition<O>> {
 
-    List<FieldDefinition<O>> fieldDefinitions = new ArrayList<>();
+    List<FieldDefinition<O, ?>> fieldDefinitions = new ArrayList<>();
 
     public void instantiateFields(FieldObject o) {
         fieldDefinitions.stream()
@@ -39,7 +39,7 @@ public class ObjectDefinition<O extends ObjectDefinition<O>> {
                 );
     }
 
-    public void addFieldDefinition(FieldDefinition<O> fieldDef) {
+    public void addFieldDefinition(FieldDefinition<O, ?> fieldDef) {
         fieldDef.setFieldId(fieldDefinitions.size());
         fieldDefinitions.add(fieldDef);
     }
@@ -48,7 +48,7 @@ public class ObjectDefinition<O extends ObjectDefinition<O>> {
         return fieldDefinitions.size();
     }
 
-    public FieldDefinition<O> getFieldDefinition(String name) {
+    public FieldDefinition<O, ?> getFieldDefinition(String name) {
         return fieldDefinitions.stream()
                 .filter(fd -> fd.getLabel() == name)
                 .findFirst()

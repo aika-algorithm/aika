@@ -14,10 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fielddefs;
+package network.aika.fielddefs.inputs;
 
 import network.aika.enums.Direction;
-import network.aika.fielddefs.link.FieldInputsDefinition;
+import network.aika.fielddefs.FieldOutputDefinition;
+import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.ObjectPath;
+import network.aika.fielddefs.ObjectRelationDefinition;
 import network.aika.fielddefs.link.FixedFieldLinkDefinition;
 
 import java.util.List;

@@ -19,6 +19,7 @@ package network.aika.fielddefs.link;
 
 import network.aika.fielddefs.FieldOutputDefinition;
 import network.aika.fielddefs.ObjectPath;
+import network.aika.fielddefs.inputs.FieldInputsDefinition;
 
 /**
  * @author Lukas Molzberger

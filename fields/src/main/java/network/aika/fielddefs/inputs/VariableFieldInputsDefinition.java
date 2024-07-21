@@ -1,10 +1,11 @@
-package network.aika.fielddefs.link;
+package network.aika.fielddefs.inputs;
 
 import network.aika.enums.Direction;
 import network.aika.fielddefs.FieldOutputDefinition;
 import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fielddefs.ObjectPath;
 import network.aika.fielddefs.ObjectRelationDefinition;
+import network.aika.fielddefs.link.VariableFieldLinkDefinition;
 
 import java.util.List;
 import java.util.function.BiFunction;
