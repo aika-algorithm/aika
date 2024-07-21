@@ -17,6 +17,8 @@
 package network.aika.model;
 
 
+import network.aika.Config;
+
 /**
  *
  * @author Lukas Molzberger
@@ -33,12 +35,12 @@ public class TypeModel {
     PatternDef pattern = new PatternDef(this, conjunctive, category);
     InhibitoryDef inhibitory = new InhibitoryDef(this, disjunctive, category);
 
-    public TypeModel() {
+    public TypeModel(Config conf) {
         neuron.init();
         conjunctive.init();
         disjunctive.init();
         binding.init();
-        pattern.init();
+        pattern.init(conf);
         inhibitory.init();
     }
 

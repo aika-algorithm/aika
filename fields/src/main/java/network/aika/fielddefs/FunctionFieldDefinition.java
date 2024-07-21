@@ -25,4 +25,8 @@ public class FunctionFieldDefinition<O extends ObjectDefinition<O>> extends Fiel
     public FunctionFieldDefinition<O> in(Integer arg, BiFunction<O, ObjectPath, FieldOutputDefinition> pathProvider) {
         return in(arg, pathProvider, true);
     }
+
+    public FunctionFieldDefinition<O> in(Integer arg, FieldOutputDefinition localField) {
+        return in(arg, (o, p) -> localField, true);
+    }
 }

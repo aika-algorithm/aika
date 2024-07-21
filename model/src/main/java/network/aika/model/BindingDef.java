@@ -40,8 +40,8 @@ import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.MaxField.max;
 import static network.aika.fields.ScaleFunction.scale;
-import static network.aika.model.NeuronDef.INPUT_VALUE;
-import static network.aika.model.NeuronDef.WEIGHT;
+import static network.aika.fields.SumField.sum;
+import static network.aika.model.NeuronDef.*;
 
 /**
  *
@@ -118,6 +118,9 @@ public class BindingDef implements TypeDefinition {
                 .addStateType(outerFeedbackState.state)
                 .addStateType(innerFeedbackState.state)
                 .addParent(superType.getActivation());
+
+        sum(activation, UPDATE_VALUE);
+
 
         neuron = new NeuronDefinition(
                 "BindingNeuron",

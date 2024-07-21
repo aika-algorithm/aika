@@ -47,7 +47,7 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
         this.clazz = clazz;
     }
 
-    public T instantiate(List<Class<?>> parameterTypes, List<Object> parameters) {
+    protected T instantiate(List<Class<?>> parameterTypes, List<Object> parameters) {
         try {
             T instance = clazz.getConstructor(parameterTypes.toArray(new Class[0]))
                     .newInstance(parameters.toArray(new Object[0]));

@@ -16,6 +16,7 @@
  */
 package network.aika.model;
 
+import network.aika.Config;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
@@ -42,6 +43,9 @@ import static network.aika.enums.Trigger.FIRED_OUTER_FEEDBACK;
 import static network.aika.enums.Trigger.FIRED_NON_FEEDBACK;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
+import static network.aika.fields.Multiplication.mul;
+import static network.aika.fields.ScaleFunction.scale;
+import static network.aika.model.NeuronDef.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -82,13 +86,24 @@ public class PatternDef implements TypeDefinition {
         this.categoryDef = categoryDef;
     }
 
-    public void init() {
+    public void init(Config conf) {
 
         activation = new ActivationDefinition(
                 "PatternActivation",
                 Activation.class
         )
                 .addStateType(typeModel.neuron.getNonFeedbackState());
+
+        scale(
+                activation,
+                UPDATE_VALUE,
+                conf.getLearnRate(false/*neuron.isAbstract()*/)
+        ).in(0,
+                mul(activation, "gradient * f'(net)")
+                        .in(0, activation.getField(GRADIENT))
+                        .in(1, activation.getField(NET_OUTER_GRADIENT))
+        );
+
 
         neuron = new NeuronDefinition(
                 "PatternNeuron",

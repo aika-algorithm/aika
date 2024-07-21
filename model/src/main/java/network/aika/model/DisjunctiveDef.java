@@ -32,6 +32,8 @@ import static network.aika.model.NeuronDef.*;
  */
 public class DisjunctiveDef {
 
+    public static final String WEIGHT_UPDATE = "weightUpdate";
+
     NeuronDef superType;
 
     ActivationDefinition activation;
@@ -77,7 +79,7 @@ public class DisjunctiveDef {
                 .setInput(superType.conjunctiveDef.activation)
                 .setOutput(activation);
 
-        mul(link, "weight update")
+        mul(link, WEIGHT_UPDATE)
                 .in(0, (o, p) -> o.getField(INPUT_IS_FIRED))
                 .in(1, (o, p) -> o.getOutput(p).getField(UPDATE_VALUE))
                 .out((o, p) -> o.getSynapse(p).getField(WEIGHT));

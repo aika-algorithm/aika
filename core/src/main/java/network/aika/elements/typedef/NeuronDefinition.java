@@ -17,13 +17,12 @@
 package network.aika.elements.typedef;
 
 import network.aika.fields.ActivationFunction;
-import network.aika.Model;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.RefType;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  *
@@ -45,6 +44,13 @@ public class NeuronDefinition extends TypeDefinition<NeuronDefinition, Neuron> {
 
     public NeuronDefinition(String name, Class<? extends Neuron> clazz) {
         super(name, clazz);
+    }
+
+    public Neuron instantiate(RefType rt) {
+        return instantiate(
+                List.of(),
+                List.of()
+        );
     }
 
     public ActivationDefinition getActivationType() {
