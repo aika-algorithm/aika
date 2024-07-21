@@ -24,6 +24,8 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.MultiFieldDefinition;
+import network.aika.fielddefs.inputs.FixedFieldInputsDefinition;
 import network.aika.statistic.AverageCoveredSpace;
 import network.aika.statistic.NeuronStatistic;
 
@@ -71,7 +73,7 @@ public class PatternDef implements TypeDefinition {
 
     FieldDefinition<SynapseDefinition> averageCoveredSpace;
 
-    FieldDefinition<NeuronDefinition> neuronStatistic;
+    MultiFieldDefinition<NeuronDefinition> neuronStatistic;
 
 
     public PatternDef(TypeModel typeModel, ConjunctiveDef superType, CategoryDef categoryDef) {
@@ -98,7 +100,7 @@ public class PatternDef implements TypeDefinition {
                 .setBindingSignalSlots(SINGLE_SAME, MULTI_INPUT);
 
 
-        averageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, neuron, "avgCoveredSpace");
+        averageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, new FixedFieldInputsDefinition(), neuron, "avgCoveredSpace");
 
         /*
             private NeuronStatistic statistic = new NeuronStatistic(
@@ -109,7 +111,7 @@ public class PatternDef implements TypeDefinition {
     );
         */
 
-        neuronStatistic = new FieldDefinition(NeuronStatistic.class, neuron, "statistic", TOLERANCE);
+        neuronStatistic = new MultiFieldDefinition(NeuronStatistic.class, new FixedFieldInputsDefinition(), neuron, "statistic", TOLERANCE);
 
         averageCoveredSpace
                 .out(0, (o, p) -> neuronStatistic, true);

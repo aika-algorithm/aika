@@ -37,9 +37,6 @@ public class FieldInputsDefinition<O extends ObjectDefinition<O>, F extends Fiel
         inputs.add(fl);
     }
 
-    public O getObject() {
-        return object;
-    }
 
     public void setObject(O object) {
         this.object = object;
