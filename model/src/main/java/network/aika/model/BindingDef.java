@@ -273,7 +273,7 @@ public class BindingDef implements TypeDefinition {
         max(negativeFeedbackLink, INPUT_VALUE);
 
         negativeWeight = scale(negativeFeedbackLink, NEGATIVE_WEIGHT, -1)
-                .in(0, (o, p) -> o.getSynapse(p).getField(WEIGHT))
+                .in(0, (o, p) -> o.getSynapse(p).getFieldOutput(WEIGHT))
                 .out((o, p) -> o.getOutput(p).getState(p, negativeFeedbackSynapse.outputState()).getField(NET), false);
 
         negativeFeedbackSynapse = new SynapseDefinition(

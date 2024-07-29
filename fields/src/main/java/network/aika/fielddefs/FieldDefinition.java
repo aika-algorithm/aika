@@ -30,7 +30,7 @@ import java.util.function.BiFunction;
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInputDefinition<O>, FieldOutputDefinition {
+public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInputDefinition<O> {
 
     protected int fieldId;
 
@@ -75,7 +75,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
         FieldInputDefinition out = pathProvider.apply(object, objectPath);
 
-        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, this, out.getInputs(), propagateUpdates);
+        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, object.getFieldOutput(getLabel()), out.getInputs(), propagateUpdates);
         out.getInputs().addInput(fl);
         addOutput(fl);
 
@@ -190,10 +190,4 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
 
         return this;
     }
-
-    @Override
-    public void addOutput(FieldLinkDefinition fl) {
-        outputs.add(fl);
-    }
-
 }

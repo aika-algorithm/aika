@@ -18,10 +18,17 @@ package network.aika.fielddefs;
 
 import network.aika.fielddefs.link.FieldLinkDefinition;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Lukas Molzberger
  */
-public interface FieldOutputDefinition {
+public class FieldOutputDefinition {
 
-    void addOutput(FieldLinkDefinition fl);
+    protected List<FieldLinkDefinition> outputs = new ArrayList<>();
+
+    public void addOutput(FieldLinkDefinition fl) {
+        outputs.add(fl);
+    }
 }

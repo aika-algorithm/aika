@@ -113,10 +113,10 @@ public class NeuronDef {
 
         identity(link, INPUT_VALUE);
         threshold(link, INPUT_IS_FIRED, 0.0, ABOVE)
-                        .in(0, (o, p) -> o.getField(INPUT_VALUE));
+                        .in(0, (o, p) -> o.getFieldOutput(INPUT_VALUE));
 
         invert(link,NEG_INPUT_IS_FIRED)
-                        .in(0, (o, p) -> o.getField(INPUT_IS_FIRED));
+                        .in(0, (o, p) -> o.getFieldOutput(INPUT_IS_FIRED));
 
         synapse = new SynapseDefinition(
                 "Synapse",

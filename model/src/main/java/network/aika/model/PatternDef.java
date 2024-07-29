@@ -100,8 +100,8 @@ public class PatternDef implements TypeDefinition {
                 conf.getLearnRate(false/*neuron.isAbstract()*/)
         ).in(0,
                 mul(activation, "gradient * f'(net)")
-                        .in(0, activation.getField(GRADIENT))
-                        .in(1, activation.getField(NET_OUTER_GRADIENT))
+                        .in(0, activation.getFieldOutput(GRADIENT))
+                        .in(1, activation.getFieldOutput(NET_OUTER_GRADIENT))
         );
 
 

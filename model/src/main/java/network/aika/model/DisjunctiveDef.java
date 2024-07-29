@@ -80,8 +80,8 @@ public class DisjunctiveDef {
                 .setOutput(activation);
 
         mul(link, WEIGHT_UPDATE)
-                .in(0, (o, p) -> o.getField(INPUT_IS_FIRED))
-                .in(1, (o, p) -> o.getOutput(p).getField(UPDATE_VALUE))
+                .in(0, (o, p) -> o.getFieldOutput(INPUT_IS_FIRED))
+                .in(1, (o, p) -> o.getOutput(p).getFieldOutput(UPDATE_VALUE))
                 .out((o, p) -> o.getSynapse(p).getField(WEIGHT));
 
         synapse = new SynapseDefinition(
