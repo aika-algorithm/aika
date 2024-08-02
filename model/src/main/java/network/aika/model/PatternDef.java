@@ -76,9 +76,10 @@ public class PatternDef implements TypeDefinition {
     private SynapseDefinition categorySynapse;
 
 
-    FieldDefinition<SynapseDefinition> averageCoveredSpace;
-
+    FieldDefinition<NeuronDefinition> neuronAverageCoveredSpace;
     MultiFieldDefinition<NeuronDefinition> neuronStatistic;
+
+    FieldDefinition<SynapseDefinition> synapseAverageCoveredSpace;
 
 
     public PatternDef(TypeModel typeModel, ConjunctiveDef superType, CategoryDef categoryDef) {
@@ -116,7 +117,7 @@ public class PatternDef implements TypeDefinition {
                 .setBindingSignalSlots(SINGLE_SAME, MULTI_INPUT);
 
 
-        averageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, new FixedFieldInputsDefinition(), neuron, "avgCoveredSpace");
+        neuronAverageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, new FixedFieldInputsDefinition(), neuron, "avgCoveredSpace");
 
         /*
             private NeuronStatistic statistic = new NeuronStatistic(
@@ -129,7 +130,7 @@ public class PatternDef implements TypeDefinition {
 
         neuronStatistic = new MultiFieldDefinition(NeuronStatistic.class, new FixedFieldInputsDefinition(), neuron, "statistic", TOLERANCE);
 
-        averageCoveredSpace
+        neuronAverageCoveredSpace
                 .out((o, p) -> neuronStatistic, true);
 
         categoryActivation = new ActivationDefinition(

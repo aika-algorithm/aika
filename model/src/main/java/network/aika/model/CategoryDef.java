@@ -40,8 +40,7 @@ public class CategoryDef {
                 "BindingCategoryActivation",
                 Activation.class
         )
-                .addParent(superType.getActivation())
-                .addStateType(activation.getState(NON_FEEDBACK));
+                .addParent(superType.getActivation());
 
         neuron = new NeuronDefinition(
                 "BindingCategoryNeuron",
