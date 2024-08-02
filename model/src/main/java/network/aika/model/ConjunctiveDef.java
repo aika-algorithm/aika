@@ -55,7 +55,8 @@ public class ConjunctiveDef {
         neuron = new NeuronDefinition(
                 "ConjunctiveNeuron",
                 Neuron.class
-        );
+        )
+                .setActivation(activation);
 
         inputSlot = new SynapseSlotDefinition(
                 "ConjunctiveSynapseInputSlot",
@@ -74,7 +75,8 @@ public class ConjunctiveDef {
         synapse = new SynapseDefinition(
                 "ConjunctiveSynapse",
                 ConjunctiveSynapse.class
-        );
+        )
+                .setLink(link);
     }
 
 

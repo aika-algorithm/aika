@@ -15,7 +15,7 @@ public class MultiFieldDefinition<O extends ObjectDefinition<O>> implements Fiel
 
     protected String label;
 
-    private FieldDefinition<O>[] outputFieldDefinitions;
+    private FieldOutputDefinition[] outputFieldDefinitions;
 
     public MultiFieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<O, ?> inputs, O object, String label, double tolerance) {
         this.clazz = clazz;
@@ -29,6 +29,10 @@ public class MultiFieldDefinition<O extends ObjectDefinition<O>> implements Fiel
     @Override
     public FieldInputsDefinition getInputs() {
         return inputs;
+    }
+
+    public FieldOutputDefinition[] getOutputFieldDefinitions() {
+        return outputFieldDefinitions;
     }
 
     @Override

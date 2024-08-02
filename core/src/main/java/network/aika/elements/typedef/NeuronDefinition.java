@@ -64,12 +64,16 @@ public class NeuronDefinition extends TypeDefinition<NeuronDefinition, Neuron> {
     }
 
     public NeuronDefinition setNeuronType(NeuronType neuronType) {
+        assert neuronType != null;
+
         this.neuronType = neuronType;
 
         return this;
     }
 
     public NeuronDefinition setActivationFunction(ActivationFunction activationFunction) {
+        assert activationFunction != null;
+
         this.activationFunction = activationFunction;
 
         return this;

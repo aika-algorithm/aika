@@ -59,6 +59,8 @@ public class StateDefinition extends TypeDefinition<StateDefinition, State> {
     }
 
     public StateDefinition setActivation(ActivationDefinition activation) {
+        assert activation != null;
+
         this.activation = activation;
         return this;
     }

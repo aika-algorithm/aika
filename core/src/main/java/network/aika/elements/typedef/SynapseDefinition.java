@@ -83,7 +83,10 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
     }
 
     public SynapseDefinition setLink(LinkDefinition link) {
+        assert link != null;
+
         this.link = link;
+        link.setSynapse(this);
 
         return this;
     }
@@ -93,6 +96,8 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
     }
 
     public SynapseDefinition setInput(NeuronDefinition input) {
+        assert input != null;
+
         this.input = input;
 
         return this;
@@ -103,6 +108,8 @@ public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse
     }
 
     public SynapseDefinition setOutput(NeuronDefinition outputDef) {
+        assert outputDef != null;
+
         this.output = outputDef;
 
         return this;

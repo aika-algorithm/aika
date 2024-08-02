@@ -70,24 +70,22 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         return inputs;
     }
 
-    public FieldDefinition<O> out(Integer arg, BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
+    public FieldDefinition<O> out(BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.OUTPUT);
         objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
+
+        FieldOutputDefinition in = object.getFieldOutput(getLabel());
         FieldInputDefinition out = pathProvider.apply(object, objectPath);
 
-        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, object.getFieldOutput(getLabel()), out.getInputs(), propagateUpdates);
+        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, in, out.getInputs(), propagateUpdates);
         out.getInputs().addInput(fl);
-        addOutput(fl);
+        in.addOutput(fl);
 
         return this;
     }
 
-    public FieldDefinition<O> out(BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
-        return out(null, pathProvider, propagateUpdates);
-    }
-
     public FieldDefinition<O> out(BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider) {
-        return out(null, pathProvider, true);
+        return out(pathProvider, true);
     }
 
     public Field instantiate(FieldObject fo) {
@@ -109,8 +107,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         inputs.instantiateLinks(f);
 
         outputs.forEach(fl ->
-                fl.getObjectPath().resolve(f.getObject()
-                )
+                fl.getObjectPath().resolve(f.getObject())
         );
     }
 
@@ -153,6 +150,10 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         this.label = label;
 
         return this;
+    }
+
+    public FieldOutputDefinition getFieldOutput() {
+        return getObject().getFieldOutput(getLabel());
     }
 
     public Double getTolerance() {

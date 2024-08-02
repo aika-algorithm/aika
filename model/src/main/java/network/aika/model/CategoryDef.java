@@ -47,7 +47,8 @@ public class CategoryDef {
         neuron = new NeuronDefinition(
                 "BindingCategoryNeuron",
                 Neuron.class
-        );
+        )
+                .setActivation(activation);
 
         inputField(
                 neuron,
@@ -62,7 +63,8 @@ public class CategoryDef {
         inputSynapse = new SynapseDefinition(
                 "CategoryInputSynapse",
                 Synapse.class
-        );
+        )
+                .setLink(inputLink);
 
         link = new LinkDefinition(
                 "CategoryLink",
@@ -71,7 +73,8 @@ public class CategoryDef {
         synapse = new SynapseDefinition(
                 "CategorySynapse",
                 Synapse.class
-        );
+        )
+                .setLink(link);
     }
 
     public TypeModel getTypeModel() {

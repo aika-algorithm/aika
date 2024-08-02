@@ -58,7 +58,9 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
         return synapse;
     }
 
-    public LinkDefinition setSynapse(SynapseDefinition synapse) {
+    LinkDefinition setSynapse(SynapseDefinition synapse) {
+        assert synapse != null;
+
         this.synapse = synapse;
 
         return this;
@@ -74,6 +76,8 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public LinkDefinition setInput(ActivationDefinition input) {
+        assert input != null;
+
         this.input = input;
 
         return this;
@@ -89,6 +93,8 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public LinkDefinition setOutput(ActivationDefinition output) {
+        assert output != null;
+
         this.output = output;
 
         return this;
@@ -105,6 +111,8 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public LinkDefinition setInputSlot(SynapseSlotDefinition inputSlot) {
+        assert inputSlot != null;
+
         this.inputSlot = inputSlot;
 
         return this;
@@ -120,6 +128,8 @@ public class LinkDefinition extends TypeDefinition<LinkDefinition, Link> {
     }
 
     public LinkDefinition setOutputSlot(SynapseSlotDefinition outputSlot) {
+        assert outputSlot != null;
+
         this.outputSlot = outputSlot;
 
         return this;

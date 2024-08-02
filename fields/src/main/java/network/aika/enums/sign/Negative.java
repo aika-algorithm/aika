@@ -33,7 +33,7 @@ public class Negative implements Sign {
     @Override
     public <O extends ObjectDefinition<O>> FieldDefinition<O> getValue(O ref, FieldDefinition<O> v) {
         return InvertFunction.invert(ref, "neg")
-                .in(0, (o, p) -> v);
+                .in(0, (o, p) -> v.getFieldOutput());
     }
 
     @Override

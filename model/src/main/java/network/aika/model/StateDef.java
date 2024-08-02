@@ -50,7 +50,7 @@ public class StateDef {
                 .out((o, p) -> firedListener(o, FIRED, TOLERANCE));
 
         actFunc(state, VALUE, TOLERANCE)
-                .in(0, (o, p) -> o.getField(NET))
+                .in(0, (o, p) -> o.getFieldOutput(NET))
                 .setQueued(INFERENCE);
     }
 }

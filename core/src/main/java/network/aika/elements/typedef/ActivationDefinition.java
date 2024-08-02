@@ -41,7 +41,9 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
         super(name, clazz);
     }
 
-    public ActivationDefinition setNeuron(NeuronDefinition neuron) {
+    ActivationDefinition setNeuron(NeuronDefinition neuron) {
+        assert neuron != null;
+
         this.neuron = neuron;
 
         return this;
@@ -63,6 +65,8 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
     }
 
     public ActivationDefinition addStateType(StateDefinition state) {
+        assert state != null;
+
         states.add(state);
         state.setActivation(this);
 

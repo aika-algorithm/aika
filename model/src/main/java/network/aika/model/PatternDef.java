@@ -25,6 +25,7 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FunctionFieldDefinition;
 import network.aika.fielddefs.MultiFieldDefinition;
 import network.aika.fielddefs.inputs.FixedFieldInputsDefinition;
 import network.aika.statistic.AverageCoveredSpace;
@@ -94,15 +95,15 @@ public class PatternDef implements TypeDefinition {
         )
                 .addStateType(typeModel.neuron.getNonFeedbackState());
 
+        FunctionFieldDefinition<ActivationDefinition> g = mul(activation, "gradient * f'(net)")
+                .in(0, activation.getFieldOutput(GRADIENT))
+                .in(1, activation.getFieldOutput(NET_OUTER_GRADIENT));
+
         scale(
                 activation,
                 UPDATE_VALUE,
                 conf.getLearnRate(false/*neuron.isAbstract()*/)
-        ).in(0,
-                mul(activation, "gradient * f'(net)")
-                        .in(0, activation.getFieldOutput(GRADIENT))
-                        .in(1, activation.getFieldOutput(NET_OUTER_GRADIENT))
-        );
+        ).in(0, g.getFieldOutput());
 
 
         neuron = new NeuronDefinition(
@@ -129,7 +130,7 @@ public class PatternDef implements TypeDefinition {
         neuronStatistic = new MultiFieldDefinition(NeuronStatistic.class, new FixedFieldInputsDefinition(), neuron, "statistic", TOLERANCE);
 
         averageCoveredSpace
-                .out(0, (o, p) -> neuronStatistic, true);
+                .out((o, p) -> neuronStatistic, true);
 
         categoryActivation = new ActivationDefinition(
                 "PatternCategoryActivation",
