@@ -16,6 +16,7 @@
  */
 package network.aika.elements.typedef;
 
+import network.aika.Model;
 import network.aika.fields.ActivationFunction;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
@@ -46,10 +47,10 @@ public class NeuronDefinition extends TypeDefinition<NeuronDefinition, Neuron> {
         super(name, clazz);
     }
 
-    public Neuron instantiate(RefType rt) {
+    public Neuron instantiate(Model m, RefType rt) {
         return instantiate(
-                List.of(),
-                List.of()
+                List.of(Model.class, RefType.class),
+                List.of(m, rt)
         );
     }
 

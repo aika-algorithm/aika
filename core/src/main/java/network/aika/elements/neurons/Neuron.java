@@ -57,11 +57,9 @@ import static network.aika.queue.Timestamp.MIN;
  *
  * @author Lukas Molzberger
  */
-public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements Element, ModelProvider, QueueProvider, Writable {
+public class Neuron extends Type<NeuronDefinition, Neuron> implements Element, ModelProvider, QueueProvider, Writable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
-
-    protected static final String CATEGORY_LABEL = " Category";
 
     private int synapseIdCounter = 0;
 
@@ -262,8 +260,6 @@ public abstract class Neuron extends Type<NeuronDefinition, Neuron> implements E
         return typeDef.getActivationType()
                 .instantiate(doc.createActivationId(), doc, this);
     }
-
-    public abstract void addInactiveLinks(Activation act);
 
     public final ActivationFunction getActivationFunction() {
         return typeDef.getActivationFunction();
