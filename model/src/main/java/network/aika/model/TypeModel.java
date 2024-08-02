@@ -36,12 +36,21 @@ public class TypeModel {
     InhibitoryDef inhibitory = new InhibitoryDef(this, disjunctive, category);
 
     public TypeModel(Config conf) {
-        neuron.init();
-        conjunctive.init();
-        disjunctive.init();
-        binding.init();
-        pattern.init(conf);
-        inhibitory.init();
+        neuron.initNodes();
+        conjunctive.initNodes();
+        disjunctive.initNodes();
+        category.initNodes();
+        binding.initNodes();
+        pattern.initNodes(conf);
+        inhibitory.initNodes();
+
+        neuron.initRelations();
+        conjunctive.initRelations();
+        disjunctive.initRelations();
+        category.initRelations();
+        binding.initRelations();
+        pattern.initRelations(conf);
+        inhibitory.initRelations();
     }
 
     public NeuronDef getNeuron() {

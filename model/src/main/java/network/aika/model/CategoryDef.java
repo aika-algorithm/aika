@@ -8,8 +8,6 @@ import network.aika.elements.typedef.ActivationDefinition;
 import network.aika.elements.typedef.LinkDefinition;
 import network.aika.elements.typedef.NeuronDefinition;
 import network.aika.elements.typedef.SynapseDefinition;
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fields.Field;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.fields.InputField.inputField;
@@ -37,7 +35,7 @@ public class CategoryDef {
     }
 
 
-    public void init() {
+    public void initNodes() {
         activation = new ActivationDefinition(
                 "BindingCategoryActivation",
                 Activation.class
@@ -56,7 +54,10 @@ public class CategoryDef {
                 neuron,
                 "initialCategorySynapseWeight"
         );
+    }
 
+
+    public void initRelations() {
         inputLink = new LinkDefinition(
                 "CategoryInputLink",
                 Link.class
@@ -82,6 +83,7 @@ public class CategoryDef {
                 .addParent(superType.synapse)
                 .setLink(link);
     }
+
 
     public TypeModel getTypeModel() {
         return typeModel;

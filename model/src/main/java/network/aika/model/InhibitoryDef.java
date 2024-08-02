@@ -66,7 +66,7 @@ public class InhibitoryDef implements TypeDefinition {
         this.categoryDef = categoryDef;
     }
 
-    public void init() {
+    public void initNodes() {
 
         activation = new ActivationDefinition(
                 "InhibitoryActivation",
@@ -103,8 +103,9 @@ public class InhibitoryDef implements TypeDefinition {
                 .setBindingSignalSlots(SINGLE_INPUT)
                 .setTrainingAllowed(false)
                 .addParent(categoryDef.getNeuron());
+    }
 
-
+    public void initRelations() {
         link = new LinkDefinition(
                 "InhibitoryLink",
                 DisjunctiveLink.class

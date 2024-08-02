@@ -87,7 +87,7 @@ public class PatternDef implements TypeDefinition {
         this.categoryDef = categoryDef;
     }
 
-    public void init(Config conf) {
+    public void initNodes(Config conf) {
 
         activation = new ActivationDefinition(
                 "PatternActivation",
@@ -149,9 +149,10 @@ public class PatternDef implements TypeDefinition {
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_SAME)
                 .setTrainingAllowed(false);
+    }
 
 
-
+    public void initRelations(Config conf) {
         link = new LinkDefinition(
                 "PatternLink",
                 ConjunctiveLink.class
@@ -237,6 +238,8 @@ public class PatternDef implements TypeDefinition {
 
         categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
     }
+
+
 
 
     public ActivationDefinition getActivation() {

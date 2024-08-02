@@ -50,7 +50,7 @@ public class DisjunctiveDef {
         this.superType.disjunctiveDef = this;
     }
 
-    public void init() {
+    public void initNodes() {
         activation = new ActivationDefinition(
                 "DisjunctiveActivation",
                 Activation.class
@@ -63,7 +63,9 @@ public class DisjunctiveDef {
         )
                 .addParent(superType.getNeuron())
                 .setActivation(activation);
+    }
 
+    public void initRelations() {
         inputSlot = new SynapseSlotDefinition(
                 "DisjunctiveSynapseInputSlot",
                 DisjunctiveSynapseSlot.class
@@ -93,6 +95,7 @@ public class DisjunctiveDef {
                 .in(1, (o, p) -> o.getOutput(p).getFieldOutput(UPDATE_VALUE))
                 .out((o, p) -> o.getSynapse(p).getField(WEIGHT));
     }
+
 
     public ActivationDefinition getActivation() {
         return activation;

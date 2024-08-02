@@ -100,7 +100,7 @@ public class BindingDef implements TypeDefinition {
         this.categoryDef = categoryDef;
     }
 
-    public void init() {
+    public void initNodes() {
         outerFeedbackState.init("OuterFeedbackState", OUTER_FEEDBACK);
         innerFeedbackState.init("InnerFeedbackState", INNER_FEEDBACK);
 
@@ -166,8 +166,9 @@ public class BindingDef implements TypeDefinition {
                 .setActivationFunction(RECTIFIED_HYPERBOLIC_TANGENT)
                 .setBindingSignalSlots();
 
+    }
 
-
+    public void initRelations() {
         inputObjectLink = new LinkDefinition(
                 "InputObjectLink",
                 ConjunctiveLink.class
@@ -369,7 +370,7 @@ public class BindingDef implements TypeDefinition {
 
         TemplateRelationDefinition templateRelationDef = new TemplateRelationDefinition()
                 .setAbstractSynapseType(categoryInputSynapse)
-                        .setInstanceSynapseType(categorySynapse);
+                .setInstanceSynapseType(categorySynapse);
 
         neuron.setTemplateRelation(templateRelationDef);
 

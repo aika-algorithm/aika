@@ -46,7 +46,7 @@ public class ConjunctiveDef {
         this.superType.conjunctiveDef = this;
     }
 
-    public void init() {
+    public void initNodes() {
         activation = new ActivationDefinition(
                 "ConjunctiveActivation",
                 Activation.class
@@ -59,7 +59,10 @@ public class ConjunctiveDef {
         )
                 .addParent(superType.getNeuron())
                 .setActivation(activation);
+    }
 
+
+    public void initRelations() {
         inputSlot = new SynapseSlotDefinition(
                 "ConjunctiveSynapseInputSlot",
                 ConjunctiveSynapseSlot.class

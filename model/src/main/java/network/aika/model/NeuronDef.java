@@ -66,7 +66,7 @@ public class NeuronDef {
         this.typeModel = typeModel;
     }
 
-    public void init() {
+    public void initNodes() {
         nonFeedbackState.init("NonFeedbackState", NON_FEEDBACK);
 
         activation = new ActivationDefinition(
@@ -107,16 +107,19 @@ public class NeuronDef {
     }
 */
 
+    }
+
+    public void initRelations() {
         link = new LinkDefinition(
                 "Link",
                 Link.class);
 
         identity(link, INPUT_VALUE);
         threshold(link, INPUT_IS_FIRED, 0.0, ABOVE)
-                        .in(0, (o, p) -> o.getFieldOutput(INPUT_VALUE));
+                .in(0, (o, p) -> o.getFieldOutput(INPUT_VALUE));
 
         invert(link,NEG_INPUT_IS_FIRED)
-                        .in(0, (o, p) -> o.getFieldOutput(INPUT_IS_FIRED));
+                .in(0, (o, p) -> o.getFieldOutput(INPUT_IS_FIRED));
 
         synapse = new SynapseDefinition(
                 "Synapse",
@@ -124,8 +127,9 @@ public class NeuronDef {
         );
 
         sum(synapse, WEIGHT)
-                        .setQueued(TRAINING);
+                .setQueued(TRAINING);
     }
+
 
     public TypeModel getTypeModel() {
         return typeModel;
