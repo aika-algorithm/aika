@@ -29,7 +29,6 @@ import static network.aika.fields.SumField.sum;
 import static network.aika.fields.ThresholdOperator.Type.ABOVE;
 import static network.aika.fields.ThresholdOperator.threshold;
 import static network.aika.queue.Phase.TRAINING;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
@@ -73,7 +72,8 @@ public class NeuronDef {
         activation = new ActivationDefinition(
                 "Activation",
                 Activation.class
-        );
+        )
+                .addStateType(nonFeedbackState.state);
 
 /*
         func(

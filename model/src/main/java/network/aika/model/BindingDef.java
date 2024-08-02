@@ -104,22 +104,21 @@ public class BindingDef implements TypeDefinition {
         outerFeedbackState.init("OuterFeedbackState", OUTER_FEEDBACK);
         innerFeedbackState.init("InnerFeedbackState", INNER_FEEDBACK);
 
-        activation.getState(NON_FEEDBACK).getField(NET)
-                .out((o,p) -> o.getActivation(p).getState(p, OUTER_FEEDBACK).getField(NET));
-
-        activation.getState(OUTER_FEEDBACK).getField(NET)
-                .out((o,p) -> o.getActivation(p).getState(p, INNER_FEEDBACK).getField(NET));
-
         activation = new ActivationDefinition(
                 "BindingActivation",
                 Activation.class
         )
                 .addParent(superType.getActivation())
-                .addStateType(activation.getState(NON_FEEDBACK))
                 .addStateType(outerFeedbackState.state)
                 .addStateType(innerFeedbackState.state);
 
         sum(activation, UPDATE_VALUE);
+
+        activation.getState(NON_FEEDBACK).getField(NET)
+                .out((o,p) -> o.getActivation(p).getState(p, OUTER_FEEDBACK).getField(NET));
+
+        outerFeedbackState.state.getField(NET)
+                .out((o,p) -> o.getActivation(p).getState(p, INNER_FEEDBACK).getField(NET));
 
 
         neuron = new NeuronDefinition(

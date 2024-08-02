@@ -25,6 +25,7 @@ import network.aika.fielddefs.ObjectPath;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -83,7 +84,15 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
     }
 
     public StateDefinition getState(StateType stateType) {
-        return states.get(stateType.ordinal());
+        StateDefinition state = states.get(stateType.ordinal());
+        if(state != null)
+            return state;
+
+        return parents.stream()
+                .map(p -> p.getState(stateType))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 
     public StateDefinition getState(ObjectPath p, StateType stateType) {

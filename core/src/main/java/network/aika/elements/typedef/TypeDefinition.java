@@ -40,7 +40,7 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
 
     protected Class<? extends T> clazz;
 
-    protected List<TypeDefinition> parents = new ArrayList<>();
+    protected List<D> parents = new ArrayList<>();
 
     public TypeDefinition(String name, Class<? extends T> clazz) {
         this.name = name;
@@ -94,13 +94,13 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
         return clazz;
     }
 
-    public D addParent(TypeDefinition p) {
+    public D addParent(D p) {
         parents.add(p);
 
         return (D) this;
     }
 
-    public List<TypeDefinition> getParents() {
+    public List<D> getParents() {
         return parents;
     }
 }
