@@ -277,12 +277,6 @@ public class BindingDef implements TypeDefinition {
                 .setInputSlot(superType.getInputSlot())
                 .setOutputSlot(superType.getOutputSlot());
 
-        max(negativeFeedbackLink, INPUT_VALUE);
-
-        negativeWeight = scale(negativeFeedbackLink, NEGATIVE_WEIGHT, -1)
-                .in(0, (o, p) -> o.getSynapse(p).getFieldOutput(WEIGHT))
-                .out((o, p) -> o.getOutput(p).getState(p, negativeFeedbackSynapse.outputState()).getField(NET), false);
-
         negativeFeedbackSynapse = new SynapseDefinition(
                 "NegativeFeedbackSynapse",
                 ConjunctiveSynapse.class
@@ -297,6 +291,13 @@ public class BindingDef implements TypeDefinition {
                 .setPropagateRange(false)
                 .setStoredAt(OUTPUT)
                 .setRegisterInputSlot(ON_INIT);
+
+        max(negativeFeedbackLink, INPUT_VALUE);
+
+        negativeWeight = scale(negativeFeedbackLink, NEGATIVE_WEIGHT, -1)
+                .in(0, (o, p) -> o.getSynapse(p).getFieldOutput(WEIGHT))
+                .out((o, p) -> o.getOutput(p).getState(p, negativeFeedbackSynapse.outputState()).getField(NET), false);
+
 
         relationInputLink = new LinkDefinition(
                 "RelationInputLink",
