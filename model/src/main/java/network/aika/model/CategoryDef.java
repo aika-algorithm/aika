@@ -42,12 +42,14 @@ public class CategoryDef {
                 "BindingCategoryActivation",
                 Activation.class
         )
+                .addParent(superType.getActivation())
                 .addStateType(activation.getState(NON_FEEDBACK));
 
         neuron = new NeuronDefinition(
                 "BindingCategoryNeuron",
                 Neuron.class
         )
+                .addParent(superType.getNeuron())
                 .setActivation(activation);
 
         inputField(
@@ -58,22 +60,26 @@ public class CategoryDef {
         inputLink = new LinkDefinition(
                 "CategoryInputLink",
                 Link.class
-        );
+        )
+                .addParent(superType.getLink());
 
         inputSynapse = new SynapseDefinition(
                 "CategoryInputSynapse",
                 Synapse.class
         )
+                .addParent(superType.getSynapse())
                 .setLink(inputLink);
 
         link = new LinkDefinition(
                 "CategoryLink",
-                Link.class);
+                Link.class)
+                .addParent(superType.link);
 
         synapse = new SynapseDefinition(
                 "CategorySynapse",
                 Synapse.class
         )
+                .addParent(superType.synapse)
                 .setLink(link);
     }
 

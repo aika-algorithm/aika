@@ -136,19 +136,19 @@ public class PatternDef implements TypeDefinition {
                 "PatternCategoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.neuron.getNonFeedbackState())
-                .addParent(categoryDef.getActivation());
+                .addParent(categoryDef.getActivation())
+                .addStateType(typeModel.neuron.getNonFeedbackState());
 
         categoryNeuron = new NeuronDefinition(
                 "PatternCategoryNeuron",
                 Neuron.class
         )
+                .addParent(categoryDef.getNeuron())
                 .setNeuronType(CATEGORY)
                 .setActivation(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_SAME)
-                .setTrainingAllowed(false)
-                .addParent(categoryDef.getNeuron());
+                .setTrainingAllowed(false);
 
 
 
@@ -165,6 +165,7 @@ public class PatternDef implements TypeDefinition {
                 "PatternSynapse",
                 ConjunctiveSynapse.class
         )
+                .addParent(superType.getSynapse())
                 .setLink(link)
                 .setInput(typeModel.binding.getNeuron())
                 .setOutput(neuron)
@@ -177,6 +178,7 @@ public class PatternDef implements TypeDefinition {
                 "PatternCategoryLink",
                 Link.class
         )
+                .addParent(categoryDef.getLink())
                 .setInput(activation)
                 .setOutput(categoryActivation)
                 .setInputSlot(typeModel.disjunctive.getInputSlot())
@@ -186,6 +188,7 @@ public class PatternDef implements TypeDefinition {
                 "PatternCategorySynapse",
                 Synapse.class
         )
+                .addParent(categoryDef.getSynapse())
                 .setLink(categoryLink)
                 .setInput(neuron)
                 .setOutput(categoryNeuron)
@@ -199,6 +202,7 @@ public class PatternDef implements TypeDefinition {
                 "PatternCategoryInputLink",
                 ConjunctiveLink.class
         )
+                .addParent(superType.getLink())
                 .setInput(categoryActivation)
                 .setOutput(activation)
                 .setInputSlot(superType.getInputSlot())
@@ -208,6 +212,7 @@ public class PatternDef implements TypeDefinition {
                 "PatternCategoryInputSynapse",
                 ConjunctiveSynapse.class
         )
+                .addParent(superType.getSynapse())
                 .setLink(categoryInputLink)
                 .setInput(categoryNeuron)
                 .setOutput(neuron)

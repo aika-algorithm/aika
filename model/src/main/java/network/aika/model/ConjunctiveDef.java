@@ -50,12 +50,14 @@ public class ConjunctiveDef {
         activation = new ActivationDefinition(
                 "ConjunctiveActivation",
                 Activation.class
-        );
+        )
+                .addParent(superType.getActivation());
 
         neuron = new NeuronDefinition(
                 "ConjunctiveNeuron",
                 Neuron.class
         )
+                .addParent(superType.getNeuron())
                 .setActivation(activation);
 
         inputSlot = new SynapseSlotDefinition(
@@ -70,12 +72,14 @@ public class ConjunctiveDef {
 
         link = new LinkDefinition(
                 "ConjunctiveLink",
-                ConjunctiveLink.class);
+                ConjunctiveLink.class)
+                .addParent(superType.getLink());
 
         synapse = new SynapseDefinition(
                 "ConjunctiveSynapse",
                 ConjunctiveSynapse.class
         )
+                .addParent(superType.getSynapse())
                 .setLink(link);
     }
 

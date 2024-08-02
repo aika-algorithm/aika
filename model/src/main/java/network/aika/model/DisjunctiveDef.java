@@ -54,12 +54,14 @@ public class DisjunctiveDef {
         activation = new ActivationDefinition(
                 "DisjunctiveActivation",
                 Activation.class
-        );
+        )
+                .addParent(superType.getActivation());
 
         neuron = new NeuronDefinition(
                 "DisjunctiveNeuron",
                 Neuron.class
         )
+                .addParent(superType.getNeuron())
                 .setActivation(activation);
 
         inputSlot = new SynapseSlotDefinition(
@@ -75,7 +77,7 @@ public class DisjunctiveDef {
         link = new LinkDefinition(
                 "DisjunctiveLink",
                 DisjunctiveLink.class)
-                .addParent(superType.link)
+                .addParent(superType.getLink())
                 .setInput(superType.conjunctiveDef.activation)
                 .setOutput(activation);
 
@@ -83,6 +85,7 @@ public class DisjunctiveDef {
                 "DisjunctiveSynapse",
                 DisjunctiveSynapse.class
         )
+                .addParent(superType.getSynapse())
                 .setLink(link);
 
         mul(link, WEIGHT_UPDATE)
