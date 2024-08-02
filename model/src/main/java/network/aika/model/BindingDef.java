@@ -115,10 +115,10 @@ public class BindingDef implements TypeDefinition {
         sum(activation, UPDATE_VALUE);
 
         activation.getState(NON_FEEDBACK).getField(NET)
-                .out((o,p) -> o.getActivation(p).getState(p, OUTER_FEEDBACK).getField(NET));
+                .out((o,p) -> outerFeedbackState.state.getField(NET));
 
         outerFeedbackState.state.getField(NET)
-                .out((o,p) -> o.getActivation(p).getState(p, INNER_FEEDBACK).getField(NET));
+                .out((o,p) -> innerFeedbackState.state.getField(NET));
 
 
         neuron = new NeuronDefinition(
