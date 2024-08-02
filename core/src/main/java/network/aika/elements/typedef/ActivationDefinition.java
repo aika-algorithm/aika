@@ -23,10 +23,7 @@ import network.aika.elements.activations.StateType;
 import network.aika.elements.neurons.Neuron;
 import network.aika.fielddefs.ObjectPath;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
@@ -36,7 +33,7 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
 
     private NeuronDefinition neuron;
 
-    private List<StateDefinition> states = new ArrayList<>();
+    private Map<StateType, StateDefinition> states = new TreeMap<>();
 
     public ActivationDefinition(String name, Class<? extends Activation> clazz) {
         super(name, clazz);
@@ -62,13 +59,13 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
     }
 
     public StateDefinition[] getStates() {
-        return states.toArray(new StateDefinition[0]);
+        return states.values().toArray(new StateDefinition[0]);
     }
 
     public ActivationDefinition addStateType(StateDefinition state) {
         assert state != null;
 
-        states.add(state);
+        states.put(state.getType(), state);
         state.setActivation(this);
 
         return this;
@@ -84,7 +81,7 @@ public class ActivationDefinition extends TypeDefinition<ActivationDefinition, A
     }
 
     public StateDefinition getState(StateType stateType) {
-        StateDefinition state = states.get(stateType.ordinal());
+        StateDefinition state = states.get(stateType);
         if(state != null)
             return state;
 
