@@ -16,6 +16,7 @@
  */
 package network.aika.elements.typedef;
 
+import network.aika.fields.Field;
 import network.aika.fields.FieldObjectImpl;
 
 /**
@@ -24,4 +25,10 @@ import network.aika.fields.FieldObjectImpl;
  */
 public abstract class Type<D extends TypeDefinition<D, T>, T extends Type<D, T>> extends FieldObjectImpl<D, T> {
 
+    public Field getField(String fieldName) {
+        return getField(
+                getObjectDefinition()
+                        .getField(fieldName)
+        );
+    }
 }

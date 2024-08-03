@@ -57,10 +57,6 @@ public class FieldObjectImpl<D extends ObjectDefinition<D>, T extends FieldObjec
         return fields[fieldDef.getFieldId()];
     }
 
-    public Field getField(String fieldName) {
-        return getField(objectDefinition.getField(fieldName));
-    }
-
     @Override
     public void disconnect() {
         for(int i = 0; i < fields.length; i++) {
