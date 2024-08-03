@@ -51,6 +51,8 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static network.aika.elements.typedef.NeuronDefinition.BIAS;
+import static network.aika.elements.typedef.SynapseDefinition.WEIGHT;
 import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_IN;
@@ -95,27 +97,32 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
     }
 
     public NeuronType getInputType() {
-        return typeDef.getInput().getType();
+        return getObjectDefinition().getInput().getType();
     }
 
     public NeuronType getOutputType() {
-        return typeDef.getOutput().getType();
+        return getObjectDefinition().getOutput().getType();
     }
 
     public Transition[] getTransition() {
-        return typeDef.getTransition();
+        return getObjectDefinition().getTransition();
     }
 
     public Transition getRequired() {
-        return typeDef.getRequired();
+        return getObjectDefinition().getRequired();
     }
 
     public boolean isPropagateRange() {
-        return typeDef.isPropagateRange();
+        return getObjectDefinition().isPropagateRange();
+    }
+
+    public Synapse setWeight(double weight) {
+        getField(WEIGHT).setValue(weight);
+        return this;
     }
 
     public final SynapseSlot createInputSlot(Activation iAct) {
-        return typeDef
+        return getObjectDefinition()
                 .getLink()
                 .getInputSlot()
                 .instantiate(iAct, this);
@@ -123,7 +130,7 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
 
 
     public Stream<BindingSignalSlot> transitionBindingSignal(Activation oAct, Scope is) {
-        return Arrays.stream(typeDef.getTransition())
+        return Arrays.stream(getObjectDefinition().getTransition())
                 .filter(t -> is == t.getFrom())
                 .map(Transition::getTo)
                 .map(oAct::getBindingSignalSlot)
@@ -131,14 +138,14 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
     }
 
     public final SynapseSlot createOutputSlot(Activation iAct) {
-        return typeDef
+        return getObjectDefinition()
                 .getLink()
                 .getOutputSlot()
                 .instantiate(iAct, this);
     }
 
     public Trigger getTrigger() {
-        return typeDef.getTrigger();
+        return getObjectDefinition().getTrigger();
     }
 
     @Override
@@ -234,9 +241,9 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
         if(s != null)
             return s;
 
-        SynapseDefinition std = typeDef.getInstanceSynapseType() != null ?
-                typeDef.getInstanceSynapseType() :
-                typeDef;
+        SynapseDefinition std = getObjectDefinition().getInstanceSynapseType() != null ?
+                getObjectDefinition().getInstanceSynapseType() :
+                getObjectDefinition();
 
         s = std.instantiate(input, output);
 
@@ -300,7 +307,7 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
     }
 
     public final Link createLink(Activation input, Activation output) {
-        return typeDef
+        return getObjectDefinition()
                 .getLink()
                 .instantiate(this, input, output);
     }
@@ -326,7 +333,7 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
     }
 
     public final boolean isTrainingAllowed() {
-        return trainingAllowed && typeDef.isTrainingAllowed() && getOutput().isTrainingAllowed();
+        return trainingAllowed && getObjectDefinition().isTrainingAllowed() && getOutput().isTrainingAllowed();
     }
 
     public void setTrainingAllowed(boolean trainingAllowed) {
@@ -334,7 +341,7 @@ public abstract class Synapse extends Type<SynapseDefinition, Synapse> implement
     }
 
     public final Direction getStoredAt() {
-        return typeDef.getStoredAt();
+        return getObjectDefinition().getStoredAt();
     }
 
     public NeuronProvider getPInput() {

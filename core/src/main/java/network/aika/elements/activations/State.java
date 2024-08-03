@@ -63,7 +63,7 @@ public class State extends Type<StateDefinition, State> implements QueueProvider
     }
 
     public StateType getType() {
-        return typeDef.getType();
+        return getObjectDefinition().getType();
     }
 
     public Timestamp getFired() {
@@ -89,7 +89,7 @@ public class State extends Type<StateDefinition, State> implements QueueProvider
 
     @Override
     public boolean isNextRound() {
-        return typeDef.isNextRound();
+        return getObjectDefinition().isNextRound();
     }
 
     public Document getDocument() {
@@ -101,6 +101,6 @@ public class State extends Type<StateDefinition, State> implements QueueProvider
     }
 
     public String toString() {
-        return act.toString() + " type:" + typeDef;
+        return act.toString() + " type:" + getObjectDefinition();
     }
 }

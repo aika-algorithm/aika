@@ -24,9 +24,9 @@ import java.util.TreeMap;
 /**
  * @author Lukas Molzberger
  */
-public class ObjectDefinition<O extends ObjectDefinition<O>> {
+public class ObjectDefinition<D extends ObjectDefinition<D>> {
 
-    Map<String, FieldDefinition<O>> fieldDefinitions = new TreeMap<>();
+    Map<String, FieldDefinition<D>> fieldDefinitions = new TreeMap<>();
     Map<String, FieldOutputDefinition> fieldOutputDefinitions = new TreeMap<>();
 
     public void instantiateFields(FieldObject o) {
@@ -40,7 +40,7 @@ public class ObjectDefinition<O extends ObjectDefinition<O>> {
                 );
     }
 
-    public void setFieldDefinition(FieldDefinition<O> fieldDef) {
+    public void setFieldDefinition(FieldDefinition<D> fieldDef) {
         fieldDef.setFieldId(fieldDefinitions.size());
         fieldDefinitions.put(fieldDef.getLabel(), fieldDef);
     }
@@ -57,7 +57,7 @@ public class ObjectDefinition<O extends ObjectDefinition<O>> {
         return fieldDefinitions.size();
     }
 
-    public FieldDefinition<O> getField(String name) {
+    public FieldDefinition<D> getField(String name) {
         return fieldDefinitions.get(name);
     }
 }

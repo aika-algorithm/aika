@@ -125,14 +125,14 @@ public class Activation extends Type<ActivationDefinition, Activation> implement
     }
 
     protected void initStates() {
-        Stream.of(typeDef.getStates())
+        Stream.of(getObjectDefinition().getStates())
                 .forEach(sd ->
                         states[sd.getType().ordinal()] = sd.instantiate(this)
                 );
     }
 
     protected final int numberOfStates() {
-        return typeDef.getStates().length;
+        return getObjectDefinition().getStates().length;
     }
 
 

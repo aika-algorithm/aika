@@ -16,22 +16,12 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.fields.FieldObject;
 import network.aika.fields.FieldObjectImpl;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class Type<D extends TypeDefinition<D, T>, T extends Type<D, T> & FieldObject> extends FieldObjectImpl {
+public abstract class Type<D extends TypeDefinition<D, T>, T extends Type<D, T>> extends FieldObjectImpl<D, T> {
 
-    protected D typeDef;
-
-    public void setTypeDefinition(D typeDef) {
-        this.typeDef = typeDef;
-    }
-
-    public D getObjectDefinition() {
-        return typeDef;
-    }
 }

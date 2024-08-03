@@ -23,6 +23,7 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
+import static network.aika.elements.typedef.SynapseDefinition.WEIGHT;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InvertFunction.invert;
 import static network.aika.fields.SumField.sum;
@@ -36,7 +37,6 @@ import static network.aika.queue.Phase.TRAINING;
  */
 public class NeuronDef {
 
-    public static final String WEIGHT = "weight";
     public static final String INPUT_VALUE = "inputValue";
     public static final String INPUT_IS_FIRED = "inputIsFired";
     public static final String NEG_INPUT_IS_FIRED = "negInputIsFired";
@@ -96,17 +96,6 @@ public class NeuronDef {
                 "Neuron",
                 Neuron.class
         );
-
-        /*
-        *     protected Field initBias() {
-        return (SumField) new SumField(this, "bias", TOLERANCE)
-                .setQueued(getQueue(), TRAINING, false)
-                .addListener("onBiasModified", (fl, u) ->
-                        setModified()
-                , true);
-    }
-*/
-
     }
 
     public void initRelations() {

@@ -59,7 +59,7 @@ public abstract class SynapseSlot extends Type<SynapseSlotDefinition, SynapseSlo
     }
 
     public Direction getDirection() {
-        return typeDef.getDirection();
+        return getObjectDefinition().getDirection();
     }
 
     public abstract void addLink(Link l);

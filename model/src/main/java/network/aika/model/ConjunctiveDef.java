@@ -23,6 +23,11 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
 
+import static network.aika.elements.typedef.NeuronDefinition.BIAS;
+import static network.aika.elements.typedef.SynapseDefinition.WEIGHT;
+import static network.aika.fields.SumField.sum;
+import static network.aika.queue.Phase.TRAINING;
+
 /**
  *
  * @author Lukas Molzberger
@@ -59,6 +64,9 @@ public class ConjunctiveDef {
         )
                 .addParent(superType.getNeuron())
                 .setActivation(activation);
+
+        sum(neuron, BIAS)
+                .setQueued(TRAINING);
     }
 
 

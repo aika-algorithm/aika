@@ -50,6 +50,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static network.aika.elements.neurons.RefType.*;
+import static network.aika.elements.typedef.NeuronDefinition.BIAS;
 import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 
@@ -93,11 +94,11 @@ public class Neuron extends Type<NeuronDefinition, Neuron> implements Element, M
     }
 
     public NeuronType getType() {
-        return typeDef.getType();
+        return getObjectDefinition().getType();
     }
 
     public Stream<BSSlotDefinition> getBindingSignalSlots() {
-        return Arrays.stream(typeDef.getBindingSignalSlots());
+        return Arrays.stream(getObjectDefinition().getBindingSignalSlots());
     }
 
     public Long getId() {
@@ -149,6 +150,11 @@ public class Neuron extends Type<NeuronDefinition, Neuron> implements Element, M
 
     public int getNewSynapseId() {
         return synapseIdCounter++;
+    }
+
+    public Neuron setBias(double bias) {
+        getField(BIAS).setValue(bias);
+        return this;
     }
 
     public void register(Activation act) {
@@ -253,16 +259,16 @@ public class Neuron extends Type<NeuronDefinition, Neuron> implements Element, M
 
 
     public final boolean isTrainingAllowed() {
-        return typeDef.isTrainingAllowed();
+        return getObjectDefinition().isTrainingAllowed();
     }
 
     public final Activation createActivation(Document doc) {
-        return typeDef.getActivationType()
+        return getObjectDefinition().getActivationType()
                 .instantiate(doc.createActivationId(), doc, this);
     }
 
     public final ActivationFunction getActivationFunction() {
-        return typeDef.getActivationFunction();
+        return getObjectDefinition().getActivationFunction();
     }
 
     public void count(Activation act) {

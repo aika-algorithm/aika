@@ -34,7 +34,7 @@ import java.util.function.Function;
  *
  * @author Lukas Molzberger
  */
-public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends Type<D, T> & FieldObject> extends ObjectDefinition<D> {
+public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends Type<D, T>> extends ObjectDefinition<D> {
 
     private String name;
 
@@ -52,7 +52,7 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
             T instance = clazz.getConstructor(parameterTypes.toArray(new Class[0]))
                     .newInstance(parameters.toArray(new Object[0]));
 
-            instance.setTypeDefinition((D) this);
+            instance.setObjectDefinition((D) this);
 
             instantiateFields(instance);
 
@@ -76,7 +76,7 @@ public abstract class TypeDefinition<D extends TypeDefinition<D, T>, T extends T
     }
 
     public boolean isInstance(T type) {
-        return this == type.typeDef ||
+        return this == type.getObjectDefinition() ||
                 parents.stream().anyMatch(p ->
                         p.isInstance(type)
                 );

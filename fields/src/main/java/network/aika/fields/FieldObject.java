@@ -25,17 +25,17 @@ import network.aika.queue.Queue;
  *
  * @author Lukas Molzberger
  */
-public interface FieldObject {
+public interface FieldObject<D extends ObjectDefinition<D>> {
 
-    void setObjectDefinition(ObjectDefinition typeDef);
+    void setObjectDefinition(D typeDef);
 
-    ObjectDefinition getObjectDefinition();
+    D getObjectDefinition();
 
     void setField(int i, Field f);
 
-    void setField(FieldDefinition fieldDef, Field f);
+    void setField(FieldDefinition<D> fieldDef, Field f);
 
-    Field getField(FieldDefinition fieldDef);
+    Field getField(FieldDefinition<D> fieldDef);
 
     void disconnect();
 

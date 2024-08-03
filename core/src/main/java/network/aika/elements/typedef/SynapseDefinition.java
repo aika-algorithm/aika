@@ -16,16 +16,13 @@
  */
 package network.aika.elements.typedef;
 
-import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.RegisterInputSlot;
-import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
-import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.ObjectPath;
 
 import java.util.List;
@@ -36,6 +33,9 @@ import java.util.Set;
  * @author Lukas Molzberger
  */
 public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse> {
+
+    public static final String WEIGHT = "weight";
+
 
     private LinkDefinition link;
 

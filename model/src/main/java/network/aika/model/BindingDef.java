@@ -27,6 +27,7 @@ import network.aika.fielddefs.FieldDefinition;
 
 
 import static network.aika.elements.typedef.StateDefinition.NET;
+import static network.aika.elements.typedef.SynapseDefinition.WEIGHT;
 import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.fields.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;

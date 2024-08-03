@@ -23,6 +23,7 @@ import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
 
+import static network.aika.elements.typedef.SynapseDefinition.WEIGHT;
 import static network.aika.fields.Multiplication.mul;
 import static network.aika.model.NeuronDef.*;
 
