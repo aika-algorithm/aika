@@ -88,11 +88,11 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return out(pathProvider, true);
     }
 
-    public Field instantiate(Obj fo) {
+    public Field instantiate(O o) {
         try {
             Field instance = clazz.newInstance();
 
-            instance.setObject(fo);
+            instance.setObject(o);
             instance.setFieldDefinition(this);
 
             return instance;

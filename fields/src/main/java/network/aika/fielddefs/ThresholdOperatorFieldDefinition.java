@@ -52,7 +52,7 @@ public class ThresholdOperatorFieldDefinition<T extends Type<T, O>, O extends Ob
     }
 
     @Override
-    public ThresholdOperator instantiate(Obj reference) {
+    public ThresholdOperator instantiate(O reference) {
         ThresholdOperator to = (ThresholdOperator) super.instantiate(reference);
         to.setThreshold(threshold);
         to.setComparison(type);

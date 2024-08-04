@@ -16,6 +16,7 @@
  */
 package network.aika.fielddefs;
 
+import network.aika.fields.Field;
 import network.aika.fields.Obj;
 
 import java.lang.reflect.InvocationTargetException;
@@ -69,6 +70,14 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
                 .orElse(null);
     }
 
+    public void collectFields(Map<String, FieldDefinition<D, O>> results) {
+        parents.forEach(p ->
+                p.collectFields(results)
+        );
+
+        results.putAll(fieldDefinitions);
+    }
+
     public boolean isInstance(O type) {
         return this == type.getType() ||
                 parents.stream().anyMatch(p ->
@@ -98,12 +107,19 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
         return parents;
     }
 
-    public void instantiateFields(Obj o) {
-        fieldDefinitions.values().stream()
+    public void instantiateFields(O o) {
+        Map<String, FieldDefinition<D, O>> fieldDefs = new HashMap<>();
+        collectFields(fieldDefs);
+
+        List<Field> fields = fieldDefs.values().stream()
                 .map(fd ->
                         fd.instantiate(o)
                 )
-                .toList().stream()
+                .toList();
+
+        o.setFields(fields);
+
+        fields.stream()
                 .forEach(f ->
                         f.getFieldDefinition().instantiateLinks(f)
                 );
@@ -121,9 +137,4 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
     public void setFieldOutputDefinition(String label, FieldOutputDefinition fieldOutDef) {
         fieldOutputDefinitions.put(label, fieldOutDef);
     }
-
-    public int getNumberOfFields() {
-        return fieldDefinitions.size();
-    }
-
 }

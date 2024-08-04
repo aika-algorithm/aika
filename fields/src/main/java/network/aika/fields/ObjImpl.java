@@ -22,6 +22,8 @@ import network.aika.fielddefs.Type;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 
+import java.util.List;
+
 /**
  * @author Lukas Molzberger
  */
@@ -41,7 +43,6 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> implements Obj<T
 
     @Override
     public void setType(T type) {
-        this.fields = new Field[type.getNumberOfFields()];
         this.type = type;
     }
 
@@ -51,13 +52,8 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> implements Obj<T
     }
 
     @Override
-    public void setField(int i, Field f) {
-        fields[i] = f;
-    }
-
-    @Override
-    public void setField(FieldDefinition<T, O> fieldDef, Field f) {
-        fields[fieldDef.getFieldId()] = f;
+    public void setFields(List<Field> fields) {
+        this.fields = fields.toArray(new Field[0]);
     }
 
     @Override

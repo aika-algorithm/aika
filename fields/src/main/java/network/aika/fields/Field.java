@@ -57,7 +57,6 @@ public class Field<O extends Obj, I extends FieldInputs<F>, F extends FieldLink>
         this.object = object;
     }
 
-
     public <F extends Field> F setQueued(Queue q, ProcessingPhase phase, boolean isNextRound) {
         interceptor = new QueueInterceptor(q, this, phase, isNextRound);
         return (F) this;

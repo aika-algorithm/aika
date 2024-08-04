@@ -21,6 +21,8 @@ import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.Type;
 import network.aika.queue.Queue;
 
+import java.util.List;
+
 /**
  *
  * @author Lukas Molzberger
@@ -31,9 +33,7 @@ public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
 
     T getType();
 
-    void setField(int i, Field f);
-
-    void setField(FieldDefinition<T, O> fieldDef, Field f);
+    void setFields(List<Field> fields);
 
     Field getField(FieldDefinition<T, O> fieldDef);
 
