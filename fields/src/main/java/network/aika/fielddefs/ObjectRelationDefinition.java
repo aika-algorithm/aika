@@ -26,22 +26,22 @@ import java.util.function.Function;
 /**
  * @author Lukas Molzberger
  */
-public class ObjectRelationDefinition<O extends FieldObject> {
+public class ObjectRelationDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>>  {
 
-    private Function<O, List<FieldObject>> mapping;
+    private Function<O, List<O>> mapping;
 
-    private ObjectDefinition relatedObject;
+    private D relatedObject;
 
-    public ObjectRelationDefinition(ObjectDefinition relatedObject, Function<O, List<FieldObject>> mapping) {
+    public ObjectRelationDefinition(D relatedObject, Function<O, List<O>> mapping) {
         this.relatedObject = relatedObject;
         this.mapping = mapping;
     }
 
-    public ObjectDefinition getRelatedObject() {
+    public D getRelatedObject() {
         return relatedObject;
     }
 
-    public List<FieldObject> followRelation(O o) {
+    public List<O> followRelation(O o) {
         return mapping.apply(o);
     }
 }

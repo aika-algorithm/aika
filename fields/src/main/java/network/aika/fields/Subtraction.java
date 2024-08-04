@@ -26,7 +26,7 @@ import network.aika.fields.link.FixedFieldLink;
  */
 public class Subtraction<O extends FieldObject> extends AbstractFunction<O> {
 
-    public static <O extends ObjectDefinition<O>> FunctionFieldDefinition<O> sub(O ref, String label) {
+    public static <D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> FunctionFieldDefinition<D, O> sub(D ref, String label) {
         return new FunctionFieldDefinition<>(Subtraction.class, ref, label);
     }
 

@@ -34,7 +34,7 @@ public class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
 
     boolean propagateUpdates;
 
-    public FieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition in, FieldInputsDefinition<?, F> out, boolean propagateUpdates) {
+    public FieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition in, FieldInputsDefinition<?, ?, F> out, boolean propagateUpdates) {
         this.objectPath = objectPath;
         this.in = in;
         this.out = out;

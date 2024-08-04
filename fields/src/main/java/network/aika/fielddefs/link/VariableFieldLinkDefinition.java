@@ -6,7 +6,7 @@ import network.aika.fielddefs.inputs.FieldInputsDefinition;
 
 public class VariableFieldLinkDefinition extends FieldLinkDefinition<VariableFieldLinkDefinition> {
 
-    public VariableFieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition in, FieldInputsDefinition<?, VariableFieldLinkDefinition> out, boolean propagateUpdates) {
+    public VariableFieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition in, FieldInputsDefinition<?, ?, VariableFieldLinkDefinition> out, boolean propagateUpdates) {
         super(objectPath, in, out, propagateUpdates);
     }
 }

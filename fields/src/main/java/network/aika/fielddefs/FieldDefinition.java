@@ -30,26 +30,26 @@ import java.util.function.BiFunction;
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInputDefinition<O> {
+public class FieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> implements FieldInputDefinition<D, O> {
 
     protected int fieldId;
 
     protected Class<? extends Field> clazz;
 
-    protected O object;
+    protected D object;
 
     protected String label;
 
     protected Double tolerance;
 
-    protected FieldInputsDefinition<O, ?> inputs;
+    protected FieldInputsDefinition<D, O, ?> inputs;
     protected List<FieldLinkDefinition> outputs = new ArrayList<>();
 
     protected ProcessingPhase phase;
     protected boolean isNextRound;
 
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<O, ?> inputs, O object, String label) {
+    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<D, O, ?> inputs, D object, String label) {
         this.clazz = clazz;
         this.label = label;
         this.object = object;
@@ -59,7 +59,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         object.setFieldDefinition(this);
     }
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<O, ?> inputs, O object, String label, double tolerance) {
+    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<D, O, ?> inputs, D object, String label, double tolerance) {
         this(clazz, inputs, object, label);
 
         this.tolerance = tolerance;
@@ -70,7 +70,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         return inputs;
     }
 
-    public FieldDefinition<O> out(BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
+    public FieldDefinition<D, O> out(BiFunction<D, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.OUTPUT);
         objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
 
@@ -84,7 +84,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         return this;
     }
 
-    public FieldDefinition<O> out(BiFunction<O, ObjectPath, FieldInputDefinition> pathProvider) {
+    public FieldDefinition<D, O> out(BiFunction<D, ObjectPath, FieldInputDefinition> pathProvider) {
         return out(pathProvider, true);
     }
 
@@ -111,7 +111,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         );
     }
 
-    public FieldDefinition<O> setFieldId(int id) {
+    public FieldDefinition<D, O> setFieldId(int id) {
         fieldId = id;
 
         return this;
@@ -125,18 +125,18 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         return clazz;
     }
 
-    public FieldDefinition<O> setClazz(Class<? extends Field> clazz) {
+    public FieldDefinition<D, O> setClazz(Class<? extends Field> clazz) {
         this.clazz = clazz;
 
         return this;
     }
 
     @Override
-    public O getObject() {
+    public D getObject() {
         return object;
     }
 
-    public FieldDefinition<O> setObject(O object) {
+    public FieldDefinition<D, O> setObject(D object) {
         this.object = object;
 
         return this;
@@ -146,7 +146,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         return label;
     }
 
-    public FieldDefinition<O> setLabel(String label) {
+    public FieldDefinition<D, O> setLabel(String label) {
         this.label = label;
 
         return this;
@@ -160,7 +160,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         return tolerance;
     }
 
-    public FieldDefinition<O> setTolerance(Double tolerance) {
+    public FieldDefinition<D, O> setTolerance(Double tolerance) {
         this.tolerance = tolerance;
 
         return this;
@@ -170,7 +170,7 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         return phase;
     }
 
-    public FieldDefinition<O> setPhase(ProcessingPhase phase) {
+    public FieldDefinition<D, O> setPhase(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;
@@ -180,13 +180,13 @@ public class FieldDefinition<O extends ObjectDefinition<O>> implements FieldInpu
         return isNextRound;
     }
 
-    public FieldDefinition<O> setNextRound(boolean nextRound) {
+    public FieldDefinition<D, O> setNextRound(boolean nextRound) {
         isNextRound = nextRound;
 
         return this;
     }
 
-    public FieldDefinition<O> setQueued(ProcessingPhase phase) {
+    public FieldDefinition<D, O> setQueued(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;

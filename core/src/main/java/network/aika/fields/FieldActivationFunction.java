@@ -28,7 +28,7 @@ import network.aika.fields.link.FixedFieldLink;
  */
 public class FieldActivationFunction extends AbstractFunction<State> {
 
-    public static FunctionFieldDefinition<StateDefinition> actFunc(StateDefinition ref, String label, Double tolerance) {
+    public static FunctionFieldDefinition<StateDefinition, State> actFunc(StateDefinition ref, String label, Double tolerance) {
         return new FunctionFieldDefinition<>(FieldActivationFunction.class, ref, label, tolerance);
     }
 

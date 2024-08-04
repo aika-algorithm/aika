@@ -76,10 +76,10 @@ public class PatternDef implements TypeDefinition {
     private SynapseDefinition categorySynapse;
 
 
-    FieldDefinition<NeuronDefinition> neuronAverageCoveredSpace;
-    MultiFieldDefinition<NeuronDefinition> neuronStatistic;
+    FieldDefinition<NeuronDefinition, Neuron> neuronAverageCoveredSpace;
+    MultiFieldDefinition<NeuronDefinition, Neuron> neuronStatistic;
 
-    FieldDefinition<SynapseDefinition> synapseAverageCoveredSpace;
+    FieldDefinition<SynapseDefinition, Synapse> synapseAverageCoveredSpace;
 
 
     public PatternDef(TypeModel typeModel, ConjunctiveDef superType, CategoryDef categoryDef) {
@@ -96,7 +96,7 @@ public class PatternDef implements TypeDefinition {
         )
                 .addStateType(typeModel.neuron.getNonFeedbackState());
 
-        FunctionFieldDefinition<ActivationDefinition> g = mul(activation, "gradient * f'(net)")
+        FunctionFieldDefinition<ActivationDefinition, Activation> g = mul(activation, "gradient * f'(net)")
                 .in(0, activation.getFieldOutput(GRADIENT))
                 .in(1, activation.getFieldOutput(NET_OUTER_GRADIENT));
 

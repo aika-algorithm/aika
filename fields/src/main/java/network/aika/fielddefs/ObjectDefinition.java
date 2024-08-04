@@ -18,16 +18,85 @@ package network.aika.fielddefs;
 
 import network.aika.fields.FieldObject;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author Lukas Molzberger
  */
-public class ObjectDefinition<D extends ObjectDefinition<D>> {
+public class ObjectDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> {
 
-    Map<String, FieldDefinition<D>> fieldDefinitions = new TreeMap<>();
+    private String name;
+
+    protected Class<? extends O> clazz;
+
+    protected List<D> parents = new ArrayList<>();
+
+
+    Map<String, FieldDefinition<D, O>> fieldDefinitions = new TreeMap<>();
     Map<String, FieldOutputDefinition> fieldOutputDefinitions = new TreeMap<>();
+
+    public ObjectDefinition(String name, Class<? extends O> clazz) {
+        this.name = name;
+        this.clazz = clazz;
+    }
+
+    protected O instantiate(List<Class<?>> parameterTypes, List<Object> parameters) {
+        try {
+            O instance = clazz.getConstructor(parameterTypes.toArray(new Class[0]))
+                    .newInstance(parameters.toArray(new Object[0]));
+
+            instance.setObjectDefinition((D) this);
+
+            instantiateFields(instance);
+
+            return instance;
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public FieldDefinition<D, O> getField(String name) {
+        FieldDefinition<D, O> fieldDef = fieldDefinitions.get(name);
+        if(fieldDef != null)
+            return fieldDef;
+
+        return parents.stream()
+                .map(p -> p.getField(name))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public boolean isInstance(O type) {
+        return this == type.getObjectDefinition() ||
+                parents.stream().anyMatch(p ->
+                        p.isInstance(type)
+                );
+    }
+
+    protected void addPathEntry(ObjectPath objectPath, ObjectDefinition relatedObject, Function<O, Set<FieldObject>> mapping) {
+        objectPath.add(new ObjectRelationDefinition(relatedObject, mapping));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Class<? extends O> getClazz() {
+        return clazz;
+    }
+
+    public D addParent(D p) {
+        parents.add(p);
+
+        return (D) this;
+    }
+
+    public List<D> getParents() {
+        return parents;
+    }
 
     public void instantiateFields(FieldObject o) {
         fieldDefinitions.values().stream()
@@ -40,7 +109,7 @@ public class ObjectDefinition<D extends ObjectDefinition<D>> {
                 );
     }
 
-    public void setFieldDefinition(FieldDefinition<D> fieldDef) {
+    public void setFieldDefinition(FieldDefinition<D, O> fieldDef) {
         fieldDef.setFieldId(fieldDefinitions.size());
         fieldDefinitions.put(fieldDef.getLabel(), fieldDef);
     }
@@ -57,7 +126,4 @@ public class ObjectDefinition<D extends ObjectDefinition<D>> {
         return fieldDefinitions.size();
     }
 
-    public FieldDefinition<D> getField(String name) {
-        return fieldDefinitions.get(name);
-    }
 }

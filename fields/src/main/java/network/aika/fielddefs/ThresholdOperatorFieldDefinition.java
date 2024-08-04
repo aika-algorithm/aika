@@ -22,21 +22,21 @@ import network.aika.fields.ThresholdOperator;
 /**
  * @author Lukas Molzberger
  */
-public class ThresholdOperatorFieldDefinition<O extends ObjectDefinition<O>> extends FunctionFieldDefinition<O> {
+public class ThresholdOperatorFieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> extends FunctionFieldDefinition<D, O> {
 
     double threshold;
     ThresholdOperator.Type type;
 
     boolean isFinal;
 
-    public ThresholdOperatorFieldDefinition(O ref, String name, double threshold, ThresholdOperator.Type type) {
+    public ThresholdOperatorFieldDefinition(D ref, String name, double threshold, ThresholdOperator.Type type) {
         super(ThresholdOperator.class, ref, name);
 
         this.threshold = threshold;
         this.type = type;
     }
 
-    public ThresholdOperatorFieldDefinition(O ref, String name, double threshold, ThresholdOperator.Type type, boolean isFinal) {
+    public ThresholdOperatorFieldDefinition(D ref, String name, double threshold, ThresholdOperator.Type type, boolean isFinal) {
         super(ThresholdOperator.class, ref, name);
 
         this.threshold = threshold;
@@ -44,7 +44,7 @@ public class ThresholdOperatorFieldDefinition<O extends ObjectDefinition<O>> ext
         this.isFinal = isFinal;
     }
 
-    public ThresholdOperatorFieldDefinition(O ref, String name, double threshold, ThresholdOperator.Type type, double tolerance) {
+    public ThresholdOperatorFieldDefinition(D ref, String name, double threshold, ThresholdOperator.Type type, double tolerance) {
         super(ThresholdOperator.class, ref, name, tolerance);
 
         this.threshold = threshold;

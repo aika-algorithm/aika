@@ -24,6 +24,7 @@ import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.links.Link;
+import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
@@ -31,6 +32,7 @@ import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.*;
 import network.aika.enums.Scope;
+import network.aika.fields.FieldObjectImpl;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
@@ -49,7 +51,7 @@ import static network.aika.text.TextReference.join;
 /**
  * @author Lukas Molzberger
  */
-public class Activation extends Type<ActivationDefinition, Activation> implements Element, ModelProvider, QueueProvider, Comparable<Activation> {
+public class Activation extends FieldObjectImpl<ActivationDefinition, Activation> implements Element, ModelProvider, QueueProvider, Comparable<Activation> {
 
     public static final Comparator<Activation> ID_COMPARATOR = Comparator.comparingInt(Activation::getId);
 
@@ -282,7 +284,7 @@ public class Activation extends Type<ActivationDefinition, Activation> implement
         return neuron.getProvider();
     }
 
-    public Optional<Link> getInputLinkByType(TypeDefinition<LinkDefinition, Link> linkType) {
+    public Optional<Link> getInputLinkByType(ObjectDefinition<LinkDefinition, Link> linkType) {
         return getInputLinksByType(linkType)
                 .findAny();
     }
@@ -298,14 +300,14 @@ public class Activation extends Type<ActivationDefinition, Activation> implement
                 .stream();
     }
 
-    public SynapseSlot getInputSlotBySynapseType(TypeDefinition<SynapseDefinition, Synapse> synType) {
+    public SynapseSlot getInputSlotBySynapseType(ObjectDefinition<SynapseDefinition, Synapse> synType) {
         return getInputSlots()
                 .filter(s -> synType.isInstance(s.getSynapse()))
                 .findFirst()
                 .orElse(null);
     }
 
-    public  Stream<SynapseSlot> getInputSlotsByType(TypeDefinition<SynapseSlotDefinition, SynapseSlot> slotType) {
+    public  Stream<SynapseSlot> getInputSlotsByType(ObjectDefinition<SynapseSlotDefinition, SynapseSlot> slotType) {
         return getInputSlots()
                 .filter(slotType::isInstance);
     }
@@ -321,7 +323,7 @@ public class Activation extends Type<ActivationDefinition, Activation> implement
                 .stream();
     }
 
-    public Stream<SynapseSlot> getOutputSlotsByType(TypeDefinition<SynapseSlotDefinition, SynapseSlot> slotType) {
+    public Stream<SynapseSlot> getOutputSlotsByType(ObjectDefinition<SynapseSlotDefinition, SynapseSlot> slotType) {
         return getOutputSlots()
                 .filter(slotType::isInstance);
     }
@@ -340,12 +342,12 @@ public class Activation extends Type<ActivationDefinition, Activation> implement
                 Stream.empty();
     }
 
-    public Stream<Link> getInputLinksByType(TypeDefinition<LinkDefinition, Link> linkType) {
+    public Stream<Link> getInputLinksByType(ObjectDefinition<LinkDefinition, Link> linkType) {
         return getInputLinks()
                 .filter(linkType::isInstance);
     }
 
-    public Stream<Link> getOutputLinksByType(TypeDefinition<LinkDefinition, Link> linkType) {
+    public Stream<Link> getOutputLinksByType(ObjectDefinition<LinkDefinition, Link> linkType) {
         return getOutputLinks()
                 .filter(linkType::isInstance);
     }

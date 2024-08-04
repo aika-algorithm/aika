@@ -17,6 +17,7 @@
 package network.aika.elements.typedef;
 
 import network.aika.Model;
+import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.ActivationFunction;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
@@ -29,7 +30,7 @@ import java.util.List;
  *
  * @author Lukas Molzberger
  */
-public class NeuronDefinition extends TypeDefinition<NeuronDefinition, Neuron> {
+public class NeuronDefinition extends ObjectDefinition<NeuronDefinition, Neuron> {
 
     public static final String BIAS = "bias";
 

@@ -2,11 +2,12 @@ package network.aika.fielddefs;
 
 
 import network.aika.fielddefs.inputs.FieldInputsDefinition;
+import network.aika.fields.FieldObject;
 
-public interface FieldInputDefinition<O extends ObjectDefinition<O>> {
+public interface FieldInputDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> {
 
-    FieldInputsDefinition<O, ?> getInputs();
+    FieldInputsDefinition<D, O, ?> getInputs();
 
-    O getObject();
+    D getObject();
 
 }

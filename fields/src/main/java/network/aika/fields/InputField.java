@@ -25,9 +25,9 @@ import network.aika.fields.link.NoFieldInputs;
 /**
  * @author Lukas Molzberger
  */
-public class InputField<O extends FieldObject> extends Field<O, NoFieldInputs, FieldLink> {
+public class InputField<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> extends Field<O, NoFieldInputs, FieldLink> {
 
-    public static <O extends ObjectDefinition<O>> FieldDefinition<O> inputField(O ref, String label) {
+    public static <D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> FieldDefinition<D, O> inputField(D ref, String label) {
         return new FieldDefinition<>(InputField.class, new NoInputsDefinition<>(), ref, label);
     }
 

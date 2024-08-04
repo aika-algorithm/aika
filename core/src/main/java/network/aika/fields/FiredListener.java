@@ -28,7 +28,7 @@ import network.aika.fields.link.FixedFieldLink;
  */
 public class FiredListener extends AbstractListener<State> {
 
-    public static FieldDefinition<StateDefinition> firedListener(StateDefinition ref, String label, Double tolerance) {
+    public static FieldDefinition<StateDefinition, State> firedListener(StateDefinition ref, String label, Double tolerance) {
         return new FieldDefinition<>(FiredListener.class, new FixedFieldInputsDefinition<>(), ref, label, tolerance);
     }
 

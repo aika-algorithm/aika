@@ -16,6 +16,7 @@
  */
 package network.aika.elements.neurons;
 
+import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fields.ActivationFunction;
 import network.aika.Model;
 import network.aika.Document;
@@ -25,8 +26,6 @@ import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.typedef.NeuronDefinition;
 import network.aika.elements.typedef.SynapseDefinition;
-import network.aika.elements.typedef.TypeDefinition;
-import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
 import network.aika.exceptions.NeuronExistsTwiceException;
@@ -58,7 +57,7 @@ import static network.aika.queue.Timestamp.MIN;
  *
  * @author Lukas Molzberger
  */
-public class Neuron extends Type<NeuronDefinition, Neuron> implements Element, ModelProvider, QueueProvider, Writable {
+public class Neuron extends FieldObjectImpl<NeuronDefinition, Neuron> implements Element, ModelProvider, QueueProvider, Writable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
 
@@ -484,15 +483,15 @@ public class Neuron extends Type<NeuronDefinition, Neuron> implements Element, M
         return provider.getInputSynapse(n);
     }
 
-    public Synapse getInputSynapseByType(TypeDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Synapse getInputSynapseByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
         return provider.getInputSynapseByType(synapseType);
     }
 
-    public Stream<Synapse> getInputSynapsesByType(TypeDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Stream<Synapse> getInputSynapsesByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
         return provider.getInputSynapsesByType(synapseType);
     }
 
-    public Synapse getOutputSynapseByType(TypeDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Synapse getOutputSynapseByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
         return provider.getOutputSynapseByType(synapseType);
     }
 

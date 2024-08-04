@@ -18,7 +18,6 @@ package network.aika.elements.activations;
 
 import network.aika.Document;
 import network.aika.elements.typedef.StateDefinition;
-import network.aika.elements.typedef.Type;
 import network.aika.fields.*;
 import network.aika.fields.link.FieldLink;
 import network.aika.queue.Queue;
@@ -33,7 +32,7 @@ import static network.aika.queue.Timestamp.NOT_SET;
  *
  * @author Lukas Molzberger
  */
-public class State extends Type<StateDefinition, State> implements QueueProvider {
+public class State extends FieldObjectImpl<StateDefinition, State> implements QueueProvider {
 
     protected Activation act;
 

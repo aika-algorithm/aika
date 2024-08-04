@@ -28,7 +28,7 @@ import network.aika.fields.link.FixedFieldInputs;
  */
 public class MixFunction<O extends FieldObject> extends AbstractFunction<O> {
 
-    public static <O extends ObjectDefinition<O>> FieldDefinition<O> mix(O ref, String label) {
+    public static <D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> FieldDefinition<D, O> mix(D ref, String label) {
         return new FieldDefinition<>(MixFunction.class, new FixedFieldInputsDefinition<>(), ref, label);
     }
 

@@ -93,7 +93,7 @@ public class BindingDef implements TypeDefinition {
     private SynapseDefinition categorySynapse;
 
 
-    FieldDefinition<LinkDefinition> negativeWeight;
+    FieldDefinition<LinkDefinition, Link> negativeWeight;
 
     public BindingDef(TypeModel typeModel, ConjunctiveDef superType, CategoryDef categoryDef) {
         this.typeModel = typeModel;

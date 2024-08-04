@@ -26,7 +26,7 @@ import network.aika.fields.link.FixedFieldLink;
  */
 public class Addition<O extends FieldObject> extends AbstractFunction<O> {
 
-    public static <O extends ObjectDefinition<O>> FunctionFieldDefinition<O> add(O ref, String label) {
+    public static <D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> FunctionFieldDefinition<D, O> add(D ref, String label) {
         return new FunctionFieldDefinition<>(Addition.class, ref, label);
     }
 

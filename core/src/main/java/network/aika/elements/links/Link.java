@@ -29,10 +29,10 @@ import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.LinkDefinition;
-import network.aika.elements.typedef.Type;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.synapses.Synapse;
+import network.aika.fields.FieldObjectImpl;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
@@ -49,7 +49,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  *
  * @author Lukas Molzberger
  */
-public abstract class Link extends Type<LinkDefinition, Link> implements Element, ModelProvider, QueueProvider {
+public abstract class Link extends FieldObjectImpl<LinkDefinition, Link> implements Element, ModelProvider, QueueProvider {
 
     protected Synapse synapse;
 

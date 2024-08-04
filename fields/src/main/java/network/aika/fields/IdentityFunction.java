@@ -27,7 +27,7 @@ import network.aika.fields.link.FixedFieldLink;
 public class IdentityFunction<O extends FieldObject> extends AbstractFunction<O> {
 
 
-    public static <O extends ObjectDefinition<O>> FunctionFieldDefinition<O> identity(O ref, String label) {
+    public static <D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> FunctionFieldDefinition<D, O> identity(D ref, String label) {
         return new FunctionFieldDefinition<>(IdentityFunction.class, ref, label);
     }
 

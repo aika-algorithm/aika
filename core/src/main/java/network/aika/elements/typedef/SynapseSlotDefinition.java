@@ -20,6 +20,7 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.direction.Direction;
+import network.aika.fielddefs.ObjectDefinition;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ import java.util.List;
  *
  * @author Lukas Molzberger
  */
-public class SynapseSlotDefinition extends TypeDefinition<SynapseSlotDefinition, SynapseSlot> {
+public class SynapseSlotDefinition extends ObjectDefinition<SynapseSlotDefinition, SynapseSlot> {
 
     private Direction direction;
 

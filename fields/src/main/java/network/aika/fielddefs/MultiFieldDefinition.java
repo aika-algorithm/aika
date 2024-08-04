@@ -3,21 +3,22 @@ package network.aika.fielddefs;
 import network.aika.fielddefs.inputs.FieldInputsDefinition;
 import network.aika.fielddefs.inputs.FixedFieldInputsDefinition;
 import network.aika.fields.Field;
+import network.aika.fields.FieldObject;
 import network.aika.statistic.NeuronStatistic;
 
-public class MultiFieldDefinition<O extends ObjectDefinition<O>> implements FieldInputDefinition<O> {
+public class MultiFieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> implements FieldInputDefinition<D, O> {
 
     protected Class<? extends Field> clazz;
 
     protected FieldInputsDefinition inputs;
 
-    protected O object;
+    protected D object;
 
     protected String label;
 
     private FieldOutputDefinition[] outputFieldDefinitions;
 
-    public MultiFieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<O, ?> inputs, O object, String label, double tolerance) {
+    public MultiFieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<D, O, ?> inputs, D object, String label, double tolerance) {
         this.clazz = clazz;
         this.inputs = inputs;
         this.object = object;
@@ -36,7 +37,7 @@ public class MultiFieldDefinition<O extends ObjectDefinition<O>> implements Fiel
     }
 
     @Override
-    public O getObject() {
+    public D getObject() {
         return object;
     }
 }

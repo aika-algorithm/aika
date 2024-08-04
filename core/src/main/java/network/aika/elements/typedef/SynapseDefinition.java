@@ -23,6 +23,7 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
+import network.aika.fielddefs.ObjectDefinition;
 import network.aika.fielddefs.ObjectPath;
 
 import java.util.List;
@@ -32,7 +33,7 @@ import java.util.Set;
  *
  * @author Lukas Molzberger
  */
-public class SynapseDefinition extends TypeDefinition<SynapseDefinition, Synapse> {
+public class SynapseDefinition extends ObjectDefinition<SynapseDefinition, Synapse> {
 
     public static final String WEIGHT = "weight";
 

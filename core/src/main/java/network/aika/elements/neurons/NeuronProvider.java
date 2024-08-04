@@ -19,10 +19,10 @@ package network.aika.elements.neurons;
 import network.aika.Model;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.SynapseDefinition;
-import network.aika.elements.typedef.TypeDefinition;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
 import network.aika.exceptions.NeuronSerializationException;
+import network.aika.fielddefs.ObjectDefinition;
 import network.aika.utils.ReadWriteLock;
 
 import java.io.*;
@@ -336,7 +336,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return syn;
     }
 
-    public Synapse getInputSynapseByType(TypeDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Synapse getInputSynapseByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
         inputLock.acquireReadLock();
         Synapse is = getInputSynapsesByType(synapseType)
                 .findAny()
@@ -345,12 +345,12 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return is;
     }
 
-    public Stream<Synapse> getInputSynapsesByType(TypeDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Stream<Synapse> getInputSynapsesByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
         return getInputSynapsesAsStream()
                 .filter(synapseType::isInstance);
     }
 
-    public Synapse getOutputSynapseByType(TypeDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Synapse getOutputSynapseByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
         outputLock.acquireReadLock();
         Synapse os = getOutputSynapsesAsStream()
                 .filter(synapseType::isInstance)
