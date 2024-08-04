@@ -70,7 +70,7 @@ public class StateDefinition extends Type<StateDefinition, State> {
     }
 
     public ActivationDefinition getActivation(ObjectPath p) {
-        addPathEntry(p, activation, s -> Set.of(s.getActivation()));
+        addPathEntry(p, "state->activation", activation, s -> Set.of(s.getActivation()));
         return activation;
     }
 

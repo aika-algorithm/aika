@@ -85,8 +85,8 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
                 );
     }
 
-    protected void addPathEntry(ObjectPath objectPath, Type relatedObject, Function<O, Set<Obj>> mapping) {
-        objectPath.add(new ObjectRelationDefinition(relatedObject, mapping));
+    protected void addPathEntry(ObjectPath objectPath, String relLabel, Type relatedObject, Function<O, Set<Obj>> mapping) {
+        objectPath.add(new ObjectRelationDefinition(relLabel, relatedObject, mapping));
     }
 
     public String getName() {

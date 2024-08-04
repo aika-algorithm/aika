@@ -27,11 +27,14 @@ import java.util.function.Function;
  */
 public class ObjectRelationDefinition<T extends Type<T, O>, O extends Obj<T, O>>  {
 
+    private String label;
+
     private Function<O, List<O>> mapping;
 
     private T relatedObject;
 
-    public ObjectRelationDefinition(T relatedObject, Function<O, List<O>> mapping) {
+    public ObjectRelationDefinition(String label, T relatedObject, Function<O, List<O>> mapping) {
+        this.label = label;
         this.relatedObject = relatedObject;
         this.mapping = mapping;
     }

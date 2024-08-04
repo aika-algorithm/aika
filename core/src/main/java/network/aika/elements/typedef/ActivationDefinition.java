@@ -77,7 +77,7 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
     }
 
     public NeuronDefinition getNeuron(ObjectPath p) {
-        addPathEntry(p, neuron, act -> Set.of(act.getNeuron()));
+        addPathEntry(p, "activation->neuron", neuron, act -> Set.of(act.getNeuron()));
         return neuron;
     }
 
@@ -95,7 +95,7 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
 
     public StateDefinition getState(ObjectPath p, StateType stateType) {
         StateDefinition s = getState(stateType);
-        addPathEntry(p, s, act -> Set.of(act.getState(stateType)));
+        addPathEntry(p, "activation->state", s, act -> Set.of(act.getState(stateType)));
         return s;
     }
 }

@@ -34,7 +34,7 @@ public class FixedFieldInputsDefinition<T extends Type<T, O>, O extends Obj<T, O
 
     public FixedFieldInputsDefinition<T, O> in(Integer arg, BiFunction<T, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.INPUT);
-        objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
+        objectPath.add(new ObjectRelationDefinition("IN", object, o -> List.of(o)));
         FieldOutputDefinition in = pathProvider.apply(object, objectPath);
 
         FixedFieldLinkDefinition fl = new FixedFieldLinkDefinition(objectPath, in, arg, this, propagateUpdates);

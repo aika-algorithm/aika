@@ -72,7 +72,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
 
     public FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.OUTPUT);
-        objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
+        objectPath.add(new ObjectRelationDefinition("OUT", object, o -> List.of(o)));
 
         FieldOutputDefinition in = object.getFieldOutput(getLabel());
         FieldInputDefinition out = pathProvider.apply(object, objectPath);

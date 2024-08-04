@@ -45,7 +45,8 @@ public class FieldInputsDefinition<T extends Type<T, O>, O extends Obj<T, O>, F 
 
     public void instantiateLinks(Field f) {
         inputs.forEach(fl ->
-                fl.getObjectPath().resolve(f.getObject()
+                fl.getObjectPath().resolve(
+                        f.getObject()
                 )
         );
     }

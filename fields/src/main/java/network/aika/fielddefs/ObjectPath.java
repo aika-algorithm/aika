@@ -37,7 +37,9 @@ public class ObjectPath {
         for(ObjectRelationDefinition e: path) {
 
             current = current.stream()
-                    .flatMap(o -> e.followRelation(o).stream())
+                    .flatMap(o ->
+                            e.followRelation(o).stream()
+                    )
                     .toList();
         }
 
