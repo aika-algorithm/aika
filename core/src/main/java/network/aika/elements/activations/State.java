@@ -32,7 +32,7 @@ import static network.aika.queue.Timestamp.NOT_SET;
  *
  * @author Lukas Molzberger
  */
-public class State extends FieldObjectImpl<StateDefinition, State> implements QueueProvider {
+public class State extends ObjImpl<StateDefinition, State> implements QueueProvider {
 
     protected Activation act;
 
@@ -45,7 +45,7 @@ public class State extends FieldObjectImpl<StateDefinition, State> implements Qu
     }
 
     private Field getValue() {
-        return getField(this.getObjectDefinition().getField(StateDefinition.VALUE));
+        return getField(this.getType().getField(StateDefinition.VALUE));
     }
 
     public void updateFiredStep(FieldLink fl) {
@@ -61,8 +61,8 @@ public class State extends FieldObjectImpl<StateDefinition, State> implements Qu
         doc.addStep(firedStep);
     }
 
-    public StateType getType() {
-        return getObjectDefinition().getType();
+    public StateType getStateType() {
+        return this.getType().getStateType();
     }
 
     public Timestamp getFired() {
@@ -88,7 +88,7 @@ public class State extends FieldObjectImpl<StateDefinition, State> implements Qu
 
     @Override
     public boolean isNextRound() {
-        return getObjectDefinition().isNextRound();
+        return this.getType().isNextRound();
     }
 
     public Document getDocument() {
@@ -100,6 +100,6 @@ public class State extends FieldObjectImpl<StateDefinition, State> implements Qu
     }
 
     public String toString() {
-        return act.toString() + " type:" + getObjectDefinition();
+        return act.toString() + " type:" + this.getType();
     }
 }

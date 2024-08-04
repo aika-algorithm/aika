@@ -18,24 +18,24 @@ package network.aika.fields;
 
 
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.queue.Queue;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public interface FieldObject<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> {
+public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
 
-    void setObjectDefinition(D typeDef);
+    void setType(T type);
 
-    D getObjectDefinition();
+    T getType();
 
     void setField(int i, Field f);
 
-    void setField(FieldDefinition<D, O> fieldDef, Field f);
+    void setField(FieldDefinition<T, O> fieldDef, Field f);
 
-    Field getField(FieldDefinition<D, O> fieldDef);
+    Field getField(FieldDefinition<T, O> fieldDef);
 
     void disconnect();
 

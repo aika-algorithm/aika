@@ -32,7 +32,7 @@ import network.aika.elements.typedef.LinkDefinition;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
 import network.aika.elements.synapses.Synapse;
-import network.aika.fields.FieldObjectImpl;
+import network.aika.fields.ObjImpl;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
@@ -49,7 +49,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  *
  * @author Lukas Molzberger
  */
-public abstract class Link extends FieldObjectImpl<LinkDefinition, Link> implements Element, ModelProvider, QueueProvider {
+public abstract class Link extends ObjImpl<LinkDefinition, Link> implements Element, ModelProvider, QueueProvider {
 
     protected Synapse synapse;
 
@@ -133,11 +133,11 @@ public abstract class Link extends FieldObjectImpl<LinkDefinition, Link> impleme
     public abstract void connectWeightUpdate();
 
     public StateType inputState() {
-        return getSynapse().getObjectDefinition().getTrigger().getType();
+        return getSynapse().getType().getTrigger().getStateType();
     }
 
     public StateType outputState() {
-        return getSynapse().getObjectDefinition().outputState();
+        return getSynapse().getType().outputState();
     }
 
     public void init() {
@@ -248,7 +248,7 @@ public abstract class Link extends FieldObjectImpl<LinkDefinition, Link> impleme
     }
 
     public void linkOutput() {
-        if(synapse.getObjectDefinition().getRegisterInputSlot() == RegisterInputSlot.ON_LINKING)
+        if(synapse.getType().getRegisterInputSlot() == RegisterInputSlot.ON_LINKING)
             outputSlot = output.registerInputSlot(synapse);
 
         outputSlot.addLink(this);

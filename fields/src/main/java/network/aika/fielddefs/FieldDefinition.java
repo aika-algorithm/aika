@@ -20,7 +20,7 @@ import network.aika.enums.Direction;
 import network.aika.fielddefs.inputs.FieldInputsDefinition;
 import network.aika.fielddefs.link.FieldLinkDefinition;
 import network.aika.fields.Field;
-import network.aika.fields.FieldObject;
+import network.aika.fields.Obj;
 import network.aika.queue.ProcessingPhase;
 
 import java.util.ArrayList;
@@ -30,26 +30,26 @@ import java.util.function.BiFunction;
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> implements FieldInputDefinition<D, O> {
+public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implements FieldInputDefinition<T, O> {
 
     protected int fieldId;
 
     protected Class<? extends Field> clazz;
 
-    protected D object;
+    protected T object;
 
     protected String label;
 
     protected Double tolerance;
 
-    protected FieldInputsDefinition<D, O, ?> inputs;
+    protected FieldInputsDefinition<T, O, ?> inputs;
     protected List<FieldLinkDefinition> outputs = new ArrayList<>();
 
     protected ProcessingPhase phase;
     protected boolean isNextRound;
 
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<D, O, ?> inputs, D object, String label) {
+    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T object, String label) {
         this.clazz = clazz;
         this.label = label;
         this.object = object;
@@ -59,7 +59,7 @@ public class FieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldOb
         object.setFieldDefinition(this);
     }
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<D, O, ?> inputs, D object, String label, double tolerance) {
+    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T object, String label, double tolerance) {
         this(clazz, inputs, object, label);
 
         this.tolerance = tolerance;
@@ -70,7 +70,7 @@ public class FieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldOb
         return inputs;
     }
 
-    public FieldDefinition<D, O> out(BiFunction<D, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
+    public FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.OUTPUT);
         objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
 
@@ -84,11 +84,11 @@ public class FieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldOb
         return this;
     }
 
-    public FieldDefinition<D, O> out(BiFunction<D, ObjectPath, FieldInputDefinition> pathProvider) {
+    public FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldInputDefinition> pathProvider) {
         return out(pathProvider, true);
     }
 
-    public Field instantiate(FieldObject fo) {
+    public Field instantiate(Obj fo) {
         try {
             Field instance = clazz.newInstance();
 
@@ -111,7 +111,7 @@ public class FieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldOb
         );
     }
 
-    public FieldDefinition<D, O> setFieldId(int id) {
+    public FieldDefinition<T, O> setFieldId(int id) {
         fieldId = id;
 
         return this;
@@ -125,18 +125,18 @@ public class FieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldOb
         return clazz;
     }
 
-    public FieldDefinition<D, O> setClazz(Class<? extends Field> clazz) {
+    public FieldDefinition<T, O> setClazz(Class<? extends Field> clazz) {
         this.clazz = clazz;
 
         return this;
     }
 
     @Override
-    public D getObject() {
+    public T getObject() {
         return object;
     }
 
-    public FieldDefinition<D, O> setObject(D object) {
+    public FieldDefinition<T, O> setObject(T object) {
         this.object = object;
 
         return this;
@@ -146,7 +146,7 @@ public class FieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldOb
         return label;
     }
 
-    public FieldDefinition<D, O> setLabel(String label) {
+    public FieldDefinition<T, O> setLabel(String label) {
         this.label = label;
 
         return this;
@@ -160,7 +160,7 @@ public class FieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldOb
         return tolerance;
     }
 
-    public FieldDefinition<D, O> setTolerance(Double tolerance) {
+    public FieldDefinition<T, O> setTolerance(Double tolerance) {
         this.tolerance = tolerance;
 
         return this;
@@ -170,7 +170,7 @@ public class FieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldOb
         return phase;
     }
 
-    public FieldDefinition<D, O> setPhase(ProcessingPhase phase) {
+    public FieldDefinition<T, O> setPhase(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;
@@ -180,13 +180,13 @@ public class FieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldOb
         return isNextRound;
     }
 
-    public FieldDefinition<D, O> setNextRound(boolean nextRound) {
+    public FieldDefinition<T, O> setNextRound(boolean nextRound) {
         isNextRound = nextRound;
 
         return this;
     }
 
-    public FieldDefinition<D, O> setQueued(ProcessingPhase phase) {
+    public FieldDefinition<T, O> setQueued(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;

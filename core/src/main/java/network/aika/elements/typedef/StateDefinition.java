@@ -19,8 +19,7 @@ package network.aika.elements.typedef;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.fielddefs.ObjectPath;
 
 import java.util.List;
@@ -30,22 +29,22 @@ import java.util.Set;
  *
  * @author Lukas Molzberger
  */
-public class StateDefinition extends ObjectDefinition<StateDefinition, State> {
+public class StateDefinition extends Type<StateDefinition, State> {
 
     public static final String NET = "net";
     public static final String FIRED = "fired";
     public static final String VALUE = "value";
 
 
-    private StateType type;
+    private StateType stateType;
 
     private boolean isNextRound;
 
     private ActivationDefinition activation;
 
-    public StateDefinition(String name, StateType type) {
+    public StateDefinition(String name, StateType stateType) {
         super(name, State.class);
-        this.type = type;
+        this.stateType = stateType;
     }
 
     public State instantiate(Activation act) {
@@ -55,8 +54,8 @@ public class StateDefinition extends ObjectDefinition<StateDefinition, State> {
         );
     }
 
-    public StateType getType() {
-        return type;
+    public StateType getStateType() {
+        return stateType;
     }
 
     public StateDefinition setActivation(ActivationDefinition activation) {

@@ -21,7 +21,7 @@ import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.neurons.Neuron;
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.fielddefs.ObjectPath;
 
 import java.util.*;
@@ -30,7 +30,7 @@ import java.util.*;
  *
  * @author Lukas Molzberger
  */
-public class ActivationDefinition extends ObjectDefinition<ActivationDefinition, Activation> {
+public class ActivationDefinition extends Type<ActivationDefinition, Activation> {
 
     private NeuronDefinition neuron;
 
@@ -66,7 +66,7 @@ public class ActivationDefinition extends ObjectDefinition<ActivationDefinition,
     public ActivationDefinition addStateType(StateDefinition state) {
         assert state != null;
 
-        states.put(state.getType(), state);
+        states.put(state.getStateType(), state);
         state.setActivation(this);
 
         return this;

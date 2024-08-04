@@ -26,5 +26,5 @@ public interface FieldInput<I extends FieldInputs<F>, F extends FieldLink> exten
 
     I getInputs();
 
-    FieldObject getObject();
+    Obj getObject();
 }

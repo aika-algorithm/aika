@@ -18,7 +18,7 @@ package network.aika.statistic;
 
 import network.aika.Range;
 import network.aika.enums.sign.Sign;
-import network.aika.fields.FieldObject;
+import network.aika.fields.Obj;
 import network.aika.fields.FieldOutput;
 import network.aika.fields.MultiField;
 import network.aika.fields.link.FixedFieldLink;
@@ -38,7 +38,7 @@ import static network.aika.enums.sign.Sign.POS;
  *
  * @author Lukas Molzberger
  */
-public class SynapseStatistic<O extends FieldObject> extends MultiField<O, FixedFieldInputs, FixedFieldLink> implements FieldWritable {
+public class SynapseStatistic<O extends Obj> extends MultiField<O, FixedFieldInputs, FixedFieldLink> implements FieldWritable {
 
     private Double alpha;
 

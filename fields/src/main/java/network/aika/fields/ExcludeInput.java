@@ -17,18 +17,16 @@
 package network.aika.fields;
 
 
-import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FunctionFieldDefinition;
-import network.aika.fielddefs.ObjectDefinition;
-import network.aika.fields.link.FieldLink;
+import network.aika.fielddefs.Type;
 import network.aika.fields.link.FixedFieldLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class ExcludeInput<O extends FieldObject> extends Subtraction<O> {
+public class ExcludeInput<O extends Obj> extends Subtraction<O> {
 
-    public static <D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> FunctionFieldDefinition<D, O> excludeInput(D ref, String label) {
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FunctionFieldDefinition<T, O> excludeInput(T ref, String label) {
         return new FunctionFieldDefinition<>(ExcludeInput.class, ref, label);
     }
 

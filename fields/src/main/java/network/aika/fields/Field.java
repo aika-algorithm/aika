@@ -27,7 +27,7 @@ import network.aika.utils.FieldWritable;
 /**
  * @author Lukas Molzberger
  */
-public class Field<O extends FieldObject, I extends FieldInputs<F>, F extends FieldLink> extends FieldOutputImpl implements FieldInput<I, F>, FieldOutput, FieldWritable {
+public class Field<O extends Obj, I extends FieldInputs<F>, F extends FieldLink> extends FieldOutputImpl implements FieldInput<I, F>, FieldOutput, FieldWritable {
 
     private FieldDefinition fieldDefinition;
 

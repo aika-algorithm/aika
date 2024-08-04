@@ -27,7 +27,7 @@ import static network.aika.elements.typedef.SynapseDefinition.WEIGHT;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InvertFunction.invert;
 import static network.aika.fields.SumField.sum;
-import static network.aika.fields.ThresholdOperator.Type.ABOVE;
+import static network.aika.fields.ThresholdOperator.Comparison.ABOVE;
 import static network.aika.fields.ThresholdOperator.threshold;
 import static network.aika.queue.Phase.TRAINING;
 

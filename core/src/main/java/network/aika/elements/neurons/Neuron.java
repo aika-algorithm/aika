@@ -16,7 +16,7 @@
  */
 package network.aika.elements.neurons;
 
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.fields.ActivationFunction;
 import network.aika.Model;
 import network.aika.Document;
@@ -57,7 +57,7 @@ import static network.aika.queue.Timestamp.MIN;
  *
  * @author Lukas Molzberger
  */
-public class Neuron extends FieldObjectImpl<NeuronDefinition, Neuron> implements Element, ModelProvider, QueueProvider, Writable {
+public class Neuron extends ObjImpl<NeuronDefinition, Neuron> implements Element, ModelProvider, QueueProvider, Writable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
 
@@ -92,12 +92,12 @@ public class Neuron extends FieldObjectImpl<NeuronDefinition, Neuron> implements
         setModified();
     }
 
-    public NeuronType getType() {
-        return getObjectDefinition().getType();
+    public NeuronType getNeuronType() {
+        return this.getType().getType();
     }
 
     public Stream<BSSlotDefinition> getBindingSignalSlots() {
-        return Arrays.stream(getObjectDefinition().getBindingSignalSlots());
+        return Arrays.stream(this.getType().getBindingSignalSlots());
     }
 
     public Long getId() {
@@ -258,16 +258,16 @@ public class Neuron extends FieldObjectImpl<NeuronDefinition, Neuron> implements
 
 
     public final boolean isTrainingAllowed() {
-        return getObjectDefinition().isTrainingAllowed();
+        return this.getType().isTrainingAllowed();
     }
 
     public final Activation createActivation(Document doc) {
-        return getObjectDefinition().getActivationType()
+        return this.getType().getActivationType()
                 .instantiate(doc.createActivationId(), doc, this);
     }
 
     public final ActivationFunction getActivationFunction() {
-        return getObjectDefinition().getActivationFunction();
+        return this.getType().getActivationFunction();
     }
 
     public void count(Activation act) {
@@ -483,15 +483,15 @@ public class Neuron extends FieldObjectImpl<NeuronDefinition, Neuron> implements
         return provider.getInputSynapse(n);
     }
 
-    public Synapse getInputSynapseByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Synapse getInputSynapseByType(Type<SynapseDefinition, Synapse> synapseType) {
         return provider.getInputSynapseByType(synapseType);
     }
 
-    public Stream<Synapse> getInputSynapsesByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Stream<Synapse> getInputSynapsesByType(Type<SynapseDefinition, Synapse> synapseType) {
         return provider.getInputSynapsesByType(synapseType);
     }
 
-    public Synapse getOutputSynapseByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Synapse getOutputSynapseByType(Type<SynapseDefinition, Synapse> synapseType) {
         return provider.getOutputSynapseByType(synapseType);
     }
 

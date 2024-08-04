@@ -16,10 +16,10 @@
  */
 package network.aika.fielddefs.inputs;
 
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.fielddefs.link.FieldLinkDefinition;
 import network.aika.fields.Field;
-import network.aika.fields.FieldObject;
+import network.aika.fields.Obj;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +27,9 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class FieldInputsDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>, F extends FieldLinkDefinition<F>> {
+public class FieldInputsDefinition<T extends Type<T, O>, O extends Obj<T, O>, F extends FieldLinkDefinition<F>> {
 
-    protected D object;
+    protected T object;
 
     protected List<F> inputs = new ArrayList<>();
 
@@ -39,7 +39,7 @@ public class FieldInputsDefinition<D extends ObjectDefinition<D, O>, O extends F
     }
 
 
-    public void setObject(D object) {
+    public void setObject(T object) {
         this.object = object;
     }
 

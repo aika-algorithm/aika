@@ -18,11 +18,11 @@ package network.aika.fielddefs.inputs;
 
 import network.aika.enums.Direction;
 import network.aika.fielddefs.FieldOutputDefinition;
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.fielddefs.ObjectPath;
 import network.aika.fielddefs.ObjectRelationDefinition;
 import network.aika.fielddefs.link.FixedFieldLinkDefinition;
-import network.aika.fields.FieldObject;
+import network.aika.fields.Obj;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -30,9 +30,9 @@ import java.util.function.BiFunction;
 /**
  * @author Lukas Molzberger
  */
-public class FixedFieldInputsDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>>  extends FieldInputsDefinition<D, O, FixedFieldLinkDefinition> {
+public class FixedFieldInputsDefinition<T extends Type<T, O>, O extends Obj<T, O>>  extends FieldInputsDefinition<T, O, FixedFieldLinkDefinition> {
 
-    public FixedFieldInputsDefinition<D, O> in(Integer arg, BiFunction<D, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
+    public FixedFieldInputsDefinition<T, O> in(Integer arg, BiFunction<T, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.INPUT);
         objectPath.add(new ObjectRelationDefinition(object, o -> List.of(o)));
         FieldOutputDefinition in = pathProvider.apply(object, objectPath);
@@ -44,7 +44,7 @@ public class FixedFieldInputsDefinition<D extends ObjectDefinition<D, O>, O exte
         return this;
     }
 
-    public FixedFieldInputsDefinition<D, O> in(Integer arg, BiFunction<D, ObjectPath, FieldOutputDefinition> pathProvider) {
+    public FixedFieldInputsDefinition<T, O> in(Integer arg, BiFunction<T, ObjectPath, FieldOutputDefinition> pathProvider) {
         return in(arg, pathProvider, true);
     }
 }

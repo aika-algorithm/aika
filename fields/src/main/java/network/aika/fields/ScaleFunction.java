@@ -17,15 +17,15 @@
 package network.aika.fields;
 
 import network.aika.fielddefs.FunctionFieldDefinition;
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.fields.link.FixedFieldLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class ScaleFunction<O extends FieldObject> extends AbstractFunction<O> {
+public class ScaleFunction<O extends Obj> extends AbstractFunction<O> {
 
-    public static <D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> FunctionFieldDefinition<D, O> scale(D ref, String label, double scale) {
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FunctionFieldDefinition<T, O> scale(T ref, String label, double scale) {
         return new FunctionFieldDefinition(ScaleFunction.class, ref, label, scale);
     }
 

@@ -83,8 +83,8 @@ public abstract class BindingSignalSlot {
                         getBindingSignals();
 
         bindingSignals.forEach(bs ->
-                s.getType().getTriggers()
-                        .filter(t -> t.getType() == s.getType())
+                s.getStateType().getTriggers()
+                        .filter(t -> t.getStateType() == s.getStateType())
                         .forEach(t ->
                                 Linking.add(act, getType(), bs, t)
                         )

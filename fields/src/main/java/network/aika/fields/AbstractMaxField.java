@@ -27,7 +27,7 @@ import java.util.stream.Stream;
  * @author Lukas Molzberger
  *
  */
-public abstract class AbstractMaxField<O extends FieldObject, I extends FieldInputs<F>, F extends FieldLink> extends Field<O, I, F> {
+public abstract class AbstractMaxField<O extends Obj, I extends FieldInputs<F>, F extends FieldLink> extends Field<O, I, F> {
 
     private F selectedInput;
 

@@ -16,27 +16,27 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.fields.FieldObject;
+import network.aika.fields.Obj;
 import network.aika.fields.ThresholdOperator;
 
 /**
  * @author Lukas Molzberger
  */
-public class ThresholdOperatorFieldDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> extends FunctionFieldDefinition<D, O> {
+public class ThresholdOperatorFieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> extends FunctionFieldDefinition<T, O> {
 
     double threshold;
-    ThresholdOperator.Type type;
+    ThresholdOperator.Comparison type;
 
     boolean isFinal;
 
-    public ThresholdOperatorFieldDefinition(D ref, String name, double threshold, ThresholdOperator.Type type) {
+    public ThresholdOperatorFieldDefinition(T ref, String name, double threshold, ThresholdOperator.Comparison type) {
         super(ThresholdOperator.class, ref, name);
 
         this.threshold = threshold;
         this.type = type;
     }
 
-    public ThresholdOperatorFieldDefinition(D ref, String name, double threshold, ThresholdOperator.Type type, boolean isFinal) {
+    public ThresholdOperatorFieldDefinition(T ref, String name, double threshold, ThresholdOperator.Comparison type, boolean isFinal) {
         super(ThresholdOperator.class, ref, name);
 
         this.threshold = threshold;
@@ -44,7 +44,7 @@ public class ThresholdOperatorFieldDefinition<D extends ObjectDefinition<D, O>, 
         this.isFinal = isFinal;
     }
 
-    public ThresholdOperatorFieldDefinition(D ref, String name, double threshold, ThresholdOperator.Type type, double tolerance) {
+    public ThresholdOperatorFieldDefinition(T ref, String name, double threshold, ThresholdOperator.Comparison type, double tolerance) {
         super(ThresholdOperator.class, ref, name, tolerance);
 
         this.threshold = threshold;
@@ -52,10 +52,10 @@ public class ThresholdOperatorFieldDefinition<D extends ObjectDefinition<D, O>, 
     }
 
     @Override
-    public ThresholdOperator instantiate(FieldObject reference) {
+    public ThresholdOperator instantiate(Obj reference) {
         ThresholdOperator to = (ThresholdOperator) super.instantiate(reference);
         to.setThreshold(threshold);
-        to.setType(type);
+        to.setComparison(type);
         to.setFinal(isFinal);
 
         return to;

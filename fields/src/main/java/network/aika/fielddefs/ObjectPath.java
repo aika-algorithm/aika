@@ -1,7 +1,7 @@
 package network.aika.fielddefs;
 
 import network.aika.enums.Direction;
-import network.aika.fields.FieldObject;
+import network.aika.fields.Obj;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +20,11 @@ public class ObjectPath {
         return direction;
     }
 
-    public ObjectDefinition getFromObject() {
+    public Type getFromObject() {
         return path.getFirst().getRelatedObject();
     }
 
-    public ObjectDefinition getToObject() {
+    public Type getToObject() {
         return path.getLast().getRelatedObject();
     }
 
@@ -32,8 +32,8 @@ public class ObjectPath {
         path.add(rel);
     }
 
-    public List<FieldObject> resolve(FieldObject startObject) {
-        List<FieldObject> current = List.of(startObject);
+    public List<Obj> resolve(Obj startObject) {
+        List<Obj> current = List.of(startObject);
         for(ObjectRelationDefinition e: path) {
 
             current = current.stream()

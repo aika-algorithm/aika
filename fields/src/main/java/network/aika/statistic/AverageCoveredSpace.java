@@ -19,7 +19,7 @@ package network.aika.statistic;
 
 import network.aika.Range;
 import network.aika.fields.Field;
-import network.aika.fields.FieldObject;
+import network.aika.fields.Obj;
 import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.NoFieldInputs;
 import network.aika.utils.FieldWritable;
@@ -32,7 +32,7 @@ import java.io.IOException;
  *
  * @author Lukas Molzberger
  */
-public class AverageCoveredSpace<O extends FieldObject> extends Field<O, NoFieldInputs, FieldLink> implements FieldWritable {
+public class AverageCoveredSpace<O extends Obj> extends Field<O, NoFieldInputs, FieldLink> implements FieldWritable {
 
     private long n;
     private long coveredSpace;

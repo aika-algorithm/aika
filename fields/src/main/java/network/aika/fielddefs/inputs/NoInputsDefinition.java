@@ -1,9 +1,9 @@
 package network.aika.fielddefs.inputs;
 
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.fielddefs.link.FixedFieldLinkDefinition;
-import network.aika.fields.FieldObject;
+import network.aika.fields.Obj;
 
 
-public class NoInputsDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> extends FieldInputsDefinition<D, O, FixedFieldLinkDefinition> {
+public class NoInputsDefinition<T extends Type<T, O>, O extends Obj<T, O>> extends FieldInputsDefinition<T, O, FixedFieldLinkDefinition> {
 }

@@ -9,7 +9,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public abstract class MultiField<O extends FieldObject, I extends FieldInputs<F>, F extends FieldLink> implements FieldInput<I, F>, FieldWritable {
+public abstract class MultiField<O extends Obj, I extends FieldInputs<F>, F extends FieldLink> implements FieldInput<I, F>, FieldWritable {
 
     protected I inputs;
 
@@ -32,7 +32,7 @@ public abstract class MultiField<O extends FieldObject, I extends FieldInputs<F>
     }
 
     @Override
-    public FieldObject getObject() {
+    public Obj getObject() {
         return object;
     }
 

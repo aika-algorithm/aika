@@ -21,7 +21,7 @@ import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.SynapseSlotDefinition;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.FieldObjectImpl;
+import network.aika.fields.ObjImpl;
 import network.aika.queue.Queue;
 
 import java.util.stream.Stream;
@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public abstract class SynapseSlot extends FieldObjectImpl<SynapseSlotDefinition, SynapseSlot> {
+public abstract class SynapseSlot extends ObjImpl<SynapseSlotDefinition, SynapseSlot> {
 
 
     protected Activation activation;
@@ -59,7 +59,7 @@ public abstract class SynapseSlot extends FieldObjectImpl<SynapseSlotDefinition,
     }
 
     public Direction getDirection() {
-        return getObjectDefinition().getDirection();
+        return getType().getDirection();
     }
 
     public abstract void addLink(Link l);

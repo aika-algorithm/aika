@@ -24,17 +24,17 @@ import java.util.function.BiConsumer;
 /**
  * @author Lukas Molzberger
  */
-public class ThresholdOperator<O extends FieldObject> extends AbstractFunction<O> {
+public class ThresholdOperator<O extends Obj> extends AbstractFunction<O> {
 
-    public static <D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> FunctionFieldDefinition<D, O> threshold(D ref, String label, double threshold, ThresholdOperator.Type type) {
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FunctionFieldDefinition<T, O> threshold(T ref, String label, double threshold, Comparison type) {
         return new ThresholdOperatorFieldDefinition<>(ref, label, threshold, type);
     }
 
-    public static <D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> FunctionFieldDefinition<D, O> threshold(D ref, String label, double threshold, ThresholdOperator.Type type, boolean isFinal, BiConsumer<O, ObjectPath> pathProvider, String in) {
+    public static <D extends Type<D, O>, O extends Obj<D, O>> FunctionFieldDefinition<D, O> threshold(D ref, String label, double threshold, Comparison type, boolean isFinal, BiConsumer<O, ObjectPath> pathProvider, String in) {
         return new ThresholdOperatorFieldDefinition<>(ref, label, threshold, type, isFinal);
     }
 
-    public enum Type {
+    public enum Comparison {
         ABOVE,
         BELOW,
         BELOW_OR_EQUAL,
@@ -42,7 +42,7 @@ public class ThresholdOperator<O extends FieldObject> extends AbstractFunction<O
     }
 
     private double threshold;
-    private Type type;
+    private Comparison comparison;
     private boolean isFinal = false;
 
     public ThresholdOperator() {
@@ -53,8 +53,8 @@ public class ThresholdOperator<O extends FieldObject> extends AbstractFunction<O
         this.threshold = threshold;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setComparison(Comparison comparison) {
+        this.comparison = comparison;
     }
 
     public void setFinal(boolean aFinal) {
@@ -70,7 +70,7 @@ public class ThresholdOperator<O extends FieldObject> extends AbstractFunction<O
     }
 
     protected double threshold(double x) {
-        return switch (type) {
+        return switch (comparison) {
             case ABOVE -> x > threshold ? 1.0 : 0.0;
             case BELOW -> x < threshold ? 1.0 : 0.0;
             case BELOW_OR_EQUAL -> x <= threshold ? 1.0 : 0.0;

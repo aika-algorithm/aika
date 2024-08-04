@@ -16,7 +16,6 @@
  */
 package network.aika.queue;
 
-import network.aika.fields.FieldObject;
 import network.aika.queue.keys.QueueKey;
 
 

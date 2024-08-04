@@ -24,7 +24,7 @@ import network.aika.elements.NeuronType;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.links.Link;
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.fields.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
@@ -32,7 +32,7 @@ import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.*;
 import network.aika.enums.Scope;
-import network.aika.fields.FieldObjectImpl;
+import network.aika.fields.ObjImpl;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
@@ -51,7 +51,7 @@ import static network.aika.text.TextReference.join;
 /**
  * @author Lukas Molzberger
  */
-public class Activation extends FieldObjectImpl<ActivationDefinition, Activation> implements Element, ModelProvider, QueueProvider, Comparable<Activation> {
+public class Activation extends ObjImpl<ActivationDefinition, Activation> implements Element, ModelProvider, QueueProvider, Comparable<Activation> {
 
     public static final Comparator<Activation> ID_COMPARATOR = Comparator.comparingInt(Activation::getId);
 
@@ -87,8 +87,8 @@ public class Activation extends FieldObjectImpl<ActivationDefinition, Activation
     }
 
 
-    public NeuronType getType() {
-        return neuron.getType();
+    public NeuronType getNeuronType() {
+        return neuron.getNeuronType();
     }
 
     public void registerTemplateInstanceSynapse(int templateSynId, int instanceSynId) {
@@ -127,14 +127,14 @@ public class Activation extends FieldObjectImpl<ActivationDefinition, Activation
     }
 
     protected void initStates() {
-        Stream.of(getObjectDefinition().getStates())
+        Stream.of(this.getType().getStates())
                 .forEach(sd ->
-                        states[sd.getType().ordinal()] = sd.instantiate(this)
+                        states[sd.getStateType().ordinal()] = sd.instantiate(this)
                 );
     }
 
     protected final int numberOfStates() {
-        return getObjectDefinition().getStates().length;
+        return this.getType().getStates().length;
     }
 
 
@@ -284,7 +284,7 @@ public class Activation extends FieldObjectImpl<ActivationDefinition, Activation
         return neuron.getProvider();
     }
 
-    public Optional<Link> getInputLinkByType(ObjectDefinition<LinkDefinition, Link> linkType) {
+    public Optional<Link> getInputLinkByType(Type<LinkDefinition, Link> linkType) {
         return getInputLinksByType(linkType)
                 .findAny();
     }
@@ -300,14 +300,14 @@ public class Activation extends FieldObjectImpl<ActivationDefinition, Activation
                 .stream();
     }
 
-    public SynapseSlot getInputSlotBySynapseType(ObjectDefinition<SynapseDefinition, Synapse> synType) {
+    public SynapseSlot getInputSlotBySynapseType(Type<SynapseDefinition, Synapse> synType) {
         return getInputSlots()
                 .filter(s -> synType.isInstance(s.getSynapse()))
                 .findFirst()
                 .orElse(null);
     }
 
-    public  Stream<SynapseSlot> getInputSlotsByType(ObjectDefinition<SynapseSlotDefinition, SynapseSlot> slotType) {
+    public  Stream<SynapseSlot> getInputSlotsByType(Type<SynapseSlotDefinition, SynapseSlot> slotType) {
         return getInputSlots()
                 .filter(slotType::isInstance);
     }
@@ -323,7 +323,7 @@ public class Activation extends FieldObjectImpl<ActivationDefinition, Activation
                 .stream();
     }
 
-    public Stream<SynapseSlot> getOutputSlotsByType(ObjectDefinition<SynapseSlotDefinition, SynapseSlot> slotType) {
+    public Stream<SynapseSlot> getOutputSlotsByType(Type<SynapseSlotDefinition, SynapseSlot> slotType) {
         return getOutputSlots()
                 .filter(slotType::isInstance);
     }
@@ -342,12 +342,12 @@ public class Activation extends FieldObjectImpl<ActivationDefinition, Activation
                 Stream.empty();
     }
 
-    public Stream<Link> getInputLinksByType(ObjectDefinition<LinkDefinition, Link> linkType) {
+    public Stream<Link> getInputLinksByType(Type<LinkDefinition, Link> linkType) {
         return getInputLinks()
                 .filter(linkType::isInstance);
     }
 
-    public Stream<Link> getOutputLinksByType(ObjectDefinition<LinkDefinition, Link> linkType) {
+    public Stream<Link> getOutputLinksByType(Type<LinkDefinition, Link> linkType) {
         return getOutputLinks()
                 .filter(linkType::isInstance);
     }

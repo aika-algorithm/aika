@@ -30,30 +30,30 @@ public enum Trigger {
     FIRED_OUTER_FEEDBACK(OUTER_FEEDBACK),
     FIRED_INNER_FEEDBACK(INNER_FEEDBACK);
 
-    private StateType type;
+    private StateType stateType;
 
-    Trigger(StateType type) {
-        this.type = type;
-        if(type != null)
-            type.addTrigger(this);
+    Trigger(StateType stateType) {
+        this.stateType = stateType;
+        if(stateType != null)
+            stateType.addTrigger(this);
     }
 
-    public void setType(StateType type) {
-        this.type = type;
+    public void setStateType(StateType stateType) {
+        this.stateType = stateType;
     }
 
-    public StateType getType() {
-        return type;
+    public StateType getStateType() {
+        return stateType;
     }
 
     public boolean check(Activation act) {
-        if(type == null)
+        if(stateType == null)
             return true;
 
-        return act.isFired(type);
+        return act.isFired(stateType);
     }
 
     public boolean match(Trigger t) {
-        return type == t.type;
+        return stateType == t.stateType;
     }
 }

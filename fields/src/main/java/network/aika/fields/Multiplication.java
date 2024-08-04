@@ -16,17 +16,16 @@
  */
 package network.aika.fields;
 
-import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FunctionFieldDefinition;
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.fields.link.FixedFieldLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class Multiplication<O extends FieldObject> extends AbstractFunction<O> {
+public class Multiplication<O extends Obj> extends AbstractFunction<O> {
 
-    public static <D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> FunctionFieldDefinition<D, O> mul(D ref, String label) {
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FunctionFieldDefinition<T, O> mul(T ref, String label) {
         return new FunctionFieldDefinition<>(Multiplication.class, ref, label);
     }
 

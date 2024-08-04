@@ -19,7 +19,7 @@ package network.aika.statistic;
 import network.aika.Range;
 import network.aika.enums.sign.Sign;
 import network.aika.fields.AbstractFunction;
-import network.aika.fields.FieldObject;
+import network.aika.fields.Obj;
 import network.aika.fields.link.FixedFieldLink;
 import network.aika.utils.Bound;
 import network.aika.utils.FieldWritable;
@@ -35,7 +35,7 @@ import static network.aika.enums.sign.Sign.POS;
  *
  * @author Lukas Molzberger
  */
-public class NeuronStatistic<O extends FieldObject> extends AbstractFunction<O> implements FieldWritable {
+public class NeuronStatistic<O extends Obj> extends AbstractFunction<O> implements FieldWritable {
 
     private Double alpha;
 

@@ -22,7 +22,7 @@ import network.aika.fields.link.FixedFieldInputs;
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractFunction<O extends FieldObject> extends Field<O, FixedFieldInputs, FixedFieldLink> {
+public abstract class AbstractFunction<O extends Obj> extends Field<O, FixedFieldInputs, FixedFieldLink> {
 
     public AbstractFunction(int numArgs) {
         super(new FixedFieldInputs(numArgs));

@@ -18,36 +18,36 @@ package network.aika.fields;
 
 
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldObjectImpl<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> implements FieldObject<D, O>, QueueProvider {
+public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> implements Obj<T, O>, QueueProvider {
 
-    private D objectDefinition;
+    private T type;
 
     private Field[] fields;
 
 
     public Field getField(String fieldName) {
         return getField(
-                getObjectDefinition()
+                getType()
                         .getField(fieldName)
         );
     }
 
     @Override
-    public void setObjectDefinition(D typeDef) {
-        this.fields = new Field[typeDef.getNumberOfFields()];
-        this.objectDefinition = typeDef;
+    public void setType(T type) {
+        this.fields = new Field[type.getNumberOfFields()];
+        this.type = type;
     }
 
     @Override
-    public D getObjectDefinition() {
-        return objectDefinition;
+    public T getType() {
+        return type;
     }
 
     @Override
@@ -56,12 +56,12 @@ public class FieldObjectImpl<D extends ObjectDefinition<D, O>, O extends FieldOb
     }
 
     @Override
-    public void setField(FieldDefinition<D, O> fieldDef, Field f) {
+    public void setField(FieldDefinition<T, O> fieldDef, Field f) {
         fields[fieldDef.getFieldId()] = f;
     }
 
     @Override
-    public Field getField(FieldDefinition<D, O> fieldDef) {
+    public Field getField(FieldDefinition<T, O> fieldDef) {
         return fields[fieldDef.getFieldId()];
     }
 

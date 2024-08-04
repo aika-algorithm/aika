@@ -22,7 +22,7 @@ import network.aika.elements.typedef.SynapseDefinition;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
 import network.aika.exceptions.NeuronSerializationException;
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.utils.ReadWriteLock;
 
 import java.io.*;
@@ -336,7 +336,7 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return syn;
     }
 
-    public Synapse getInputSynapseByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Synapse getInputSynapseByType(Type<SynapseDefinition, Synapse> synapseType) {
         inputLock.acquireReadLock();
         Synapse is = getInputSynapsesByType(synapseType)
                 .findAny()
@@ -345,12 +345,12 @@ public class NeuronProvider implements Comparable<NeuronProvider> {
         return is;
     }
 
-    public Stream<Synapse> getInputSynapsesByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Stream<Synapse> getInputSynapsesByType(Type<SynapseDefinition, Synapse> synapseType) {
         return getInputSynapsesAsStream()
                 .filter(synapseType::isInstance);
     }
 
-    public Synapse getOutputSynapseByType(ObjectDefinition<SynapseDefinition, Synapse> synapseType) {
+    public Synapse getOutputSynapseByType(Type<SynapseDefinition, Synapse> synapseType) {
         outputLock.acquireReadLock();
         Synapse os = getOutputSynapsesAsStream()
                 .filter(synapseType::isInstance)

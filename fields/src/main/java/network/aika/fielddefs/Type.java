@@ -16,7 +16,7 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.fields.FieldObject;
+import network.aika.fields.Obj;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -25,7 +25,7 @@ import java.util.function.Function;
 /**
  * @author Lukas Molzberger
  */
-public class ObjectDefinition<D extends ObjectDefinition<D, O>, O extends FieldObject<D, O>> {
+public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
 
     private String name;
 
@@ -37,7 +37,7 @@ public class ObjectDefinition<D extends ObjectDefinition<D, O>, O extends FieldO
     Map<String, FieldDefinition<D, O>> fieldDefinitions = new TreeMap<>();
     Map<String, FieldOutputDefinition> fieldOutputDefinitions = new TreeMap<>();
 
-    public ObjectDefinition(String name, Class<? extends O> clazz) {
+    public Type(String name, Class<? extends O> clazz) {
         this.name = name;
         this.clazz = clazz;
     }
@@ -47,7 +47,7 @@ public class ObjectDefinition<D extends ObjectDefinition<D, O>, O extends FieldO
             O instance = clazz.getConstructor(parameterTypes.toArray(new Class[0]))
                     .newInstance(parameters.toArray(new Object[0]));
 
-            instance.setObjectDefinition((D) this);
+            instance.setType((D) this);
 
             instantiateFields(instance);
 
@@ -70,13 +70,13 @@ public class ObjectDefinition<D extends ObjectDefinition<D, O>, O extends FieldO
     }
 
     public boolean isInstance(O type) {
-        return this == type.getObjectDefinition() ||
+        return this == type.getType() ||
                 parents.stream().anyMatch(p ->
                         p.isInstance(type)
                 );
     }
 
-    protected void addPathEntry(ObjectPath objectPath, ObjectDefinition relatedObject, Function<O, Set<FieldObject>> mapping) {
+    protected void addPathEntry(ObjectPath objectPath, Type relatedObject, Function<O, Set<Obj>> mapping) {
         objectPath.add(new ObjectRelationDefinition(relatedObject, mapping));
     }
 
@@ -98,7 +98,7 @@ public class ObjectDefinition<D extends ObjectDefinition<D, O>, O extends FieldO
         return parents;
     }
 
-    public void instantiateFields(FieldObject o) {
+    public void instantiateFields(Obj o) {
         fieldDefinitions.values().stream()
                 .map(fd ->
                         fd.instantiate(o)

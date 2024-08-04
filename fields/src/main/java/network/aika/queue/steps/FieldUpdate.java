@@ -18,7 +18,7 @@ package network.aika.queue.steps;
 
 import network.aika.queue.*;
 import network.aika.queue.keys.FieldQueueKey;
-import network.aika.fields.FieldObject;
+import network.aika.fields.Obj;
 import network.aika.fields.QueueInterceptor;
 import network.aika.utils.ApproximateComparisonValueUtil;
 
@@ -30,7 +30,7 @@ import static network.aika.utils.StringUtils.roundToString;
  *
  * @author Lukas Molzberger
  */
-public class FieldUpdate<E extends FieldObject & QueueProvider> extends Step<E> {
+public class FieldUpdate<E extends Obj & QueueProvider> extends Step<E> {
 
     private QueueInterceptor interceptor;
 

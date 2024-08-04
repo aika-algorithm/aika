@@ -27,7 +27,7 @@ import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
 import network.aika.elements.typedef.SynapseDefinition;
-import network.aika.fields.FieldObjectImpl;
+import network.aika.fields.ObjImpl;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.elements.synapses.slots.SynapseSlot;
@@ -51,7 +51,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static network.aika.elements.typedef.NeuronDefinition.BIAS;
 import static network.aika.elements.typedef.SynapseDefinition.WEIGHT;
 import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
@@ -62,7 +61,7 @@ import static network.aika.elements.neurons.RefType.SYNAPSE_OUT;
  *
  * @author Lukas Molzberger
  */
-public abstract class Synapse extends FieldObjectImpl<SynapseDefinition, Synapse> implements Element, ModelProvider, QueueProvider, Writable {
+public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse> implements Element, ModelProvider, QueueProvider, Writable {
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
@@ -97,23 +96,23 @@ public abstract class Synapse extends FieldObjectImpl<SynapseDefinition, Synapse
     }
 
     public NeuronType getInputType() {
-        return getObjectDefinition().getInput().getType();
+        return getType().getInput().getType();
     }
 
     public NeuronType getOutputType() {
-        return getObjectDefinition().getOutput().getType();
+        return getType().getOutput().getType();
     }
 
     public Transition[] getTransition() {
-        return getObjectDefinition().getTransition();
+        return getType().getTransition();
     }
 
     public Transition getRequired() {
-        return getObjectDefinition().getRequired();
+        return getType().getRequired();
     }
 
     public boolean isPropagateRange() {
-        return getObjectDefinition().isPropagateRange();
+        return getType().isPropagateRange();
     }
 
     public Synapse setWeight(double weight) {
@@ -122,7 +121,7 @@ public abstract class Synapse extends FieldObjectImpl<SynapseDefinition, Synapse
     }
 
     public final SynapseSlot createInputSlot(Activation iAct) {
-        return getObjectDefinition()
+        return getType()
                 .getLink()
                 .getInputSlot()
                 .instantiate(iAct, this);
@@ -130,7 +129,7 @@ public abstract class Synapse extends FieldObjectImpl<SynapseDefinition, Synapse
 
 
     public Stream<BindingSignalSlot> transitionBindingSignal(Activation oAct, Scope is) {
-        return Arrays.stream(getObjectDefinition().getTransition())
+        return Arrays.stream(getType().getTransition())
                 .filter(t -> is == t.getFrom())
                 .map(Transition::getTo)
                 .map(oAct::getBindingSignalSlot)
@@ -138,14 +137,14 @@ public abstract class Synapse extends FieldObjectImpl<SynapseDefinition, Synapse
     }
 
     public final SynapseSlot createOutputSlot(Activation iAct) {
-        return getObjectDefinition()
+        return getType()
                 .getLink()
                 .getOutputSlot()
                 .instantiate(iAct, this);
     }
 
     public Trigger getTrigger() {
-        return getObjectDefinition().getTrigger();
+        return getType().getTrigger();
     }
 
     @Override
@@ -241,9 +240,9 @@ public abstract class Synapse extends FieldObjectImpl<SynapseDefinition, Synapse
         if(s != null)
             return s;
 
-        SynapseDefinition std = getObjectDefinition().getInstanceSynapseType() != null ?
-                getObjectDefinition().getInstanceSynapseType() :
-                getObjectDefinition();
+        SynapseDefinition std = getType().getInstanceSynapseType() != null ?
+                getType().getInstanceSynapseType() :
+                getType();
 
         s = std.instantiate(input, output);
 
@@ -307,7 +306,7 @@ public abstract class Synapse extends FieldObjectImpl<SynapseDefinition, Synapse
     }
 
     public final Link createLink(Activation input, Activation output) {
-        return getObjectDefinition()
+        return getType()
                 .getLink()
                 .instantiate(this, input, output);
     }
@@ -333,7 +332,7 @@ public abstract class Synapse extends FieldObjectImpl<SynapseDefinition, Synapse
     }
 
     public final boolean isTrainingAllowed() {
-        return trainingAllowed && getObjectDefinition().isTrainingAllowed() && getOutput().isTrainingAllowed();
+        return trainingAllowed && getType().isTrainingAllowed() && getOutput().isTrainingAllowed();
     }
 
     public void setTrainingAllowed(boolean trainingAllowed) {
@@ -341,7 +340,7 @@ public abstract class Synapse extends FieldObjectImpl<SynapseDefinition, Synapse
     }
 
     public final Direction getStoredAt() {
-        return getObjectDefinition().getStoredAt();
+        return getType().getStoredAt();
     }
 
     public NeuronProvider getPInput() {

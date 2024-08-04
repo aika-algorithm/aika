@@ -19,7 +19,7 @@ package network.aika.elements.typedef;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
-import network.aika.fielddefs.ObjectDefinition;
+import network.aika.fielddefs.Type;
 import network.aika.fielddefs.ObjectPath;
 
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.Set;
  *
  * @author Lukas Molzberger
  */
-public class LinkDefinition extends ObjectDefinition<LinkDefinition, Link> {
+public class LinkDefinition extends Type<LinkDefinition, Link> {
 
     private SynapseDefinition synapse;
     private ActivationDefinition input;
