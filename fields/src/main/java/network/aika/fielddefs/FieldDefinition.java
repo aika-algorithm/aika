@@ -16,51 +16,48 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.enums.Direction;
 import network.aika.fielddefs.inputs.FieldInputsDefinition;
 import network.aika.fielddefs.link.FieldLinkDefinition;
 import network.aika.fields.Field;
 import network.aika.fields.Obj;
 import network.aika.queue.ProcessingPhase;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+
+import static network.aika.enums.Direction.OUTPUT;
 
 /**
  * @author Lukas Molzberger
  */
 public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implements FieldInputDefinition<T, O> {
 
-    protected int fieldId;
+    protected FieldTag fieldTag;
 
     protected Class<? extends Field> clazz;
 
     protected T object;
 
-    protected String label;
-
     protected Double tolerance;
 
     protected FieldInputsDefinition<T, O, ?> inputs;
-    protected List<FieldLinkDefinition> outputs = new ArrayList<>();
 
     protected ProcessingPhase phase;
     protected boolean isNextRound;
 
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T object, String label) {
+    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T object, FieldTag fieldTag) {
         this.clazz = clazz;
-        this.label = label;
+        this.fieldTag = fieldTag;
         this.object = object;
         this.inputs = inputs;
 
-        inputs.setObject(object);
+        inputs.setFieldDefinition(this);
         object.setFieldDefinition(this);
     }
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T object, String label, double tolerance) {
-        this(clazz, inputs, object, label);
+    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T object, FieldTag fieldTag, double tolerance) {
+        this(clazz, inputs, object, fieldTag);
 
         this.tolerance = tolerance;
     }
@@ -70,21 +67,22 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return inputs;
     }
 
-    public FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldInputDefinition> pathProvider, boolean propagateUpdates) {
-        ObjectPath objectPath = new ObjectPath(Direction.OUTPUT);
+
+    public FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldDefinition> pathProvider, boolean propagateUpdates) {
+        ObjectPath objectPath = new ObjectPath(OUTPUT);
         objectPath.add(new ObjectRelationDefinition("OUT", object, o -> List.of(o)));
 
-        FieldOutputDefinition in = object.getFieldOutput(getLabel());
-        FieldInputDefinition out = pathProvider.apply(object, objectPath);
+        FieldOutputDefinition in = object.getFieldOutput(getFieldTag());
+        FieldDefinition out = pathProvider.apply(object, objectPath);
 
-        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, in, out.getInputs(), propagateUpdates);
+        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, in, out, propagateUpdates);
         out.getInputs().addInput(fl);
         in.addOutput(fl);
 
         return this;
     }
 
-    public FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldInputDefinition> pathProvider) {
+    public FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldDefinition> pathProvider) {
         return out(pathProvider, true);
     }
 
@@ -103,22 +101,18 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         }
     }
 
-    public void instantiateLinks(Field f) {
+    public void instantiateInputLinks(Field f) {
         inputs.instantiateLinks(f);
-
-        outputs.forEach(fl ->
-                fl.getObjectPath().resolve(f.getObject())
-        );
     }
 
-    public FieldDefinition<T, O> setFieldId(int id) {
-        fieldId = id;
+    public FieldDefinition<T, O> setFieldTag(FieldTag fieldTag) {
+        this.fieldTag = fieldTag;
 
         return this;
     }
 
-    public int getFieldId() {
-        return fieldId;
+    public FieldTag getFieldTag() {
+        return fieldTag;
     }
 
     public Class<? extends Field> getClazz() {
@@ -142,18 +136,9 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return this;
     }
 
-    public String getLabel() {
-        return label;
-    }
-
-    public FieldDefinition<T, O> setLabel(String label) {
-        this.label = label;
-
-        return this;
-    }
 
     public FieldOutputDefinition getFieldOutput() {
-        return getObject().getFieldOutput(getLabel());
+        return getObject().getFieldOutput(getFieldTag());
     }
 
     public Double getTolerance() {

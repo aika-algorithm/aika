@@ -19,6 +19,7 @@ package network.aika.model;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.typedef.StateDefinition;
 
+import static network.aika.elements.typedef.FieldTags.*;
 import static network.aika.elements.typedef.StateDefinition.*;
 import static network.aika.fields.FieldActivationFunction.actFunc;
 import static network.aika.elements.activations.StateType.*;

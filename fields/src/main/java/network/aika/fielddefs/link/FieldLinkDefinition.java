@@ -17,9 +17,18 @@
 package network.aika.fielddefs.link;
 
 
+import network.aika.enums.Direction;
+import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldOutputDefinition;
 import network.aika.fielddefs.ObjectPath;
-import network.aika.fielddefs.inputs.FieldInputsDefinition;
+import network.aika.fielddefs.Type;
+import network.aika.fields.Field;
+import network.aika.fields.FieldInput;
+import network.aika.fields.FieldOutput;
+import network.aika.fields.Obj;
+import network.aika.fields.link.FieldLink;
+
+import java.util.List;
 
 /**
  * @author Lukas Molzberger
@@ -28,16 +37,16 @@ public class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
 
     private ObjectPath objectPath;
 
-    private FieldOutputDefinition in;
+    private FieldOutputDefinition input;
 
-    private FieldInputsDefinition out;
+    private FieldDefinition output;
 
     boolean propagateUpdates;
 
-    public FieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition in, FieldInputsDefinition<?, ?, F> out, boolean propagateUpdates) {
+    public FieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition input, FieldDefinition output, boolean propagateUpdates) {
         this.objectPath = objectPath;
-        this.in = in;
-        this.out = out;
+        this.input = input;
+        this.output = output;
         this.propagateUpdates = propagateUpdates;
     }
 
@@ -45,15 +54,46 @@ public class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
         return objectPath;
     }
 
-    public FieldOutputDefinition getIn() {
-        return in;
+    public FieldOutputDefinition getInput() {
+        return input;
     }
 
-    public FieldInputsDefinition getOut() {
-        return out;
+    public FieldDefinition getOutput() {
+        return output;
     }
 
     public boolean isPropagateUpdates() {
         return propagateUpdates;
+    }
+
+    public void instantiate(Direction dir, Field f) {
+        if(dir != getObjectPath().getDirection())
+            return;
+
+        List<Obj> objects = getObjectPath().resolve(f.getObject());
+
+        switch (dir) {
+            case INPUT:
+                objects.stream()
+                        .map(o -> o.getField(input.getFieldTag()))
+                        .forEach(in -> instantiateAndLink(in, f));
+                break;
+            case OUTPUT:
+                objects.stream()
+                        .map(o -> o.getField(output))
+                        .forEach(out -> instantiateAndLink(f, out));
+        }
+    }
+
+    public FieldLink instantiateAndLink(FieldOutput input, FieldInput output) {
+        FieldLink fl = instantiate(input, output);
+        output.getInputs().addInput(fl);
+        input.addOutput(fl);
+
+        return fl;
+    }
+
+    public FieldLink instantiate(FieldOutput input, FieldInput output) {
+        return new FieldLink(input, output);
     }
 }

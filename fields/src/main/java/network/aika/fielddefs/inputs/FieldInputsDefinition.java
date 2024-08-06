@@ -16,6 +16,7 @@
  */
 package network.aika.fielddefs.inputs;
 
+import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.Type;
 import network.aika.fielddefs.link.FieldLinkDefinition;
 import network.aika.fields.Field;
@@ -24,35 +25,36 @@ import network.aika.fields.Obj;
 import java.util.ArrayList;
 import java.util.List;
 
+import static network.aika.enums.Direction.INPUT;
+
 /**
  * @author Lukas Molzberger
  */
 public class FieldInputsDefinition<T extends Type<T, O>, O extends Obj<T, O>, F extends FieldLinkDefinition<F>> {
 
-    protected T object;
+    protected FieldDefinition<T, O> field;
 
     protected List<F> inputs = new ArrayList<>();
 
+    public FieldDefinition<T, O> getField() {
+        return field;
+    }
+
+    public void setFieldDefinition(FieldDefinition<T, O> field) {
+        this.field = field;
+    }
 
     public void addInput(F fl) {
         inputs.add(fl);
     }
 
-
-    public void setObject(T object) {
-        this.object = object;
-    }
-
     public void instantiateLinks(Field f) {
         inputs.forEach(fl ->
-                fl.getObjectPath().resolve(
-                        f.getObject()
-                )
+                fl.instantiate(INPUT, f)
         );
     }
 
     public int size() {
         return inputs.size();
     }
-
 }

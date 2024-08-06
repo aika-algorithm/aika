@@ -23,6 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
 
+import static network.aika.fielddefs.FieldTag.FIELD_TAG_COMPARATOR;
+
 /**
  * @author Lukas Molzberger
  */
@@ -35,8 +37,8 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
     protected List<D> parents = new ArrayList<>();
 
 
-    Map<String, FieldDefinition<D, O>> fieldDefinitions = new TreeMap<>();
-    Map<String, FieldOutputDefinition> fieldOutputDefinitions = new TreeMap<>();
+    Map<FieldTag, FieldDefinition<D, O>> fieldDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
+    Map<FieldTag, FieldOutputDefinition> fieldOutputDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
 
     public Type(String name, Class<? extends O> clazz) {
         this.name = name;
@@ -58,24 +60,32 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
         }
     }
 
-    public FieldDefinition<D, O> getField(String name) {
-        FieldDefinition<D, O> fieldDef = fieldDefinitions.get(name);
+    public FieldDefinition<D, O> getField(FieldTag fieldTag) {
+        FieldDefinition<D, O> fieldDef = fieldDefinitions.get(fieldTag);
         if(fieldDef != null)
             return fieldDef;
 
         return parents.stream()
-                .map(p -> p.getField(name))
+                .map(p -> p.getField(fieldTag))
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(null);
     }
 
-    public void collectFields(Map<String, FieldDefinition<D, O>> results) {
+    public void collectFieldDefinitions(Map<FieldTag, FieldDefinition<D, O>> results) {
         parents.forEach(p ->
-                p.collectFields(results)
+                p.collectFieldDefinitions(results)
         );
 
         results.putAll(fieldDefinitions);
+    }
+
+    public void collectFieldOutputDefinitions(Map<FieldTag, FieldOutputDefinition> results) {
+        parents.forEach(p ->
+                p.collectFieldOutputDefinitions(results)
+        );
+
+        results.putAll(fieldOutputDefinitions);
     }
 
     public boolean isInstance(O type) {
@@ -108,33 +118,41 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
     }
 
     public void instantiateFields(O o) {
-        Map<String, FieldDefinition<D, O>> fieldDefs = new HashMap<>();
-        collectFields(fieldDefs);
+        Map<FieldTag, FieldDefinition<D, O>> fieldDefs = new HashMap<>();
+        collectFieldDefinitions(fieldDefs);
 
-        List<Field> fields = fieldDefs.values().stream()
+        TreeMap<FieldTag, Field> fields = new TreeMap<>();
+                fieldDefs.values().stream()
                 .map(fd ->
                         fd.instantiate(o)
                 )
-                .toList();
+                .forEach(f ->
+                        fields.put(f.getFieldDefinition().getFieldTag(), f)
+                );
 
         o.setFields(fields);
 
-        fields.stream()
-                .forEach(f ->
-                        f.getFieldDefinition().instantiateLinks(f)
-                );
+        Map<FieldTag, FieldOutputDefinition> fieldOutputDefs = new HashMap<>();
+        collectFieldOutputDefinitions(fieldOutputDefs);
+
+        fields.values().forEach(f -> {
+            FieldDefinition fd = f.getFieldDefinition();
+            fd.instantiateInputLinks(f);
+            FieldOutputDefinition fod = fieldOutputDefs.get(fd.getFieldTag());
+            if(fod != null)
+                fod.instantiateOutputLinks(f);
+        });
     }
 
     public void setFieldDefinition(FieldDefinition<D, O> fieldDef) {
-        fieldDef.setFieldId(fieldDefinitions.size());
-        fieldDefinitions.put(fieldDef.getLabel(), fieldDef);
+        fieldDefinitions.put(fieldDef.getFieldTag(), fieldDef);
     }
 
-    public FieldOutputDefinition getFieldOutput(String label) {
-        return fieldOutputDefinitions.computeIfAbsent(label, k -> new FieldOutputDefinition());
+    public FieldOutputDefinition getFieldOutput(FieldTag fieldTag) {
+        return fieldOutputDefinitions.computeIfAbsent(fieldTag, k -> new FieldOutputDefinition(k));
     }
 
-    public void setFieldOutputDefinition(String label, FieldOutputDefinition fieldOutDef) {
-        fieldOutputDefinitions.put(label, fieldOutDef);
+    public void setFieldOutputDefinition(FieldTag fieldTag, FieldOutputDefinition fieldOutDef) {
+        fieldOutputDefinitions.put(fieldTag, fieldOutDef);
     }
 }

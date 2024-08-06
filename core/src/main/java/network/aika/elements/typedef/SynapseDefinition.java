@@ -35,8 +35,6 @@ import java.util.Set;
  */
 public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
 
-    public static final String WEIGHT = "weight";
-
 
     private LinkDefinition link;
 

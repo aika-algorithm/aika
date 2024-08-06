@@ -17,6 +17,7 @@
 package network.aika.fields;
 
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
 import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.FieldInputs;
 import network.aika.queue.ProcessingPhase;
@@ -79,8 +80,9 @@ public class Field<O extends Obj, I extends FieldInputs<F>, F extends FieldLink>
         return fieldDefinition.getTolerance();
     }
 
-    protected String getLabel() {
-        return fieldDefinition.getLabel();
+    @Override
+    protected FieldTag getFieldTag() {
+        return fieldDefinition.getFieldTag();
     }
 
     public void setValue(double v) {

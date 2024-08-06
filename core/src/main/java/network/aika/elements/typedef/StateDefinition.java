@@ -31,10 +31,6 @@ import java.util.Set;
  */
 public class StateDefinition extends Type<StateDefinition, State> {
 
-    public static final String NET = "net";
-    public static final String FIRED = "fired";
-    public static final String VALUE = "value";
-
 
     private StateType stateType;
 

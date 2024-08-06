@@ -51,7 +51,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static network.aika.elements.typedef.SynapseDefinition.WEIGHT;
+import static network.aika.elements.typedef.FieldTags.WEIGHT;
 import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_IN;

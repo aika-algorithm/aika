@@ -26,11 +26,11 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FunctionFieldDefinition;
-import network.aika.fielddefs.MultiFieldDefinition;
 import network.aika.fielddefs.inputs.FixedFieldInputsDefinition;
 import network.aika.statistic.AverageCoveredSpace;
 import network.aika.statistic.NeuronStatistic;
 
+import static network.aika.elements.typedef.FieldTags.*;
 import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.fields.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;
@@ -77,7 +77,7 @@ public class PatternDef implements TypeDefinition {
 
 
     FieldDefinition<NeuronDefinition, Neuron> neuronAverageCoveredSpace;
-    MultiFieldDefinition<NeuronDefinition, Neuron> neuronStatistic;
+    FieldDefinition<NeuronDefinition, Neuron> neuronStatistic;
 
     FieldDefinition<SynapseDefinition, Synapse> synapseAverageCoveredSpace;
 
@@ -96,7 +96,7 @@ public class PatternDef implements TypeDefinition {
         )
                 .addStateType(typeModel.neuron.getNonFeedbackState());
 
-        FunctionFieldDefinition<ActivationDefinition, Activation> g = mul(activation, "gradient * f'(net)")
+        FunctionFieldDefinition<ActivationDefinition, Activation> g = mul(activation, ACT_GRADIENT)
                 .in(0, activation.getFieldOutput(GRADIENT))
                 .in(1, activation.getFieldOutput(NET_OUTER_GRADIENT));
 
@@ -117,7 +117,7 @@ public class PatternDef implements TypeDefinition {
                 .setBindingSignalSlots(SINGLE_SAME, MULTI_INPUT);
 
 
-        neuronAverageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, new FixedFieldInputsDefinition(), neuron, "avgCoveredSpace");
+        neuronAverageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, new FixedFieldInputsDefinition(), neuron, AVERAGE_COVERED_SPACE);
 
         /*
             private NeuronStatistic statistic = new NeuronStatistic(
@@ -128,7 +128,7 @@ public class PatternDef implements TypeDefinition {
     );
         */
 
-        neuronStatistic = new MultiFieldDefinition(NeuronStatistic.class, new FixedFieldInputsDefinition(), neuron, "statistic", TOLERANCE);
+        neuronStatistic = new FieldDefinition(NeuronStatistic.class, new FixedFieldInputsDefinition(), neuron, STATISTIC, TOLERANCE);
 
         neuronAverageCoveredSpace
                 .out((o, p) -> neuronStatistic, true);

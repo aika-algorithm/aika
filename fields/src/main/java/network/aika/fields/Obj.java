@@ -18,10 +18,12 @@ package network.aika.fields;
 
 
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.Type;
 import network.aika.queue.Queue;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -33,7 +35,9 @@ public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
 
     T getType();
 
-    void setFields(List<Field> fields);
+    void setFields(Map<FieldTag, Field> fields);
+
+    Field getField(FieldTag fieldTag);
 
     Field getField(FieldDefinition<T, O> fieldDef);
 

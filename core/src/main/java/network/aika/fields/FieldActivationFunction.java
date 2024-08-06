@@ -19,6 +19,7 @@ package network.aika.fields;
 import network.aika.elements.activations.State;
 import network.aika.elements.typedef.StateDefinition;
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.FunctionFieldDefinition;
 import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.FixedFieldLink;
@@ -28,8 +29,8 @@ import network.aika.fields.link.FixedFieldLink;
  */
 public class FieldActivationFunction extends AbstractFunction<State> {
 
-    public static FunctionFieldDefinition<StateDefinition, State> actFunc(StateDefinition ref, String label, Double tolerance) {
-        return new FunctionFieldDefinition<>(FieldActivationFunction.class, ref, label, tolerance);
+    public static FunctionFieldDefinition<StateDefinition, State> actFunc(StateDefinition ref, FieldTag fieldTag, Double tolerance) {
+        return new FunctionFieldDefinition<>(FieldActivationFunction.class, ref, fieldTag, tolerance);
     }
 
     public FieldActivationFunction() {

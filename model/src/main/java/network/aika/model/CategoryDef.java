@@ -4,12 +4,9 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
-import network.aika.elements.typedef.ActivationDefinition;
-import network.aika.elements.typedef.LinkDefinition;
-import network.aika.elements.typedef.NeuronDefinition;
-import network.aika.elements.typedef.SynapseDefinition;
+import network.aika.elements.typedef.*;
 
-import static network.aika.elements.activations.StateType.NON_FEEDBACK;
+import static network.aika.elements.typedef.FieldTags.INITIAL_CATEGORY_SYNAPSE_WEIGHT;
 import static network.aika.fields.InputField.inputField;
 
 public class CategoryDef {
@@ -51,7 +48,7 @@ public class CategoryDef {
 
         inputField(
                 neuron,
-                "initialCategorySynapseWeight"
+                INITIAL_CATEGORY_SYNAPSE_WEIGHT
         );
     }
 

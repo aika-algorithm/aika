@@ -29,23 +29,23 @@ public class ThresholdOperatorFieldDefinition<T extends Type<T, O>, O extends Ob
 
     boolean isFinal;
 
-    public ThresholdOperatorFieldDefinition(T ref, String name, double threshold, ThresholdOperator.Comparison type) {
-        super(ThresholdOperator.class, ref, name);
+    public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison type) {
+        super(ThresholdOperator.class, ref, fieldTag);
 
         this.threshold = threshold;
         this.type = type;
     }
 
-    public ThresholdOperatorFieldDefinition(T ref, String name, double threshold, ThresholdOperator.Comparison type, boolean isFinal) {
-        super(ThresholdOperator.class, ref, name);
+    public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison type, boolean isFinal) {
+        super(ThresholdOperator.class, ref, fieldTag);
 
         this.threshold = threshold;
         this.type = type;
         this.isFinal = isFinal;
     }
 
-    public ThresholdOperatorFieldDefinition(T ref, String name, double threshold, ThresholdOperator.Comparison type, double tolerance) {
-        super(ThresholdOperator.class, ref, name, tolerance);
+    public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison type, double tolerance) {
+        super(ThresholdOperator.class, ref, fieldTag, tolerance);
 
         this.threshold = threshold;
         this.type = type;

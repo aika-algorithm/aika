@@ -16,6 +16,7 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.FunctionFieldDefinition;
 import network.aika.fielddefs.Type;
 import network.aika.fields.link.FixedFieldLink;
@@ -25,8 +26,8 @@ import network.aika.fields.link.FixedFieldLink;
  */
 public class InvertFunction<O extends Obj> extends AbstractFunction<O> {
 
-    public static <T extends Type<T, O>, O extends Obj<T, O>>  FunctionFieldDefinition<T, O> invert(T ref, String label) {
-        return new FunctionFieldDefinition<>(InvertFunction.class, ref, label);
+    public static <T extends Type<T, O>, O extends Obj<T, O>>  FunctionFieldDefinition<T, O> invert(T ref, FieldTag fieldTag) {
+        return new FunctionFieldDefinition<>(InvertFunction.class, ref, fieldTag);
     }
 
     public InvertFunction() {

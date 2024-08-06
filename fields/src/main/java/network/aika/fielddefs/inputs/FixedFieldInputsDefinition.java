@@ -17,10 +17,7 @@
 package network.aika.fielddefs.inputs;
 
 import network.aika.enums.Direction;
-import network.aika.fielddefs.FieldOutputDefinition;
-import network.aika.fielddefs.Type;
-import network.aika.fielddefs.ObjectPath;
-import network.aika.fielddefs.ObjectRelationDefinition;
+import network.aika.fielddefs.*;
 import network.aika.fielddefs.link.FixedFieldLinkDefinition;
 import network.aika.fields.Obj;
 
@@ -32,12 +29,13 @@ import java.util.function.BiFunction;
  */
 public class FixedFieldInputsDefinition<T extends Type<T, O>, O extends Obj<T, O>>  extends FieldInputsDefinition<T, O, FixedFieldLinkDefinition> {
 
+
     public FixedFieldInputsDefinition<T, O> in(Integer arg, BiFunction<T, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.INPUT);
-        objectPath.add(new ObjectRelationDefinition("IN", object, o -> List.of(o)));
-        FieldOutputDefinition in = pathProvider.apply(object, objectPath);
+        objectPath.add(new ObjectRelationDefinition("IN", field.getObject(), o -> List.of(o)));
+        FieldOutputDefinition in = pathProvider.apply(field.getObject(), objectPath);
 
-        FixedFieldLinkDefinition fl = new FixedFieldLinkDefinition(objectPath, in, arg, this, propagateUpdates);
+        FixedFieldLinkDefinition fl = new FixedFieldLinkDefinition(objectPath, in, arg, field, propagateUpdates);
         addInput(fl);
         in.addOutput(fl);
 

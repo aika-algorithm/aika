@@ -18,11 +18,16 @@ package network.aika.fields;
 
 
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.Type;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 
-import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import static network.aika.fielddefs.FieldTag.FIELD_TAG_COMPARATOR;
+
 
 /**
  * @author Lukas Molzberger
@@ -31,13 +36,14 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> implements Obj<T
 
     private T type;
 
-    private Field[] fields;
+    private Map<FieldTag, Field> fields = new TreeMap<>(FIELD_TAG_COMPARATOR);
 
 
-    public Field getField(String fieldName) {
+    @Override
+    public Field getField(FieldTag fieldTag) {
         return getField(
                 getType()
-                        .getField(fieldName)
+                        .getField(fieldTag)
         );
     }
 
@@ -52,20 +58,20 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> implements Obj<T
     }
 
     @Override
-    public void setFields(List<Field> fields) {
-        this.fields = fields.toArray(new Field[0]);
+    public void setFields(Map<FieldTag, Field> fields) {
+        this.fields = fields;
     }
 
     @Override
     public Field getField(FieldDefinition<T, O> fieldDef) {
-        return fields[fieldDef.getFieldId()];
+        return fields.get(fieldDef.getFieldTag());
     }
 
     @Override
     public void disconnect() {
-        for(int i = 0; i < fields.length; i++) {
-            fields[i].getInputs().disconnectAndUnlinkInputs(false);
-        }
+        fields.values().forEach(f ->
+                f.getInputs().disconnectAndUnlinkInputs(false)
+        );
     }
 
     @Override

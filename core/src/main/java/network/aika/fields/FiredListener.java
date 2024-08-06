@@ -19,6 +19,7 @@ package network.aika.fields;
 import network.aika.elements.activations.State;
 import network.aika.elements.typedef.StateDefinition;
 import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.inputs.FixedFieldInputsDefinition;
 import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.FixedFieldLink;
@@ -28,8 +29,8 @@ import network.aika.fields.link.FixedFieldLink;
  */
 public class FiredListener extends AbstractListener<State> {
 
-    public static FieldDefinition<StateDefinition, State> firedListener(StateDefinition ref, String label, Double tolerance) {
-        return new FieldDefinition<>(FiredListener.class, new FixedFieldInputsDefinition<>(), ref, label, tolerance);
+    public static FieldDefinition<StateDefinition, State> firedListener(StateDefinition ref, FieldTag fieldTag, Double tolerance) {
+        return new FieldDefinition<>(FiredListener.class, new FixedFieldInputsDefinition<>(), ref, fieldTag, tolerance);
     }
 
     @Override

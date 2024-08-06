@@ -32,9 +32,6 @@ import java.util.List;
  */
 public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
 
-    public static final String BIAS = "bias";
-
-
     private NeuronType neuronType;
 
     private ActivationFunction activationFunction;

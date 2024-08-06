@@ -16,6 +16,7 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.FunctionFieldDefinition;
 import network.aika.fielddefs.Type;
 import network.aika.fields.link.FixedFieldLink;
@@ -25,8 +26,8 @@ import network.aika.fields.link.FixedFieldLink;
  */
 public class Addition<O extends Obj> extends AbstractFunction<O> {
 
-    public static <T extends Type<T, O>, O extends Obj<T, O>> FunctionFieldDefinition<T, O> add(T ref, String label) {
-        return new FunctionFieldDefinition<>(Addition.class, ref, label);
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FunctionFieldDefinition<T, O> add(T ref, FieldTag fieldTag) {
+        return new FunctionFieldDefinition<>(Addition.class, ref, fieldTag);
     }
 
     public Addition() {

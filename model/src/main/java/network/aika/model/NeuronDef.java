@@ -23,7 +23,10 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
-import static network.aika.elements.typedef.SynapseDefinition.WEIGHT;
+import static network.aika.elements.typedef.FieldTags.INPUT_VALUE;
+import static network.aika.elements.typedef.FieldTags.INPUT_IS_FIRED;
+import static network.aika.elements.typedef.FieldTags.NEG_INPUT_IS_FIRED;
+import static network.aika.elements.typedef.FieldTags.WEIGHT;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InvertFunction.invert;
 import static network.aika.fields.SumField.sum;
@@ -36,15 +39,6 @@ import static network.aika.queue.Phase.TRAINING;
  * @author Lukas Molzberger
  */
 public class NeuronDef {
-
-    public static final String INPUT_VALUE = "inputValue";
-    public static final String INPUT_IS_FIRED = "inputIsFired";
-    public static final String NEG_INPUT_IS_FIRED = "negInputIsFired";
-    public static final String INITIAL_CATEGORY_SYNAPSE_WEIGHT = "initialCategorySynapseWeight";
-    public static final String NET_OUTER_GRADIENT = "netOuterGradient";
-    public static final String GRADIENT = "gradient";
-    public static final String UPDATE_VALUE = "updateValue";
-    public static final String NEG_UPDATE_VALUE = "negUpdateValue";
 
     TypeModel typeModel;
 
@@ -107,7 +101,7 @@ public class NeuronDef {
         threshold(link, INPUT_IS_FIRED, 0.0, ABOVE)
                 .in(0, (o, p) -> o.getFieldOutput(INPUT_VALUE));
 
-        invert(link,NEG_INPUT_IS_FIRED)
+        invert(link, NEG_INPUT_IS_FIRED)
                 .in(0, (o, p) -> o.getFieldOutput(INPUT_IS_FIRED));
 
         synapse = new SynapseDefinition(

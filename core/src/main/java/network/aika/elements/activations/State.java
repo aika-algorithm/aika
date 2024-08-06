@@ -25,6 +25,7 @@ import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.queue.steps.Fired;
 
+import static network.aika.elements.typedef.FieldTags.VALUE;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.queue.Timestamp.NOT_SET;
 
@@ -45,7 +46,7 @@ public class State extends ObjImpl<StateDefinition, State> implements QueueProvi
     }
 
     private Field getValue() {
-        return getField(this.getType().getField(StateDefinition.VALUE));
+        return getField(this.getType().getField(VALUE));
     }
 
     public void updateFiredStep(FieldLink fl) {

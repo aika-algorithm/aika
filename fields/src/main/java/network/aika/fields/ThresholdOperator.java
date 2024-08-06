@@ -26,12 +26,12 @@ import java.util.function.BiConsumer;
  */
 public class ThresholdOperator<O extends Obj> extends AbstractFunction<O> {
 
-    public static <T extends Type<T, O>, O extends Obj<T, O>> FunctionFieldDefinition<T, O> threshold(T ref, String label, double threshold, Comparison type) {
-        return new ThresholdOperatorFieldDefinition<>(ref, label, threshold, type);
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FunctionFieldDefinition<T, O> threshold(T ref, FieldTag fieldTag, double threshold, Comparison type) {
+        return new ThresholdOperatorFieldDefinition<>(ref, fieldTag, threshold, type);
     }
 
-    public static <D extends Type<D, O>, O extends Obj<D, O>> FunctionFieldDefinition<D, O> threshold(D ref, String label, double threshold, Comparison type, boolean isFinal, BiConsumer<O, ObjectPath> pathProvider, String in) {
-        return new ThresholdOperatorFieldDefinition<>(ref, label, threshold, type, isFinal);
+    public static <D extends Type<D, O>, O extends Obj<D, O>> FunctionFieldDefinition<D, O> threshold(D ref, FieldTag fieldTag, double threshold, Comparison type, boolean isFinal, BiConsumer<O, ObjectPath> pathProvider, String in) {
+        return new ThresholdOperatorFieldDefinition<>(ref, fieldTag, threshold, type, isFinal);
     }
 
     public enum Comparison {

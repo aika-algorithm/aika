@@ -9,12 +9,12 @@ import java.util.function.BiFunction;
 public class FunctionFieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> extends FieldDefinition<T, O> {
 
 
-    public FunctionFieldDefinition(Class<? extends Field> clazz, T object, String label) {
-        super(clazz, new FixedFieldInputsDefinition<>(), object, label);
+    public FunctionFieldDefinition(Class<? extends Field> clazz, T object, FieldTag fieldTag) {
+        super(clazz, new FixedFieldInputsDefinition<>(), object, fieldTag);
     }
 
-    public FunctionFieldDefinition(Class<? extends Field> clazz, T object, String name, double tolerance) {
-        super(clazz, new FixedFieldInputsDefinition<>(), object, name, tolerance);
+    public FunctionFieldDefinition(Class<? extends Field> clazz, T object, FieldTag fieldTag, double tolerance) {
+        super(clazz, new FixedFieldInputsDefinition<>(), object, fieldTag, tolerance);
     }
 
     public FunctionFieldDefinition<T, O> in(Integer arg, BiFunction<T, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {

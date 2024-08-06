@@ -16,6 +16,7 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldTag;
 import network.aika.fields.link.FieldLink;
 import network.aika.utils.FieldWritable;
 import network.aika.utils.StringUtils;
@@ -61,7 +62,7 @@ public abstract class FieldOutputImpl implements FieldOutput, FieldWritable {
 
     protected abstract double getTolerance();
 
-    protected abstract String getLabel();
+    protected abstract FieldTag getFieldTag();
 
     public void triggerUpdate(double u) {
         if(ToleranceUtils.belowTolerance(getTolerance(), u))
@@ -131,7 +132,7 @@ public abstract class FieldOutputImpl implements FieldOutput, FieldWritable {
 
     @Override
     public String toString() {
-        return getLabel() + ": " + getValueString();
+        return getFieldTag() + ": " + getValueString();
     }
 
     public String getValueString() {

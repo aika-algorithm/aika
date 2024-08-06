@@ -49,7 +49,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static network.aika.elements.neurons.RefType.*;
-import static network.aika.elements.typedef.NeuronDefinition.BIAS;
+import static network.aika.elements.typedef.FieldTags.BIAS;
 import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 

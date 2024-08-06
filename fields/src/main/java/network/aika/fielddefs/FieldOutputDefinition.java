@@ -17,18 +17,37 @@
 package network.aika.fielddefs;
 
 import network.aika.fielddefs.link.FieldLinkDefinition;
+import network.aika.fields.Field;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static network.aika.enums.Direction.OUTPUT;
 
 /**
  * @author Lukas Molzberger
  */
 public class FieldOutputDefinition {
 
+    protected FieldTag fieldTag;
+
     protected List<FieldLinkDefinition> outputs = new ArrayList<>();
+
+    public FieldOutputDefinition(FieldTag fieldTag) {
+        this.fieldTag = fieldTag;
+    }
+
+    public FieldTag getFieldTag() {
+        return fieldTag;
+    }
 
     public void addOutput(FieldLinkDefinition fl) {
         outputs.add(fl);
+    }
+
+    public void instantiateOutputLinks(Field f) {
+        outputs.forEach(fl ->
+                fl.instantiate(OUTPUT, f)
+        );
     }
 }
