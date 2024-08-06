@@ -8,6 +8,6 @@ public interface FieldInputDefinition<T extends Type<T, O>, O extends Obj<T, O>>
 
     FieldInputsDefinition<T, O, ?> getInputs();
 
-    T getObject();
+    T getObjectType();
 
 }

@@ -36,7 +36,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
 
     protected Class<? extends Field> clazz;
 
-    protected T object;
+    protected T objectType;
 
     protected Double tolerance;
 
@@ -46,18 +46,18 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
     protected boolean isNextRound;
 
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T object, FieldTag fieldTag) {
+    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T objectType, FieldTag fieldTag) {
         this.clazz = clazz;
         this.fieldTag = fieldTag;
-        this.object = object;
+        this.objectType = objectType;
         this.inputs = inputs;
 
         inputs.setFieldDefinition(this);
-        object.setFieldDefinition(this);
+        objectType.setFieldDefinition(this);
     }
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T object, FieldTag fieldTag, double tolerance) {
-        this(clazz, inputs, object, fieldTag);
+    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T objectType, FieldTag fieldTag, double tolerance) {
+        this(clazz, inputs, objectType, fieldTag);
 
         this.tolerance = tolerance;
     }
@@ -70,10 +70,10 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
 
     public FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(OUTPUT);
-        objectPath.add(new ObjectRelationDefinition("OUT", object, o -> List.of(o)));
+        objectPath.add(new ObjectRelationDefinition("OUT", objectType, o -> List.of(o)));
 
-        FieldOutputDefinition in = object.getFieldOutput(getFieldTag());
-        FieldDefinition out = pathProvider.apply(object, objectPath);
+        FieldOutputDefinition in = objectType.getFieldOutput(getFieldTag());
+        FieldDefinition out = pathProvider.apply(objectType, objectPath);
 
         FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, in, out, propagateUpdates);
         out.getInputs().addInput(fl);
@@ -126,19 +126,18 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
     }
 
     @Override
-    public T getObject() {
-        return object;
+    public T getObjectType() {
+        return objectType;
     }
 
-    public FieldDefinition<T, O> setObject(T object) {
-        this.object = object;
+    public FieldDefinition<T, O> setObjectType(T objectType) {
+        this.objectType = objectType;
 
         return this;
     }
 
-
     public FieldOutputDefinition getFieldOutput() {
-        return getObject().getFieldOutput(getFieldTag());
+        return getObjectType().getFieldOutput(getFieldTag());
     }
 
     public Double getTolerance() {

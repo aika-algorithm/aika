@@ -25,37 +25,37 @@ import network.aika.fields.ThresholdOperator;
 public class ThresholdOperatorFieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> extends FunctionFieldDefinition<T, O> {
 
     double threshold;
-    ThresholdOperator.Comparison type;
+    ThresholdOperator.Comparison comparison;
 
     boolean isFinal;
 
-    public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison type) {
+    public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison comparison) {
         super(ThresholdOperator.class, ref, fieldTag);
 
         this.threshold = threshold;
-        this.type = type;
+        this.comparison = comparison;
     }
 
-    public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison type, boolean isFinal) {
+    public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison comparison, boolean isFinal) {
         super(ThresholdOperator.class, ref, fieldTag);
 
         this.threshold = threshold;
-        this.type = type;
+        this.comparison = comparison;
         this.isFinal = isFinal;
     }
 
-    public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison type, double tolerance) {
+    public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison comparison, double tolerance) {
         super(ThresholdOperator.class, ref, fieldTag, tolerance);
 
         this.threshold = threshold;
-        this.type = type;
+        this.comparison = comparison;
     }
 
     @Override
     public ThresholdOperator instantiate(O reference) {
         ThresholdOperator to = (ThresholdOperator) super.instantiate(reference);
         to.setThreshold(threshold);
-        to.setComparison(type);
+        to.setComparison(comparison);
         to.setFinal(isFinal);
 
         return to;

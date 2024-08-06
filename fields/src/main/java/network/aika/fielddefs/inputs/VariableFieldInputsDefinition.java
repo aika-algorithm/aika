@@ -32,8 +32,8 @@ public class VariableFieldInputsDefinition<T extends Type<T, O>, O extends Obj<T
 
     public VariableFieldInputsDefinition<T, O> in(BiFunction<T, ObjectPath, FieldOutputDefinition> pathProvider, boolean propagateUpdates) {
         ObjectPath objectPath = new ObjectPath(Direction.INPUT);
-        objectPath.add(new ObjectRelationDefinition("IN", field.getObject(), o -> List.of(o)));
-        FieldOutputDefinition in = pathProvider.apply(field.getObject(), objectPath);
+        objectPath.add(new ObjectRelationDefinition("IN", field.getObjectType(), o -> List.of(o)));
+        FieldOutputDefinition in = pathProvider.apply(field.getObjectType(), objectPath);
 
         VariableFieldLinkDefinition fl = new VariableFieldLinkDefinition(objectPath, in, field, propagateUpdates);
         addInput(fl);
