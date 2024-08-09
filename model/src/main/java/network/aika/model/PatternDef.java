@@ -132,7 +132,7 @@ public class PatternDef implements TypeDefinition {
         neuronStatistic = new FieldDefinition(NeuronStatistic.class, new ArgInputs(), neuron, STATISTIC, TOLERANCE);
 
         neuronAverageCoveredSpace
-                .out((o, p) -> neuronStatistic, varLink(true));
+                .out((o, p) -> neuronStatistic, argLink(0));
 
         categoryActivation = new ActivationDefinition(
                 "PatternCategoryActivation",

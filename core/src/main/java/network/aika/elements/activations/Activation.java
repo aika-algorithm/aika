@@ -55,13 +55,13 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
 
     public static final Comparator<Activation> ID_COMPARATOR = Comparator.comparingInt(Activation::getId);
 
-    protected final int id;
+    protected final Integer id;
     protected Neuron neuron;
     protected Document doc;
 
     protected Timestamp created = NOT_SET;
 
-    protected State[] states = new State[numberOfStates()];
+    protected State[] states;
 
     protected NavigableMap<Integer, SynapseSlot> inputSlots = new TreeMap<>();
     protected NavigableMap<Long, SynapseSlot> outputSlots = new TreeMap<>();
@@ -75,7 +75,7 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
 
     protected HashMap<Integer, Integer> templateSynIdMap;
 
-    public Activation(int id, Document doc, Neuron n) {
+    public Activation(Integer id, Document doc, Neuron n) {
         this.id = id;
         this.neuron = n;
         this.doc = doc;
@@ -132,11 +132,6 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
                         states[sd.getStateType().ordinal()] = sd.instantiate(this)
                 );
     }
-
-    protected final int numberOfStates() {
-        return this.getType().getStates().length;
-    }
-
 
     public void propagateBindingSignal(Scope t, Activation bs, boolean state) {
         getOutputLinks()
