@@ -16,13 +16,6 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.FieldLink;
-import network.aika.utils.ToleranceUtils;
-
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleFunction;
-
-import static network.aika.fields.link.FieldLink.*;
 
 /**
  * @author Lukas Molzberger

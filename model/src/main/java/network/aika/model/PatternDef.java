@@ -25,12 +25,13 @@ import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FunctionFieldDefinition;
-import network.aika.fielddefs.inputs.FixedFieldInputsDefinition;
+import network.aika.fielddefs.inputs.ArgInputs;
 import network.aika.statistic.AverageCoveredSpace;
 import network.aika.statistic.NeuronStatistic;
 
 import static network.aika.elements.typedef.FieldTags.*;
+import static network.aika.fielddefs.inputs.ArgInputs.argLink;
+import static network.aika.fielddefs.inputs.VariableInputs.varLink;
 import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.fields.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;
@@ -46,7 +47,6 @@ import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
 import static network.aika.fields.Multiplication.mul;
 import static network.aika.fields.ScaleFunction.scale;
-import static network.aika.model.NeuronDef.*;
 import static network.aika.utils.Utils.TOLERANCE;
 
 /**
@@ -96,15 +96,16 @@ public class PatternDef implements TypeDefinition {
         )
                 .addStateType(typeModel.neuron.getNonFeedbackState());
 
-        FunctionFieldDefinition<ActivationDefinition, Activation> g = mul(activation, ACT_GRADIENT)
-                .in(0, activation.getFieldOutput(GRADIENT))
-                .in(1, activation.getFieldOutput(NET_OUTER_GRADIENT));
+        FieldDefinition<ActivationDefinition, Activation> g = mul(activation, ACT_GRADIENT)
+                .in(activation.getFieldOutput(GRADIENT), argLink(0))
+                .in(activation.getFieldOutput(NET_OUTER_GRADIENT), argLink(1));
 
         scale(
                 activation,
                 UPDATE_VALUE,
                 conf.getLearnRate(false/*neuron.isAbstract()*/)
-        ).in(0, g.getFieldOutput());
+        )
+                .in(g.getFieldOutput(), argLink(0));
 
 
         neuron = new NeuronDefinition(
@@ -117,7 +118,7 @@ public class PatternDef implements TypeDefinition {
                 .setBindingSignalSlots(SINGLE_SAME, MULTI_INPUT);
 
 
-        neuronAverageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, new FixedFieldInputsDefinition(), neuron, AVERAGE_COVERED_SPACE);
+        neuronAverageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, new ArgInputs(), neuron, AVERAGE_COVERED_SPACE);
 
         /*
             private NeuronStatistic statistic = new NeuronStatistic(
@@ -128,10 +129,10 @@ public class PatternDef implements TypeDefinition {
     );
         */
 
-        neuronStatistic = new FieldDefinition(NeuronStatistic.class, new FixedFieldInputsDefinition(), neuron, STATISTIC, TOLERANCE);
+        neuronStatistic = new FieldDefinition(NeuronStatistic.class, new ArgInputs(), neuron, STATISTIC, TOLERANCE);
 
         neuronAverageCoveredSpace
-                .out((o, p) -> neuronStatistic, true);
+                .out((o, p) -> neuronStatistic, varLink(true));
 
         categoryActivation = new ActivationDefinition(
                 "PatternCategoryActivation",

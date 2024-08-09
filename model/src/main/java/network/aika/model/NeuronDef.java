@@ -27,6 +27,7 @@ import static network.aika.elements.typedef.FieldTags.INPUT_VALUE;
 import static network.aika.elements.typedef.FieldTags.INPUT_IS_FIRED;
 import static network.aika.elements.typedef.FieldTags.NEG_INPUT_IS_FIRED;
 import static network.aika.elements.typedef.FieldTags.WEIGHT;
+import static network.aika.fielddefs.inputs.ArgInputs.argLink;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InvertFunction.invert;
 import static network.aika.fields.SumField.sum;
@@ -99,10 +100,10 @@ public class NeuronDef {
 
         identity(link, INPUT_VALUE);
         threshold(link, INPUT_IS_FIRED, 0.0, ABOVE)
-                .in(0, (o, p) -> o.getFieldOutput(INPUT_VALUE));
+                .in((o, p) -> o.getFieldOutput(INPUT_VALUE), argLink(0));
 
         invert(link, NEG_INPUT_IS_FIRED)
-                .in(0, (o, p) -> o.getFieldOutput(INPUT_IS_FIRED));
+                .in((o, p) -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0));
 
         synapse = new SynapseDefinition(
                 "Synapse",

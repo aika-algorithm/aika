@@ -16,13 +16,16 @@
  */
 package network.aika.fielddefs.inputs;
 
-import network.aika.fielddefs.Type;
+import network.aika.fielddefs.link.FieldLinkDefinition;
 import network.aika.fielddefs.link.FixedFieldLinkDefinition;
-import network.aika.fields.Obj;
 
 /**
  * @author Lukas Molzberger
  */
-public class NoInputsDefinition<T extends Type<T, O>, O extends Obj<T, O>> extends FieldInputsDefinition<T, O, FixedFieldLinkDefinition> {
+public class NoInputs extends FieldInputsDefinition<NoInputs, FixedFieldLinkDefinition> {
 
+
+    public void verify(FieldLinkDefinition fl) {
+        assert false;
+    }
 }

@@ -21,7 +21,6 @@ import network.aika.enums.Direction;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldOutputDefinition;
 import network.aika.fielddefs.ObjectPath;
-import network.aika.fielddefs.Type;
 import network.aika.fields.Field;
 import network.aika.fields.FieldInput;
 import network.aika.fields.FieldOutput;
@@ -33,7 +32,7 @@ import java.util.List;
 /**
  * @author Lukas Molzberger
  */
-public class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
+public abstract class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
 
     private ObjectPath objectPath;
 
@@ -43,11 +42,16 @@ public class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
 
     boolean propagateUpdates;
 
-    public FieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition input, FieldDefinition output, boolean propagateUpdates) {
+    public FieldLinkDefinition(boolean propagateUpdates) {
+        this.propagateUpdates = propagateUpdates;
+    }
+
+    public void link(ObjectPath objectPath, FieldOutputDefinition input, FieldDefinition output) {
         this.objectPath = objectPath;
         this.input = input;
         this.output = output;
-        this.propagateUpdates = propagateUpdates;
+
+        input.addOutput(this);
     }
 
     public ObjectPath getObjectPath() {

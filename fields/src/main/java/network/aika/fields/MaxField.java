@@ -16,9 +16,10 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldTag;
-import network.aika.fielddefs.FunctionFieldDefinition;
 import network.aika.fielddefs.Type;
+import network.aika.fielddefs.inputs.VariableInputs;
 import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.VariableFieldInputs;
 
@@ -30,10 +31,10 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
  */
 public class MaxField<O extends Obj> extends AbstractMaxField<O, VariableFieldInputs, FieldLink> {
 
-
-    public static <T extends Type<T, O>, O extends Obj<T, O>> FunctionFieldDefinition<T, O> max(T ref, FieldTag fieldTag) {
-        return new FunctionFieldDefinition<>(
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> max(T ref, FieldTag fieldTag) {
+        return new FieldDefinition<>(
                 MaxField.class,
+                new VariableInputs(),
                 ref,
                 fieldTag,
                 TOLERANCE

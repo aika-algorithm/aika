@@ -28,16 +28,16 @@ import static network.aika.fielddefs.FieldTag.FIELD_TAG_COMPARATOR;
 /**
  * @author Lukas Molzberger
  */
-public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
+public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     private String name;
 
     protected Class<? extends O> clazz;
 
-    protected List<D> parents = new ArrayList<>();
+    protected List<T> parents = new ArrayList<>();
 
 
-    Map<FieldTag, FieldDefinition<D, O>> fieldDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
+    Map<FieldTag, FieldDefinition<T, O>> fieldDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
     Map<FieldTag, FieldOutputDefinition> fieldOutputDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
 
     public Type(String name, Class<? extends O> clazz) {
@@ -50,7 +50,7 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
             O instance = clazz.getConstructor(parameterTypes.toArray(new Class[0]))
                     .newInstance(parameters.toArray(new Object[0]));
 
-            instance.setType((D) this);
+            instance.setType((T) this);
 
             instantiateFields(instance);
 
@@ -60,8 +60,8 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
         }
     }
 
-    public FieldDefinition<D, O> getField(FieldTag fieldTag) {
-        FieldDefinition<D, O> fieldDef = fieldDefinitions.get(fieldTag);
+    public FieldDefinition<T, O> getField(FieldTag fieldTag) {
+        FieldDefinition<T, O> fieldDef = fieldDefinitions.get(fieldTag);
         if(fieldDef != null)
             return fieldDef;
 
@@ -72,7 +72,7 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
                 .orElse(null);
     }
 
-    public void collectFieldDefinitions(Map<FieldTag, FieldDefinition<D, O>> results) {
+    public void collectFieldDefinitions(Map<FieldTag, FieldDefinition<T, O>> results) {
         parents.forEach(p ->
                 p.collectFieldDefinitions(results)
         );
@@ -107,18 +107,18 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
         return clazz;
     }
 
-    public D addParent(D p) {
+    public T addParent(T p) {
         parents.add(p);
 
-        return (D) this;
+        return (T) this;
     }
 
-    public List<D> getParents() {
+    public List<T> getParents() {
         return parents;
     }
 
     public void instantiateFields(O o) {
-        Map<FieldTag, FieldDefinition<D, O>> fieldDefs = new HashMap<>();
+        Map<FieldTag, FieldDefinition<T, O>> fieldDefs = new HashMap<>();
         collectFieldDefinitions(fieldDefs);
 
         TreeMap<FieldTag, Field> fields = new TreeMap<>();
@@ -144,7 +144,7 @@ public class Type<D extends Type<D, O>, O extends Obj<D, O>> {
         });
     }
 
-    public void setFieldDefinition(FieldDefinition<D, O> fieldDef) {
+    public void setFieldDefinition(FieldDefinition<T, O> fieldDef) {
         fieldDefinitions.put(fieldDef.getFieldTag(), fieldDef);
     }
 

@@ -21,6 +21,7 @@ import network.aika.elements.typedef.StateDefinition;
 
 import static network.aika.elements.typedef.FieldTags.*;
 import static network.aika.elements.typedef.StateDefinition.*;
+import static network.aika.fielddefs.inputs.ArgInputs.argLink;
 import static network.aika.fields.FieldActivationFunction.actFunc;
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.fields.FiredListener.firedListener;
@@ -48,10 +49,10 @@ public class StateDef {
                 .setNextRound(stateType == OUTER_FEEDBACK);
 
         sum(state, NET)
-                .out((o, p) -> firedListener(o, FIRED, TOLERANCE));
+                .out((o, p) -> firedListener(o, FIRED, TOLERANCE), argLink(0));
 
         actFunc(state, VALUE, TOLERANCE)
-                .in(0, (o, p) -> o.getFieldOutput(NET))
+                .in((o, p) -> o.getFieldOutput(NET), argLink(0))
                 .setQueued(INFERENCE);
     }
 }

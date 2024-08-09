@@ -16,10 +16,6 @@
  */
 package network.aika.fielddefs.link;
 
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldOutputDefinition;
-import network.aika.fielddefs.ObjectPath;
-import network.aika.fielddefs.inputs.FixedFieldInputsDefinition;
 import network.aika.fields.FieldInput;
 import network.aika.fields.FieldOutput;
 import network.aika.fields.link.FieldLink;
@@ -32,9 +28,8 @@ public class FixedFieldLinkDefinition extends FieldLinkDefinition<FixedFieldLink
 
     private Integer arg;
 
-    public FixedFieldLinkDefinition(ObjectPath objectPath, FieldOutputDefinition in, Integer arg, FieldDefinition out, boolean propagateUpdates) {
-        super(objectPath, in, out, propagateUpdates);
-
+    public FixedFieldLinkDefinition(Integer arg, boolean propagateUpdates) {
+        super(propagateUpdates);
         this.arg = arg;
     }
 

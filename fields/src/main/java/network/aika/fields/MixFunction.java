@@ -20,7 +20,7 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.Type;
-import network.aika.fielddefs.inputs.FixedFieldInputsDefinition;
+import network.aika.fielddefs.inputs.ArgInputs;
 import network.aika.fields.link.FixedFieldLink;
 import network.aika.fields.link.FixedFieldInputs;
 
@@ -30,7 +30,12 @@ import network.aika.fields.link.FixedFieldInputs;
 public class MixFunction<O extends Obj> extends AbstractFunction<O> {
 
     public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> mix(T ref, FieldTag fieldTag) {
-        return new FieldDefinition<>(MixFunction.class, new FixedFieldInputsDefinition<>(), ref, fieldTag);
+        return new FieldDefinition<>(
+                MixFunction.class,
+                new ArgInputs(),
+                ref,
+                fieldTag
+        );
     }
 
     public MixFunction() {

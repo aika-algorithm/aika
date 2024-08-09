@@ -17,30 +17,24 @@
 package network.aika.fielddefs.inputs;
 
 import network.aika.fielddefs.link.FieldLinkDefinition;
-import network.aika.fields.Field;
+import network.aika.fielddefs.link.FixedFieldLinkDefinition;
+import network.aika.fielddefs.link.VariableFieldLinkDefinition;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static network.aika.enums.Direction.INPUT;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class FieldInputsDefinition<I extends FieldInputsDefinition<I, F>, F extends FieldLinkDefinition<F>> {
+public class VariableInputs extends FieldInputsDefinition<VariableInputs, VariableFieldLinkDefinition> {
 
-    protected List<F> inputs = new ArrayList<>();
-
-    public void instantiateLinks(Field f) {
-        inputs.forEach(fl ->
-                fl.instantiate(INPUT, f)
-        );
+    public static VariableFieldLinkDefinition varLink(boolean propagateUpdates) {
+        return new VariableFieldLinkDefinition(propagateUpdates);
     }
 
-    public abstract void verify(FieldLinkDefinition fl);
-
-    public int size() {
-        return inputs.size();
+    public static VariableFieldLinkDefinition varLink() {
+        return new VariableFieldLinkDefinition(true);
     }
 
+    public void verify(FieldLinkDefinition fl) {
+        assert fl instanceof VariableFieldLinkDefinition;
+    }
 }

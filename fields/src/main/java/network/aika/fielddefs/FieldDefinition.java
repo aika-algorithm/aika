@@ -16,6 +16,7 @@
  */
 package network.aika.fielddefs;
 
+import network.aika.enums.Direction;
 import network.aika.fielddefs.inputs.FieldInputsDefinition;
 import network.aika.fielddefs.link.FieldLinkDefinition;
 import network.aika.fields.Field;
@@ -24,6 +25,7 @@ import network.aika.queue.ProcessingPhase;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static network.aika.enums.Direction.OUTPUT;
 
@@ -40,23 +42,22 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
 
     protected Double tolerance;
 
-    protected FieldInputsDefinition<T, O, ?> inputs;
+    protected FieldInputsDefinition inputs;
 
     protected ProcessingPhase phase;
     protected boolean isNextRound;
 
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T objectType, FieldTag fieldTag) {
+    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition inputs, T objectType, FieldTag fieldTag) {
         this.clazz = clazz;
         this.fieldTag = fieldTag;
         this.objectType = objectType;
         this.inputs = inputs;
 
-        inputs.setFieldDefinition(this);
         objectType.setFieldDefinition(this);
     }
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition<T, O, ?> inputs, T objectType, FieldTag fieldTag, double tolerance) {
+    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition inputs, T objectType, FieldTag fieldTag, double tolerance) {
         this(clazz, inputs, objectType, fieldTag);
 
         this.tolerance = tolerance;
@@ -67,23 +68,38 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return inputs;
     }
 
+    public FieldDefinition<T, O> in(FieldOutputDefinition in, FieldLinkDefinition fl) {
+        ObjectPath objectPath = new ObjectPath(Direction.INPUT);
+        objectPath.add(new ObjectRelationDefinition("IN", objectType, o -> List.of(o)));
 
-    public FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldDefinition> pathProvider, boolean propagateUpdates) {
-        ObjectPath objectPath = new ObjectPath(OUTPUT);
-        objectPath.add(new ObjectRelationDefinition("OUT", objectType, o -> List.of(o)));
-
-        FieldOutputDefinition in = objectType.getFieldOutput(getFieldTag());
-        FieldDefinition out = pathProvider.apply(objectType, objectPath);
-
-        FieldLinkDefinition fl = new FieldLinkDefinition(objectPath, in, out, propagateUpdates);
-        out.getInputs().addInput(fl);
-        in.addOutput(fl);
+        inputs.verify(fl);
+        fl.link(objectPath, in, this);
 
         return this;
     }
 
-    public FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldDefinition> pathProvider) {
-        return out(pathProvider, true);
+    public FieldDefinition<T, O> in(BiFunction<T, ObjectPath, FieldOutputDefinition> pathProvider, FieldLinkDefinition fl) {
+        ObjectPath objectPath = new ObjectPath(Direction.INPUT);
+        objectPath.add(new ObjectRelationDefinition("IN", objectType, o -> List.of(o)));
+        FieldOutputDefinition in = pathProvider.apply(getObjectType(), objectPath);
+
+        inputs.verify(fl);
+        fl.link(objectPath, in, this);
+
+        return this;
+    }
+
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>, F extends FieldDefinition<RT, RO>> FieldDefinition<T, O> out(BiFunction<T, ObjectPath, F> pathProvider, FieldLinkDefinition fl) {
+        ObjectPath objectPath = new ObjectPath(OUTPUT);
+        objectPath.add(new ObjectRelationDefinition("OUT", objectType, o -> List.of(o)));
+
+        FieldOutputDefinition in = objectType.getFieldOutput(getFieldTag());
+        F out = pathProvider.apply(objectType, objectPath);
+
+        out.getInputs().verify(fl);
+        fl.link(objectPath, in, out);
+
+        return this;
     }
 
     public Field instantiate(O o) {

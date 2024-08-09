@@ -16,13 +16,14 @@
  */
 package network.aika.fielddefs;
 
+import network.aika.fielddefs.inputs.ArgInputs;
 import network.aika.fields.Obj;
 import network.aika.fields.ThresholdOperator;
 
 /**
  * @author Lukas Molzberger
  */
-public class ThresholdOperatorFieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> extends FunctionFieldDefinition<T, O> {
+public class ThresholdOperatorFieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> extends FieldDefinition<T, O> {
 
     double threshold;
     ThresholdOperator.Comparison comparison;
@@ -30,14 +31,14 @@ public class ThresholdOperatorFieldDefinition<T extends Type<T, O>, O extends Ob
     boolean isFinal;
 
     public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison comparison) {
-        super(ThresholdOperator.class, ref, fieldTag);
+        super(ThresholdOperator.class, new ArgInputs(), ref, fieldTag);
 
         this.threshold = threshold;
         this.comparison = comparison;
     }
 
     public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison comparison, boolean isFinal) {
-        super(ThresholdOperator.class, ref, fieldTag);
+        super(ThresholdOperator.class, new ArgInputs(), ref, fieldTag);
 
         this.threshold = threshold;
         this.comparison = comparison;
@@ -45,7 +46,7 @@ public class ThresholdOperatorFieldDefinition<T extends Type<T, O>, O extends Ob
     }
 
     public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison comparison, double tolerance) {
-        super(ThresholdOperator.class, ref, fieldTag, tolerance);
+        super(ThresholdOperator.class, new ArgInputs(), ref, fieldTag, tolerance);
 
         this.threshold = threshold;
         this.comparison = comparison;

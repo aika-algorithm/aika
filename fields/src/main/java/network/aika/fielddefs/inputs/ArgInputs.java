@@ -16,31 +16,24 @@
  */
 package network.aika.fielddefs.inputs;
 
+
 import network.aika.fielddefs.link.FieldLinkDefinition;
-import network.aika.fields.Field;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static network.aika.enums.Direction.INPUT;
+import network.aika.fielddefs.link.FixedFieldLinkDefinition;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class FieldInputsDefinition<I extends FieldInputsDefinition<I, F>, F extends FieldLinkDefinition<F>> {
+public class ArgInputs extends FieldInputsDefinition<ArgInputs, FixedFieldLinkDefinition> {
 
-    protected List<F> inputs = new ArrayList<>();
-
-    public void instantiateLinks(Field f) {
-        inputs.forEach(fl ->
-                fl.instantiate(INPUT, f)
-        );
+    public static FixedFieldLinkDefinition argLink(Integer arg) {
+        return argLink(arg, true);
     }
 
-    public abstract void verify(FieldLinkDefinition fl);
-
-    public int size() {
-        return inputs.size();
+    public static FixedFieldLinkDefinition argLink(Integer arg, boolean propagateUpdates) {
+        return new FixedFieldLinkDefinition(arg, propagateUpdates);
     }
 
+    public void verify(FieldLinkDefinition fl) {
+        assert fl instanceof FixedFieldLinkDefinition;
+    }
 }
