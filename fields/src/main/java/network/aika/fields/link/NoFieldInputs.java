@@ -18,6 +18,7 @@ package network.aika.fields.link;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger
@@ -34,8 +35,8 @@ public class NoFieldInputs implements FieldInputs<FieldLink> {
     }
 
     @Override
-    public List<FieldLink> getInputs() {
-        return Collections.emptyList();
+    public Stream<FieldLink> getInputs() {
+        return Stream.empty();
     }
 
     @Override

@@ -16,9 +16,9 @@
  */
 package network.aika.fields.link;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger
@@ -43,7 +43,7 @@ public class MapFieldInputs<K, V> implements FieldInputs<MapFieldLink<K, V>> {
     }
 
     @Override
-    public Collection<MapFieldLink<K, V>> getInputs() {
-        return inputs.values();
+    public Stream<MapFieldLink<K, V>> getInputs() {
+        return inputs.values().stream();
     }
 }

@@ -89,7 +89,7 @@ public abstract class AbstractMaxField<O extends Obj, I extends FieldInputs<F>, 
     }
 
     private synchronized Stream<F> getCandidateInputs() {
-        Stream<F> inputs = getInputs().getInputs().stream();
+        Stream<F> inputs = getInputs().getInputs();
         return isNegativeInputAllowed() ?
                 inputs :
                 inputs.filter(fl -> fl.getUpdatedInputValue() > 0.0);

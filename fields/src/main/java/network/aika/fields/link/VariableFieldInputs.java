@@ -18,6 +18,7 @@ package network.aika.fields.link;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger
@@ -42,7 +43,7 @@ public class VariableFieldInputs implements FieldInputs<FieldLink> {
     }
 
     @Override
-    public List<FieldLink> getInputs() {
-        return inputs;
+    public Stream<FieldLink> getInputs() {
+        return inputs.stream();
     }
 }

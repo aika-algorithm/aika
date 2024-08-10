@@ -18,6 +18,8 @@ package network.aika.fields.link;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger
@@ -46,8 +48,9 @@ public class FixedFieldInputs implements FieldInputs<FixedFieldLink> {
     }
 
     @Override
-    public List<FixedFieldLink> getInputs() {
-        return Arrays.asList(inputs);
+    public Stream<FixedFieldLink> getInputs() {
+        return Arrays.stream(inputs)
+                .filter(Objects::nonNull);
     }
 
     public double getInputValueByArg(int arg) {

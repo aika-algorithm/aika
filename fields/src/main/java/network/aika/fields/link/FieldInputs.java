@@ -16,7 +16,7 @@
  */
 package network.aika.fields.link;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger
@@ -27,7 +27,7 @@ public interface FieldInputs<F extends FieldLink> {
 
     void removeInput(F fl);
 
-    Collection<F> getInputs();
+    Stream<F> getInputs();
 
     int size();
 
