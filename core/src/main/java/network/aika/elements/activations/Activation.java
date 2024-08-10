@@ -75,13 +75,16 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
 
     protected HashMap<Integer, Integer> templateSynIdMap;
 
-    public Activation(Integer id, Document doc, Neuron n) {
+    public Activation(ActivationDefinition t, Integer id, Document doc, Neuron n) {
+        this.type = t;
         this.id = id;
         this.neuron = n;
         this.doc = doc;
 
         neuron.register(this);
         doc.register(this);
+
+        initStates();
 
         setCreated(doc.getCurrentTimestamp());
     }
@@ -127,7 +130,10 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
     }
 
     protected void initStates() {
-        Stream.of(this.getType().getStates())
+        StateDefinition[] stateDefs = this.getType().getStates();
+        states = new State[stateDefs.length];
+
+        Stream.of(stateDefs)
                 .forEach(sd ->
                         states[sd.getStateType().ordinal()] = sd.instantiate(this)
                 );

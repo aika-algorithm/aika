@@ -40,8 +40,8 @@ public class SynapseSlotDefinition extends Type<SynapseSlotDefinition, SynapseSl
 
     public SynapseSlot instantiate(Activation act, Synapse synapse) {
         return instantiate(
-                List.of(Activation.class, Synapse.class),
-                List.of(act, synapse)
+                List.of(SynapseSlotDefinition.class, Activation.class, Synapse.class),
+                List.of(this, act, synapse)
         );
     }
 

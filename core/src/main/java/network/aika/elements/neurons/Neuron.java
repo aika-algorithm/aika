@@ -81,13 +81,13 @@ public class Neuron extends ObjImpl<NeuronDefinition, Neuron> implements Element
 
     private final HashMap<Long, PreActivation> activations = new HashMap<>();
 
-    private boolean isStale;
 
     public Neuron(NeuronProvider np) {
         provider = np;
     }
 
-    public Neuron(Model m, RefType rt) {
+    public Neuron(NeuronDefinition type, Model m, RefType rt) {
+        this.type = type;
         provider = new NeuronProvider(m, this, rt);
         setModified();
     }
@@ -355,8 +355,6 @@ public class Neuron extends ObjImpl<NeuronDefinition, Neuron> implements Element
             np.removePropagableRef(provider);
         }
         propagable = null;
-
-        isStale = true;
     }
 
     public void reactivate(Model m) {

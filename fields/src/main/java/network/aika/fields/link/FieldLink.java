@@ -135,8 +135,14 @@ public class FieldLink {
         return Objects.hash(input, output);
     }
 
+    protected String getObjectString() {
+        return input.getObject() != output.getObject() ?
+                "[" + input.getObject().toKeyString() + "]  " :
+                "";
+    }
+
     @Override
     public String toString() {
-        return input + " --->" + output;
+        return getObjectString() + input + " ---> " + output;
     }
 }

@@ -20,6 +20,7 @@ import network.aika.Model;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.links.Link;
+import network.aika.elements.typedef.SynapseDefinition;
 import network.aika.queue.Timestamp;
 
 import java.io.DataInput;
@@ -44,8 +45,8 @@ public class ConjunctiveSynapse extends Synapse
     public ConjunctiveSynapse() {
     }
 
-    public ConjunctiveSynapse(Neuron input, Neuron output) {
-        super(input, output);
+    public ConjunctiveSynapse(SynapseDefinition type, Neuron input, Neuron output) {
+        super(type, input, output);
     }
 
     @Override

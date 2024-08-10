@@ -25,6 +25,7 @@ import network.aika.queue.QueueProvider;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 import static network.aika.fielddefs.FieldTag.FIELD_TAG_COMPARATOR;
 
@@ -32,9 +33,9 @@ import static network.aika.fielddefs.FieldTag.FIELD_TAG_COMPARATOR;
 /**
  * @author Lukas Molzberger
  */
-public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> implements Obj<T, O>, QueueProvider {
+public abstract class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> implements Obj<T, O>, QueueProvider {
 
-    private T type;
+    protected T type;
 
     private Map<FieldTag, Field> fields = new TreeMap<>(FIELD_TAG_COMPARATOR);
 
@@ -45,11 +46,6 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> implements Obj<T
                 getType()
                         .getField(fieldTag)
         );
-    }
-
-    @Override
-    public void setType(T type) {
-        this.type = type;
     }
 
     @Override
@@ -68,6 +64,11 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> implements Obj<T
     }
 
     @Override
+    public Stream<Field> getFields() {
+        return fields.values().stream();
+    }
+
+    @Override
     public void disconnect() {
         fields.values().forEach(f ->
                 f.getInputs().disconnectAndUnlinkInputs(false)
@@ -83,4 +84,6 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> implements Obj<T
     public boolean isNextRound() {
         return false;
     }
+
+
 }

@@ -45,8 +45,8 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
 
     public Link instantiate(Synapse synapse, Activation input, Activation output) {
         return instantiate(
-                List.of(Synapse.class, Activation.class, Activation.class),
-                List.of(synapse, input, output)
+                List.of(LinkDefinition.class, Synapse.class, Activation.class, Activation.class),
+                List.of(this, synapse, input, output)
         );
     }
 

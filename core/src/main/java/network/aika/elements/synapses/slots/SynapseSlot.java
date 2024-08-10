@@ -37,7 +37,8 @@ public abstract class SynapseSlot extends ObjImpl<SynapseSlotDefinition, Synapse
 
     protected Synapse synapse;
 
-    public SynapseSlot(Activation activation, Synapse synapse) {
+    public SynapseSlot(SynapseSlotDefinition type, Activation activation, Synapse synapse) {
+        this.type = type;
         this.activation = activation;
         this.synapse = synapse;
     }
@@ -79,5 +80,10 @@ public abstract class SynapseSlot extends ObjImpl<SynapseSlotDefinition, Synapse
     @Override
     public boolean isNextRound() {
         return false;
+    }
+
+    @Override
+    public String toKeyString() {
+        return "syn-slot:" + activation.toKeyString() + ":" + synapse.toKeyString();
     }
 }

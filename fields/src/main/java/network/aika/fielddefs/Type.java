@@ -18,6 +18,8 @@ package network.aika.fielddefs;
 
 import network.aika.fields.Field;
 import network.aika.fields.Obj;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -29,6 +31,9 @@ import static network.aika.fielddefs.FieldTag.FIELD_TAG_COMPARATOR;
  * @author Lukas Molzberger
  */
 public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
+
+    protected static final Logger LOG = LoggerFactory.getLogger(Type.class);
+
 
     private String name;
 
@@ -50,9 +55,22 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
             O instance = clazz.getConstructor(parameterTypes.toArray(new Class[0]))
                     .newInstance(parameters.toArray(new Object[0]));
 
-            instance.setType((T) this);
-
             instantiateFields(instance);
+
+//            LOG.info(instance.toString());
+            System.out.println(instance);
+
+            instance.getFields()
+                    .forEach(f -> {
+                                System.out.println("  " + f);
+                                f.getInputs().getInputs()
+                                        .forEach(fl ->
+                                                System.out.println("    " + fl.toString())
+                                        );
+                            }
+                    );
+
+            System.out.println();
 
             return instance;
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {

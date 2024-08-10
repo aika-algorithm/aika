@@ -18,6 +18,7 @@ package network.aika.elements.synapses;
 
 
 import network.aika.elements.neurons.Neuron;
+import network.aika.elements.typedef.SynapseDefinition;
 
 /**
  *
@@ -25,8 +26,8 @@ import network.aika.elements.neurons.Neuron;
  */
 public class DisjunctiveSynapse extends Synapse
 {
-    public DisjunctiveSynapse(Neuron input, Neuron output) {
-        super(input, output);
+    public DisjunctiveSynapse(SynapseDefinition type, Neuron input, Neuron output) {
+        super(type, input, output);
     }
 
     @Override

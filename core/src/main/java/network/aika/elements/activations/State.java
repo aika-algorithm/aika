@@ -41,7 +41,8 @@ public class State extends ObjImpl<StateDefinition, State> implements QueueProvi
     protected Fired firedStep = new Fired(this);
 
 
-    public State(Activation act) {
+    public State(StateDefinition type, Activation act) {
+        this.type = type;
         this.act = act;
     }
 
@@ -100,7 +101,13 @@ public class State extends ObjImpl<StateDefinition, State> implements QueueProvi
         return act;
     }
 
+    @Override
+    public String toKeyString() {
+        return "state:" + getStateType() + act.toKeyString();
+    }
+
+    @Override
     public String toString() {
-        return act.toString() + " type:" + this.getType();
+        return getClass().getSimpleName() + " type:" + getStateType() + " act:" + act.toKeyString();
     }
 }

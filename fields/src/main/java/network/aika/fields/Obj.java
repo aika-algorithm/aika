@@ -22,16 +22,14 @@ import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.Type;
 import network.aika.queue.Queue;
 
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Lukas Molzberger
  */
 public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
-
-    void setType(T type);
 
     T getType();
 
@@ -41,7 +39,12 @@ public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
 
     Field getField(FieldDefinition<T, O> fieldDef);
 
+    Stream<Field> getFields();
+
     void disconnect();
 
     Queue getQueue();
+
+    String toKeyString();
+
 }

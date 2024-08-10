@@ -53,6 +53,6 @@ public class FixedFieldLink extends FieldLink {
 
     @Override
     public String toString() {
-        return input + " --" + arg + "-->" + output;
+        return getObjectString() + input + " --" + arg + "--> " + output;
     }
 }

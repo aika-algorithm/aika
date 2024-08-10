@@ -50,8 +50,8 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
 
     public Activation instantiate(int actId, Document doc, Neuron neuron) {
         return instantiate(
-                List.of(Integer.class, Document.class, Neuron.class),
-                List.of(actId, doc, neuron)
+                List.of(ActivationDefinition.class, Integer.class, Document.class, Neuron.class),
+                List.of(this, actId, doc, neuron)
         );
     }
 

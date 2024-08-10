@@ -19,6 +19,7 @@ package network.aika.elements.synapses.slots;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
+import network.aika.elements.typedef.SynapseSlotDefinition;
 
 import java.util.stream.Stream;
 
@@ -29,8 +30,8 @@ import java.util.stream.Stream;
 public class ConjunctiveSynapseSlot extends SynapseSlot {
 
 
-    public ConjunctiveSynapseSlot(Activation activation, Synapse synapse) {
-        super(activation, synapse);
+    public ConjunctiveSynapseSlot(SynapseSlotDefinition type, Activation activation, Synapse synapse) {
+        super(type, activation, synapse);
     }
 
     @Override

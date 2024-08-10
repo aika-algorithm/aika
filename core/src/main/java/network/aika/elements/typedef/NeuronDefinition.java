@@ -50,8 +50,8 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
 
     public Neuron instantiate(Model m, RefType rt) {
         return instantiate(
-                List.of(Model.class, RefType.class),
-                List.of(m, rt)
+                List.of(NeuronDefinition.class, Model.class, RefType.class),
+                List.of(this, m, rt)
         );
     }
 

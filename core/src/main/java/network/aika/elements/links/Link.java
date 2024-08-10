@@ -65,7 +65,8 @@ public abstract class Link extends ObjImpl<LinkDefinition, Link> implements Elem
     protected SynapseSlot outputSlot;
 
 
-    public Link(Synapse s, Activation input, Activation output) {
+    public Link(LinkDefinition type, Synapse s, Activation input, Activation output) {
+        this.type = type;
         this.synapse = s;
         this.input = input;
         this.output = output;

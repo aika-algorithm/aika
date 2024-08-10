@@ -66,8 +66,8 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
 
     public Synapse instantiate(Neuron input, Neuron output) {
         return instantiate(
-                List.of(Neuron.class, Neuron.class),
-                List.of(input, output)
+                List.of(SynapseDefinition.class, Neuron.class, Neuron.class),
+                List.of(this, input, output)
         );
     }
 

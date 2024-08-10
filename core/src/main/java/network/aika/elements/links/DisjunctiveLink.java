@@ -18,6 +18,7 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.DisjunctiveSynapse;
+import network.aika.elements.typedef.LinkDefinition;
 import network.aika.enums.direction.Direction;
 
 /**
@@ -25,8 +26,8 @@ import network.aika.enums.direction.Direction;
  */
 public abstract class DisjunctiveLink extends Link {
 
-    public DisjunctiveLink(DisjunctiveSynapse s, Activation input, Activation output) {
-        super(s, input, output);
+    public DisjunctiveLink(LinkDefinition type, DisjunctiveSynapse s, Activation input, Activation output) {
+        super(type, s, input, output);
 
         setState(Direction.INPUT, true);
         setState(Direction.OUTPUT, true);

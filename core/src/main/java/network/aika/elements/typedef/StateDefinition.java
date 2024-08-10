@@ -45,8 +45,8 @@ public class StateDefinition extends Type<StateDefinition, State> {
 
     public State instantiate(Activation act) {
         return instantiate(
-                List.of(Activation.class),
-                List.of(act)
+                List.of(StateDefinition.class, Activation.class),
+                List.of(this, act)
         );
     }
 

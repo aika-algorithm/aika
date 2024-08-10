@@ -83,7 +83,8 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse> implem
     public Synapse() {
     }
 
-    public Synapse(Neuron input, Neuron output) {
+    public Synapse(SynapseDefinition type, Neuron input, Neuron output) {
+        this.type = type;
         link(input, output);
     }
 
@@ -476,12 +477,6 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse> implem
         return false;
     }
 
-    public String toString() {
-        return getClass().getSimpleName() +
-                " in:[" + (input != null ? input.toKeyString() : "--")  + "] " +
-                getArrow() +
-                " out:[" + (output != null ? output.toKeyString() : "--") + "])";
-    }
 
     private String getArrow() {
         return "-->";
@@ -489,5 +484,21 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse> implem
 
     public void setLatentProxySynapseId(int synapseId) {
 
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() +
+                " in:[" + (input != null ? input.toKeyString() : "--")  + "] " +
+                getArrow() +
+                " out:[" + (output != null ? output.toKeyString() : "--") + "])";
+    }
+
+    @Override
+    public String toKeyString() {
+        return "syn " +
+                " in:[" + (input != null ? input.toKeyString() : "--")  + "] " +
+                getArrow() +
+                " out:[" + (output != null ? output.toKeyString() : "--") + "])";
     }
 }

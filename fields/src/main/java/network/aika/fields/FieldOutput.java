@@ -16,7 +16,6 @@
  */
 package network.aika.fields;
 
-import network.aika.fielddefs.FieldDefinition;
 import network.aika.fields.link.FieldLink;
 
 import java.util.Collection;
@@ -25,6 +24,8 @@ import java.util.Collection;
  * @author Lukas Molzberger
  */
 public interface FieldOutput {
+
+    Obj getObject();
 
     String getValueString();
 
