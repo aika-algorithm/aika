@@ -30,10 +30,9 @@ import static network.aika.fielddefs.FieldTag.FIELD_TAG_COMPARATOR;
 /**
  * @author Lukas Molzberger
  */
-public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
+public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Type.class);
-
 
     private String name;
 
@@ -41,13 +40,13 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     protected List<T> parents = new ArrayList<>();
 
-
     Map<FieldTag, FieldDefinition<T, O>> fieldDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
     Map<FieldTag, FieldOutputDefinition> fieldOutputDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
 
-    public Type(String name, Class<? extends O> clazz) {
+    public Type(TypeRegistry registry, String name, Class<? extends O> clazz) {
         this.name = name;
         this.clazz = clazz;
+        registry.register(this);
     }
 
     protected O instantiate(List<Class<?>> parameterTypes, List<Object> parameters) {
@@ -172,5 +171,18 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     public void setFieldOutputDefinition(FieldTag fieldTag, FieldOutputDefinition fieldOutDef) {
         fieldOutputDefinitions.put(fieldTag, fieldOutDef);
+    }
+
+    public String toKeyString() {
+        return getClazz().getSimpleName() + "." + getName();
+    }
+
+    public abstract void dumpType(StringBuilder sb);
+
+    public void dumpFields(StringBuilder sb) {
+        fieldDefinitions.values()
+                .forEach(fd ->
+                                sb.append("  " + fd.fieldTag)
+                        );
     }
 }

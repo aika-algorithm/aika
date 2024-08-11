@@ -21,6 +21,7 @@ import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
 import network.aika.fielddefs.Type;
 import network.aika.fielddefs.ObjectPath;
+import network.aika.fielddefs.TypeRegistry;
 
 import java.util.List;
 import java.util.Set;
@@ -31,16 +32,21 @@ import java.util.Set;
  */
 public class StateDefinition extends Type<StateDefinition, State> {
 
-
     private StateType stateType;
 
     private boolean isNextRound;
 
     private ActivationDefinition activation;
 
-    public StateDefinition(String name, StateType stateType) {
-        super(name, State.class);
+    public StateDefinition(TypeRegistry registry, String name, StateType stateType) {
+        super(registry, name, State.class);
+
         this.stateType = stateType;
+    }
+
+    @Override
+    public void dumpType(StringBuilder sb) {
+        sb.append("  isNextRound" + isNextRound);
     }
 
     public State instantiate(Activation act) {

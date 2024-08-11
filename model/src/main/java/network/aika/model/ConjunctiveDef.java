@@ -31,7 +31,7 @@ import static network.aika.queue.Phase.TRAINING;
  *
  * @author Lukas Molzberger
  */
-public class ConjunctiveDef {
+public class ConjunctiveDef extends TypeDefinitionBase {
 
     private NeuronDef superType;
 
@@ -45,19 +45,22 @@ public class ConjunctiveDef {
     SynapseDefinition synapse;
 
 
-    public ConjunctiveDef(NeuronDef superType) {
+    public ConjunctiveDef(TypeModel typeModel, NeuronDef superType) {
+        super(typeModel);
         this.superType = superType;
         this.superType.conjunctiveDef = this;
     }
 
     public void initNodes() {
         activation = new ActivationDefinition(
+                getTypeModel(),
                 "ConjunctiveActivation",
                 Activation.class
         )
                 .addParent(superType.getActivation());
 
         neuron = new NeuronDefinition(
+                getTypeModel(),
                 "ConjunctiveNeuron",
                 Neuron.class
         )
@@ -71,21 +74,25 @@ public class ConjunctiveDef {
 
     public void initRelations() {
         inputSlot = new SynapseSlotDefinition(
+                getTypeModel(),
                 "ConjunctiveSynapseInputSlot",
                 ConjunctiveSynapseSlot.class
         );
 
         outputSlot = new SynapseSlotDefinition(
+                getTypeModel(),
                 "ConjunctiveSynapseOutputSlot",
                 ConjunctiveSynapseSlot.class
         );
 
         link = new LinkDefinition(
+                getTypeModel(),
                 "ConjunctiveLink",
                 ConjunctiveLink.class)
                 .addParent(superType.getLink());
 
         synapse = new SynapseDefinition(
+                getTypeModel(),
                 "ConjunctiveSynapse",
                 ConjunctiveSynapse.class
         )
@@ -93,6 +100,9 @@ public class ConjunctiveDef {
                 .setLink(link);
     }
 
+    public TypeModel getTypeModel() {
+        return superType.getTypeModel();
+    }
 
     public ActivationDefinition getActivation() {
         return activation;
@@ -117,5 +127,4 @@ public class ConjunctiveDef {
     public SynapseDefinition getSynapse() {
         return synapse;
     }
-
 }

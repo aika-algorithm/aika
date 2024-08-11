@@ -38,9 +38,7 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  *
  * @author Lukas Molzberger
  */
-public class InhibitoryDef implements TypeDefinition {
-
-    private TypeModel typeModel;
+public class InhibitoryDef extends TypeDefinitionBase {
 
     private DisjunctiveDef superType;
 
@@ -61,21 +59,25 @@ public class InhibitoryDef implements TypeDefinition {
     private SynapseDefinition categorySynapse;
 
     public InhibitoryDef(TypeModel typeModel, DisjunctiveDef superType, CategoryDef categoryDef) {
-        this.typeModel = typeModel;
+        super(typeModel);
+
         this.superType = superType;
         this.categoryDef = categoryDef;
     }
 
+
     public void initNodes() {
 
         activation = new ActivationDefinition(
+                getTypeModel(),
                 "InhibitoryActivation",
                 Activation.class
         )
                 .addParent(superType.getActivation())
-                .addStateType(typeModel.neuron.getNonFeedbackState());
+                .addStateType(getTypeModel().neuron.getNonFeedbackState());
 
         neuron = new NeuronDefinition(
+                getTypeModel(),
                 "InhibitoryNeuron",
                 Neuron.class
         )
@@ -87,13 +89,15 @@ public class InhibitoryDef implements TypeDefinition {
 
 
         categoryActivation = new ActivationDefinition(
+                getTypeModel(),
                 "InhibitoryCategoryActivation",
                 Activation.class
         )
-                .addStateType(typeModel.neuron.getNonFeedbackState())
+                .addStateType(getTypeModel().neuron.getNonFeedbackState())
                 .addParent(categoryDef.getActivation());
 
         categoryNeuron = new NeuronDefinition(
+                getTypeModel(),
                 "InhibitoryCategoryNeuron",
                 Neuron.class
         )
@@ -107,21 +111,23 @@ public class InhibitoryDef implements TypeDefinition {
 
     public void initRelations() {
         link = new LinkDefinition(
+                getTypeModel(),
                 "InhibitoryLink",
                 DisjunctiveLink.class
         )
-                .setInput(typeModel.binding.getActivation())
+                .setInput(getTypeModel().binding.getActivation())
                 .setOutput(activation)
-                .setInputSlot(typeModel.disjunctive.getInputSlot())
-                .setOutputSlot(typeModel.disjunctive.getOutputSlot());
+                .setInputSlot(getTypeModel().disjunctive.getInputSlot())
+                .setOutputSlot(getTypeModel().disjunctive.getOutputSlot());
 
         synapse = new SynapseDefinition(
+                getTypeModel(),
                 "InhibitorySynapse",
                 DisjunctiveSynapse.class
         )
                 .addParent(superType.getSynapse())
                 .setLink(link)
-                .setInput(typeModel.binding.getNeuron())
+                .setInput(getTypeModel().binding.getNeuron())
                 .setOutput(neuron)
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
@@ -130,19 +136,21 @@ public class InhibitoryDef implements TypeDefinition {
 
 
         primaryLink = new LinkDefinition(
+                getTypeModel(),
                 "PrimaryInhibitoryLink",
                 DisjunctiveLink.class)
                 .addParent(superType.getLink())
-                .setInputSlot(typeModel.disjunctive.getInputSlot())
-                .setOutputSlot(typeModel.disjunctive.getOutputSlot());
+                .setInputSlot(getTypeModel().disjunctive.getInputSlot())
+                .setOutputSlot(getTypeModel().disjunctive.getOutputSlot());
 
         primarySynapse = new SynapseDefinition(
+                getTypeModel(),
                 "PrimaryInhibitorySynapse",
                 DisjunctiveSynapse.class
         )
                 .addParent(superType.getSynapse())
                 .setLink(primaryLink)
-                .setInput(typeModel.pattern.getNeuron())
+                .setInput(getTypeModel().pattern.getNeuron())
                 .setOutput(neuron)
                 .setTransition(SAME_INPUT)
                 .setRequired(SAME_INPUT)
@@ -151,13 +159,15 @@ public class InhibitoryDef implements TypeDefinition {
 
 
         categoryLink = new LinkDefinition(
+                getTypeModel(),
                 "InhibitoryCategoryLink",
                 Link.class)
                 .addParent(categoryDef.getLink())
-                .setInputSlot(typeModel.disjunctive.getInputSlot())
-                .setOutputSlot(typeModel.disjunctive.getOutputSlot());
+                .setInputSlot(getTypeModel().disjunctive.getInputSlot())
+                .setOutputSlot(getTypeModel().disjunctive.getOutputSlot());
 
         categorySynapse = new SynapseDefinition(
+                getTypeModel(),
                 "InhibitoryCategorySynapse",
                 Synapse.class
         )
@@ -172,20 +182,22 @@ public class InhibitoryDef implements TypeDefinition {
 
 
         categoryInputLink = new LinkDefinition(
+                getTypeModel(),
                 "InhibitoryCategoryInputLink",
                 DisjunctiveLink.class)
                 .addParent(superType.getLink())
-                .setInputSlot(typeModel.disjunctive.getInputSlot())
-                .setOutputSlot(typeModel.disjunctive.getOutputSlot());
+                .setInputSlot(getTypeModel().disjunctive.getInputSlot())
+                .setOutputSlot(getTypeModel().disjunctive.getOutputSlot());
 
         categoryInputSynapse = new SynapseDefinition(
+                getTypeModel(),
                 "InhibitoryCategoryInputSynapse",
                 Synapse.class
         )
                 .addParent(superType.getSynapse())
                 .setLink(categoryInputLink)
                 .setInput(categoryNeuron)
-                .setOutput(typeModel.binding.getNeuron())
+                .setOutput(getTypeModel().binding.getNeuron())
                 .setTransition(INPUT_INPUT)
                 .setRequired(INPUT_INPUT)
                 .setOutputState(NON_FEEDBACK)
@@ -205,6 +217,10 @@ public class InhibitoryDef implements TypeDefinition {
                 .setInstanceSynapseType(categoryInputSynapse);
 
         categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
+    }
+
+    public TypeModel getTypeModel() {
+        return superType.getTypeModel();
     }
 
 

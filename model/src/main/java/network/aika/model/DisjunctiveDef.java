@@ -32,7 +32,7 @@ import static network.aika.fields.Multiplication.mul;
  *
  * @author Lukas Molzberger
  */
-public class DisjunctiveDef {
+public class DisjunctiveDef extends TypeDefinitionBase {
 
     NeuronDef superType;
 
@@ -45,19 +45,22 @@ public class DisjunctiveDef {
     LinkDefinition link;
     SynapseDefinition synapse;
 
-    public DisjunctiveDef(NeuronDef superType) {
+    public DisjunctiveDef(TypeModel typeModel, NeuronDef superType) {
+        super(typeModel);
         this.superType = superType;
         this.superType.disjunctiveDef = this;
     }
 
     public void initNodes() {
         activation = new ActivationDefinition(
+                getTypeModel(),
                 "DisjunctiveActivation",
                 Activation.class
         )
                 .addParent(superType.getActivation());
 
         neuron = new NeuronDefinition(
+                getTypeModel(),
                 "DisjunctiveNeuron",
                 Neuron.class
         )
@@ -67,16 +70,19 @@ public class DisjunctiveDef {
 
     public void initRelations() {
         inputSlot = new SynapseSlotDefinition(
+                getTypeModel(),
                 "DisjunctiveSynapseInputSlot",
                 DisjunctiveSynapseSlot.class
         );
 
         outputSlot = new SynapseSlotDefinition(
+                getTypeModel(),
                 "DisjunctiveSynapseOutputSlot",
                 DisjunctiveSynapseSlot.class
         );
 
         link = new LinkDefinition(
+                getTypeModel(),
                 "DisjunctiveLink",
                 DisjunctiveLink.class)
                 .addParent(superType.getLink())
@@ -84,6 +90,7 @@ public class DisjunctiveDef {
                 .setOutput(activation);
 
         synapse = new SynapseDefinition(
+                getTypeModel(),
                 "DisjunctiveSynapse",
                 DisjunctiveSynapse.class
         )
@@ -94,6 +101,11 @@ public class DisjunctiveDef {
                 .in((o, p) -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0))
                 .in((o, p) -> o.getOutput(p).getFieldOutput(UPDATE_VALUE), argLink(1))
                 .out((o, p) -> o.getSynapse(p).getField(WEIGHT), varLink());
+    }
+
+
+    public TypeModel getTypeModel() {
+        return superType.getTypeModel();
     }
 
 

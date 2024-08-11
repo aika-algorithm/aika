@@ -25,6 +25,7 @@ import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
 import network.aika.fielddefs.Type;
 import network.aika.fielddefs.ObjectPath;
+import network.aika.fielddefs.TypeRegistry;
 
 import java.util.List;
 import java.util.Set;
@@ -60,8 +61,14 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
 
     private SynapseDefinition instanceSynapseType;
 
-    public SynapseDefinition(String name, Class<? extends Synapse> clazz) {
-        super(name, clazz);
+    public SynapseDefinition(TypeRegistry registry, String name, Class<? extends Synapse> clazz) {
+        super(registry, name, clazz);
+    }
+
+    @Override
+    public void dumpType(StringBuilder sb) {
+        sb.append("  input:" + input.toKeyString());
+        sb.append("  output:" + output.toKeyString());
     }
 
     public Synapse instantiate(Neuron input, Neuron output) {

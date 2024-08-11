@@ -21,6 +21,7 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.direction.Direction;
 import network.aika.fielddefs.Type;
+import network.aika.fielddefs.TypeRegistry;
 
 import java.util.List;
 
@@ -33,10 +34,14 @@ public class SynapseSlotDefinition extends Type<SynapseSlotDefinition, SynapseSl
 
     private Direction direction;
 
-    public SynapseSlotDefinition(String name, Class<? extends SynapseSlot> clazz) {
-        super(name, clazz);
+    public SynapseSlotDefinition(TypeRegistry registry, String name, Class<? extends SynapseSlot> clazz) {
+        super(registry, name, clazz);
     }
 
+    @Override
+    public void dumpType(StringBuilder sb) {
+        System.out.println("  direction:" + direction);
+    }
 
     public SynapseSlot instantiate(Activation act, Synapse synapse) {
         return instantiate(

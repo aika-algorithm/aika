@@ -20,7 +20,6 @@ import network.aika.elements.activations.StateType;
 import network.aika.elements.typedef.StateDefinition;
 
 import static network.aika.elements.typedef.FieldTags.*;
-import static network.aika.elements.typedef.StateDefinition.*;
 import static network.aika.fielddefs.inputs.ArgInputs.argLink;
 import static network.aika.fields.FieldActivationFunction.actFunc;
 import static network.aika.elements.activations.StateType.*;
@@ -39,13 +38,12 @@ public class StateDef {
 
     StateDefinition state;
 
-
     public StateDef(TypeModel typeModel) {
         this.typeModel = typeModel;
     }
 
     public void init(String name, StateType stateType) {
-        state = new StateDefinition(name, stateType)
+        state = new StateDefinition(typeModel, name, stateType)
                 .setNextRound(stateType == OUTER_FEEDBACK);
 
         sum(state, NET)
@@ -54,5 +52,9 @@ public class StateDef {
         actFunc(state, VALUE, TOLERANCE)
                 .in((o, p) -> o.getFieldOutput(NET), argLink(0))
                 .setQueued(INFERENCE);
+    }
+
+    public TypeModel getTypeModel() {
+        return typeModel;
     }
 }

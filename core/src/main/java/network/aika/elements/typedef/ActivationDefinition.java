@@ -23,6 +23,7 @@ import network.aika.elements.activations.StateType;
 import network.aika.elements.neurons.Neuron;
 import network.aika.fielddefs.Type;
 import network.aika.fielddefs.ObjectPath;
+import network.aika.fielddefs.TypeRegistry;
 
 import java.util.*;
 
@@ -36,8 +37,17 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
 
     private Map<StateType, StateDefinition> states = new TreeMap<>();
 
-    public ActivationDefinition(String name, Class<? extends Activation> clazz) {
-        super(name, clazz);
+    public ActivationDefinition(TypeRegistry registry, String name, Class<? extends Activation> clazz) {
+        super(registry, name, clazz);
+    }
+
+    @Override
+    public void dumpType(StringBuilder sb) {
+        sb.append("  neuron:" + neuron.toKeyString());
+        states.values()
+                .forEach(s ->
+                    sb.append("  state:" + s.toKeyString())
+                );
     }
 
     ActivationDefinition setNeuron(NeuronDefinition neuron) {

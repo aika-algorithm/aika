@@ -53,9 +53,7 @@ import static network.aika.utils.Utils.TOLERANCE;
  *
  * @author Lukas Molzberger
  */
-public class PatternDef implements TypeDefinition {
-
-    private TypeModel typeModel;
+public class PatternDef extends TypeDefinitionBase {
 
     private ConjunctiveDef superType;
 
@@ -83,7 +81,8 @@ public class PatternDef implements TypeDefinition {
 
 
     public PatternDef(TypeModel typeModel, ConjunctiveDef superType, CategoryDef categoryDef) {
-        this.typeModel = typeModel;
+        super(typeModel);
+
         this.superType = superType;
         this.categoryDef = categoryDef;
     }
@@ -91,6 +90,7 @@ public class PatternDef implements TypeDefinition {
     public void initNodes(Config conf) {
 
         activation = new ActivationDefinition(
+                getTypeModel(),
                 "PatternActivation",
                 Activation.class
         )
@@ -109,6 +109,7 @@ public class PatternDef implements TypeDefinition {
 
 
         neuron = new NeuronDefinition(
+                getTypeModel(),
                 "PatternNeuron",
                 Neuron.class
         )
@@ -135,6 +136,7 @@ public class PatternDef implements TypeDefinition {
                 .out((o, p) -> neuronStatistic, argLink(0));
 
         categoryActivation = new ActivationDefinition(
+                getTypeModel(),
                 "PatternCategoryActivation",
                 Activation.class
         )
@@ -142,6 +144,7 @@ public class PatternDef implements TypeDefinition {
                 .addStateType(typeModel.neuron.getNonFeedbackState());
 
         categoryNeuron = new NeuronDefinition(
+                getTypeModel(),
                 "PatternCategoryNeuron",
                 Neuron.class
         )
@@ -156,6 +159,7 @@ public class PatternDef implements TypeDefinition {
 
     public void initRelations(Config conf) {
         link = new LinkDefinition(
+                getTypeModel(),
                 "PatternLink",
                 ConjunctiveLink.class
         )
@@ -165,6 +169,7 @@ public class PatternDef implements TypeDefinition {
                 .setOutputSlot(typeModel.conjunctive.getOutputSlot());
 
         synapse = new SynapseDefinition(
+                getTypeModel(),
                 "PatternSynapse",
                 ConjunctiveSynapse.class
         )
@@ -178,6 +183,7 @@ public class PatternDef implements TypeDefinition {
                 .setStoredAt(OUTPUT);
 
         categoryLink = new LinkDefinition(
+                getTypeModel(),
                 "PatternCategoryLink",
                 Link.class
         )
@@ -188,6 +194,7 @@ public class PatternDef implements TypeDefinition {
                 .setOutputSlot(typeModel.disjunctive.getOutputSlot());
 
         categorySynapse = new SynapseDefinition(
+                getTypeModel(),
                 "PatternCategorySynapse",
                 Synapse.class
         )
@@ -202,6 +209,7 @@ public class PatternDef implements TypeDefinition {
 
 
         categoryInputLink = new LinkDefinition(
+                getTypeModel(),
                 "PatternCategoryInputLink",
                 ConjunctiveLink.class
         )
@@ -212,6 +220,7 @@ public class PatternDef implements TypeDefinition {
                 .setOutputSlot(superType.getOutputSlot());
 
         categoryInputSynapse = new SynapseDefinition(
+                getTypeModel(),
                 "PatternCategoryInputSynapse",
                 ConjunctiveSynapse.class
         )
@@ -241,8 +250,9 @@ public class PatternDef implements TypeDefinition {
         categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
     }
 
-
-
+    public TypeModel getTypeModel() {
+        return superType.getTypeModel();
+    }
 
     public ActivationDefinition getActivation() {
         return activation;

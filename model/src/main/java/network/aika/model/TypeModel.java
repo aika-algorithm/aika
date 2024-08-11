@@ -18,17 +18,24 @@ package network.aika.model;
 
 
 import network.aika.Config;
+import network.aika.fielddefs.Type;
+import network.aika.fielddefs.TypeRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class TypeModel {
+public class TypeModel implements TypeRegistry {
+
+    List<Type> types = new ArrayList<>();
 
     NeuronDef neuron = new NeuronDef(this);
 
-    ConjunctiveDef conjunctive = new ConjunctiveDef(neuron);
-    DisjunctiveDef disjunctive = new DisjunctiveDef(neuron);
+    ConjunctiveDef conjunctive = new ConjunctiveDef(this, neuron);
+    DisjunctiveDef disjunctive = new DisjunctiveDef(this, neuron);
     CategoryDef category = new CategoryDef(this, disjunctive);
 
     BindingDef binding = new BindingDef(this, conjunctive, category);
@@ -79,5 +86,21 @@ public class TypeModel {
 
     public InhibitoryDef getInhibitory() {
         return inhibitory;
+    }
+
+    @Override
+    public void register(Type type) {
+        types.add(type);
+    }
+
+    public String dumpModel() {
+        StringBuilder sb = new StringBuilder();
+        types.forEach(t -> {
+            sb.append(t.toKeyString());
+            t.dumpType(sb);
+            t.dumpFields(sb);
+        });
+
+        return sb.toString();
     }
 }

@@ -39,11 +39,9 @@ import static network.aika.queue.Phase.TRAINING;
  *
  * @author Lukas Molzberger
  */
-public class NeuronDef {
+public class NeuronDef extends TypeDefinitionBase {
 
-    TypeModel typeModel;
-
-    StateDef nonFeedbackState = new StateDef(typeModel);
+    StateDef nonFeedbackState;
 
     ConjunctiveDef conjunctiveDef;
 
@@ -58,13 +56,16 @@ public class NeuronDef {
     SynapseDefinition synapse;
 
     public NeuronDef(TypeModel typeModel) {
-        this.typeModel = typeModel;
+        super(typeModel);
+
+        nonFeedbackState = new StateDef(typeModel);
     }
 
     public void initNodes() {
         nonFeedbackState.init("NonFeedbackState", NON_FEEDBACK);
 
         activation = new ActivationDefinition(
+                typeModel,
                 "Activation",
                 Activation.class
         )
@@ -88,6 +89,7 @@ public class NeuronDef {
 
         
         neuron = new NeuronDefinition(
+                typeModel,
                 "Neuron",
                 Neuron.class
         );
@@ -95,6 +97,7 @@ public class NeuronDef {
 
     public void initRelations() {
         link = new LinkDefinition(
+                typeModel,
                 "Link",
                 Link.class);
 
@@ -106,17 +109,13 @@ public class NeuronDef {
                 .in((o, p) -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0));
 
         synapse = new SynapseDefinition(
+                typeModel,
                 "Synapse",
                 Synapse.class
         );
 
         sum(synapse, WEIGHT)
                 .setQueued(TRAINING);
-    }
-
-
-    public TypeModel getTypeModel() {
-        return typeModel;
     }
 
     public StateDefinition getNonFeedbackState() {

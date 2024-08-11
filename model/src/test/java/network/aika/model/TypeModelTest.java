@@ -22,6 +22,8 @@ public class TypeModelTest {
 
         TypeModel typeModel = new TypeModel(new Config());
 
+        System.out.println(typeModel.dumpModel());
+
         Neuron inputNeuron = typeModel
                 .getPattern()
                 .getNeuron()

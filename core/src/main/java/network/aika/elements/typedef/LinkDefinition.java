@@ -21,6 +21,7 @@ import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.fielddefs.Type;
 import network.aika.fielddefs.ObjectPath;
+import network.aika.fielddefs.TypeRegistry;
 
 import java.util.List;
 import java.util.Set;
@@ -39,8 +40,17 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     private SynapseSlotDefinition outputSlot;
 
 
-    public LinkDefinition(String name, Class<? extends Link> clazz) {
-        super(name, clazz);
+    public LinkDefinition(TypeRegistry registry, String name, Class<? extends Link> clazz) {
+        super(registry, name, clazz);
+    }
+
+    @Override
+    public void dumpType(StringBuilder sb) {
+        sb.append("  synapse:" + synapse.toKeyString());
+        sb.append("  input:" + input.toKeyString());
+        sb.append("  output:" + output.toKeyString());
+        sb.append("  inputSlot:" + inputSlot.toKeyString());
+        sb.append("  outputSlot:" + outputSlot.toKeyString());
     }
 
     public Link instantiate(Synapse synapse, Activation input, Activation output) {

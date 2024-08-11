@@ -9,9 +9,7 @@ import network.aika.elements.typedef.*;
 import static network.aika.elements.typedef.FieldTags.INITIAL_CATEGORY_SYNAPSE_WEIGHT;
 import static network.aika.fields.InputField.inputField;
 
-public class CategoryDef {
-
-    private TypeModel typeModel;
+public class CategoryDef extends TypeDefinitionBase {
 
     private DisjunctiveDef superType;
 
@@ -27,19 +25,21 @@ public class CategoryDef {
 
 
     public CategoryDef(TypeModel typeModel, DisjunctiveDef superType) {
-        this.typeModel = typeModel;
+        super(typeModel);
+
         this.superType = superType;
     }
 
-
     public void initNodes() {
         activation = new ActivationDefinition(
+                getTypeModel(),
                 "BindingCategoryActivation",
                 Activation.class
         )
                 .addParent(superType.getActivation());
 
         neuron = new NeuronDefinition(
+                getTypeModel(),
                 "BindingCategoryNeuron",
                 Neuron.class
         )
@@ -55,12 +55,14 @@ public class CategoryDef {
 
     public void initRelations() {
         inputLink = new LinkDefinition(
+                getTypeModel(),
                 "CategoryInputLink",
                 Link.class
         )
                 .addParent(superType.getLink());
 
         inputSynapse = new SynapseDefinition(
+                getTypeModel(),
                 "CategoryInputSynapse",
                 Synapse.class
         )
@@ -68,11 +70,13 @@ public class CategoryDef {
                 .setLink(inputLink);
 
         link = new LinkDefinition(
+                getTypeModel(),
                 "CategoryLink",
                 Link.class)
                 .addParent(superType.link);
 
         synapse = new SynapseDefinition(
+                getTypeModel(),
                 "CategorySynapse",
                 Synapse.class
         )
@@ -80,9 +84,8 @@ public class CategoryDef {
                 .setLink(link);
     }
 
-
     public TypeModel getTypeModel() {
-        return typeModel;
+        return superType.getTypeModel();
     }
 
     public ActivationDefinition getActivation() {
