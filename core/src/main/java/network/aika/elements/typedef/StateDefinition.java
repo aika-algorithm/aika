@@ -46,7 +46,7 @@ public class StateDefinition extends Type<StateDefinition, State> {
 
     @Override
     public void dumpType(StringBuilder sb) {
-        sb.append("  isNextRound" + isNextRound);
+        sb.append("  isNextRound: " + isNextRound + "\n");
     }
 
     public State instantiate(Activation act) {

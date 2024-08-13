@@ -46,11 +46,19 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
 
     @Override
     public void dumpType(StringBuilder sb) {
-        sb.append("  synapse:" + synapse.toKeyString());
-        sb.append("  input:" + input.toKeyString());
-        sb.append("  output:" + output.toKeyString());
-        sb.append("  inputSlot:" + inputSlot.toKeyString());
-        sb.append("  outputSlot:" + outputSlot.toKeyString());
+        sb.append("  synapse: " + synapse.getName() + "\n");
+
+        if(input != null)
+            sb.append("  input: " + input.getName() + "\n");
+
+        if(output != null)
+            sb.append("  output: " + output.getName() + "\n");
+
+        if(inputSlot != null)
+            sb.append("  inputSlot: " + inputSlot.getName() + "\n");
+
+        if(outputSlot != null)
+            sb.append("  outputSlot: " + outputSlot.getName() + "\n");
     }
 
     public Link instantiate(Synapse synapse, Activation input, Activation output) {

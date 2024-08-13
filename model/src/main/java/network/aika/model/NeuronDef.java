@@ -92,14 +92,17 @@ public class NeuronDef extends TypeDefinitionBase {
                 typeModel,
                 "Neuron",
                 Neuron.class
-        );
+        )
+                .setActivation(activation);
     }
 
     public void initRelations() {
         link = new LinkDefinition(
                 typeModel,
                 "Link",
-                Link.class);
+                Link.class)
+                .setInput(activation)
+                .setOutput(activation);
 
         identity(link, INPUT_VALUE);
         threshold(link, INPUT_IS_FIRED, 0.0, ABOVE)
@@ -112,7 +115,10 @@ public class NeuronDef extends TypeDefinitionBase {
                 typeModel,
                 "Synapse",
                 Synapse.class
-        );
+        )
+                .setLink(link)
+                .setInput(neuron)
+                .setOutput(neuron);
 
         sum(synapse, WEIGHT)
                 .setQueued(TRAINING);

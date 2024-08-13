@@ -22,6 +22,7 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
+import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.typedef.FieldTags.*;
 import static network.aika.fielddefs.inputs.ArgInputs.argLink;
@@ -73,13 +74,15 @@ public class DisjunctiveDef extends TypeDefinitionBase {
                 getTypeModel(),
                 "DisjunctiveSynapseInputSlot",
                 DisjunctiveSynapseSlot.class
-        );
+        )
+                .setDirection(Direction.INPUT);
 
         outputSlot = new SynapseSlotDefinition(
                 getTypeModel(),
                 "DisjunctiveSynapseOutputSlot",
                 DisjunctiveSynapseSlot.class
-        );
+        )
+                .setDirection(Direction.OUTPUT);
 
         link = new LinkDefinition(
                 getTypeModel(),

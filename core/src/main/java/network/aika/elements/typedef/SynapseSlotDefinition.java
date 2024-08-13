@@ -40,7 +40,7 @@ public class SynapseSlotDefinition extends Type<SynapseSlotDefinition, SynapseSl
 
     @Override
     public void dumpType(StringBuilder sb) {
-        System.out.println("  direction:" + direction);
+        sb.append("  direction: " + direction + "\n");
     }
 
     public SynapseSlot instantiate(Activation act, Synapse synapse) {

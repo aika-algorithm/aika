@@ -23,6 +23,7 @@ import network.aika.fielddefs.TypeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -30,7 +31,7 @@ import java.util.List;
  */
 public class TypeModel implements TypeRegistry {
 
-    List<Type> types = new ArrayList<>();
+    List<Type<?, ?>> types = new ArrayList<>();
 
     NeuronDef neuron = new NeuronDef(this);
 
@@ -96,9 +97,16 @@ public class TypeModel implements TypeRegistry {
     public String dumpModel() {
         StringBuilder sb = new StringBuilder();
         types.forEach(t -> {
-            sb.append(t.toKeyString());
+            sb.append(t.getName() + "\n");
+            sb.append("  class: " + t.getClazz().getSimpleName() + "\n");
+            sb.append("  parents: " + t.getParents().stream()
+                    .map(Type::getName)
+                    .collect(Collectors.joining(", ")) +
+                    "\n"
+            );
             t.dumpType(sb);
             t.dumpFields(sb);
+            sb.append("\n");
         });
 
         return sb.toString();

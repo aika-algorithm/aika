@@ -42,7 +42,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
 
     protected Double tolerance;
 
-    protected FieldInputsDefinition inputs;
+    protected FieldInputsDefinition<?, ?> inputs;
 
     protected ProcessingPhase phase;
     protected boolean isNextRound;
@@ -64,7 +64,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
     }
 
     @Override
-    public FieldInputsDefinition getInputs() {
+    public FieldInputsDefinition<?, ?> getInputs() {
         return inputs;
     }
 

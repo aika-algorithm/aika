@@ -51,7 +51,7 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
 
     @Override
     public void dumpType(StringBuilder sb) {
-        sb.append("  activation:" + activationType.toKeyString());
+        sb.append("  activation: " + activationType.getName() + "\n");
     }
 
     public Neuron instantiate(Model m, RefType rt) {

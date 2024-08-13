@@ -37,6 +37,10 @@ public abstract class FieldInputsDefinition<I extends FieldInputsDefinition<I, F
         );
     }
 
+    public List<F> getInputs() {
+        return inputs;
+    }
+
     public abstract void verify(FieldLinkDefinition fl);
 
     public int size() {

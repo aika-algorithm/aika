@@ -22,6 +22,7 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
+import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.typedef.FieldTags.BIAS;
 import static network.aika.fields.SumField.sum;
@@ -77,19 +78,22 @@ public class ConjunctiveDef extends TypeDefinitionBase {
                 getTypeModel(),
                 "ConjunctiveSynapseInputSlot",
                 ConjunctiveSynapseSlot.class
-        );
+        )
+                .setDirection(Direction.INPUT);
 
         outputSlot = new SynapseSlotDefinition(
                 getTypeModel(),
                 "ConjunctiveSynapseOutputSlot",
                 ConjunctiveSynapseSlot.class
-        );
+        )
+                .setDirection(Direction.OUTPUT);
 
         link = new LinkDefinition(
                 getTypeModel(),
                 "ConjunctiveLink",
                 ConjunctiveLink.class)
-                .addParent(superType.getLink());
+                .addParent(superType.getLink())
+                .setOutput(activation);
 
         synapse = new SynapseDefinition(
                 getTypeModel(),
@@ -97,7 +101,8 @@ public class ConjunctiveDef extends TypeDefinitionBase {
                 ConjunctiveSynapse.class
         )
                 .addParent(superType.getSynapse())
-                .setLink(link);
+                .setLink(link)
+                .setOutput(neuron);
     }
 
     public TypeModel getTypeModel() {

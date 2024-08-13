@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static network.aika.fielddefs.FieldTag.FIELD_TAG_COMPARATOR;
 
@@ -173,16 +174,30 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         fieldOutputDefinitions.put(fieldTag, fieldOutDef);
     }
 
-    public String toKeyString() {
-        return getClazz().getSimpleName() + "." + getName();
-    }
-
     public abstract void dumpType(StringBuilder sb);
 
     public void dumpFields(StringBuilder sb) {
+        if(fieldDefinitions.isEmpty())
+            return;
+
+        sb.append("  fields:\n");
         fieldDefinitions.values()
-                .forEach(fd ->
-                                sb.append("  " + fd.fieldTag)
-                        );
+                .forEach(fd -> {
+                    sb.append("    " + fd.fieldTag + "\n");
+                    dumpInputFieldLinks(fd, sb);
+                });
+    }
+
+    private void dumpInputFieldLinks(FieldDefinition<T, O> fd, StringBuilder sb) {
+        if(fd.getInputs().getInputs().isEmpty())
+            return;
+
+        sb.append("    inputs:\n");
+        sb.append(
+                fd.getInputs().getInputs()
+                        .stream()
+                        .map(fl -> "      " + fl)
+                        .collect(Collectors.joining("\n"))
+        );
     }
 }

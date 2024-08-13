@@ -67,8 +67,11 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
 
     @Override
     public void dumpType(StringBuilder sb) {
-        sb.append("  input:" + input.toKeyString());
-        sb.append("  output:" + output.toKeyString());
+        if(input != null)
+            sb.append("  input: " + input.getName() + "\n");
+
+        if(output != null)
+            sb.append("  output: " + output.getName() + "\n");
     }
 
     public Synapse instantiate(Neuron input, Neuron output) {
