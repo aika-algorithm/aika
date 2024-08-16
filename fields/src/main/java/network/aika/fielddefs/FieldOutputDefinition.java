@@ -50,4 +50,8 @@ public class FieldOutputDefinition {
                 fl.instantiate(OUTPUT, f)
         );
     }
+
+    public String toString() {
+        return "" + fieldTag;
+    }
 }

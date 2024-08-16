@@ -65,7 +65,7 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
                                 System.out.println("  " + f);
                                 f.getInputs().getInputs()
                                         .forEach(fl ->
-                                                System.out.println("    " + fl.toString())
+                                                System.out.println("    " + fl)
                                         );
                             }
                     );
@@ -192,12 +192,16 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         if(fd.getInputs().getInputs().isEmpty())
             return;
 
-        sb.append("    inputs:\n");
         sb.append(
                 fd.getInputs().getInputs()
                         .stream()
                         .map(fl -> "      " + fl)
                         .collect(Collectors.joining("\n"))
         );
+        sb.append("\n");
+    }
+
+    public String toString() {
+        return name;
     }
 }

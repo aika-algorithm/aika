@@ -5,6 +5,7 @@ import network.aika.fields.Obj;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ObjectPath {
 
@@ -44,5 +45,12 @@ public class ObjectPath {
         }
 
         return current;
+    }
+
+    public String toString() {
+        return "[" + path.stream()
+                .map(ObjectRelationDefinition::toString)
+                .collect(Collectors.joining(", ")) +
+                "]";
     }
 }

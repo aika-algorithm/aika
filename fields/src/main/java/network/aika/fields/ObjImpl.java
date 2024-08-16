@@ -16,8 +16,6 @@
  */
 package network.aika.fields;
 
-
-import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.Type;
 import network.aika.queue.Queue;
@@ -41,14 +39,6 @@ public abstract class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> impleme
 
 
     @Override
-    public Field getField(FieldTag fieldTag) {
-        return getField(
-                getType()
-                        .getField(fieldTag)
-        );
-    }
-
-    @Override
     public T getType() {
         return type;
     }
@@ -59,8 +49,8 @@ public abstract class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> impleme
     }
 
     @Override
-    public Field getField(FieldDefinition<T, O> fieldDef) {
-        return fields.get(fieldDef.getFieldTag());
+    public Field getField(FieldTag fieldTag) {
+        return fields.get(fieldTag);
     }
 
     @Override
@@ -85,5 +75,7 @@ public abstract class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> impleme
         return false;
     }
 
-
+    public String toString() {
+        return "" + type;
+    }
 }

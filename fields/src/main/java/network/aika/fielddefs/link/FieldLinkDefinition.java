@@ -26,6 +26,8 @@ import network.aika.fields.FieldInput;
 import network.aika.fields.FieldOutput;
 import network.aika.fields.Obj;
 import network.aika.fields.link.FieldLink;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -34,6 +36,7 @@ import java.util.List;
  */
 public abstract class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
 
+    private static final Logger log = LoggerFactory.getLogger(FieldLinkDefinition.class);
     private ObjectPath objectPath;
 
     private FieldOutputDefinition input;
@@ -84,12 +87,17 @@ public abstract class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
                 break;
             case OUTPUT:
                 objects.stream()
-                        .map(o -> o.getField(output))
+                        .map(o -> o.getField(output.getFieldTag()))
                         .forEach(out -> instantiateAndLink(f, out));
         }
     }
 
     public FieldLink instantiateAndLink(FieldOutput input, FieldInput output) {
+        if(input == null || output == null) {
+            log.warn("Unable to instantiate field link " + this + " because input or output is null.");
+            return null;
+        }
+
         FieldLink fl = instantiate(input, output);
         output.getInputs().addInput(fl);
         input.addOutput(fl);
@@ -99,5 +107,9 @@ public abstract class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
 
     public FieldLink instantiate(FieldOutput input, FieldInput output) {
         return new FieldLink(input, output);
+    }
+
+    public String toString() {
+        return "path:" + objectPath + " in: " + input + " out: " + output;
     }
 }

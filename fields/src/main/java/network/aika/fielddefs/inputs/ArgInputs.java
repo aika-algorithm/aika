@@ -33,7 +33,7 @@ public class ArgInputs extends FieldInputsDefinition<ArgInputs, FixedFieldLinkDe
         return new FixedFieldLinkDefinition(arg, propagateUpdates);
     }
 
-    public void verify(FieldLinkDefinition fl) {
+    public void verify(FixedFieldLinkDefinition fl) {
         assert fl instanceof FixedFieldLinkDefinition;
     }
 }

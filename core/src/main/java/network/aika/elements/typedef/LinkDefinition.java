@@ -73,7 +73,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     public SynapseDefinition getSynapse(ObjectPath p) {
-        addPathEntry(p, "link->synapse", synapse, l -> Set.of(l.getSynapse()));
+        addPathEntry(p, "link.synapse", synapse, l -> Set.of(l.getSynapse()));
         return synapse;
     }
 
@@ -86,7 +86,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     public ActivationDefinition getInput(ObjectPath p) {
-        addPathEntry(p, "link->input", input, l ->
+        addPathEntry(p, "link.input", input, l ->
                 Set.of(l.getInput())
         );
         return input;
@@ -105,7 +105,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     public ActivationDefinition getOutput(ObjectPath p) {
-        addPathEntry(p, "link->output", output, l ->
+        addPathEntry(p, "link.output", output, l ->
                 Set.of(l.getOutput())
         );
         return output;
@@ -129,7 +129,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     public SynapseSlotDefinition getInputSlot(ObjectPath p) {
-        addPathEntry(p, "link->inputSlot", inputSlot, l ->
+        addPathEntry(p, "link.inputSlot", inputSlot, l ->
                 Set.of(l.getInputSlot())
         );
         return inputSlot;
@@ -148,7 +148,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     public SynapseSlotDefinition getOutputSlot(ObjectPath p) {
-        addPathEntry(p, "link->outputSlot", outputSlot, l ->
+        addPathEntry(p, "link.outputSlot", outputSlot, l ->
                 Set.of(l.getOutputSlot())
         );
         return outputSlot;

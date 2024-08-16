@@ -47,7 +47,7 @@ public class State extends ObjImpl<StateDefinition, State> implements QueueProvi
     }
 
     private Field getValue() {
-        return getField(this.getType().getField(VALUE));
+        return getField(VALUE);
     }
 
     public void updateFiredStep(FieldLink fl) {

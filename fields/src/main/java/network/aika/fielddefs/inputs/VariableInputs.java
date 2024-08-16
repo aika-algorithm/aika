@@ -34,7 +34,7 @@ public class VariableInputs extends FieldInputsDefinition<VariableInputs, Variab
         return new VariableFieldLinkDefinition(true);
     }
 
-    public void verify(FieldLinkDefinition fl) {
+    public void verify(VariableFieldLinkDefinition fl) {
         assert fl instanceof VariableFieldLinkDefinition;
     }
 }

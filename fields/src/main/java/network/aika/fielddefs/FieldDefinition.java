@@ -72,7 +72,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         ObjectPath objectPath = new ObjectPath(Direction.INPUT);
         objectPath.add(new ObjectRelationDefinition("IN", objectType, o -> List.of(o)));
 
-        inputs.verify(fl);
+        inputs.addLink(fl);
         fl.link(objectPath, in, this);
 
         return this;
@@ -83,7 +83,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         objectPath.add(new ObjectRelationDefinition("IN", objectType, o -> List.of(o)));
         FieldOutputDefinition in = pathProvider.apply(getObjectType(), objectPath);
 
-        inputs.verify(fl);
+        inputs.addLink(fl);
         fl.link(objectPath, in, this);
 
         return this;
@@ -96,7 +96,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         FieldOutputDefinition in = objectType.getFieldOutput(getFieldTag());
         F out = pathProvider.apply(objectType, objectPath);
 
-        out.getInputs().verify(fl);
+        out.getInputs().addLink(fl);
         fl.link(objectPath, in, out);
 
         return this;
@@ -190,5 +190,9 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         this.phase = phase;
 
         return this;
+    }
+
+    public String toString() {
+        return fieldTag + " (" + clazz.getSimpleName() + ")";
     }
 }

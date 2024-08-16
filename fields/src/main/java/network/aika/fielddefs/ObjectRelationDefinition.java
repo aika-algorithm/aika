@@ -46,4 +46,12 @@ public class ObjectRelationDefinition<T extends Type<T, O>, O extends Obj<T, O>>
     public List<O> followRelation(O o) {
         return mapping.apply(o);
     }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public String toString() {
+        return label + "." + relatedObject;
+    }
 }

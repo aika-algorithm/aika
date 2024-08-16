@@ -16,7 +16,6 @@
  */
 package network.aika.fielddefs.inputs;
 
-import network.aika.fielddefs.link.FieldLinkDefinition;
 import network.aika.fielddefs.link.FixedFieldLinkDefinition;
 
 /**
@@ -25,7 +24,7 @@ import network.aika.fielddefs.link.FixedFieldLinkDefinition;
 public class NoInputs extends FieldInputsDefinition<NoInputs, FixedFieldLinkDefinition> {
 
 
-    public void verify(FieldLinkDefinition fl) {
+    public void verify(FixedFieldLinkDefinition fl) {
         assert false;
     }
 }

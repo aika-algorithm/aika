@@ -37,8 +37,6 @@ public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
 
     Field getField(FieldTag fieldTag);
 
-    Field getField(FieldDefinition<T, O> fieldDef);
-
     Stream<Field> getFields();
 
     void disconnect();

@@ -41,10 +41,14 @@ public abstract class FieldInputsDefinition<I extends FieldInputsDefinition<I, F
         return inputs;
     }
 
-    public abstract void verify(FieldLinkDefinition fl);
+    public abstract void verify(F fl);
 
     public int size() {
         return inputs.size();
     }
 
+    public void addLink(FieldLinkDefinition fl) {
+        verify((F)fl);
+        inputs.add((F)fl);
+    }
 }

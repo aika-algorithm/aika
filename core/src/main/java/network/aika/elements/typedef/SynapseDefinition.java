@@ -82,12 +82,12 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     }
 
     public NeuronDefinition getInput(ObjectPath p) {
-        addPathEntry(p, "synapse->input", input, s -> Set.of(s.getInput()));
+        addPathEntry(p, "synapse.input", input, s -> Set.of(s.getInput()));
         return input;
     }
 
     public NeuronDefinition getOutput(ObjectPath p) {
-        addPathEntry(p, "synapse->output", output, s -> Set.of(s.getOutput()));
+        addPathEntry(p, "synapse.output", output, s -> Set.of(s.getOutput()));
         return output;
     }
 
