@@ -66,7 +66,7 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     }
 
     @Override
-    public void dumpType(StringBuilder sb) {
+    public void dumpTypeDetails(StringBuilder sb) {
         if(input != null)
             sb.append("  input: " + input.getName() + "\n");
 

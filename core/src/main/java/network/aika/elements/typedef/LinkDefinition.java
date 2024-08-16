@@ -45,7 +45,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     @Override
-    public void dumpType(StringBuilder sb) {
+    public void dumpTypeDetails(StringBuilder sb) {
         sb.append("  synapse: " + synapse.getName() + "\n");
 
         if(input != null)

@@ -50,7 +50,7 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
     }
 
     @Override
-    public void dumpType(StringBuilder sb) {
+    public void dumpTypeDetails(StringBuilder sb) {
         sb.append("  activation: " + activationType.getName() + "\n");
     }
 

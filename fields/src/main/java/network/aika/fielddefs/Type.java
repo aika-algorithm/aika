@@ -174,7 +174,7 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         fieldOutputDefinitions.put(fieldTag, fieldOutDef);
     }
 
-    public abstract void dumpType(StringBuilder sb);
+    public abstract void dumpTypeDetails(StringBuilder sb);
 
     public void dumpFields(StringBuilder sb) {
         if(fieldDefinitions.isEmpty())
@@ -198,6 +198,23 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
                         .map(fl -> "      " + fl)
                         .collect(Collectors.joining("\n"))
         );
+        sb.append("\n");
+    }
+
+    public void dumpType(StringBuilder sb) {
+        sb.append(getName() + "\n");
+        sb.append("  class: " + getClazz().getSimpleName() + "\n");
+
+        if(!getParents().isEmpty()) {
+            sb.append("  parents: " + getParents().stream()
+                    .map(Type::getName)
+                    .collect(Collectors.joining(", ")) +
+                    "\n"
+            );
+        }
+
+        dumpTypeDetails(sb);
+        dumpFields(sb);
         sb.append("\n");
     }
 

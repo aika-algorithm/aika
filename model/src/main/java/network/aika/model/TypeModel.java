@@ -23,7 +23,6 @@ import network.aika.fielddefs.TypeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -96,19 +95,11 @@ public class TypeModel implements TypeRegistry {
 
     public String dumpModel() {
         StringBuilder sb = new StringBuilder();
-        types.forEach(t -> {
-            sb.append(t.getName() + "\n");
-            sb.append("  class: " + t.getClazz().getSimpleName() + "\n");
-            sb.append("  parents: " + t.getParents().stream()
-                    .map(Type::getName)
-                    .collect(Collectors.joining(", ")) +
-                    "\n"
-            );
-            t.dumpType(sb);
-            t.dumpFields(sb);
-            sb.append("\n");
-        });
+        types.forEach(t ->
+            t.dumpType(sb)
+        );
 
         return sb.toString();
     }
+
 }

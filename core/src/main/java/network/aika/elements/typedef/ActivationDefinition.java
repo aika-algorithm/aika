@@ -42,7 +42,7 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
     }
 
     @Override
-    public void dumpType(StringBuilder sb) {
+    public void dumpTypeDetails(StringBuilder sb) {
         sb.append("  neuron: " + neuron.getName() + "\n");
         states.values()
                 .forEach(s ->
