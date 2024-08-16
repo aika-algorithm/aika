@@ -23,13 +23,11 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
-import static network.aika.elements.typedef.FieldTags.INPUT_VALUE;
-import static network.aika.elements.typedef.FieldTags.INPUT_IS_FIRED;
-import static network.aika.elements.typedef.FieldTags.NEG_INPUT_IS_FIRED;
-import static network.aika.elements.typedef.FieldTags.WEIGHT;
+import static network.aika.elements.typedef.FieldTags.*;
 import static network.aika.fielddefs.inputs.ArgInputs.argLink;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InvertFunction.invert;
+import static network.aika.fields.Multiplication.mul;
 import static network.aika.fields.SumField.sum;
 import static network.aika.fields.ThresholdOperator.Comparison.ABOVE;
 import static network.aika.fields.ThresholdOperator.threshold;
@@ -110,6 +108,19 @@ public class NeuronDef extends TypeDefinitionBase {
 
         invert(link, NEG_INPUT_IS_FIRED)
                 .in((o, p) -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0));
+
+        mul(link, WEIGHTED_INPUT)
+                .in((o, p) -> o.getFieldOutput(INPUT_VALUE), argLink(0))
+                .in((o, p) -> o.getSynapse(p).getFieldOutput(WEIGHT), argLink(1));
+
+        /*
+                weightedInput = mul(
+                this,
+                "iAct(" + getInputKeyString() + ").value * s.weight",
+                inputValue, isInputSideActive(), true,
+                synapse.getWeight(), true, false
+        );
+         */
 
         synapse = new SynapseDefinition(
                 typeModel,
