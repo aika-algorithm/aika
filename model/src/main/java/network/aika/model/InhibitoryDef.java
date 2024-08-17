@@ -41,9 +41,6 @@ import static network.aika.enums.direction.Direction.OUTPUT;
 public class InhibitoryDef extends TypeDefinitionBase {
 
     private DisjunctiveDef superType;
-
-    private CategoryDef categoryDef;
-
     private ActivationDefinition activation;
     private NeuronDefinition neuron;
     private ActivationDefinition categoryActivation;
@@ -58,11 +55,10 @@ public class InhibitoryDef extends TypeDefinitionBase {
     private LinkDefinition categoryLink;
     private SynapseDefinition categorySynapse;
 
-    public InhibitoryDef(TypeModel typeModel, DisjunctiveDef superType, CategoryDef categoryDef) {
+    public InhibitoryDef(TypeModel typeModel, DisjunctiveDef superType) {
         super(typeModel);
 
         this.superType = superType;
-        this.categoryDef = categoryDef;
     }
 
 
@@ -94,7 +90,7 @@ public class InhibitoryDef extends TypeDefinitionBase {
                 Activation.class
         )
                 .addStateType(getTypeModel().neuron.getNonFeedbackState())
-                .addParent(categoryDef.getActivation());
+                .addParent(typeModel.category.getActivation());
 
         categoryNeuron = new NeuronDefinition(
                 getTypeModel(),
@@ -106,7 +102,7 @@ public class InhibitoryDef extends TypeDefinitionBase {
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
                 .setBindingSignalSlots(SINGLE_INPUT)
                 .setTrainingAllowed(false)
-                .addParent(categoryDef.getNeuron());
+                .addParent(typeModel.category.getNeuron());
     }
 
     public void initRelations() {
@@ -162,7 +158,7 @@ public class InhibitoryDef extends TypeDefinitionBase {
                 getTypeModel(),
                 "InhibitoryCategoryLink",
                 Link.class)
-                .addParent(categoryDef.getLink())
+                .addParent(typeModel.category.getLink())
                 .setInputSlot(getTypeModel().disjunctive.getInputSlot())
                 .setOutputSlot(getTypeModel().disjunctive.getOutputSlot());
 
@@ -171,7 +167,7 @@ public class InhibitoryDef extends TypeDefinitionBase {
                 "InhibitoryCategorySynapse",
                 Synapse.class
         )
-                .addParent(categoryDef.getSynapse())
+                .addParent(typeModel.category.getSynapse())
                 .setLink(categoryLink)
                 .setInput(neuron)
                 .setOutput(categoryNeuron)

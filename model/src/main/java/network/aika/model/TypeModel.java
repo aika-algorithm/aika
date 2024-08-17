@@ -38,9 +38,9 @@ public class TypeModel implements TypeRegistry {
     DisjunctiveDef disjunctive = new DisjunctiveDef(this, neuron);
     CategoryDef category = new CategoryDef(this, disjunctive);
 
-    BindingDef binding = new BindingDef(this, conjunctive, category);
-    PatternDef pattern = new PatternDef(this, conjunctive, category);
-    InhibitoryDef inhibitory = new InhibitoryDef(this, disjunctive, category);
+    BindingDef binding = new BindingDef(this, conjunctive);
+    PatternDef pattern = new PatternDef(this, conjunctive);
+    InhibitoryDef inhibitory = new InhibitoryDef(this, disjunctive);
 
     public TypeModel(Config conf) {
         neuron.initNodes();

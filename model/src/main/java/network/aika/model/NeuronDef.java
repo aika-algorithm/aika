@@ -25,6 +25,7 @@ import network.aika.elements.typedef.*;
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.typedef.FieldTags.*;
 import static network.aika.fielddefs.inputs.ArgInputs.argLink;
+import static network.aika.fielddefs.inputs.VariableInputs.varLink;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InvertFunction.invert;
 import static network.aika.fields.Multiplication.mul;
@@ -41,10 +42,6 @@ public class NeuronDef extends TypeDefinitionBase {
 
     StateDef nonFeedbackState;
 
-    ConjunctiveDef conjunctiveDef;
-
-    DisjunctiveDef disjunctiveDef;
-
     ActivationDefinition activation;
 
     NeuronDefinition neuron;
@@ -52,6 +49,11 @@ public class NeuronDef extends TypeDefinitionBase {
     LinkDefinition link;
 
     SynapseDefinition synapse;
+
+    SynapseSlotDefinition inputSlot;
+
+    SynapseSlotDefinition outputSlot;
+
 
     public NeuronDef(TypeModel typeModel) {
         super(typeModel);
@@ -111,7 +113,8 @@ public class NeuronDef extends TypeDefinitionBase {
 
         mul(link, WEIGHTED_INPUT)
                 .in((o, p) -> o.getFieldOutput(INPUT_VALUE), argLink(0))
-                .in((o, p) -> o.getSynapse(p).getFieldOutput(WEIGHT), argLink(1));
+                .in((o, p) -> o.getSynapse(p).getFieldOutput(WEIGHT), argLink(1))
+                .out((o, p) -> o.getOutputSlot(p).getField(OUTPUT_SLOT), varLink());
 
         /*
                 weightedInput = mul(

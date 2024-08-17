@@ -53,9 +53,6 @@ public class BindingDef extends TypeDefinitionBase {
 
     private ConjunctiveDef superType;
 
-    private CategoryDef categoryDef;
-
-
     StateDef outerFeedbackState;
     StateDef innerFeedbackState;
 
@@ -90,10 +87,9 @@ public class BindingDef extends TypeDefinitionBase {
 
     FieldDefinition<LinkDefinition, Link> negativeWeight;
 
-    public BindingDef(TypeModel typeModel, ConjunctiveDef superType, CategoryDef categoryDef) {
+    public BindingDef(TypeModel typeModel, ConjunctiveDef superType) {
         super(typeModel);
         this.superType = superType;
-        this.categoryDef = categoryDef;
 
         outerFeedbackState = new StateDef(getTypeModel());
         innerFeedbackState = new StateDef(getTypeModel());
@@ -137,7 +133,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "BindingCategoryActivation",
                 Activation.class
         )
-                .addParent(categoryDef.getActivation())
+                .addParent(typeModel.category.getActivation())
                 .addStateType(activation.getState(NON_FEEDBACK));
 
         categoryNeuron = new NeuronDefinition(
@@ -145,7 +141,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "BindingCategoryNeuron",
                 Neuron.class
         )
-                .addParent(categoryDef.getNeuron())
+                .addParent(typeModel.category.getNeuron())
                 .setNeuronType(CATEGORY)
                 .setActivation(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
@@ -342,7 +338,7 @@ public class BindingDef extends TypeDefinitionBase {
                 getTypeModel(),
                 "BindingCategoryLink",
                 Link.class)
-                .addParent(categoryDef.getLink())
+                .addParent(typeModel.category.getLink())
                 .setInput(getTypeModel().binding.getCategoryActivation())
                 .setOutput(getTypeModel().binding.getActivation())
                 .setInputSlot(getTypeModel().disjunctive.getInputSlot())
@@ -353,7 +349,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "BindingCategorySynapse",
                 Synapse.class
         )
-                .addParent(categoryDef.getSynapse())
+                .addParent(typeModel.category.getSynapse())
                 .setLink(categoryLink)
                 .setInput(neuron)
                 .setOutput(categoryNeuron)

@@ -57,8 +57,6 @@ public class PatternDef extends TypeDefinitionBase {
 
     private ConjunctiveDef superType;
 
-    private CategoryDef categoryDef;
-
     private ActivationDefinition activation;
     private NeuronDefinition neuron;
 
@@ -80,11 +78,10 @@ public class PatternDef extends TypeDefinitionBase {
     FieldDefinition<SynapseDefinition, Synapse> synapseAverageCoveredSpace;
 
 
-    public PatternDef(TypeModel typeModel, ConjunctiveDef superType, CategoryDef categoryDef) {
+    public PatternDef(TypeModel typeModel, ConjunctiveDef superType) {
         super(typeModel);
 
         this.superType = superType;
-        this.categoryDef = categoryDef;
     }
 
     public void initNodes(Config conf) {
@@ -140,7 +137,7 @@ public class PatternDef extends TypeDefinitionBase {
                 "PatternCategoryActivation",
                 Activation.class
         )
-                .addParent(categoryDef.getActivation())
+                .addParent(typeModel.category.getActivation())
                 .addStateType(typeModel.neuron.getNonFeedbackState());
 
         categoryNeuron = new NeuronDefinition(
@@ -148,7 +145,7 @@ public class PatternDef extends TypeDefinitionBase {
                 "PatternCategoryNeuron",
                 Neuron.class
         )
-                .addParent(categoryDef.getNeuron())
+                .addParent(typeModel.category.getNeuron())
                 .setNeuronType(CATEGORY)
                 .setActivation(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
@@ -187,7 +184,7 @@ public class PatternDef extends TypeDefinitionBase {
                 "PatternCategoryLink",
                 Link.class
         )
-                .addParent(categoryDef.getLink())
+                .addParent(typeModel.category.getLink())
                 .setInput(activation)
                 .setOutput(categoryActivation)
                 .setInputSlot(typeModel.disjunctive.getInputSlot())
@@ -198,7 +195,7 @@ public class PatternDef extends TypeDefinitionBase {
                 "PatternCategorySynapse",
                 Synapse.class
         )
-                .addParent(categoryDef.getSynapse())
+                .addParent(typeModel.category.getSynapse())
                 .setLink(categoryLink)
                 .setInput(neuron)
                 .setOutput(categoryNeuron)

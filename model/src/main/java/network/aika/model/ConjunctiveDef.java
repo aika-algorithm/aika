@@ -49,7 +49,6 @@ public class ConjunctiveDef extends TypeDefinitionBase {
     public ConjunctiveDef(TypeModel typeModel, NeuronDef superType) {
         super(typeModel);
         this.superType = superType;
-        this.superType.conjunctiveDef = this;
     }
 
     public void initNodes() {

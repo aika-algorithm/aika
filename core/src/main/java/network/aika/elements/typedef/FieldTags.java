@@ -13,6 +13,8 @@ public enum FieldTags implements FieldTag {
     INPUT_IS_FIRED,
     NEG_INPUT_IS_FIRED,
     WEIGHTED_INPUT,
+    INPUT_SLOT,
+    OUTPUT_SLOT,
     INITIAL_CATEGORY_SYNAPSE_WEIGHT,
     NET_OUTER_GRADIENT,
     GRADIENT,

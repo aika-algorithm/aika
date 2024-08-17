@@ -49,7 +49,6 @@ public class DisjunctiveDef extends TypeDefinitionBase {
     public DisjunctiveDef(TypeModel typeModel, NeuronDef superType) {
         super(typeModel);
         this.superType = superType;
-        this.superType.disjunctiveDef = this;
     }
 
     public void initNodes() {
@@ -89,7 +88,7 @@ public class DisjunctiveDef extends TypeDefinitionBase {
                 "DisjunctiveLink",
                 DisjunctiveLink.class)
                 .addParent(superType.getLink())
-                .setInput(superType.conjunctiveDef.activation)
+                .setInput(typeModel.conjunctive.activation)
                 .setOutput(activation);
 
         synapse = new SynapseDefinition(
