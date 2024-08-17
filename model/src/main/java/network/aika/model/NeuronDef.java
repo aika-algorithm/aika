@@ -30,6 +30,7 @@ import static network.aika.fielddefs.inputs.ArgInputs.argLink;
 import static network.aika.fielddefs.inputs.VariableInputs.varLink;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InvertFunction.invert;
+import static network.aika.fields.MaxField.max;
 import static network.aika.fields.Multiplication.mul;
 import static network.aika.fields.SumField.sum;
 import static network.aika.fields.ThresholdOperator.Comparison.ABOVE;
@@ -106,6 +107,8 @@ public class NeuronDef extends TypeDefinitionBase {
         )
                 .setDirection(Direction.INPUT);
 
+        max(outputSlot, INPUT_SLOT);
+
         outputSlot = new SynapseSlotDefinition(
                 getTypeModel(),
                 "SynapseOutputSlot",
@@ -113,6 +116,7 @@ public class NeuronDef extends TypeDefinitionBase {
         )
                 .setDirection(Direction.OUTPUT);
 
+        max(outputSlot, OUTPUT_SLOT);
 
         link = new LinkDefinition(
                 typeModel,
