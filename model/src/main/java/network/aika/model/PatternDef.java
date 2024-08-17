@@ -55,8 +55,6 @@ import static network.aika.utils.Utils.TOLERANCE;
  */
 public class PatternDef extends TypeDefinitionBase {
 
-    private ConjunctiveDef superType;
-
     private ActivationDefinition activation;
     private NeuronDefinition neuron;
 
@@ -79,9 +77,7 @@ public class PatternDef extends TypeDefinitionBase {
 
 
     public PatternDef(TypeModel typeModel, ConjunctiveDef superType) {
-        super(typeModel);
-
-        this.superType = superType;
+        super(typeModel, superType);
     }
 
     public void initNodes(Config conf) {
@@ -247,46 +243,57 @@ public class PatternDef extends TypeDefinitionBase {
         categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
     }
 
+    @Override
     public TypeModel getTypeModel() {
         return superType.getTypeModel();
     }
 
+    @Override
     public ActivationDefinition getActivation() {
         return activation;
     }
 
+    @Override
     public NeuronDefinition getNeuron() {
         return neuron;
     }
 
+    @Override
     public ActivationDefinition getCategoryActivation() {
         return categoryActivation;
     }
 
+    @Override
     public NeuronDefinition getCategoryNeuron() {
         return categoryNeuron;
     }
 
+    @Override
     public LinkDefinition getLink() {
         return link;
     }
 
+    @Override
     public SynapseDefinition getSynapse() {
         return synapse;
     }
 
+    @Override
     public LinkDefinition getCategoryInputLink() {
         return categoryInputLink;
     }
 
+    @Override
     public SynapseDefinition getCategoryInputSynapse() {
         return categoryInputSynapse;
     }
 
+    @Override
     public LinkDefinition getCategoryLink() {
         return categoryLink;
     }
 
+    @Override
     public SynapseDefinition getCategorySynapse() {
         return categorySynapse;
     }

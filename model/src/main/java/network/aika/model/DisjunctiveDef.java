@@ -35,8 +35,6 @@ import static network.aika.fields.Multiplication.mul;
  */
 public class DisjunctiveDef extends TypeDefinitionBase {
 
-    NeuronDef superType;
-
     ActivationDefinition activation;
     NeuronDefinition neuron;
 
@@ -47,8 +45,7 @@ public class DisjunctiveDef extends TypeDefinitionBase {
     SynapseDefinition synapse;
 
     public DisjunctiveDef(TypeModel typeModel, NeuronDef superType) {
-        super(typeModel);
-        this.superType = superType;
+        super(typeModel, superType);
     }
 
     public void initNodes() {
@@ -74,6 +71,7 @@ public class DisjunctiveDef extends TypeDefinitionBase {
                 "DisjunctiveSynapseInputSlot",
                 DisjunctiveSynapseSlot.class
         )
+                .addParent(superType.getInputSlot())
                 .setDirection(Direction.INPUT);
 
         outputSlot = new SynapseSlotDefinition(
@@ -81,6 +79,7 @@ public class DisjunctiveDef extends TypeDefinitionBase {
                 "DisjunctiveSynapseOutputSlot",
                 DisjunctiveSynapseSlot.class
         )
+                .addParent(superType.getOutputSlot())
                 .setDirection(Direction.OUTPUT);
 
         link = new LinkDefinition(
@@ -105,33 +104,37 @@ public class DisjunctiveDef extends TypeDefinitionBase {
                 .out((o, p) -> o.getSynapse(p).getField(WEIGHT), varLink());
     }
 
-
+    @Override
     public TypeModel getTypeModel() {
         return superType.getTypeModel();
     }
 
-
+    @Override
     public ActivationDefinition getActivation() {
         return activation;
     }
 
+    @Override
     public NeuronDefinition getNeuron() {
         return neuron;
     }
 
+    @Override
     public SynapseSlotDefinition getInputSlot() {
         return inputSlot;
     }
 
+    @Override
     public SynapseSlotDefinition getOutputSlot() {
         return outputSlot;
     }
 
-
+    @Override
     public LinkDefinition getLink() {
         return link;
     }
 
+    @Override
     public SynapseDefinition getSynapse() {
         return synapse;
     }

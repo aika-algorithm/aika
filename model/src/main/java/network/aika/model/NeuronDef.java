@@ -20,7 +20,9 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.*;
+import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.typedef.FieldTags.*;
@@ -56,7 +58,7 @@ public class NeuronDef extends TypeDefinitionBase {
 
 
     public NeuronDef(TypeModel typeModel) {
-        super(typeModel);
+        super(typeModel, null);
 
         nonFeedbackState = new StateDef(typeModel);
     }
@@ -97,6 +99,21 @@ public class NeuronDef extends TypeDefinitionBase {
     }
 
     public void initRelations() {
+        inputSlot = new SynapseSlotDefinition(
+                getTypeModel(),
+                "SynapseInputSlot",
+                SynapseSlot.class
+        )
+                .setDirection(Direction.INPUT);
+
+        outputSlot = new SynapseSlotDefinition(
+                getTypeModel(),
+                "SynapseOutputSlot",
+                SynapseSlot.class
+        )
+                .setDirection(Direction.OUTPUT);
+
+
         link = new LinkDefinition(
                 typeModel,
                 "Link",
@@ -148,6 +165,14 @@ public class NeuronDef extends TypeDefinitionBase {
 
     public NeuronDefinition getNeuron() {
         return neuron;
+    }
+
+    public SynapseSlotDefinition getInputSlot() {
+        return inputSlot;
+    }
+
+    public SynapseSlotDefinition getOutputSlot() {
+        return outputSlot;
     }
 
     public LinkDefinition getLink() {

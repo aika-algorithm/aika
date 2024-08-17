@@ -11,8 +11,6 @@ import static network.aika.fields.InputField.inputField;
 
 public class CategoryDef extends TypeDefinitionBase {
 
-    private DisjunctiveDef superType;
-
     private ActivationDefinition activation;
 
     private NeuronDefinition neuron;
@@ -25,9 +23,7 @@ public class CategoryDef extends TypeDefinitionBase {
 
 
     public CategoryDef(TypeModel typeModel, DisjunctiveDef superType) {
-        super(typeModel);
-
-        this.superType = superType;
+        super(typeModel, superType);
     }
 
     public void initNodes() {
@@ -73,33 +69,38 @@ public class CategoryDef extends TypeDefinitionBase {
                 getTypeModel(),
                 "CategoryLink",
                 Link.class)
-                .addParent(superType.link);
+                .addParent(superType.getLink());
 
         synapse = new SynapseDefinition(
                 getTypeModel(),
                 "CategorySynapse",
                 Synapse.class
         )
-                .addParent(superType.synapse)
+                .addParent(superType.getSynapse())
                 .setLink(link);
     }
 
+    @Override
     public TypeModel getTypeModel() {
         return superType.getTypeModel();
     }
 
+    @Override
     public ActivationDefinition getActivation() {
         return activation;
     }
 
+    @Override
     public NeuronDefinition getNeuron() {
         return neuron;
     }
 
+    @Override
     public LinkDefinition getLink() {
         return link;
     }
 
+    @Override
     public SynapseDefinition getSynapse() {
         return synapse;
     }

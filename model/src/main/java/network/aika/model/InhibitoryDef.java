@@ -40,7 +40,6 @@ import static network.aika.enums.direction.Direction.OUTPUT;
  */
 public class InhibitoryDef extends TypeDefinitionBase {
 
-    private DisjunctiveDef superType;
     private ActivationDefinition activation;
     private NeuronDefinition neuron;
     private ActivationDefinition categoryActivation;
@@ -56,11 +55,8 @@ public class InhibitoryDef extends TypeDefinitionBase {
     private SynapseDefinition categorySynapse;
 
     public InhibitoryDef(TypeModel typeModel, DisjunctiveDef superType) {
-        super(typeModel);
-
-        this.superType = superType;
+        super(typeModel, superType);
     }
-
 
     public void initNodes() {
 
@@ -215,31 +211,37 @@ public class InhibitoryDef extends TypeDefinitionBase {
         categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
     }
 
+    @Override
     public TypeModel getTypeModel() {
         return superType.getTypeModel();
     }
 
-
+    @Override
     public ActivationDefinition getActivation() {
         return activation;
     }
 
+    @Override
     public NeuronDefinition getNeuron() {
         return neuron;
     }
 
+    @Override
     public ActivationDefinition getCategoryActivation() {
         return categoryActivation;
     }
 
+    @Override
     public NeuronDefinition getCategoryNeuron() {
         return categoryNeuron;
     }
 
+    @Override
     public LinkDefinition getLink() {
         return link;
     }
 
+    @Override
     public SynapseDefinition getSynapse() {
         return synapse;
     }
@@ -252,18 +254,22 @@ public class InhibitoryDef extends TypeDefinitionBase {
         return primarySynapse;
     }
 
+    @Override
     public LinkDefinition getCategoryInputLink() {
         return categoryInputLink;
     }
 
+    @Override
     public SynapseDefinition getCategoryInputSynapse() {
         return categoryInputSynapse;
     }
 
+    @Override
     public LinkDefinition getCategoryLink() {
         return categoryLink;
     }
 
+    @Override
     public SynapseDefinition getCategorySynapse() {
         return categorySynapse;
     }

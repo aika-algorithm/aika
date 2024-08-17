@@ -16,10 +16,7 @@
  */
 package network.aika.model;
 
-import network.aika.elements.typedef.ActivationDefinition;
-import network.aika.elements.typedef.LinkDefinition;
-import network.aika.elements.typedef.NeuronDefinition;
-import network.aika.elements.typedef.SynapseDefinition;
+import network.aika.elements.typedef.*;
 
 /**
  *
@@ -34,6 +31,10 @@ public interface TypeDefinition {
     ActivationDefinition getCategoryActivation();
 
     NeuronDefinition getCategoryNeuron();
+
+    SynapseSlotDefinition getInputSlot();
+
+    SynapseSlotDefinition getOutputSlot();
 
     LinkDefinition getLink();
 

@@ -50,9 +50,6 @@ import static network.aika.fields.SumField.sum;
  */
 public class BindingDef extends TypeDefinitionBase {
 
-
-    private ConjunctiveDef superType;
-
     StateDef outerFeedbackState;
     StateDef innerFeedbackState;
 
@@ -88,8 +85,7 @@ public class BindingDef extends TypeDefinitionBase {
     FieldDefinition<LinkDefinition, Link> negativeWeight;
 
     public BindingDef(TypeModel typeModel, ConjunctiveDef superType) {
-        super(typeModel);
-        this.superType = superType;
+        super(typeModel, superType);
 
         outerFeedbackState = new StateDef(getTypeModel());
         innerFeedbackState = new StateDef(getTypeModel());
@@ -415,35 +411,42 @@ public class BindingDef extends TypeDefinitionBase {
         return latentRelationNeuron;
     }
 
+    @Override
     public ActivationDefinition getActivation() {
         return activation;
     }
 
+    @Override
     public NeuronDefinition getNeuron() {
         return neuron;
     }
 
+    @Override
     public ActivationDefinition getCategoryActivation() {
         return categoryActivation;
     }
 
+    @Override
     public NeuronDefinition getCategoryNeuron() {
         return categoryNeuron;
     }
 
-
+    @Override
     public LinkDefinition getCategoryInputLink() {
         return categoryInputLink;
     }
 
+    @Override
     public SynapseDefinition getCategoryInputSynapse() {
         return categoryInputSynapse;
     }
 
+    @Override
     public LinkDefinition getLink() {
         return inputObjectLink;
     }
 
+    @Override
     public SynapseDefinition getSynapse() {
         return inputObjectSynapse;
     }
@@ -496,11 +499,12 @@ public class BindingDef extends TypeDefinitionBase {
         return relationInputSynapse;
     }
 
-
+    @Override
     public LinkDefinition getCategoryLink() {
         return categoryLink;
     }
 
+    @Override
     public SynapseDefinition getCategorySynapse() {
         return categorySynapse;
     }

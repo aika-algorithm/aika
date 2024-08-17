@@ -34,8 +34,6 @@ import static network.aika.queue.Phase.TRAINING;
  */
 public class ConjunctiveDef extends TypeDefinitionBase {
 
-    private NeuronDef superType;
-
     ActivationDefinition activation;
     NeuronDefinition neuron;
 
@@ -47,8 +45,7 @@ public class ConjunctiveDef extends TypeDefinitionBase {
 
 
     public ConjunctiveDef(TypeModel typeModel, NeuronDef superType) {
-        super(typeModel);
-        this.superType = superType;
+        super(typeModel, superType);
     }
 
     public void initNodes() {
@@ -78,6 +75,7 @@ public class ConjunctiveDef extends TypeDefinitionBase {
                 "ConjunctiveSynapseInputSlot",
                 ConjunctiveSynapseSlot.class
         )
+                .addParent(superType.getInputSlot())
                 .setDirection(Direction.INPUT);
 
         outputSlot = new SynapseSlotDefinition(
@@ -85,6 +83,7 @@ public class ConjunctiveDef extends TypeDefinitionBase {
                 "ConjunctiveSynapseOutputSlot",
                 ConjunctiveSynapseSlot.class
         )
+                .addParent(superType.getOutputSlot())
                 .setDirection(Direction.OUTPUT);
 
         link = new LinkDefinition(
@@ -104,30 +103,37 @@ public class ConjunctiveDef extends TypeDefinitionBase {
                 .setOutput(neuron);
     }
 
+    @Override
     public TypeModel getTypeModel() {
         return superType.getTypeModel();
     }
 
+    @Override
     public ActivationDefinition getActivation() {
         return activation;
     }
 
+    @Override
     public NeuronDefinition getNeuron() {
         return neuron;
     }
 
+    @Override
     public SynapseSlotDefinition getInputSlot() {
         return inputSlot;
     }
 
+    @Override
     public SynapseSlotDefinition getOutputSlot() {
         return outputSlot;
     }
 
+    @Override
     public LinkDefinition getLink() {
         return link;
     }
 
+    @Override
     public SynapseDefinition getSynapse() {
         return synapse;
     }
