@@ -87,6 +87,8 @@ public class DisjunctiveDef extends TypeDefinitionBase {
                 "DisjunctiveLink",
                 DisjunctiveLink.class)
                 .addParent(superType.getLink())
+                .setInputSlot(inputSlot)
+                .setOutputSlot(outputSlot)
                 .setInput(typeModel.conjunctive.activation)
                 .setOutput(activation);
 

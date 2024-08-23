@@ -4,6 +4,7 @@ import network.aika.Config;
 import network.aika.Document;
 import network.aika.Model;
 import network.aika.Range;
+import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.text.TextReference;
@@ -24,6 +25,8 @@ public class TypeModelTest {
 
         System.out.println(typeModel.dumpModel());
 
+        System.out.println("Begin test\n");
+
         Neuron inputNeuron = typeModel
                 .getPattern()
                 .getNeuron()
@@ -43,9 +46,12 @@ public class TypeModelTest {
                 .instantiate(inputNeuron, outputNeuron)
                 .setWeight(10.0);
 
+        System.out.println(inputNeuron + "\n" + inputNeuron.dumpFields());
+        System.out.println(outputNeuron + "\n" + outputNeuron.dumpFields());
+        System.out.println(synapse + "\n" + synapse.dumpFields());
 
         Document doc = new Document(m, "test");
-        doc.addToken(
+        Activation act = doc.addToken(
                 inputNeuron,
                 new TextReference(
                         new Range(0, 1),
@@ -53,6 +59,10 @@ public class TypeModelTest {
                 ),
                 5.0
         );
+
+
+        System.out.println(doc.dumpActivations());
+
 
         doc.disconnect();
     }

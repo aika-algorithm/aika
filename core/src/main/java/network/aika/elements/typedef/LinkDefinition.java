@@ -78,8 +78,6 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     LinkDefinition setSynapse(SynapseDefinition synapse) {
-        assert synapse != null;
-
         this.synapse = synapse;
 
         return this;

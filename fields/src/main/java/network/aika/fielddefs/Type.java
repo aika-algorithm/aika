@@ -57,20 +57,10 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
             instantiateFields(instance);
 
-//            LOG.info(instance.toString());
-            System.out.println(instance);
-
-            instance.getFields()
-                    .forEach(f -> {
-                                System.out.println("  " + f);
-                                f.getInputs().getInputs()
-                                        .forEach(fl ->
-                                                System.out.println("    " + fl)
-                                        );
-                            }
-                    );
-
-            System.out.println();
+            if(LOG.isDebugEnabled()) {
+                LOG.debug(instance.toString());
+                LOG.debug(instance.dumpFields());
+            }
 
             return instance;
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
@@ -114,7 +104,11 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
     }
 
     protected void addPathEntry(ObjectPath objectPath, String relLabel, Type relatedObject, Function<O, Set<Obj>> mapping) {
-        objectPath.add(new ObjectRelationDefinition(relLabel, relatedObject, mapping));
+        assert relatedObject != null;
+
+        objectPath.add(
+                new ObjectRelationDefinition(relLabel, relatedObject, mapping)
+        );
     }
 
     public String getName() {

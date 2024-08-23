@@ -269,4 +269,10 @@ public class Document extends Queue implements ModelProvider, QueueProvider {
         );
         return sb.toString();
     }
+
+    public String dumpActivations() {
+        return activationsById.values().stream()
+                .map(act -> act + "" + act.dumpFields())
+                .collect(Collectors.joining("\n"));
+    }
 }

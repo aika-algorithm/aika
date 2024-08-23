@@ -45,4 +45,5 @@ public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
 
     String toKeyString();
 
+    String dumpFields();
 }

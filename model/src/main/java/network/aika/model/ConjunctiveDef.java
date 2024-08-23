@@ -24,7 +24,11 @@ import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
 import network.aika.elements.typedef.*;
 import network.aika.enums.direction.Direction;
 
-import static network.aika.elements.typedef.FieldTags.BIAS;
+import static network.aika.elements.activations.StateType.NON_FEEDBACK;
+import static network.aika.elements.typedef.FieldTags.*;
+import static network.aika.fielddefs.inputs.ArgInputs.argLink;
+import static network.aika.fielddefs.inputs.VariableInputs.varLink;
+import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.SumField.sum;
 import static network.aika.queue.Phase.TRAINING;
 
@@ -91,6 +95,8 @@ public class ConjunctiveDef extends TypeDefinitionBase {
                 "ConjunctiveLink",
                 ConjunctiveLink.class)
                 .addParent(superType.getLink())
+                .setInputSlot(inputSlot)
+                .setOutputSlot(outputSlot)
                 .setOutput(activation);
 
         synapse = new SynapseDefinition(
@@ -101,6 +107,13 @@ public class ConjunctiveDef extends TypeDefinitionBase {
                 .addParent(superType.getSynapse())
                 .setLink(link)
                 .setOutput(neuron);
+
+        sum(synapse, SYNAPSE_BIAS)
+                .setQueued(TRAINING);
+
+        identity(link, SYNAPSE_BIAS)
+                .in((o, p) -> o.getFieldOutput(SYNAPSE_BIAS), argLink(0))
+                .out((o, p) -> o.getOutput(p).getState(p, NON_FEEDBACK).getField(NET), varLink());
     }
 
     @Override

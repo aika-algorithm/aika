@@ -23,6 +23,7 @@ import network.aika.queue.QueueProvider;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static network.aika.fielddefs.FieldTag.FIELD_TAG_COMPARATOR;
@@ -75,7 +76,15 @@ public abstract class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> impleme
         return false;
     }
 
+    @Override
     public String toString() {
         return "" + type;
+    }
+
+    @Override
+    public String dumpFields() {
+        return getFields()
+                .map(f -> "  " + f + "\n" + f.dumpFieldLinks())
+                .collect(Collectors.joining("\n"));
     }
 }

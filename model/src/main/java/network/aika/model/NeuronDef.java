@@ -89,7 +89,6 @@ public class NeuronDef extends TypeDefinitionBase {
 
         negUpdateValue;
 */
-
         
         neuron = new NeuronDefinition(
                 typeModel,
@@ -107,8 +106,6 @@ public class NeuronDef extends TypeDefinitionBase {
         )
                 .setDirection(Direction.INPUT);
 
-        max(outputSlot, INPUT_SLOT);
-
         outputSlot = new SynapseSlotDefinition(
                 getTypeModel(),
                 "SynapseOutputSlot",
@@ -116,26 +113,14 @@ public class NeuronDef extends TypeDefinitionBase {
         )
                 .setDirection(Direction.OUTPUT);
 
-        max(outputSlot, OUTPUT_SLOT);
-
         link = new LinkDefinition(
                 typeModel,
                 "Link",
                 Link.class)
+                .setInputSlot(inputSlot)
+                .setOutputSlot(outputSlot)
                 .setInput(activation)
                 .setOutput(activation);
-
-        identity(link, INPUT_VALUE);
-        threshold(link, INPUT_IS_FIRED, 0.0, ABOVE)
-                .in((o, p) -> o.getFieldOutput(INPUT_VALUE), argLink(0));
-
-        invert(link, NEG_INPUT_IS_FIRED)
-                .in((o, p) -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0));
-
-        mul(link, WEIGHTED_INPUT)
-                .in((o, p) -> o.getFieldOutput(INPUT_VALUE), argLink(0))
-                .in((o, p) -> o.getSynapse(p).getFieldOutput(WEIGHT), argLink(1))
-                .out((o, p) -> o.getOutputSlot(p).getField(OUTPUT_SLOT), varLink());
 
         /*
                 weightedInput = mul(
@@ -155,8 +140,25 @@ public class NeuronDef extends TypeDefinitionBase {
                 .setInput(neuron)
                 .setOutput(neuron);
 
+
+        max(inputSlot, INPUT_SLOT);
+
+        max(outputSlot, OUTPUT_SLOT);
+
         sum(synapse, WEIGHT)
                 .setQueued(TRAINING);
+
+        identity(link, INPUT_VALUE);
+        threshold(link, INPUT_IS_FIRED, 0.0, ABOVE)
+                .in((o, p) -> o.getFieldOutput(INPUT_VALUE), argLink(0));
+
+        invert(link, NEG_INPUT_IS_FIRED)
+                .in((o, p) -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0));
+
+        mul(link, WEIGHTED_INPUT)
+                .in((o, p) -> o.getFieldOutput(INPUT_VALUE), argLink(0))
+                .in((o, p) -> o.getSynapse(p).getFieldOutput(WEIGHT), argLink(1))
+                .out((o, p) -> o.getOutputSlot(p).getField(OUTPUT_SLOT), varLink());
     }
 
     public StateDefinition getNonFeedbackState() {

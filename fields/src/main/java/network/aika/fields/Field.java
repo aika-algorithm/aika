@@ -24,6 +24,8 @@ import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
 import network.aika.utils.FieldWritable;
 
+import java.util.stream.Collectors;
+
 
 /**
  * @author Lukas Molzberger
@@ -117,5 +119,11 @@ public class Field<O extends Obj, I extends FieldInputs<F>, F extends FieldLink>
 
         assert !withinUpdate;
         triggerUpdate(u);
+    }
+
+    public String dumpFieldLinks() {
+        return getInputs().getInputs()
+                .map(fl -> "    " + fl)
+                .collect(Collectors.joining("\n"));
     }
 }
