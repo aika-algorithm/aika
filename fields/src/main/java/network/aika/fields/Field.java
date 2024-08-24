@@ -26,6 +26,8 @@ import network.aika.utils.FieldWritable;
 
 import java.util.stream.Collectors;
 
+import static network.aika.utils.StringUtils.depthToSpace;
+
 
 /**
  * @author Lukas Molzberger
@@ -121,9 +123,13 @@ public class Field<O extends Obj, I extends FieldInputs<F>, F extends FieldLink>
         triggerUpdate(u);
     }
 
-    public String dumpFieldLinks() {
+    public String dumpField(int depth) {
+        return depthToSpace(depth) + this + dumpFieldLinks(depth + 2);
+    }
+
+    public String dumpFieldLinks(int depth) {
         return getInputs().getInputs()
-                .map(fl -> "    " + fl)
+                .map(fl -> fl.dumpFieldLink(depth))
                 .collect(Collectors.joining("\n"));
     }
 }

@@ -58,8 +58,7 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
             instantiateFields(instance);
 
             if(LOG.isDebugEnabled()) {
-                LOG.debug(instance.toString());
-                LOG.debug(instance.dumpFields());
+                LOG.debug(instance.dumpObject(0));
             }
 
             return instance;

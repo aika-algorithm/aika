@@ -47,6 +47,7 @@ import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.elements.neurons.RefType.TEMPLATE;
 import static network.aika.queue.Timestamp.NOT_SET;
 import static network.aika.text.TextReference.join;
+import static network.aika.utils.StringUtils.depthToSpace;
 
 /**
  * @author Lukas Molzberger
@@ -480,5 +481,11 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
 
     public String toKeyString() {
         return "id:" + getId() + " n:[" + getNeuron().toKeyString() + "]";
+    }
+
+    @Override
+    public String dumpObject(int depth) {
+        return depthToSpace(depth) + this + "\n" +
+                dumpFields(depth + 2);
     }
 }

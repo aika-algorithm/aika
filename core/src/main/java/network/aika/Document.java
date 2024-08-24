@@ -272,7 +272,7 @@ public class Document extends Queue implements ModelProvider, QueueProvider {
 
     public String dumpActivations() {
         return activationsById.values().stream()
-                .map(act -> act + "" + act.dumpFields())
+                .map(act -> act.dumpObject(0))
                 .collect(Collectors.joining("\n"));
     }
 }

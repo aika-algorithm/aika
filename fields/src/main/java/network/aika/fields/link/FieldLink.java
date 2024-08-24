@@ -21,6 +21,8 @@ import network.aika.fields.FieldOutput;
 
 import java.util.Objects;
 
+import static network.aika.utils.StringUtils.depthToSpace;
+
 /**
  * @author Lukas Molzberger
  */
@@ -144,5 +146,9 @@ public class FieldLink {
     @Override
     public String toString() {
         return getObjectString() + input + " ---> " + output;
+    }
+
+    public String dumpFieldLink(int depth) {
+        return depthToSpace(depth) + this;
     }
 }

@@ -82,9 +82,9 @@ public abstract class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> impleme
     }
 
     @Override
-    public String dumpFields() {
+    public String dumpFields(int depth) {
         return getFields()
-                .map(f -> "  " + f + "\n" + f.dumpFieldLinks())
+                .map(f -> f.dumpField(depth))
                 .collect(Collectors.joining("\n"));
     }
 }
