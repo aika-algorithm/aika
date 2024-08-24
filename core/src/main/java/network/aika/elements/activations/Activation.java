@@ -482,10 +482,4 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
     public String toKeyString() {
         return "id:" + getId() + " n:[" + getNeuron().toKeyString() + "]";
     }
-
-    @Override
-    public String dumpObject(int depth) {
-        return depthToSpace(depth) + this + "\n" +
-                dumpFields(depth + 2);
-    }
 }

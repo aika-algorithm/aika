@@ -46,9 +46,9 @@ public class TypeModelTest {
                 .instantiate(inputNeuron, outputNeuron)
                 .setWeight(10.0);
 
-        System.out.println(inputNeuron + "\n" + inputNeuron.dumpFields());
-        System.out.println(outputNeuron + "\n" + outputNeuron.dumpFields());
-        System.out.println(synapse + "\n" + synapse.dumpFields());
+        System.out.println(inputNeuron + "\n" + inputNeuron.dumpFields(0));
+        System.out.println(outputNeuron + "\n" + outputNeuron.dumpFields(0));
+        System.out.println(synapse + "\n" + synapse.dumpFields(0));
 
         Document doc = new Document(m, "test");
         Activation act = doc.addToken(
