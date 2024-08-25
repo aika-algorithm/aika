@@ -124,12 +124,16 @@ public class Field<O extends Obj, I extends FieldInputs<F>, F extends FieldLink>
     }
 
     public String dumpField(int depth) {
-        return depthToSpace(depth) + this + dumpFieldLinks(depth + 2);
+        return depthToSpace(depth) + this +
+                dumpFieldLinks(depth + 2);
     }
 
     public String dumpFieldLinks(int depth) {
+        if(getInputs().getInputs().findAny().isEmpty())
+            return "";
+
         return getInputs().getInputs()
                 .map(fl -> fl.dumpFieldLink(depth))
-                .collect(Collectors.joining("\n"));
+                .collect(Collectors.joining("\n", "\n", ""));
     }
 }

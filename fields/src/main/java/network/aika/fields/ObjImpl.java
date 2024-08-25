@@ -83,15 +83,15 @@ public abstract class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> impleme
     }
 
     @Override
+    public String dumpObject(int depth) {
+        return depthToSpace(depth) + this + "\n" +
+                dumpFields(depth + 2);
+    }
+
+    @Override
     public String dumpFields(int depth) {
         return getFields()
                 .map(f -> f.dumpField(depth))
                 .collect(Collectors.joining("\n"));
-    }
-
-    @Override
-    public String dumpObject(int depth) {
-        return depthToSpace(depth) + this + "\n" +
-                dumpFields(depth + 2);
     }
 }
