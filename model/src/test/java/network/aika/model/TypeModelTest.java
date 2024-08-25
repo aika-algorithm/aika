@@ -45,13 +45,14 @@ public class TypeModelTest {
                 .getSynapse()
                 .instantiate(inputNeuron, outputNeuron)
                 .setWeight(10.0);
-
+/*
         System.out.println("Dump model:");
         System.out.println(inputNeuron.dumpObject(0));
         System.out.println(outputNeuron.dumpObject(0));
         System.out.println(synapse.dumpObject(0));
         System.out.println();
-
+*/
+//        typeModel.typesAsJSON();
 
         Document doc = new Document(m, "test");
         Activation act = doc.addToken(

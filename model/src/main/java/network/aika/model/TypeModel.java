@@ -24,6 +24,9 @@ import network.aika.fielddefs.TypeRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
+import static network.aika.utils.JSONExporter.export;
+
+
 /**
  *
  * @author Lukas Molzberger
@@ -102,4 +105,9 @@ public class TypeModel implements TypeRegistry {
         return sb.toString();
     }
 
+    public void typesAsJSON() {
+        types.forEach(t -> {
+            System.out.println(export(t));
+        });
+    }
 }
