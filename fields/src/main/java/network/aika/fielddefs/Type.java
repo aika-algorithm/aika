@@ -153,6 +153,10 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
             if(fod != null)
                 fod.instantiateOutputLinks(f);
         });
+
+        fields.values().forEach(f -> {
+            f.getInputs().connectInputs(true);
+        });
     }
 
     public void setFieldDefinition(FieldDefinition<T, O> fieldDef) {
