@@ -38,6 +38,8 @@ public class FieldLink {
     protected boolean propagateUpdates = true;
 
     public FieldLink(FieldOutput input, FieldInput output) {
+        assert input != output;
+
         this.input = input;
         this.output = output;
     }
@@ -145,7 +147,19 @@ public class FieldLink {
 
     @Override
     public String toString() {
-        return getObjectString() + input + " ---> " + output;
+        return getObjectString() +
+                input +
+                arrowToString() +
+                output +
+                " (" + linkParamsToString() + ")";
+    }
+
+    protected String arrowToString() {
+        return " ---> ";
+    }
+
+    protected String linkParamsToString() {
+        return "c:" + connected + ", p:" + propagateUpdates;
     }
 
     public String dumpFieldLink(int depth) {

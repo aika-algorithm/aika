@@ -50,6 +50,7 @@ import static network.aika.fields.SumField.sum;
  */
 public class BindingDef extends TypeDefinitionBase {
 
+    StateDef nonFeedbackState;
     StateDef outerFeedbackState;
     StateDef innerFeedbackState;
 
@@ -87,11 +88,13 @@ public class BindingDef extends TypeDefinitionBase {
     public BindingDef(TypeModel typeModel, ConjunctiveDef superType) {
         super(typeModel, superType);
 
+        nonFeedbackState = new StateDef(typeModel);
         outerFeedbackState = new StateDef(getTypeModel());
         innerFeedbackState = new StateDef(getTypeModel());
     }
 
     public void initNodes() {
+        nonFeedbackState.init("NonFeedbackState", NON_FEEDBACK);
         outerFeedbackState.init("OuterFeedbackState", OUTER_FEEDBACK);
         innerFeedbackState.init("InnerFeedbackState", INNER_FEEDBACK);
 
@@ -101,16 +104,17 @@ public class BindingDef extends TypeDefinitionBase {
                 Activation.class
         )
                 .addParent(superType.getActivation())
+                .addStateType(nonFeedbackState.state)
                 .addStateType(outerFeedbackState.state)
                 .addStateType(innerFeedbackState.state);
 
         sum(activation, UPDATE_VALUE);
 
         activation.getState(NON_FEEDBACK).getField(NET)
-                .out((o,p) -> outerFeedbackState.state.getField(NET), varLink());
+                .out((o,p) -> o.getActivation(p).getState(p, OUTER_FEEDBACK).getField(NET), varLink());
 
         outerFeedbackState.state.getField(NET)
-                .out((o,p) -> innerFeedbackState.state.getField(NET), varLink());
+                .out((o,p) -> o.getActivation(p).getState(p, INNER_FEEDBACK).getField(NET), varLink());
 
 
         neuron = new NeuronDefinition(
