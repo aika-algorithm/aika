@@ -50,6 +50,7 @@ public class TypeModelTest {
         System.out.println(inputNeuron.dumpObject(0));
         System.out.println(outputNeuron.dumpObject(0));
         System.out.println(synapse.dumpObject(0));
+        System.out.println();
 
 
         Document doc = new Document(m, "test");
