@@ -21,6 +21,7 @@ import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.ModelProvider;
 import network.aika.elements.NeuronType;
+import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.links.Link;
@@ -90,6 +91,8 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
 
         initStates();
 
+        initBindingSignalSlots();
+
         setCreated(doc.getCurrentTimestamp());
     }
 
@@ -110,6 +113,13 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
             return null;
 
         return templateSynIdMap.get(templateSynId);
+    }
+
+    protected void initBindingSignalSlots() {
+        Stream<BSSlotDefinition> bsSlots = neuron.getBindingSignalSlots();
+        bsSlots.forEach(slotDef ->
+                bindingSignalSlots[slotDef.getScope().ordinal()] = BindingSignalSlot.create(this, slotDef)
+        );
     }
 
     public BindingSignalSlot getBindingSignalSlot(Scope t) {
