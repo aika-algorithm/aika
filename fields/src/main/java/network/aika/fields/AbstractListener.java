@@ -9,4 +9,9 @@ public abstract class AbstractListener<O extends Obj> extends Field<O, FixedFiel
     public AbstractListener() {
         super(new FixedFieldInputs(1));
     }
+
+    @Override
+    public String toString() {
+        return "" + getFieldTag();
+    }
 }

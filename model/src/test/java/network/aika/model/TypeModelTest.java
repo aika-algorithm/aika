@@ -64,6 +64,8 @@ public class TypeModelTest {
                 5.0
         );
 
+        doc.process();
+
         System.out.println("Dump results:");
         System.out.println(doc.dumpActivations());
 

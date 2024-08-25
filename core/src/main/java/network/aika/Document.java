@@ -94,7 +94,7 @@ public class Document extends Queue implements ModelProvider, QueueProvider {
     }
 
     @Override
-    public long getTimeout() {
+    public Long getTimeout() {
         return getConfig().getTimeout();
     }
 

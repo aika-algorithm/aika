@@ -71,7 +71,7 @@ public class Model extends Queue implements Writable {
     }
 
     @Override
-    public long getTimeout() {
+    public Long getTimeout() {
         return config.getTimeout();
     }
 

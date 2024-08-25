@@ -38,7 +38,7 @@ public class Queue {
 
     private Timestamp timestampOnProcess = new Timestamp(0);
 
-    public long getTimeout(){
+    public Long getTimeout(){
         return Long.MAX_VALUE;
     }
 
