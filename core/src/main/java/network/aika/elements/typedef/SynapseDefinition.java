@@ -47,6 +47,8 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
 
     private Transition required;
 
+    private boolean propagable;
+
     private Trigger trigger;
     
     private StateType outputState;
@@ -132,6 +134,17 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
 
     public SynapseDefinition setRequired(Transition required) {
         this.required = required;
+
+        return this;
+    }
+
+
+    public boolean isPropagable() {
+        return propagable;
+    }
+
+    public SynapseDefinition setPropagable(boolean propagable) {
+        this.propagable = propagable;
 
         return this;
     }

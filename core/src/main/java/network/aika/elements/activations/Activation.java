@@ -47,11 +47,9 @@ import java.util.stream.Stream;
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.elements.neurons.RefType.TEMPLATE;
-import static network.aika.elements.typedef.FieldTags.BIAS;
 import static network.aika.elements.typedef.FieldTags.NET;
 import static network.aika.queue.Timestamp.NOT_SET;
 import static network.aika.text.TextReference.join;
-import static network.aika.utils.StringUtils.depthToSpace;
 
 /**
  * @author Lukas Molzberger
@@ -118,7 +116,7 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
     protected void initBindingSignalSlots() {
         Stream<BSSlotDefinition> bsSlots = neuron.getBindingSignalSlots();
         bsSlots.forEach(slotDef ->
-                bindingSignalSlots[slotDef.getScope().ordinal()] = BindingSignalSlot.create(this, slotDef)
+                bindingSignalSlots[slotDef.getScope().ordinal()] = slotDef.instantiate(this)
         );
     }
 

@@ -50,12 +50,6 @@ public abstract class BindingSignalSlot {
         return slotDef.isFeedback();
     }
 
-    public static BindingSignalSlot create(Activation act, BSSlotDefinition slotDef) {
-        return slotDef.isMulti() ?
-                        new MultiBSSlot(act, slotDef) :
-                        new SingleBSSlot(act, slotDef);
-    }
-
     public Scope getType() {
         return slotDef.getScope();
     }

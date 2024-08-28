@@ -16,6 +16,7 @@
  */
 package network.aika.elements.activations.bsslots;
 
+import network.aika.elements.activations.Activation;
 import network.aika.enums.Scope;
 
 import static network.aika.enums.Scope.INPUT;
@@ -26,20 +27,34 @@ import static network.aika.enums.Scope.SAME;
  * @author Lukas Molzberger
  */
 public enum BSSlotDefinition {
-    SINGLE_SAME(SAME, false, false),
-    SINGLE_SAME_FEEDBACK(SAME, false, true),
-    SINGLE_INPUT(INPUT, false, false),
-    MULTI_INPUT(INPUT, true, false);
+    SINGLE_SAME(SAME, false, false, false),
+    SINGLE_SAME_START(SAME, false, false, true),
+    SINGLE_SAME_FEEDBACK(SAME, false, true, false),
+    SINGLE_INPUT(INPUT, false, false, false),
+    MULTI_INPUT(INPUT, true, false, false);
 
     private Scope scope;
     private boolean multi;
 
     private boolean isFeedback;
+    private boolean isStart;
 
-    BSSlotDefinition(Scope scope, boolean multi, boolean isFeedback) {
+    BSSlotDefinition(Scope scope, boolean multi, boolean isFeedback, boolean isStart) {
         this.scope = scope;
         this.multi = multi;
         this.isFeedback = isFeedback;
+        this.isStart = isStart;
+    }
+
+    public BindingSignalSlot instantiate(Activation act) {
+        BindingSignalSlot bs = isMulti() ?
+                new MultiBSSlot(act, this) :
+                new SingleBSSlot(act, this);
+
+        if(isStart)
+            bs.updateBindingSignal(act, true);
+
+        return bs;
     }
 
     public Scope getScope() {
