@@ -14,9 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.elements.activations.bsslots;
+package network.aika.elements.typedef;
 
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.bsslots.BindingSignalSlot;
+import network.aika.elements.activations.bsslots.MultiBSSlot;
+import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.enums.Scope;
 
 import static network.aika.enums.Scope.INPUT;
@@ -26,24 +29,23 @@ import static network.aika.enums.Scope.SAME;
  *
  * @author Lukas Molzberger
  */
-public enum BSSlotDefinition {
-    SINGLE_SAME(SAME, false, false, false),
-    SINGLE_SAME_START(SAME, false, false, true),
-    SINGLE_SAME_FEEDBACK(SAME, false, true, false),
-    SINGLE_INPUT(INPUT, false, false, false),
-    MULTI_INPUT(INPUT, true, false, false);
+public class BSSlotDefinition {
 
+    /*  SINGLE_SAME(SAME, false, false, false),
+        SINGLE_SAME_START(SAME, false, false, true),
+        SINGLE_SAME_FEEDBACK(SAME, false, true, false),
+        SINGLE_INPUT(INPUT, false, false, false),
+        MULTI_INPUT(INPUT, true, false, false);
+    */
     private Scope scope;
     private boolean multi;
 
     private boolean isFeedback;
     private boolean isStart;
 
-    BSSlotDefinition(Scope scope, boolean multi, boolean isFeedback, boolean isStart) {
-        this.scope = scope;
-        this.multi = multi;
-        this.isFeedback = isFeedback;
-        this.isStart = isStart;
+    public static BSSlotDefinition bsSlotDef(Scope scope) {
+        return new BSSlotDefinition()
+                .setScope(scope);
     }
 
     public BindingSignalSlot instantiate(Activation act) {
@@ -61,11 +63,39 @@ public enum BSSlotDefinition {
         return scope;
     }
 
+    public BSSlotDefinition setScope(Scope scope) {
+        this.scope = scope;
+
+        return this;
+    }
+
     public boolean isMulti() {
         return multi;
     }
 
+    public BSSlotDefinition setMulti(boolean multi) {
+        this.multi = multi;
+
+        return this;
+    }
+
     public boolean isFeedback() {
         return isFeedback;
+    }
+
+    public BSSlotDefinition setFeedback(boolean feedback) {
+        isFeedback = feedback;
+
+        return this;
+    }
+
+    public boolean isStart() {
+        return isStart;
+    }
+
+    public BSSlotDefinition setStart(boolean start) {
+        isStart = start;
+
+        return this;
     }
 }

@@ -44,23 +44,6 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
         super(registry, name, clazz);
     }
 
-    @Override
-    public void dumpTypeDetails(StringBuilder sb) {
-        sb.append("  synapse: " + synapse.getName() + "\n");
-
-        if(input != null)
-            sb.append("  input: " + input.getName() + "\n");
-
-        if(output != null)
-            sb.append("  output: " + output.getName() + "\n");
-
-        if(inputSlot != null)
-            sb.append("  inputSlot: " + inputSlot.getName() + "\n");
-
-        if(outputSlot != null)
-            sb.append("  outputSlot: " + outputSlot.getName() + "\n");
-    }
-
     public Link instantiate(Synapse synapse, Activation input, Activation output) {
         return instantiate(
                 List.of(LinkDefinition.class, Synapse.class, Activation.class, Activation.class),
@@ -158,5 +141,22 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
         this.outputSlot = outputSlot;
 
         return this;
+    }
+
+    @Override
+    public void dumpTypeDetails(StringBuilder sb) {
+        sb.append("  synapse: " + synapse.getName() + "\n");
+
+        if(input != null)
+            sb.append("  input: " + input.getName() + "\n");
+
+        if(output != null)
+            sb.append("  output: " + output.getName() + "\n");
+
+        if(inputSlot != null)
+            sb.append("  inputSlot: " + inputSlot.getName() + "\n");
+
+        if(outputSlot != null)
+            sb.append("  outputSlot: " + outputSlot.getName() + "\n");
     }
 }

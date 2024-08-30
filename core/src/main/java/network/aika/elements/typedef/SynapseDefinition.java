@@ -67,15 +67,6 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
         super(registry, name, clazz);
     }
 
-    @Override
-    public void dumpTypeDetails(StringBuilder sb) {
-        if(input != null)
-            sb.append("  input: " + input.getName() + "\n");
-
-        if(output != null)
-            sb.append("  output: " + output.getName() + "\n");
-    }
-
     public Synapse instantiate(Neuron input, Neuron output) {
         return instantiate(
                 List.of(SynapseDefinition.class, Neuron.class, Neuron.class),
@@ -229,5 +220,14 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
         this.instanceSynapseType = instanceSynapseType;
 
         return this;
+    }
+
+    @Override
+    public void dumpTypeDetails(StringBuilder sb) {
+        if(input != null)
+            sb.append("  input: " + input.getName() + "\n");
+
+        if(output != null)
+            sb.append("  output: " + output.getName() + "\n");
     }
 }

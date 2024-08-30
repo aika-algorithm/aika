@@ -23,11 +23,12 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
+import network.aika.enums.Scope;
 
+import static network.aika.elements.typedef.BSSlotDefinition.bsSlotDef;
 import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.elements.NeuronType.*;
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
-import static network.aika.elements.activations.bsslots.BSSlotDefinition.SINGLE_INPUT;
 import static network.aika.enums.Transition.INPUT_INPUT;
 import static network.aika.enums.Transition.SAME_INPUT;
 import static network.aika.enums.Trigger.FIRED_NON_FEEDBACK;
@@ -96,7 +97,7 @@ public class InhibitoryDef extends TypeDefinitionBase {
                 .setNeuronType(CATEGORY)
                 .setActivation(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
-                .setBindingSignalSlots(SINGLE_INPUT)
+                .setBindingSignalSlots(bsSlotDef(Scope.INPUT))
                 .setTrainingAllowed(false)
                 .addParent(typeModel.category.getNeuron());
     }

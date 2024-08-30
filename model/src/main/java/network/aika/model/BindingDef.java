@@ -23,6 +23,7 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
+import network.aika.enums.Scope;
 import network.aika.fielddefs.FieldDefinition;
 
 
@@ -34,7 +35,7 @@ import static network.aika.fields.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGEN
 import static network.aika.elements.NeuronType.*;
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
-import static network.aika.elements.activations.bsslots.BSSlotDefinition.*;
+import static network.aika.elements.typedef.BSSlotDefinition.*;
 import static network.aika.elements.activations.bsslots.RegisterInputSlot.ON_INIT;
 import static network.aika.enums.Transition.*;
 import static network.aika.enums.Trigger.*;
@@ -126,7 +127,11 @@ public class BindingDef extends TypeDefinitionBase {
                 .setNeuronType(BINDING)
                 .setActivation(activation)
                 .setActivationFunction(RECTIFIED_HYPERBOLIC_TANGENT)
-                .setBindingSignalSlots(SINGLE_INPUT, SINGLE_SAME_FEEDBACK);
+                .setBindingSignalSlots(
+                        bsSlotDef(Scope.INPUT),
+                        bsSlotDef(Scope.SAME)
+                                .setFeedback(true)
+                );
 
         categoryActivation = new ActivationDefinition(
                 getTypeModel(),
@@ -145,7 +150,10 @@ public class BindingDef extends TypeDefinitionBase {
                 .setNeuronType(CATEGORY)
                 .setActivation(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
-                .setBindingSignalSlots(SINGLE_INPUT, SINGLE_SAME)
+                .setBindingSignalSlots(
+                        bsSlotDef(Scope.INPUT),
+                        bsSlotDef(Scope.SAME)
+                )
                 .setTrainingAllowed(false);
 
         latentRelationActivation = new ActivationDefinition(

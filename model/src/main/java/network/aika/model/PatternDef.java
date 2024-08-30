@@ -24,12 +24,13 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
+import network.aika.enums.Scope;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.inputs.ArgInputs;
 import network.aika.statistic.AverageCoveredSpace;
 import network.aika.statistic.NeuronStatistic;
 
-import static network.aika.elements.activations.bsslots.BSSlotDefinition.*;
+import static network.aika.elements.typedef.BSSlotDefinition.*;
 import static network.aika.elements.typedef.FieldTags.*;
 import static network.aika.fielddefs.inputs.ArgInputs.argLink;
 import static network.aika.fielddefs.inputs.VariableInputs.varLink;
@@ -108,7 +109,12 @@ public class PatternDef extends TypeDefinitionBase {
                 .setNeuronType(PATTERN)
                 .setActivation(activation)
                 .setActivationFunction(RECTIFIED_HYPERBOLIC_TANGENT)
-                .setBindingSignalSlots(SINGLE_SAME_START, MULTI_INPUT);
+                .setBindingSignalSlots(
+                        bsSlotDef(Scope.SAME)
+                                .setStart(true),
+                        bsSlotDef(Scope.INPUT)
+                                .setMulti(true)
+                );
 
 
         neuronAverageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, new ArgInputs(), neuron, AVERAGE_COVERED_SPACE);
@@ -144,7 +150,7 @@ public class PatternDef extends TypeDefinitionBase {
                 .setNeuronType(CATEGORY)
                 .setActivation(categoryActivation)
                 .setActivationFunction(LIMITED_RECTIFIED_LINEAR_UNIT)
-                .setBindingSignalSlots(SINGLE_SAME)
+                .setBindingSignalSlots(bsSlotDef(Scope.SAME))
                 .setTrainingAllowed(false);
     }
 

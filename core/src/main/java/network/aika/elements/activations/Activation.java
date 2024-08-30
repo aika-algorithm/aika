@@ -21,7 +21,7 @@ import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.ModelProvider;
 import network.aika.elements.NeuronType;
-import network.aika.elements.activations.bsslots.BSSlotDefinition;
+import network.aika.elements.typedef.BSSlotDefinition;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
 import network.aika.elements.links.Link;

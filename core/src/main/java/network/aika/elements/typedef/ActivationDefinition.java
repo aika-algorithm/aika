@@ -41,15 +41,6 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
         super(registry, name, clazz);
     }
 
-    @Override
-    public void dumpTypeDetails(StringBuilder sb) {
-        sb.append("  neuron: " + neuron.getName() + "\n");
-        states.values()
-                .forEach(s ->
-                    sb.append("  state: " + s.getName() + "\n")
-                );
-    }
-
     ActivationDefinition setNeuron(NeuronDefinition neuron) {
         assert neuron != null;
 
@@ -107,5 +98,14 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
         StateDefinition s = getState(stateType);
         addPathEntry(p, "activation.state", s, act -> Set.of(act.getState(stateType)));
         return s;
+    }
+
+    @Override
+    public void dumpTypeDetails(StringBuilder sb) {
+        sb.append("  neuron: " + neuron.getName() + "\n");
+        states.values()
+                .forEach(s ->
+                        sb.append("  state: " + s.getName() + "\n")
+                );
     }
 }

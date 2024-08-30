@@ -17,6 +17,7 @@
 package network.aika.elements.activations.bsslots;
 
 import network.aika.elements.activations.Activation;
+import network.aika.elements.typedef.BSSlotDefinition;
 
 import java.util.HashSet;
 import java.util.Set;

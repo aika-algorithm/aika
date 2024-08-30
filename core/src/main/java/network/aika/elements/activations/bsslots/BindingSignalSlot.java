@@ -18,6 +18,7 @@ package network.aika.elements.activations.bsslots;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.State;
+import network.aika.elements.typedef.BSSlotDefinition;
 import network.aika.enums.Scope;
 import network.aika.queue.steps.Linking;
 import org.slf4j.Logger;

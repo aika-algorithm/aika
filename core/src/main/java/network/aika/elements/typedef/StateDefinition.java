@@ -44,11 +44,6 @@ public class StateDefinition extends Type<StateDefinition, State> {
         this.stateType = stateType;
     }
 
-    @Override
-    public void dumpTypeDetails(StringBuilder sb) {
-        sb.append("  isNextRound: " + isNextRound + "\n");
-    }
-
     public State instantiate(Activation act) {
         return instantiate(
                 List.of(StateDefinition.class, Activation.class),
@@ -84,5 +79,10 @@ public class StateDefinition extends Type<StateDefinition, State> {
 
     public boolean isNextRound() {
         return isNextRound;
+    }
+
+    @Override
+    public void dumpTypeDetails(StringBuilder sb) {
+        sb.append("  isNextRound: " + isNextRound + "\n");
     }
 }

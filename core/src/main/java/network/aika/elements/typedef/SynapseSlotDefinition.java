@@ -38,11 +38,6 @@ public class SynapseSlotDefinition extends Type<SynapseSlotDefinition, SynapseSl
         super(registry, name, clazz);
     }
 
-    @Override
-    public void dumpTypeDetails(StringBuilder sb) {
-        sb.append("  direction: " + direction + "\n");
-    }
-
     public SynapseSlot instantiate(Activation act, Synapse synapse) {
         return instantiate(
                 List.of(SynapseSlotDefinition.class, Activation.class, Synapse.class),
@@ -57,5 +52,10 @@ public class SynapseSlotDefinition extends Type<SynapseSlotDefinition, SynapseSl
 
     public Direction getDirection() {
         return direction;
+    }
+
+    @Override
+    public void dumpTypeDetails(StringBuilder sb) {
+        sb.append("  direction: " + direction + "\n");
     }
 }

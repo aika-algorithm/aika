@@ -23,7 +23,7 @@ import network.aika.Document;
 import network.aika.elements.ModelProvider;
 import network.aika.elements.PreActivation;
 import network.aika.elements.NeuronType;
-import network.aika.elements.activations.bsslots.BSSlotDefinition;
+import network.aika.elements.typedef.BSSlotDefinition;
 import network.aika.elements.typedef.NeuronDefinition;
 import network.aika.elements.typedef.SynapseDefinition;
 import network.aika.enums.Scope;

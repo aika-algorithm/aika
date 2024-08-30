@@ -21,7 +21,6 @@ import network.aika.fielddefs.Type;
 import network.aika.fielddefs.TypeRegistry;
 import network.aika.fields.ActivationFunction;
 import network.aika.elements.NeuronType;
-import network.aika.elements.activations.bsslots.BSSlotDefinition;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.RefType;
 
@@ -47,11 +46,6 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
 
     public NeuronDefinition(TypeRegistry registry, String name, Class<? extends Neuron> clazz) {
         super(registry, name, clazz);
-    }
-
-    @Override
-    public void dumpTypeDetails(StringBuilder sb) {
-        sb.append("  activation: " + activationType.getName() + "\n");
     }
 
     public Neuron instantiate(Model m, RefType rt) {
@@ -123,4 +117,10 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
         this.templateRelation = templateRelation;
         return this;
     }
+
+    @Override
+    public void dumpTypeDetails(StringBuilder sb) {
+        sb.append("  activation: " + activationType.getName() + "\n");
+    }
+
 }
