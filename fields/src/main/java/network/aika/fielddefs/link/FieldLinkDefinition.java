@@ -21,6 +21,7 @@ import network.aika.enums.Direction;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldOutputDefinition;
 import network.aika.fielddefs.ObjectPath;
+import network.aika.fielddefs.ObjectRelationType;
 import network.aika.fields.Field;
 import network.aika.fields.FieldInput;
 import network.aika.fields.FieldOutput;
@@ -37,6 +38,7 @@ import java.util.List;
 public abstract class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
 
     private static final Logger log = LoggerFactory.getLogger(FieldLinkDefinition.class);
+
     private ObjectPath objectPath;
 
     private FieldOutputDefinition input;
@@ -74,10 +76,15 @@ public abstract class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
     }
 
     public void instantiate(Direction dir, Field f) {
+        ObjectPath op = getObjectPath();
+
         if(dir != getObjectPath().getDirection())
+            op = op.getReversed();
+
+        if(op == null)
             return;
 
-        List<Obj> objects = getObjectPath().resolve(f.getObject());
+        List<Obj> objects = op.resolve(f.getObject());
 
         switch (dir) {
             case INPUT:

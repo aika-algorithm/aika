@@ -7,9 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static network.aika.fielddefs.ObjectRelationType.ONE_TO_MANY;
+import static network.aika.fielddefs.ObjectRelationType.ONE_TO_ONE;
+
 public class ObjectPath {
 
     private Direction direction;
+
+    private ObjectRelationType relType = ONE_TO_ONE;
 
     private ArrayList<ObjectRelationDefinition> path = new ArrayList<>();
 
@@ -22,14 +27,21 @@ public class ObjectPath {
     }
 
     public Type getFromObject() {
-        return path.getFirst().getRelatedObject();
+        return path.getFirst().getToObject();
     }
 
     public Type getToObject() {
-        return path.getLast().getRelatedObject();
+        return path.getLast().getToObject();
+    }
+
+    public ObjectRelationType getRelType() {
+        return relType;
     }
 
     public void add(ObjectRelationDefinition rel) {
+        if(rel.getRelationType() == ONE_TO_MANY)
+            relType = ONE_TO_MANY;
+
         path.add(rel);
     }
 
@@ -45,6 +57,17 @@ public class ObjectPath {
         }
 
         return current;
+    }
+
+    public ObjectPath getReversed() {
+        if(relType != ONE_TO_ONE)
+            return null;
+
+        ObjectPath invertedPath = new ObjectPath(direction.invert());
+        for(ObjectRelationDefinition e: path.reversed()) {
+            invertedPath.add(e.getReversed());
+        }
+        return invertedPath;
     }
 
     public String toString() {

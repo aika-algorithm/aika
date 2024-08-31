@@ -19,12 +19,17 @@ package network.aika.elements.typedef;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
+import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.fielddefs.ObjectRelationDefinition;
 import network.aika.fielddefs.Type;
 import network.aika.fielddefs.ObjectPath;
 import network.aika.fielddefs.TypeRegistry;
 
 import java.util.List;
 import java.util.Set;
+
+import static network.aika.fielddefs.ObjectRelationDefinition.single;
+import static network.aika.fielddefs.ObjectRelationType.ONE_TO_MANY;
 
 /**
  *
@@ -33,11 +38,21 @@ import java.util.Set;
 public class LinkDefinition extends Type<LinkDefinition, Link> {
 
     private SynapseDefinition synapse;
+    ObjectRelationDefinition<LinkDefinition, Link, SynapseDefinition, Synapse> synapseRelation;
+
     private ActivationDefinition input;
+    ObjectRelationDefinition<LinkDefinition, Link, ActivationDefinition, Activation> inputRelation;
+
     private ActivationDefinition output;
+    ObjectRelationDefinition<LinkDefinition, Link, ActivationDefinition, Activation> outputRelation;
+
 
     private SynapseSlotDefinition inputSlot;
+    ObjectRelationDefinition<LinkDefinition, Link, SynapseSlotDefinition, SynapseSlot> inputSlotRelation;
+
     private SynapseSlotDefinition outputSlot;
+    ObjectRelationDefinition<LinkDefinition, Link, SynapseSlotDefinition, SynapseSlot> outputSlotRelation;
+
 
 
     public LinkDefinition(TypeRegistry registry, String name, Class<? extends Link> clazz) {
@@ -56,20 +71,26 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     public SynapseDefinition getSynapse(ObjectPath p) {
-        addPathEntry(p, "link.synapse", synapse, l -> Set.of(l.getSynapse()));
+        p.add(synapseRelation);
         return synapse;
     }
 
     LinkDefinition setSynapse(SynapseDefinition synapse) {
         this.synapse = synapse;
 
+        synapseRelation = new ObjectRelationDefinition<>(
+                this,
+                synapse,
+                ONE_TO_MANY,
+                l -> single(l.getSynapse()),
+                null
+        );
+
         return this;
     }
 
     public ActivationDefinition getInput(ObjectPath p) {
-        addPathEntry(p, "link.input", input, l ->
-                Set.of(l.getInput())
-        );
+        p.add(inputRelation);
         return input;
     }
 
@@ -81,14 +102,19 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
         assert input != null;
 
         this.input = input;
+        inputRelation = new ObjectRelationDefinition<>(
+                this,
+                input,
+                ONE_TO_MANY,
+                l -> single(l.getInput()),
+                null
+        );
 
         return this;
     }
 
     public ActivationDefinition getOutput(ObjectPath p) {
-        addPathEntry(p, "link.output", output, l ->
-                Set.of(l.getOutput())
-        );
+        p.add(outputRelation);
         return output;
     }
 
@@ -100,6 +126,13 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
         assert output != null;
 
         this.output = output;
+        outputRelation = new ObjectRelationDefinition<>(
+                this,
+                output,
+                ONE_TO_MANY,
+                l -> single(l.getOutput()),
+                null
+        );
 
         return this;
     }
@@ -110,9 +143,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     public SynapseSlotDefinition getInputSlot(ObjectPath p) {
-        addPathEntry(p, "link.inputSlot", inputSlot, l ->
-                Set.of(l.getInputSlot())
-        );
+        p.add(inputSlotRelation);
         return inputSlot;
     }
 
@@ -120,6 +151,13 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
         assert inputSlot != null;
 
         this.inputSlot = inputSlot;
+        inputSlotRelation = new ObjectRelationDefinition<>(
+                this,
+                inputSlot,
+                ONE_TO_MANY,
+                l -> single(l.getInputSlot()),
+                null
+        );
 
         return this;
     }
@@ -129,9 +167,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     public SynapseSlotDefinition getOutputSlot(ObjectPath p) {
-        addPathEntry(p, "link.outputSlot", outputSlot, l ->
-                Set.of(l.getOutputSlot())
-        );
+        p.add(outputSlotRelation);
         return outputSlot;
     }
 
@@ -139,6 +175,13 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
         assert outputSlot != null;
 
         this.outputSlot = outputSlot;
+        outputSlotRelation = new ObjectRelationDefinition<>(
+                this,
+                outputSlot,
+                ONE_TO_MANY,
+                l -> single(l.getOutputSlot()),
+                null
+        );
 
         return this;
     }

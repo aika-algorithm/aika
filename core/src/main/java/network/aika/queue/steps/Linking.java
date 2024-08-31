@@ -82,9 +82,7 @@ public class Linking extends ElementStep<Activation> {
                     .filter(s ->
                             s.getRequired().getTo() == bsType
                     )
-                    .forEach(targetSyn ->
-                            linkIncoming(targetSyn)
-                    );
+                    .forEach(this::linkIncoming);
 
         n.wakeupPropagable();
 

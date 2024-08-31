@@ -31,16 +31,12 @@ import java.io.IOException;
  *
  * @author Lukas Molzberger
  */
-public class ConjunctiveSynapse extends Synapse
-{
+public class ConjunctiveSynapse extends Synapse {
 
     private boolean optional;
 
-    protected boolean propagable;
-
     protected Integer relActTimeSum;
     protected Integer relActTimeN;
-
 
     public ConjunctiveSynapse() {
     }
@@ -98,21 +94,6 @@ public class ConjunctiveSynapse extends Synapse
     public void initFromTemplate(Neuron input, Neuron output, Synapse templateSyn) {
         super.initFromTemplate(input, output, templateSyn);
         setPropagable(templateSyn.isPropagable());
-    }
-
-    public Synapse setPropagable(boolean propagable) {
-        if(this.propagable != propagable)
-            input.getNeuron().setModified();
-
-        getInput().updatePropagable(output, propagable);
-        this.propagable = propagable;
-
-        return this;
-    }
-
-    @Override
-    public boolean isPropagable() {
-        return propagable;
     }
 
     @Override

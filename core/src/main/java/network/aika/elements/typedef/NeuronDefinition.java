@@ -17,6 +17,8 @@
 package network.aika.elements.typedef;
 
 import network.aika.Model;
+import network.aika.elements.activations.Activation;
+import network.aika.fielddefs.ObjectRelationDefinition;
 import network.aika.fielddefs.Type;
 import network.aika.fielddefs.TypeRegistry;
 import network.aika.fields.ActivationFunction;
@@ -25,6 +27,9 @@ import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.RefType;
 
 import java.util.List;
+import java.util.Set;
+
+import static network.aika.fielddefs.ObjectRelationType.ONE_TO_MANY;
 
 /**
  *
@@ -40,7 +45,7 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
 
     private boolean trainingAllowed;
 
-    public ActivationDefinition activationType;
+    public ActivationDefinition activation;
 
     public TemplateRelationDefinition templateRelation;
 
@@ -55,13 +60,14 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
         );
     }
 
-    public ActivationDefinition getActivationType() {
-        return activationType;
+    public ActivationDefinition getActivation() {
+        return activation;
     }
 
-    public NeuronDefinition setActivation(ActivationDefinition activationType) {
-        this.activationType = activationType;
-        this.activationType.setNeuron(this);
+    public NeuronDefinition setActivation(ActivationDefinition activation) {
+        this.activation = activation;
+        this.activation.setNeuron(this);
+
         return this;
     }
 
@@ -120,7 +126,7 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
 
     @Override
     public void dumpTypeDetails(StringBuilder sb) {
-        sb.append("  activation: " + activationType.getName() + "\n");
+        sb.append("  activation: " + activation.getName() + "\n");
     }
 
 }

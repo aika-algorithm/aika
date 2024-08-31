@@ -19,13 +19,16 @@ package network.aika.elements.typedef;
 import network.aika.Document;
 import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
+import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
 import network.aika.elements.neurons.Neuron;
-import network.aika.fielddefs.Type;
-import network.aika.fielddefs.ObjectPath;
-import network.aika.fielddefs.TypeRegistry;
+import network.aika.fielddefs.*;
 
 import java.util.*;
+
+import static network.aika.fielddefs.ObjectRelationDefinition.single;
+import static network.aika.fielddefs.ObjectRelationType.ONE_TO_MANY;
+import static network.aika.fielddefs.ObjectRelationType.ONE_TO_ONE;
 
 /**
  *
@@ -34,8 +37,10 @@ import java.util.*;
 public class ActivationDefinition extends Type<ActivationDefinition, Activation> {
 
     private NeuronDefinition neuron;
+    ObjectRelationDefinition<ActivationDefinition, Activation, NeuronDefinition, Neuron> neuronRelation;
 
     private Map<StateType, StateDefinition> states = new TreeMap<>();
+    Map<StateType, ObjectRelationDefinition<ActivationDefinition, Activation, StateDefinition, State>> stateRelations = new TreeMap<>();
 
     public ActivationDefinition(TypeRegistry registry, String name, Class<? extends Activation> clazz) {
         super(registry, name, clazz);
@@ -45,6 +50,14 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
         assert neuron != null;
 
         this.neuron = neuron;
+
+        neuronRelation = new ObjectRelationDefinition<>(
+                this,
+                neuron,
+                ONE_TO_MANY,
+                act -> single(act.getNeuron()),
+                null
+        );
 
         return this;
     }
@@ -68,6 +81,17 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
         assert state != null;
 
         states.put(state.getStateType(), state);
+
+        stateRelations.put(
+                state.getStateType(),
+                new ObjectRelationDefinition<>(
+                        this,
+                        state,
+                        ONE_TO_ONE,
+                        act -> single(act.getState(state.getStateType())),
+                        state.activationRelation
+                )
+        );
         state.setActivation(this);
 
         return this;
@@ -78,7 +102,7 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
     }
 
     public NeuronDefinition getNeuron(ObjectPath p) {
-        addPathEntry(p, "activation.neuron", neuron, act -> Set.of(act.getNeuron()));
+        p.add(neuronRelation);
         return neuron;
     }
 
@@ -87,16 +111,20 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
         if(state != null)
             return state;
 
-        return parents.stream()
-                .map(p -> p.getState(stateType))
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
+        return getFromParent(p -> p.getState(stateType));
+    }
+
+    public ObjectRelationDefinition<ActivationDefinition, Activation, StateDefinition, State> getStateRelation(StateType stateType) {
+        ObjectRelationDefinition<ActivationDefinition, Activation, StateDefinition, State> stateRelation = stateRelations.get(stateType);
+        if(stateRelation != null)
+            return stateRelation;
+
+        return getFromParent(p -> p.getStateRelation(stateType));
     }
 
     public StateDefinition getState(ObjectPath p, StateType stateType) {
         StateDefinition s = getState(stateType);
-        addPathEntry(p, "activation.state", s, act -> Set.of(act.getState(stateType)));
+        p.add(getStateRelation(stateType));
         return s;
     }
 

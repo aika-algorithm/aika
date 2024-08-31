@@ -23,7 +23,9 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static network.aika.fielddefs.FieldTag.FIELD_TAG_COMPARATOR;
@@ -67,6 +69,14 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         }
     }
 
+    public <X> X getFromParent(Function<T, X> f) {
+        return parents.stream()
+                .map(f::apply)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
+    }
+
     public FieldDefinition<T, O> getField(FieldTag fieldTag) {
         FieldDefinition<T, O> fieldDef = fieldDefinitions.get(fieldTag);
         if(fieldDef != null)
@@ -100,14 +110,6 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
                 parents.stream().anyMatch(p ->
                         p.isInstance(type)
                 );
-    }
-
-    protected void addPathEntry(ObjectPath objectPath, String relLabel, Type relatedObject, Function<O, Set<Obj>> mapping) {
-        assert relatedObject != null;
-
-        objectPath.add(
-                new ObjectRelationDefinition(relLabel, relatedObject, mapping)
-        );
     }
 
     public String getName() {

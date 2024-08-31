@@ -69,6 +69,8 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse> implem
     protected NeuronProvider input;
     protected NeuronProvider output;
 
+    protected boolean propagable;
+
     private Relation relation;
 
     private boolean inputSideInstantiable = true;
@@ -116,6 +118,20 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse> implem
         return getType().isPropagateRange();
     }
 
+    public Synapse setPropagable(boolean propagable) {
+        if(this.propagable != propagable)
+            input.getNeuron().setModified();
+
+        getInput().updatePropagable(output, propagable);
+        this.propagable = propagable;
+
+        return this;
+    }
+
+    public boolean isPropagable() {
+        return propagable;
+    }
+
     public Synapse setWeight(double weight) {
         getField(WEIGHT).setValue(weight);
         return this;
@@ -150,10 +166,6 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse> implem
 
     @Override
     public void disconnect() {
-    }
-
-    public boolean isPropagable() {
-        return true;
     }
 
     public void propagate(Activation iAct) {

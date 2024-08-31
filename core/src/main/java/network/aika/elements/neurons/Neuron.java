@@ -262,7 +262,7 @@ public class Neuron extends ObjImpl<NeuronDefinition, Neuron> implements Element
     }
 
     public final Activation createActivation(Document doc) {
-        return this.getType().getActivationType()
+        return this.getType().getActivation()
                 .instantiate(doc.createActivationId(), doc, this);
     }
 

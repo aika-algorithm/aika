@@ -28,6 +28,8 @@ public class DisjunctiveSynapse extends Synapse
 {
     public DisjunctiveSynapse(SynapseDefinition type, Neuron input, Neuron output) {
         super(type, input, output);
+
+        propagable = true;
     }
 
     @Override

@@ -19,12 +19,18 @@ package network.aika.elements.typedef;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.State;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.neurons.Neuron;
+import network.aika.fielddefs.ObjectRelationDefinition;
 import network.aika.fielddefs.Type;
 import network.aika.fielddefs.ObjectPath;
 import network.aika.fielddefs.TypeRegistry;
 
 import java.util.List;
 import java.util.Set;
+
+import static network.aika.fielddefs.ObjectRelationDefinition.single;
+import static network.aika.fielddefs.ObjectRelationType.ONE_TO_MANY;
+import static network.aika.fielddefs.ObjectRelationType.ONE_TO_ONE;
 
 /**
  *
@@ -37,6 +43,8 @@ public class StateDefinition extends Type<StateDefinition, State> {
     private boolean isNextRound;
 
     private ActivationDefinition activation;
+    ObjectRelationDefinition<StateDefinition, State, ActivationDefinition, Activation> activationRelation;
+
 
     public StateDefinition(TypeRegistry registry, String name, StateType stateType) {
         super(registry, name, State.class);
@@ -59,6 +67,15 @@ public class StateDefinition extends Type<StateDefinition, State> {
         assert activation != null;
 
         this.activation = activation;
+
+        activationRelation = new ObjectRelationDefinition<>(
+                this,
+                activation,
+                ONE_TO_ONE,
+                s -> single(s.getActivation()),
+                activation.stateRelations.get(stateType)
+        );
+
         return this;
     }
 
@@ -67,7 +84,7 @@ public class StateDefinition extends Type<StateDefinition, State> {
     }
 
     public ActivationDefinition getActivation(ObjectPath p) {
-        addPathEntry(p, "state.activation", activation, s -> Set.of(s.getActivation()));
+        p.add(activationRelation);
         return activation;
     }
 

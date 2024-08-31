@@ -31,12 +31,6 @@ import static network.aika.enums.Scope.SAME;
  */
 public class BSSlotDefinition {
 
-    /*  SINGLE_SAME(SAME, false, false, false),
-        SINGLE_SAME_START(SAME, false, false, true),
-        SINGLE_SAME_FEEDBACK(SAME, false, true, false),
-        SINGLE_INPUT(INPUT, false, false, false),
-        MULTI_INPUT(INPUT, true, false, false);
-    */
     private Scope scope;
     private boolean multi;
 

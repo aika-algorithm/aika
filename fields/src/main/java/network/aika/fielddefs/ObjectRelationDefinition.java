@@ -19,39 +19,64 @@ package network.aika.fielddefs;
 
 import network.aika.fields.Obj;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
  * @author Lukas Molzberger
  */
-public class ObjectRelationDefinition<T extends Type<T, O>, O extends Obj<T, O>>  {
+public class ObjectRelationDefinition<IT extends Type<IT, IO>, IO extends Obj<IT, IO>, OT extends Type<OT, OO>, OO extends Obj<OT, OO>>  {
 
-    private String label;
+    private IT fromObject;
 
-    private Function<O, List<O>> mapping;
+    private OT toObject;
 
-    private T relatedObject;
+    private Function<IO, Set<OO>> mapping;
 
-    public ObjectRelationDefinition(String label, T relatedObject, Function<O, List<O>> mapping) {
-        this.label = label;
-        this.relatedObject = relatedObject;
+    private ObjectRelationType relationType;
+
+    private ObjectRelationDefinition reversed;
+
+    public ObjectRelationDefinition(IT fromObject, OT toObject, ObjectRelationType relType, Function<IO, Set<OO>> mapping, ObjectRelationDefinition<OT, OO, IT, IO> reversed) {
+        this.fromObject = fromObject;
+        this.toObject = toObject;
+        this.relationType = relType;
         this.mapping = mapping;
+        if(reversed != null) {
+            this.reversed = reversed;
+            reversed.reversed = this;
+        }
     }
 
-    public T getRelatedObject() {
-        return relatedObject;
+    public static <O> Set<O> single(O o) {
+        if(o == null)
+            return Collections.emptySet();
+
+        return Set.of(o);
     }
 
-    public List<O> followRelation(O o) {
+    public Type getFromObject() {
+        return fromObject;
+    }
+
+    public Type getToObject() {
+        return toObject;
+    }
+
+    public ObjectRelationType getRelationType() {
+        return relationType;
+    }
+
+    public ObjectRelationDefinition getReversed() {
+        return reversed;
+    }
+
+    public Set<OO> followRelation(IO o) {
         return mapping.apply(o);
     }
 
-    public String getLabel() {
-        return label;
-    }
-
     public String toString() {
-        return label + "." + relatedObject;
+        return fromObject.getName() + "." + toObject.getName() + "." + toObject;
     }
 }

@@ -24,6 +24,7 @@ import network.aika.fields.Obj;
 import network.aika.queue.ProcessingPhase;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -70,7 +71,6 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
 
     public FieldDefinition<T, O> in(FieldOutputDefinition in, FieldLinkDefinition fl) {
         ObjectPath objectPath = new ObjectPath(Direction.INPUT);
-        objectPath.add(new ObjectRelationDefinition("IN", objectType, o -> List.of(o)));
 
         inputs.addLink(fl);
         fl.link(objectPath, in, this);
@@ -80,7 +80,6 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
 
     public FieldDefinition<T, O> in(BiFunction<T, ObjectPath, FieldOutputDefinition> pathProvider, FieldLinkDefinition fl) {
         ObjectPath objectPath = new ObjectPath(Direction.INPUT);
-        objectPath.add(new ObjectRelationDefinition("IN", objectType, o -> List.of(o)));
         FieldOutputDefinition in = pathProvider.apply(getObjectType(), objectPath);
 
         inputs.addLink(fl);
@@ -91,7 +90,6 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
 
     public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>, F extends FieldDefinition<RT, RO>> FieldDefinition<T, O> out(BiFunction<T, ObjectPath, F> pathProvider, FieldLinkDefinition fl) {
         ObjectPath objectPath = new ObjectPath(OUTPUT);
-        objectPath.add(new ObjectRelationDefinition("OUT", objectType, o -> List.of(o)));
 
         FieldOutputDefinition in = objectType.getFieldOutput(getFieldTag());
         F out = pathProvider.apply(objectType, objectPath);

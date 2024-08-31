@@ -63,7 +63,8 @@ public class TypeModelTest {
                 .getBinding()
                 .getSynapse()
                 .instantiate(inputNeuron, outputNeuron)
-                .setWeight(10.0);
+                .setWeight(10.0)
+                .setPropagable(true);
 /*
         System.out.println("Dump model:");
         System.out.println(inputNeuron.dumpObject(0));

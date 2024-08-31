@@ -114,7 +114,6 @@ public abstract class Link extends ObjImpl<LinkDefinition, Link> implements Elem
         v.next(this, s, depth);
     }
 
-
     public void instantiateTemplate(Activation iAct, Activation oAct) {
         if(iAct == null || oAct == null)
             return;
@@ -130,8 +129,6 @@ public abstract class Link extends ObjImpl<LinkDefinition, Link> implements Elem
 
         s.createLinkFromTemplate(iAct, oAct, this);
     }
-
-    public abstract void connectWeightUpdate();
 
     public StateType inputState() {
         return getSynapse().getType().getTrigger().getStateType();
@@ -301,9 +298,17 @@ public abstract class Link extends ObjImpl<LinkDefinition, Link> implements Elem
         return (output != null ? output.toKeyString() : "id:X n:[" + synapse.getOutput() + "]");
     }
 
+    @Override
     public String toString() {
         return getClass().getSimpleName() +
                 " in:[" + getInputKeyString() + "] " +
+                "--> " +
+                "out:[" + getOutputKeyString() + "]";
+    }
+
+    @Override
+    public String toKeyString() {
+        return "link in:[" + getInputKeyString() + "] " +
                 "--> " +
                 "out:[" + getOutputKeyString() + "]";
     }
