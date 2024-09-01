@@ -52,6 +52,8 @@ public abstract class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
     }
 
     public void link(ObjectPath objectPath, FieldOutputDefinition input, FieldDefinition output) {
+        assert !objectPath.getPath().isEmpty() || input.getFieldTag() != output.getFieldTag();
+
         this.objectPath = objectPath;
         this.input = input;
         this.output = output;

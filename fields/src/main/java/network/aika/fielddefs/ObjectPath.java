@@ -45,6 +45,10 @@ public class ObjectPath {
         path.add(rel);
     }
 
+    public ArrayList<ObjectRelationDefinition> getPath() {
+        return path;
+    }
+
     public List<Obj> resolve(Obj startObject) {
         List<Obj> current = List.of(startObject);
         for(ObjectRelationDefinition e: path) {
