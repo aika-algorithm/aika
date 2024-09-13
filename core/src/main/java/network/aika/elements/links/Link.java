@@ -241,15 +241,12 @@ public abstract class Link extends ObjImpl<LinkDefinition, Link> implements Elem
 
     public void linkInput() {
         inputSlot = input.registerOutputSlot(synapse);
-        inputSlot.addLink(this);
         updateBindingSignals(ON_CREATE, true);
     }
 
     public void linkOutput() {
         if(synapse.getType().getRegisterInputSlot() == RegisterInputSlot.ON_LINKING)
             outputSlot = output.registerInputSlot(synapse);
-
-        outputSlot.addLink(this);
     }
 
     public SynapseSlot getInputSlot() {

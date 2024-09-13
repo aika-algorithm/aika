@@ -304,8 +304,9 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
 
     public Stream<Link> getInputLinks() {
         return getInputSlots()
-                .flatMap(sl -> sl.getLinks())
-                .toList().stream();
+                .flatMap(SynapseSlot::getLinks)
+                .toList()
+                .stream();
     }
 
     public Stream<SynapseSlot> getInputSlots() {

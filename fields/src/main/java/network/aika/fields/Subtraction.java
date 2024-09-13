@@ -19,7 +19,6 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.Type;
-import network.aika.fielddefs.inputs.ArgInputs;
 import network.aika.fields.link.FixedFieldLink;
 
 /**
@@ -30,7 +29,6 @@ public class Subtraction<O extends Obj> extends AbstractFunction<O> {
     public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> sub(T ref, FieldTag fieldTag) {
         return new FieldDefinition<>(
                 Subtraction.class,
-                new ArgInputs(),
                 ref,
                 fieldTag
         );

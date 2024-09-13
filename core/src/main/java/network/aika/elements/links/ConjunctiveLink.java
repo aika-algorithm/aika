@@ -33,9 +33,6 @@ import static network.aika.enums.direction.Direction.INPUT;
  */
 public class ConjunctiveLink extends Link {
 
-    protected MapFieldLink<QueueKey, ConjunctiveLink> inputSlotFL;
-
-
     public ConjunctiveLink(LinkDefinition type, Synapse s, Activation input, Activation output) {
         super(type, s, input, output);
     }

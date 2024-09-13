@@ -16,7 +16,6 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.fielddefs.inputs.ArgInputs;
 import network.aika.fields.Obj;
 import network.aika.fields.ThresholdOperator;
 
@@ -31,14 +30,14 @@ public class ThresholdOperatorFieldDefinition<T extends Type<T, O>, O extends Ob
     boolean isFinal;
 
     public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison comparison) {
-        super(ThresholdOperator.class, new ArgInputs(), ref, fieldTag);
+        super(ThresholdOperator.class, ref, fieldTag);
 
         this.threshold = threshold;
         this.comparison = comparison;
     }
 
     public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison comparison, boolean isFinal) {
-        super(ThresholdOperator.class, new ArgInputs(), ref, fieldTag);
+        super(ThresholdOperator.class, ref, fieldTag);
 
         this.threshold = threshold;
         this.comparison = comparison;
@@ -46,7 +45,7 @@ public class ThresholdOperatorFieldDefinition<T extends Type<T, O>, O extends Ob
     }
 
     public ThresholdOperatorFieldDefinition(T ref, FieldTag fieldTag, double threshold, ThresholdOperator.Comparison comparison, double tolerance) {
-        super(ThresholdOperator.class, new ArgInputs(), ref, fieldTag, tolerance);
+        super(ThresholdOperator.class, ref, fieldTag, tolerance);
 
         this.threshold = threshold;
         this.comparison = comparison;

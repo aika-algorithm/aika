@@ -20,7 +20,6 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.Type;
-import network.aika.fielddefs.inputs.ArgInputs;
 import network.aika.fields.link.FixedFieldLink;
 
 /**
@@ -31,7 +30,6 @@ public class ExcludeInput<O extends Obj> extends Subtraction<O> {
     public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> excludeInput(T ref, FieldTag fieldTag) {
         return new FieldDefinition<>(
                 ExcludeInput.class,
-                new ArgInputs(),
                 ref,
                 fieldTag
         );

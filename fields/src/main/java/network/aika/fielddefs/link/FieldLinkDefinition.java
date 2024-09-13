@@ -18,10 +18,7 @@ package network.aika.fielddefs.link;
 
 
 import network.aika.enums.Direction;
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldOutputDefinition;
-import network.aika.fielddefs.ObjectPath;
-import network.aika.fielddefs.ObjectRelationType;
+import network.aika.fielddefs.*;
 import network.aika.fields.Field;
 import network.aika.fields.FieldInput;
 import network.aika.fields.FieldOutput;
@@ -43,7 +40,7 @@ public abstract class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
 
     private FieldOutputDefinition input;
 
-    private FieldDefinition output;
+    private FieldInputDefinition output;
 
     boolean propagateUpdates;
 
@@ -51,7 +48,7 @@ public abstract class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
         this.propagateUpdates = propagateUpdates;
     }
 
-    public void link(ObjectPath objectPath, FieldOutputDefinition input, FieldDefinition output) {
+    public void link(ObjectPath objectPath, FieldOutputDefinition input, FieldInputDefinition output) {
         assert !objectPath.getPath().isEmpty() || input.getFieldTag() != output.getFieldTag();
 
         this.objectPath = objectPath;
@@ -69,7 +66,7 @@ public abstract class FieldLinkDefinition<F extends FieldLinkDefinition<F>> {
         return input;
     }
 
-    public FieldDefinition getOutput() {
+    public FieldInputDefinition getOutput() {
         return output;
     }
 

@@ -16,14 +16,69 @@
  */
 package network.aika.fielddefs;
 
-
-import network.aika.fielddefs.inputs.FieldInputsDefinition;
+import network.aika.fielddefs.link.FieldLinkDefinition;
+import network.aika.fielddefs.link.FixedFieldLinkDefinition;
+import network.aika.fielddefs.link.VariableFieldLinkDefinition;
+import network.aika.fields.Field;
 import network.aika.fields.Obj;
 
-public interface FieldInputDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
+import java.util.ArrayList;
+import java.util.List;
 
-    FieldInputsDefinition getInputs();
+import static network.aika.enums.Direction.INPUT;
 
-    T getObjectType();
+/**
+ * @author Lukas Molzberger
+ */
+public class FieldInputDefinition<T extends Type<T, O>, O extends Obj<T, O>, F extends FieldLinkDefinition<F>> {
 
+    protected FieldTag fieldTag;
+
+    protected List<F> inputs = new ArrayList<>();
+
+    public static FixedFieldLinkDefinition argLink(Integer arg) {
+        return argLink(arg, true);
+    }
+
+    public static FixedFieldLinkDefinition argLink(Integer arg, boolean propagateUpdates) {
+        return new FixedFieldLinkDefinition(arg, propagateUpdates);
+    }
+
+    public static VariableFieldLinkDefinition varLink(boolean propagateUpdates) {
+        return new VariableFieldLinkDefinition(propagateUpdates);
+    }
+
+    public static VariableFieldLinkDefinition varLink() {
+        return new VariableFieldLinkDefinition(true);
+    }
+
+    public FieldInputDefinition(FieldTag fieldTag) {
+        this.fieldTag = fieldTag;
+    }
+
+    public FieldTag getFieldTag() {
+        return fieldTag;
+    }
+
+    public void instantiateLinks(Field f) {
+        inputs.forEach(fl ->
+                fl.instantiate(INPUT, f)
+        );
+    }
+
+    public List<F> getInputs() {
+        return inputs;
+    }
+
+    public int size() {
+        return inputs.size();
+    }
+
+    public void addLink(FieldLinkDefinition fl) {
+        inputs.add((F)fl);
+    }
+
+    public String toString() {
+        return "" + fieldTag;
+    }
 }

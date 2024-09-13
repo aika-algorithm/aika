@@ -26,14 +26,13 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.*;
 import network.aika.enums.Scope;
 import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.inputs.ArgInputs;
 import network.aika.statistic.AverageCoveredSpace;
 import network.aika.statistic.NeuronStatistic;
 
 import static network.aika.elements.typedef.BSSlotDefinition.*;
 import static network.aika.elements.typedef.FieldTags.*;
-import static network.aika.fielddefs.inputs.ArgInputs.argLink;
-import static network.aika.fielddefs.inputs.VariableInputs.varLink;
+import static network.aika.fielddefs.FieldInputDefinition.argLink;
+import static network.aika.fielddefs.FieldInputDefinition.varLink;
 import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.fields.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;
@@ -117,7 +116,7 @@ public class PatternDef extends TypeDefinitionBase {
                 );
 
 
-        neuronAverageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, new ArgInputs(), neuron, AVERAGE_COVERED_SPACE);
+        neuronAverageCoveredSpace = new FieldDefinition(AverageCoveredSpace.class, neuron, AVERAGE_COVERED_SPACE);
 
         /*
             private NeuronStatistic statistic = new NeuronStatistic(
@@ -128,10 +127,10 @@ public class PatternDef extends TypeDefinitionBase {
     );
         */
 
-        neuronStatistic = new FieldDefinition(NeuronStatistic.class, new ArgInputs(), neuron, STATISTIC, TOLERANCE);
+        neuronStatistic = new FieldDefinition(NeuronStatistic.class, neuron, STATISTIC, TOLERANCE);
 
         neuronAverageCoveredSpace
-                .out((o, p) -> neuronStatistic, argLink(0));
+                .out((o, p) -> o.getFieldInput(STATISTIC), argLink(0));
 
         categoryActivation = new ActivationDefinition(
                 getTypeModel(),

@@ -20,15 +20,16 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.ConjunctiveSynapse;
-import network.aika.elements.synapses.slots.ConjunctiveSynapseSlot;
+import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.*;
 import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.typedef.FieldTags.*;
-import static network.aika.fielddefs.inputs.ArgInputs.argLink;
-import static network.aika.fielddefs.inputs.VariableInputs.varLink;
+import static network.aika.fielddefs.FieldInputDefinition.argLink;
+import static network.aika.fielddefs.FieldInputDefinition.varLink;
 import static network.aika.fields.IdentityFunction.identity;
+import static network.aika.fields.MaxField.max;
 import static network.aika.fields.SumField.sum;
 import static network.aika.queue.Phase.TRAINING;
 
@@ -77,7 +78,7 @@ public class ConjunctiveDef extends TypeDefinitionBase {
         inputSlot = new SynapseSlotDefinition(
                 getTypeModel(),
                 "ConjunctiveSynapseInputSlot",
-                ConjunctiveSynapseSlot.class
+                SynapseSlot.class
         )
                 .addParent(superType.getInputSlot())
                 .setDirection(Direction.INPUT);
@@ -85,7 +86,7 @@ public class ConjunctiveDef extends TypeDefinitionBase {
         outputSlot = new SynapseSlotDefinition(
                 getTypeModel(),
                 "ConjunctiveSynapseOutputSlot",
-                ConjunctiveSynapseSlot.class
+                SynapseSlot.class
         )
                 .addParent(superType.getOutputSlot())
                 .setDirection(Direction.OUTPUT);
@@ -108,12 +109,16 @@ public class ConjunctiveDef extends TypeDefinitionBase {
                 .setLink(link)
                 .setOutput(neuron);
 
+        max(inputSlot, INPUT_SLOT);
+
+        max(outputSlot, OUTPUT_SLOT);
+
         sum(synapse, SYNAPSE_BIAS)
                 .setQueued(TRAINING);
 
         identity(link, SYNAPSE_BIAS)
                 .in((o, p) -> o.getSynapse(p).getFieldOutput(SYNAPSE_BIAS), argLink(0))
-                .out((o, p) -> o.getOutput(p).getState(p, NON_FEEDBACK).getField(NET), varLink());
+                .out((o, p) -> o.getOutput(p).getState(p, NON_FEEDBACK).getFieldInput(NET), varLink());
     }
 
     @Override

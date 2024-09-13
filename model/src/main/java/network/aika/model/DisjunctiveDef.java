@@ -20,13 +20,14 @@ import network.aika.elements.activations.Activation;
 import network.aika.elements.links.DisjunctiveLink;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.DisjunctiveSynapse;
-import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
+import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.typedef.*;
 import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.typedef.FieldTags.*;
-import static network.aika.fielddefs.inputs.ArgInputs.argLink;
-import static network.aika.fielddefs.inputs.VariableInputs.varLink;
+import static network.aika.fielddefs.FieldInputDefinition.argLink;
+import static network.aika.fielddefs.FieldInputDefinition.varLink;
+import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.Multiplication.mul;
 
 /**
@@ -69,7 +70,7 @@ public class DisjunctiveDef extends TypeDefinitionBase {
         inputSlot = new SynapseSlotDefinition(
                 getTypeModel(),
                 "DisjunctiveSynapseInputSlot",
-                DisjunctiveSynapseSlot.class
+                SynapseSlot.class
         )
                 .addParent(superType.getInputSlot())
                 .setDirection(Direction.INPUT);
@@ -77,7 +78,7 @@ public class DisjunctiveDef extends TypeDefinitionBase {
         outputSlot = new SynapseSlotDefinition(
                 getTypeModel(),
                 "DisjunctiveSynapseOutputSlot",
-                DisjunctiveSynapseSlot.class
+                SynapseSlot.class
         )
                 .addParent(superType.getOutputSlot())
                 .setDirection(Direction.OUTPUT);
@@ -100,10 +101,14 @@ public class DisjunctiveDef extends TypeDefinitionBase {
                 .addParent(superType.getSynapse())
                 .setLink(link);
 
+        identity(inputSlot, INPUT_SLOT);
+
+        identity(outputSlot, OUTPUT_SLOT);
+
         mul(link, WEIGHT_UPDATE)
                 .in((o, p) -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0))
                 .in((o, p) -> o.getOutput(p).getFieldOutput(UPDATE_VALUE), argLink(1))
-                .out((o, p) -> o.getSynapse(p).getField(WEIGHT), varLink());
+                .out((o, p) -> o.getSynapse(p).getFieldInput(WEIGHT), varLink());
     }
 
     @Override

@@ -144,7 +144,6 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse> implem
                 .instantiate(iAct, this);
     }
 
-
     public Stream<BindingSignalSlot> transitionBindingSignal(Activation oAct, Scope is) {
         return Arrays.stream(getType().getTransition())
                 .filter(t -> is == t.getFrom())

@@ -17,7 +17,6 @@
 package network.aika.fields;
 
 import network.aika.fielddefs.*;
-import network.aika.fielddefs.inputs.ArgInputs;
 import network.aika.fields.link.FixedFieldLink;
 
 import java.util.function.BiConsumer;

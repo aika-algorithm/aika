@@ -22,7 +22,8 @@ import network.aika.fielddefs.Type;
 import network.aika.fields.Obj;
 import network.aika.fields.InvertFunction;
 
-import static network.aika.fielddefs.inputs.ArgInputs.argLink;
+import static network.aika.fielddefs.FieldInputDefinition.argLink;
+
 
 /**
  *

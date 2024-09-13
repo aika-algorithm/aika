@@ -26,11 +26,10 @@ import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.typedef.FieldTags.*;
-import static network.aika.fielddefs.inputs.ArgInputs.argLink;
-import static network.aika.fielddefs.inputs.VariableInputs.varLink;
+import static network.aika.fielddefs.FieldInputDefinition.argLink;
+import static network.aika.fielddefs.FieldInputDefinition.varLink;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InvertFunction.invert;
-import static network.aika.fields.MaxField.max;
 import static network.aika.fields.Multiplication.mul;
 import static network.aika.fields.SumField.sum;
 import static network.aika.fields.ThresholdOperator.Comparison.ABOVE;
@@ -141,10 +140,6 @@ public class NeuronDef extends TypeDefinitionBase {
                 .setOutput(neuron);
 
 
-        max(inputSlot, INPUT_SLOT);
-
-        max(outputSlot, OUTPUT_SLOT);
-
         sum(synapse, WEIGHT)
                 .setQueued(TRAINING);
 
@@ -158,7 +153,7 @@ public class NeuronDef extends TypeDefinitionBase {
         mul(link, WEIGHTED_INPUT)
                 .in((o, p) -> o.getFieldOutput(INPUT_VALUE), argLink(0))
                 .in((o, p) -> o.getSynapse(p).getFieldOutput(WEIGHT), argLink(1))
-                .out((o, p) -> o.getOutputSlot(p).getField(OUTPUT_SLOT), varLink());
+                .out((o, p) -> o.getOutputSlot(p).getFieldInput(OUTPUT_SLOT), varLink());
     }
 
     public StateDefinition getNonFeedbackState() {

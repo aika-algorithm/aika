@@ -19,8 +19,6 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.Type;
-import network.aika.fielddefs.inputs.ArgInputs;
-import network.aika.fielddefs.inputs.NoInputs;
 import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.NoFieldInputs;
 
@@ -32,7 +30,6 @@ public class InputField<D extends Type<D, O>, O extends Obj<D, O>> extends Field
     public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> inputField(T ref, FieldTag fieldTag) {
         return new FieldDefinition<>(
                 InputField.class,
-                new NoInputs(),
                 ref,
                 fieldTag
         );

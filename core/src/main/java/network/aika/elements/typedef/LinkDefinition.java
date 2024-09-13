@@ -26,7 +26,6 @@ import network.aika.fielddefs.ObjectPath;
 import network.aika.fielddefs.TypeRegistry;
 
 import java.util.List;
-import java.util.Set;
 
 import static network.aika.fielddefs.ObjectRelationDefinition.single;
 import static network.aika.fielddefs.ObjectRelationType.ONE_TO_MANY;

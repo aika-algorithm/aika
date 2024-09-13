@@ -17,23 +17,19 @@
 package network.aika.fielddefs;
 
 import network.aika.enums.Direction;
-import network.aika.fielddefs.inputs.FieldInputsDefinition;
 import network.aika.fielddefs.link.FieldLinkDefinition;
 import network.aika.fields.Field;
 import network.aika.fields.Obj;
 import network.aika.queue.ProcessingPhase;
 
-import java.util.List;
-import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import static network.aika.enums.Direction.OUTPUT;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implements FieldInputDefinition<T, O> {
+public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
 
     protected FieldTag fieldTag;
 
@@ -43,58 +39,54 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
 
     protected Double tolerance;
 
-    protected FieldInputsDefinition<?, ?> inputs;
-
     protected ProcessingPhase phase;
     protected boolean isNextRound;
 
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition inputs, T objectType, FieldTag fieldTag) {
+    public FieldDefinition(Class<? extends Field> clazz, T objectType, FieldTag fieldTag) {
         this.clazz = clazz;
         this.fieldTag = fieldTag;
         this.objectType = objectType;
-        this.inputs = inputs;
 
         objectType.setFieldDefinition(this);
     }
 
-    public FieldDefinition(Class<? extends Field> clazz, FieldInputsDefinition inputs, T objectType, FieldTag fieldTag, double tolerance) {
-        this(clazz, inputs, objectType, fieldTag);
+    public FieldDefinition(Class<? extends Field> clazz, T objectType, FieldTag fieldTag, double tolerance) {
+        this(clazz, objectType, fieldTag);
 
         this.tolerance = tolerance;
     }
 
-    @Override
-    public FieldInputsDefinition<?, ?> getInputs() {
-        return inputs;
-    }
-
     public FieldDefinition<T, O> in(FieldOutputDefinition in, FieldLinkDefinition fl) {
+
+        FieldInputDefinition out = objectType.getFieldInput(getFieldTag());
         ObjectPath objectPath = new ObjectPath(Direction.INPUT);
 
-        inputs.addLink(fl);
-        fl.link(objectPath, in, this);
+        out.addLink(fl);
+        fl.link(objectPath, in, out);
 
         return this;
     }
 
     public FieldDefinition<T, O> in(BiFunction<T, ObjectPath, FieldOutputDefinition> pathProvider, FieldLinkDefinition fl) {
+
         ObjectPath objectPath = new ObjectPath(Direction.INPUT);
         FieldOutputDefinition in = pathProvider.apply(getObjectType(), objectPath);
+        FieldInputDefinition out = objectType.getFieldInput(getFieldTag());
 
-        inputs.addLink(fl);
-        fl.link(objectPath, in, this);
+        out.addLink(fl);
+        fl.link(objectPath, in, out);
 
         return this;
     }
 
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>, F extends FieldDefinition<RT, RO>> FieldDefinition<T, O> out(BiFunction<T, ObjectPath, F> pathProvider, FieldLinkDefinition fl) {
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>, F extends FieldDefinition<RT, RO>> FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldInputDefinition> pathProvider, FieldLinkDefinition fl) {
         ObjectPath objectPath = new ObjectPath(OUTPUT);
 
         FieldOutputDefinition in = objectType.getFieldOutput(getFieldTag());
-        F out = pathProvider.apply(objectType, objectPath);
+        FieldInputDefinition out = pathProvider.apply(objectType, objectPath);
 
-        out.getInputs().addLink(fl);
+        out.addLink(fl);
         fl.link(objectPath, in, out);
 
         return this;
@@ -116,7 +108,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
     }
 
     public void instantiateInputLinks(Field f) {
-        inputs.instantiateLinks(f);
+        getFieldInput().instantiateLinks(f);
     }
 
     public FieldDefinition<T, O> setFieldTag(FieldTag fieldTag) {
@@ -139,7 +131,6 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return this;
     }
 
-    @Override
     public T getObjectType() {
         return objectType;
     }
@@ -148,6 +139,10 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         this.objectType = objectType;
 
         return this;
+    }
+
+    public FieldInputDefinition getFieldInput() {
+        return getObjectType().getFieldInput(getFieldTag());
     }
 
     public FieldOutputDefinition getFieldOutput() {

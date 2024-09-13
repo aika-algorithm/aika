@@ -28,8 +28,8 @@ import network.aika.fielddefs.FieldDefinition;
 
 
 import static network.aika.elements.typedef.FieldTags.*;
-import static network.aika.fielddefs.inputs.ArgInputs.argLink;
-import static network.aika.fielddefs.inputs.VariableInputs.varLink;
+import static network.aika.fielddefs.FieldInputDefinition.argLink;
+import static network.aika.fielddefs.FieldInputDefinition.varLink;
 import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.fields.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;
@@ -112,10 +112,10 @@ public class BindingDef extends TypeDefinitionBase {
         sum(activation, UPDATE_VALUE);
 
         activation.getState(NON_FEEDBACK).getField(NET)
-                .out((o,p) -> o.getActivation(p).getState(p, OUTER_FEEDBACK).getField(NET), varLink());
+                .out((o,p) -> o.getActivation(p).getState(p, OUTER_FEEDBACK).getFieldInput(NET), varLink());
 
         outerFeedbackState.state.getField(NET)
-                .out((o,p) -> o.getActivation(p).getState(p, INNER_FEEDBACK).getField(NET), varLink());
+                .out((o,p) -> o.getActivation(p).getState(p, INNER_FEEDBACK).getFieldInput(NET), varLink());
 
 
         neuron = new NeuronDefinition(
@@ -315,7 +315,7 @@ public class BindingDef extends TypeDefinitionBase {
 
         negativeWeight = scale(negativeFeedbackLink, NEGATIVE_WEIGHT, -1)
                 .in((o, p) -> o.getSynapse(p).getFieldOutput(WEIGHT), argLink(0))
-                .out((o, p) -> o.getOutput(p).getState(p, negativeFeedbackSynapse.outputState()).getField(NET), varLink(false));
+                .out((o, p) -> o.getOutput(p).getState(p, negativeFeedbackSynapse.outputState()).getFieldInput(NET), varLink(false));
 
 
         relationInputLink = new LinkDefinition(

@@ -23,9 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static network.aika.fielddefs.FieldTag.FIELD_TAG_COMPARATOR;
@@ -44,6 +42,7 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
     protected List<T> parents = new ArrayList<>();
 
     Map<FieldTag, FieldDefinition<T, O>> fieldDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
+    Map<FieldTag, FieldInputDefinition<T, O, ?>> fieldInputDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
     Map<FieldTag, FieldOutputDefinition> fieldOutputDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
 
     public Type(TypeRegistry registry, String name, Class<? extends O> clazz) {
@@ -165,6 +164,14 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         fieldDefinitions.put(fieldDef.getFieldTag(), fieldDef);
     }
 
+    public FieldInputDefinition getFieldInput(FieldTag fieldTag) {
+        return fieldInputDefinitions.computeIfAbsent(fieldTag, k -> new FieldInputDefinition(k));
+    }
+
+    public void setFieldInputDefinition(FieldTag fieldTag, FieldInputDefinition fieldInDef) {
+        fieldInputDefinitions.put(fieldTag, fieldInDef);
+    }
+
     public FieldOutputDefinition getFieldOutput(FieldTag fieldTag) {
         return fieldOutputDefinitions.computeIfAbsent(fieldTag, k -> new FieldOutputDefinition(k));
     }
@@ -183,16 +190,16 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         fieldDefinitions.values()
                 .forEach(fd -> {
                     sb.append("    " + fd.fieldTag + "\n");
-                    dumpInputFieldLinks(fd, sb);
+                    dumpInputFieldLinks(fd.getFieldInput(), sb);
                 });
     }
 
-    private void dumpInputFieldLinks(FieldDefinition<T, O> fd, StringBuilder sb) {
-        if(fd.getInputs().getInputs().isEmpty())
+    private void dumpInputFieldLinks(FieldInputDefinition fd, StringBuilder sb) {
+        if(fd.getInputs().isEmpty())
             return;
 
         sb.append(
-                fd.getInputs().getInputs()
+                fd.getInputs()
                         .stream()
                         .map(fl -> "      " + fl)
                         .collect(Collectors.joining("\n"))

@@ -17,20 +17,26 @@
 package network.aika.elements.synapses.slots;
 
 import network.aika.elements.activations.Activation;
+import network.aika.elements.links.ConjunctiveLink;
 import network.aika.elements.links.Link;
 import network.aika.elements.synapses.Synapse;
 import network.aika.elements.typedef.SynapseSlotDefinition;
 import network.aika.enums.direction.Direction;
+import network.aika.fields.Field;
+import network.aika.fields.MaxField;
 import network.aika.fields.ObjImpl;
+import network.aika.fields.link.FieldLink;
 import network.aika.queue.Queue;
 
 import java.util.stream.Stream;
+
+import static network.aika.elements.typedef.FieldTags.OUTPUT_SLOT;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class SynapseSlot extends ObjImpl<SynapseSlotDefinition, SynapseSlot> {
+public class SynapseSlot extends ObjImpl<SynapseSlotDefinition, SynapseSlot> {
 
 
     protected Activation activation;
@@ -63,13 +69,28 @@ public abstract class SynapseSlot extends ObjImpl<SynapseSlotDefinition, Synapse
         return getType().getDirection();
     }
 
-    public abstract void addLink(Link l);
+    public Stream<Link> getLinks() {
+        Field<SynapseSlot, ?, ?> f = getSlotField();
+        return f.getInputs()
+                .getInputs()
+                .map(SynapseSlot::extractLinkFromFieldLink);
+    }
 
-    public abstract Stream<Link> getLinks();
+    private static ConjunctiveLink extractLinkFromFieldLink(FieldLink fl) {
+        return (ConjunctiveLink) fl.getInput().getObject();
+    }
 
-    public abstract Link getLink(Activation act);
+    private Field<SynapseSlot, ?, ?> getSlotField() {
+        return getField(OUTPUT_SLOT);
+    }
 
-    public abstract Link getSelectedLink();
+    public Link getLink(Activation act) {
+        return getSlotField();
+    }
+
+    public Link getSelectedLink() {
+        return null;
+    }
 
 
     @Override

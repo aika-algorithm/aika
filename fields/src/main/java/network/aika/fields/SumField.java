@@ -19,7 +19,6 @@ package network.aika.fields;
 import network.aika.fielddefs.FieldDefinition;
 import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.Type;
-import network.aika.fielddefs.inputs.VariableInputs;
 import network.aika.fields.link.FieldLink;
 import network.aika.fields.link.VariableFieldInputs;
 
@@ -33,7 +32,6 @@ public class SumField<O extends Obj> extends Field<O, VariableFieldInputs, Field
     public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> sum(T ref, FieldTag fieldTag) {
         return new FieldDefinition<>(
                 SumField.class,
-                new VariableInputs(),
                 ref,
                 fieldTag,
                 TOLERANCE
