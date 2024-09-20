@@ -109,9 +109,9 @@ public class ConjunctiveDef extends TypeDefinitionBase {
                 .setLink(link)
                 .setOutput(neuron);
 
-        max(inputSlot, INPUT_SLOT);
+        max(inputSlot, SLOT);
 
-        max(outputSlot, OUTPUT_SLOT);
+        max(outputSlot, SLOT);
 
         sum(synapse, SYNAPSE_BIAS)
                 .setQueued(TRAINING);

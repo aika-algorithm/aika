@@ -30,7 +30,7 @@ import network.aika.queue.Queue;
 
 import java.util.stream.Stream;
 
-import static network.aika.elements.typedef.FieldTags.OUTPUT_SLOT;
+import static network.aika.elements.typedef.FieldTags.SLOT;
 
 /**
  *
@@ -81,17 +81,25 @@ public class SynapseSlot extends ObjImpl<SynapseSlotDefinition, SynapseSlot> {
     }
 
     private Field<SynapseSlot, ?, ?> getSlotField() {
-        return getField(OUTPUT_SLOT);
+        return getField(SLOT);
     }
 
     public Link getLink(Activation act) {
-        return getSlotField();
+        return getLinks()
+                .filter(l -> l.getInput() == act)
+                .findFirst()
+                .orElse(null);
     }
 
     public Link getSelectedLink() {
-        return null;
-    }
+        MaxField f = (MaxField) getSlotField();
 
+        FieldLink fl = f.getMaxInput();
+        if(fl == null)
+            return null;
+
+        return (Link) fl.getInput().getObject();
+    }
 
     @Override
     public Queue getQueue() {

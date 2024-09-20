@@ -41,6 +41,7 @@ import static network.aika.enums.Transition.*;
 import static network.aika.enums.Trigger.*;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
+import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.MaxField.max;
 import static network.aika.fields.ScaleFunction.scale;
 import static network.aika.fields.SumField.sum;
@@ -66,6 +67,9 @@ public class BindingDef extends TypeDefinitionBase {
 
     private ActivationDefinition latentRelationActivation;
     private NeuronDefinition latentRelationNeuron;
+
+    private LinkDefinition bindingLink;
+    private SynapseDefinition bindingSynapse;
 
     private LinkDefinition inputObjectLink;
     private SynapseDefinition inputObjectSynapse;
@@ -178,23 +182,41 @@ public class BindingDef extends TypeDefinitionBase {
     }
 
     public void initRelations() {
+        bindingLink = new LinkDefinition(
+                getTypeModel(),
+                "BindingLink",
+                ConjunctiveLink.class)
+                .addParent(superType.getLink())
+                .setOutput(activation)
+                .setInputSlot(superType.getInputSlot())
+                .setOutputSlot(superType.getOutputSlot());
+
+        bindingSynapse = new SynapseDefinition(
+                getTypeModel(),
+                "BindingSynapse",
+                ConjunctiveSynapse.class
+        )
+                .addParent(superType.getSynapse())
+                .setLink(bindingLink)
+                .setOutput(neuron);
+
         inputObjectLink = new LinkDefinition(
                 getTypeModel(),
                 "InputObjectLink",
                 ConjunctiveLink.class
         )
-                .addParent(superType.getLink())
+                .addParent(bindingLink)
                 .setInput(getTypeModel().pattern.getActivation())
                 .setOutput(activation)
-                .setInputSlot(getTypeModel().conjunctive.getInputSlot())
-                .setOutputSlot(getTypeModel().conjunctive.getOutputSlot());
+                .setInputSlot(superType.getInputSlot())
+                .setOutputSlot(superType.getOutputSlot());
 
         inputObjectSynapse = new SynapseDefinition(
                 getTypeModel(),
                 "InputObjectSynapse",
                 ConjunctiveSynapse.class
         )
-                .addParent(superType.getSynapse())
+                .addParent(bindingSynapse)
                 .setLink(inputObjectLink)
                 .setInput(getTypeModel().pattern.getNeuron())
                 .setOutput(neuron)
@@ -209,7 +231,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "SameObjectLink",
                 ConjunctiveLink.class
         )
-                .addParent(superType.getLink())
+                .addParent(bindingLink)
                 .setInput(activation)
                 .setOutput(activation)
                 .setInputSlot(getTypeModel().conjunctive.getInputSlot())
@@ -220,7 +242,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "SameObjectSynapse",
                 ConjunctiveSynapse.class
         )
-                .addParent(superType.getSynapse())
+                .addParent(bindingSynapse)
                 .setLink(sameObjectLink)
                 .setInput(neuron)
                 .setOutput(neuron)
@@ -234,7 +256,7 @@ public class BindingDef extends TypeDefinitionBase {
                 getTypeModel(),
                 "InnerPositiveFeedbackLink",
                 ConjunctiveLink.class)
-                .addParent(superType.getLink())
+                .addParent(bindingLink)
                 .setInput(getTypeModel().pattern.getActivation())
                 .setOutput(getTypeModel().binding.getActivation())
                 .setInputSlot(getTypeModel().conjunctive.getInputSlot())
@@ -245,7 +267,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "InnerPositiveFeedbackSynapse",
                 ConjunctiveSynapse.class
         )
-                .addParent(superType.getSynapse())
+                .addParent(bindingSynapse)
                 .setLink(innerPositiveFeedbackLink)
                 .setInput(getTypeModel().pattern.getNeuron())
                 .setOutput(neuron)
@@ -262,7 +284,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "OuterPositiveFeedbackLink",
                 ConjunctiveLink.class
         )
-                .addParent(superType.getLink())
+                .addParent(bindingLink)
                 .setInput(getTypeModel().pattern.getActivation())
                 .setOutput(getTypeModel().binding.getActivation())
                 .setInputSlot(superType.getInputSlot())
@@ -273,7 +295,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "OuterPositiveFeedbackSynapse",
                 ConjunctiveSynapse.class
         )
-                .addParent(superType.getSynapse())
+                .addParent(bindingSynapse)
                 .setLink(outerPositiveFeedbackLink)
                 .setInput(getTypeModel().pattern.getNeuron())
                 .setOutput(neuron)
@@ -289,7 +311,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "NegativeFeedbackLink",
                 ConjunctiveLink.class
         )
-                .addParent(superType.getLink())
+                .addParent(bindingLink)
                 .setInput(getTypeModel().inhibitory.getActivation())
                 .setOutput(activation)
                 .setInputSlot(superType.getInputSlot())
@@ -300,6 +322,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "NegativeFeedbackSynapse",
                 ConjunctiveSynapse.class
         )
+                .addParent(bindingSynapse)
                 .setLink(negativeFeedbackLink)
                 .setInput(getTypeModel().inhibitory.getNeuron())
                 .setOutput(neuron)
@@ -322,7 +345,7 @@ public class BindingDef extends TypeDefinitionBase {
                 getTypeModel(),
                 "RelationInputLink",
                 ConjunctiveLink.class)
-                .addParent(superType.getLink())
+                .addParent(bindingLink)
                 .setInput(activation)
                 .setOutput(activation)
                 .setInputSlot(getTypeModel().conjunctive.getInputSlot())
@@ -333,7 +356,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "RelationInputSynapse",
                 ConjunctiveSynapse.class
         )
-                .addParent(superType.getSynapse())
+                .addParent(bindingSynapse)
                 .setLink(relationInputLink)
                 .setInput(neuron)
                 .setOutput(neuron)
@@ -372,7 +395,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "BindingCategoryInputLink",
                 ConjunctiveLink.class
         )
-                .addParent(superType.getLink())
+                .addParent(bindingLink)
                 .setInputSlot(superType.getInputSlot())
                 .setOutputSlot(superType.getOutputSlot());
 
@@ -381,7 +404,7 @@ public class BindingDef extends TypeDefinitionBase {
                 "BindingCategoryInputSynapse",
                 ConjunctiveSynapse.class
         )
-                .addParent(superType.getSynapse())
+                .addParent(bindingSynapse)
                 .setLink(categoryInputLink)
                 .setInput(categoryNeuron)
                 .setOutput(neuron)
@@ -405,6 +428,15 @@ public class BindingDef extends TypeDefinitionBase {
                 .setInstanceSynapseType(categoryInputSynapse);
 
         categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
+
+
+
+        identity(bindingLink, INPUT_VALUE)  // TODO: check if a placeholder field can be used
+                .in((o, p) -> o.getInput(p).getState(p, INNER_FEEDBACK).getFieldOutput(NET), argLink(0));
+
+        identity(sameObjectLink, INPUT_VALUE)  // TODO: check if a placeholder field can be used
+                .in((o, p) -> o.getInput(p).getState(p, OUTER_FEEDBACK).getFieldOutput(NET), argLink(0));
+
     }
 
     public StateDefinition getOuterFeedbackState() {
@@ -453,15 +485,24 @@ public class BindingDef extends TypeDefinitionBase {
         return categoryInputSynapse;
     }
 
+    public LinkDefinition getBindingLink() {
+        return bindingLink;
+    }
+
+    public SynapseDefinition getBindingSynapse() {
+        return bindingSynapse;
+    }
+
     @Override
     public LinkDefinition getLink() {
-        return inputObjectLink;
+        return bindingLink;
     }
 
     @Override
     public SynapseDefinition getSynapse() {
-        return inputObjectSynapse;
+        return bindingSynapse;
     }
+
 
     public LinkDefinition getInputObjectLink() {
         return inputObjectLink;

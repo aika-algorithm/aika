@@ -103,7 +103,7 @@ public class State extends ObjImpl<StateDefinition, State> implements QueueProvi
 
     @Override
     public String toKeyString() {
-        return "state:" + getStateType() + act.toKeyString();
+        return "state:" + getStateType() + " " + act.toKeyString();
     }
 
     @Override

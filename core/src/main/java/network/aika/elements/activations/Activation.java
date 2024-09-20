@@ -498,15 +498,21 @@ public class Activation extends ObjImpl<ActivationDefinition, Activation> implem
     @Override
     public String dumpObject(int depth) {
         return super.dumpObject(depth) + "\n" +
-                dumpStates(depth) +
-                getInputLinks()
-                .map(f -> f.dumpObject(depth + 2))
-                .collect(Collectors.joining("\n"));
+                dumpStates(depth) + "\n" +
+                dumpInputLinks(depth);
     }
 
     public String dumpStates(int depth) {
         return Arrays.stream(states)
                 .map(f -> f.dumpObject(depth + 2))
+                .collect(Collectors.joining("\n"));
+    }
+
+    public String dumpInputLinks(int depth) {
+        return getInputLinks()
+                .map(l ->
+                        l.dumpObject(depth + 2)
+                )
                 .collect(Collectors.joining("\n"));
     }
 

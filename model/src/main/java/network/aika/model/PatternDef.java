@@ -29,10 +29,10 @@ import network.aika.fielddefs.FieldDefinition;
 import network.aika.statistic.AverageCoveredSpace;
 import network.aika.statistic.NeuronStatistic;
 
+import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
 import static network.aika.elements.typedef.BSSlotDefinition.*;
 import static network.aika.elements.typedef.FieldTags.*;
 import static network.aika.fielddefs.FieldInputDefinition.argLink;
-import static network.aika.fielddefs.FieldInputDefinition.varLink;
 import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.fields.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;
@@ -44,6 +44,7 @@ import static network.aika.enums.Trigger.FIRED_OUTER_FEEDBACK;
 import static network.aika.enums.Trigger.FIRED_NON_FEEDBACK;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
+import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.Multiplication.mul;
 import static network.aika.fields.ScaleFunction.scale;
 import static network.aika.utils.Utils.TOLERANCE;
@@ -245,6 +246,10 @@ public class PatternDef extends TypeDefinitionBase {
                 .setInstanceSynapseType(categoryInputSynapse);
 
         categoryNeuron.setTemplateRelation(categoryTemplateRelationDef);
+
+
+        identity(link, INPUT_VALUE)  // TODO: check if a placeholder field can be used
+                .in((o, p) -> o.getInput(p).getState(p, OUTER_FEEDBACK).getFieldOutput(NET), argLink(0));
     }
 
     @Override

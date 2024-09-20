@@ -101,9 +101,9 @@ public class DisjunctiveDef extends TypeDefinitionBase {
                 .addParent(superType.getSynapse())
                 .setLink(link);
 
-        identity(inputSlot, INPUT_SLOT);
+        identity(inputSlot, SLOT);
 
-        identity(outputSlot, OUTPUT_SLOT);
+        identity(outputSlot, SLOT);
 
         mul(link, WEIGHT_UPDATE)
                 .in((o, p) -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0))
