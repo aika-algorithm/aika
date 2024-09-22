@@ -26,8 +26,8 @@ import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.typedef.FieldTags.*;
-import static network.aika.fielddefs.FieldInputDefinition.argLink;
-import static network.aika.fielddefs.FieldInputDefinition.varLink;
+import static network.aika.fielddefs.link.FieldLinkTypeDefinition.argLink;
+import static network.aika.fielddefs.link.FieldLinkTypeDefinition.varLink;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.MaxField.max;
 import static network.aika.fields.SumField.sum;
@@ -117,8 +117,8 @@ public class ConjunctiveDef extends TypeDefinitionBase {
                 .setQueued(TRAINING);
 
         identity(link, SYNAPSE_BIAS)
-                .in((o, p) -> o.getSynapse(p).getFieldOutput(SYNAPSE_BIAS), argLink(0))
-                .out((o, p) -> o.getOutput(p).getState(p, NON_FEEDBACK).getFieldInput(NET), varLink());
+                .in(o -> o.getSynapse().getFieldOutput(SYNAPSE_BIAS), argLink(0))
+                .out(o -> o.getOutput().getState(NON_FEEDBACK).getFieldInput(NET), varLink());
     }
 
     @Override

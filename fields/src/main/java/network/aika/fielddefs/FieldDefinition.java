@@ -16,15 +16,16 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.enums.Direction;
-import network.aika.fielddefs.link.FieldLinkDefinition;
+import network.aika.fielddefs.link.FieldLinkTypeDefinition;
+import network.aika.fielddefs.link.InputFieldLinkDefinition;
+import network.aika.fielddefs.link.OutputFieldLinkDefinition;
 import network.aika.fields.Field;
+import network.aika.fields.FieldInput;
+import network.aika.fields.FieldOutput;
 import network.aika.fields.Obj;
 import network.aika.queue.ProcessingPhase;
 
-import java.util.function.BiFunction;
-
-import static network.aika.enums.Direction.OUTPUT;
+import java.util.function.Function;
 
 /**
  * @author Lukas Molzberger
@@ -57,37 +58,17 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
         this.tolerance = tolerance;
     }
 
-    public FieldDefinition<T, O> in(FieldOutputDefinition in, FieldLinkDefinition fl) {
-
+    public FieldDefinition<T, O> in(Function<O, FieldOutput> pathProvider, FieldLinkTypeDefinition flType) {
         FieldInputDefinition out = objectType.getFieldInput(getFieldTag());
-        ObjectPath objectPath = new ObjectPath(Direction.INPUT);
-
-        out.addLink(fl);
-        fl.link(objectPath, in, out);
+        out.addInput(new InputFieldLinkDefinition(pathProvider, flType));
 
         return this;
     }
 
-    public FieldDefinition<T, O> in(BiFunction<T, ObjectPath, FieldOutputDefinition> pathProvider, FieldLinkDefinition fl) {
-
-        ObjectPath objectPath = new ObjectPath(Direction.INPUT);
-        FieldOutputDefinition in = pathProvider.apply(getObjectType(), objectPath);
-        FieldInputDefinition out = objectType.getFieldInput(getFieldTag());
-
-        out.addLink(fl);
-        fl.link(objectPath, in, out);
-
-        return this;
-    }
-
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>, F extends FieldDefinition<RT, RO>> FieldDefinition<T, O> out(BiFunction<T, ObjectPath, FieldInputDefinition> pathProvider, FieldLinkDefinition fl) {
-        ObjectPath objectPath = new ObjectPath(OUTPUT);
-
+    public FieldDefinition<T, O> out(Function<O, FieldInput> pathProvider, FieldLinkTypeDefinition flType) {
         FieldOutputDefinition in = objectType.getFieldOutput(getFieldTag());
-        FieldInputDefinition out = pathProvider.apply(objectType, objectPath);
 
-        out.addLink(fl);
-        fl.link(objectPath, in, out);
+        in.addOutput(new OutputFieldLinkDefinition(pathProvider, flType));
 
         return this;
     }

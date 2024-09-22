@@ -20,6 +20,7 @@ import network.aika.fielddefs.*;
 import network.aika.fields.link.FixedFieldLink;
 
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * @author Lukas Molzberger
@@ -30,7 +31,7 @@ public class ThresholdOperator<O extends Obj> extends AbstractFunction<O> {
         return new ThresholdOperatorFieldDefinition<>(ref, fieldTag, threshold, type);
     }
 
-    public static <D extends Type<D, O>, O extends Obj<D, O>> FieldDefinition<D, O> threshold(D ref, FieldTag fieldTag, double threshold, Comparison type, boolean isFinal, BiConsumer<O, ObjectPath> pathProvider, String in) {
+    public static <D extends Type<D, O>, O extends Obj<D, O>> FieldDefinition<D, O> threshold(D ref, FieldTag fieldTag, double threshold, Comparison type, boolean isFinal, Consumer<O> pathProvider, String in) {
         return new ThresholdOperatorFieldDefinition<>(ref, fieldTag, threshold, type, isFinal);
     }
 

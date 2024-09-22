@@ -24,7 +24,7 @@ import network.aika.fields.link.FixedFieldLink;
 /**
  * @author Lukas Molzberger
  */
-public class FixedFieldLinkDefinition extends FieldLinkDefinition<FixedFieldLinkDefinition> {
+public class FixedFieldLinkDefinition extends FieldLinkTypeDefinition {
 
     private Integer arg;
 

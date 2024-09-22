@@ -25,8 +25,8 @@ import network.aika.elements.typedef.*;
 import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.typedef.FieldTags.*;
-import static network.aika.fielddefs.FieldInputDefinition.argLink;
-import static network.aika.fielddefs.FieldInputDefinition.varLink;
+import static network.aika.fielddefs.link.FieldLinkTypeDefinition.argLink;
+import static network.aika.fielddefs.link.FieldLinkTypeDefinition.varLink;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.Multiplication.mul;
 
@@ -106,9 +106,9 @@ public class DisjunctiveDef extends TypeDefinitionBase {
         identity(outputSlot, SLOT);
 
         mul(link, WEIGHT_UPDATE)
-                .in((o, p) -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0))
-                .in((o, p) -> o.getOutput(p).getFieldOutput(UPDATE_VALUE), argLink(1))
-                .out((o, p) -> o.getSynapse(p).getFieldInput(WEIGHT), varLink());
+                .in(o -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0))
+                .in(o -> o.getOutput().getFieldOutput(UPDATE_VALUE), argLink(1))
+                .out(o -> o.getSynapse().getFieldInput(WEIGHT), varLink());
     }
 
     @Override

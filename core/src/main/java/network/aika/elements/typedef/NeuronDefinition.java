@@ -17,8 +17,6 @@
 package network.aika.elements.typedef;
 
 import network.aika.Model;
-import network.aika.elements.activations.Activation;
-import network.aika.fielddefs.ObjectRelationDefinition;
 import network.aika.fielddefs.Type;
 import network.aika.fielddefs.TypeRegistry;
 import network.aika.fields.ActivationFunction;
@@ -28,8 +26,6 @@ import network.aika.elements.neurons.RefType;
 
 import java.util.List;
 import java.util.Set;
-
-import static network.aika.fielddefs.ObjectRelationType.ONE_TO_MANY;
 
 /**
  *

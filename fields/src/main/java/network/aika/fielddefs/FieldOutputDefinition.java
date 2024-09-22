@@ -16,8 +16,10 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.fielddefs.link.FieldLinkDefinition;
+import network.aika.fielddefs.link.InputFieldLinkDefinition;
+import network.aika.fielddefs.link.OutputFieldLinkDefinition;
 import network.aika.fields.Field;
+import network.aika.fields.Obj;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +29,11 @@ import static network.aika.enums.Direction.OUTPUT;
 /**
  * @author Lukas Molzberger
  */
-public class FieldOutputDefinition {
+public class FieldOutputDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
 
     protected FieldTag fieldTag;
 
-    protected List<FieldLinkDefinition> outputs = new ArrayList<>();
+    protected List<OutputFieldLinkDefinition<T, O>> outputs = new ArrayList<>();
 
     public FieldOutputDefinition(FieldTag fieldTag) {
         this.fieldTag = fieldTag;
@@ -41,13 +43,13 @@ public class FieldOutputDefinition {
         return fieldTag;
     }
 
-    public void addOutput(FieldLinkDefinition fl) {
+    public void addOutput(OutputFieldLinkDefinition<T, O> fl) {
         outputs.add(fl);
     }
 
     public void instantiateOutputLinks(Field f) {
         outputs.forEach(fl ->
-                fl.instantiate(OUTPUT, f)
+                fl.instantiate(f)
         );
     }
 

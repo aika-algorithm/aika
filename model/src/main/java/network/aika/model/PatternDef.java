@@ -32,7 +32,7 @@ import network.aika.statistic.NeuronStatistic;
 import static network.aika.elements.activations.StateType.OUTER_FEEDBACK;
 import static network.aika.elements.typedef.BSSlotDefinition.*;
 import static network.aika.elements.typedef.FieldTags.*;
-import static network.aika.fielddefs.FieldInputDefinition.argLink;
+import static network.aika.fielddefs.link.FieldLinkTypeDefinition.argLink;
 import static network.aika.fields.ActivationFunction.LIMITED_RECTIFIED_LINEAR_UNIT;
 import static network.aika.fields.ActivationFunction.RECTIFIED_HYPERBOLIC_TANGENT;
 import static network.aika.elements.NeuronType.*;
@@ -90,8 +90,8 @@ public class PatternDef extends TypeDefinitionBase {
                 .addStateType(typeModel.neuron.getNonFeedbackState());
 
         FieldDefinition<ActivationDefinition, Activation> g = mul(activation, ACT_GRADIENT)
-                .in(activation.getFieldOutput(GRADIENT), argLink(0))
-                .in(activation.getFieldOutput(NET_OUTER_GRADIENT), argLink(1));
+                .in(o -> o.getFieldOutput(GRADIENT), argLink(0))
+                .in(o -> o.getFieldOutput(NET_OUTER_GRADIENT), argLink(1));
 
         scale(
                 activation,
@@ -131,7 +131,7 @@ public class PatternDef extends TypeDefinitionBase {
         neuronStatistic = new FieldDefinition(NeuronStatistic.class, neuron, STATISTIC, TOLERANCE);
 
         neuronAverageCoveredSpace
-                .out((o, p) -> o.getFieldInput(STATISTIC), argLink(0));
+                .out(o -> o.getFieldInput(STATISTIC), argLink(0));
 
         categoryActivation = new ActivationDefinition(
                 getTypeModel(),
@@ -249,7 +249,7 @@ public class PatternDef extends TypeDefinitionBase {
 
 
         identity(link, INPUT_VALUE)  // TODO: check if a placeholder field can be used
-                .in((o, p) -> o.getInput(p).getState(p, OUTER_FEEDBACK).getFieldOutput(NET), argLink(0));
+                .in(o -> o.getInput().getState(OUTER_FEEDBACK).getFieldOutput(NET), argLink(0));
     }
 
     @Override

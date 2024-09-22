@@ -22,7 +22,7 @@ import network.aika.fielddefs.Type;
 import network.aika.fields.Obj;
 import network.aika.fields.InvertFunction;
 
-import static network.aika.fielddefs.FieldInputDefinition.argLink;
+import static network.aika.fielddefs.link.FieldLinkTypeDefinition.argLink;
 
 
 /**
@@ -41,7 +41,7 @@ public class Negative implements Sign {
     @Override
     public <D extends Type<D, O>, O extends Obj<D, O>> FieldDefinition<D, O> getValue(D ref, FieldDefinition<D, O> v) {
         return InvertFunction.invert(ref, NEGATION)
-                .in((o, p) -> v.getFieldOutput(), argLink(0));
+                .in(o -> v.getFieldOutput(), argLink(0));
     }
 
     @Override

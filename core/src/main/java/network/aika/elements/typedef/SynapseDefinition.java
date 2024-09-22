@@ -25,16 +25,10 @@ import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Trigger;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
-import network.aika.fielddefs.ObjectRelationDefinition;
 import network.aika.fielddefs.Type;
-import network.aika.fielddefs.ObjectPath;
 import network.aika.fielddefs.TypeRegistry;
 
 import java.util.List;
-import java.util.Set;
-
-import static network.aika.fielddefs.ObjectRelationDefinition.single;
-import static network.aika.fielddefs.ObjectRelationType.ONE_TO_MANY;
 
 /**
  *
@@ -46,11 +40,7 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     private LinkDefinition link;
 
     private NeuronDefinition input;
-    ObjectRelationDefinition<SynapseDefinition, Synapse, NeuronDefinition, Neuron> inputRelation;
-
     private NeuronDefinition output;
-    ObjectRelationDefinition<SynapseDefinition, Synapse, NeuronDefinition, Neuron> outputRelation;
-
 
     private Transition[] transition;
 
@@ -81,16 +71,6 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
         );
     }
 
-    public NeuronDefinition getInput(ObjectPath p) {
-        p.add(inputRelation);
-        return input;
-    }
-
-    public NeuronDefinition getOutput(ObjectPath p) {
-        p.add(outputRelation);
-        return output;
-    }
-
     public SynapseDefinition setLink(LinkDefinition link) {
         assert link != null;
 
@@ -108,13 +88,6 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
         assert input != null;
 
         this.input = input;
-        inputRelation = new ObjectRelationDefinition<>(
-                this,
-                input,
-                ONE_TO_MANY,
-                syn -> single(syn.getInput()),
-                null
-        );
 
         return this;
     }
@@ -127,13 +100,6 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
         assert outputDef != null;
 
         this.output = outputDef;
-        outputRelation = new ObjectRelationDefinition<>(
-                this,
-                output,
-                ONE_TO_MANY,
-                syn -> single(syn.getOutput()),
-                null
-        );
 
         return this;
     }

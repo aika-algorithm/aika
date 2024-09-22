@@ -42,7 +42,7 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
     protected List<T> parents = new ArrayList<>();
 
     Map<FieldTag, FieldDefinition<T, O>> fieldDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
-    Map<FieldTag, FieldInputDefinition<T, O, ?>> fieldInputDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
+    Map<FieldTag, FieldInputDefinition<T, O>> fieldInputDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
     Map<FieldTag, FieldOutputDefinition> fieldOutputDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
 
     public Type(TypeRegistry registry, String name, Class<? extends O> clazz) {

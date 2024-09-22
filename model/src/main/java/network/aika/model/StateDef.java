@@ -20,7 +20,7 @@ import network.aika.elements.activations.StateType;
 import network.aika.elements.typedef.StateDefinition;
 
 import static network.aika.elements.typedef.FieldTags.*;
-import static network.aika.fielddefs.FieldInputDefinition.argLink;
+import static network.aika.fielddefs.link.FieldLinkTypeDefinition.argLink;
 import static network.aika.fields.FieldActivationFunction.actFunc;
 import static network.aika.elements.activations.StateType.*;
 import static network.aika.fields.FiredListener.firedListener;
@@ -49,10 +49,10 @@ public class StateDef {
         firedListener(state, FIRED, TOLERANCE);
 
         sum(state, NET)
-                .out((o, p) -> o.getFieldInput(FIRED), argLink(0));
+                .out(o -> o.getFieldInput(FIRED), argLink(0));
 
         actFunc(state, VALUE, TOLERANCE)
-                .in((o, p) -> o.getFieldOutput(NET), argLink(0))
+                .in(o -> o.getFieldOutput(NET), argLink(0))
                 .setQueued(INFERENCE);
     }
 

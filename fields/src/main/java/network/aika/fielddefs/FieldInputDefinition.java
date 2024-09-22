@@ -16,9 +16,7 @@
  */
 package network.aika.fielddefs;
 
-import network.aika.fielddefs.link.FieldLinkDefinition;
-import network.aika.fielddefs.link.FixedFieldLinkDefinition;
-import network.aika.fielddefs.link.VariableFieldLinkDefinition;
+import network.aika.fielddefs.link.InputFieldLinkDefinition;
 import network.aika.fields.Field;
 import network.aika.fields.Obj;
 
@@ -30,27 +28,11 @@ import static network.aika.enums.Direction.INPUT;
 /**
  * @author Lukas Molzberger
  */
-public class FieldInputDefinition<T extends Type<T, O>, O extends Obj<T, O>, F extends FieldLinkDefinition<F>> {
+public class FieldInputDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
 
     protected FieldTag fieldTag;
 
-    protected List<F> inputs = new ArrayList<>();
-
-    public static FixedFieldLinkDefinition argLink(Integer arg) {
-        return argLink(arg, true);
-    }
-
-    public static FixedFieldLinkDefinition argLink(Integer arg, boolean propagateUpdates) {
-        return new FixedFieldLinkDefinition(arg, propagateUpdates);
-    }
-
-    public static VariableFieldLinkDefinition varLink(boolean propagateUpdates) {
-        return new VariableFieldLinkDefinition(propagateUpdates);
-    }
-
-    public static VariableFieldLinkDefinition varLink() {
-        return new VariableFieldLinkDefinition(true);
-    }
+    protected List<InputFieldLinkDefinition<T, O>> inputs = new ArrayList<>();
 
     public FieldInputDefinition(FieldTag fieldTag) {
         this.fieldTag = fieldTag;
@@ -62,11 +44,11 @@ public class FieldInputDefinition<T extends Type<T, O>, O extends Obj<T, O>, F e
 
     public void instantiateLinks(Field f) {
         inputs.forEach(fl ->
-                fl.instantiate(INPUT, f)
+                fl.instantiate(f)
         );
     }
 
-    public List<F> getInputs() {
+    public List<InputFieldLinkDefinition<T, O>> getInputs() {
         return inputs;
     }
 
@@ -74,8 +56,8 @@ public class FieldInputDefinition<T extends Type<T, O>, O extends Obj<T, O>, F e
         return inputs.size();
     }
 
-    public void addLink(FieldLinkDefinition fl) {
-        inputs.add((F)fl);
+    public void addInput(InputFieldLinkDefinition<T, O> fl) {
+        inputs.add(fl);
     }
 
     public String toString() {

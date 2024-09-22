@@ -26,8 +26,8 @@ import network.aika.enums.direction.Direction;
 
 import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.typedef.FieldTags.*;
-import static network.aika.fielddefs.FieldInputDefinition.argLink;
-import static network.aika.fielddefs.FieldInputDefinition.varLink;
+import static network.aika.fielddefs.link.FieldLinkTypeDefinition.argLink;
+import static network.aika.fielddefs.link.FieldLinkTypeDefinition.varLink;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InvertFunction.invert;
 import static network.aika.fields.Multiplication.mul;
@@ -144,18 +144,18 @@ public class NeuronDef extends TypeDefinitionBase {
                 .setQueued(TRAINING);
 
         identity(link, INPUT_VALUE)
-                .in((o, p) -> o.getInput(p).getState(p, NON_FEEDBACK).getFieldOutput(NET), argLink(0));
+                .in(o -> o.getInput().getState(NON_FEEDBACK).getFieldOutput(NET), argLink(0));
 
         threshold(link, INPUT_IS_FIRED, 0.0, ABOVE)
-                .in((o, p) -> o.getFieldOutput(INPUT_VALUE), argLink(0));
+                .in(o -> o.getFieldOutput(INPUT_VALUE), argLink(0));
 
         invert(link, NEG_INPUT_IS_FIRED)
-                .in((o, p) -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0));
+                .in(o -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0));
 
         mul(link, WEIGHTED_INPUT)
-                .in((o, p) -> o.getFieldOutput(INPUT_VALUE), argLink(0))
-                .in((o, p) -> o.getSynapse(p).getFieldOutput(WEIGHT), argLink(1))
-                .out((o, p) -> o.getOutputSlot(p).getFieldInput(SLOT), varLink());
+                .in(o -> o.getFieldOutput(INPUT_VALUE), argLink(0))
+                .in(o -> o.getSynapse().getFieldOutput(WEIGHT), argLink(1))
+                .out(o -> o.getOutputSlot().getFieldInput(SLOT), varLink());
     }
 
     public StateDefinition getNonFeedbackState() {

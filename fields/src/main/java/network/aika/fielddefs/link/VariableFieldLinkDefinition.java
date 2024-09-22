@@ -20,7 +20,7 @@ package network.aika.fielddefs.link;
 /**
  * @author Lukas Molzberger
  */
-public class VariableFieldLinkDefinition extends FieldLinkDefinition<VariableFieldLinkDefinition> {
+public class VariableFieldLinkDefinition extends FieldLinkTypeDefinition {
 
     public VariableFieldLinkDefinition(boolean propagateUpdates) {
         super(propagateUpdates);
