@@ -40,6 +40,7 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
     protected Class<? extends O> clazz;
 
     protected List<T> parents = new ArrayList<>();
+    protected List<T> children = new ArrayList<>();
 
     Map<FieldTag, FieldDefinition<T, O>> fieldDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
     Map<FieldTag, FieldInputDefinition<T, O>> fieldInputDefinitions = new TreeMap<>(FIELD_TAG_COMPARATOR);
@@ -51,7 +52,14 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         registry.register(this);
     }
 
+    public boolean isAbstract() {
+        return !children.isEmpty();
+    }
+
     protected O instantiate(List<Class<?>> parameterTypes, List<Object> parameters) {
+        if(isAbstract())
+            throw new RuntimeException("Unable to instantiate abstract type " + name);
+
         try {
             O instance = clazz.getConstructor(parameterTypes.toArray(new Class[0]))
                     .newInstance(parameters.toArray(new Object[0]));
@@ -121,12 +129,17 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     public T addParent(T p) {
         parents.add(p);
+        p.children.add((T) this);
 
         return (T) this;
     }
 
     public List<T> getParents() {
         return parents;
+    }
+
+    public List<T> getChildren() {
+        return children;
     }
 
     public void instantiateFields(O o) {

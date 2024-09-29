@@ -61,7 +61,7 @@ public class TypeModelTest {
 
         Synapse synapse = typeModel
                 .getBinding()
-                .getSynapse()
+                .getInputObjectSynapse()
                 .instantiate(inputNeuron, outputNeuron)
                 .setWeight(10.0)
                 .setPropagable(true);
