@@ -16,7 +16,6 @@
  */
 package network.aika.fields;
 
-import network.aika.fielddefs.FieldInputDefinition;
 import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.Type;
 import network.aika.queue.Queue;
@@ -56,10 +55,12 @@ public abstract class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>> impleme
         return fields.get(fieldTag);
     }
 
+    @Override
     public FieldInput getFieldInput(FieldTag fieldTag) {
         return getField(fieldTag);
     }
 
+    @Override
     public FieldOutput getFieldOutput(FieldTag fieldTag) {
         return getField(fieldTag);
     }

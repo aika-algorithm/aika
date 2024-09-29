@@ -37,6 +37,10 @@ public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
 
     Field getField(FieldTag fieldTag);
 
+    FieldInput getFieldInput(FieldTag fieldTag);
+
+    FieldOutput getFieldOutput(FieldTag fieldTag);
+
     Stream<Field> getFields();
 
     void disconnect();

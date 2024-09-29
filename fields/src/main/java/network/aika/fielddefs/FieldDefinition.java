@@ -58,6 +58,14 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
         this.tolerance = tolerance;
     }
 
+    public FieldDefinition<T, O> in(FieldOutputDefinition fieldOutDef, FieldLinkTypeDefinition flType) {
+        Function<O, FieldOutput> pathProvider = o -> o.getFieldOutput(fieldOutDef.getFieldTag());
+        FieldInputDefinition out = objectType.getFieldInput(getFieldTag());
+        out.addInput(new InputFieldLinkDefinition(pathProvider, flType));
+
+        return this;
+    }
+
     public FieldDefinition<T, O> in(Function<O, FieldOutput> pathProvider, FieldLinkTypeDefinition flType) {
         FieldInputDefinition out = objectType.getFieldInput(getFieldTag());
         out.addInput(new InputFieldLinkDefinition(pathProvider, flType));
