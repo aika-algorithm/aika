@@ -141,8 +141,8 @@ public class FieldLink {
 
     protected String getObjectString() {
         return input.getObject() != output.getObject() ?
-                "[" + input.getObject().toKeyString() + "]  " :
-                "";
+                "<" + input.getObject().toKeyString() + "> " :
+                "<> ";
     }
 
     @Override

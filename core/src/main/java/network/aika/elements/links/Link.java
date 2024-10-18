@@ -299,14 +299,14 @@ public abstract class Link extends ObjImpl<LinkDefinition, Link> implements Elem
     public String toString() {
         return getClass().getSimpleName() +
                 " in:[" + getInputKeyString() + "] " +
-                "--> " +
+                " ==> " +
                 "out:[" + getOutputKeyString() + "]";
     }
 
     @Override
     public String toKeyString() {
-        return "link in:[" + getInputKeyString() + "] " +
-                "--> " +
-                "out:[" + getOutputKeyString() + "]";
+        return getInputKeyString() +
+                " ==> " +
+                getOutputKeyString();
     }
 }
