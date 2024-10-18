@@ -80,7 +80,7 @@ public class Field<O extends Obj, I extends FieldInputs<F>, F extends FieldLink>
         return fieldDefinition;
     }
 
-    protected double getTolerance() {
+    protected Double getTolerance() {
         return fieldDefinition.getTolerance();
     }
 

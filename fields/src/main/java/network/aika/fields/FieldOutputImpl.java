@@ -60,7 +60,7 @@ public abstract class FieldOutputImpl implements FieldOutput, FieldWritable {
                 value;
     }
 
-    protected abstract double getTolerance();
+    protected abstract Double getTolerance();
 
     protected abstract FieldTag getFieldTag();
 
