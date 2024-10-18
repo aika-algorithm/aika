@@ -19,6 +19,7 @@ package network.aika.fielddefs.link;
 
 import network.aika.enums.Direction;
 import network.aika.fielddefs.FieldOutputDefinition;
+import network.aika.fielddefs.FieldTag;
 import network.aika.fielddefs.Type;
 import network.aika.fields.Field;
 import network.aika.fields.FieldInput;
@@ -40,8 +41,8 @@ public class OutputFieldLinkDefinition<T extends Type<T, O>, O extends Obj<T, O>
 
     private Function<O, FieldInput> pathProvider;
 
-    public OutputFieldLinkDefinition(Function<O, FieldInput> pathProvider, FieldLinkTypeDefinition typeDefinition) {
-        super(typeDefinition);
+    public OutputFieldLinkDefinition(Function<O, FieldInput> pathProvider, FieldTag targetFieldDocu, FieldLinkTypeDefinition typeDefinition) {
+        super(typeDefinition, targetFieldDocu);
 
         this.pathProvider = pathProvider;
     }
@@ -70,5 +71,10 @@ public class OutputFieldLinkDefinition<T extends Type<T, O>, O extends Obj<T, O>
         input.addOutput(fl);
 
         return fl;
+    }
+
+    @Override
+    public String toString() {
+        return "OUT " + super.toString();
     }
 }

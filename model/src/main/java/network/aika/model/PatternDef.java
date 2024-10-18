@@ -90,15 +90,15 @@ public class PatternDef extends TypeDefinitionBase {
                 .addStateType(typeModel.neuron.getNonFeedbackState());
 
         FieldDefinition<ActivationDefinition, Activation> g = mul(activation, ACT_GRADIENT)
-                .in(o -> o.getFieldOutput(GRADIENT), argLink(0))
-                .in(o -> o.getFieldOutput(NET_OUTER_GRADIENT), argLink(1));
+                .in(o -> o.getFieldOutput(GRADIENT), GRADIENT, argLink(0))
+                .in(o -> o.getFieldOutput(NET_OUTER_GRADIENT), NET_OUTER_GRADIENT, argLink(1));
 
         scale(
                 activation,
                 UPDATE_VALUE,
                 conf.getLearnRate(false/*neuron.isAbstract()*/)
         )
-                .in(g.getFieldOutput(), argLink(0));
+                .in(g.getFieldOutput(), UPDATE_VALUE, argLink(0));
 
 
         neuron = new NeuronDefinition(
@@ -131,7 +131,7 @@ public class PatternDef extends TypeDefinitionBase {
         neuronStatistic = new FieldDefinition(NeuronStatistic.class, neuron, STATISTIC, TOLERANCE);
 
         neuronAverageCoveredSpace
-                .out(o -> o.getFieldInput(STATISTIC), argLink(0));
+                .out(o -> o.getFieldInput(STATISTIC), STATISTIC, argLink(0));
 
         categoryActivation = new ActivationDefinition(
                 getTypeModel(),
@@ -249,7 +249,7 @@ public class PatternDef extends TypeDefinitionBase {
 
 
         identity(link, INPUT_VALUE)  // TODO: check if a placeholder field can be used
-                .in(o -> o.getInput().getState(OUTER_FEEDBACK).getFieldOutput(NET), argLink(0));
+                .in(o -> o.getInput().getState(OUTER_FEEDBACK).getFieldOutput(NET), NET, argLink(0));
     }
 
     @Override

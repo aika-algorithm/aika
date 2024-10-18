@@ -58,25 +58,25 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
         this.tolerance = tolerance;
     }
 
-    public FieldDefinition<T, O> in(FieldOutputDefinition fieldOutDef, FieldLinkTypeDefinition flType) {
+    public FieldDefinition<T, O> in(FieldOutputDefinition fieldOutDef, FieldTag targetFieldDocu, FieldLinkTypeDefinition flType) {
         Function<O, FieldOutput> pathProvider = o -> o.getFieldOutput(fieldOutDef.getFieldTag());
         FieldInputDefinition out = objectType.getFieldInput(getFieldTag());
-        out.addInput(new InputFieldLinkDefinition(pathProvider, flType));
+        out.addInput(new InputFieldLinkDefinition(pathProvider, targetFieldDocu, flType));
 
         return this;
     }
 
-    public FieldDefinition<T, O> in(Function<O, FieldOutput> pathProvider, FieldLinkTypeDefinition flType) {
+    public FieldDefinition<T, O> in(Function<O, FieldOutput> pathProvider, FieldTag targetFieldDocu, FieldLinkTypeDefinition flType) {
         FieldInputDefinition out = objectType.getFieldInput(getFieldTag());
-        out.addInput(new InputFieldLinkDefinition(pathProvider, flType));
+        out.addInput(new InputFieldLinkDefinition(pathProvider, targetFieldDocu, flType));
 
         return this;
     }
 
-    public FieldDefinition<T, O> out(Function<O, FieldInput> pathProvider, FieldLinkTypeDefinition flType) {
+    public FieldDefinition<T, O> out(Function<O, FieldInput> pathProvider, FieldTag targetFieldDocu, FieldLinkTypeDefinition flType) {
         FieldOutputDefinition in = objectType.getFieldOutput(getFieldTag());
 
-        in.addOutput(new OutputFieldLinkDefinition(pathProvider, flType));
+        in.addOutput(new OutputFieldLinkDefinition(pathProvider, targetFieldDocu, flType));
 
         return this;
     }

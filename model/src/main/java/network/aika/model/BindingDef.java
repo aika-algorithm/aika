@@ -116,10 +116,10 @@ public class BindingDef extends TypeDefinitionBase {
         sum(activation, UPDATE_VALUE);
 
         activation.getState(OUTER_FEEDBACK).getField(NET)
-                .in(o -> o.getActivation().getState(NON_FEEDBACK).getFieldOutput(NET), varLink());
+                .in(o -> o.getActivation().getState(NON_FEEDBACK).getFieldOutput(NET), NET, varLink());
 
         activation.getState(INNER_FEEDBACK).getField(NET)
-                .in(o -> o.getActivation().getState(OUTER_FEEDBACK).getFieldOutput(NET), varLink());
+                .in(o -> o.getActivation().getState(OUTER_FEEDBACK).getFieldOutput(NET), NET, varLink());
 
 
         neuron = new NeuronDefinition(
@@ -337,8 +337,8 @@ public class BindingDef extends TypeDefinitionBase {
         max(negativeFeedbackLink, INPUT_VALUE);
 
         negativeWeight = scale(negativeFeedbackLink, NEGATIVE_WEIGHT, -1)
-                .in(o -> o.getSynapse().getFieldOutput(WEIGHT), argLink(0))
-                .out(o -> o.getOutput().getState(negativeFeedbackSynapse.outputState()).getFieldInput(NET), varLink(false));
+                .in(o -> o.getSynapse().getFieldOutput(WEIGHT), WEIGHT, argLink(0))
+                .out(o -> o.getOutput().getState(negativeFeedbackSynapse.outputState()).getFieldInput(NET), NET, varLink(false));
 
 
         relationInputLink = new LinkDefinition(
@@ -432,10 +432,10 @@ public class BindingDef extends TypeDefinitionBase {
 
 
         identity(bindingLink, INPUT_VALUE)  // TODO: check if a placeholder field can be used
-                .in(o -> o.getInput().getState(INNER_FEEDBACK).getFieldOutput(NET), argLink(0));
+                .in(o -> o.getInput().getState(INNER_FEEDBACK).getFieldOutput(NET), NET, argLink(0));
 
         identity(sameObjectLink, INPUT_VALUE)  // TODO: check if a placeholder field can be used
-                .in(o -> o.getInput().getState(OUTER_FEEDBACK).getFieldOutput(NET), argLink(0));
+                .in(o -> o.getInput().getState(OUTER_FEEDBACK).getFieldOutput(NET), NET, argLink(0));
 
     }
 

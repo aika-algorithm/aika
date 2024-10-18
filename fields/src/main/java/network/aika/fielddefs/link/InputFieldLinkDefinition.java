@@ -37,8 +37,8 @@ public class InputFieldLinkDefinition<T extends Type<T, O>, O extends Obj<T, O>>
 
     private Function<O, FieldOutput> pathProvider;
 
-    public InputFieldLinkDefinition(Function<O, FieldOutput> pathProvider, FieldLinkTypeDefinition typeDefinition) {
-        super(typeDefinition);
+    public InputFieldLinkDefinition(Function<O, FieldOutput> pathProvider, FieldTag targetFieldDocu, FieldLinkTypeDefinition typeDefinition) {
+        super(typeDefinition, targetFieldDocu);
         this.pathProvider = pathProvider;
     }
 
@@ -66,5 +66,10 @@ public class InputFieldLinkDefinition<T extends Type<T, O>, O extends Obj<T, O>>
         input.addOutput(fl);
 
         return fl;
+    }
+
+    @Override
+    public String toString() {
+        return "OUT " + super.toString();
     }
 }

@@ -49,10 +49,10 @@ public class StateDef {
         firedListener(state, FIRED, TOLERANCE);
 
         sum(state, NET)
-                .out(o -> o.getFieldInput(FIRED), argLink(0));
+                .out(o -> o.getFieldInput(FIRED), FIRED, argLink(0));
 
         actFunc(state, VALUE, TOLERANCE)
-                .in(o -> o.getFieldOutput(NET), argLink(0))
+                .in(o -> o.getFieldOutput(NET), NET, argLink(0))
                 .setQueued(INFERENCE);
     }
 

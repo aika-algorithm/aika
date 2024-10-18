@@ -117,8 +117,8 @@ public class ConjunctiveDef extends TypeDefinitionBase {
                 .setQueued(TRAINING);
 
         identity(link, SYNAPSE_BIAS)
-                .in(o -> o.getSynapse().getFieldOutput(SYNAPSE_BIAS), argLink(0))
-                .out(o -> o.getOutput().getState(NON_FEEDBACK).getFieldInput(NET), varLink());
+                .in(o -> o.getSynapse().getFieldOutput(SYNAPSE_BIAS), SYNAPSE_BIAS, argLink(0))
+                .out(o -> o.getOutput().getState(NON_FEEDBACK).getFieldInput(NET), NET, varLink());
     }
 
     @Override

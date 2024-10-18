@@ -144,18 +144,18 @@ public class NeuronDef extends TypeDefinitionBase {
                 .setQueued(TRAINING);
 
         identity(link, INPUT_VALUE)
-                .in(o -> o.getInput().getState(NON_FEEDBACK).getFieldOutput(NET), argLink(0));
+                .in(o -> o.getInput().getState(NON_FEEDBACK).getFieldOutput(NET), NET, argLink(0));
 
         threshold(link, INPUT_IS_FIRED, 0.0, ABOVE)
-                .in(o -> o.getFieldOutput(INPUT_VALUE), argLink(0));
+                .in(o -> o.getFieldOutput(INPUT_VALUE), INPUT_VALUE, argLink(0));
 
         invert(link, NEG_INPUT_IS_FIRED)
-                .in(o -> o.getFieldOutput(INPUT_IS_FIRED), argLink(0));
+                .in(o -> o.getFieldOutput(INPUT_IS_FIRED), INPUT_IS_FIRED, argLink(0));
 
         mul(link, WEIGHTED_INPUT)
-                .in(o -> o.getFieldOutput(INPUT_VALUE), argLink(0))
-                .in(o -> o.getSynapse().getFieldOutput(WEIGHT), argLink(1))
-                .out(o -> o.getOutputSlot().getFieldInput(SLOT), varLink());
+                .in(o -> o.getFieldOutput(INPUT_VALUE), INPUT_VALUE, argLink(0))
+                .in(o -> o.getSynapse().getFieldOutput(WEIGHT), WEIGHT, argLink(1))
+                .out(o -> o.getOutputSlot().getFieldInput(SLOT), SLOT, varLink());
     }
 
     public StateDefinition getNonFeedbackState() {

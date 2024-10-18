@@ -40,4 +40,9 @@ public class FixedFieldLinkDefinition extends FieldLinkTypeDefinition {
     public Integer getArg() {
         return arg;
     }
+
+    @Override
+    public String toString() {
+        return "FIXED(" + arg + ")";
+    }
 }

@@ -25,4 +25,9 @@ public class VariableFieldLinkDefinition extends FieldLinkTypeDefinition {
     public VariableFieldLinkDefinition(boolean propagateUpdates) {
         super(propagateUpdates);
     }
+
+    @Override
+    public String toString() {
+        return "VARIABLE";
+    }
 }
