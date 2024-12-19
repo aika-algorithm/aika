@@ -18,7 +18,7 @@ package network.aika.elements.activations.bsslots;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.activations.State;
-import network.aika.elements.activations.types.PatternActivation;
+import network.aika.elements.typedef.BSSlotDefinition;
 import network.aika.enums.Scope;
 import network.aika.queue.steps.Linking;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
+import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.enums.Trigger.*;
 
 /**
@@ -38,7 +38,7 @@ public abstract class BindingSignalSlot {
 
     protected static final Logger log = LoggerFactory.getLogger(BindingSignalSlot.class);
 
-    protected Activation<?> act;
+    protected Activation act;
 
     protected BSSlotDefinition slotDef;
 
@@ -51,44 +51,35 @@ public abstract class BindingSignalSlot {
         return slotDef.isFeedback();
     }
 
-    public static BindingSignalSlot create(Activation act, BSSlotDefinition slotDef) {
-        return slotDef.isMulti() ?
-                        new MultiBSSlot(act, slotDef) :
-                        new SingleBSSlot(act, slotDef);
-    }
-
     public Scope getType() {
         return slotDef.getScope();
     }
 
     public abstract boolean isSet();
 
-    public abstract boolean isSet(PatternActivation bs);
+    public abstract boolean isSet(Activation bs);
 
-    public abstract Stream<PatternActivation> getBindingSignals();
+    public abstract Stream<Activation> getBindingSignals();
 
-    public abstract void updateBindingSignal(PatternActivation bs, boolean state);
+    public abstract void updateBindingSignal(Activation bs, boolean state);
 
-    protected void onBindingSignalSlotUpdate(PatternActivation bs, boolean state) {
+    protected void onBindingSignalSlotUpdate(Activation bs, boolean state) {
         if(!state)
             return;
 
-        Linking.add(act, getType(), bs, NOT_FIRED);
-
-        if(act.isFired(PRE_FEEDBACK))
-            Linking.add(act, getType(), bs, FIRED_PRE_FEEDBACK);
+        if(act.isFired(NON_FEEDBACK))
+            Linking.add(act, getType(), bs, FIRED_NON_FEEDBACK);
     }
 
     public void onFired(State s) {
-        Stream<PatternActivation> bindingSignals =
+        Stream<Activation> bindingSignals =
                 isFeedback() && !isSet() ?
-                        Stream.of((PatternActivation) null) :
+                        Stream.of((Activation) null) :
                         getBindingSignals();
 
         bindingSignals.forEach(bs ->
-                s.getType().getTriggers()
-                        .filter(t -> t.getType() == s.getType())
-                        .filter(t -> t.checkPrimary(act))
+                s.getStateType().getTriggers()
+                        .filter(t -> t.getStateType() == s.getStateType())
                         .forEach(t ->
                                 Linking.add(act, getType(), bs, t)
                         )

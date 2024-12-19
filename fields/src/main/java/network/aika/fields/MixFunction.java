@@ -17,32 +17,40 @@
 package network.aika.fields;
 
 
-import network.aika.fields.link.FieldLink;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
+import network.aika.fielddefs.Type;
+import network.aika.fields.link.FixedFieldLink;
+import network.aika.fields.link.FixedFieldInputs;
 
 /**
  * @author Lukas Molzberger
  */
-public class MixFunction extends AbstractFunction {
+public class MixFunction<O extends Obj> extends AbstractFunction<O> {
 
-    public MixFunction(FieldObject ref, String label) {
-        super(ref, label);
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> mix(T ref, FieldTag fieldTag) {
+        return new FieldDefinition<>(
+                MixFunction.class,
+                ref,
+                fieldTag
+        );
+    }
+
+    public MixFunction() {
+        super(3);
     }
 
     @Override
-    protected int getNumberOfFunctionArguments() {
-        return 3;
-    }
-
-    @Override
-    protected double computeUpdate(FieldLink fl, double u) {
+    protected double computeUpdate(FixedFieldLink fl, double u) {
+        FixedFieldInputs in = getInputs();
         int arg = fl.getArgument();
         if(arg == 0) {
-            double a = getInputValueByArg(1);
-            double b = getInputValueByArg(2);
+            double a = in.getInputValueByArg(1);
+            double b = in.getInputValueByArg(2);
 
             return (-u * a + u * b);
         } else {
-            double x = getInputValueByArg(0);
+            double x = in.getInputValueByArg(0);
 
             return (arg == 2 ? x : 1 - x) * u;
         }

@@ -16,16 +16,10 @@
  */
 package network.aika.fields;
 
-
-import network.aika.debugger.FieldObserver;
 import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
 import network.aika.queue.steps.FieldUpdate;
 import network.aika.queue.Step;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  *
@@ -42,8 +36,6 @@ public class QueueInterceptor {
     private Queue queue;
 
     private boolean isNextRound;
-
-    private List<FieldObserver> observers = new ArrayList<>();
 
     public QueueInterceptor(Queue q, Field f, ProcessingPhase phase, boolean isNextRound) {
         this.queue = q;
@@ -72,8 +64,6 @@ public class QueueInterceptor {
     }
 
     public void receiveUpdate(double u, boolean replaceUpdate) {
-        updateObservers();
-
         FieldUpdate s = getOrCreateStep();
         s.updateDelta(u, replaceUpdate);
 
@@ -87,25 +77,6 @@ public class QueueInterceptor {
     public void process(FieldUpdate s) {
         step = null;
         field.triggerUpdate(s.getDelta());
-
-        updateObservers();
-    }
-
-    public void addObserver(FieldObserver observer) {
-        if(observers.contains(observer))
-            return;
-
-        observers.add(observer);
-    }
-
-    public void removeObserver(FieldObserver observer) {
-        observers.remove(observer);
-    }
-
-    protected void updateObservers() {
-        observers.forEach(o ->
-                o.receiveUpdate(field.value)
-        );
     }
 
     public Queue getQueue() {

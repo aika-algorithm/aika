@@ -34,7 +34,7 @@ public class DownVisitor extends Visitor {
     }
 
     @Override
-    public void next(Activation<?> act, Link lastLink, Scope s, int depth) {
+    public void next(Activation act, Link lastLink, Scope s, int depth) {
         if(act.checkVisited(v))
             return;
 

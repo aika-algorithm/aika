@@ -19,62 +19,150 @@ package network.aika.fields.link;
 import network.aika.fields.FieldInput;
 import network.aika.fields.FieldOutput;
 
+import java.util.Objects;
+
+import static network.aika.utils.StringUtils.depthToSpace;
+
 /**
  * @author Lukas Molzberger
  */
-public class FieldLink extends AbstractFieldLink<FieldInput> {
+public class FieldLink {
 
-    public FieldLink(FieldOutput input, int arg, FieldInput output) {
-        super(input, arg, output);
+
+    protected FieldOutput input;
+    protected FieldInput output;
+
+    protected boolean connected;
+    protected boolean withinConnectionChange;
+
+    protected boolean propagateUpdates = true;
+
+    public FieldLink(FieldOutput input, FieldInput output) {
+        assert input != output;
+
+        this.input = input;
+        this.output = output;
     }
 
-    public static FieldLink linkAndConnect(FieldOutput in, FieldInput out) {
-        FieldLink fl = link(in, out.size(), out);
-
-        fl.connect(true);
-        return fl;
+    protected void propagateUpdate(double u) {
+        output.receiveUpdate(this, u);
     }
 
-    public static FieldLink link(FieldOutput in, FieldInput out) {
-        return link(in, out.size(), out);
+    public void setPropagateUpdates(boolean propagateUpdates) {
+        this.propagateUpdates = propagateUpdates;
     }
 
-    public static FieldLink linkAndConnect(FieldOutput in, int arg, FieldInput out) {
-        FieldLink fl = link(in, arg, out);
-        fl.connect(true);
-        return fl;
+    public boolean isPropagateUpdates() {
+        return propagateUpdates;
     }
 
-    public static FieldLink link(FieldOutput in, int arg, FieldInput out) {
-        FieldLink fl = new FieldLink(in, arg, out);
-        out.addInput(fl);
-        in.addOutput(fl);
-        return fl;
+    public boolean isConnected() {
+        return connected;
     }
 
-    public static void linkAndConnectAll(FieldOutput in, FieldInput... out) {
-        assert in != null;
+    public void receiveUpdate(double u) {
+        if(connected && propagateUpdates)
+            propagateUpdate(u);
+    }
 
-        for(FieldInput o : out) {
-            if(o != null) {
-                link(in, 0, o)
-                        .connect(true);
-            }
+    public void updateConnected(boolean newConnected, boolean initialize) {
+        if(!connected && newConnected)
+            connect(initialize);
+        else if(connected && !newConnected)
+            disconnect(initialize);
+    }
+
+    public void connect(boolean initialize) {
+        if(connected)
+            return;
+
+        withinConnectionChange = true;
+        if(initialize) {
+            double cv = input.getValue();
+            propagateUpdate(cv);
         }
+        withinConnectionChange = false;
+
+        connected = true;
     }
 
-    public static void linkAll(FieldOutput in, FieldInput... out) {
-        assert in != null;
+    public void disconnect(boolean deinitialize) {
+        if(!connected)
+            return;
 
-        for(FieldInput o : out) {
-            if(o != null) {
-                link(in, 0, o);
-            }
+        withinConnectionChange = true;
+        if(deinitialize) {
+            double cv = input.getValue();
+            propagateUpdate(-cv);
         }
+        withinConnectionChange = false;
+
+        connected = false;
+    }
+
+    public double getInputValue() {
+        return connected ?
+                input.getValue() :
+                0.0;
+    }
+
+    public double getUpdatedInputValue() {
+        return connected != withinConnectionChange ?
+                input.getUpdatedValue() :
+                0.0;
+    }
+
+
+    public FieldOutput getInput() {
+        return input;
+    }
+
+
+    public void unlinkInput() {
+        input.removeOutput(this);
+    }
+
+    public void unlinkOutput() {
+        output.getInputs().removeInput(this);
     }
 
     @Override
-    public void unlinkOutput() {
-        output.removeInput(this);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FieldLink fieldLink = (FieldLink) o;
+        return Objects.equals(input, fieldLink.input) && Objects.equals(output, fieldLink.output);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(input, output);
+    }
+
+    protected String getObjectString() {
+        return input.getObject() != output.getObject() ?
+                "<" + input.getObject().toKeyString() + "> " :
+                "<> ";
+    }
+
+    @Override
+    public String toString() {
+        return getObjectString() +
+                input +
+                arrowToString() +
+                output +
+                " (" + linkParamsToString() + ")";
+    }
+
+    protected String arrowToString() {
+        return " ---> ";
+    }
+
+    protected String linkParamsToString() {
+        return "c:" + connected + ", p:" + propagateUpdates;
+    }
+
+    public String dumpFieldLink(int depth) {
+        return depthToSpace(depth) + this;
     }
 }

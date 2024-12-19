@@ -17,21 +17,15 @@
 package network.aika;
 
 
-import network.aika.debugger.EventListener;
-import network.aika.debugger.EventType;
 import network.aika.callbacks.InstantiationCallback;
+import network.aika.elements.ModelProvider;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.Element;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.types.PatternNeuron;
 import network.aika.elements.PreActivation;
 import network.aika.elements.neurons.NeuronProvider;
-import network.aika.fields.Field;
 import network.aika.queue.Queue;
-import network.aika.queue.Timestamp;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Step;
-import network.aika.text.Range;
 import network.aika.text.TextReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +35,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static network.aika.queue.Timestamp.MIN;
-import static network.aika.queue.Timestamp.NOT_SET;
 import static network.aika.elements.activations.StateType.*;
+
 
 /**
  * The {@code Document} class represents a single document which may be either used for processing a text or as
@@ -51,7 +44,7 @@ import static network.aika.elements.activations.StateType.*;
  *
  * @author Lukas Molzberger
  */
-public class Document extends Queue implements Element {
+public class Document extends Queue implements ModelProvider, QueueProvider {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Document.class);
 
@@ -71,7 +64,7 @@ public class Document extends Queue implements Element {
     private long visitorCounter = 0;
 
     private final TreeMap<Integer, Activation> activationsById = new TreeMap<>();
-    private final Map<NeuronProvider, PreActivation<? extends Activation>> actsPerNeuron = new HashMap<>();
+    private final Map<NeuronProvider, PreActivation> actsPerNeuron = new HashMap<>();
     private final Set<EventListener> eventListeners = new HashSet<>();
 
     private InstantiationCallback instantiationCallback;
@@ -101,7 +94,7 @@ public class Document extends Queue implements Element {
     }
 
     @Override
-    public long getTimeout() {
+    public Long getTimeout() {
         return getConfig().getTimeout();
     }
 
@@ -123,18 +116,6 @@ public class Document extends Queue implements Element {
 
     public Step getCurrentStep() {
         return currentStep;
-    }
-
-    public void queueEvent(EventType et, Step s) {
-        callEventListener(el ->
-                el.onQueueEvent(et, s)
-        );
-    }
-
-    public void onElementEvent(EventType et, Element e) {
-        callEventListener(el ->
-                el.onElementEvent(et, e)
-        );
     }
 
     public InstantiationCallback getInstantiationCallback() {
@@ -165,7 +146,7 @@ public class Document extends Queue implements Element {
         activationsById.put(act.getId(), act);
     }
 
-    public void register(Neuron n, PreActivation<? extends Activation> acts) {
+    public void register(Neuron n, PreActivation acts) {
         PreActivation existingPreAct = actsPerNeuron.put(n.getProvider(), acts);
 
         if(existingPreAct != null)
@@ -209,6 +190,11 @@ public class Document extends Queue implements Element {
         return this;
     }
 
+    @Override
+    public boolean isNextRound() {
+        return false;
+    }
+
     public String activationsToString() {
         return getActivations()
                 .stream()
@@ -248,45 +234,22 @@ public class Document extends Queue implements Element {
         return content.substring((int) r.getBegin(), (int) r.getEnd());
     }
 
-    public static String getText(Activation<?> act) {
+    public static String getText(Activation act) {
         return act.getDocument().getTextSegment(act.getTextReference().getCharRange());
     }
 
-    public PatternActivation addToken(PatternNeuron n, TextReference textReference) {
+    public Activation addToken(Neuron n, TextReference textReference) {
         return addToken(n, textReference, n.getTargetNet());
     }
 
-    public PatternActivation addToken(PatternNeuron n, TextReference textReference, double inputNet) {
-        PatternActivation act = n.createActivation(this);
+    public Activation addToken(Neuron n, TextReference textReference, double inputNet) {
+        Activation act = n.createActivation(this);
 
         act.updateRanges(textReference);
-
-        disconnectNetFields(act);
 
         act.setNet(INNER_FEEDBACK, inputNet);
 
         return act;
-    }
-
-    private void disconnectNetFields(Activation act) {
-        disconnectAndBlock(act.getNet(PRE_FEEDBACK));
-        disconnectAndBlock(act.getNet(OUTER_FEEDBACK));
-        disconnectAndBlock(act.getNet(INNER_FEEDBACK));
-    }
-
-    private void disconnectAndBlock(Field f) {
-        f.disconnectInputs(false);
-        f.setBlocked(true);
-    }
-
-    @Override
-    public Timestamp getCreated() {
-        return MIN;
-    }
-
-    @Override
-    public Timestamp getFired() {
-        return NOT_SET;
     }
 
     public String docToString() {
@@ -305,5 +268,11 @@ public class Document extends Queue implements Element {
                         .replaceAll("[\\n\\r\\s]+", " ")
         );
         return sb.toString();
+    }
+
+    public String dumpActivations() {
+        return activationsById.values().stream()
+                .map(act -> act.dumpObject(0))
+                .collect(Collectors.joining("\n"));
     }
 }

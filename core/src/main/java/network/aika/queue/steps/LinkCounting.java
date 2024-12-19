@@ -28,7 +28,7 @@ import network.aika.queue.Phase;
 public class LinkCounting extends ElementStep<Link> {
 
     public static void add(Link l) {
-        if (l.getConfig().isCountingEnabled() && !l.getOutput().getNeuron().isAbstract())
+        if (l.getConfig().isCountingEnabled() /*&& !l.getOutput().getNeuron().isAbstract()*/)
             add(new LinkCounting(l));
     }
 

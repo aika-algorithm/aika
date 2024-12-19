@@ -18,98 +18,42 @@ package network.aika.elements.synapses;
 
 import network.aika.Model;
 import network.aika.elements.activations.StateType;
-import network.aika.elements.synapses.slots.SynapseInputSlot;
-import network.aika.elements.synapses.slots.SynapseOutputSlot;
-import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.ConjunctiveNeuron;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.ConjunctiveActivation;
 import network.aika.elements.links.Link;
+import network.aika.elements.typedef.SynapseDefinition;
 import network.aika.queue.Timestamp;
-import network.aika.fields.Field;
-import network.aika.fields.SumField;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.queue.Phase.TRAINING;
-import static network.aika.utils.Utils.TOLERANCE;
-
-
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class ConjunctiveSynapse<
-            S extends ConjunctiveSynapse,
-            I extends Neuron,
-            O extends ConjunctiveNeuron<O, OA>,
-            L extends Link<S, IA, OA, SynapseInputSlot, SynapseOutputSlot>,
-            IA extends Activation<?>,
-            OA extends ConjunctiveActivation<?>
-        >
-        extends Synapse<S, I, O, L, IA, OA>
-{
-
-    protected Field synapseBias = new SumField(this, "synapseBias", TOLERANCE)
-            .setQueued(getQueue(), TRAINING, false);
+public class ConjunctiveSynapse extends Synapse {
 
     private boolean optional;
-
-    protected boolean propagable;
 
     protected Integer relActTimeSum;
     protected Integer relActTimeN;
 
-
     public ConjunctiveSynapse() {
-        synapseBias.setValue(0.0);
+    }
+
+    public ConjunctiveSynapse(SynapseDefinition type, Neuron input, Neuron output) {
+        super(type, input, output);
     }
 
     @Override
-    public SynapseSlot createInputSlot(IA iAct) {
-        return new SynapseInputSlot(iAct, this);
-    }
-
-    @Override
-    public SynapseSlot createOutputSlot(OA oAct) {
-        return new SynapseOutputSlot(oAct, this);
-    }
-
-    @Override
-    public SynapseSlot createAndInitOutputSlot(OA oAct) {
-        SynapseOutputSlot slot = (SynapseOutputSlot) super.createAndInitOutputSlot(oAct);
-        slot.connectToActivation();
-        return slot;
-    }
-
-    public void initSlots(OA act) {
-        act.registerInputSlot(this);
-    }
-
-    public void initSynapseBias(ConjunctiveActivation act) {
-        linkAndConnect(synapseBias, act.getNet(synapseType.outputState()))
-                .setPropagateUpdates(false);
-    }
-
-    public S setSynapseBias(double b) {
-        synapseBias.setValue(b);
-
-        return (S) this;
-    }
-
-    @Override
-    public void count(L l) {
+    public void count(Link l) {
         super.count(l);
 
         if(l.getInput() == null)
             return;
 
-        Timestamp inFired = l.getInput().getFired(StateType.PRE_FEEDBACK);
-        Timestamp outFired = l.getOutput().getFired(StateType.PRE_FEEDBACK);
+        Timestamp inFired = l.getInput().getFired(StateType.NON_FEEDBACK);
+        Timestamp outFired = l.getOutput().getFired(StateType.NON_FEEDBACK);
 
         if(inFired != null && outFired != null) {
             if(relActTimeSum == null) {
@@ -122,11 +66,11 @@ public abstract class ConjunctiveSynapse<
         }
     }
 
-    public S setRelativeActivationTime(Integer relActTimeSum, Integer relActTimeN) {
+    public Synapse setRelativeActivationTime(Integer relActTimeSum, Integer relActTimeN) {
         this.relActTimeSum = relActTimeSum;
         this.relActTimeN = relActTimeN;
 
-        return (S) this;
+        return this;
     }
 
     public Float getAvgRelActTime() {
@@ -136,76 +80,26 @@ public abstract class ConjunctiveSynapse<
         return ((float) relActTimeSum) / ((float) relActTimeN);
     }
 
-    public Field getSynapseBias() {
-        return synapseBias;
-    }
-
-    @Override
     public boolean isOptional() {
         return optional;
     }
 
-    public S setOptional(boolean optional) {
+    public Synapse setOptional(boolean optional) {
         this.optional = optional;
 
-        return (S) this;
+        return this;
     }
 
     @Override
-    public void initFromTemplate(I input, O output, Synapse templateSyn) {
-        synapseBias.setInitialValue(
-                ((ConjunctiveSynapse)templateSyn).synapseBias.getUpdatedValue()
-        );
-
+    public void initFromTemplate(Neuron input, Neuron output, Synapse templateSyn) {
         super.initFromTemplate(input, output, templateSyn);
         setPropagable(templateSyn.isPropagable());
-    }
-
-    public S setPropagable(boolean propagable) {
-        if(this.propagable != propagable)
-            input.getNeuron().setModified();
-
-        getInput().updatePropagable(output, propagable);
-        this.propagable = propagable;
-
-        return (S) this;
-    }
-
-    @Override
-    public boolean isPropagable() {
-        return propagable;
-    }
-
-    @Override
-    public void setModified() {
-        O no = getOutput();
-        if(no != null)
-            no.setModified();
-    }
-
-    @Override
-    public boolean isWeak() {
-        return getOutput().getBias().getUpdatedValue() > -synapseBias.getUpdatedValue();
-    }
-
-    public S adjustBias() {
-        return adjustBias(
-                getInput().getTargetValue()
-        );
-    }
-
-    public S adjustBias(double inputValueTarget) {
-        if(weight.getValue() > 0.0)
-            synapseBias.receiveUpdate(null, -weight.getValue() * inputValueTarget);
-
-        return (S) this;
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         super.write(out);
 
-        synapseBias.write(out);
         out.writeBoolean(propagable);
         out.writeBoolean(optional);
 
@@ -220,7 +114,6 @@ public abstract class ConjunctiveSynapse<
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
 
-        synapseBias.readFields(in);
         propagable = in.readBoolean();
         optional = in.readBoolean();
 

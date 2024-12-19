@@ -16,68 +16,22 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.FieldLink;
-
-import java.util.Arrays;
-import java.util.List;
+import network.aika.fields.link.FixedFieldLink;
+import network.aika.fields.link.FixedFieldInputs;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class AbstractFunction extends Field<FieldLink> {
+public abstract class AbstractFunction<O extends Obj> extends Field<O, FixedFieldInputs, FixedFieldLink> {
 
-    private FieldLink[] inputs;
-
-    public AbstractFunction(FieldObject ref, String label, Double tolerance) {
-        super(ref, label, tolerance);
+    public AbstractFunction(int numArgs) {
+        super(new FixedFieldInputs(numArgs));
     }
 
-    public AbstractFunction(FieldObject ref, String label) {
-        this(ref, label, null);
-    }
+    protected abstract double computeUpdate(FixedFieldLink fl, double u);
 
     @Override
-    protected void initIO() {
-        super.initIO();
-        inputs = new FieldLink[getNumberOfFunctionArguments()];
-    }
-
-    protected int getNumberOfFunctionArguments() {
-        return 1;
-    }
-
-    @Override
-    public int size() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addInput(FieldLink l) {
-        inputs[l.getArgument()] = l;
-    }
-
-    @Override
-    public void removeInput(FieldLink l) {
-        inputs[l.getArgument()] = null;
-    }
-
-    @Override
-    public List<FieldLink> getInputs() {
-        return Arrays.asList(inputs);
-    }
-
-    public double getInputValueByArg(int arg) {
-        return getInputLinkByArg(arg).getInputValue();
-    }
-
-    public FieldLink getInputLinkByArg(int arg) {
-        return inputs[arg];
-    }
-
-    protected abstract double computeUpdate(FieldLink fl, double u);
-
-    @Override
-    public void receiveUpdate(FieldLink fl, double u) {
+    public void receiveUpdate(FixedFieldLink fl, double u) {
         double update = computeUpdate(fl, u);
 
         if(interceptor != null) {

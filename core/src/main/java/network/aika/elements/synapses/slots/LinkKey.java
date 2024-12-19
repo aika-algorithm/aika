@@ -17,10 +17,10 @@
 package network.aika.elements.synapses.slots;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.links.ConjunctiveLink;
+import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.link.ArgumentFieldLink;
+import network.aika.fields.link.MapFieldLink;
 
 /**
  *
@@ -37,16 +37,16 @@ public class LinkKey implements Comparable<LinkKey> {
         this.act = act;
     }
 
-    private LinkKey(ConjunctiveLink l, Direction dir) {
+    private LinkKey(Link l, Direction dir) {
         this(
                 dir.getNeuron(l.getSynapse()),
                 dir.getActivation(l)
         );
     }
 
-    public LinkKey(ArgumentFieldLink<? extends ConjunctiveLink> fl, Direction dir) {
+    public LinkKey(MapFieldLink<LinkKey, Link> fl, Direction dir) {
         this(
-                fl.getArgumentRef(),
+                fl.getValue(),
                 dir.invert()
         );
     }

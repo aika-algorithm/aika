@@ -19,85 +19,61 @@ package network.aika.elements.links;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.Element;
-import network.aika.elements.Type;
+import network.aika.elements.ModelProvider;
+import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.CategoryActivation;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.StateType;
+import network.aika.elements.activations.bsslots.RegisterInputSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.relations.Relation;
 import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.elements.typedef.LinkDefinition;
 import network.aika.enums.Scope;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.*;
 import network.aika.elements.synapses.Synapse;
-import network.aika.fields.link.FieldLink;
+import network.aika.fields.ObjImpl;
 import network.aika.queue.Queue;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.queue.steps.LinkUpdate;
 import network.aika.visitor.Visitor;
 
 import java.util.stream.Stream;
 
-import static network.aika.debugger.EventType.CREATE;
 import static network.aika.elements.links.BSLinkEvent.ON_CREATE;
 import static network.aika.enums.direction.Direction.INPUT;
 import static network.aika.enums.direction.Direction.OUTPUT;
-import static network.aika.fields.link.ArgumentFieldLink.linkAndConnect;
-import static network.aika.fields.Fields.*;
-import static network.aika.fields.ThresholdOperator.Type.ABOVE;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class Link<
-        S extends Synapse,
-        I extends Activation<?>,
-        O extends Activation<?>,
-        SI extends SynapseSlot,
-        SO extends SynapseSlot
-        > implements Element {
+public abstract class Link extends ObjImpl<LinkDefinition, Link> implements Element, ModelProvider, QueueProvider {
 
-    protected S synapse;
+    protected Synapse synapse;
 
-    protected I input;
-    protected O output;
+    protected Activation input;
+    protected Activation output;
 
     protected LinkUpdate inputStep = new LinkUpdate(this, INPUT);
 
     protected LinkUpdate outputStep = new LinkUpdate(this, OUTPUT);
 
-    protected SI synInputSlot;
+    protected SynapseSlot inputSlot;
 
-    protected SO synOutputSlot;
+    protected SynapseSlot outputSlot;
 
-    protected Field inputValue;
-    protected AbstractFunction inputIsFired;
-    protected AbstractFunction negInputIsFired;
-    protected Multiplication weightedInput;
 
-    protected SumField gradient;
-
-    public Link(S s, I input, O output) {
+    public Link(LinkDefinition type, Synapse s, Activation input, Activation output) {
+        this.type = type;
         this.synapse = s;
         this.input = input;
         this.output = output;
 
         link();
 
-        if(output != null) {
-            initWeightInput();
-
-            if (s.getModel().getConfig().isTrainingEnabled() && getSynapse().isTrainingAllowed()) {
-                connectGradientFields();
-                connectWeightUpdate();
-            }
-        }
-
         propagateRanges();
-        getDocument().onElementEvent(CREATE, this);
     }
 
     public LinkUpdate getLinkUpdateStep(Direction dir) {
@@ -123,34 +99,26 @@ public abstract class Link<
         return true;
     }
 
-    public Type getInputType() {
+    public NeuronType getInputType() {
         return synapse.getInputType();
     }
 
-    public Type getOutputType() {
+    public NeuronType getOutputType() {
         return synapse.getOutputType();
     }
 
-    public void onOutputBindingSignalUpdate(Scope bsType, PatternActivation nBS, boolean state) {
+    public void onOutputBindingSignalUpdate(Scope bsType, Activation nBS, boolean state) {
     }
 
     public void visit(Visitor v, Scope s, int depth) {
         v.next(this, s, depth);
     }
 
-    protected void connectGradientFields() {
-    }
-
-    @Override
-    public void disconnect() {
-        weightedInput.disconnectAndUnlinkInputs(false);
-    }
-
-    public void instantiateTemplate(I iAct, O oAct) {
+    public void instantiateTemplate(Activation iAct, Activation oAct) {
         if(iAct == null || oAct == null)
             return;
 
-        S s = (S) synapse.instantiateTemplate(
+        Synapse s = synapse.instantiateTemplate(
                 iAct.getNeuron(),
                 oAct.getNeuron()
         );
@@ -162,62 +130,18 @@ public abstract class Link<
         s.createLinkFromTemplate(iAct, oAct, this);
     }
 
-    public abstract void connectWeightUpdate();
-
-    protected void initWeightInput() {
-        initInputValue();
-
-        inputIsFired = threshold(this, "inputIsFired", 0.0, ABOVE, inputValue);
-        negInputIsFired = invert(this,"!inputIsFired", inputIsFired);
-
-        initWeightedInput();
-        initWeightedOutput();
-
-        if(input != null)
-            connectInputValue();
-    }
-
-    protected void initWeightedOutput() {
-        linkAndConnect(weightedInput, this, synOutputSlot.getInputField());
-    }
-
     public StateType inputState() {
-        return getSynapse().getSynapseType().getTrigger().getType();
+        return getSynapse().getType().getTrigger().getStateType();
     }
 
     public StateType outputState() {
-        return getSynapse().getSynapseType().outputState();
-    }
-
-    protected void initInputValue() {
-        inputValue = new IdentityFunction(this, "input value");
-    }
-
-    protected void connectInputValue() {
-        linkAndConnect(
-                synapse.getInputValue(input),
-                0,
-                inputValue
-        );
-    }
-
-    protected void initWeightedInput() {
-        weightedInput = mul(
-                this,
-                "iAct(" + getInputKeyString() + ").value * s.weight",
-                inputValue, isInputSideActive(), true,
-                synapse.getWeight(), true, false
-        );
-    }
-
-    public FieldLink getInputValueLink() {
-        return weightedInput.getInputLinkByArg(0);
+        return getSynapse().getType().outputState();
     }
 
     public void init() {
     }
 
-    public void initFromTemplate(Link<S, ?, ?, SI, SO> template) {
+    public void initFromTemplate(Link template) {
         output.registerTemplateInstanceSynapse(
                 template.synapse.getSynapseId(),
                 synapse.getSynapseId()
@@ -226,7 +150,7 @@ public abstract class Link<
         linkRelationFromTemplate(template);
     }
 
-    protected void linkRelationFromTemplate(Link<S, ?, ?, SI, SO> template) {
+    protected void linkRelationFromTemplate(Link template) {
         Relation rel = synapse.getRelation();
         if(rel != null)
             rel.linkRelationFromTemplate(output, synapse, template);
@@ -268,7 +192,7 @@ public abstract class Link<
                 );
     }
 
-    public void propagateBindingSignal(PatternActivation bs, Scope is, boolean state) {
+    public void propagateBindingSignal(Activation bs, Scope is, boolean state) {
         Stream<BindingSignalSlot> slots = synapse.transitionBindingSignal(output, is);
 
         if(!isActive())
@@ -277,14 +201,6 @@ public abstract class Link<
         slots.forEach(oBSSlot ->
                 oBSSlot.updateBindingSignal(bs, state)
         );
-    }
-
-    public Field getWeightedInput() {
-        return weightedInput;
-    }
-
-    public Field getGradient() {
-        return gradient;
     }
 
     @Override
@@ -299,31 +215,19 @@ public abstract class Link<
         return input != null && isCausal() ? input.getCreated() : output.getCreated();
     }
 
-    public Field getInputValue() {
-        return inputValue;
-    }
-
-    public FieldOutput getInputIsFired() {
-        return inputIsFired;
-    }
-
-    public FieldOutput getNegInputIsFired() {
-        return negInputIsFired;
-    }
-
-    public S getSynapse() {
+    public Synapse getSynapse() {
         return synapse;
     }
 
-    public void setSynapse(S synapse) {
+    public void setSynapse(Synapse synapse) {
         this.synapse = synapse;
     }
 
-    public I getInput() {
+    public Activation getInput() {
         return input;
     }
 
-    public O getOutput() {
+    public Activation getOutput() {
         return output;
     }
 
@@ -336,22 +240,21 @@ public abstract class Link<
     }
 
     public void linkInput() {
-        synInputSlot = (SI) input.registerOutputSlot(synapse);
-        synInputSlot.addLink(this);
+        inputSlot = input.registerOutputSlot(synapse);
         updateBindingSignals(ON_CREATE, true);
     }
 
     public void linkOutput() {
-        synOutputSlot = (SO) output.registerInputSlot(synapse);
-        synOutputSlot.addLink(this);
+        if(synapse.getType().getRegisterInputSlot() == RegisterInputSlot.ON_LINKING)
+            outputSlot = output.registerInputSlot(synapse);
     }
 
-    public SI getSynInputSlot() {
-        return synInputSlot;
+    public SynapseSlot getInputSlot() {
+        return inputSlot;
     }
 
-    public SO getSynOutputSlot() {
-        return synOutputSlot;
+    public SynapseSlot getOutputSlot() {
+        return outputSlot;
     }
 
     public void propagateRanges() {
@@ -368,10 +271,6 @@ public abstract class Link<
     }
 
     public void checkPrimarySuppression() {
-    }
-
-    public boolean isNegative() {
-        return synapse.isNegative();
     }
 
     public Document getDocument() {
@@ -396,10 +295,18 @@ public abstract class Link<
         return (output != null ? output.toKeyString() : "id:X n:[" + synapse.getOutput() + "]");
     }
 
+    @Override
     public String toString() {
         return getClass().getSimpleName() +
                 " in:[" + getInputKeyString() + "] " +
-                "--> " +
+                " ==> " +
                 "out:[" + getOutputKeyString() + "]";
+    }
+
+    @Override
+    public String toKeyString() {
+        return getInputKeyString() +
+                " ==> " +
+                getOutputKeyString();
     }
 }

@@ -17,12 +17,8 @@
 package network.aika.visitor.operator;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
-import network.aika.elements.relations.Relation;
-import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
-import network.aika.enums.direction.Direction;
 import network.aika.visitor.UpVisitor;
 
 /**
@@ -30,7 +26,7 @@ import network.aika.visitor.UpVisitor;
  */
 public interface Operator {
 
-    PatternActivation getBindingSignal();
+    Activation getBindingSignal();
 
     void check(Activation bsAct, Scope s, int depth);
 

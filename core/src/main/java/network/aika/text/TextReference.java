@@ -17,14 +17,15 @@
 package network.aika.text;
 
 import network.aika.Model;
+import network.aika.Range;
 import network.aika.utils.Writable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import static network.aika.text.Range.getBegin;
-import static network.aika.text.Range.getEnd;
+import static network.aika.Range.getBegin;
+import static network.aika.Range.getEnd;
 
 /**
  *
@@ -106,10 +107,10 @@ public class TextReference implements Writable {
     @Override
     public void readFields(DataInput in, Model m) throws Exception {
         if(in.readBoolean())
-            tokenPosRange = Range.read(in, m);
+            tokenPosRange = Range.read(in);
 
         if(in.readBoolean())
-            charRange = Range.read(in, m);
+            charRange = Range.read(in);
     }
 
     public String toString() {

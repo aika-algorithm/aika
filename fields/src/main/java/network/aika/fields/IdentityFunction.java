@@ -16,19 +16,31 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.FieldLink;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
+import network.aika.fielddefs.Type;
+import network.aika.fields.link.FixedFieldLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class IdentityFunction extends AbstractFunction {
+public class IdentityFunction<O extends Obj> extends AbstractFunction<O> {
 
-    public IdentityFunction(FieldObject ref, String label) {
-        super(ref, label);
+
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> identity(T ref, FieldTag fieldTag) {
+        return new FieldDefinition<>(
+                IdentityFunction.class,
+                ref,
+                fieldTag
+        );
+    }
+
+    public IdentityFunction() {
+        super(1);
     }
 
     @Override
-    protected double computeUpdate(FieldLink fl, double u) {
+    protected double computeUpdate(FixedFieldLink fl, double u) {
         return u;
     }
 }

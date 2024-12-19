@@ -16,24 +16,35 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.FieldLink;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
+import network.aika.fielddefs.Type;
+import network.aika.fields.link.FixedFieldLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class Multiplication extends AbstractFunction {
+public class Multiplication<O extends Obj> extends AbstractFunction<O> {
 
-    public Multiplication(FieldObject ref, String label) {
-        super(ref, label);
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> mul(T ref, FieldTag fieldTag) {
+        return new FieldDefinition<>(
+                Multiplication.class,
+                ref,
+                fieldTag
+        );
+    }
+
+    public Multiplication() {
+        super(2);
     }
 
     @Override
-    protected int getNumberOfFunctionArguments() {
-        return 2;
-    }
-
-    @Override
-    protected double computeUpdate(FieldLink fl, double u) {
-        return u * getInputValueByArg(fl.getArgument() == 0 ? 1 : 0);
+    protected double computeUpdate(FixedFieldLink fl, double u) {
+        return u * getInputs()
+                .getInputValueByArg(
+                        fl.getArgument() == 0 ?
+                                1 :
+                                0
+                );
     }
 }

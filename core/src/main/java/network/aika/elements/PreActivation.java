@@ -20,10 +20,8 @@ package network.aika.elements;
 import network.aika.Document;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.NeuronProvider;
-import network.aika.elements.neurons.RefType;
 import network.aika.enums.direction.Direction;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.text.TextReference;
 import network.aika.text.TokenPositionKey;
 
@@ -38,13 +36,13 @@ import static network.aika.text.TextReference.getTPEnd;
  *
  * @author Lukas Molzberger
  */
-public class PreActivation<A extends Activation> {
+public class PreActivation {
 
     private Document doc;
 
     private Neuron neuron;
 
-    private SortedSet<A> activations = new TreeSet<>();
+    private SortedSet<Activation> activations = new TreeSet<>();
 
     private NavigableMap<TokenPositionKey, Activation> tokenPosBeginIndex = new TreeMap<>();
 
@@ -60,7 +58,7 @@ public class PreActivation<A extends Activation> {
         doc.register(neuron, this);
     }
 
-    public SortedSet<A> getActivations() {
+    public SortedSet<Activation> getActivations() {
         return activations;
     }
 
@@ -76,7 +74,7 @@ public class PreActivation<A extends Activation> {
         return tokenPosEndIndex;
     }
 
-    public void addActivation(A act) {
+    public void addActivation(Activation act) {
         activations.add(act);
     }
 

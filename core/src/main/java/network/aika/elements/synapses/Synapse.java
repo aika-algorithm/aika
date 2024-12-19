@@ -17,30 +17,28 @@
 package network.aika.elements.synapses;
 
 import network.aika.Model;
+import network.aika.elements.ModelProvider;
 import network.aika.elements.PreActivation;
-import network.aika.elements.Type;
+import network.aika.elements.NeuronType;
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.StateType;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.relations.Relation;
 import network.aika.Document;
 import network.aika.elements.Element;
 import network.aika.elements.links.Link;
-import network.aika.elements.typedef.SynapseTypeDefinition;
+import network.aika.elements.typedef.SynapseDefinition;
+import network.aika.fields.ObjImpl;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.elements.synapses.slots.SynapseSlot;
 import network.aika.enums.Scope;
 import network.aika.enums.Transition;
 import network.aika.enums.direction.Direction;
-import network.aika.fields.Field;
-import network.aika.fields.FieldOutput;
-import network.aika.fields.SumField;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.enums.Trigger;
 import network.aika.queue.Queue;
 import network.aika.text.TextReference;
-import network.aika.utils.Utils;
 import network.aika.utils.Writable;
 import network.aika.visitor.operator.LinkingOperator;
 import org.slf4j.Logger;
@@ -53,43 +51,43 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static network.aika.elements.typedef.FieldTags.WEIGHT;
 import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_IN;
 import static network.aika.elements.neurons.RefType.SYNAPSE_OUT;
-import static network.aika.elements.typedef.SynapseTypeDefinition.getDefinition;
-import static network.aika.queue.Phase.TRAINING;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neuron<O, OA>, L extends Link<S, IA, OA, ?, ?>, IA extends Activation<?>, OA extends Activation<?>> implements Element, Writable {
+public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse> implements Element, ModelProvider, QueueProvider, Writable {
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
-
-    protected final SynapseTypeDefinition synapseType = getDefinition(getClass());
 
     protected int synapseId;
     protected NeuronProvider input;
     protected NeuronProvider output;
 
+    protected boolean propagable;
+
     private Relation relation;
 
-    private Boolean inputSideInstantiable;
-    private Boolean outputSideInstantiable;
+    private boolean inputSideInstantiable = true;
+    private boolean outputSideInstantiable = true;
 
-    protected SumField weight = (SumField) new SumField(this, "weight", TOLERANCE)
-            .setQueued(getQueue(), TRAINING, false)
-            .addListener("onWeightModified", (fl, u) -> {
-                checkWeight();
-                setModified();
-            }, true);
 
     protected boolean trainingAllowed = true;
 
+    private int latentProxySynapseId;
+
+
     public Synapse() {
+    }
+
+    public Synapse(SynapseDefinition type, Neuron input, Neuron output) {
+        this.type = type;
+        link(input, output);
     }
 
     public int getSynapseId() {
@@ -100,80 +98,76 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         this.synapseId = synapseId;
     }
 
-    public Type getInputType() {
-        return synapseType.getInputType();
+    public NeuronType getInputType() {
+        return getType().getInput().getType();
     }
 
-    public Type getOutputType() {
-        return synapseType.getOutputType();
+    public NeuronType getOutputType() {
+        return getType().getOutput().getType();
     }
 
     public Transition[] getTransition() {
-        return synapseType.getTransition();
+        return getType().getTransition();
     }
 
     public Transition getRequired() {
-        return synapseType.getRequired();
+        return getType().getRequired();
     }
 
     public boolean isPropagateRange() {
-        return synapseType.isPropagateRange();
+        return getType().isPropagateRange();
     }
 
-    public abstract SynapseSlot createInputSlot(IA iAct);
+    public Synapse setPropagable(boolean propagable) {
+        if(this.propagable != propagable)
+            input.getNeuron().setModified();
 
-    public SynapseSlot createAndInitInputSlot(IA iAct) {
-        SynapseSlot slot = createInputSlot(iAct);
-        slot.init();
-        return slot;
+        getInput().updatePropagable(output, propagable);
+        this.propagable = propagable;
+
+        return this;
     }
 
-    public Stream<BindingSignalSlot> transitionBindingSignal(Activation<?> oAct, Scope is) {
-        return Arrays.stream(getSynapseType().getTransition())
+    public boolean isPropagable() {
+        return propagable;
+    }
+
+    public Synapse setWeight(double weight) {
+        getField(WEIGHT).setValue(weight);
+        return this;
+    }
+
+    public final SynapseSlot createInputSlot(Activation iAct) {
+        return getType()
+                .getLink()
+                .getInputSlot()
+                .instantiate(iAct, this);
+    }
+
+    public Stream<BindingSignalSlot> transitionBindingSignal(Activation oAct, Scope is) {
+        return Arrays.stream(getType().getTransition())
                 .filter(t -> is == t.getFrom())
                 .map(Transition::getTo)
                 .map(oAct::getBindingSignalSlot)
                 .filter(Objects::nonNull);
     }
 
-    public abstract SynapseSlot createOutputSlot(OA oAct);
-
-    public SynapseSlot createAndInitOutputSlot(OA oAct) {
-        SynapseSlot slot = createOutputSlot(oAct);
-        slot.init();
-        return slot;
-    }
-
-    public SumField getOutputNet(Activation act) {
-        return act.getNet(synapseType.outputState());
-    }
-
-    public FieldOutput getInputValue(IA input) {
-        return input.getValue();
-    }
-
-    public FieldOutput getInputValue(IA input, StateType t) {
-        return input.getValue(t);
-    }
-
-    protected void checkWeight() {
-        if(isNegative())
-            delete();
+    public final SynapseSlot createOutputSlot(Activation iAct) {
+        return getType()
+                .getLink()
+                .getOutputSlot()
+                .instantiate(iAct, this);
     }
 
     public Trigger getTrigger() {
-        return synapseType.getTrigger();
+        return getType().getTrigger();
     }
 
     @Override
     public void disconnect() {
     }
 
-    public boolean isPropagable() {
-        return true;
-    }
-
-    public void propagate(IA iAct) {
+    public void propagate(Activation iAct) {
         if(!isPropagable())
             return;
 
@@ -184,16 +178,12 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             return;
 
         Document doc = iAct.getDocument();
-        OA oAct = getOutput().createActivation(doc);
+        Activation oAct = getOutput().createActivation(doc);
 
         createAndInitLink(iAct, oAct);
     }
 
     public boolean isWeak() {
-        return false;
-    }
-
-    public boolean isOptional() {
         return false;
     }
 
@@ -204,13 +194,13 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                 .orElse(null);
     }
 
-    public L getLink(IA iAct, OA oAct) {
-        L l = (L) oAct.getInputLink(iAct, synapseId);
+    public Link getLink(Activation iAct, Activation oAct) {
+        Link l = oAct.getInputLink(iAct, synapseId);
         assert l == null || l.getSynapse() == this;
         return l;
     }
 
-    public boolean linkExists(OA oAct, boolean includeInactive) {
+    public boolean linkExists(Activation oAct, boolean includeInactive) {
         Stream<Link> links = oAct.getInputLinks(this);
 
         if(!includeInactive)
@@ -221,14 +211,14 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                 .isPresent();
     }
 
-    public boolean propagateLinkExists(IA iAct) {
+    public boolean propagateLinkExists(Activation iAct) {
         return iAct.getOutputLinks(this)
                         .findAny()
                         .isPresent();
     }
 
-    public L link(IA iAct, OA oAct) {
-        L l = getLink(iAct, oAct);
+    public Link link(Activation iAct, Activation oAct) {
+        Link l = getLink(iAct, oAct);
         if (l != null) {
             if(log.isDebugEnabled())
                 log.debug("existing link: " + l);
@@ -238,31 +228,35 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return createAndInitLink(iAct, oAct);
     }
 
-    public abstract void setModified();
-
-    public void count(L l) {
+    public final void setModified() {
+        Neuron n = getStoredAt().getNeuron(this);
+        if(n != null)
+            n.setModified();
     }
 
-    public void setInput(I input) {
+    public void count(Link l) {
+    }
+
+    public void setInput(Neuron input) {
         this.input = input.getProvider();
         this.input.increaseRefCount(SYNAPSE_IN);
     }
 
-    public void setOutput(O output) {
+    public void setOutput(Neuron output) {
         this.output = output.getProvider();
         this.output.increaseRefCount(SYNAPSE_OUT);
     }
 
-    public S instantiateTemplate(I input, O output) {
-        S s = (S) output.getInputSynapse(input.getProvider());
+    public Synapse instantiateTemplate(Neuron input, Neuron output) {
+        Synapse s = output.getInputSynapse(input.getProvider());
         if(s != null)
             return s;
 
-        try {
-            s = (S) getClass().getConstructor().newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        SynapseDefinition std = getType().getInstanceSynapseType() != null ?
+                getType().getInstanceSynapseType() :
+                getType();
+
+        s = std.instantiate(input, output);
 
         input.setModified();
         output.setModified();
@@ -270,63 +264,44 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return s;
     }
 
-    public void initFromTemplate(I input, O output, Synapse templateSyn) {
+    public void initFromTemplate(Neuron input, Neuron output, Synapse templateSyn) {
         synapseId = output.getNewSynapseId();
         setInput(input);
         setOutput(output);
-
-        inputSideInstantiable = templateSyn.inputSideInstantiable;
-        outputSideInstantiable = templateSyn.outputSideInstantiable;
 
         link();
 
         if(templateSyn.relation != null)
             relation = templateSyn.relation.instantiate();
-
-        weight.setValue(
-                templateSyn.weight.getUpdatedValue()
-        );
     }
 
-    public S setInputSideInstantiable(Boolean instantiable) {
-        this.inputSideInstantiable = instantiable;
+    public Synapse setInstantiable(boolean inputSideInstantiable, boolean outputSideInstantiable) {
+        this.inputSideInstantiable = inputSideInstantiable;
+        this.outputSideInstantiable = outputSideInstantiable;
 
-        return (S) this;
+        return this;
     }
 
-    public Boolean isInputSideInstantiable() {
-        return inputSideInstantiable != null ?
-                inputSideInstantiable :
-                input.getNeuron().isInstantiable() &&
-                        (output.getNeuron().isInstantiable() || isOptional());
+    public boolean isInputSideInstantiable() {
+        return inputSideInstantiable;
     }
 
-    public S setOutputSideInstantiable(Boolean instantiable) {
-        this.outputSideInstantiable = instantiable;
-
-        return (S) this;
+    public boolean isOutputSideInstantiable() {
+        return outputSideInstantiable;
     }
 
-    public Boolean isOutputSideInstantiable() {
-        boolean cis = this instanceof CategoryInputSynapse;
-
-        return outputSideInstantiable != null ?
-                outputSideInstantiable :
-                output.getNeuron().isInstantiable() && (!cis || input.getNeuron().isInstantiable());
-    }
-
-    public S link(Neuron input, Neuron output) {
+    public Synapse link(Neuron input, Neuron output) {
         input.verifyNeuronExistsOnlyOnce();
         output.verifyNeuronExistsOnlyOnce();
 
         synapseId = output.getNewSynapseId();
 
-        setInput((I) input);
-        setOutput((O) output);
+        setInput(input);
+        setOutput(output);
 
         link();
 
-        return (S) this;
+        return this;
     }
 
     public void link() {
@@ -342,40 +317,34 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         input.removeInputSynapse(this);
     }
 
-    public abstract L createLink(IA input, OA output);
+    public final Link createLink(Activation input, Activation output) {
+        return getType()
+                .getLink()
+                .instantiate(this, input, output);
+    }
 
-    public L createAndInitLink(IA input, OA output) {
-        L l = createLink(input, output);
+    public Link createAndInitLink(Activation input, Activation output) {
+        Link l = createLink(input, output);
         l.init();
         return l;
     }
 
-    public L createLinkFromTemplate(IA input, OA output, Link template) {
-        L l = createLink(input, output);
+    public Link createLinkFromTemplate(Activation input, Activation output, Link template) {
+        Link l = createLink(input, output);
         l.initFromTemplate(template);
         return l;
     }
 
-    public S setWeight(double w) {
-        weight.setValue(w);
-
-        return (S) this;
+    public Synapse setInitialCategorySynapseWeight(double initialCategorySynapseWeight) {
+        throw new UnsupportedOperationException();
     }
 
-    public S adjustBias() {
-        return (S) this;
-    }
-
-    public SumField getWeight() {
-        return weight;
-    }
-
-    public Field getWeightForAnnealing() {
-        return weight;
+    public Synapse setOptional(boolean optional) {
+        throw new UnsupportedOperationException();
     }
 
     public final boolean isTrainingAllowed() {
-        return trainingAllowed && synapseType.isTrainingAllowed() && getOutput().isTrainingAllowed();
+        return trainingAllowed && getType().isTrainingAllowed() && getOutput().isTrainingAllowed();
     }
 
     public void setTrainingAllowed(boolean trainingAllowed) {
@@ -383,7 +352,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
     }
 
     public final Direction getStoredAt() {
-        return synapseType.getStoredAt();
+        return getType().getStoredAt();
     }
 
     public NeuronProvider getPInput() {
@@ -394,24 +363,24 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return output;
     }
 
-    public I getInput() {
+    public Neuron getInput() {
         if(input == null)
             return null;
 
         return input.getNeuron();
     }
 
-    public O getOutput() {
+    public Neuron getOutput() {
         if(output == null)
             return null;
 
         return output.getNeuron();
     }
 
-    public S setRelation(Relation rel) {
+    public Synapse setRelation(Relation rel) {
         this.relation = rel;
 
-        return (S) this;
+        return this;
     }
 
     public Relation getRelation() {
@@ -424,7 +393,7 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
             return;
 
         Activation from = op.getSourceAct();
-        PreActivation<?> toPreAct = to.getPreActivation(from.getDocument());
+        PreActivation toPreAct = to.getPreActivation(from.getDocument());
         if(toPreAct == null)
             return;
 
@@ -438,23 +407,18 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
                 );
     }
 
+
     @Override
     public Model getModel() {
         return output != null ?
                 output.getModel() :
                 null;
     }
-
-    public boolean isZero() {
-        return Utils.belowTolerance(TOLERANCE, weight.getValue());
+    public boolean isOptional() {
+        return false;
     }
 
-    public boolean isNegative() {
-        return weight.getUpdatedValue() < 0.0;
-    }
-
-    public SynapseTypeDefinition getSynapseType() {
-        return synapseType;
+    public void initSlots(Activation output) {
     }
 
     @Override
@@ -465,16 +429,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         out.writeLong(input.getId());
         out.writeLong(output.getId());
 
-        weight.write(out);
-
-        out.writeBoolean(inputSideInstantiable != null);
-        if(inputSideInstantiable != null)
-            out.writeBoolean(inputSideInstantiable);
-
-        out.writeBoolean(outputSideInstantiable != null);
-
-        if(outputSideInstantiable != null)
-            out.writeBoolean(outputSideInstantiable);
+        out.writeBoolean(inputSideInstantiable);
+        out.writeBoolean(outputSideInstantiable);
 
         out.writeBoolean(relation != null);
         if(relation != null)
@@ -495,13 +451,8 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         input = m.lookupNeuronProvider(in.readLong(), SYNAPSE_IN);
         output = m.lookupNeuronProvider(in.readLong(), SYNAPSE_OUT);
 
-        weight.readFields(in);
-
-        if(in.readBoolean())
-            inputSideInstantiable = in.readBoolean();
-
-        if(in.readBoolean())
-            outputSideInstantiable = in.readBoolean();
+        inputSideInstantiable = in.readBoolean();
+        outputSideInstantiable = in.readBoolean();
 
         if(in.readBoolean())
             relation = Relation.read(in, m);
@@ -532,14 +483,28 @@ public abstract class Synapse<S extends Synapse, I extends Neuron, O extends Neu
         return getModel();
     }
 
-    public String toString() {
-        return getClass().getSimpleName() +
-                " in:[" + (input != null ? input.toKeyString() : "--")  + "] " +
-                getArrow() +
-                " out:[" + (output != null ? output.toKeyString() : "--") + "])";
+    @Override
+    public boolean isNextRound() {
+        return false;
     }
 
-    private String getArrow() {
-        return "-->";
+
+    public void setLatentProxySynapseId(int synapseId) {
+
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() +
+                " in:[" + (input != null ? input.toKeyString() : "X")  + "] " +
+                " --> " +
+                " out:[" + (output != null ? output.toKeyString() : "X") + "])";
+    }
+
+    @Override
+    public String toKeyString() {
+        return (input != null ? input.toKeyString() : "X") +
+                " --> " +
+               (output != null ? output.toKeyString() : "X");
     }
 }

@@ -21,7 +21,7 @@ import network.aika.elements.PreActivation;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.direction.Direction;
-import network.aika.text.Range;
+import network.aika.Range;
 import network.aika.text.TextReference;
 
 import java.io.DataInput;
@@ -62,12 +62,12 @@ public class BeforeRelation extends Relation {
     }
 
     @Override
-    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir) {
+    public Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation toPreAct, Direction dir) {
         Direction toSlot = dir.combine(relDirection);
         Direction fromSlot = toSlot.invert();
 
         Range inputRange = ref.getTokenPosRange();
-        long fromPos = inputRange.getPosition(fromSlot);
+        long fromPos = fromSlot.getPosition(inputRange);
 
         Range targetRange = new Range(
                 fromPos + getRelBegin(dir),
@@ -104,7 +104,7 @@ public class BeforeRelation extends Relation {
     public void readFields(DataInput in, Model m) throws IOException {
         super.readFields(in, m);
         relDirection = in.readBoolean() ? INPUT : OUTPUT;
-        offsetRange = Range.read(in, m);
+        offsetRange = Range.read(in);
     }
 
     @Override

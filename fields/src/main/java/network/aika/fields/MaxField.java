@@ -16,46 +16,30 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
+import network.aika.fielddefs.Type;
 import network.aika.fields.link.FieldLink;
-import java.util.ArrayList;
-import java.util.List;
+import network.aika.fields.link.VariableFieldInputs;
+
+import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
  *
  */
-public class MaxField extends AbstractMaxField<FieldLink> {
+public class MaxField<O extends Obj> extends AbstractMaxField<O, VariableFieldInputs, FieldLink> {
 
-    private List<FieldLink> inputs;
-
-    public MaxField(FieldObject ref, String label, Double tolerance) {
-        super(ref, label, tolerance);
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> max(T ref, FieldTag fieldTag) {
+        return new FieldDefinition<>(
+                MaxField.class,
+                ref,
+                fieldTag,
+                TOLERANCE
+        );
     }
 
-    @Override
-    protected void initIO() {
-        super.initIO();
-
-        inputs = new ArrayList<>();
-    }
-
-    @Override
-    public int size() {
-        return inputs.size();
-    }
-
-    @Override
-    public void addInput(FieldLink l) {
-        inputs.add(l);
-    }
-
-    @Override
-    public void removeInput(FieldLink l) {
-        inputs.remove(l);
-    }
-
-    @Override
-    public List<FieldLink> getInputs() {
-        return inputs;
+    public MaxField() {
+        super(new VariableFieldInputs());
     }
 }

@@ -34,7 +34,7 @@ public class UpVisitor extends Visitor {
     }
 
     @Override
-    public void next(Activation<?> act, Link lastLink, Scope s, int depth) {
+    public void next(Activation act, Link lastLink, Scope s, int depth) {
         operator.visitorCheck(this, lastLink, act, s);
 
         if(act.checkVisited(v))

@@ -26,49 +26,34 @@ import static network.aika.elements.activations.StateType.*;
  * @author Lukas Molzberger
  */
 public enum Trigger {
-    FIRED_PRE_FEEDBACK(PRE_FEEDBACK),
+    FIRED_NON_FEEDBACK(NON_FEEDBACK),
     FIRED_OUTER_FEEDBACK(OUTER_FEEDBACK),
-    PRIMARY_CHECKED_FIRED_OUTER_FEEDBACK(OUTER_FEEDBACK, true),
-    FIRED_INNER_FEEDBACK(INNER_FEEDBACK),
-    NOT_FIRED(null);
+    FIRED_INNER_FEEDBACK(INNER_FEEDBACK);
 
-    private boolean checkPrimary;
-    private StateType type;
+    private StateType stateType;
 
-    Trigger(StateType type) {
-        this.type = type;
-        if(type != null)
-            type.addTrigger(this);
+    Trigger(StateType stateType) {
+        this.stateType = stateType;
+        if(stateType != null)
+            stateType.addTrigger(this);
     }
 
-    Trigger(StateType type, boolean checkPrimary) {
-        this(type);
-        this.checkPrimary = checkPrimary;
+    public void setStateType(StateType stateType) {
+        this.stateType = stateType;
     }
 
-    public void setType(StateType type) {
-        this.type = type;
-    }
-
-    public StateType getType() {
-        return type;
+    public StateType getStateType() {
+        return stateType;
     }
 
     public boolean check(Activation act) {
-        if(!checkPrimary(act))
-            return false;
-
-        if(type == null)
+        if(stateType == null)
             return true;
 
-        return act.isFired(type);
+        return act.isFired(stateType);
     }
 
     public boolean match(Trigger t) {
-        return type == t.type && checkPrimary == t.checkPrimary;
-    }
-
-    public boolean checkPrimary(Activation act) {
-        return !checkPrimary || act.checkPrimary();
+        return stateType == t.stateType;
     }
 }

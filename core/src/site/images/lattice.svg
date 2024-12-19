@@ -62,40 +62,40 @@
    </g>
   </g>
   <g>
-   <path fill="none" stroke="rgb(0,0,0)" id="Drawing_8_0" stroke-linejoin="round" d="M 4400,7000 L 6416,4808"/>
-   <path fill="rgb(0,0,0)" stroke="none" id="Drawing_8_1" d="M 6520,4871 L 6527,4910 6700,4500 6306,4707 6343,4711 6382,4722 6419,4739 6454,4765 6483,4797 6504,4833 6520,4871 Z"/>
+   <objectPath fill="none" stroke="rgb(0,0,0)" id="Drawing_8_0" stroke-linejoin="round" d="M 4400,7000 L 6416,4808"/>
+   <objectPath fill="rgb(0,0,0)" stroke="none" id="Drawing_8_1" d="M 6520,4871 L 6527,4910 6700,4500 6306,4707 6343,4711 6382,4722 6419,4739 6454,4765 6483,4797 6504,4833 6520,4871 Z"/>
   </g>
   <g>
-   <path fill="none" stroke="rgb(0,0,0)" id="Drawing_9_0" stroke-linejoin="round" d="M 4400,4900 L 6485,6724"/>
-   <path fill="rgb(0,0,0)" stroke="none" id="Drawing_9_1" d="M 6424,6829 L 6386,6837 6800,7000 6583,6611 6580,6649 6570,6688 6554,6725 6529,6760 6498,6790 6462,6813 6424,6829 Z"/>
+   <objectPath fill="none" stroke="rgb(0,0,0)" id="Drawing_9_0" stroke-linejoin="round" d="M 4400,4900 L 6485,6724"/>
+   <objectPath fill="rgb(0,0,0)" stroke="none" id="Drawing_9_1" d="M 6424,6829 L 6386,6837 6800,7000 6583,6611 6580,6649 6570,6688 6554,6725 6529,6760 6498,6790 6462,6813 6424,6829 Z"/>
   </g>
   <g>
-   <path fill="none" stroke="rgb(0,0,0)" id="Drawing_10_0" stroke-linejoin="round" d="M 4400,4763 L 6287,4435"/>
-   <path fill="rgb(0,0,0)" stroke="none" id="Drawing_10_1" d="M 6331,4548 L 6313,4583 6700,4363 6261,4287 6289,4313 6313,4345 6331,4382 6343,4423 6347,4466 6342,4508 6331,4548 Z"/>
+   <objectPath fill="none" stroke="rgb(0,0,0)" id="Drawing_10_0" stroke-linejoin="round" d="M 4400,4763 L 6287,4435"/>
+   <objectPath fill="rgb(0,0,0)" stroke="none" id="Drawing_10_1" d="M 6331,4548 L 6313,4583 6700,4363 6261,4287 6289,4313 6313,4345 6331,4382 6343,4423 6347,4466 6342,4508 6331,4548 Z"/>
   </g>
   <g>
-   <path fill="none" stroke="rgb(0,0,0)" id="Drawing_11_0" stroke-linejoin="round" d="M 4400,7100 L 6497,9110"/>
-   <path fill="rgb(0,0,0)" stroke="none" id="Drawing_11_1" d="M 6432,9212 L 6394,9218 6800,9400 6601,9002 6597,9039 6585,9078 6566,9114 6540,9148 6508,9177 6471,9198 6432,9212 Z"/>
+   <objectPath fill="none" stroke="rgb(0,0,0)" id="Drawing_11_0" stroke-linejoin="round" d="M 4400,7100 L 6497,9110"/>
+   <objectPath fill="rgb(0,0,0)" stroke="none" id="Drawing_11_1" d="M 6432,9212 L 6394,9218 6800,9400 6601,9002 6597,9039 6585,9078 6566,9114 6540,9148 6508,9177 6471,9198 6432,9212 Z"/>
   </g>
   <g>
-   <path fill="none" stroke="rgb(0,0,0)" id="Drawing_12_0" stroke-linejoin="round" d="M 4300,9100 L 6473,7362"/>
-   <path fill="rgb(0,0,0)" stroke="none" id="Drawing_12_1" d="M 6565,7440 L 6566,7479 6800,7100 6379,7245 6416,7254 6452,7271 6486,7294 6516,7325 6540,7360 6556,7399 6565,7440 Z"/>
+   <objectPath fill="none" stroke="rgb(0,0,0)" id="Drawing_12_0" stroke-linejoin="round" d="M 4300,9100 L 6473,7362"/>
+   <objectPath fill="rgb(0,0,0)" stroke="none" id="Drawing_12_1" d="M 6565,7440 L 6566,7479 6800,7100 6379,7245 6416,7254 6452,7271 6486,7294 6516,7325 6540,7360 6556,7399 6565,7440 Z"/>
   </g>
   <g>
-   <path fill="none" stroke="rgb(0,0,0)" id="Drawing_13_0" stroke-linejoin="round" d="M 4300,9200 L 6386,9534"/>
-   <path fill="rgb(0,0,0)" stroke="none" id="Drawing_13_1" d="M 6391,9655 L 6362,9682 6800,9600 6410,9386 6427,9419 6439,9458 6445,9498 6443,9541 6433,9583 6414,9621 6391,9655 Z"/>
+   <objectPath fill="none" stroke="rgb(0,0,0)" id="Drawing_13_0" stroke-linejoin="round" d="M 4300,9200 L 6386,9534"/>
+   <objectPath fill="rgb(0,0,0)" stroke="none" id="Drawing_13_1" d="M 6391,9655 L 6362,9682 6800,9600 6410,9386 6427,9419 6439,9458 6445,9498 6443,9541 6433,9583 6414,9621 6391,9655 Z"/>
   </g>
   <g>
-   <path fill="none" stroke="rgb(0,0,0)" id="Drawing_14_0" stroke-linejoin="round" d="M 7900,4300 L 10010,6498"/>
-   <path fill="rgb(0,0,0)" stroke="none" id="Drawing_14_1" d="M 9940,6597 L 9902,6602 10300,6800 10118,6394 10112,6431 10098,6469 10078,6505 10051,6538 10017,6565 9980,6584 9940,6597 Z"/>
+   <objectPath fill="none" stroke="rgb(0,0,0)" id="Drawing_14_0" stroke-linejoin="round" d="M 7900,4300 L 10010,6498"/>
+   <objectPath fill="rgb(0,0,0)" stroke="none" id="Drawing_14_1" d="M 9940,6597 L 9902,6602 10300,6800 10118,6394 10112,6431 10098,6469 10078,6505 10051,6538 10017,6565 9980,6584 9940,6597 Z"/>
   </g>
   <g>
-   <path fill="none" stroke="rgb(0,0,0)" id="Drawing_15_0" stroke-linejoin="round" d="M 7900,7000 L 9881,7000"/>
-   <path fill="rgb(0,0,0)" stroke="none" id="Drawing_15_1" d="M 9905,7119 L 9881,7150 10300,7000 9881,6850 9903,6880 9921,6916 9934,6956 9938,6998 9935,7041 9923,7082 9905,7119 Z"/>
+   <objectPath fill="none" stroke="rgb(0,0,0)" id="Drawing_15_0" stroke-linejoin="round" d="M 7900,7000 L 9881,7000"/>
+   <objectPath fill="rgb(0,0,0)" stroke="none" id="Drawing_15_1" d="M 9905,7119 L 9881,7150 10300,7000 9881,6850 9903,6880 9921,6916 9934,6956 9938,6998 9935,7041 9923,7082 9905,7119 Z"/>
   </g>
   <g>
-   <path fill="none" stroke="rgb(0,0,0)" id="Drawing_16_0" stroke-linejoin="round" d="M 7900,9700 L 10010,7502"/>
-   <path fill="rgb(0,0,0)" stroke="none" id="Drawing_16_1" d="M 10112,7568 L 10118,7606 10300,7200 9902,7398 9939,7403 9977,7415 10014,7433 10048,7460 10077,7492 10097,7529 10112,7568 Z"/>
+   <objectPath fill="none" stroke="rgb(0,0,0)" id="Drawing_16_0" stroke-linejoin="round" d="M 7900,9700 L 10010,7502"/>
+   <objectPath fill="rgb(0,0,0)" stroke="none" id="Drawing_16_1" d="M 10112,7568 L 10118,7606 10300,7200 9902,7398 9939,7403 9977,7415 10014,7433 10048,7460 10077,7492 10097,7529 10112,7568 Z"/>
   </g>
  </g>
 </svg>

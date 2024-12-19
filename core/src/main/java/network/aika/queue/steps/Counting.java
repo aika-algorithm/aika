@@ -31,7 +31,7 @@ import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 public class Counting extends ElementStep<Activation> {
 
     public static void add(Activation act) {
-        if (act.getConfig().isCountingEnabled() && !act.getNeuron().isAbstract())
+        if (act.getConfig().isCountingEnabled() /*&& !act.getNeuron().isAbstract()*/)
             Step.add(new Counting(act));
     }
 

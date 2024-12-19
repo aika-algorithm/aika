@@ -17,70 +17,40 @@
 package network.aika.elements.activations;
 
 import network.aika.Document;
+import network.aika.elements.typedef.StateDefinition;
 import network.aika.fields.*;
-import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fields.link.FieldLink;
 import network.aika.queue.Queue;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.queue.steps.Fired;
 
-import static network.aika.debugger.EventType.UPDATE;
-import static network.aika.fields.Fields.func;
+import static network.aika.elements.typedef.FieldTags.VALUE;
 import static network.aika.fields.Fields.isTrue;
 import static network.aika.queue.Timestamp.NOT_SET;
-import static network.aika.queue.Phase.INFERENCE;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class State implements FieldObject {
-
-    protected StateType type;
-
-    protected boolean isNextRound;
+public class State extends ObjImpl<StateDefinition, State> implements QueueProvider {
 
     protected Activation act;
-
-    protected SumField net;
-
-    protected FieldFunction value;
 
     protected Timestamp fired = NOT_SET;
     protected Fired firedStep = new Fired(this);
 
 
-    public State(Activation act, StateType type, boolean isNextRound) {
-        this.act = act;
+    public State(StateDefinition type, Activation act) {
         this.type = type;
-        this.isNextRound = isNextRound;
-
-        init();
+        this.act = act;
     }
 
-    protected void init() {
-        net = new SumField(this, "net", null);
-
-        net.addListener("onFired", (fl, u) ->
-                updateFiredStep(fl)
-        );
-
-        value = func(
-                this,
-                "value = f(net)",
-                TOLERANCE,
-                net,
-                x -> act.getActivationFunction().f(x)
-        );
-        value.setQueued(getQueue(), INFERENCE, isNextRound);
-
-        value.addListener("onFired", (fl, u) -> {
-            if (isTrue(value, false) != isTrue(value, true))
-                getDocument().onElementEvent(UPDATE, act);
-        });
+    private Field getValue() {
+        return getField(VALUE);
     }
 
-    private void updateFiredStep(AbstractFieldLink fl) {
+    public void updateFiredStep(FieldLink fl) {
         FieldOutput net = fl.getInput();
         if(!net.exceedsThreshold() || fired != NOT_SET)
             return;
@@ -93,20 +63,8 @@ public class State implements FieldObject {
         doc.addStep(firedStep);
     }
 
-    public StateType getType() {
-        return type;
-    }
-
-    public FieldOutput getValue() {
-        return value;
-    }
-
-    public void setNet(double v) {
-        net.setValue(v);
-    }
-
-    public SumField getNet() {
-        return net;
+    public StateType getStateType() {
+        return this.getType().getStateType();
     }
 
     public Timestamp getFired() {
@@ -122,12 +80,7 @@ public class State implements FieldObject {
     }
 
     public boolean isFired() {
-        return isTrue(value, true);
-    }
-
-    @Override
-    public void disconnect() {
-        net.disconnectAndUnlinkInputs(false);
+        return isTrue(getValue(), true);
     }
 
     @Override
@@ -135,15 +88,26 @@ public class State implements FieldObject {
         return act.getQueue();
     }
 
+    @Override
+    public boolean isNextRound() {
+        return this.getType().isNextRound();
+    }
+
     public Document getDocument() {
         return act.getDocument();
     }
 
-    public Activation<?> getActivation() {
+    public Activation getActivation() {
         return act;
     }
 
+    @Override
+    public String toKeyString() {
+        return "state:" + getStateType() + " " + act.toKeyString();
+    }
+
+    @Override
     public String toString() {
-        return act.toString() + " type:" + type;
+        return getClass().getSimpleName() + " type:" + getStateType() + " act:" + act.toKeyString();
     }
 }

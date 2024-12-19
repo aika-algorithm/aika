@@ -16,12 +16,12 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fields.link.FieldLink;
 
 /**
  * @author Lukas Molzberger
  */
-public interface UpdateListener<F extends AbstractFieldLink> {
+public interface UpdateListener<F extends FieldLink> {
 
     void receiveUpdate(F fl, double u);
 }

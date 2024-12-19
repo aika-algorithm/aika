@@ -16,51 +16,50 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.AbstractFieldLink;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.FieldInputs;
 import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
 import network.aika.utils.FieldWritable;
-import network.aika.utils.StringUtils;
-import network.aika.utils.ToleranceUtils;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.stream.Collectors;
 
+import static network.aika.utils.StringUtils.depthToSpace;
 
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class Field<F extends FieldLink> implements FieldInput<F>, FieldOutput, FieldWritable {
+public class Field<O extends Obj, I extends FieldInputs<F>, F extends FieldLink> extends FieldOutputImpl implements FieldInput<I, F>, FieldOutput, FieldWritable {
 
-    private static double MIN_TOLERANCE = 0.0000000001;
+    private FieldDefinition fieldDefinition;
 
-    private String label;
-    private FieldObject reference;
-
-    protected double value;
+    private O object;
 
     private boolean blocked;
 
-    private boolean withinUpdate;
-    private double updatedValue;
-
-    private Collection<AbstractFieldLink> receivers;
-
-    protected Double tolerance;
-
     QueueInterceptor interceptor;
 
-    public Field(FieldObject reference, String label, Double tolerance) {
-        this.reference = reference;
-        this.label = label;
-        this.tolerance = tolerance;
+    private I inputs;
 
-        initIO();
+    public Field(I inputs) {
+        this.inputs = inputs;
+    }
+
+    @Override
+    public I getInputs() {
+        return inputs;
+    }
+
+    @Override
+    public O getObject() {
+        return object;
+    }
+
+    public void setObject(O object) {
+        this.object = object;
     }
 
     public <F extends Field> F setQueued(Queue q, ProcessingPhase phase, boolean isNextRound) {
@@ -68,13 +67,26 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
         return (F) this;
     }
 
-    protected void initIO() {
-        receivers = new ArrayList<>();
-    }
-
     public Field setInitialValue(double initialValue) {
         value = initialValue;
         return this;
+    }
+
+    public void setFieldDefinition(FieldDefinition fieldDefinition) {
+        this.fieldDefinition = fieldDefinition;
+    }
+
+    public FieldDefinition getFieldDefinition() {
+        return fieldDefinition;
+    }
+
+    protected Double getTolerance() {
+        return fieldDefinition.getTolerance();
+    }
+
+    @Override
+    protected FieldTag getFieldTag() {
+        return fieldDefinition.getFieldTag();
     }
 
     public void setValue(double v) {
@@ -87,83 +99,6 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
 
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
-    }
-
-    @Override
-    public boolean isWithinUpdate() {
-        return withinUpdate;
-    }
-
-    @Override
-    public FieldObject getReference() {
-        return reference;
-    }
-
-    public void setReference(FieldObject reference) {
-        this.reference = reference;
-    }
-
-    @Override
-    public String getLabel() {
-        return label;
-    }
-
-    @Override
-    public double getValue() {
-        return value;
-    }
-
-    @Override
-    public double getUpdatedValue() {
-        return withinUpdate ?
-                updatedValue :
-                value;
-    }
-
-    public synchronized void connectInputs(boolean initialize) {
-        getInputs().forEach(fl ->
-                fl.connect(initialize)
-        );
-    }
-
-    public synchronized void disconnectInputs(boolean deinitialize) {
-        getInputs().forEach(fl ->
-                fl.disconnect(deinitialize)
-        );
-    }
-
-    public synchronized void disconnectAndUnlinkInputs(boolean deinitialize) {
-        getInputs().forEach(fl -> {
-            fl.disconnect(deinitialize);
-            fl.unlinkInput();
-        });
-    }
-
-    public void disconnectAndUnlinkOutputs(boolean deinitialize) {
-        synchronized (this.receivers) {
-            receivers.forEach(fl -> {
-                fl.disconnect(deinitialize);
-                fl.unlinkOutput();
-            });
-        }
-    }
-
-    public Collection<AbstractFieldLink> getReceivers() {
-        return receivers;
-    }
-
-    @Override
-    public void addOutput(AbstractFieldLink fl) {
-        synchronized (this.receivers) {
-            this.receivers.add(fl);
-        }
-    }
-
-    @Override
-    public void removeOutput(AbstractFieldLink fl) {
-        synchronized (this.receivers) {
-            this.receivers.remove(fl);
-        }
     }
 
     public QueueInterceptor getInterceptor() {
@@ -188,51 +123,17 @@ public abstract class Field<F extends FieldLink> implements FieldInput<F>, Field
         triggerUpdate(u);
     }
 
-    public void triggerUpdate(double u) {
-        if(ToleranceUtils.belowTolerance(tolerance, u))
-            return;
-
-        withinUpdate = true;
-
-        updatedValue = value + u;
-        if(updatedValue > -MIN_TOLERANCE && updatedValue < MIN_TOLERANCE) {
-            updatedValue = 0.0; // TODO: Find a better solution to this hack
-        }
-
-        propagateUpdate(u);
-        value = updatedValue;
-
-        withinUpdate = false;
+    public String dumpField(int depth) {
+        return depthToSpace(depth) + this +
+                dumpFieldLinks(depth + 2);
     }
 
-    protected void propagateUpdate(double update) {
-        AbstractFieldLink[] recs;
+    public String dumpFieldLinks(int depth) {
+        if(getInputs().getInputs().findAny().isEmpty())
+            return "";
 
-        synchronized (this.receivers) {
-            recs = receivers.toArray(new AbstractFieldLink[0]);
-        }
-
-        for(int i = 0; i < recs.length; i++) {
-            recs[i].receiveUpdate(update);
-        }
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        out.writeDouble(value);
-    }
-
-    @Override
-    public void readFields(DataInput in) throws IOException {
-        value = in.readDouble();
-    }
-
-    @Override
-    public String toString() {
-        return getLabel() + ": " + getValueString();
-    }
-
-    public String getValueString() {
-        return StringUtils.doubleToString(getValue());
+        return getInputs().getInputs()
+                .map(fl -> fl.dumpFieldLink(depth))
+                .collect(Collectors.joining("\n", "\n", ""));
     }
 }

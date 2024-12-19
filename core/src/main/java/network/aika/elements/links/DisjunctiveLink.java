@@ -18,35 +18,19 @@ package network.aika.elements.links;
 
 import network.aika.elements.activations.Activation;
 import network.aika.elements.synapses.DisjunctiveSynapse;
-import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
+import network.aika.elements.synapses.Synapse;
+import network.aika.elements.typedef.LinkDefinition;
 import network.aika.enums.direction.Direction;
-
-import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.mul;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class DisjunctiveLink<S extends DisjunctiveSynapse, IA extends Activation<?>, OA extends Activation<?>>
-        extends Link<S, IA, OA, DisjunctiveSynapseSlot, DisjunctiveSynapseSlot> {
+public class DisjunctiveLink extends Link {
 
-    public DisjunctiveLink(S s, IA input, OA output) {
-        super(s, input, output);
+    public DisjunctiveLink(LinkDefinition type, Synapse s, Activation input, Activation output) {
+        super(type, s, input, output);
 
         setState(Direction.INPUT, true);
         setState(Direction.OUTPUT, true);
-    }
-
-    @Override
-    public void connectWeightUpdate() {
-        linkAndConnect(
-                mul(
-                        this,
-                        "weight update",
-                        inputIsFired,
-                        getOutput().getUpdateValue()
-                ),
-                synapse.getWeight()
-        );
     }
 }

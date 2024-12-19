@@ -43,7 +43,7 @@ public abstract class Relation implements Writable {
 
     public abstract int getRelationType();
 
-    public abstract Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation<?> toPreAct, Direction dir);
+    public abstract Stream<Activation> evaluateLatentRelation(Synapse s, TextReference ref, Activation fromAct, PreActivation toPreAct, Direction dir);
 
     public void createLatentRelation(Activation oAct, Activation fromOriginAct, Activation toOriginAct) {
 
@@ -55,7 +55,7 @@ public abstract class Relation implements Writable {
             case 2 -> new ContainsRelation();
             case 3 -> new EqualsRelation();
             case 4 -> new NearRelation();
-            case 5 -> new LatentProxyRelation();
+//            case 5 -> new LatentProxyRelation();
             default -> null;
         };
         rel.readFields(in, m);

@@ -16,22 +16,37 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.FieldLink;
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
+import network.aika.fielddefs.Type;
+import network.aika.fields.link.FixedFieldLink;
 
 /**
  * @author Lukas Molzberger
  */
-public class ScaleFunction extends AbstractFunction {
+public class ScaleFunction<O extends Obj> extends AbstractFunction<O> {
+
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> scale(T ref, FieldTag fieldTag, double scale) {
+        return new FieldDefinition(
+                ScaleFunction.class,
+                ref,
+                fieldTag,
+                scale
+        );
+    }
 
     private double scale;
 
-    public ScaleFunction(FieldObject ref, String label, double scale) {
-        super(ref, label);
+    public ScaleFunction() {
+        super(1);
+    }
+
+    public void setScale(double scale) {
         this.scale = scale;
     }
 
     @Override
-    protected double computeUpdate(FieldLink fl, double u) {
+    protected double computeUpdate(FixedFieldLink fl, double u) {
         return scale * u;
     }
 }

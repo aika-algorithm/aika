@@ -17,12 +17,8 @@
 package network.aika.visitor.operator;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.links.Link;
-import network.aika.elements.relations.Relation;
-import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
-import network.aika.enums.direction.Direction;
 import network.aika.visitor.DownVisitor;
 import network.aika.visitor.UpVisitor;
 
@@ -32,23 +28,23 @@ import network.aika.visitor.UpVisitor;
  */
 public class SubsumesOperator implements Operator {
 
-    private PatternActivation target;
+    private Activation target;
 
-    private PatternActivation startBS;
+    private Activation startBS;
 
     private boolean subsumes;
 
-    public SubsumesOperator(PatternActivation target, PatternActivation startBS) {
+    public SubsumesOperator(Activation target, Activation startBS) {
         this.target = target;
         this.startBS = startBS;
     }
 
     @Override
-    public PatternActivation getBindingSignal() {
+    public Activation getBindingSignal() {
         return startBS;
     }
 
-    public static boolean subsumes(Scope s, PatternActivation a, PatternActivation b) {
+    public static boolean subsumes(Scope s, Activation a, Activation b) {
         if(a == b)
             return true;
 

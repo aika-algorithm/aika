@@ -16,48 +16,24 @@
  */
 package network.aika.elements.synapses;
 
-import network.aika.elements.activations.Activation;
-import network.aika.elements.links.Link;
-import network.aika.elements.neurons.Neuron;
-import network.aika.elements.synapses.slots.DisjunctiveSynapseSlot;
-import network.aika.enums.direction.Direction;
 
-import static network.aika.enums.direction.Direction.INPUT;
-import static network.aika.enums.direction.Direction.OUTPUT;
+import network.aika.elements.neurons.Neuron;
+import network.aika.elements.typedef.SynapseDefinition;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class DisjunctiveSynapse<
-        S extends DisjunctiveSynapse,
-        I extends Neuron,
-        O extends Neuron<O, OA>,
-        L extends Link<S, IA, OA, DisjunctiveSynapseSlot, DisjunctiveSynapseSlot>,
-        IA extends Activation<?>,
-        OA extends Activation<?>
-        > extends Synapse<S, I, O, L, IA, OA>
+public class DisjunctiveSynapse extends Synapse
 {
+    public DisjunctiveSynapse(SynapseDefinition type, Neuron input, Neuron output) {
+        super(type, input, output);
 
-    @Override
-    public DisjunctiveSynapseSlot createInputSlot(Activation iAct) {
-        return new DisjunctiveSynapseSlot(INPUT);
-    }
-
-    @Override
-    public DisjunctiveSynapseSlot createOutputSlot(Activation oAct) {
-        return new DisjunctiveSynapseSlot(OUTPUT);
+        propagable = true;
     }
 
     @Override
     public void link() {
         input.addOutputSynapse(this);
-    }
-
-    @Override
-    public void setModified() {
-        I in = getInput();
-        if(in != null)
-            in.setModified();
     }
 }

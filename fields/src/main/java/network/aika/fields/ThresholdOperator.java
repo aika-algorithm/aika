@@ -16,14 +16,26 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.FieldLink;
+import network.aika.fielddefs.*;
+import network.aika.fields.link.FixedFieldLink;
+
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * @author Lukas Molzberger
  */
-public class  ThresholdOperator extends AbstractFunction {
+public class ThresholdOperator<O extends Obj> extends AbstractFunction<O> {
 
-    public enum Type {
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> threshold(T ref, FieldTag fieldTag, double threshold, Comparison type) {
+        return new ThresholdOperatorFieldDefinition<>(ref, fieldTag, threshold, type);
+    }
+
+    public static <D extends Type<D, O>, O extends Obj<D, O>> FieldDefinition<D, O> threshold(D ref, FieldTag fieldTag, double threshold, Comparison type, boolean isFinal, Consumer<O> pathProvider, String in) {
+        return new ThresholdOperatorFieldDefinition<>(ref, fieldTag, threshold, type, isFinal);
+    }
+
+    public enum Comparison {
         ABOVE,
         BELOW,
         BELOW_OR_EQUAL,
@@ -31,22 +43,27 @@ public class  ThresholdOperator extends AbstractFunction {
     }
 
     private double threshold;
-    private Type type;
+    private Comparison comparison;
     private boolean isFinal = false;
 
-    public ThresholdOperator(FieldObject ref, String label, double threshold, Type type) {
-        super(ref, label);
-        this.threshold = threshold;
-        this.type = type;
+    public ThresholdOperator() {
+        super(1);
     }
 
-    public ThresholdOperator(FieldObject ref, String label, double threshold, Type type, boolean isFinal) {
-        this(ref, label, threshold, type);
-        this.isFinal = isFinal;
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
+
+    public void setComparison(Comparison comparison) {
+        this.comparison = comparison;
+    }
+
+    public void setFinal(boolean aFinal) {
+        isFinal = aFinal;
     }
 
     @Override
-    protected double computeUpdate(FieldLink fl, double u) {
+    protected double computeUpdate(FixedFieldLink fl, double u) {
         if(isFinal && value > 0.5)
             return 0.0;
 
@@ -54,7 +71,7 @@ public class  ThresholdOperator extends AbstractFunction {
     }
 
     protected double threshold(double x) {
-        return switch (type) {
+        return switch (comparison) {
             case ABOVE -> x > threshold ? 1.0 : 0.0;
             case BELOW -> x < threshold ? 1.0 : 0.0;
             case BELOW_OR_EQUAL -> x <= threshold ? 1.0 : 0.0;

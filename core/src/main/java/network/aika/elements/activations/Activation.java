@@ -19,63 +19,52 @@ package network.aika.elements.activations;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.elements.Element;
-import network.aika.elements.Type;
-import network.aika.elements.activations.bsslots.BSSlotDefinition;
+import network.aika.elements.ModelProvider;
+import network.aika.elements.NeuronType;
+import network.aika.elements.typedef.BSSlotDefinition;
 import network.aika.elements.activations.bsslots.BindingSignalSlot;
 import network.aika.elements.activations.bsslots.SingleBSSlot;
-import network.aika.elements.activations.types.PatternActivation;
-import network.aika.elements.links.CategoryInputLink;
-import network.aika.elements.links.CategoryLink;
 import network.aika.elements.links.Link;
-import network.aika.ActivationFunction;
-import network.aika.elements.neurons.CategoryNeuron;
+import network.aika.fielddefs.Type;
+import network.aika.fields.ActivationFunction;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.neurons.NeuronProvider;
 import network.aika.elements.synapses.*;
 import network.aika.elements.synapses.slots.SynapseSlot;
+import network.aika.elements.typedef.*;
 import network.aika.enums.Scope;
+import network.aika.fields.ObjImpl;
 import network.aika.queue.Queue;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
-import network.aika.queue.steps.InactiveLinks;
 import network.aika.text.TextReference;
-import network.aika.text.Range;
-import network.aika.fields.*;
+import network.aika.Range;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static network.aika.debugger.EventType.*;
-import static network.aika.elements.activations.StateType.PRE_FEEDBACK;
+import static network.aika.elements.activations.StateType.NON_FEEDBACK;
 import static network.aika.elements.activations.StateType.INNER_FEEDBACK;
 import static network.aika.elements.neurons.RefType.TEMPLATE;
-import static network.aika.fields.link.FieldLink.linkAndConnect;
-import static network.aika.fields.Fields.*;
-import static network.aika.queue.Phase.*;
+import static network.aika.elements.typedef.FieldTags.NET;
 import static network.aika.queue.Timestamp.NOT_SET;
 import static network.aika.text.TextReference.join;
-import static network.aika.utils.Utils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class Activation<N extends Neuron> implements Element, Comparable<Activation> {
+public class Activation extends ObjImpl<ActivationDefinition, Activation> implements Element, ModelProvider, QueueProvider, Comparable<Activation> {
 
     public static final Comparator<Activation> ID_COMPARATOR = Comparator.comparingInt(Activation::getId);
 
-    protected final int id;
-    protected N neuron;
+    protected final Integer id;
+    protected Neuron neuron;
     protected Document doc;
 
     protected Timestamp created = NOT_SET;
 
-    protected State[] states = new State[numberOfStates()];
-
-    protected FieldFunction netOuterGradient;
-    protected Field gradient;
-
-    protected Field updateValue;
-
-    protected FieldOutput negUpdateValue;
+    protected State[] states;
 
     protected NavigableMap<Integer, SynapseSlot> inputSlots = new TreeMap<>();
     protected NavigableMap<Long, SynapseSlot> outputSlots = new TreeMap<>();
@@ -89,7 +78,8 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     protected HashMap<Integer, Integer> templateSynIdMap;
 
-    public Activation(int id, Document doc, N n) {
+    public Activation(ActivationDefinition t, Integer id, Document doc, Neuron n) {
+        this.type = t;
         this.id = id;
         this.neuron = n;
         this.doc = doc;
@@ -97,33 +87,16 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         neuron.register(this);
         doc.register(this);
 
-        setCreated(doc.getCurrentTimestamp());
-
-        initNet();
-
-        initBiases();
+        initStates();
 
         initBindingSignalSlots();
 
-        gradient = new SumField(this, "gradient", TOLERANCE)
-                .setQueued(getQueue(), TRAINING, false);
-
-        if (getConfig().isTrainingEnabled() && neuron.isTrainingAllowed()) {
-            connectGradientFields();
-            connectWeightUpdate();
-            InactiveLinks.add(this);
-        }
-
-        doc.onElementEvent(CREATE, this);
+        setCreated(doc.getCurrentTimestamp());
     }
 
 
-    public Type getType() {
-        return neuron.getType();
-    }
-
-
-    protected void connectWeightUpdate() {
+    public NeuronType getNeuronType() {
+        return neuron.getNeuronType();
     }
 
     public void registerTemplateInstanceSynapse(int templateSynId, int instanceSynId) {
@@ -140,6 +113,13 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return templateSynIdMap.get(templateSynId);
     }
 
+    protected void initBindingSignalSlots() {
+        Stream<BSSlotDefinition> bsSlots = neuron.getBindingSignalSlots();
+        bsSlots.forEach(slotDef ->
+                bindingSignalSlots[slotDef.getScope().ordinal()] = slotDef.instantiate(this)
+        );
+    }
+
     public BindingSignalSlot getBindingSignalSlot(Scope t) {
         return bindingSignalSlots[t.ordinal()];
     }
@@ -151,44 +131,34 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public SynapseSlot registerOutputSlot(Synapse syn) {
         return outputSlots.computeIfAbsent(syn.getOutput().getId(), nId ->
-                syn.createAndInitInputSlot(this)
+                syn.createInputSlot(this)
         );
     }
 
     public SynapseSlot registerInputSlot(Synapse syn) {
         return inputSlots.computeIfAbsent(syn.getSynapseId(), nId ->
-            syn.createAndInitOutputSlot(this)
+            syn.createOutputSlot(this)
         );
     }
 
-    protected void initNet() {
-        states[PRE_FEEDBACK.ordinal()] = new State(this, PRE_FEEDBACK, isNextRound());
+    protected void initStates() {
+        StateDefinition[] stateDefs = this.getType().getStates();
+        states = new State[stateDefs.length];
+
+        Stream.of(stateDefs)
+                .forEach(sd ->
+                        states[sd.getStateType().ordinal()] = sd.instantiate(this)
+                );
     }
 
-    protected boolean isNextRound() {
-        return false;
-    }
-
-    protected void initBiases() {
-        linkAndConnect(getNeuron().getBias(), getNet(PRE_FEEDBACK))
-                .setPropagateUpdates(false);
-    }
-
-    protected void initBindingSignalSlots() {
-        Stream<BSSlotDefinition> bsSlots = neuron.getBindingSignalSlots();
-        bsSlots.forEach(slotDef ->
-                bindingSignalSlots[slotDef.getScope().ordinal()] = BindingSignalSlot.create(this, slotDef)
-        );
-    }
-
-    public void propagateBindingSignal(Scope t, PatternActivation bs, boolean state) {
+    public void propagateBindingSignal(Scope t, Activation bs, boolean state) {
         getOutputLinks()
                 .forEach(l ->
                         l.propagateBindingSignal(bs, t, state)
                 );
     }
 
-    public PatternActivation getBindingSignal(Scope t) {
+    public Activation getBindingSignal(Scope t) {
         SingleBSSlot slot = (SingleBSSlot) getBindingSignalSlot(t);
 
         return slot != null ?
@@ -198,37 +168,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public boolean isNewInstance() {
         return isNewInstance;
-    }
-
-    public boolean isAbstract() {
-        return neuron.isAbstract();
-    }
-
-    protected void connectGradientFields() {
-        netOuterGradient =
-                func(
-                        this,
-                        "f'(net)",
-                        TOLERANCE,
-                        getNet(PRE_FEEDBACK),
-                        x -> getNeuron().getActivationFunction().outerGrad(x)
-        );
-    }
-
-    public FieldFunction getNetOuterGradient() {
-        return netOuterGradient;
-    }
-
-    public Field getGradient() {
-        return gradient;
-    }
-
-    public Field getUpdateValue() {
-        return updateValue;
-    }
-
-    public FieldOutput getNegUpdateValue() {
-        return negUpdateValue;
     }
 
     public int getId() {
@@ -243,34 +182,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         this.created = ts;
     }
 
-    protected int numberOfStates() {
-        return 1;
-    }
-
-    public Field getValue() {
-        return getValue(PRE_FEEDBACK);
-    }
-
     public State getState(StateType st) {
         if(st.ordinal() >= states.length)
             return states[states.length - 1];
 
         return states[st.ordinal()];
-    }
-
-    public Field getValue(StateType st) {
-        if(st == null)
-            return getValue();
-
-        return getState(st).value;
-    }
-
-    public void setNet(StateType st, double v) {
-        getNet(st).setValue(v);
-    }
-
-    public SumField getNet(StateType st) {
-        return getState(st).net;
     }
 
     public void setFired(StateType st, Timestamp fired) {
@@ -286,7 +202,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     @Override
     public Timestamp getFired() {
-        return getFired(PRE_FEEDBACK);
+        return getFired(NON_FEEDBACK);
     }
 
     public boolean isFired(StateType st) {
@@ -302,6 +218,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return doc;
     }
 
+    @Override
+    public boolean isNextRound() {
+        return false;
+    }
+
     public TextReference getTextReference() {
         return textReference;
     }
@@ -315,7 +236,6 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
             propagateRanges();
         }
-        doc.onElementEvent(TOKEN_POSITION, this);
     }
 
     protected void registerPosRange(TextReference oldTextReference, TextReference newTextReference) {
@@ -352,11 +272,11 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return false;
     }
 
-    public N getNeuron() {
+    public Neuron getNeuron() {
         return neuron;
     }
 
-    public void setNeuron(N n) {
+    public void setNeuron(Neuron n) {
         this.neuron = n;
     }
 
@@ -377,19 +297,16 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return neuron.getProvider();
     }
 
-    public boolean checkPrimary() {
-        return true;
-    }
-
-    public <IL> Optional<IL> getInputLinkByType(Class<IL> linkType) {
+    public Optional<Link> getInputLinkByType(Type<LinkDefinition, Link> linkType) {
         return getInputLinksByType(linkType)
                 .findAny();
     }
 
     public Stream<Link> getInputLinks() {
         return getInputSlots()
-                .flatMap(sl -> sl.getLinks())
-                .toList().stream();
+                .flatMap(SynapseSlot::getLinks)
+                .toList()
+                .stream();
     }
 
     public Stream<SynapseSlot> getInputSlots() {
@@ -397,17 +314,16 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .stream();
     }
 
-    public SynapseSlot getInputSlotBySynapseType(Class<? extends Synapse> synType) {
+    public SynapseSlot getInputSlotBySynapseType(Type<SynapseDefinition, Synapse> synType) {
         return getInputSlots()
                 .filter(s -> synType.isInstance(s.getSynapse()))
                 .findFirst()
                 .orElse(null);
     }
 
-    public <IS extends SynapseSlot> Stream<IS> getInputSlotsByType(Class<IS> slotType) {
+    public  Stream<SynapseSlot> getInputSlotsByType(Type<SynapseSlotDefinition, SynapseSlot> slotType) {
         return getInputSlots()
-                .filter(slotType::isInstance)
-                .map(slotType::cast);
+                .filter(slotType::isInstance);
     }
 
     public Stream<Link> getOutputLinks() {
@@ -421,10 +337,9 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .stream();
     }
 
-    public <OS extends SynapseSlot> Stream<OS> getOutputSlotsByType(Class<OS> slotType) {
+    public Stream<SynapseSlot> getOutputSlotsByType(Type<SynapseSlotDefinition, SynapseSlot> slotType) {
         return getOutputSlots()
-                .filter(slotType::isInstance)
-                .map(slotType::cast);
+                .filter(slotType::isInstance);
     }
 
     public Link getInputLink(Activation iAct, int synapseId) {
@@ -441,16 +356,14 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 Stream.empty();
     }
 
-    public <IL> Stream<IL> getInputLinksByType(Class<IL> linkType) {
+    public Stream<Link> getInputLinksByType(Type<LinkDefinition, Link> linkType) {
         return getInputLinks()
-                .filter(linkType::isInstance)
-                .map(linkType::cast);
+                .filter(linkType::isInstance);
     }
 
-    public <OL> Stream<OL> getOutputLinksByType(Class<OL> linkType) {
+    public Stream<Link> getOutputLinksByType(Type<LinkDefinition, Link> linkType) {
         return getOutputLinks()
-                .filter(linkType::isInstance)
-                .map(linkType::cast);
+                .filter(linkType::isInstance);
     }
 
     public Stream<Link> getOutputLinks(Neuron n) {
@@ -465,95 +378,41 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
                 .filter(l -> l.getSynapse() == s);
     }
 
-    @Override
-    public void disconnect() {
-        for(State s: states)
-            s.disconnect();
-
-        if(updateValue != null)
-            updateValue.disconnectAndUnlinkOutputs(false);
-
-        if(negUpdateValue != null)
-            negUpdateValue.disconnectAndUnlinkOutputs(false);
-
-        getInputSlots().forEach(SynapseSlot::disconnect);
-    }
-
-    public Activation getTemplate() {
-        return getCategoryActivations()
-                .map(CategoryActivation::getTemplate)
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
-    }
-
-    public Stream<CategoryActivation> getCategoryActivations() {
-        return getOutputLinksByType(CategoryLink.class)
-                .map(l -> (CategoryActivation) l.getOutput())
-                .filter(Objects::nonNull);
-    }
-
-    public Neuron getTemplateNeuron() {
-        return getCategoryActivations()
-                .map(Activation::getNeuron)
-                .map(CategoryNeuron::getOutgoingCategoryInputSynapse)
-                .map(CategoryInputSynapse::getOutput)
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
-    }
-
-    public Stream<Activation> getTemplateInstances() {
-        CategoryInputLink cil = getActiveCategoryInputLink();
-        if(cil == null || cil.getInput() == null)
-            return Stream.empty();
-
-        return cil.getInput()
-                .getCategoryInputs();
-    }
-
     public boolean isActiveTemplateInstance() {
         return isNewInstance ||
                 isFired(INNER_FEEDBACK);
     }
 
-    public abstract CategoryInputLink getActiveCategoryInputLink();
-
-    public Activation<N> resolveAbstractInputActivation(boolean isSynapseInstantiable) {
+    public Activation resolveAbstractInputActivation(boolean isSynapseInstantiable) {
         return isSynapseInstantiable && neuron.isInstantiable() ?
                 getActiveTemplateInstance() :
                 this;
     }
 
     public Activation getActiveTemplateInstance() {
-        CategoryInputLink l = getActiveCategoryInputLink();
-        return l != null && l.getInput() != null ?
-                l.getInput().getActiveCategoryInput() :
-                null;
+        return null;
     }
 
-    public Activation<N> instantiateTemplateNode() {
+    public Activation instantiateTemplateNode() {
         if(!neuron.isInstantiable())
             return null;
 
-        N n = null;
+        Neuron n = null;
         if(doc.getInstantiationCallback() != null) {
-            n = (N) doc.getInstantiationCallback().resolveInstance(neuron, doc);
+            n = doc.getInstantiationCallback().resolveInstance(neuron, doc);
         }
 
         boolean newNeuronInstance = false;
         if(n == null) {
-            n = (N) neuron.instantiateTemplate();
+            n = neuron.instantiateTemplate();
             newNeuronInstance = true;
         }
 
-        Activation<N> ti = n.createActivation(getDocument());
+        Activation ti = n.createActivation(getDocument());
 
         ti.textReference = textReference;
         ti.isNewInstance = true;
         ti.setFired(INNER_FEEDBACK, getFired(INNER_FEEDBACK));
-
-        doc.onElementEvent(TOKEN_POSITION, ti);
 
         linkTemplateAndInstance(ti);
         instantiateTemplateEdges(ti);
@@ -570,30 +429,21 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
         return ti;
     }
 
-    protected void linkTemplateAndInstance(Activation<N> ti) {
-        CategoryInputLink cl = getActiveCategoryInputLink();
-        if(cl == null)
-            cl = createCategoryInputLink();
+    protected void linkTemplateAndInstance(Activation ti) {
+/*        Link cil = getActiveCategoryInputLink();
+        if(cil == null)
+            cil = createCategoryInputLink();
 
-        cl.instantiateCategoryLink(ti);
+        CategoryActivation cAct = (CategoryActivation) cil.getOutput();
+        cAct.instantiateCategoryLink(ti);*/
     }
 
-    public CategoryInputLink createCategoryInputLink() {
-        CategoryInputSynapse cis = getNeuron().getCategoryInputSynapse();
-        if(cis == null)
-            return null;
 
-        CategoryActivation catAct = cis.getInput().createActivation(doc);
-
-        Synapse s = ((Synapse)cis);
-        return (CategoryInputLink) s.createAndInitLink(catAct, this);
-    }
-
-    public void instantiateTemplateEdges(Activation<N> instanceAct) {
+    public void instantiateTemplateEdges(Activation instanceAct) {
         getInputLinks()
                 .filter(l -> l.getSynapse().isOutputSideInstantiable())
                 .filter(l -> l.getInput() != null)
-                .filter(l -> l.getInput().isFired(INNER_FEEDBACK) || l instanceof CategoryInputLink) // Should this condition rely on the annealing value instead of instanceof?
+                .filter(l -> l.getInput().isFired(INNER_FEEDBACK)) // Should this condition rely on the annealing value instead of instanceof?
                 .forEach(l ->
                         l.instantiateTemplate(
                                 l.getInput().resolveAbstractInputActivation(
@@ -607,7 +457,7 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
         getOutputLinks()
                 .filter(l -> l.getSynapse().isInputSideInstantiable())
-                .filter(l -> !(l instanceof CategoryLink))
+//                .filter(l -> !(l instanceof CategoryLink))
                 .filter(l -> l.getOutput().isFired(INNER_FEEDBACK))
                 .forEach(l ->
                         l.instantiateTemplate(
@@ -621,14 +471,13 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public void initFromTemplate(Activation templateAct) {
         setFired(INNER_FEEDBACK, templateAct.getFired(INNER_FEEDBACK));
-        doc.onElementEvent(UPDATE, this);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Activation)) return false;
-        Activation<?> that = (Activation<?>) o;
+        Activation that = (Activation) o;
         return id == that.id;
     }
 
@@ -644,5 +493,32 @@ public abstract class Activation<N extends Neuron> implements Element, Comparabl
 
     public String toKeyString() {
         return "id:" + getId() + " n:[" + getNeuron().toKeyString() + "]";
+    }
+
+    @Override
+    public String dumpObject(int depth) {
+        return super.dumpObject(depth) + "\n" +
+                dumpStates(depth) + "\n" +
+                dumpInputLinks(depth);
+    }
+
+    public String dumpStates(int depth) {
+        return Arrays.stream(states)
+                .map(f -> f.dumpObject(depth + 2))
+                .collect(Collectors.joining("\n"));
+    }
+
+    public String dumpInputLinks(int depth) {
+        return getInputLinks()
+                .map(l ->
+                        l.dumpObject(depth + 2)
+                )
+                .collect(Collectors.joining("\n"));
+    }
+
+    public Activation setNet(StateType stateType, double net) {
+        State s = getState(stateType);
+        s.getField(NET).setValue(net);
+        return this;
     }
 }

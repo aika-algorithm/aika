@@ -16,25 +16,25 @@
  */
 package network.aika.elements.neurons;
 
-import network.aika.ActivationFunction;
+import network.aika.fielddefs.Type;
+import network.aika.fields.ActivationFunction;
 import network.aika.Model;
 import network.aika.Document;
+import network.aika.elements.ModelProvider;
 import network.aika.elements.PreActivation;
-import network.aika.elements.Type;
-import network.aika.elements.activations.CategoryActivation;
-import network.aika.elements.activations.bsslots.BSSlotDefinition;
-import network.aika.elements.synapses.CategoryInputSynapse;
-import network.aika.elements.synapses.CategorySynapse;
-import network.aika.elements.typedef.NeuronTypeDefinition;
+import network.aika.elements.NeuronType;
+import network.aika.elements.typedef.BSSlotDefinition;
+import network.aika.elements.typedef.NeuronDefinition;
+import network.aika.elements.typedef.SynapseDefinition;
 import network.aika.enums.Scope;
 import network.aika.enums.Trigger;
-import network.aika.exceptions.MissingInputCategoryNeuron;
 import network.aika.exceptions.NeuronExistsTwiceException;
 import network.aika.fields.*;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.Element;
 import network.aika.elements.synapses.Synapse;
 import network.aika.queue.Queue;
+import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 import network.aika.queue.steps.Save;
 import network.aika.utils.Writable;
@@ -48,10 +48,8 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static network.aika.elements.typedef.NeuronTypeDefinition.getDefinition;
 import static network.aika.elements.neurons.RefType.*;
-import static network.aika.queue.Phase.TRAINING;
-import static network.aika.utils.Utils.TOLERANCE;
+import static network.aika.elements.typedef.FieldTags.BIAS;
 import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 
@@ -59,13 +57,9 @@ import static network.aika.queue.Timestamp.MIN;
  *
  * @author Lukas Molzberger
  */
-public abstract class Neuron<N extends Neuron, A extends Activation> implements Element, Writable {
+public class Neuron extends ObjImpl<NeuronDefinition, Neuron> implements Element, ModelProvider, QueueProvider, Writable {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
-
-    protected static final String CATEGORY_LABEL = " Category";
-
-    private final NeuronTypeDefinition neuronType = getDefinition(getClass());
 
     private int synapseIdCounter = 0;
 
@@ -75,49 +69,39 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
 
     private String label;
 
-    private String typeDescription;
-
     private Writable customData;
-
-    protected Field bias = initBias();
 
     protected boolean allowTraining = true;
 
-    private boolean instantiable;
+    private boolean instantiable = true;
 
     protected InitParams initParams;
 
     private Set<NeuronProvider> propagable = new HashSet<>();
 
-    private final HashMap<Long, PreActivation<A>> activations = new HashMap<>();
+    private final HashMap<Long, PreActivation> activations = new HashMap<>();
 
-    private boolean isStale;
 
     public Neuron(NeuronProvider np) {
         provider = np;
-        setBias(0.0);
     }
 
-    public Neuron(Model m, RefType rt) {
+    public Neuron(NeuronDefinition type, Model m, RefType rt) {
+        this.type = type;
         provider = new NeuronProvider(m, this, rt);
         setModified();
-        setBias(0.0);
     }
 
-    public Type getType() {
-        return neuronType.getType();
+    public NeuronType getNeuronType() {
+        return this.getType().getType();
     }
 
     public Stream<BSSlotDefinition> getBindingSignalSlots() {
-        return Arrays.stream(neuronType.getBindingSignalSlots());
+        return Arrays.stream(this.getType().getBindingSignalSlots());
     }
 
     public Long getId() {
         return provider.getId();
-    }
-
-    @Override
-    public void disconnect() {
     }
 
     public void updatePropagable(NeuronProvider np, boolean isPropagable) {
@@ -167,9 +151,14 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return synapseIdCounter++;
     }
 
-    public void register(A act) {
+    public Neuron setBias(double bias) {
+        getField(BIAS).setValue(bias);
+        return this;
+    }
+
+    public void register(Activation act) {
         Document doc = act.getDocument();
-        PreActivation<A> npd = getOrCreatePreActivation(doc);
+        PreActivation npd = getOrCreatePreActivation(doc);
         npd.addActivation(act);
         provider.updateLastUsed(doc.getId());
     }
@@ -180,19 +169,19 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public PreActivation<A> getOrCreatePreActivation(Document doc) {
-        PreActivation<A> preAct;
+    public PreActivation getOrCreatePreActivation(Document doc) {
+        PreActivation preAct;
         synchronized (activations) {
             preAct = activations
                     .computeIfAbsent(
                             doc.getId(),
-                            docId -> new PreActivation<>(doc, this)
+                            docId -> new PreActivation(doc, this)
                     );
         }
         return preAct;
     }
 
-    public Stream<PreActivation<A>> getPreActivations() {
+    public Stream<PreActivation> getPreActivations() {
         synchronized (activations) {
             return activations.values()
                     .stream()
@@ -200,7 +189,7 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public PreActivation<A> getPreActivation(Document doc) {
+    public PreActivation getPreActivation(Document doc) {
         synchronized (activations) {
             if (doc == null)
                 return null;
@@ -216,18 +205,18 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         }
     }
 
-    public SortedSet<A> getActivations(Document doc) {
-        PreActivation<A> preAct = getPreActivation(doc);
+    public SortedSet<Activation> getActivations(Document doc) {
+        PreActivation preAct = getPreActivation(doc);
 
         return preAct != null ?
                 preAct.getActivations() :
                 Collections.emptyNavigableSet();
     }
 
-    public <R extends N> R instantiateTemplate() {
-        R n;
+    public Neuron instantiateTemplate() {
+        Neuron n;
         try {
-            n = (R) getClass()
+            n = getClass()
                     .getConstructor(Model.class, RefType.class)
                     .newInstance(getModel(), TEMPLATE);
         } catch (Exception e) {
@@ -239,88 +228,49 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     }
 
     protected void initFromTemplate(Neuron templateN) {
-        initParamsFromTemplate(templateN);
-
-        CategoryInputSynapse cis = templateN.getCategoryInputSynapse();
-        if(cis == null)
-            throw new MissingInputCategoryNeuron(templateN);
-
-        createCategorySynapse()
-                .setWeight(cis.getInitialCategorySynapseWeight())
-                .setInputSideInstantiable(false)
-                .setOutputSideInstantiable(false)
-                .link(this, cis.getInput());
-    }
-
-    protected void initParamsFromTemplate(Neuron templateN) {
-        bias.setInitialValue(
+/*        bias.setInitialValue(
                 templateN.getBias().getUpdatedValue()
         );
-
+*/
         if(templateN.initParams != null) {
             InitParams ip = templateN.initParams;
             setTargetNet(ip.targetNet);
         }
+/*
+        Synapse cis = templateN.getCategoryInputSynapse();
+        if(cis == null)
+            throw new MissingInputCategoryNeuron(templateN);
+
+        createCategorySynapse()
+                .setWeight(cis.getInitialInstanceWeight())
+                .link(this, cis.getInput());*/
     }
 
-    public N setInstantiable(boolean instantiable) {
+    public Neuron setInstantiable(boolean instantiable) {
         this.instantiable = instantiable;
 
-        return (N) this;
+        return this;
     }
 
     public boolean isInstantiable() {
         return instantiable;
     }
 
-    public Stream<Activation> getInstanceActivations(Document doc) {
-        assert isAbstract();
-        CategoryInputSynapse cis = getCategoryInputSynapse();
-        if(cis == null)
-            return Stream.empty();
-
-        CategoryNeuron cn = cis.getInput();
-        if(cn == null)
-            return Stream.empty();
-
-        return cn.getActivations(doc)
-                .stream()
-                .flatMap(CategoryActivation::getCategoryInputs);
-    }
-
-    public abstract CategorySynapse createCategorySynapse();
-
-    public boolean isAbstract() {
-        return getCategoryInputSynapse() != null;
-    }
-
-    public abstract CategoryInputSynapse makeAbstract(boolean instantiable);
-
-    public abstract CategoryInputSynapse getCategoryInputSynapse();
-
-    public abstract CategorySynapse getCategoryOutputSynapse();
 
     public final boolean isTrainingAllowed() {
-        return neuronType.isTrainingAllowed();
+        return this.getType().isTrainingAllowed();
     }
 
-    public abstract A createActivation(Document doc);
-
-    public abstract void addInactiveLinks(Activation act);
+    public final Activation createActivation(Document doc) {
+        return this.getType().getActivation()
+                .instantiate(doc.createActivationId(), doc, this);
+    }
 
     public final ActivationFunction getActivationFunction() {
-        return neuronType.getActivationFunction();
+        return this.getType().getActivationFunction();
     }
 
-    public void count(A act) {
-    }
-
-    protected Field initBias() {
-        return (SumField) new SumField(this, "bias", TOLERANCE)
-                .setQueued(getQueue(), TRAINING, false)
-                .addListener("onBiasModified", (fl, u) ->
-                        setModified()
-                , true);
+    public void count(Activation act) {
     }
 
     public void setAllowTraining(boolean allowTraining) {
@@ -379,14 +329,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return modified;
     }
 
-    public Field getBias() {
-        return bias;
-    }
-
-    public double getCurrentCompleteBias() {
-        return getBias().getUpdatedValue();
-    }
-
     public void suspend() {
         for (Synapse s : provider.getInputSynapsesStoredAtOutputSide()) {
             NeuronProvider in = s.getPInput();
@@ -413,8 +355,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
             np.removePropagableRef(provider);
         }
         propagable = null;
-
-        isStale = true;
     }
 
     public void reactivate(Model m) {
@@ -427,12 +367,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         out.writeBoolean(label != null);
         if(label != null)
             out.writeUTF(label);
-
-        out.writeBoolean(typeDescription != null);
-        if(typeDescription != null)
-            out.writeUTF(typeDescription);
-
-        bias.write(out);
 
         for (Synapse s : getProvider().getInputSynapsesStoredAtOutputSide()) {
             out.writeBoolean(true);
@@ -478,11 +412,6 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
     public void readFields(DataInput in, Model m) throws Exception {
         if(in.readBoolean())
             label = in.readUTF();
-
-        if(in.readBoolean())
-            typeDescription = in.readUTF();
-
-        bias.readFields(in);
 
         while (in.readBoolean()) {
             Synapse syn = Synapse.read(in, m);
@@ -552,15 +481,15 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return provider.getInputSynapse(n);
     }
 
-    public <IS extends Synapse> IS getInputSynapseByType(Class<IS> synapseType) {
+    public Synapse getInputSynapseByType(Type<SynapseDefinition, Synapse> synapseType) {
         return provider.getInputSynapseByType(synapseType);
     }
 
-    public <IS extends Synapse> Stream<IS> getInputSynapsesByType(Class<IS> synapseType) {
+    public Stream<Synapse> getInputSynapsesByType(Type<SynapseDefinition, Synapse> synapseType) {
         return provider.getInputSynapsesByType(synapseType);
     }
 
-    public <OS> OS getOutputSynapseByType(Class<OS> synapseType) {
+    public Synapse getOutputSynapseByType(Type<SynapseDefinition, Synapse> synapseType) {
         return provider.getOutputSynapseByType(synapseType);
     }
 
@@ -594,38 +523,23 @@ public abstract class Neuron<N extends Neuron, A extends Activation> implements 
         return label;
     }
 
-    public String getTypeDescription() {
-        return typeDescription;
-    }
-
-    public <R extends N> R setTypeDescription(String typeDescription) {
-        this.typeDescription = typeDescription;
-
-        return (R) this;
-    }
-
-    public <R extends N> R  setLabel(String label) {
+    public Neuron  setLabel(String label) {
         this.label = label;
-        return (R) this;
+        return this;
     }
 
-    public <R extends N> R setBias(double bias) {
-        getBias().setValue(bias);
-        return (R) this;
-    }
-
-    public <R extends N> R  setTargetNet(double targetNet) {
+    public Neuron  setTargetNet(double targetNet) {
         if(initParams == null) {
             initParams = new InitParams();
         }
         initParams.targetNet = targetNet;
 
-        return (R) this;
+        return this;
     }
 
-    public <R extends N> R setPersistent(boolean persistent) {
+    public Neuron setPersistent(boolean persistent) {
         getProvider().setPersistent(persistent);
-        return (R) this;
+        return this;
     }
 
     public void verifyNeuronExistsOnlyOnce() {

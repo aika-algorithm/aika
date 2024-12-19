@@ -16,6 +16,7 @@
  */
 package network.aika.enums.direction;
 
+import network.aika.Range;
 import network.aika.elements.activations.Activation;
 import network.aika.elements.links.Link;
 import network.aika.elements.neurons.Neuron;
@@ -50,6 +51,11 @@ public class Output implements Direction {
     @Override
     public <O> O getOutput(O from, O to) {
         return to;
+    }
+
+    @Override
+    public long getPosition(Range r) {
+        return r.getEnd();
     }
 
     @Override

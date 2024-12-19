@@ -16,46 +16,29 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
+import network.aika.fielddefs.Type;
 import network.aika.fields.link.FieldLink;
+import network.aika.fields.link.VariableFieldInputs;
 
-import java.util.ArrayList;
-import java.util.List;
+import static network.aika.utils.ToleranceUtils.TOLERANCE;
 
 /**
  * @author Lukas Molzberger
  */
-public class SumField extends Field {
+public class SumField<O extends Obj> extends Field<O, VariableFieldInputs, FieldLink> {
 
-    private List<FieldLink> inputs;
-
-    public SumField(FieldObject reference, String label, Double tolerance) {
-        super(reference, label, tolerance);
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> sum(T ref, FieldTag fieldTag) {
+        return new FieldDefinition<>(
+                SumField.class,
+                ref,
+                fieldTag,
+                TOLERANCE
+        );
     }
 
-    @Override
-    protected synchronized void initIO() {
-        super.initIO();
-
-        inputs = new ArrayList<>();
-    }
-
-    @Override
-    public synchronized int size() {
-        return inputs.size();
-    }
-
-    @Override
-    public synchronized void addInput(FieldLink l) {
-        inputs.add(l);
-    }
-
-    @Override
-    public synchronized void removeInput(FieldLink l) {
-        inputs.remove(l);
-    }
-
-    @Override
-    public List<FieldLink> getInputs() {
-        return inputs;
+    public SumField() {
+        super(new VariableFieldInputs());
     }
 }

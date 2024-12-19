@@ -61,7 +61,9 @@ public class Fired extends Step<State> {
         s.setFired();
 
         s.getActivation().getBindingSignalSlots()
-                .forEach(bsSlot -> bsSlot.onFired(s));
+                .forEach(bsSlot ->
+                        bsSlot.onFired(s)
+                );
 
         Counting.add(s.getActivation());
     }

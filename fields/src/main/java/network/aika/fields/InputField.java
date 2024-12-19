@@ -16,36 +16,32 @@
  */
 package network.aika.fields;
 
+import network.aika.fielddefs.FieldDefinition;
+import network.aika.fielddefs.FieldTag;
+import network.aika.fielddefs.Type;
 import network.aika.fields.link.FieldLink;
-
-import java.util.Collections;
-import java.util.List;
+import network.aika.fields.link.NoFieldInputs;
 
 /**
  * @author Lukas Molzberger
  */
-public class InputField extends Field<FieldLink> {
+public class InputField<D extends Type<D, O>, O extends Obj<D, O>> extends Field<O, NoFieldInputs, FieldLink> {
 
-    public InputField(FieldObject ref, String label, double value) {
-        super(ref, label, null);
+    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> inputField(T ref, FieldTag fieldTag) {
+        return new FieldDefinition<>(
+                InputField.class,
+                ref,
+                fieldTag
+        );
+    }
+
+    public InputField() {
+        super(new NoFieldInputs());
+    }
+
+    /*
+    public InputField(O ref, String label, double value) {
         setInitialValue(value);
-    }
+    }*/
 
-    @Override
-    public void addInput(FieldLink fl) {
-    }
-
-    @Override
-    public void removeInput(FieldLink fl) {
-    }
-
-    @Override
-    public List<FieldLink> getInputs() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public int size() {
-        return 0;
-    }
 }

@@ -17,7 +17,6 @@
 package network.aika.queue.steps;
 
 import network.aika.elements.activations.Activation;
-import network.aika.elements.activations.types.PatternActivation;
 import network.aika.elements.neurons.Neuron;
 import network.aika.elements.synapses.Synapse;
 import network.aika.enums.Scope;
@@ -47,14 +46,14 @@ public class Linking extends ElementStep<Activation> {
 
     protected Scope bsType;
 
-    protected PatternActivation bindingSignal;
+    protected Activation bindingSignal;
 
 
-    public static void add(Activation act, Scope bsType, PatternActivation bindingSignal, Trigger trigger) {
+    public static void add(Activation act, Scope bsType, Activation bindingSignal, Trigger trigger) {
         Step.add(new Linking(act, bsType, bindingSignal, trigger));
     }
 
-    public Linking(Activation act, Scope bsType, PatternActivation bindingSignal, Trigger trigger) {
+    public Linking(Activation act, Scope bsType, Activation bindingSignal, Trigger trigger) {
         super(act);
         this.trigger = trigger;
         this.bsType = bsType;
@@ -75,17 +74,15 @@ public class Linking extends ElementStep<Activation> {
 
     @Override
     public void process() {
-        Activation<?> act = getElement();
-        Neuron<?, ?> n = act.getNeuron();
+        Activation act = getElement();
+        Neuron n = act.getNeuron();
 
         if(bindingSignal != null)
             n.getInputSynapsesAsStream()
                     .filter(s ->
                             s.getRequired().getTo() == bsType
                     )
-                    .forEach(targetSyn ->
-                            linkIncoming(targetSyn)
-                    );
+                    .forEach(this::linkIncoming);
 
         n.wakeupPropagable();
 
@@ -114,7 +111,7 @@ public class Linking extends ElementStep<Activation> {
     }
 
     private void linkOutgoing(Synapse targetSyn) {
-        Activation<?> act = getElement();
+        Activation act = getElement();
 
         Neuron to = targetSyn.getOutput();
         LinkingOperator op = new OutgoingLinkingOperator(act, targetSyn, bindingSignal);
@@ -132,7 +129,7 @@ public class Linking extends ElementStep<Activation> {
         if(!sourceSyn.isPropagateRange() && sourceSyn.getRelation() == null)
             return;
 
-        Neuron<?, ?> targetNeuron = sourceSyn.getOutput();
+        Neuron targetNeuron = sourceSyn.getOutput();
         targetNeuron.getInputSynapsesAsStream()
                 .filter(ts -> sourceSyn != ts)
                 .filter(ts ->
