@@ -16,33 +16,27 @@
  */
 package network.aika;
 
-import network.aika.elements.neurons.RefType;
-import network.aika.elements.synapses.Synapse;
-import network.aika.suspension.InMemorySuspensionCallback;
-import network.aika.suspension.SuspensionCallback;
-import network.aika.elements.neurons.Neuron;
-import network.aika.elements.neurons.NeuronProvider;
+import network.aika.neurons.RefType;
+import network.aika.misc.suspension.InMemorySuspensionCallback;
+import network.aika.misc.suspension.SuspensionCallback;
+import network.aika.neurons.Neuron;
 import network.aika.queue.Queue;
+import network.aika.type.TypeRegistry;
 import network.aika.utils.Writable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
-
-import static network.aika.elements.neurons.RefType.*;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class Model extends Queue implements Writable {
+public class Model extends Queue implements Writable<Model> {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Model.class);
 
@@ -50,11 +44,13 @@ public class Model extends Queue implements Writable {
 
     private Config config;
 
+    private TypeRegistry typeRegistry;
+
     private SuspensionCallback suspensionCallback;
 
     private final AtomicLong documentIdCounter = new AtomicLong(0);
 
-    public final Map<Long, NeuronProvider> providers = new TreeMap<>();
+    public final Map<Long, Neuron> activeNeurons = new TreeMap<>();
 
     private SortedMap<Long, Document> documents = new TreeMap<>();
 
@@ -62,12 +58,9 @@ public class Model extends Queue implements Writable {
 
     private Supplier<Writable> customDataInstanceSupplier;
 
-    public Model() {
-        this(new InMemorySuspensionCallback());
-    }
-
-    public Model(SuspensionCallback sc) {
-        suspensionCallback = sc;
+    public Model(TypeRegistry typeRegistry) {
+        this.typeRegistry = typeRegistry;
+        this.suspensionCallback = new InMemorySuspensionCallback();
     }
 
     @Override
@@ -79,8 +72,9 @@ public class Model extends Queue implements Writable {
         return customDataInstanceSupplier;
     }
 
-    public void setCustomDataInstanceSupplier(Supplier<Writable> customDataInstanceSupplier) {
+    public Model setCustomDataInstanceSupplier(Supplier<Writable> customDataInstanceSupplier) {
         this.customDataInstanceSupplier = customDataInstanceSupplier;
+        return this;
     }
 
     public long createNeuronId() {
@@ -97,6 +91,10 @@ public class Model extends Queue implements Writable {
         }
     }
 
+    public TypeRegistry getTypeRegistry() {
+        return typeRegistry;
+    }
+
     public void registerDocument(Document doc) {
         synchronized (documents) {
             documents.put(doc.getId(), doc);
@@ -111,48 +109,21 @@ public class Model extends Queue implements Writable {
         lastProcessedDocument = Math.max(lastProcessedDocument, doc.getId());
     }
 
-    public Collection<NeuronProvider> getActiveNeurons() {
-        return new ArrayList<>(providers.values());
+    public Collection<Neuron> getActiveNeurons() {
+        return new ArrayList<>(activeNeurons.values());
     }
 
-    public <N extends Neuron> N lookupNeuronByLabel(String label, N template) {
-        N n = getNeuronByLabel(label, template);
-        if(n != null)
-            return n;
 
-        n = (N) template.instantiateTemplate()
-                .setLabel(label);
-
-        n.setAllowTraining(false);
-
-        registerLabel(n, template);
-
-        n.getProvider().decreaseRefCount(TEMPLATE);
-        return n;
+    public void registerTokenId(int tokenId, Neuron in) {
+        suspensionCallback.putTokenId(tokenId, in.getId());
+        in.save();
     }
 
-    public void registerLabel(Neuron in, Neuron tn) {
-        suspensionCallback.putLabel(in.getLabel(), tn.getId(), in.getId());
-        in.getProvider().save();
-    }
-
-    public <N extends Neuron> N getNeuronByLabel(String tokenLabel, Neuron template) {
-        Long id = suspensionCallback.getIdByLabel(tokenLabel, template.getId());
+    public <N extends Neuron> N getNeuronByTokenId(int tokenId) {
+        Long id = suspensionCallback.getIdByTokenId(tokenId);
         return id != null ?
-                (N) lookupNeuronProvider(id, NEURON_EXTERNAL).getNeuron() :
+                (N) getNeuron(id) :
                 null;
-    }
-
-    public Stream<NeuronProvider> getAllNeurons() {
-        return suspensionCallback
-                .getAllIds().stream()
-                .map(id -> lookupNeuronProvider(id, OTHER));
-    }
-
-    public <N extends Neuron> Stream<N> getNeuronsByType(Class<N> type) {
-        return getAllNeurons().map(NeuronProvider::getNeuron)
-                .filter(type::isInstance)
-                .map(type::cast);
     }
 
     public void applyMovingAverage(Config trainingConfig) {
@@ -165,8 +136,9 @@ public class Model extends Queue implements Writable {
         return suspensionCallback;
     }
 
-    public void setSuspensionCallback(SuspensionCallback suspensionCallback) {
+    public Model setSuspensionCallback(SuspensionCallback suspensionCallback) {
         this.suspensionCallback = suspensionCallback;
+        return this;
     }
 
     public void addToN(int l) {
@@ -189,25 +161,18 @@ public class Model extends Queue implements Writable {
         return lastUsed < tId - config.getNeuronProviderRetention();
     }
 
-    public NeuronProvider lookupNeuronProvider(Long id, RefType rt) {
-        synchronized (providers) {
-            NeuronProvider n = providers.get(id);
-            if(n != null) {
-                if(rt != null)
-                    n.increaseRefCount(rt);
-
-                return n;
-            }
-
-            return new NeuronProvider(this, id, rt);
+    public Neuron getNeuron(Long id) {
+        synchronized (activeNeurons) {
+            return activeNeurons.get(id);
         }
     }
 
+    /*
     public void saveAll() {
         List<NeuronProvider> toSave;
 
-        synchronized (providers) {
-            toSave = providers
+        synchronized (activeNeurons) {
+            toSave = activeNeurons
                     .values()
                     .stream()
                     .filter(n -> !n.isSuspended())
@@ -216,12 +181,14 @@ public class Model extends Queue implements Writable {
 
         toSave.forEach(NeuronProvider::save);
     }
+     */
 
+    /*
     public void suspend(boolean saveOnSuspend, boolean staleOnly) {
-        List<NeuronProvider> toSuspend;
+        List<Neuron> toSuspend;
 
-        synchronized (providers) {
-            toSuspend = providers
+        synchronized (activeNeurons) {
+            toSuspend = activeNeurons
                     .values()
                     .stream()
                     .filter(n ->
@@ -238,28 +205,23 @@ public class Model extends Queue implements Writable {
 
         LOG.info("Suspended " + toSuspend.size() + " neurons. (saveOnSuspend:" + saveOnSuspend + ")");
     }
+     */
 
-    private void suspend(NeuronProvider p, boolean saveOnSuspend) {
-        Neuron n = p.getIfNotSuspended();
-        if (n != null)
-            p.suspend(saveOnSuspend);
-    }
-
-    public void register(NeuronProvider np) {
-        synchronized (providers) {
-            NeuronProvider existingNP = providers.put(np.getId(), np);
+    public void register(Neuron n) {
+        synchronized (activeNeurons) {
+            Neuron existingNP = activeNeurons.put(n.getId(), n);
 
             if(existingNP != null)
-                LOG.error("Attempted to overwrite existing Provider: (np:" + np.getId() + ")");
+                LOG.error("Attempted to register Neuron twice: (n:" + n.getId() + ")");
         }
     }
 
-    public void unregister(NeuronProvider np) {
-        synchronized (providers) {
-            NeuronProvider removedNP = providers.remove(np.getId());
+    public void unregister(Neuron n) {
+        synchronized (activeNeurons) {
+            Neuron removedN = activeNeurons.remove(n.getId());
 
-            if(removedNP != np)
-                LOG.error("Attempted to remove a duplicate Provider: (np:" + np.getId() + ")");
+            if(removedN != n)
+                LOG.error("Attempted to remove Neuron twice: (n:" + n.getId() + ")");
         }
     }
 
@@ -279,26 +241,6 @@ public class Model extends Queue implements Writable {
         suspensionCallback.close();
     }
 
-    public <N extends Neuron> N createNeuronByClass(String clazzName, NeuronProvider np) {
-        try {
-            Class clazz = getClass().getClassLoader().loadClass(clazzName);
-            return (N) clazz.getConstructor(NeuronProvider.class)
-                    .newInstance(np);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public <S extends Synapse> S createSynapseByClass(String clazzName) {
-        try {
-            Class clazz = getClass().getClassLoader().loadClass(clazzName);
-            return (S) clazz.getConstructor().newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
     public long createThoughtId() {
         return documentIdCounter.addAndGet(1);
     }
@@ -310,8 +252,9 @@ public class Model extends Queue implements Writable {
         return config;
     }
 
-    public void setConfig(Config config) {
+    public Model setConfig(Config config) {
         this.config = config;
+        return this;
     }
 
     @Override
@@ -326,5 +269,42 @@ public class Model extends Queue implements Writable {
 
     public String toString() {
         return "N:" + N;
+    }
+
+
+    public synchronized boolean suspend(Neuron neuron, boolean saveOnSuspend) {
+/*        if(neuron.inUse())
+            return false;
+
+        assert getSuspensionCallback() != null;
+
+        if(saveOnSuspend)
+            neuron.save();
+
+        neuron.suspend();
+        neuron = null;
+*/
+        return true;
+    }
+
+    public Neuron reactivate(long neuronId) {
+        return null;
+/*
+        assert getSuspensionCallback() != null;
+
+        Neuron n;
+        try (DataInputStream dis = new DataInputStream(
+                new ByteArrayInputStream(
+                        getSuspensionCallback().retrieve(neuronId)
+                )
+        )) {
+            n = Neuron.read(dis, this);
+        } catch (Exception e) {
+            throw new NeuronSerializationException(neuronId, e);
+        }
+
+        n.reactivate(this);
+
+ */
     }
 }

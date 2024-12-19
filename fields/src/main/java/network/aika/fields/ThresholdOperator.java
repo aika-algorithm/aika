@@ -16,23 +16,48 @@
  */
 package network.aika.fields;
 
-import network.aika.fielddefs.*;
-import network.aika.fields.link.FixedFieldLink;
+import network.aika.fields.link.ArgFieldLinkDefinition;
+import network.aika.type.Obj;
+import network.aika.type.Type;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * @author Lukas Molzberger
  */
-public class ThresholdOperator<O extends Obj> extends AbstractFunction<O> {
+public class ThresholdOperator<
+        T extends Type<T, O>,
+        O extends Obj<T, O>
+        > extends AbstractFunctionDefinition<T, O> {
 
-    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> threshold(T ref, FieldTag fieldTag, double threshold, Comparison type) {
-        return new ThresholdOperatorFieldDefinition<>(ref, fieldTag, threshold, type);
+    public static <
+            T extends Type<T, O>,
+            O extends Obj<T, O>
+            > ThresholdOperator<T, O> threshold(T ref, String name, double threshold, Comparison type) {
+        return new ThresholdOperator<>(ref, name, threshold, type);
     }
 
-    public static <D extends Type<D, O>, O extends Obj<D, O>> FieldDefinition<D, O> threshold(D ref, FieldTag fieldTag, double threshold, Comparison type, boolean isFinal, Consumer<O> pathProvider, String in) {
-        return new ThresholdOperatorFieldDefinition<>(ref, fieldTag, threshold, type, isFinal);
+    public static <
+            T extends Type<T, O>,
+            O extends Obj<T, O>
+            > ThresholdOperator<T, O> threshold(T ref, String name, double threshold, Comparison type, boolean isFinal) {
+        return new ThresholdOperator<>(ref, name, threshold, type, isFinal);
+    }
+
+    private double threshold;
+    private ThresholdOperator.Comparison comparison;
+    private boolean isFinal;
+
+    public ThresholdOperator(T ref, String name, double threshold, Comparison type) {
+        super(ref, name, 1);
+        this.threshold = threshold;
+        this.comparison = type;
+    }
+
+    public ThresholdOperator(T ref, String name, double threshold, Comparison type, boolean isFinal) {
+        super(ref, name, 1);
+        this.threshold = threshold;
+        this.comparison = type;
+        this.isFinal = isFinal;
     }
 
     public enum Comparison {
@@ -42,32 +67,13 @@ public class ThresholdOperator<O extends Obj> extends AbstractFunction<O> {
         ABOVE_ABS
     }
 
-    private double threshold;
-    private Comparison comparison;
-    private boolean isFinal = false;
-
-    public ThresholdOperator() {
-        super(1);
-    }
-
-    public void setThreshold(double threshold) {
-        this.threshold = threshold;
-    }
-
-    public void setComparison(Comparison comparison) {
-        this.comparison = comparison;
-    }
-
-    public void setFinal(boolean aFinal) {
-        isFinal = aFinal;
-    }
-
     @Override
-    protected double computeUpdate(FixedFieldLink fl, double u) {
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u) {
+        double value = obj.getOrCreateField(this).getValue();
         if(isFinal && value > 0.5)
             return 0.0;
 
-        return threshold(fl.getUpdatedInputValue()) - value;
+        return threshold(fl.getUpdatedInputValue(obj)) - value;
     }
 
     protected double threshold(double x) {

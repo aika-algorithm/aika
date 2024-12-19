@@ -16,30 +16,34 @@
  */
 package network.aika.fields;
 
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldTag;
-import network.aika.fielddefs.Type;
-import network.aika.fields.link.FixedFieldLink;
+import network.aika.type.Type;
+import network.aika.fields.link.ArgFieldLinkDefinition;
+import network.aika.type.Obj;
 
 /**
  * @author Lukas Molzberger
  */
-public class Addition<O extends Obj> extends AbstractFunction<O> {
+public class Addition<
+        T extends Type<T, O>,
+        O extends Obj<T, O>
+        > extends AbstractFunctionDefinition<T, O> {
 
-    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> add(T ref, FieldTag fieldTag) {
-        return new FieldDefinition<>(
-                Addition.class,
+    public static <
+            T extends Type<T, O>,
+            O extends Obj<T, O>
+            > Addition<T, O> add(T ref, String name) {
+        return new Addition<>(
                 ref,
-                fieldTag
+                name
         );
     }
 
-    public Addition() {
-        super(2);
+    public Addition(T ref, String name) {
+        super(ref, name, 2);
     }
 
     @Override
-    protected double computeUpdate(FixedFieldLink fl, double u) {
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u) {
         return u;
     }
 }

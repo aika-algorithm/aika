@@ -124,5 +124,4 @@ public class Queue {
         if (startTime + timeout < currentTime)
             throw new TimeoutException();
     }
-
 }

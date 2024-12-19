@@ -30,7 +30,7 @@ public class FieldQueueKey extends QueueKey {
     Comparator<FieldQueueKey> COMPARATOR = Comparator
             .comparingInt(k -> -k.sortValue);
 
-    private int sortValue;
+    private final int sortValue;
 
 
     public FieldQueueKey(int round, ProcessingPhase phase, int sortValue, Timestamp currentTimestamp) {

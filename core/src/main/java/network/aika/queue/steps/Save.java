@@ -16,12 +16,10 @@
  */
 package network.aika.queue.steps;
 
-import network.aika.elements.neurons.Neuron;
+import network.aika.neurons.Neuron;
 import network.aika.queue.ElementStep;
 import network.aika.queue.Phase;
 import network.aika.queue.Step;
-
-import static network.aika.queue.keys.QueueKey.MAX_ROUND;
 
 /**
  * Store model
@@ -46,7 +44,6 @@ public class Save extends ElementStep<Neuron> {
     @Override
     public void process() {
         getElement()
-                .getProvider()
                 .save();
     }
 }

@@ -20,6 +20,10 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+/**
+ *
+ * @author Lukas Molzberger
+ */
 public interface FieldWritable {
 
     /**

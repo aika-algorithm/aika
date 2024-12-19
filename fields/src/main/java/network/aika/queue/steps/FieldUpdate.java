@@ -18,8 +18,8 @@ package network.aika.queue.steps;
 
 import network.aika.queue.*;
 import network.aika.queue.keys.FieldQueueKey;
-import network.aika.fields.Obj;
-import network.aika.fields.QueueInterceptor;
+import network.aika.type.Obj;
+import network.aika.fields.field.QueueInterceptor;
 import network.aika.utils.ApproximateComparisonValueUtil;
 
 import static network.aika.utils.StringUtils.doubleToString;
@@ -32,9 +32,9 @@ import static network.aika.utils.StringUtils.roundToString;
  */
 public class FieldUpdate<E extends Obj & QueueProvider> extends Step<E> {
 
-    private QueueInterceptor interceptor;
+    private final QueueInterceptor interceptor;
 
-    private ProcessingPhase phase;
+    private final ProcessingPhase phase;
 
     private int sortValue = Integer.MAX_VALUE;
 
@@ -103,6 +103,7 @@ public class FieldUpdate<E extends Obj & QueueProvider> extends Step<E> {
         return phase;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E getElement() {
         return (E) interceptor.getField().getObject();

@@ -16,33 +16,47 @@
  */
 package network.aika.fields;
 
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldTag;
-import network.aika.fielddefs.Type;
-import network.aika.fields.link.FixedFieldLink;
+import network.aika.fields.field.Field;
+import network.aika.type.Type;
+import network.aika.fields.link.ArgFieldLinkDefinition;
+import network.aika.type.Obj;
 
 /**
  * @author Lukas Molzberger
  */
-public class Multiplication<O extends Obj> extends AbstractFunction<O> {
+public class Multiplication<
+        T extends Type<T, O>,
+        O extends Obj<T, O>
+        > extends AbstractFunctionDefinition<T, O> {
 
-    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> mul(T ref, FieldTag fieldTag) {
-        return new FieldDefinition<>(
-                Multiplication.class,
+    public static <
+            T extends Type<T, O>,
+            O extends Obj<T, O>
+            > Multiplication<T, O> mul(T ref, String name) {
+        return new Multiplication<>(
                 ref,
-                fieldTag
+                name
         );
     }
 
-    public Multiplication() {
-        super(2);
+    public Multiplication(T ref, String name) {
+        super(ref, name, 2);
     }
 
     @Override
-    protected double computeUpdate(FixedFieldLink fl, double u) {
-        return u * getInputs()
-                .getInputValueByArg(
-                        fl.getArgument() == 0 ?
+    public void initializeField(Obj<?, ?> fromObj, O toObj) {
+        double valueArg0 = getInputValueByArg(toObj, 0);
+        double valueArg1 = getInputValueByArg(toObj, 1);
+
+        Field field = toObj.getOrCreateField(this);
+        field.setValue(valueArg0 * valueArg1);
+    }
+
+    @Override
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u) {
+        return u * getInputValueByArg(
+                obj,
+                fl.getArgument() == 0 ?
                                 1 :
                                 0
                 );

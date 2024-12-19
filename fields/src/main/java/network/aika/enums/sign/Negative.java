@@ -16,14 +16,6 @@
  */
 package network.aika.enums.sign;
 
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldTag;
-import network.aika.fielddefs.Type;
-import network.aika.fields.Obj;
-import network.aika.fields.InvertFunction;
-
-import static network.aika.fielddefs.link.FieldLinkTypeDefinition.argLink;
-
 
 /**
  *
@@ -31,17 +23,9 @@ import static network.aika.fielddefs.link.FieldLinkTypeDefinition.argLink;
  */
 public class Negative implements Sign {
 
-    public static final FieldTag NEGATION = () -> 0;
-
     @Override
     public Sign invert() {
         return POS;
-    }
-
-    @Override
-    public <D extends Type<D, O>, O extends Obj<D, O>> FieldDefinition<D, O> getValue(D ref, FieldDefinition<D, O> v) {
-        return InvertFunction.invert(ref, NEGATION)
-                .in(v.getFieldOutput(), v.getFieldOutput().getFieldTag(), argLink(0));
     }
 
     @Override

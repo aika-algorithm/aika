@@ -23,22 +23,14 @@ package network.aika;
 public class Config {
     private Double alpha = null; //0.99;
 
-    private double annealStepSize = 0.05;
-
     private double learnRate;
 
-    private double learnRateForAbstract;
     private boolean trainingEnabled;
     private boolean countingEnabled;
-    private boolean metaInstantiationEnabled;
 
     private long neuronProviderRetention = 50;
 
     private Long timeout;
-
-    public double getLearnRate(boolean isAbstract) {
-        return isAbstract ? learnRateForAbstract : learnRate;
-    }
 
 
     public double getLearnRate() {
@@ -49,25 +41,6 @@ public class Config {
         this.learnRate = learnRate;
         return this;
     }
-
-    public double getLearnRateForAbstract() {
-        return learnRateForAbstract;
-    }
-
-    public Config setLearnRateForAbstract(double learnRate) {
-        this.learnRateForAbstract = learnRateForAbstract;
-        return this;
-    }
-
-    public double getAnnealStepSize() {
-        return annealStepSize;
-    }
-
-    public Config setAnnealStepSize(double annealStepSize) {
-        this.annealStepSize = annealStepSize;
-        return this;
-    }
-
     public Double getAlpha() {
         return alpha;
     }
@@ -93,16 +66,6 @@ public class Config {
 
     public boolean isCountingEnabled() {
         return countingEnabled;
-    }
-
-
-    public boolean isMetaInstantiationEnabled() {
-        return metaInstantiationEnabled;
-    }
-
-    public Config setMetaInstantiationEnabled(boolean metaInstantiationEnabled) {
-        this.metaInstantiationEnabled = metaInstantiationEnabled;
-        return this;
     }
 
     public long getNeuronProviderRetention() {

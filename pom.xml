@@ -8,7 +8,7 @@
     <modules>
         <module>fields</module>
         <module>core</module>
-        <module>model</module>
+        <module>debug</module>
     </modules>
     <name>aika-project</name>
     <url>https://aika.network</url>
@@ -49,7 +49,6 @@
         <url>https://github.com/aika-algorithm/aika/issues</url>
     </issueManagement>
 
-    <!--
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -60,20 +59,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
--->
-    <distributionManagement>
-        <repository>
-            <id>meinestadt.de-releases</id>
-            <name>meinestadt Release Repository</name>
-            <url>http://repository.meinestadt.de:8081/artifactory/libs-release-local</url>
-        </repository>
-        <snapshotRepository>
-            <id>meinestadt.de-snapshots</id>
-            <name>meinestadt Snapshot Repository</name>
-            <url>http://repository.meinestadt.de:8081/artifactory/libs-snapshot-local</url>
-        </snapshotRepository>
-    </distributionManagement>
-
 
     <properties>
         <revision>2.0.9-rc31</revision>
@@ -81,14 +66,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- dependencies used only for tests: -->
-        <junit.version>5.8.2</junit.version>
+        <junit.version>5.11.3</junit.version>
+        <mockito.version>5.14.2</mockito.version>
 
         <!-- commons dependencies: -->
         <commons-math.version>3.6.1</commons-math.version>
-        <commons-io.version>2.11.0</commons-io.version>
+        <commons-io.version>2.14.0</commons-io.version>
         <jackson.version>2.17.2</jackson.version>
-        <logback.version>1.3.12</logback.version>
-        <slf4j.version>1.7.36</slf4j.version>
+        <logback.version>1.5.12</logback.version>
+        <slf4j.version>2.0.16</slf4j.version>
         <commons-csv.version>1.9.0</commons-csv.version>
     </properties>
 
@@ -243,6 +229,13 @@
             </dependency>
 
             <dependency>
+                <groupId>network.aika</groupId>
+                <artifactId>aika-debug</artifactId>
+                <version>${revision}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-math3</artifactId>
                 <version>${commons-math.version}</version>
@@ -295,26 +288,6 @@
                 <version>${commons-csv.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.graphstream</groupId>
-                <artifactId>gs-algo</artifactId>
-                <version>2.0</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>bouncycastle</groupId>
-                        <artifactId>bcmail-jdk14</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>bouncycastle</groupId>
-                        <artifactId>bcprov-jdk14</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.lowagie</groupId>
-                        <artifactId>itext</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
             <!-- dependencies for tests: -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
@@ -334,44 +307,56 @@
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
-    <!--
-        <profiles>
-            <profile>
-                <id>deploy_artifact</id>
-                <build>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-gpg-plugin</artifactId>
-                            <version>1.5</version>
-                            <executions>
-                                <execution>
-                                    <id>sign-artifacts</id>
-                                    <phase>verify</phase>
-                                    <goals>
-                                        <goal>sign</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
 
-                        <plugin>
-                            <groupId>org.sonatype.plugins</groupId>
-                            <artifactId>nexus-staging-maven-plugin</artifactId>
-                            <version>1.6.13</version>
-                            <extensions>true</extensions>
-                            <configuration>
-                                <serverId>ossrh</serverId>
-                                <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                                <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                                <stagingProgressTimeoutMinutes>10</stagingProgressTimeoutMinutes>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </build>
-            </profile>
-        </profiles>
-        -->
+    <profiles>
+        <profile>
+            <id>deploy_artifact</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.13</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <stagingProgressTimeoutMinutes>10</stagingProgressTimeoutMinutes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     </project>

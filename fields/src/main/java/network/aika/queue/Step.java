@@ -47,10 +47,6 @@ public abstract class Step<E extends QueueProvider> {
 
     public abstract void createQueueKey(Timestamp timestamp, int round);
 
-    public String getStepName() {
-        return getClass().getSimpleName();
-    }
-
     public abstract void process();
 
     public abstract ProcessingPhase getPhase();

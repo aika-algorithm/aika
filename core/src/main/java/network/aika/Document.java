@@ -17,25 +17,18 @@
 package network.aika;
 
 
-import network.aika.callbacks.InstantiationCallback;
-import network.aika.elements.ModelProvider;
-import network.aika.elements.activations.Activation;
-import network.aika.elements.neurons.Neuron;
-import network.aika.elements.PreActivation;
-import network.aika.elements.neurons.NeuronProvider;
+import network.aika.activations.Activation;
+import network.aika.bindingsignal.BSType;
+import network.aika.bindingsignal.BindingSignal;
+import network.aika.neurons.Neuron;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Step;
-import network.aika.text.TextReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import static network.aika.elements.activations.StateType.*;
 
 
 /**
@@ -48,45 +41,28 @@ public class Document extends Queue implements ModelProvider, QueueProvider {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Document.class);
 
-
     protected final Model model;
 
     private Long id;
 
-    private final StringBuilder content;
-
-    private Context context;
-
     private long absoluteBeginChar;
+    private int length;
 
     private int activationIdCounter = 0;
 
-    private long visitorCounter = 0;
-
-    private final TreeMap<Integer, Activation> activationsById = new TreeMap<>();
-    private final Map<NeuronProvider, PreActivation> actsPerNeuron = new HashMap<>();
-    private final Set<EventListener> eventListeners = new HashSet<>();
-
-    private InstantiationCallback instantiationCallback;
+    private final Map<Integer, Activation> activations = new TreeMap<>();
+    private final TreeMap<Integer, BindingSignal> bindingSignals = new TreeMap<>();
 
     private boolean isStale;
 
-    public Document(Model m, String content) {
+    public Document(Model m, int length) {
         model = m;
         id = model.createThoughtId();
 
-        this.content = new StringBuilder();
-        if(content != null) {
-            this.content.append(content);
-        }
-
         absoluteBeginChar = m.getN();
+        this.length = length;
 
         m.registerDocument(this);
-    }
-
-    public long getNewVisitorId() {
-        return visitorCounter++;
     }
 
     public Long getId() {
@@ -102,7 +78,7 @@ public class Document extends Queue implements ModelProvider, QueueProvider {
         super.process(filter);
 
         if(model.getConfig().isCountingEnabled())
-            model.addToN(length());
+            model.addToN(length);
     }
 
     public Model getModel() {
@@ -118,69 +94,27 @@ public class Document extends Queue implements ModelProvider, QueueProvider {
         return currentStep;
     }
 
-    public InstantiationCallback getInstantiationCallback() {
-        return instantiationCallback;
+    public void addActivation(Activation act) {
+        activations.put(act.getId(), act);
     }
 
-    public void setInstantiationCallback(InstantiationCallback instantiationCallback) {
-        this.instantiationCallback = instantiationCallback;
+    public Collection<Activation> getActivations() {
+        return activations.values();
     }
 
-    private void callEventListener(Consumer<EventListener> el) {
-        getEventListeners().forEach(el);
-    }
-
-    public synchronized Collection<EventListener> getEventListeners() {
-        return new ArrayList<>(eventListeners);
-    }
-
-    public synchronized void addEventListener(EventListener l) {
-        eventListeners.add(l);
-    }
-
-    public synchronized void removeEventListener(EventListener l) {
-        eventListeners.remove(l);
-    }
-
-    public void register(Activation act) {
-        activationsById.put(act.getId(), act);
-    }
-
-    public void register(Neuron n, PreActivation acts) {
-        PreActivation existingPreAct = actsPerNeuron.put(n.getProvider(), acts);
-
-        if(existingPreAct != null)
-            LOG.error("Attempted to overwrite existing PreAct: (doc:" + id + " n:" + n.getId() + ")");
-    }
-
-    public Range getCharRange() {
-        return new Range(absoluteBeginChar, absoluteBeginChar + length());
+    public Activation getActivationByNeuron(Neuron outputNeuron) {
+        return getActivations().stream()
+                .filter(act -> act.getNeuron() == outputNeuron)
+                .findFirst()
+                .orElse(null);
     }
 
     public int createActivationId() {
         return activationIdCounter++;
     }
 
-    public Activation getActivation(Integer id) {
-        return activationsById.get(id);
-    }
-
-    public Collection<Activation> getActivations() {
-        return activationsById.values();
-    }
-
     public void disconnect() {
         model.deregisterDocument(this);
-
-        getActivations()
-                .forEach(act ->
-                        act.disconnect()
-                );
-
-        actsPerNeuron.values()
-                .stream()
-                .map(PreActivation::getNeuron)
-                .forEach(n -> n.removePreActivation(this));
 
         isStale = true;
     }
@@ -190,89 +124,31 @@ public class Document extends Queue implements ModelProvider, QueueProvider {
         return this;
     }
 
-    @Override
-    public boolean isNextRound() {
-        return false;
-    }
+    public Activation addToken(Neuron n, BSType bsType, int tokenId) {
+        BindingSignal bs = getOrCreateBindingSignal(tokenId);
 
-    public String activationsToString() {
-        return getActivations()
-                .stream()
-                .map(act -> act + "\n")
-                .collect(Collectors.joining());
-    }
-
-    public void append(String txt) {
-        content.append(txt);
-    }
-
-    public char charAt(int i) {
-        return content.charAt(i);
-    }
-
-    public String getContent() {
-        return content.toString();
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-    public int length() {
-        return content.length();
-    }
-
-    public String getTextSegment(Range range) {
-        if(range == null)
-            return "";
-
-        Range r = range.limit(new Range(0, length()));
-        return content.substring((int) r.getBegin(), (int) r.getEnd());
-    }
-
-    public static String getText(Activation act) {
-        return act.getDocument().getTextSegment(act.getTextReference().getCharRange());
-    }
-
-    public Activation addToken(Neuron n, TextReference textReference) {
-        return addToken(n, textReference, n.getTargetNet());
-    }
-
-    public Activation addToken(Neuron n, TextReference textReference, double inputNet) {
-        Activation act = n.createActivation(this);
-
-        act.updateRanges(textReference);
-
-        act.setNet(INNER_FEEDBACK, inputNet);
+        Activation act = n.createActivation(
+                null,
+                this,
+                Map.of(bsType, bs)
+        );
 
         return act;
     }
 
-    public String docToString() {
-        StringBuilder sb = new StringBuilder(content);
-        sb.append("\n");
-        sb.append(activationsToString());
-        return sb.toString();
+    public BindingSignal getOrCreateBindingSignal(int tokenId) {
+        return bindingSignals.computeIfAbsent(tokenId, tid ->
+                new BindingSignal(tid, this)
+        );
+    }
+
+    public BindingSignal getBindingSignal(Integer tokenId) {
+        return bindingSignals.get(id);
     }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(" Id:" + id);
-        sb.append(" Content: ");
-        sb.append(
-                content.substring(0, Math.min(content.length(), 100))
-                        .replaceAll("[\\n\\r\\s]+", " ")
-        );
         return sb.toString();
-    }
-
-    public String dumpActivations() {
-        return activationsById.values().stream()
-                .map(act -> act.dumpObject(0))
-                .collect(Collectors.joining("\n"));
     }
 }

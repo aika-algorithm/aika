@@ -37,11 +37,11 @@ public abstract class QueueKey implements Comparable<QueueKey> {
             .thenComparing(Function.identity())
             .thenComparing(QueueKey::getCurrentTimestamp);
 
-    private int round;
+    private final int round;
 
-    private ProcessingPhase phase;
+    private final ProcessingPhase phase;
 
-    private Timestamp currentTimestamp;
+    private final Timestamp currentTimestamp;
 
     public QueueKey(int round, ProcessingPhase phase, Timestamp currentTimestamp) {
         this.round = round;

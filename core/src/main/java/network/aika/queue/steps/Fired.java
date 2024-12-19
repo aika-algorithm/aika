@@ -16,7 +16,7 @@
  */
 package network.aika.queue.steps;
 
-import network.aika.elements.activations.State;
+import network.aika.activations.Activation;
 import network.aika.queue.Phase;
 import network.aika.queue.Queue;
 import network.aika.queue.Timestamp;
@@ -31,16 +31,16 @@ import static network.aika.queue.Phase.FIRED;
  *
  * @author Lukas Molzberger
  */
-public class Fired extends Step<State> {
+public class Fired extends Step<Activation> {
 
-    private State state;
+    private final Activation act;
 
     private double net;
 
     private int sortValue;
 
-    public Fired(State s) {
-        this.state = s;
+    public Fired(Activation act) {
+        this.act = act;
     }
 
     @Override
@@ -53,19 +53,20 @@ public class Fired extends Step<State> {
         );
     }
 
-
     @Override
     public void process() {
-        State s = getElement();
+        Activation act = getElement();
 
-        s.setFired();
+        act.setFired();
 
-        s.getActivation().getBindingSignalSlots()
-                .forEach(bsSlot ->
-                        bsSlot.onFired(s)
+        // Only once the activation is fired, will it be visible to other neurons.
+        act.getBindingSignals()
+                .values().
+                forEach(bs ->
+                        bs.addActivation(act)
                 );
 
-        Counting.add(s.getActivation());
+        act.linkOutgoing();
     }
 
     public void updateNet(double net) {
@@ -79,13 +80,13 @@ public class Fired extends Step<State> {
     }
 
     @Override
-    public State getElement() {
-        return state;
+    public Activation getElement() {
+        return act;
     }
 
     @Override
     public Queue getQueue() {
-        return state.getDocument();
+        return act.getDocument();
     }
 
     @Override

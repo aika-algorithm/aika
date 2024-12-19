@@ -16,7 +16,7 @@
  */
 package network.aika.queue;
 
-import network.aika.elements.Element;
+import network.aika.Element;
 import network.aika.queue.keys.FiredQueueKey;
 
 /**

@@ -16,8 +16,7 @@
  */
 package network.aika.queue.keys;
 
-import network.aika.elements.Element;
-import network.aika.queue.Phase;
+import network.aika.Element;
 import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Timestamp;
 
@@ -34,8 +33,8 @@ public class FiredQueueKey extends QueueKey {
             .<FiredQueueKey, Timestamp>comparing(k -> k.fired)
             .thenComparing(k -> k.created);
 
-    private Timestamp created;
-    private Timestamp fired;
+    private final Timestamp created;
+    private final Timestamp fired;
 
     public FiredQueueKey(int round, ProcessingPhase phase, Element element, Timestamp currentTimestamp) {
         super(round, phase, currentTimestamp);

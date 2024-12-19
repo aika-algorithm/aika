@@ -16,10 +16,6 @@
  */
 package network.aika.enums.sign;
 
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.Type;
-import network.aika.fields.Obj;
-
 /**
  *
  * @author Lukas Molzberger
@@ -30,10 +26,6 @@ public class Positive implements Sign {
         return NEG;
     }
 
-    @Override
-    public <D extends Type<D, O>, O extends Obj<D, O>> FieldDefinition<D, O> getValue(D ref, FieldDefinition<D, O> v) {
-        return v;
-    }
 
     @Override
     public int index() {

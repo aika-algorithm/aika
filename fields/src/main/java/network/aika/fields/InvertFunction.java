@@ -16,32 +16,37 @@
  */
 package network.aika.fields;
 
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldTag;
-import network.aika.fielddefs.Type;
-import network.aika.fields.link.FixedFieldLink;
+import network.aika.type.Type;
+import network.aika.fields.link.ArgFieldLinkDefinition;
+import network.aika.type.Obj;
 
 /**
  * @author Lukas Molzberger
  */
-public class InvertFunction<O extends Obj> extends AbstractFunction<O> {
+public class InvertFunction<
+        T extends Type<T, O>,
+        O extends Obj<T, O>
+        > extends AbstractFunctionDefinition<T, O> {
 
-    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> invert(T ref, FieldTag fieldTag) {
-        return new FieldDefinition<>(
-                InvertFunction.class,
+    public static <
+            T extends Type<T, O>,
+            O extends Obj<T, O>
+            > InvertFunction<T, O> invert(T ref, String name) {
+        return new InvertFunction<>(
                 ref,
-                fieldTag
+                name
         );
     }
 
-    public InvertFunction() {
-        super(1);
+    public InvertFunction(T ref, String name) {
+        super(ref, name, 1);
 
-        setInitialValue(1.0);
+//        setInitialValue(1.0);
     }
 
     @Override
-    protected double computeUpdate(FixedFieldLink fl, double u) {
-        return (1.0 - fl.getUpdatedInputValue()) - value;
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u)  {
+        double value = obj.getOrCreateField(this).getValue();
+        return (1.0 - fl.getUpdatedInputValue(obj)) - value;
     }
 }

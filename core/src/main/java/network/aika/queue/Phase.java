@@ -21,18 +21,11 @@ package network.aika.queue;
  * @author Lukas Molzberger
  */
 public enum Phase implements ProcessingPhase {
-    INSTANTIATION(),
-    LINKING(),
-    LINK_UPDATE(),
-    FEEDBACK_TRIGGER(),
     INFERENCE(),
     FIRED(),
-    NEGATIVE_FEEDBACK(),
-    ANNEAL(),
     INSTANTIATION_TRIGGER(true),
     TRAINING(true),
     INACTIVE_LINKS(true),
-    COUNTING(true),
     SAVE(true);
 
 

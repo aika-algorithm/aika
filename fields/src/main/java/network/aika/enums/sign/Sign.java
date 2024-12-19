@@ -16,11 +16,6 @@
  */
 package network.aika.enums.sign;
 
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.Type;
-import network.aika.fields.Obj;
-
-
 /**
  *
  * @author Lukas Molzberger
@@ -37,8 +32,6 @@ public interface Sign {
     static Sign getSign(double x) {
         return x >= 0.0 ? POS : NEG;
     }
-
-    <D extends Type<D, O>, O extends Obj<D, O>> FieldDefinition<D, O> getValue(D ref, FieldDefinition<D, O> v);
 
     int index();
 }

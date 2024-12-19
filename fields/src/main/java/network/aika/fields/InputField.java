@@ -16,32 +16,35 @@
  */
 package network.aika.fields;
 
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldTag;
-import network.aika.fielddefs.Type;
-import network.aika.fields.link.FieldLink;
-import network.aika.fields.link.NoFieldInputs;
+import network.aika.type.Type;
+import network.aika.fields.link.ArgFieldLinkDefinition;
+import network.aika.type.Obj;
 
 /**
  * @author Lukas Molzberger
  */
-public class InputField<D extends Type<D, O>, O extends Obj<D, O>> extends Field<O, NoFieldInputs, FieldLink> {
+public class InputField<
+        T extends Type<T, O>,
+        O extends Obj<T, O>
+        > extends AbstractFunctionDefinition<T, O> {
 
-    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> inputField(T ref, FieldTag fieldTag) {
-        return new FieldDefinition<>(
-                InputField.class,
+
+    public static <
+            T extends Type<T, O>,
+            O extends Obj<T, O>
+            > InputField<T, O> inputField(T ref, String name) {
+        return new InputField<>(
                 ref,
-                fieldTag
+                name
         );
     }
 
-    public InputField() {
-        super(new NoFieldInputs());
+    public InputField(T ref, String name) {
+        super(ref, name, 0);
     }
 
-    /*
-    public InputField(O ref, String label, double value) {
-        setInitialValue(value);
-    }*/
-
+    @Override
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u) {
+        return 0;
+    }
 }

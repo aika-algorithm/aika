@@ -16,30 +16,34 @@
  */
 package network.aika.fields;
 
-import network.aika.fielddefs.FieldDefinition;
-import network.aika.fielddefs.FieldTag;
-import network.aika.fielddefs.Type;
-import network.aika.fields.link.FixedFieldLink;
+import network.aika.type.Type;
+import network.aika.fields.link.ArgFieldLinkDefinition;
+import network.aika.type.Obj;
 
 /**
  * @author Lukas Molzberger
  */
-public class Subtraction<O extends Obj> extends AbstractFunction<O> {
+public class Subtraction<
+        T extends Type<T, O>,
+        O extends Obj<T, O>
+        > extends AbstractFunctionDefinition<T, O> {
 
-    public static <T extends Type<T, O>, O extends Obj<T, O>> FieldDefinition<T, O> sub(T ref, FieldTag fieldTag) {
-        return new FieldDefinition<>(
-                Subtraction.class,
+    public static <
+            T extends Type<T, O>,
+            O extends Obj<T, O>
+            > Subtraction<T, O> sub(T ref, String name) {
+        return new Subtraction<>(
                 ref,
-                fieldTag
+                name
         );
     }
 
-    public Subtraction() {
-        super(2);
+    public Subtraction(T ref, String name) {
+        super(ref, name, 2);
     }
 
     @Override
-    protected double computeUpdate(FixedFieldLink fl, double u) {
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u) {
         return fl.getArgument() == 0 ? u : -u;
     }
 }
