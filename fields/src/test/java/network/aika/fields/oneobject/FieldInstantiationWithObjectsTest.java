@@ -14,18 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.oneobject;
 
 import network.aika.fields.defs.FieldDefinition;
-import network.aika.fields.model.TestObject;
-import network.aika.fields.model.TestType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.SumField.sum;
-import static network.aika.fields.model.TestObject.linkObjectsAndInitFields;
+import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
 
 
 /**

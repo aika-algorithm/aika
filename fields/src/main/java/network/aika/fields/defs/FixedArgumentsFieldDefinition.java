@@ -69,6 +69,11 @@ public abstract class FixedArgumentsFieldDefinition<
         return fl.getInputValue(obj);
     }
 
+    public double getUpdatedInputValueByArg(O obj, int arg) {
+        var fl = inputs[arg];
+        return fl.getUpdatedInputValue(obj);
+    }
+
     public <
             IT extends Type<IT, IO>,
             IO extends Obj<IT, IO>

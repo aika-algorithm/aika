@@ -1,7 +1,6 @@
-package network.aika.fields;
+package network.aika.fields.oneobject;
 
 
-import network.aika.fields.model.TestObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

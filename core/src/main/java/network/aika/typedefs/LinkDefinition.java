@@ -35,6 +35,9 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     public static RelationTypeOne<LinkDefinition, Link, ActivationDefinition, Activation> OUTPUT = new RelationTypeOne<>(Link::getOutput, "LINK-OUTPUT");
     public static RelationTypeOne<LinkDefinition, Link, SynapseDefinition, Synapse> SYNAPSE = new RelationTypeOne<>(Link::getSynapse, "LINK-SYNAPSE");
 
+    public static RelationTypeOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_INPUT_LINK = new RelationTypeOne<>(Link::getCorrespondingInputLink, "LINK-CORRESPONDING-INPUT-LINK");
+    public static RelationTypeOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_OUTPUT_LINK = new RelationTypeOne<>(Link::getCorrespondingOutputLink, "LINK-CORRESPONDING-INPUT-LINK");
+
     static {
         SYNAPSE.setReversed(SynapseDefinition.LINK);
         INPUT.setReversed(ActivationDefinition.OUTPUT);

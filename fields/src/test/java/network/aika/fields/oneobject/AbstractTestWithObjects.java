@@ -1,7 +1,5 @@
-package network.aika.fields;
+package network.aika.fields.oneobject;
 
-import network.aika.fields.model.TestObject;
-import network.aika.fields.model.TestType;
 import network.aika.type.TypeRegistry;
 import network.aika.type.TypeRegistryImpl;
 import network.aika.type.relations.RelationTypeOne;

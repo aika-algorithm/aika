@@ -1,4 +1,4 @@
-package network.aika.fields.model;
+package network.aika.fields.oneobject;
 
 
 import network.aika.type.Type;

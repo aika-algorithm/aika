@@ -1,12 +1,6 @@
-package network.aika.fields;
+package network.aika.fields.manyobjects;
 
 import network.aika.fields.defs.FieldDefinition;
-import network.aika.fields.model.TestObject;
-import network.aika.fields.model.TestType;
-import network.aika.fields.model.many.TestObjectMany;
-import network.aika.fields.model.many.TestObjectOne;
-import network.aika.fields.model.many.TestTypeMany;
-import network.aika.fields.model.many.TestTypeOne;
 import network.aika.type.TypeRegistry;
 import network.aika.type.TypeRegistryImpl;
 import network.aika.type.relations.RelationTypeMany;
@@ -17,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.SumField.sum;
-import static network.aika.fields.model.many.TestObjectMany.linkObjectsAndInitFields;
+import static network.aika.fields.manyobjects.TestObjectMany.linkObjectsAndInitFields;
 
 
 public class OneToManyRelationTest {

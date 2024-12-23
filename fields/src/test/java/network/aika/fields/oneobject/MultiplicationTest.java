@@ -14,11 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.oneobject;
 
 import network.aika.fields.defs.FieldDefinition;
-import network.aika.fields.model.TestObject;
-import network.aika.fields.model.TestType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,13 +24,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.Multiplication.mul;
-import static network.aika.fields.model.TestObject.linkObjectsAndInitFields;
+import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class MultiplicationWithObjectsTest extends AbstractTestWithObjects {
+public class MultiplicationTest extends AbstractTestWithObjects {
 
 
     @BeforeEach

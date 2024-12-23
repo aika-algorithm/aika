@@ -14,25 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.oneobject;
 
 import network.aika.fields.defs.FieldDefinition;
-import network.aika.fields.model.TestObject;
-import network.aika.fields.model.TestType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static network.aika.fields.Division.div;
 import static network.aika.fields.InputField.inputField;
-import static network.aika.fields.Subtraction.sub;
-import static network.aika.fields.model.TestObject.linkObjectsAndInitFields;
+import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class SubtractionWithObjectsTest extends AbstractTestWithObjects {
+public class DivisionTest extends AbstractTestWithObjects {
 
 
     @BeforeEach
@@ -40,17 +38,16 @@ public class SubtractionWithObjectsTest extends AbstractTestWithObjects {
         super.init();
     }
 
-
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2})
-    public void testSubtraction(int linkingPos) {
+    public void testDivision(int linkingPos) {
 
         // Type and Math Model initialization
 
         FieldDefinition<TestType, TestObject> a = inputField(typeA, "a");
         FieldDefinition<TestType, TestObject> b = inputField(typeA, "b");
 
-        FieldDefinition<TestType, TestObject> c = sub(typeB, "c")
+        FieldDefinition<TestType, TestObject> c = div(typeB, "c")
                 .in(TEST_RELATION_FROM, a, 0)
                 .in(TEST_RELATION_FROM, b, 1);
 
@@ -62,18 +59,27 @@ public class SubtractionWithObjectsTest extends AbstractTestWithObjects {
         if(linkingPos == 0)
             linkObjectsAndInitFields(oa, ob);
 
-        oa.setFieldValue(a, 50.0);
+        oa.setFieldValue(a, 25.0);
 
         if(linkingPos == 1)
             linkObjectsAndInitFields(oa, ob);
 
-        oa.setFieldValue(b, 20.0);
+        Assertions.assertEquals(0.0, ob.getFieldValue(c));
+
+        oa.setFieldValue(b, 5.0);
 
         if(linkingPos == 2)
             linkObjectsAndInitFields(oa, ob);
 
         Assertions.assertEquals(
-                30.0,
+                5.0,
+                ob.getField(c).getValue()
+        );
+
+        oa.setFieldValue(b, 10.0);
+
+        Assertions.assertEquals(
+                2.5,
                 ob.getField(c).getValue()
         );
     }

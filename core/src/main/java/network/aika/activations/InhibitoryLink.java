@@ -14,20 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.neurons;
+package network.aika.activations;
+
+import network.aika.misc.direction.Direction;
+import network.aika.neurons.Synapse;
+import network.aika.typedefs.LinkDefinition;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public enum RefType {
-    NEURON_EXTERNAL,
-    PERSISTENCE,
-    SYNAPSE_IN,
-    SYNAPSE_OUT,
-    PROPAGABLE,
-    TEMPLATE,
-    CATEGORY,
-    TEMPLATE_MODEL,
-    OTHER
+public class InhibitoryLink extends Link {
+
+    public InhibitoryLink(LinkDefinition type, Synapse s, Activation input, Activation output, Direction dir) {
+        super(type, s, input, output);
+    }
+
+    public Link getCorrespondingInputLink() {
+        return null; // TODO
+    }
 }

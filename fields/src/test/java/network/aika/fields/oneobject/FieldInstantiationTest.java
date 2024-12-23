@@ -14,11 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.oneobject;
 
 import network.aika.fields.defs.FieldDefinition;
-import network.aika.fields.model.TestObject;
-import network.aika.fields.model.TestType;
 import network.aika.type.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

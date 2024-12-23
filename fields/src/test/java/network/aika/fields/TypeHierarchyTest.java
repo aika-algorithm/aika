@@ -16,8 +16,8 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.model.TestObject;
-import network.aika.fields.model.TestType;
+import network.aika.fields.oneobject.TestObject;
+import network.aika.fields.oneobject.TestType;
 import network.aika.type.relations.RelationTypeOne;
 
 

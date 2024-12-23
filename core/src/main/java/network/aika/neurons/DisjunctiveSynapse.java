@@ -16,7 +16,6 @@
  */
 package network.aika.neurons;
 
-
 import network.aika.Model;
 import network.aika.typedefs.SynapseDefinition;
 

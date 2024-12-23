@@ -14,20 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.neurons;
+package network.aika.activations;
+
+import network.aika.Document;
+import network.aika.bindingsignal.BSType;
+import network.aika.bindingsignal.BindingSignal;
+import network.aika.neurons.Neuron;
+import network.aika.typedefs.ActivationDefinition;
+
+import java.util.Map;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public enum RefType {
-    NEURON_EXTERNAL,
-    PERSISTENCE,
-    SYNAPSE_IN,
-    SYNAPSE_OUT,
-    PROPAGABLE,
-    TEMPLATE,
-    CATEGORY,
-    TEMPLATE_MODEL,
-    OTHER
+public class InhibitoryActivation extends DisjunctiveActivation {
+
+    public InhibitoryActivation(
+            ActivationDefinition t,
+            Activation parent,
+            Integer id,
+            Neuron n,
+            Document doc,
+            Map<BSType, BindingSignal> bindingSignals
+    ) {
+        super(t, parent, id, n, doc, bindingSignals);
+    }
 }

@@ -1,6 +1,5 @@
-package network.aika.fields.model.many;
+package network.aika.fields.manyobjects;
 
-import network.aika.fields.model.TestObject;
 import network.aika.type.ObjImpl;
 import network.aika.type.TypeRegistry;
 

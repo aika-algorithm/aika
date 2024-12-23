@@ -79,6 +79,14 @@ public class Link extends ObjImpl<LinkDefinition, Link, Model> implements Elemen
         return output;
     }
 
+    public Link getCorrespondingInputLink() {
+        throw new UnsupportedOperationException();
+    }
+
+    public Link getCorrespondingOutputLink() {
+        throw new UnsupportedOperationException();
+    }
+
     public boolean isCausal() {
         return input == null || isCausal(input, output);
     }
