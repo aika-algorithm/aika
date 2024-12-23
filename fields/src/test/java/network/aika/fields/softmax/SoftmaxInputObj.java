@@ -20,4 +20,8 @@ public class SoftmaxInputObj extends ObjImpl<SoftmaxInputType, SoftmaxInputObj, 
     public void setNormObject(SoftmaxNormObj normObject) {
         this.normObject = normObject;
     }
+
+    public SoftmaxOutputObj getCorrespondingOutputLink() {
+        return null;
+    }
 }

@@ -17,9 +17,9 @@
 package network.aika.fields;
 
 import network.aika.fields.defs.FieldDefinition;
-import network.aika.fields.defs.VariableArgumentsFieldDefinition;
 import network.aika.type.Obj;
 import network.aika.type.Type;
+import network.aika.type.relations.RelationTypeMany;
 import network.aika.type.relations.RelationTypeOne;
 
 import static network.aika.fields.Division.div;
@@ -29,7 +29,14 @@ import static network.aika.fields.SumField.sum;
 /**
  * @author Lukas Molzberger
  */
-public class SoftmaxField {
+public class SoftmaxFields<
+        IT extends Type<IT, IO>,
+        IO extends Obj<IT, IO>,
+        NT extends Type<NT, NO>,
+        NO extends Obj<NT, NO>,
+        OT extends Type<OT, OO>,
+        OO extends Obj<OT, OO>
+        > {
 
     public static <
             IT extends Type<IT, IO>,
@@ -38,21 +45,57 @@ public class SoftmaxField {
             NO extends Obj<NT, NO>,
             OT extends Type<OT, OO>,
             OO extends Obj<OT, OO>
-            > FieldDefinition<OT, OO> softmax(
+            > SoftmaxFields<IT, IO, NT, NO, OT, OO> softmax(
                     IT inputRef,
                     NT normRef,
                     OT outputRef,
-                    RelationTypeOne<NT, NO, IT, IO> normInputRelation,
+                    RelationTypeMany<NT, NO, IT, IO> normInputRelation,
                     RelationTypeOne<OT, OO, NT, NO> normOutputRelation,
                     RelationTypeOne<OT, OO, IT, IO> inputRelation,
                     String name
     ) {
-        ExponentialFunction<IT, IO> e = exp(inputRef, name);
-        FieldDefinition<NT, NO> norm = sum(normRef, name)
-                .in(normInputRelation, e);
+        return new SoftmaxFields<>(
+                inputRef,
+                normRef,
+                outputRef,
+                normInputRelation,
+                normOutputRelation,
+                inputRelation,
+                name);
+    }
 
-        return div(outputRef, name)
-                .in(inputRelation, e, 0)
+    private final ExponentialFunction<IT, IO> inputs;
+    private final FieldDefinition<NT, NO> norm;
+    private final FieldDefinition<OT, OO> outputs;
+
+
+    public SoftmaxFields(
+            IT inputRef,
+            NT normRef,
+            OT outputRef,
+            RelationTypeMany<NT, NO, IT, IO> normInputRelation,
+            RelationTypeOne<OT, OO, NT, NO> normOutputRelation,
+            RelationTypeOne<OT, OO, IT, IO> inputRelation,
+            String name
+    ) {
+        inputs = exp(inputRef, name);
+        norm = sum(normRef, name)
+                .in(normInputRelation, inputs);
+
+        outputs = div(outputRef, name)
+                .in(inputRelation, inputs, 0)
                 .in(normOutputRelation, norm, 1);
+    }
+
+    public ExponentialFunction<IT, IO> getInputs() {
+        return inputs;
+    }
+
+    public FieldDefinition<NT, NO> getNorm() {
+        return norm;
+    }
+
+    public FieldDefinition<OT, OO> getOutputs() {
+        return outputs;
     }
 }

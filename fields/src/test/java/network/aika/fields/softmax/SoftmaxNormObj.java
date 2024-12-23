@@ -5,6 +5,7 @@ import network.aika.type.TypeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class SoftmaxNormObj extends ObjImpl<SoftmaxNormType, SoftmaxNormObj, TypeRegistry> {
 
@@ -23,11 +24,11 @@ public class SoftmaxNormObj extends ObjImpl<SoftmaxNormType, SoftmaxNormObj, Typ
         objB.initFields(objA);
     }
 
-    public List<SoftmaxInputObj> getInputs() {
-        return inputs;
+    public Stream<SoftmaxInputObj> getInputs() {
+        return inputs.stream();
     }
 
-    public List<SoftmaxOutputObj> getOutputs() {
-        return outputs;
+    public Stream<SoftmaxOutputObj> getOutputs() {
+        return outputs.stream();
     }
 }

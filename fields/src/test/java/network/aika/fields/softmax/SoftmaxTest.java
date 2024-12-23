@@ -1,77 +1,89 @@
 package network.aika.fields.softmax;
 
+import network.aika.fields.SoftmaxFields;
 import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.manyobjects.TestObjectMany;
-import network.aika.fields.manyobjects.TestObjectOne;
-import network.aika.fields.manyobjects.TestTypeMany;
-import network.aika.fields.manyobjects.TestTypeOne;
 import network.aika.type.TypeRegistry;
 import network.aika.type.TypeRegistryImpl;
+import network.aika.type.relations.RelationTypeMany;
 import network.aika.type.relations.RelationTypeOne;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static network.aika.fields.SoftmaxField.softmax;
-import static network.aika.fields.SumField.sum;
+import static network.aika.fields.SoftmaxFields.softmax;
 import static network.aika.fields.manyobjects.TestObjectMany.linkObjectsAndInitFields;
 
 public class SoftmaxTest {
-/*
-    public static RelationTypeOne<TestTypeOne, TestObjectOne, TestTypeMany, TestObjectMany> ONE_TO_MANY = new RelationTypeOne<>(Link::getInput, "LINK-INPUT");
 
-    public static RelationTypeOne<TestTypeOne, TestObjectOne, TestTypeMany, TestObjectMany> OUTPUT = new RelationTypeOne<>(Link::getOutput, "LINK-OUTPUT");
+    public static RelationTypeOne<SoftmaxInputType, SoftmaxInputObj, SoftmaxNormType, SoftmaxNormObj> INPUT_TO_NORM = new RelationTypeOne<>(SoftmaxInputObj::getNormObject, "INPUT_TO_NORM");
+    public static RelationTypeMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxInputType, SoftmaxInputObj> NORM_TO_INPUT = new RelationTypeMany<>((o, td) -> o.getInputs(), "NORM_TO_INPUT");
 
-    public static RelationTypeOne<TestTypeOne, TestObjectOne, TestTypeOne, TestObjectOne> CORRESPONDING_INPUT_LINK = new RelationTypeOne<>(Link::getCorrespondingInputLink, "LINK-CORRESPONDING-INPUT-LINK");
-    public static RelationTypeOne<TestTypeOne, TestObjectOne, TestTypeOne, TestObjectOne> CORRESPONDING_OUTPUT_LINK = new RelationTypeOne<>(Link::getCorrespondingOutputLink, "LINK-CORRESPONDING-INPUT-LINK");
-*/
+    public static RelationTypeMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxOutputType, SoftmaxOutputObj> NORM_TO_OUTPUT = new RelationTypeMany<>((o, td) -> o.getOutputs(), "NORM_TO_OUTPUT");
+    public static RelationTypeOne<SoftmaxOutputType, SoftmaxOutputObj, SoftmaxNormType, SoftmaxNormObj> OUTPUT_TO_NORM = new RelationTypeOne<>(SoftmaxOutputObj::getNormObj, "OUTPUT_TO_NORM");
+
+    public static RelationTypeOne<SoftmaxOutputType, SoftmaxOutputObj, SoftmaxInputType, SoftmaxInputObj> CORRESPONDING_INPUT_LINK = new RelationTypeOne<>(SoftmaxOutputObj::getCorrespondingInputLink, "CORRESPONDING_INPUT_LINK");
+    public static RelationTypeOne<SoftmaxInputType, SoftmaxInputObj, SoftmaxOutputType, SoftmaxOutputObj> CORRESPONDING_OUTPUT_LINK = new RelationTypeOne<>(SoftmaxInputObj::getCorrespondingOutputLink, "CORRESPONDING_OUTPUT_LINK");
+
     static {
+        INPUT_TO_NORM.setReversed(NORM_TO_INPUT);
+        NORM_TO_INPUT.setReversed(INPUT_TO_NORM);
 
-//        CORRESPONDING_INPUT_LINK.setReversed(CORRESPONDING_OUTPUT_LINK);
-//        CORRESPONDING_OUTPUT_LINK.setReversed(CORRESPONDING_INPUT_LINK);
+        NORM_TO_OUTPUT.setReversed(OUTPUT_TO_NORM);
+        OUTPUT_TO_NORM.setReversed(NORM_TO_OUTPUT);
+
+        CORRESPONDING_INPUT_LINK.setReversed(CORRESPONDING_OUTPUT_LINK);
+        CORRESPONDING_OUTPUT_LINK.setReversed(CORRESPONDING_INPUT_LINK);
     }
 
-    protected TestTypeOne typeA;
-    protected TestTypeMany typeB;
-    protected TestTypeOne typeC;
+    protected SoftmaxInputType inputType;
+    protected SoftmaxNormType normType;
+    protected SoftmaxOutputType outputType;
 
-/*
+
     @BeforeEach
     public void init() {
         TypeRegistry registry = new TypeRegistryImpl();
 
-        inputType = new TestTypeOne(registry, "Input")
-                .setClazz(TestObjectOne.class);
+        inputType = new SoftmaxInputType(registry, "Input")
+                .setClazz(SoftmaxInputObj.class);
 
-        normType = new TestTypeMany(registry, "Norm")
-                .setClazz(TestObjectMany.class);
+        normType = new SoftmaxNormType(registry, "Norm")
+                .setClazz(SoftmaxNormObj.class);
 
-        outputType = new TestTypeOne(registry, "Output")
-                .setClazz(TestObjectOne.class);
+        outputType = new SoftmaxOutputType(registry, "Output")
+                .setClazz(SoftmaxOutputObj.class);
     }
 
     @Test
     public void testSoftmax() {
-        FieldDefinition<TestTypeOne, TestObjectOne> softmaxField = softmax(
-                inputType,
-                normType,
-                outputType,
-                TEST_INPUT_RELATION_FROM,
-                TEST_OUTPUT_RELATION_FROM,
-                CORRESPONDING_INPUT_LINK,
-                "test softmax"
-        );
-
-        FieldDefinition<TestTypeMany, TestObjectMany> fieldC = sum(typeB, "b")
-                .in(TEST_RELATION_FROM, fieldA)
-                .in(TEST_RELATION_FROM, fieldB);
+        SoftmaxFields<SoftmaxInputType, SoftmaxInputObj,
+                SoftmaxNormType, SoftmaxNormObj,
+                SoftmaxOutputType, SoftmaxOutputObj> softmaxField =
+                softmax(
+                        inputType,
+                        normType,
+                        outputType,
+                        NORM_TO_INPUT,
+                        OUTPUT_TO_NORM,
+                        CORRESPONDING_INPUT_LINK,
+                        "test softmax"
+                );
 
 
         // Object and Field initialization
 
-        TestObjectOne objA = new TestObjectOne(typeA);
-        objA.setFieldValue(fieldA, 5.0);
-        objA.setFieldValue(fieldB, 5.0);
+        SoftmaxInputObj[] inputsObjs = new SoftmaxInputObj[3];
+        for(int i = 0; i < inputsObjs.length; i++)
+            inputsObjs[i] = inputType.instantiate();
+
+        SoftmaxNormObj normObj = normType.instantiate();
+
+        SoftmaxOutputObj[] outputsObjs = new SoftmaxOutputObj[3];
+        for(int i = 0; i < outputsObjs.length; i++)
+            outputsObjs[i] = outputType.instantiate();
+        /*
+        objA.setFieldValue(softmaxField.getInputs(), 5.0);
 
         TestObjectMany objB = new TestObjectMany(typeB);
 
@@ -81,7 +93,7 @@ public class SoftmaxTest {
                 10.0,
                 objB.getField(fieldC).getValue()
         );
-    }
 
- */
+         */
+    }
 }

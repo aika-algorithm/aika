@@ -22,4 +22,8 @@ public class SoftmaxOutputObj extends ObjImpl<SoftmaxOutputType, SoftmaxOutputOb
 
         objB.initFields(objA);
     }
+
+    public SoftmaxInputObj getCorrespondingInputLink() {
+        return null;
+    }
 }
