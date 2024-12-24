@@ -73,17 +73,16 @@ public class SoftmaxTest {
 
         SoftmaxInputObj[] inputsObjs = new SoftmaxInputObj[inputValues.length];
         for(int i = 0; i < inputsObjs.length; i++)
-            inputsObjs[i] = inputType.instantiate();
+            inputsObjs[i] = inputType.instantiate(i);
 
         SoftmaxNormObj normObj = normType.instantiate();
 
         SoftmaxOutputObj[] outputsObjs = new SoftmaxOutputObj[inputValues.length];
         for(int i = 0; i < outputsObjs.length; i++)
-            outputsObjs[i] = outputType.instantiate();
+            outputsObjs[i] = outputType.instantiate(i);
 
         for (int i = 0; i < inputValues.length; i++)
             inputsObjs[i].setFieldValue(softmaxField.getInputs(), inputValues[i]);
-
 
         SoftmaxNormObj.linkObjectsAndInitFields(inputsObjs, normObj);
         SoftmaxOutputObj.linkObjectsAndInitFields(normObj, outputsObjs);
@@ -92,9 +91,10 @@ public class SoftmaxTest {
         for(int i = 0; i < outputValues.length; i++)
             outputValues[i] = outputsObjs[i].getField(softmaxField.getOutputs()).getValue();
 
-        Assertions.assertEquals(
-                new double[] {2.3, 4.1, 8.4, 1.2, 6.9},
-                outputValues
+        Assertions.assertArrayEquals(
+                new double[] {0.10043668122270742, 0.17903930131004367, 0.36681222707423583, 0.052401746724890834, 0.3013100436681223},
+                outputValues,
+                0.0001
         );
     }
 }

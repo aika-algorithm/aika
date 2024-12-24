@@ -13,10 +13,10 @@ public class SoftmaxOutputType extends Type<SoftmaxOutputType, SoftmaxOutputObj>
         super(registry, name);
     }
 
-    public SoftmaxOutputObj instantiate() {
+    public SoftmaxOutputObj instantiate(int bsId) {
         return instantiate(
-                List.of(SoftmaxOutputType.class),
-                List.of(this)
+                List.of(SoftmaxOutputType.class, Integer.class),
+                List.of(this, bsId)
         );
     }
 }

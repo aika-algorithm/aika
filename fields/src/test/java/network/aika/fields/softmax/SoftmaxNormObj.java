@@ -27,8 +27,16 @@ public class SoftmaxNormObj extends ObjImpl<SoftmaxNormType, SoftmaxNormObj, Typ
         }
     }
 
+    public SoftmaxInputObj getInput(int bsId) {
+        return inputs.get(bsId);
+    }
+
     public Stream<SoftmaxInputObj> getInputs() {
         return inputs.stream();
+    }
+
+    public SoftmaxOutputObj getOutput(int bsId) {
+        return outputs.get(bsId);
     }
 
     public Stream<SoftmaxOutputObj> getOutputs() {

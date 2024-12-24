@@ -13,10 +13,10 @@ public class SoftmaxInputType extends Type<SoftmaxInputType, SoftmaxInputObj> {
         super(registry, name);
     }
 
-    public SoftmaxInputObj instantiate() {
+    public SoftmaxInputObj instantiate(int bsId) {
         return instantiate(
-                List.of(SoftmaxInputType.class),
-                List.of(this)
+                List.of(SoftmaxInputType.class, Integer.class),
+                List.of(this, bsId)
         );
     }
 }

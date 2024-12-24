@@ -7,9 +7,11 @@ import network.aika.type.TypeRegistry;
 public class SoftmaxOutputObj extends ObjImpl<SoftmaxOutputType, SoftmaxOutputObj, TypeRegistry> {
 
     SoftmaxNormObj normObj;
+    Integer bsId;
 
-    public SoftmaxOutputObj(SoftmaxOutputType type) {
+    public SoftmaxOutputObj(SoftmaxOutputType type, Integer bsId) {
         super(type);
+        this.bsId = bsId;
     }
 
     public SoftmaxNormObj getNormObj() {
@@ -27,6 +29,9 @@ public class SoftmaxOutputObj extends ObjImpl<SoftmaxOutputType, SoftmaxOutputOb
     }
 
     public SoftmaxInputObj getCorrespondingInputLink() {
-        return null;
+        if(normObj == null)
+            return null;
+
+        return normObj.getInput(bsId);
     }
 }
