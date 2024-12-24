@@ -23,7 +23,7 @@ public class SoftmaxInputObj extends ObjImpl<SoftmaxInputType, SoftmaxInputObj, 
     }
 
     public SoftmaxOutputObj getCorrespondingOutputLink() {
-        if(normObject == null)
+        if(normObject == null || normObject.outputs.isEmpty())
             return null;
 
         return normObject.getOutput(bsId);
