@@ -1,8 +1,6 @@
 package network.aika.fields.softmax;
 
 import network.aika.fields.SoftmaxFields;
-import network.aika.fields.defs.FieldDefinition;
-import network.aika.fields.manyobjects.TestObjectMany;
 import network.aika.type.TypeRegistry;
 import network.aika.type.TypeRegistryImpl;
 import network.aika.type.relations.RelationTypeMany;
@@ -12,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static network.aika.fields.SoftmaxFields.softmax;
-import static network.aika.fields.manyobjects.TestObjectMany.linkObjectsAndInitFields;
 
 public class SoftmaxTest {
 
@@ -72,28 +69,32 @@ public class SoftmaxTest {
 
 
         // Object and Field initialization
+        double[] inputValues = new double[] {2.3, 4.1, 8.4, 1.2, 6.9};
 
-        SoftmaxInputObj[] inputsObjs = new SoftmaxInputObj[3];
+        SoftmaxInputObj[] inputsObjs = new SoftmaxInputObj[inputValues.length];
         for(int i = 0; i < inputsObjs.length; i++)
             inputsObjs[i] = inputType.instantiate();
 
         SoftmaxNormObj normObj = normType.instantiate();
 
-        SoftmaxOutputObj[] outputsObjs = new SoftmaxOutputObj[3];
+        SoftmaxOutputObj[] outputsObjs = new SoftmaxOutputObj[inputValues.length];
         for(int i = 0; i < outputsObjs.length; i++)
             outputsObjs[i] = outputType.instantiate();
-        /*
-        objA.setFieldValue(softmaxField.getInputs(), 5.0);
 
-        TestObjectMany objB = new TestObjectMany(typeB);
+        for (int i = 0; i < inputValues.length; i++)
+            inputsObjs[i].setFieldValue(softmaxField.getInputs(), inputValues[i]);
 
-        linkObjectsAndInitFields(objA, objB);
+
+        SoftmaxNormObj.linkObjectsAndInitFields(inputsObjs, normObj);
+        SoftmaxOutputObj.linkObjectsAndInitFields(normObj, outputsObjs);
+
+        double[] outputValues = new double[inputValues.length];
+        for(int i = 0; i < outputValues.length; i++)
+            outputValues[i] = outputsObjs[i].getField(softmaxField.getOutputs()).getValue();
 
         Assertions.assertEquals(
-                10.0,
-                objB.getField(fieldC).getValue()
+                new double[] {2.3, 4.1, 8.4, 1.2, 6.9},
+                outputValues
         );
-
-         */
     }
 }

@@ -17,11 +17,14 @@ public class SoftmaxNormObj extends ObjImpl<SoftmaxNormType, SoftmaxNormObj, Typ
     }
 
 
-    public static void linkObjectsAndInitFields(SoftmaxInputObj objA, SoftmaxNormObj objB) {
-        objA.normObject = objB;
-        objB.inputs.add(objA);
+    public static void linkObjectsAndInitFields(SoftmaxInputObj[] inputsObjs, SoftmaxNormObj normObj) {
+        for (int i = 0; i < inputsObjs.length; i++) {
+            SoftmaxInputObj inputObj = inputsObjs[i];
+            inputObj.normObject = normObj;
+            normObj.inputs.add(inputObj);
 
-        objB.initFields(objA);
+            normObj.initFields(inputObj);
+        }
     }
 
     public Stream<SoftmaxInputObj> getInputs() {

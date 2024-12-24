@@ -16,11 +16,14 @@ public class SoftmaxOutputObj extends ObjImpl<SoftmaxOutputType, SoftmaxOutputOb
         return normObj;
     }
 
-    public static void linkObjectsAndInitFields(SoftmaxNormObj objA, SoftmaxOutputObj objB) {
-        objA.outputs.add(objB);
-        objB.normObj = objA;
+    public static void linkObjectsAndInitFields(SoftmaxNormObj normObj, SoftmaxOutputObj[] outputObjs) {
+        for(int i = 0; i < outputObjs.length; i++) {
+            SoftmaxOutputObj outputObj = outputObjs[i];
+            normObj.outputs.add(outputObj);
+            outputObj.normObj = normObj;
 
-        objB.initFields(objA);
+            outputObj.initFields(normObj);
+        }
     }
 
     public SoftmaxInputObj getCorrespondingInputLink() {
