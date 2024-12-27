@@ -16,8 +16,9 @@
  */
 package network.aika.typedefs;
 
-import network.aika.Model;
+import network.aika.activations.InhibitoryActivation;
 import network.aika.activations.Link;
+import network.aika.bindingsignal.BSType;
 import network.aika.type.relations.RelationTypeMany;
 import network.aika.type.relations.RelationTypeOne;
 import network.aika.neurons.Neuron;
@@ -28,6 +29,7 @@ import network.aika.type.Type;
 import network.aika.type.TypeRegistry;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -119,6 +121,38 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
         this.link = link;
 
         return this;
+    }
+
+    public boolean isIncomingLinkingCandidate(Set<BSType> BSTypes) {
+        for (Transition t : getTransition()) {
+            if (BSTypes.contains(t.to()))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean isOutgoingLinkingCandidate(Set<BSType> BSTypes) {
+        for (Transition t : getTransition()) {
+            if (BSTypes.contains(t.from()))
+                return true;
+        }
+        return false;
+    }
+
+    public BSType mapTransitionForward(BSType bsType) {
+        for (Transition t : getTransition()) {
+            if(t.from() == bsType)
+                return t.to();
+        }
+        return null;
+    }
+
+    public BSType mapTransitionBackward(BSType bsType) {
+        for (Transition t : getTransition()) {
+            if(t.to() == bsType)
+                return t.from();
+        }
+        return null;
     }
 
     public Transition[] getTransition() {

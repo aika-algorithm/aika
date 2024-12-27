@@ -58,14 +58,8 @@ public class DisjunctiveActivation extends Activation {
     }
 
     @Override
-    public Link getInputLink(Activation iAct, int synapseId) {
-        return inputLinks.get(iAct.getId());
-    }
-
-    @Override
     public Stream<Link> getInputLinks() {
         return inputLinks.values()
                 .stream();
     }
-
 }

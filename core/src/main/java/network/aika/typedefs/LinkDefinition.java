@@ -17,6 +17,7 @@
 package network.aika.typedefs;
 
 import network.aika.activations.Activation;
+import network.aika.activations.InhibitoryActivation;
 import network.aika.activations.Link;
 import network.aika.type.relations.RelationTypeOne;
 import network.aika.neurons.Synapse;
@@ -35,8 +36,8 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     public static RelationTypeOne<LinkDefinition, Link, ActivationDefinition, Activation> OUTPUT = new RelationTypeOne<>(Link::getOutput, "LINK-OUTPUT");
     public static RelationTypeOne<LinkDefinition, Link, SynapseDefinition, Synapse> SYNAPSE = new RelationTypeOne<>(Link::getSynapse, "LINK-SYNAPSE");
 
-    public static RelationTypeOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_INPUT_LINK = new RelationTypeOne<>(Link::getCorrespondingInputLink, "LINK-CORRESPONDING-INPUT-LINK");
-    public static RelationTypeOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_OUTPUT_LINK = new RelationTypeOne<>(Link::getCorrespondingOutputLink, "LINK-CORRESPONDING-INPUT-LINK");
+    public static RelationTypeOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_INPUT_LINK = new RelationTypeOne<>(l -> ((InhibitoryActivation) l.getInput()).getCorrespondingInputLink(l), "CORRESPONDING_INPUT_LINK");
+    public static RelationTypeOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_OUTPUT_LINK = new RelationTypeOne<>(l -> ((InhibitoryActivation) l.getOutput()).getCorrespondingOutputLink(l), "CORRESPONDING_OUTPUT_LINK");
 
     static {
         SYNAPSE.setReversed(SynapseDefinition.LINK);

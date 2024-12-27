@@ -51,7 +51,7 @@ public class ConjunctiveActivation extends Activation {
         neuron
                 .getInputSynapsesAsStream()
                 .filter(s ->
-                        s.isIncomingLinkingCandidate(getBindingSignals().keySet())
+                        s.getType().isIncomingLinkingCandidate(getBindingSignals().keySet())
                 )
                 .forEach(s ->
                         linkIncoming(s, excludedInputAct)
@@ -74,11 +74,6 @@ public class ConjunctiveActivation extends Activation {
         Synapse syn = l.getSynapse();
         assert inputLinks.get(syn.getSynapseId()) == null;
         inputLinks.put(syn.getSynapseId(), l);
-    }
-
-    @Override
-    public Link getInputLink(Activation iAct, int synapseId) {
-        return inputLinks.get(synapseId);
     }
 
     @Override

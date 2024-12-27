@@ -48,6 +48,8 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
 
     NeuronDefinition neuron;
 
+    BSType wildcard;
+
     public ActivationDefinition(TypeRegistry registry, String name) {
         super(registry, name);
     }
@@ -68,6 +70,15 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
     public ActivationDefinition setNeuron(NeuronDefinition neuron) {
         this.neuron = neuron;
 
+        return this;
+    }
+
+    public BSType getWildcard() {
+        return wildcard;
+    }
+
+    public ActivationDefinition setWildcard(BSType wildcard) {
+        this.wildcard = wildcard;
         return this;
     }
 }

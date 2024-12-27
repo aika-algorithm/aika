@@ -21,7 +21,6 @@ import network.aika.activations.Activation;
 import network.aika.Element;
 import network.aika.bindingsignal.BindingSignal;
 import network.aika.activations.Link;
-import network.aika.typedefs.NeuronDefinition;
 import network.aika.typedefs.SynapseDefinition;
 import network.aika.bindingsignal.BSType;
 import network.aika.bindingsignal.Transition;
@@ -76,29 +75,10 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse, Model>
         this.synapseId = synapseId;
     }
 
-    public Transition[] getTransition() {
-        return getType().getTransition();
-    }
 
-    public boolean isIncomingLinkingCandidate(Set<BSType> BSTypes) {
-        for (Transition t : getTransition()) {
-            if (BSTypes.contains(t.to()))
-                return true;
-        }
-        return false;
-    }
-
-    public boolean isOutgoingLinkingCandidate(Set<BSType> BSTypes) {
-        for (Transition t : getTransition()) {
-            if (BSTypes.contains(t.from()))
-                return true;
-        }
-        return false;
-    }
-
-    public Map<BSType, BindingSignal> transition(Map<BSType, BindingSignal> inputBindingSignals) {
+    public Map<BSType, BindingSignal> transitionForward(Map<BSType, BindingSignal> inputBindingSignals) {
         Map<BSType, BindingSignal> outputTransitions = new HashMap<>();
-        Transition[] transitions = getTransition();
+        Transition[] transitions = type.getTransition();
         for (Transition t : transitions) {
             BindingSignal bs = inputBindingSignals.get(t.from());
             if (bs != null) {
@@ -120,12 +100,6 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse, Model>
 
     public boolean isPropagable() {
         return propagable;
-    }
-
-    public Link getLink(Activation iAct, Activation oAct) {
-        Link l = oAct.getInputLink(iAct, synapseId);
-        assert l == null || l.getSynapse() == this;
-        return l;
     }
 
     public final void setModified(Model m) {
@@ -167,7 +141,10 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse, Model>
     }
 
     public final Link createLink(Activation input, Activation output) {
-        Map<BSType, BindingSignal> bindingSignals = transition(input.getBindingSignals());
+        return createLink(input, transitionForward(input.getBindingSignals()), output);
+    }
+
+    public final Link createLink(Activation input, Map<BSType, BindingSignal> bindingSignals, Activation output) {
         if(output.hasConflictingBindingSignals(bindingSignals))
             return null;
         else if(output.hasNewBindingSignals(bindingSignals)) {

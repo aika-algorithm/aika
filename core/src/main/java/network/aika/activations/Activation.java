@@ -144,7 +144,7 @@ public abstract class Activation extends ObjImpl<ActivationDefinition, Activatio
         neuron.getOutputSynapses()
                 .stream()
                 .filter(s ->
-                        s.isOutgoingLinkingCandidate(getBindingSignals().keySet())
+                        s.getType().isOutgoingLinkingCandidate(getBindingSignals().keySet())
                 )
                 .forEach(this::linkOutgoing);
     }
@@ -164,13 +164,10 @@ public abstract class Activation extends ObjImpl<ActivationDefinition, Activatio
     }
 
     public void propagate(Synapse targetSyn) {
-        Activation oAct = targetSyn.getOutput(getModel()).createActivation(
-                null,
-                getDocument(),
-                targetSyn.transition(getBindingSignals())
-        );
+        Map<BSType, BindingSignal> bindingSignals = targetSyn.transitionForward(getBindingSignals());
+        Activation oAct = targetSyn.getOutput(getModel()).createActivation(null, getDocument(), bindingSignals);
 
-        targetSyn.createLink(this, oAct);
+        targetSyn.createLink(this, bindingSignals, oAct);
 
         oAct.linkIncoming(this);
     }
@@ -253,8 +250,6 @@ public abstract class Activation extends ObjImpl<ActivationDefinition, Activatio
         return outputLinks.values()
                 .stream();
     }
-
-    public abstract Link getInputLink(Activation iAct, int synapseId);
 
     public Link getOutputLink(Neuron n) {
         return outputLinks.get(n.getId());

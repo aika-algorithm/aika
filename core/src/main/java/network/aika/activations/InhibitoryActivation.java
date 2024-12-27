@@ -23,12 +23,18 @@ import network.aika.neurons.Neuron;
 import network.aika.typedefs.ActivationDefinition;
 
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class InhibitoryActivation extends DisjunctiveActivation {
+public class InhibitoryActivation extends Activation {
+
+    protected NavigableMap<Integer, Link> inputLinks = new TreeMap<>();
+    protected NavigableMap<Integer, Link> outputLinks = new TreeMap<>();
 
     public InhibitoryActivation(
             ActivationDefinition t,
@@ -39,5 +45,70 @@ public class InhibitoryActivation extends DisjunctiveActivation {
             Map<BSType, BindingSignal> bindingSignals
     ) {
         super(t, parent, id, n, doc, bindingSignals);
+    }
+
+    @Override
+    public void addInputLink(Link l) {
+        int bsId = getInputKey(l);
+        assert inputLinks.get(bsId) == null;
+        inputLinks.put(bsId, l);
+    }
+
+    public Link getInputLink(int bsId) {
+        return inputLinks.get(bsId);
+    }
+
+    public int getInputKey(Link l) {
+        BSType wildcard = type.getWildcard();
+        BSType inputBSType = l.getSynapse().getType().mapTransitionBackward(wildcard);
+        BindingSignal inputBS = l.getInput().getBindingSignal(inputBSType);
+        return inputBS.getTokenId();
+    }
+
+    @Override
+    public void addOutputLink(Link l) {
+        int bsId = getOutputKey(l);
+        assert outputLinks.get(bsId) == null;
+        outputLinks.put(bsId, l);
+    }
+
+    public Link getOutputLink(int bsId) {
+        return outputLinks.get(bsId);
+    }
+
+    public int getOutputKey(Link l) {
+        BSType wildcard = type.getWildcard();
+        BSType outputBSType = l.getSynapse().getType().mapTransitionForward(wildcard);
+        BindingSignal outputBS = l.getOutput().getBindingSignal(outputBSType);
+        return outputBS.getTokenId();
+    }
+
+    @Override
+    public void linkIncoming(Activation excludedInputAct) {
+
+    }
+
+    @Override
+    public Stream<Link> getInputLinks() {
+        return inputLinks.values()
+                .stream();
+    }
+
+    @Override
+    public Stream<Link> getOutputLinks() {
+        return outputLinks.values()
+                .stream();
+    }
+
+    public Link getCorrespondingInputLink(Link l) {
+        InhibitoryActivation in = (InhibitoryActivation) l.input;
+        int bsId = in.getOutputKey(l);
+        return in.getInputLink(bsId);
+    }
+
+    public Link getCorrespondingOutputLink(Link l) {
+        InhibitoryActivation out = (InhibitoryActivation) l.output;
+        int bsId = out.getInputKey(l);
+        return out.getOutputLink(bsId);
     }
 }
