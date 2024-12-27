@@ -100,15 +100,15 @@ public class InhibitoryActivation extends Activation {
                 .stream();
     }
 
+    @Override
     public Link getCorrespondingInputLink(Link l) {
-        InhibitoryActivation in = (InhibitoryActivation) l.input;
-        int bsId = in.getOutputKey(l);
-        return in.getInputLink(bsId);
+        int bsId = getOutputKey(l);
+        return getInputLink(bsId);
     }
 
+    @Override
     public Link getCorrespondingOutputLink(Link l) {
-        InhibitoryActivation out = (InhibitoryActivation) l.output;
-        int bsId = out.getInputKey(l);
-        return out.getOutputLink(bsId);
+        int bsId = getInputKey(l);
+        return getOutputLink(bsId);
     }
 }

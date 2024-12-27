@@ -236,6 +236,14 @@ public abstract class Activation extends ObjImpl<ActivationDefinition, Activatio
         return getNeuron().getModel();
     }
 
+    public Link getCorrespondingInputLink(Link l) {
+        return null;
+    }
+
+    public Link getCorrespondingOutputLink(Link l) {
+        return null;
+    }
+
     public Stream<Link> getInputLinks(LinkDefinition linkDefinition) {
         return getInputLinks();
     }
