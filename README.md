@@ -1,19 +1,23 @@
 # AIKA: Artificial Intelligence for Knowledge Acquisition
 
 ## Overview
+### Idea and Core Concept:
 AIKA (Artificial Intelligence for Knowledge Acquisition) is an innovative approach to neural network design, diverging from traditional architectures that rely heavily on rigid matrix and vector operations.
 
-The AIKA Project introduces a flexible, sparse, and non-layered network representation, derived from a type hierarchy. By separating the static structure of the neural network from its dynamic activation network, AIKA enables efficient, context-aware processing. This approach ensures that only the relevant neurons and synapses are activated during the processing of input data, maintaining sparsity and computational efficiency, even in large networks with millions of neurons.
+The AIKA Project introduces a flexible, sparse, and non-layered network representation, derived from a type hierarchy. 
 
-### Key Features
-- **Sparse Activation**: Only relevant network components are activated, reducing computational overhead.
-- **Type Hierarchy**: Defines various neuron types (e.g., excitatory, inhibitory) to model network architecture and behavior.
-- **Non-Layered Representation**: Moves away from fixed-layered topologies, allowing dynamic activation sequences driven by input data.
+The Aika separates the primary neural network from its activation network. During the processing of a document, only those neurons and synapses in the activation network that are truly relevant are activated. The global neural network can encompass millions of neurons, yet the activation remains highly sparse. This sparsity is designed to enable efficient processing by focusing on the relevant subsections of the model.
 
-### Design Philosophy
-AIKA is inspired by:
-1. **Predicate Logic**: Using individual constants to model unique identifiers.
-2. **Biological Neural Networks**: Incorporating concepts of temporally synchronized spike activity.
+### Linker and Binding Signals:
+A central element is the so-called "Linker," which transfers the structure of the neural network to the activation network. Here, not only activations but also so-called binding signals propagate through the network. Binding signals are inspired by two concepts:
+
+* Individual constants from predicate logic.
+* Temporally synchronized spiking activity in biological neural networks.
+### Event-Driven Processing:
+The Aika algorithm processes all changes in the network asynchronously as time-ordered events. Whenever a neuron exceeds its activation threshold, this is recorded as an event in a queue. The algorithm then processes these events sequentially. This creates a clear temporal order in which activations and binding signals are propagated. This event-based approach allows the system to flexibly respond to dynamic changes in the network while ensuring the correctness of the computation sequence at all times.
+
+### Type Hierarchy of Network Elements:
+Unlike classical neural networks, which rely heavily on vector and matrix operations, Aika uses a hierarchy of different neuron types (e.g., excitatory, inhibitory) to define the architecture and behavior of the network. The mathematical models associated with these neuron types are organized as graphs of mathematical functions. This structure allows for flexible responses to dynamic changes in the activation network.
 
 ## Project Structure
 
@@ -60,8 +64,9 @@ mvn clean install
 
 ### Usage
 1. Instantiate the neural network using the `Fields Module`.
-2. Use the `Neural Network Module` to process input data and generate activations.
-3. Explore the sparse activation network and analyze the results.
+2. Use the `Core Module` to process input data and generate activations.
+3. The project is currently being heavily restructured. A good starting point for getting 
+familiar with the project are the test-cases within the `Core Module`.
 
 ## Contributing
 We welcome contributions from the open-source community! To contribute:
