@@ -17,7 +17,11 @@
 package network.aika.type;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
+
+import static network.aika.type.Type.TYPE_COMPARATOR;
 
 /**
  *
@@ -25,9 +29,9 @@ import java.util.List;
  */
 public class TypeRegistryImpl implements TypeRegistry {
 
-    List<Type<?, ?>> types = new ArrayList<>();
+    private List<Type<?, ?>> types = new ArrayList<>();
 
-    int fieldIdCounter = 0;
+    private int fieldIdCounter = 0;
 
     @Override
     public short register(Type<?, ?> type) {
@@ -47,9 +51,23 @@ public class TypeRegistryImpl implements TypeRegistry {
         return types;
     }
 
-    // TODO: correctly implement multiple inheritance
     @Override
     public int createFieldId() {
         return fieldIdCounter++;
+    }
+
+    @Override
+    public int getNumberOfFields() {
+        return fieldIdCounter;
+    }
+
+    @Override
+    public void flattenTypeHierarchy() {
+        TreeSet<Type<?, ?>> sortedTypes = new TreeSet<>(TYPE_COMPARATOR);
+
+        sortedTypes.addAll(types);
+
+        sortedTypes
+                .forEach(Type::initFlattenedFields);
     }
 }

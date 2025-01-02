@@ -17,6 +17,7 @@
 package network.aika.type;
 
 import network.aika.fields.defs.FieldDefinition;
+import network.aika.fields.field.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +32,10 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Type.class);
 
+    public static final Comparator<Type<?, ?>> TYPE_COMPARATOR = Comparator.
+            <Type<?, ?>>comparingInt(Type::getDepth)
+            .thenComparing(Type::getId);
+
     private final short id;
     private final String name;
 
@@ -41,7 +46,13 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     private final TypeRegistry registry;
 
-    Set<FieldDefinition<T, O>> fieldDefinitions = new HashSet<>();
+    private final Set<FieldDefinition<T, O>> fieldDefinitions = new HashSet<>();
+
+    private Integer depth;
+
+    private short[] flattenedFields;
+    private short numberOfFields;
+
 
     public Type(TypeRegistry registry, String name) {
         this.name = name;
@@ -58,6 +69,46 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         return !children.isEmpty();
     }
 
+    public void initFlattenedFields() {
+        flattenedFields = new short[registry.getNumberOfFields()];
+        Arrays.fill(flattenedFields, (short) -1);
+
+        numberOfFields = 0;
+        SortedSet<Type<?, ?>> sortedTypes = collectTypes();
+        for (Type<?, ?> t : sortedTypes) {
+            for (FieldDefinition<?, ?> fd : t.fieldDefinitions) {
+                flattenedFields[fd.getFieldId()] = numberOfFields++;
+            }
+        }
+    }
+
+    public short getFieldIndex(FieldDefinition<T, O> fd) {
+        return flattenedFields[fd.getFieldId()];
+    }
+
+    public SortedSet<Type<?, ?>> collectTypes() {
+        TreeSet<Type<?, ?>> sortedTypes = new TreeSet<>(TYPE_COMPARATOR);
+        collectTypesRecursiveStep(sortedTypes);
+        return sortedTypes;
+    }
+
+    public void collectTypesRecursiveStep(SortedSet<Type<?, ?>> sortedTypes) {
+        parents.forEach(p ->
+                p.collectTypesRecursiveStep(sortedTypes)
+        );
+        sortedTypes.add(this);
+    }
+
+    public Integer getDepth() {
+        if(depth == null)
+            depth = parents.stream()
+                .mapToInt(Type::getDepth)
+                .max()
+                .orElse(0);
+
+        return depth;
+    }
+
     protected O instantiate(List<Class<?>> parameterTypes, List<Object> parameters) {
         if(isAbstract())
             throw new RuntimeException("Unable to instantiate abstract type " + name);
@@ -69,6 +120,8 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
             if(LOG.isDebugEnabled()) {
                 LOG.debug(instance.toString());
             }
+
+            instance.setFields(new Field[numberOfFields]);
 
             return instance;
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
@@ -87,7 +140,6 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
                 clazz :
                 getFromParent(Type::getClazz);
     }
-
 
     @SuppressWarnings("rawtypes")
     public boolean isInstanceOf(Obj obj) {
@@ -151,5 +203,4 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
     public String toString() {
         return name;
     }
-
 }

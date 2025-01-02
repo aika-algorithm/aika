@@ -31,4 +31,8 @@ public interface TypeRegistry {
     int createFieldId();
 
     <T extends Type<?, ?>> T getType(short typeId);
+
+    int getNumberOfFields();
+
+    void flattenTypeHierarchy();
 }

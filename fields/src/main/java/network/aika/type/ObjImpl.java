@@ -25,7 +25,9 @@ import network.aika.utils.Writable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
@@ -36,7 +38,7 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
     protected T type;
 
-    private Map<Integer, Field> fields = new TreeMap<>();
+    private Field[] fields;
 
     public ObjImpl(T type) {
         this.type = type;
@@ -62,21 +64,27 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
     }
 
     @Override
-    public void setFields(Map<Integer, Field> fields) {
+    public void setFields(Field[] fields) {
         this.fields = fields;
     }
 
     @Override
     public Field getField(FieldDefinition<T, O> fd) {
-        return fields.get(fd.getFieldId());
+        short fieldIndex = type.getFieldIndex(fd);
+
+        return fields[fieldIndex];
     }
 
     @Override
     public Field getOrCreateField(FieldDefinition<T, O> fd) {
-        return fields.computeIfAbsent(
-                fd.getFieldId(),
-                _ -> new Field(this, fd)
-        );
+        short fieldIndex = type.getFieldIndex(fd);
+
+        Field f = fields[fieldIndex];
+        if(f == null) {
+            f = fields[fieldIndex] = new Field(this, fd);
+        }
+
+        return f;
     }
 
     @SuppressWarnings("unchecked")
@@ -105,7 +113,8 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
     @Override
     public Stream<Field> getFields() {
-        return fields.values().stream();
+        return Stream.of(fields)
+                .filter(Objects::nonNull);
     }
 
     @Override

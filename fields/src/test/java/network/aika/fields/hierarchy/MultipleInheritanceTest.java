@@ -14,17 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.fields;
+package network.aika.fields.hierarchy;
 
+import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.oneobject.TestObject;
 import network.aika.fields.oneobject.TestType;
+import network.aika.type.TypeRegistry;
+import network.aika.type.TypeRegistryImpl;
 import network.aika.type.relations.RelationTypeOne;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import static network.aika.fields.InputField.inputField;
+import static network.aika.fields.SumField.sum;
+import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
 
 
 /**
  * @author Lukas Molzberger
  */
-public class TypeHierarchyTest {
+public class MultipleInheritanceTest {
 
     public static RelationTypeOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_FROM = new RelationTypeOne<>(TestObject::getRelatedTestObject, "TEST_FROM");
     public static RelationTypeOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_TO = new RelationTypeOne<>(TestObject::getRelatedTestObject, "TEST_TO");
@@ -36,7 +47,7 @@ public class TypeHierarchyTest {
 
     protected TestType[][][] type;
 
-/*
+
     @BeforeEach
     public void init() {
         TypeRegistry registry = new TypeRegistryImpl();
@@ -71,11 +82,11 @@ public class TypeHierarchyTest {
     public void testHierarchy(int linkingPos) {
 
         // Type and Math Model initialization
+/*
+        FieldDefinition<TestType, TestObject> a = inputField(typeA, "a");
+        FieldDefinition<TestType, TestObject> b = inputField(typeA, "b");
 
-        FieldDefinition<TestType> a = inputField(typeA, "a");
-        FieldDefinition<TestType> b = inputField(typeA, "b");
-
-        FieldDefinition<TestType> c = sum(typeB, "c")
+        FieldDefinition<TestType, TestObject> c = sum(typeB, "c")
                 .in(TEST_RELATION_FROM, a)
                 .in(TEST_RELATION_FROM, b);
 
@@ -101,7 +112,6 @@ public class TypeHierarchyTest {
                 30.0,
                 ob.getField(c).getValue()
         );
-    }
-
  */
+    }
 }

@@ -1,0 +1,82 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package network.aika.fields.hierarchy;
+
+import network.aika.fields.defs.FieldDefinition;
+import network.aika.fields.oneobject.TestObject;
+import network.aika.fields.oneobject.TestType;
+import network.aika.type.TypeRegistry;
+import network.aika.type.TypeRegistryImpl;
+import network.aika.type.relations.RelationTypeOne;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import static network.aika.fields.InputField.inputField;
+import static network.aika.fields.SumField.sum;
+import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
+
+
+/**
+ * @author Lukas Molzberger
+ */
+public class TypeHierarchyTest {
+
+    TypeRegistry registry;
+    TestType parent;
+    TestType child;
+
+    @BeforeEach
+    public void init() {
+        registry = new TypeRegistryImpl();
+
+        parent = new TestType(registry, "Parent")
+                .setClazz(TestObject.class);
+
+        child = new TestType(registry, "Child")
+                .setClazz(TestObject.class)
+                .addParent(parent);
+    }
+
+    @Test
+    public void testInheritance() {
+
+        // Type and Math Model initialization
+
+        FieldDefinition<TestType, TestObject> a = inputField(parent, "a");
+        FieldDefinition<TestType, TestObject> b = inputField(parent, "b");
+
+        FieldDefinition<TestType, TestObject> c = sum(parent, "c")
+                .in(a)
+                .in(b);
+
+        registry.flattenTypeHierarchy();
+
+        // Object and Field initialization
+
+        TestObject obj = child.instantiate();
+        obj.setFieldValue(a, 50.0);
+        obj.setFieldValue(b, 20.0);
+
+        Assertions.assertEquals(
+                70.0,
+                obj.getField(c).getValue()
+        );
+    }
+}
