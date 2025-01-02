@@ -4,9 +4,7 @@
 ### Idea and Core Concept:
 AIKA (Artificial Intelligence for Knowledge Acquisition) is an innovative approach to neural network design, diverging from traditional architectures that rely heavily on rigid matrix and vector operations.
 
-The AIKA Project introduces a flexible, sparse, and non-layered network representation, derived from a type hierarchy. 
-
-The Aika separates the primary neural network from its activation network. During the processing of a document, only those neurons and synapses in the activation network that are truly relevant are activated. The global neural network can encompass millions of neurons, yet the activation remains highly sparse. This sparsity is designed to enable efficient processing by focusing on the relevant subsections of the model.
+The AIKA Project introduces a flexible, sparse, and non-layered network representation, derived from a type hierarchy. Furthermore, it separates the primary neural network from its activation network. During the processing of a document, only those neurons and synapses in the activation network that are truly relevant are activated. The global neural network can encompass millions of neurons, yet the activation remains highly sparse. This sparsity is designed to enable efficient processing by focusing on the relevant subsections of the model.
 
 ### Linker and Binding Signals:
 A central element is the so-called "Linker," which transfers the structure of the neural network to the activation network. Here, not only activations but also so-called binding signals propagate through the network. Binding signals are inspired by two concepts:
