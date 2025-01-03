@@ -68,6 +68,6 @@ public class TypeRegistryImpl implements TypeRegistry {
         sortedTypes.addAll(types);
 
         sortedTypes
-                .forEach(Type::initFlattenedFields);
+                .forEach(Type::initFlattenedType);
     }
 }

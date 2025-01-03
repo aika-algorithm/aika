@@ -112,6 +112,6 @@ public class MultipleInheritanceTest {
                 30.0,
                 ob.getField(c).getValue()
         );
- */
+*/
     }
 }

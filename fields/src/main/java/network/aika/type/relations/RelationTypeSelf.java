@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 public class RelationTypeSelf<T extends Type<T, O>, O extends Obj<T, O>> extends RelationTypeOne<T, O, T, O> {
 
     public RelationTypeSelf() {
-       super(null, "Self");
+       super(null, null, null, "Self");
     }
 
     @Override
@@ -54,5 +54,10 @@ public class RelationTypeSelf<T extends Type<T, O>, O extends Obj<T, O>> extends
     @Override
     public boolean testRelation(O fromObj, O toObj) {
         return fromObj == toObj;
+    }
+
+    @Override
+    public boolean testRelation(T fromType, T toType) {
+        return fromType == toType;
     }
 }

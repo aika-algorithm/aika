@@ -28,7 +28,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static network.aika.fields.Addition.add;
+import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InputField.inputField;
+import static network.aika.fields.Subtraction.sub;
 import static network.aika.fields.SumField.sum;
 import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
 
@@ -62,11 +65,21 @@ public class TypeHierarchyTest {
         FieldDefinition<TestType, TestObject> a = inputField(parent, "a");
         FieldDefinition<TestType, TestObject> b = inputField(parent, "b");
 
-        FieldDefinition<TestType, TestObject> c = sum(parent, "c")
-                .in(a)
-                .in(b);
+        FieldDefinition<TestType, TestObject> parentC = add(parent, "c")
+                .in(a, 0)
+                .in(b, 1);
+
+        FieldDefinition<TestType, TestObject> c = sub(child, "c")
+                .in(a, 0)
+                .in(b, 1)
+                .setParent(parentC);
+
+        FieldDefinition<TestType, TestObject> d = identity(parent, "d")
+                .in(c, 0);
 
         registry.flattenTypeHierarchy();
+
+        Assertions.assertEquals(5, child.getFlattenedType().getNumberOfFields());
 
         // Object and Field initialization
 
@@ -74,9 +87,16 @@ public class TypeHierarchyTest {
         obj.setFieldValue(a, 50.0);
         obj.setFieldValue(b, 20.0);
 
+        Assertions.assertEquals(5, obj.getFields().count());
+
         Assertions.assertEquals(
-                70.0,
+                30.0,
                 obj.getField(c).getValue()
+        );
+
+        Assertions.assertEquals(
+                30.0,
+                obj.getField(d).getValue()
         );
     }
 }

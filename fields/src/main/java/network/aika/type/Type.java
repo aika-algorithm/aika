@@ -50,9 +50,7 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     private Integer depth;
 
-    private short[] flattenedFields;
-    private short numberOfFields;
-
+    private FlattenedType<T, O> flattenedType;
 
     public Type(TypeRegistry registry, String name) {
         this.name = name;
@@ -69,30 +67,17 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         return !children.isEmpty();
     }
 
-    public void initFlattenedFields() {
-        flattenedFields = new short[registry.getNumberOfFields()];
-        Arrays.fill(flattenedFields, (short) -1);
-
-        numberOfFields = 0;
-        SortedSet<Type<?, ?>> sortedTypes = collectTypes();
-        for (Type<?, ?> t : sortedTypes) {
-            for (FieldDefinition<?, ?> fd : t.fieldDefinitions) {
-                flattenedFields[fd.getFieldId()] = numberOfFields++;
-            }
-        }
+    public void initFlattenedType() {
+        flattenedType = new FlattenedType<>((T)this);
     }
 
-    public short getFieldIndex(FieldDefinition<T, O> fd) {
-        return flattenedFields[fd.getFieldId()];
-    }
-
-    public SortedSet<Type<?, ?>> collectTypes() {
-        TreeSet<Type<?, ?>> sortedTypes = new TreeSet<>(TYPE_COMPARATOR);
+    public SortedSet<Type<T, O>> collectTypes() {
+        TreeSet<Type<T, O>> sortedTypes = new TreeSet<>(TYPE_COMPARATOR);
         collectTypesRecursiveStep(sortedTypes);
         return sortedTypes;
     }
 
-    public void collectTypesRecursiveStep(SortedSet<Type<?, ?>> sortedTypes) {
+    public void collectTypesRecursiveStep(SortedSet<Type<T, O>> sortedTypes) {
         parents.forEach(p ->
                 p.collectTypesRecursiveStep(sortedTypes)
         );
@@ -121,7 +106,7 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
                 LOG.debug(instance.toString());
             }
 
-            instance.setFields(new Field[numberOfFields]);
+            instance.setFields(new Field[flattenedType.getNumberOfFields()]);
 
             return instance;
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
@@ -156,6 +141,14 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     public String getName() {
         return name;
+    }
+
+    public TypeRegistry getTypeRegistry() {
+        return registry;
+    }
+
+    public FlattenedType<T, O> getFlattenedType() {
+        return flattenedType;
     }
 
     public void setFieldDefinition(FieldDefinition<T, O> fieldDef) {

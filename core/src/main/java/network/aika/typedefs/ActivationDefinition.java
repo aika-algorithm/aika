@@ -36,9 +36,9 @@ import java.util.*;
 public class ActivationDefinition extends Type<ActivationDefinition, Activation> {
 
 
-    public static RelationTypeMany<ActivationDefinition, Activation, LinkDefinition, Link> INPUT = new RelationTypeMany<>(Activation::getInputLinks, "ACT-INPUT");
-    public static RelationTypeMany<ActivationDefinition, Activation, LinkDefinition, Link> OUTPUT = new RelationTypeMany<>(Activation::getOutputLinks, "ACT-OUTPUT");
-    public static RelationTypeOne<ActivationDefinition, Activation, NeuronDefinition, Neuron> NEURON = new RelationTypeOne<>(Activation::getNeuron, "ACT-NEURON");
+    public static RelationTypeMany<ActivationDefinition, Activation, LinkDefinition, Link> INPUT = new RelationTypeMany<>(Activation::getInputLinks, ActivationDefinition.class, LinkDefinition.class, "ACT-INPUT");
+    public static RelationTypeMany<ActivationDefinition, Activation, LinkDefinition, Link> OUTPUT = new RelationTypeMany<>(Activation::getOutputLinks, ActivationDefinition.class, LinkDefinition.class, "ACT-OUTPUT");
+    public static RelationTypeOne<ActivationDefinition, Activation, NeuronDefinition, Neuron> NEURON = new RelationTypeOne<>(Activation::getNeuron, ActivationDefinition.class, NeuronDefinition.class, "ACT-NEURON");
 
     static {
         NEURON.setReversed(NeuronDefinition.ACTIVATION);

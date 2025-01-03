@@ -25,10 +25,7 @@ import network.aika.utils.Writable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 import java.util.stream.Stream;
 
 /**
@@ -47,10 +44,10 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
     @SuppressWarnings("unchecked")
     @Override
     public void initFields(Obj<?, ?> sourceObj) {
-        type.getFieldDefinitions()
-                .forEach(fd ->
-                        fd.initializeField(sourceObj, (O) this)
-                );
+        for(short i = 0; i < type.getFlattenedType().getNumberOfFields(); i++) {
+            FieldDefinition<T, O> fd = type.getFlattenedType().getFieldDefinitionIdByIndex(i);
+            fd.initializeField(sourceObj, (O) this);
+        }
     }
 
     @Override
@@ -70,14 +67,14 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
     @Override
     public Field getField(FieldDefinition<T, O> fd) {
-        short fieldIndex = type.getFieldIndex(fd);
+        short fieldIndex = type.getFlattenedType().getFieldIndex(fd);
 
         return fields[fieldIndex];
     }
 
     @Override
     public Field getOrCreateField(FieldDefinition<T, O> fd) {
-        short fieldIndex = type.getFieldIndex(fd);
+        short fieldIndex = type.getFlattenedType().getFieldIndex(fd);
 
         Field f = fields[fieldIndex];
         if(f == null) {

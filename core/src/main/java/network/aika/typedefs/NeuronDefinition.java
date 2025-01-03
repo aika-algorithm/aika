@@ -33,9 +33,9 @@ import java.util.List;
  */
 public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
 
-    public static RelationTypeMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> INPUT = new RelationTypeMany<>(Neuron::getInputSynapsesByType, "NEURON-INPUT");
-    public static RelationTypeMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> OUTPUT = new RelationTypeMany<>(Neuron::getOutputSynapsesByType, "NEURON-OUTPUT");
-    public static RelationTypeMany<NeuronDefinition, Neuron, ActivationDefinition, Activation> ACTIVATION = new RelationTypeMany<>(null, "NEURON-ACTIVATION");
+    public static RelationTypeMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> INPUT = new RelationTypeMany<>(Neuron::getInputSynapsesByType, NeuronDefinition.class, SynapseDefinition.class, "NEURON-INPUT");
+    public static RelationTypeMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> OUTPUT = new RelationTypeMany<>(Neuron::getOutputSynapsesByType, NeuronDefinition.class, SynapseDefinition.class, "NEURON-OUTPUT");
+    public static RelationTypeMany<NeuronDefinition, Neuron, ActivationDefinition, Activation> ACTIVATION = new RelationTypeMany<>(null, NeuronDefinition.class, ActivationDefinition.class, "NEURON-ACTIVATION");
 
     static {
         ACTIVATION.setReversed(ActivationDefinition.NEURON);

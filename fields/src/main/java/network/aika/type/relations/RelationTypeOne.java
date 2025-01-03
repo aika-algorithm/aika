@@ -35,8 +35,9 @@ public class RelationTypeOne<
 
     private final Function<F, T> followFunction;
 
-    public RelationTypeOne(Function<F, T> followFunction, String relationName) {
-        super(relationName);
+
+    public RelationTypeOne(Function<F, T> followFunction, Class<FD> input, Class<TD> output, String relationName) {
+        super(input, output, relationName);
         this.followFunction = followFunction;
     }
 

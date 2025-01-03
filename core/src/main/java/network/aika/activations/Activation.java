@@ -150,7 +150,9 @@ public abstract class Activation extends ObjImpl<ActivationDefinition, Activatio
     }
 
     void linkOutgoing(Synapse targetSyn) {
-        Set<Activation> targets = collectLinkingTargets(targetSyn.getOutput(getModel()));
+        Set<Activation> targets = collectLinkingTargets(
+                targetSyn.getOutput(getModel())
+        );
 
         targets.forEach(targetAct ->
                 targetSyn.createLink(
