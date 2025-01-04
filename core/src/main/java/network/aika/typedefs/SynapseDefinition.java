@@ -18,9 +18,9 @@ package network.aika.typedefs;
 
 import network.aika.activations.Link;
 import network.aika.bindingsignal.BSType;
-import network.aika.type.relations.RelationType;
-import network.aika.type.relations.RelationTypeMany;
-import network.aika.type.relations.RelationTypeOne;
+import network.aika.type.relations.Relation;
+import network.aika.type.relations.RelationMany;
+import network.aika.type.relations.RelationOne;
 import network.aika.neurons.Neuron;
 import network.aika.neurons.Synapse;
 import network.aika.bindingsignal.Transition;
@@ -38,9 +38,9 @@ import java.util.stream.Stream;
  */
 public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
 
-    public static RelationTypeOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> INPUT = new RelationTypeOne<>(Synapse::getInput, "SYN-INPUT");
-    public static RelationTypeOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> OUTPUT = new RelationTypeOne<>(Synapse::getOutput, "SYN-OUTPUT");
-    public static RelationTypeMany<SynapseDefinition, Synapse, LinkDefinition, Link> LINK = new RelationTypeMany<>(null, "SYN-LINK");
+    public static RelationOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> INPUT = new RelationOne<>(Synapse::getInput, "SYN-INPUT");
+    public static RelationOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> OUTPUT = new RelationOne<>(Synapse::getOutput, "SYN-OUTPUT");
+    public static RelationMany<SynapseDefinition, Synapse, LinkDefinition, Link> LINK = new RelationMany<>(null, "SYN-LINK");
 
     static {
         LINK.setReversed(LinkDefinition.SYNAPSE);
@@ -66,7 +66,7 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     }
 
     @Override
-    public Stream<RelationType<SynapseDefinition, Synapse, ?, ?>> getRelationTypes() {
+    public Stream<Relation<SynapseDefinition, Synapse, ?, ?>> getRelationTypes() {
         return Stream.of(INPUT, OUTPUT, LINK);
     }
 

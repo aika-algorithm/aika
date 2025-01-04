@@ -16,43 +16,44 @@
  */
 package network.aika.type.relations;
 
-import network.aika.type.Obj;
 import network.aika.type.Type;
+import network.aika.type.Obj;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class RelationTypeSelf<T extends Type<T, O>, O extends Obj<T, O>> extends RelationTypeOne<T, O, T, O> {
+public class RelationMany<
+        FD extends Type<FD, F>,
+        F extends Obj<FD, F>,
+        TD extends Type<TD, T>,
+        T extends Obj<TD, T>
+        > extends AbstractRelation<FD, F, TD, T> {
 
-    public RelationTypeSelf() {
-       super(null, "Self");
+    private final Function<F, Stream<T>> transitionFunction;
+
+    public RelationMany(Function<F, Stream<T>> transitionFunction, int relationId, String relationName) {
+        super(relationId, relationName);
+        this.transitionFunction = transitionFunction;
+    }
+
+    public Stream<T> followAll(F fromObj) {
+        if(transitionFunction == null)
+            return Stream.empty();
+
+        return transitionFunction.apply(fromObj);
     }
 
     @Override
-    public void setReversed(RelationType<T, O, T, O> reversed) {
-        throw new UnsupportedOperationException();
+    public boolean testRelation(F fromObj, T toObj) {
+        return getReverse().testRelation(toObj, fromObj);
     }
 
     @Override
-    public RelationType<T, O, T, O> getReverse() {
-        return this;
-    }
-
-    @Override
-    public O followOne(O fromObj) {
-        return fromObj;
-    }
-
-    @Override
-    public Stream<O> followAll(O fromObj) {
-        return Stream.of(fromObj);
-    }
-
-    @Override
-    public boolean testRelation(O fromObj, O toObj) {
-        return fromObj == toObj;
+    public String getRelationLabel() {
+        return relationName + " (Many)";
     }
 }

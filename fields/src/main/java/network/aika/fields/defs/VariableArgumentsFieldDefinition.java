@@ -18,7 +18,7 @@ package network.aika.fields.defs;
 
 import network.aika.fields.link.FieldLinkDefinition;
 import network.aika.type.Obj;
-import network.aika.type.relations.RelationType;
+import network.aika.type.relations.Relation;
 import network.aika.type.Type;
 
 import java.util.ArrayList;
@@ -54,8 +54,8 @@ public class VariableArgumentsFieldDefinition<
     public <
             IT extends Type<IT, IO>,
             IO extends Obj<IT, IO>
-            > VariableArgumentsFieldDefinition<T, O> in(RelationType<T, O, IT, IO> relationType, FieldDefinition<IT, IO> input) {
-        var fl = new FieldLinkDefinition<>(input, this, relationType.getReverse());
+            > VariableArgumentsFieldDefinition<T, O> in(Relation<T, O, IT, IO> relation, FieldDefinition<IT, IO> input) {
+        var fl = new FieldLinkDefinition<>(input, this, relation.getReverse());
         addInput(fl);
         input.addOutput(fl);
 

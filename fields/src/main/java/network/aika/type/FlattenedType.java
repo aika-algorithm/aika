@@ -66,10 +66,17 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
 
     @SuppressWarnings("unchecked")
     private FieldLinkDefinition<?, ?, T, O>[][][] flattenInputs() {
-        FieldLinkDefinition<?, ?, T, O>[][] results = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
-        for (Type<?, ?> relType: type.getTypeRegistry().getTypes()) {
-            results[relType.getId()] = flattenInputPerType(relType);
-        }
+        FieldLinkDefinition<?, ?, T, O>[][][] results = new FieldLinkDefinition[type.getRelationTypes().size()][][];
+
+        type.getRelationTypes().forEach(rel -> {
+            FieldLinkDefinition<?, ?, T, O>[][] resultsPerRelation = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
+            for (Type<?, ?> relType : type.getTypeRegistry().getTypes()) {
+                resultsPerRelation[relType.getId()] = flattenInputsPerType(relType);
+            }
+
+            results[rel.getRelationId()] = resultsPerRelation;
+        });
+
         return results;
     }
 
@@ -78,7 +85,7 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
     }
 
     @SuppressWarnings("unchecked")
-    private FieldLinkDefinition<?, ?, T, O>[] flattenInputPerType(Type<?, ?> relType) {
+    private FieldLinkDefinition<?, ?, T, O>[] flattenInputsPerType(Type<?, ?> relType) {
         List<FieldLinkDefinition<?, ?, T, O>> results = new ArrayList<>();
         for (FieldDefinition<T, O> fd : fieldsReverse) {
             fd.getInputs()

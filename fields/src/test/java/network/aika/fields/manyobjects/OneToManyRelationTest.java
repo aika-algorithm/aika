@@ -3,8 +3,8 @@ package network.aika.fields.manyobjects;
 import network.aika.fields.defs.FieldDefinition;
 import network.aika.type.TypeRegistry;
 import network.aika.type.TypeRegistryImpl;
-import network.aika.type.relations.RelationTypeMany;
-import network.aika.type.relations.RelationTypeOne;
+import network.aika.type.relations.RelationMany;
+import network.aika.type.relations.RelationOne;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +16,8 @@ import static network.aika.fields.manyobjects.TestObjectMany.linkObjectsAndInitF
 
 public class OneToManyRelationTest {
 
-    public static RelationTypeMany<TestTypeMany, TestObjectMany, TestTypeOne, TestObjectOne> TEST_RELATION_FROM = new RelationTypeMany<>((o, t) -> o.getRelatedTestObjects(), "TEST_FROM");
-    public static RelationTypeOne<TestTypeOne, TestObjectOne, TestTypeMany, TestObjectMany> TEST_RELATION_TO = new RelationTypeOne<>(TestObjectOne::getRelatedTestObject, "TEST_TO");
+    public static RelationMany<TestTypeMany, TestObjectMany, TestTypeOne, TestObjectOne> TEST_RELATION_FROM = new RelationMany<>((o, t) -> o.getRelatedTestObjects(), "TEST_FROM");
+    public static RelationOne<TestTypeOne, TestObjectOne, TestTypeMany, TestObjectMany> TEST_RELATION_TO = new RelationOne<>(TestObjectOne::getRelatedTestObject, "TEST_TO");
 
     static {
         TEST_RELATION_TO.setReversed(TEST_RELATION_FROM);

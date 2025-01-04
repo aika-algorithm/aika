@@ -19,8 +19,8 @@ package network.aika.fields;
 import network.aika.fields.defs.FieldDefinition;
 import network.aika.type.Obj;
 import network.aika.type.Type;
-import network.aika.type.relations.RelationTypeMany;
-import network.aika.type.relations.RelationTypeOne;
+import network.aika.type.relations.RelationMany;
+import network.aika.type.relations.RelationOne;
 
 import static network.aika.fields.Division.div;
 import static network.aika.fields.ExponentialFunction.exp;
@@ -49,9 +49,9 @@ public class SoftmaxFields<
                     IT inputRef,
                     NT normRef,
                     OT outputRef,
-                    RelationTypeMany<NT, NO, IT, IO> normInputRelation,
-                    RelationTypeOne<OT, OO, NT, NO> normOutputRelation,
-                    RelationTypeOne<OT, OO, IT, IO> inputRelation,
+                    RelationMany<NT, NO, IT, IO> normInputRelation,
+                    RelationOne<OT, OO, NT, NO> normOutputRelation,
+                    RelationOne<OT, OO, IT, IO> inputRelation,
                     String name
     ) {
         return new SoftmaxFields<>(
@@ -73,9 +73,9 @@ public class SoftmaxFields<
             IT inputRef,
             NT normRef,
             OT outputRef,
-            RelationTypeMany<NT, NO, IT, IO> normInputRelation,
-            RelationTypeOne<OT, OO, NT, NO> normOutputRelation,
-            RelationTypeOne<OT, OO, IT, IO> inputRelation,
+            RelationMany<NT, NO, IT, IO> normInputRelation,
+            RelationOne<OT, OO, NT, NO> normOutputRelation,
+            RelationOne<OT, OO, IT, IO> inputRelation,
             String name
     ) {
         inputs = exp(inputRef, name);

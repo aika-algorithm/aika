@@ -19,13 +19,12 @@ package network.aika.fields.defs;
 import network.aika.fields.field.Field;
 import network.aika.fields.link.ArgFieldLinkDefinition;
 import network.aika.fields.link.FieldLinkDefinition;
-import network.aika.type.FlattenedType;
-import network.aika.type.relations.RelationType;
-import network.aika.type.relations.RelationTypeOne;
+import network.aika.type.relations.Relation;
+import network.aika.type.relations.RelationOne;
 import network.aika.type.Obj;
 import network.aika.queue.ProcessingPhase;
 import network.aika.type.Type;
-import network.aika.type.relations.RelationTypeSelf;
+import network.aika.type.relations.RelationSelf;
 import network.aika.utils.ToleranceUtils;
 
 import java.util.ArrayList;
@@ -39,8 +38,6 @@ public class FieldDefinition<
         T extends Type<T, O>,
         O extends Obj<T, O>
         > {
-
-    protected static final RelationTypeSelf SELF = new RelationTypeSelf<>();
 
     protected Integer fieldId;
 
@@ -102,10 +99,10 @@ public class FieldDefinition<
     public void propagateUpdate(O fromObj, double update) {
         for(int rel = 0; rel < getObjectType().getFlattenedType().getOutputs().length; rel++) {
             FieldLinkDefinition<T, O, ?, ?>[][] outputs = getObjectType().getFlattenedType().getOutputs()[rel];
-            RelationType<T, O, ?, ?> relationType = getObjectType().getRelationType(rel);
+            Relation<T, O, ?, ?> relation = getObjectType().getRelationType(rel);
 
             if(outputs != null) {
-                relationType.followAll(fromObj)
+                relation.followAll(fromObj)
                         .forEach(toObj -> {
                             for(FieldLinkDefinition fl: outputs[toObj.getType().getId()]) {
                                 fl.getOutput().receiveUpdate(toObj, fl, update);
@@ -157,7 +154,7 @@ public class FieldDefinition<
     public <
             OT extends Type<OT, OO>,
             OO extends Obj<OT, OO>
-            > FieldDefinition<T, O> out(RelationTypeOne<T, O, OT, OO> relationType, FixedArgumentsFieldDefinition<OT, OO> output, int arg) {
+            > FieldDefinition<T, O> out(RelationOne<T, O, OT, OO> relationType, FixedArgumentsFieldDefinition<OT, OO> output, int arg) {
         ArgFieldLinkDefinition<T, O, OT, OO> fl = new ArgFieldLinkDefinition<>(this, output, relationType, arg);
         output.addInput(fl);
         addOutput(fl);
@@ -177,12 +174,12 @@ public class FieldDefinition<
     public <
             OT extends Type<OT, OO>,
             OO extends Obj<OT, OO>
-            > FieldDefinition<T, O> out(RelationType<T, O, OT, OO> relationType, VariableArgumentsFieldDefinition<OT, OO> output) {
-        FieldLinkDefinition fl = new FieldLinkDefinition(this, output, relationType);
+            > FieldDefinition<T, O> out(Relation<T, O, OT, OO> relation, VariableArgumentsFieldDefinition<OT, OO> output) {
+        FieldLinkDefinition fl = new FieldLinkDefinition(this, output, relation);
         output.addInput(fl);
         addOutput(fl);
 
-        assert relationType != null || objectType.isInstanceOf(output.objectType) || output.objectType.isInstanceOf(objectType);
+        assert relation != null || objectType.isInstanceOf(output.objectType) || output.objectType.isInstanceOf(objectType);
 
         return this;
     }

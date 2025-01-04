@@ -16,20 +16,14 @@
  */
 package network.aika.fields.hierarchy;
 
-import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.oneobject.TestObject;
 import network.aika.fields.oneobject.TestType;
 import network.aika.type.TypeRegistry;
 import network.aika.type.TypeRegistryImpl;
-import network.aika.type.relations.RelationTypeOne;
-import org.junit.jupiter.api.Assertions;
+import network.aika.type.relations.RelationOne;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import static network.aika.fields.InputField.inputField;
-import static network.aika.fields.SumField.sum;
-import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
 
 
 /**
@@ -37,8 +31,8 @@ import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
  */
 public class MultipleInheritanceTest {
 
-    public static RelationTypeOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_FROM = new RelationTypeOne<>(TestObject::getRelatedTestObject, "TEST_FROM");
-    public static RelationTypeOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_TO = new RelationTypeOne<>(TestObject::getRelatedTestObject, "TEST_TO");
+    public static RelationOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_FROM = new RelationOne<>(TestObject::getRelatedTestObject, "TEST_FROM");
+    public static RelationOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_TO = new RelationOne<>(TestObject::getRelatedTestObject, "TEST_TO");
 
     static {
         TEST_RELATION_TO.setReversed(TEST_RELATION_FROM);

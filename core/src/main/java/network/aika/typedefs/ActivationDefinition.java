@@ -20,13 +20,14 @@ import network.aika.Document;
 import network.aika.activations.Activation;
 import network.aika.activations.Link;
 import network.aika.bindingsignal.BindingSignal;
-import network.aika.type.relations.RelationType;
-import network.aika.type.relations.RelationTypeMany;
-import network.aika.type.relations.RelationTypeOne;
+import network.aika.type.relations.Relation;
+import network.aika.type.relations.RelationMany;
+import network.aika.type.relations.RelationOne;
 import network.aika.neurons.Neuron;
 import network.aika.bindingsignal.BSType;
 import network.aika.type.Type;
 import network.aika.type.TypeRegistry;
+import network.aika.type.relations.RelationSelf;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -38,9 +39,10 @@ import java.util.stream.Stream;
 public class ActivationDefinition extends Type<ActivationDefinition, Activation> {
 
 
-    public static RelationTypeMany<ActivationDefinition, Activation, LinkDefinition, Link> INPUT = new RelationTypeMany<>(Activation::getInputLinks, "ACT-INPUT");
-    public static RelationTypeMany<ActivationDefinition, Activation, LinkDefinition, Link> OUTPUT = new RelationTypeMany<>(Activation::getOutputLinks, "ACT-OUTPUT");
-    public static RelationTypeOne<ActivationDefinition, Activation, NeuronDefinition, Neuron> NEURON = new RelationTypeOne<>(Activation::getNeuron, "ACT-NEURON");
+    public static final RelationSelf<ActivationDefinition, Activation> SELF = new RelationSelf<>(0, "ACT-SELF");
+    public static final RelationMany<ActivationDefinition, Activation, LinkDefinition, Link> INPUT = new RelationMany<>(Activation::getInputLinks, 1, "ACT-INPUT");
+    public static final RelationMany<ActivationDefinition, Activation, LinkDefinition, Link> OUTPUT = new RelationMany<>(Activation::getOutputLinks, 2, "ACT-OUTPUT");
+    public static final RelationOne<ActivationDefinition, Activation, NeuronDefinition, Neuron> NEURON = new RelationOne<>(Activation::getNeuron, 3, "ACT-NEURON");
 
     static {
         NEURON.setReversed(NeuronDefinition.ACTIVATION);
@@ -57,8 +59,13 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
     }
 
     @Override
-    public Stream<RelationType<ActivationDefinition, Activation, ?, ?>> getRelationTypes() {
-        return Stream.of(INPUT, OUTPUT, NEURON);
+    public Set<Relation<ActivationDefinition, Activation, ?, ?>> getRelationTypes() {
+        return Set.of(SELF, INPUT, OUTPUT, NEURON);
+    }
+
+    @Override
+    public Relation<ActivationDefinition, Activation, ?, ?> getRelationType(int rel) {
+        return null;
     }
 
     public Activation instantiate(int actId, Activation parent, Neuron n, Document doc, Map<BSType, BindingSignal> bindingSignals) {

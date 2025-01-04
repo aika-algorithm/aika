@@ -2,7 +2,7 @@ package network.aika.fields.link;
 
 import network.aika.fields.defs.FieldDefinition;
 import network.aika.type.Type;
-import network.aika.type.relations.RelationType;
+import network.aika.type.relations.Relation;
 import network.aika.type.Obj;
 
 
@@ -15,33 +15,33 @@ public class FieldLinkDefinition<
 
     private final FieldDefinition<IT, IO> input;
     private final FieldDefinition<OT, OO> output;
-    private final RelationType<IT, IO, OT, OO> inputToOutputRelationType;
+    private final Relation<IT, IO, OT, OO> inputToOutputRelation;
 
 
     public FieldLinkDefinition(
             FieldDefinition<IT, IO> input,
             FieldDefinition<OT, OO> output,
-            RelationType<IT, IO, OT, OO> inputToOutputRelationType
+            Relation<IT, IO, OT, OO> inputToOutputRelation
     ) {
         this.input = input;
         this.output = output;
-        this.inputToOutputRelationType = inputToOutputRelationType;
+        this.inputToOutputRelation = inputToOutputRelation;
     }
 
     public FieldDefinition<IT, IO> getInput() {
         return input;
     }
 
-    public RelationType<IT, IO, OT, OO> getInputToOutputRelationType() {
-        return inputToOutputRelationType;
+    public Relation<IT, IO, OT, OO> getInputToOutputRelationType() {
+        return inputToOutputRelation;
     }
 
     public FieldDefinition<OT, OO> getOutput() {
         return output;
     }
 
-    public RelationType<OT, OO, IT, IO> getOutputToInputRelationType() {
-        return inputToOutputRelationType.getReverse();
+    public Relation<OT, OO, IT, IO> getOutputToInputRelationType() {
+        return inputToOutputRelation.getReverse();
     }
 
     public void fetchFrom(IO sourceObj, OO obj) {
@@ -64,6 +64,6 @@ public class FieldLinkDefinition<
 
     @Override
     public String toString() {
-        return input + " -- (" + inputToOutputRelationType + ") -> " + output;
+        return input + " -- (" + inputToOutputRelation + ") -> " + output;
     }
 }

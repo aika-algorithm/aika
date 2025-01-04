@@ -16,50 +16,43 @@
  */
 package network.aika.type.relations;
 
-import network.aika.type.Type;
 import network.aika.type.Obj;
+import network.aika.type.Type;
 
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class RelationTypeOne<
-        FD extends Type<FD, F>,
-        F extends Obj<FD, F>,
-        TD extends Type<TD, T>,
-        T extends Obj<TD, T>
-        > extends AbstractRelationType<FD, F, TD, T> {
+public class RelationSelf<T extends Type<T, O>, O extends Obj<T, O>> extends RelationOne<T, O, T, O> {
 
-    private final Function<F, T> followFunction;
-
-    public RelationTypeOne(Function<F, T> followFunction, String relationName) {
-        super(relationName);
-        this.followFunction = followFunction;
-    }
-
-    public T followOne(F fromObj) {
-        T toObj = followFunction.apply(fromObj);
-        return toObj;
+    public RelationSelf(int relationId, String relationName) {
+       super(null, relationId, relationName);
     }
 
     @Override
-    public Stream<T> followAll(F fromObj) {
-        T toObj = followOne(fromObj);
-        return toObj != null ?
-                Stream.of(toObj) :
-                Stream.empty();
+    public void setReversed(Relation<T, O, T, O> reversed) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean testRelation(F fromObj, T toObj) {
-        return followOne(fromObj) == toObj;
+    public Relation<T, O, T, O> getReverse() {
+        return this;
     }
 
     @Override
-    public String getRelationLabel() {
-        return relationName + " (One)";
+    public O followOne(O fromObj) {
+        return fromObj;
+    }
+
+    @Override
+    public Stream<O> followAll(O fromObj) {
+        return Stream.of(fromObj);
+    }
+
+    @Override
+    public boolean testRelation(O fromObj, O toObj) {
+        return fromObj == toObj;
     }
 }

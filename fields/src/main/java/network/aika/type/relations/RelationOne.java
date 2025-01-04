@@ -26,34 +26,40 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public class RelationTypeMany<
+public class RelationOne<
         FD extends Type<FD, F>,
         F extends Obj<FD, F>,
         TD extends Type<TD, T>,
         T extends Obj<TD, T>
-        > extends AbstractRelationType<FD, F, TD, T> {
+        > extends AbstractRelation<FD, F, TD, T> {
 
-    private final Function<F, Stream<T>> transitionFunction;
+    private final Function<F, T> followFunction;
 
-    public RelationTypeMany(Function<F, Stream<T>> transitionFunction, String relationName) {
-        super(relationName);
-        this.transitionFunction = transitionFunction;
+    public RelationOne(Function<F, T> followFunction, int relationId, String relationName) {
+        super(relationId, relationName);
+        this.followFunction = followFunction;
     }
 
-    public Stream<T> followAll(F fromObj) {
-        if(transitionFunction == null)
-            return Stream.empty();
+    public T followOne(F fromObj) {
+        T toObj = followFunction.apply(fromObj);
+        return toObj;
+    }
 
-        return transitionFunction.apply(fromObj);
+    @Override
+    public Stream<T> followAll(F fromObj) {
+        T toObj = followOne(fromObj);
+        return toObj != null ?
+                Stream.of(toObj) :
+                Stream.empty();
     }
 
     @Override
     public boolean testRelation(F fromObj, T toObj) {
-        return getReverse().testRelation(toObj, fromObj);
+        return followOne(fromObj) == toObj;
     }
 
     @Override
     public String getRelationLabel() {
-        return relationName + " (Many)";
+        return relationName + " (One)";
     }
 }

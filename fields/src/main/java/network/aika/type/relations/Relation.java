@@ -25,7 +25,7 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public interface RelationType<
+public interface Relation<
         FD extends Type<FD, F>,
         F extends Obj<FD, F>,
         TD extends Type<TD, T>,
@@ -34,9 +34,9 @@ public interface RelationType<
 
     int getRelationId();
 
-    void setReversed(RelationType<TD, T, FD, F> reversed);
+    void setReversed(Relation<TD, T, FD, F> reversed);
 
-    RelationType<TD, T, FD, F> getReverse();
+    Relation<TD, T, FD, F> getReverse();
 
     Stream<T> followAll(F fromObj);
 

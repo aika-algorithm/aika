@@ -3,8 +3,8 @@ package network.aika.fields.link;
 import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.defs.FixedArgumentsFieldDefinition;
 import network.aika.type.Type;
-import network.aika.type.relations.RelationType;
-import network.aika.type.relations.RelationTypeOne;
+import network.aika.type.relations.Relation;
+import network.aika.type.relations.RelationOne;
 import network.aika.fields.field.Field;
 import network.aika.type.Obj;
 
@@ -21,10 +21,10 @@ public class ArgFieldLinkDefinition<
     public ArgFieldLinkDefinition(
             FieldDefinition<IT, IO> input,
             FixedArgumentsFieldDefinition<OT, OO> output,
-            RelationType<IT, IO, OT, OO> relationType,
+            Relation<IT, IO, OT, OO> relation,
             int argument
     ) {
-        super(input, output, relationType);
+        super(input, output, relation);
 
         this.argument = argument;
     }
@@ -34,7 +34,7 @@ public class ArgFieldLinkDefinition<
     }
 
     public Field getInputField(OO obj) {
-        var rt = (RelationTypeOne<OT, OO, IT, IO>) getOutputToInputRelationType();
+        var rt = (RelationOne<OT, OO, IT, IO>) getOutputToInputRelationType();
         IO inputObj = rt.followOne(obj);
 
         return inputObj.getField(getInput());

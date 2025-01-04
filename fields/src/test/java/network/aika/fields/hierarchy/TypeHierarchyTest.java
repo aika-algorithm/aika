@@ -21,19 +21,14 @@ import network.aika.fields.oneobject.TestObject;
 import network.aika.fields.oneobject.TestType;
 import network.aika.type.TypeRegistry;
 import network.aika.type.TypeRegistryImpl;
-import network.aika.type.relations.RelationTypeOne;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import static network.aika.fields.Addition.add;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.Subtraction.sub;
-import static network.aika.fields.SumField.sum;
-import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
 
 
 /**

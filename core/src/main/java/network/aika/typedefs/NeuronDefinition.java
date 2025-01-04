@@ -18,13 +18,11 @@ package network.aika.typedefs;
 
 import network.aika.Model;
 import network.aika.activations.Activation;
-import network.aika.activations.Link;
 import network.aika.type.Type;
 import network.aika.type.TypeRegistry;
-import network.aika.type.relations.RelationType;
-import network.aika.type.relations.RelationTypeMany;
+import network.aika.type.relations.Relation;
+import network.aika.type.relations.RelationMany;
 import network.aika.neurons.Neuron;
-import network.aika.neurons.RefType;
 import network.aika.neurons.Synapse;
 
 import java.util.List;
@@ -36,9 +34,9 @@ import java.util.stream.Stream;
  */
 public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
 
-    public static RelationTypeMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> INPUT = new RelationTypeMany<>(Neuron::getInputSynapsesAsStream, "NEURON-INPUT");
-    public static RelationTypeMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> OUTPUT = new RelationTypeMany<>(Neuron::getOutputSynapsesAsStream, "NEURON-OUTPUT");
-    public static RelationTypeMany<NeuronDefinition, Neuron, ActivationDefinition, Activation> ACTIVATION = new RelationTypeMany<>(null, "NEURON-ACTIVATION");
+    public static RelationMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> INPUT = new RelationMany<>(Neuron::getInputSynapsesAsStream, "NEURON-INPUT");
+    public static RelationMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> OUTPUT = new RelationMany<>(Neuron::getOutputSynapsesAsStream, "NEURON-OUTPUT");
+    public static RelationMany<NeuronDefinition, Neuron, ActivationDefinition, Activation> ACTIVATION = new RelationMany<>(null, "NEURON-ACTIVATION");
 
     static {
         ACTIVATION.setReversed(ActivationDefinition.NEURON);
@@ -55,7 +53,7 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
     }
 
     @Override
-    public Stream<RelationType<NeuronDefinition, Neuron, ?, ?>> getRelationTypes() {
+    public Stream<Relation<NeuronDefinition, Neuron, ?, ?>> getRelationTypes() {
         return Stream.of(INPUT, OUTPUT, ACTIVATION);
     }
 
