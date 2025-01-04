@@ -18,17 +18,19 @@ package network.aika.type;
 
 import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.field.Field;
+import network.aika.type.relations.RelationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger
  */
-public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
+public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Type.class);
 
@@ -66,6 +68,8 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
     public boolean isAbstract() {
         return !children.isEmpty();
     }
+
+    public abstract Set<RelationType<T, O, ?, ?>> getRelationTypes();
 
     public void initFlattenedType() {
         flattenedType = new FlattenedType<>((T)this);

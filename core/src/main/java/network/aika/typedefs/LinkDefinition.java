@@ -18,12 +18,14 @@ package network.aika.typedefs;
 
 import network.aika.activations.Activation;
 import network.aika.activations.Link;
+import network.aika.type.relations.RelationType;
 import network.aika.type.relations.RelationTypeOne;
 import network.aika.neurons.Synapse;
 import network.aika.type.Type;
 import network.aika.type.TypeRegistry;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  *
@@ -52,6 +54,11 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
 
     public LinkDefinition(TypeRegistry registry, String name) {
         super(registry, name);
+    }
+
+    @Override
+    public Stream<RelationType<LinkDefinition, Link, ?, ?>> getRelationTypes() {
+        return Stream.of(INPUT, OUTPUT, SYNAPSE, CORRESPONDING_INPUT_LINK, CORRESPONDING_OUTPUT_LINK);
     }
 
     public Link instantiate(Synapse synapse, Activation input, Activation output) {

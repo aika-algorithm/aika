@@ -42,12 +42,12 @@ public class RelationTypeSelf<T extends Type<T, O>, O extends Obj<T, O>> extends
     }
 
     @Override
-    public O followOne(O fromObj, T toType) {
+    public O followOne(O fromObj) {
         return fromObj;
     }
 
     @Override
-    public Stream<O> followAll(O fromObj, T toType) {
+    public Stream<O> followAll(O fromObj) {
         return Stream.of(fromObj);
     }
 

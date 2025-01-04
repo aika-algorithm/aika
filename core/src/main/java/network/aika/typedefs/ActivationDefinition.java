@@ -20,6 +20,7 @@ import network.aika.Document;
 import network.aika.activations.Activation;
 import network.aika.activations.Link;
 import network.aika.bindingsignal.BindingSignal;
+import network.aika.type.relations.RelationType;
 import network.aika.type.relations.RelationTypeMany;
 import network.aika.type.relations.RelationTypeOne;
 import network.aika.neurons.Neuron;
@@ -28,6 +29,7 @@ import network.aika.type.Type;
 import network.aika.type.TypeRegistry;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  *
@@ -52,6 +54,11 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
 
     public ActivationDefinition(TypeRegistry registry, String name) {
         super(registry, name);
+    }
+
+    @Override
+    public Stream<RelationType<ActivationDefinition, Activation, ?, ?>> getRelationTypes() {
+        return Stream.of(INPUT, OUTPUT, NEURON);
     }
 
     public Activation instantiate(int actId, Activation parent, Neuron n, Document doc, Map<BSType, BindingSignal> bindingSignals) {

@@ -18,6 +18,7 @@ package network.aika.typedefs;
 
 import network.aika.activations.Link;
 import network.aika.bindingsignal.BSType;
+import network.aika.type.relations.RelationType;
 import network.aika.type.relations.RelationTypeMany;
 import network.aika.type.relations.RelationTypeOne;
 import network.aika.neurons.Neuron;
@@ -29,6 +30,7 @@ import network.aika.type.TypeRegistry;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  *
@@ -61,6 +63,11 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
 
     public SynapseDefinition(TypeRegistry registry, String name) {
         super(registry, name);
+    }
+
+    @Override
+    public Stream<RelationType<SynapseDefinition, Synapse, ?, ?>> getRelationTypes() {
+        return Stream.of(INPUT, OUTPUT, LINK);
     }
 
     public Synapse instantiate() {

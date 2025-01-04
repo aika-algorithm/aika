@@ -19,7 +19,7 @@ package network.aika.type.relations;
 import network.aika.type.Type;
 import network.aika.type.Obj;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -33,18 +33,18 @@ public class RelationTypeMany<
         T extends Obj<TD, T>
         > extends AbstractRelationType<FD, F, TD, T> {
 
-    private final BiFunction<F, TD, Stream<T>> transitionFunction;
+    private final Function<F, Stream<T>> transitionFunction;
 
-    public RelationTypeMany(BiFunction<F, TD, Stream<T>> transitionFunction, String relationName) {
+    public RelationTypeMany(Function<F, Stream<T>> transitionFunction, String relationName) {
         super(relationName);
         this.transitionFunction = transitionFunction;
     }
 
-    public Stream<T> followAll(F fromObj, TD toType) {
+    public Stream<T> followAll(F fromObj) {
         if(transitionFunction == null)
             return Stream.empty();
 
-        return transitionFunction.apply(fromObj, toType);
+        return transitionFunction.apply(fromObj);
     }
 
     @Override

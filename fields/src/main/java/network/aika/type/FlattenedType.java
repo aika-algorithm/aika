@@ -35,8 +35,8 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
     private final short[] fields;
     private final FieldDefinition<T, O>[] fieldsReverse;
 
-    private FieldLinkDefinition<?, ?, T, O>[][] inputs; // From-Type, FD-List
-    private FieldLinkDefinition<T, O, ?, ?>[][] outputs; // To-Type, FD-List
+    private FieldLinkDefinition<?, ?, T, O>[][][] inputs; // From-Type, FD-List
+    private FieldLinkDefinition<T, O, ?, ?>[][][] outputs; // To-Type, FD-List
 
 
     @SuppressWarnings("unchecked")
@@ -60,17 +60,21 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
     }
 
     public void flattenFieldLinks() {
-        inputs = flattenInputs(type);
-        outputs = flattenOutputs(type);
+        inputs = flattenInputs();
+        outputs = flattenOutputs();
     }
 
     @SuppressWarnings("unchecked")
-    private FieldLinkDefinition<?, ?, T, O>[][] flattenInputs(T type) {
+    private FieldLinkDefinition<?, ?, T, O>[][][] flattenInputs() {
         FieldLinkDefinition<?, ?, T, O>[][] results = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
         for (Type<?, ?> relType: type.getTypeRegistry().getTypes()) {
             results[relType.getId()] = flattenInputPerType(relType);
         }
         return results;
+    }
+
+    public FieldLinkDefinition<?, ?, T, O>[][][] getInputs() {
+        return inputs;
     }
 
     @SuppressWarnings("unchecked")
@@ -91,19 +95,30 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
     }
 
     @SuppressWarnings("unchecked")
-    private FieldLinkDefinition<T, O, ?, ?>[][] flattenOutputs(T type) {
-        FieldLinkDefinition<T, O, ?, ?>[][] results = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
-        for (Type<?, ?> relType: type.getTypeRegistry().getTypes()) {
-            results[relType.getId()] = flattenOutputsPerType(relType);
-        }
+    private FieldLinkDefinition<T, O, ?, ?>[][][] flattenOutputs() {
+        FieldLinkDefinition<T, O, ?, ?>[][][] results = new FieldLinkDefinition[type.getRelationTypes().size()][][];
+
+        type.getRelationTypes().forEach(rel -> {
+            FieldLinkDefinition<T, O, ?, ?>[][] resultsPerRelation = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
+            for (Type<?, ?> relType : type.getTypeRegistry().getTypes()) {
+                resultsPerRelation[relType.getId()] = flattenOutputsPerType(relType);
+            }
+
+            results[rel.getRelationId()] = resultsPerRelation;
+        });
+
         return results;
+    }
+
+    public FieldLinkDefinition<T, O, ?, ?>[][][] getOutputs() {
+        return outputs;
     }
 
     @SuppressWarnings("unchecked")
     private FieldLinkDefinition<T, O, ?, ?>[] flattenOutputsPerType(Type<?, ?> relType) {
         List<FieldLinkDefinition<T, O, ?, ?>> results = new ArrayList<>();
         for (FieldDefinition<T, O> fd : fieldsReverse) {
-            fd.getOutputs()
+            fd.getAllOutputs()
                     .filter(fl ->
                             relType.isInstanceOf(fl.getOutput().getObjectType())
                     )

@@ -32,11 +32,13 @@ public interface RelationType<
         T extends Obj<TD, T>
         > {
 
+    int getRelationId();
+
     void setReversed(RelationType<TD, T, FD, F> reversed);
 
     RelationType<TD, T, FD, F> getReverse();
 
-    Stream<T> followAll(F fromObj, TD toType);
+    Stream<T> followAll(F fromObj);
 
     boolean testRelation(F fromObj, T toObj);
 

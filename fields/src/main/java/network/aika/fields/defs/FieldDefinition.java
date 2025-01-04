@@ -19,6 +19,7 @@ package network.aika.fields.defs;
 import network.aika.fields.field.Field;
 import network.aika.fields.link.ArgFieldLinkDefinition;
 import network.aika.fields.link.FieldLinkDefinition;
+import network.aika.type.FlattenedType;
 import network.aika.type.relations.RelationType;
 import network.aika.type.relations.RelationTypeOne;
 import network.aika.type.Obj;
@@ -99,10 +100,19 @@ public class FieldDefinition<
 
     @SuppressWarnings("unchecked")
     public void propagateUpdate(O fromObj, double update) {
-        getOutputs()
-                .forEach(fl ->
-                        fl.propagateToAll(fromObj, update)
-                );
+        for(int rel = 0; rel < getObjectType().getFlattenedType().getOutputs().length; rel++) {
+            FieldLinkDefinition<T, O, ?, ?>[][] outputs = getObjectType().getFlattenedType().getOutputs()[rel];
+            RelationType<T, O, ?, ?> relationType = getObjectType().getRelationType(rel);
+
+            if(outputs != null) {
+                relationType.followAll(fromObj)
+                        .forEach(toObj -> {
+                            for(FieldLinkDefinition fl: outputs[toObj.getType().getId()]) {
+                                fl.getOutput().receiveUpdate(toObj, fl, update);
+                            }
+                        });
+            }
+        }
     }
 
     public FieldDefinition<T, O> getParent() {
@@ -131,8 +141,12 @@ public class FieldDefinition<
     }
 
     public Stream<? extends FieldLinkDefinition> getOutputs() {
+        return outputs.stream();
+    }
+
+    public Stream<? extends FieldLinkDefinition> getAllOutputs() {
         return parent != null ?
-                Stream.concat(outputs.stream(), parent.getOutputs()) :
+                Stream.concat(outputs.stream(), parent.getAllOutputs()) :
                 outputs.stream();
     }
 
@@ -188,9 +202,6 @@ public class FieldDefinition<
     }
 
     public Integer getFieldId() {
-        if(parent != null)
-            return parent.getFieldId();
-
         return fieldId;
     }
 

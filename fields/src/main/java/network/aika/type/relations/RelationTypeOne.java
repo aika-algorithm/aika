@@ -40,16 +40,14 @@ public class RelationTypeOne<
         this.followFunction = followFunction;
     }
 
-    public T followOne(F fromObj, TD toType) {
+    public T followOne(F fromObj) {
         T toObj = followFunction.apply(fromObj);
-        return toObj != null && toObj.isInstanceOf(toType) ?
-                toObj :
-                null;
+        return toObj;
     }
 
     @Override
-    public Stream<T> followAll(F fromObj, TD toType) {
-        T toObj = followOne(fromObj, toType);
+    public Stream<T> followAll(F fromObj) {
+        T toObj = followOne(fromObj);
         return toObj != null ?
                 Stream.of(toObj) :
                 Stream.empty();
@@ -57,7 +55,7 @@ public class RelationTypeOne<
 
     @Override
     public boolean testRelation(F fromObj, T toObj) {
-        return followOne(fromObj, toObj.getType()) == toObj;
+        return followOne(fromObj) == toObj;
     }
 
     @Override

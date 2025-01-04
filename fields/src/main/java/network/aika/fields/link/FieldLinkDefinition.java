@@ -50,7 +50,7 @@ public class FieldLinkDefinition<
             if (rt.testRelation(obj, sourceObj))
                 fetchFromObject(sourceObj, obj);
         } else {
-            rt.followAll(obj, input.getObjectType())
+            rt.followAll(obj)
                     .forEach(fo ->
                         fetchFromObject(fo, obj)
                     );
@@ -60,14 +60,6 @@ public class FieldLinkDefinition<
     private void fetchFromObject(IO sourceObj, OO obj) {
         double inputFieldValue = sourceObj.getFieldValue(input);
         output.receiveUpdate(obj, this, inputFieldValue);
-    }
-
-    public void propagateToAll(IO fromObj, double update) {
-        getInputToOutputRelationType()
-                .followAll(fromObj, output.getObjectType())
-                .forEach(toObj ->
-                        output.receiveUpdate(toObj, this, update)
-                );
     }
 
     @Override

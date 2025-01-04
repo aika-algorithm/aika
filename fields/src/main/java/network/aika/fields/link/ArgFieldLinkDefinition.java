@@ -35,10 +35,7 @@ public class ArgFieldLinkDefinition<
 
     public Field getInputField(OO obj) {
         var rt = (RelationTypeOne<OT, OO, IT, IO>) getOutputToInputRelationType();
-        IO inputObj = rt.followOne(
-                obj,
-                getInput().getObjectType()
-        );
+        IO inputObj = rt.followOne(obj);
 
         return inputObj.getField(getInput());
     }
