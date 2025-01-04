@@ -34,12 +34,7 @@ public abstract class AbstractRelationType<
 
     private RelationType<TD, T, FD, F> reversed;
 
-    protected final Class<FD> input;
-    protected final Class<TD> output;
-
-    public AbstractRelationType(Class<FD> input, Class<TD> output, String relationName) {
-        this.input = input;
-        this.output = output;
+    public AbstractRelationType(String relationName) {
         this.relationName = relationName;
     }
 
@@ -57,8 +52,4 @@ public abstract class AbstractRelationType<
         return getRelationLabel() + " -> " + getReverse().getRelationLabel();
     }
 
-    @Override
-    public boolean testRelation(FD fromType, TD toType) {
-        return fromType.getClass() == input && toType.getClass() == output;
-    }
 }

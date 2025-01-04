@@ -36,9 +36,9 @@ import java.util.Set;
  */
 public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
 
-    public static RelationTypeOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> INPUT = new RelationTypeOne<>(Synapse::getInput, SynapseDefinition.class, NeuronDefinition.class, "SYN-INPUT");
-    public static RelationTypeOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> OUTPUT = new RelationTypeOne<>(Synapse::getOutput, SynapseDefinition.class, NeuronDefinition.class, "SYN-OUTPUT");
-    public static RelationTypeMany<SynapseDefinition, Synapse, LinkDefinition, Link> LINK = new RelationTypeMany<>(null, SynapseDefinition.class, LinkDefinition.class, "SYN-LINK");
+    public static RelationTypeOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> INPUT = new RelationTypeOne<>(Synapse::getInput, "SYN-INPUT");
+    public static RelationTypeOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> OUTPUT = new RelationTypeOne<>(Synapse::getOutput, "SYN-OUTPUT");
+    public static RelationTypeMany<SynapseDefinition, Synapse, LinkDefinition, Link> LINK = new RelationTypeMany<>(null, "SYN-LINK");
 
     static {
         LINK.setReversed(LinkDefinition.SYNAPSE);

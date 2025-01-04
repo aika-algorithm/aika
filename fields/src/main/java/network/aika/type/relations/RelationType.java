@@ -40,7 +40,5 @@ public interface RelationType<
 
     boolean testRelation(F fromObj, T toObj);
 
-    boolean testRelation(FD fromType, TD toType);
-
     String getRelationLabel();
 }

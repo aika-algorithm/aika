@@ -69,5 +69,10 @@ public class TypeRegistryImpl implements TypeRegistry {
 
         sortedTypes
                 .forEach(Type::initFlattenedType);
+
+        sortedTypes
+                .forEach(t ->
+                        t.getFlattenedType().flattenFieldLinks()
+                );
     }
 }

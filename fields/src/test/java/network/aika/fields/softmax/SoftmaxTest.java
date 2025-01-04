@@ -15,14 +15,14 @@ import static network.aika.fields.SoftmaxFields.softmax;
 
 public class SoftmaxTest {
 
-    public static RelationTypeOne<SoftmaxInputType, SoftmaxInputObj, SoftmaxNormType, SoftmaxNormObj> INPUT_TO_NORM = new RelationTypeOne<>(SoftmaxInputObj::getNormObject, SoftmaxInputType.class, SoftmaxNormType.class, "INPUT_TO_NORM");
-    public static RelationTypeMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxInputType, SoftmaxInputObj> NORM_TO_INPUT = new RelationTypeMany<>((o, td) -> o.getInputs(), SoftmaxNormType.class, SoftmaxInputType.class, "NORM_TO_INPUT");
+    public static RelationTypeOne<SoftmaxInputType, SoftmaxInputObj, SoftmaxNormType, SoftmaxNormObj> INPUT_TO_NORM = new RelationTypeOne<>(SoftmaxInputObj::getNormObject, "INPUT_TO_NORM");
+    public static RelationTypeMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxInputType, SoftmaxInputObj> NORM_TO_INPUT = new RelationTypeMany<>((o, td) -> o.getInputs(), "NORM_TO_INPUT");
 
-    public static RelationTypeMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxOutputType, SoftmaxOutputObj> NORM_TO_OUTPUT = new RelationTypeMany<>((o, td) -> o.getOutputs(), SoftmaxNormType.class, SoftmaxOutputType.class, "NORM_TO_OUTPUT");
-    public static RelationTypeOne<SoftmaxOutputType, SoftmaxOutputObj, SoftmaxNormType, SoftmaxNormObj> OUTPUT_TO_NORM = new RelationTypeOne<>(SoftmaxOutputObj::getNormObj, SoftmaxOutputType.class, SoftmaxNormType.class, "OUTPUT_TO_NORM");
+    public static RelationTypeMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxOutputType, SoftmaxOutputObj> NORM_TO_OUTPUT = new RelationTypeMany<>((o, td) -> o.getOutputs(), "NORM_TO_OUTPUT");
+    public static RelationTypeOne<SoftmaxOutputType, SoftmaxOutputObj, SoftmaxNormType, SoftmaxNormObj> OUTPUT_TO_NORM = new RelationTypeOne<>(SoftmaxOutputObj::getNormObj, "OUTPUT_TO_NORM");
 
-    public static RelationTypeOne<SoftmaxOutputType, SoftmaxOutputObj, SoftmaxInputType, SoftmaxInputObj> CORRESPONDING_INPUT_LINK = new RelationTypeOne<>(SoftmaxOutputObj::getCorrespondingInputLink, SoftmaxOutputType.class, SoftmaxInputType.class, "CORRESPONDING_INPUT_LINK");
-    public static RelationTypeOne<SoftmaxInputType, SoftmaxInputObj, SoftmaxOutputType, SoftmaxOutputObj> CORRESPONDING_OUTPUT_LINK = new RelationTypeOne<>(SoftmaxInputObj::getCorrespondingOutputLink, SoftmaxInputType.class, SoftmaxOutputType.class, "CORRESPONDING_OUTPUT_LINK");
+    public static RelationTypeOne<SoftmaxOutputType, SoftmaxOutputObj, SoftmaxInputType, SoftmaxInputObj> CORRESPONDING_INPUT_LINK = new RelationTypeOne<>(SoftmaxOutputObj::getCorrespondingInputLink, "CORRESPONDING_INPUT_LINK");
+    public static RelationTypeOne<SoftmaxInputType, SoftmaxInputObj, SoftmaxOutputType, SoftmaxOutputObj> CORRESPONDING_OUTPUT_LINK = new RelationTypeOne<>(SoftmaxInputObj::getCorrespondingOutputLink, "CORRESPONDING_OUTPUT_LINK");
 
     static {
         INPUT_TO_NORM.setReversed(NORM_TO_INPUT);

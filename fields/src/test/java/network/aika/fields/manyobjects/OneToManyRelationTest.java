@@ -16,8 +16,8 @@ import static network.aika.fields.manyobjects.TestObjectMany.linkObjectsAndInitF
 
 public class OneToManyRelationTest {
 
-    public static RelationTypeMany<TestTypeMany, TestObjectMany, TestTypeOne, TestObjectOne> TEST_RELATION_FROM = new RelationTypeMany<>((o, t) -> o.getRelatedTestObjects(), TestTypeMany.class, TestTypeOne.class, "TEST_FROM");
-    public static RelationTypeOne<TestTypeOne, TestObjectOne, TestTypeMany, TestObjectMany> TEST_RELATION_TO = new RelationTypeOne<>(TestObjectOne::getRelatedTestObject, TestTypeOne.class, TestTypeMany.class, "TEST_TO");
+    public static RelationTypeMany<TestTypeMany, TestObjectMany, TestTypeOne, TestObjectOne> TEST_RELATION_FROM = new RelationTypeMany<>((o, t) -> o.getRelatedTestObjects(), "TEST_FROM");
+    public static RelationTypeOne<TestTypeOne, TestObjectOne, TestTypeMany, TestObjectMany> TEST_RELATION_TO = new RelationTypeOne<>(TestObjectOne::getRelatedTestObject, "TEST_TO");
 
     static {
         TEST_RELATION_TO.setReversed(TEST_RELATION_FROM);

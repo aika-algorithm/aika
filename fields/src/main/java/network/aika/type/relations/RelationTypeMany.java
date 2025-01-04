@@ -35,8 +35,8 @@ public class RelationTypeMany<
 
     private final BiFunction<F, TD, Stream<T>> transitionFunction;
 
-    public RelationTypeMany(BiFunction<F, TD, Stream<T>> transitionFunction, Class<FD> input, Class<TD> output, String relationName) {
-        super(input, output, relationName);
+    public RelationTypeMany(BiFunction<F, TD, Stream<T>> transitionFunction, String relationName) {
+        super(relationName);
         this.transitionFunction = transitionFunction;
     }
 
