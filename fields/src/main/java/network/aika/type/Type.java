@@ -68,9 +68,7 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         return !children.isEmpty();
     }
 
-    public abstract Set<Relation<T, O, ?, ?>> getRelationTypes();
-
-    public abstract Relation<T, O, ?, ?> getRelationType(int rel);
+    public abstract Relation<T, O, ?, ?>[] getRelationTypes();
 
     public void initFlattenedType() {
         flattenedType = new FlattenedType<>((T)this);

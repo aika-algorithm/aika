@@ -40,15 +40,19 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
 
 
     public static final RelationSelf<ActivationDefinition, Activation> SELF = new RelationSelf<>(0, "ACT-SELF");
+
     public static final RelationMany<ActivationDefinition, Activation, LinkDefinition, Link> INPUT = new RelationMany<>(Activation::getInputLinks, 1, "ACT-INPUT");
     public static final RelationMany<ActivationDefinition, Activation, LinkDefinition, Link> OUTPUT = new RelationMany<>(Activation::getOutputLinks, 2, "ACT-OUTPUT");
     public static final RelationOne<ActivationDefinition, Activation, NeuronDefinition, Neuron> NEURON = new RelationOne<>(Activation::getNeuron, 3, "ACT-NEURON");
+
+    public static final Relation[] RELATIONS = {SELF, INPUT, OUTPUT, NEURON};
 
     static {
         NEURON.setReversed(NeuronDefinition.ACTIVATION);
         INPUT.setReversed(LinkDefinition.OUTPUT);
         OUTPUT.setReversed(LinkDefinition.INPUT);
     }
+
 
     NeuronDefinition neuron;
 
@@ -59,13 +63,8 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
     }
 
     @Override
-    public Set<Relation<ActivationDefinition, Activation, ?, ?>> getRelationTypes() {
-        return Set.of(SELF, INPUT, OUTPUT, NEURON);
-    }
-
-    @Override
-    public Relation<ActivationDefinition, Activation, ?, ?> getRelationType(int rel) {
-        return null;
+    public Relation<ActivationDefinition, Activation, ?, ?>[] getRelationTypes() {
+        return RELATIONS;
     }
 
     public Activation instantiate(int actId, Activation parent, Neuron n, Document doc, Map<BSType, BindingSignal> bindingSignals) {

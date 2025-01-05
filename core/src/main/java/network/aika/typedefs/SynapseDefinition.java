@@ -16,6 +16,7 @@
  */
 package network.aika.typedefs;
 
+import network.aika.activations.Activation;
 import network.aika.activations.Link;
 import network.aika.bindingsignal.BSType;
 import network.aika.type.relations.Relation;
@@ -27,6 +28,7 @@ import network.aika.bindingsignal.Transition;
 import network.aika.misc.direction.Direction;
 import network.aika.type.Type;
 import network.aika.type.TypeRegistry;
+import network.aika.type.relations.RelationSelf;
 
 import java.util.List;
 import java.util.Set;
@@ -38,9 +40,13 @@ import java.util.stream.Stream;
  */
 public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
 
-    public static RelationOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> INPUT = new RelationOne<>(Synapse::getInput, "SYN-INPUT");
-    public static RelationOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> OUTPUT = new RelationOne<>(Synapse::getOutput, "SYN-OUTPUT");
-    public static RelationMany<SynapseDefinition, Synapse, LinkDefinition, Link> LINK = new RelationMany<>(null, "SYN-LINK");
+    public static final RelationSelf<ActivationDefinition, Activation> SELF = new RelationSelf<>(0, "SYN-SELF");
+
+    public static final RelationOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> INPUT = new RelationOne<>(Synapse::getInput, 1, "SYN-INPUT");
+    public static final RelationOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> OUTPUT = new RelationOne<>(Synapse::getOutput, 2, "SYN-OUTPUT");
+    public static final RelationMany<SynapseDefinition, Synapse, LinkDefinition, Link> LINK = new RelationMany<>(null, 3, "SYN-LINK");
+
+    public static final Relation[] RELATIONS = {INPUT, OUTPUT, LINK};
 
     static {
         LINK.setReversed(LinkDefinition.SYNAPSE);
@@ -66,8 +72,8 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     }
 
     @Override
-    public Stream<Relation<SynapseDefinition, Synapse, ?, ?>> getRelationTypes() {
-        return Stream.of(INPUT, OUTPUT, LINK);
+    public Relation<SynapseDefinition, Synapse, ?, ?>[] getRelationTypes() {
+        return RELATIONS;
     }
 
     public Synapse instantiate() {

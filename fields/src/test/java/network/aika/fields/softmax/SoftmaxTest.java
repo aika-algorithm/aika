@@ -14,26 +14,6 @@ import static network.aika.fields.SoftmaxFields.softmax;
 
 public class SoftmaxTest {
 
-    public static RelationOne<SoftmaxInputType, SoftmaxInputObj, SoftmaxNormType, SoftmaxNormObj> INPUT_TO_NORM = new RelationOne<>(SoftmaxInputObj::getNormObject, "INPUT_TO_NORM");
-    public static RelationMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxInputType, SoftmaxInputObj> NORM_TO_INPUT = new RelationMany<>((o, td) -> o.getInputs(), "NORM_TO_INPUT");
-
-    public static RelationMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxOutputType, SoftmaxOutputObj> NORM_TO_OUTPUT = new RelationMany<>((o, td) -> o.getOutputs(), "NORM_TO_OUTPUT");
-    public static RelationOne<SoftmaxOutputType, SoftmaxOutputObj, SoftmaxNormType, SoftmaxNormObj> OUTPUT_TO_NORM = new RelationOne<>(SoftmaxOutputObj::getNormObj, "OUTPUT_TO_NORM");
-
-    public static RelationOne<SoftmaxOutputType, SoftmaxOutputObj, SoftmaxInputType, SoftmaxInputObj> CORRESPONDING_INPUT_LINK = new RelationOne<>(SoftmaxOutputObj::getCorrespondingInputLink, "CORRESPONDING_INPUT_LINK");
-    public static RelationOne<SoftmaxInputType, SoftmaxInputObj, SoftmaxOutputType, SoftmaxOutputObj> CORRESPONDING_OUTPUT_LINK = new RelationOne<>(SoftmaxInputObj::getCorrespondingOutputLink, "CORRESPONDING_OUTPUT_LINK");
-
-    static {
-        INPUT_TO_NORM.setReversed(NORM_TO_INPUT);
-        NORM_TO_INPUT.setReversed(INPUT_TO_NORM);
-
-        NORM_TO_OUTPUT.setReversed(OUTPUT_TO_NORM);
-        OUTPUT_TO_NORM.setReversed(NORM_TO_OUTPUT);
-
-        CORRESPONDING_INPUT_LINK.setReversed(CORRESPONDING_OUTPUT_LINK);
-        CORRESPONDING_OUTPUT_LINK.setReversed(CORRESPONDING_INPUT_LINK);
-    }
-
     protected SoftmaxInputType inputType;
     protected SoftmaxNormType normType;
     protected SoftmaxOutputType outputType;

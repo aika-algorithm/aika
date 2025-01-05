@@ -23,8 +23,10 @@ import network.aika.type.relations.RelationOne;
 import network.aika.neurons.Synapse;
 import network.aika.type.Type;
 import network.aika.type.TypeRegistry;
+import network.aika.type.relations.RelationSelf;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -33,12 +35,16 @@ import java.util.stream.Stream;
  */
 public class LinkDefinition extends Type<LinkDefinition, Link> {
 
-    public static RelationOne<LinkDefinition, Link, ActivationDefinition, Activation> INPUT = new RelationOne<>(Link::getInput, "LINK-INPUT");
-    public static RelationOne<LinkDefinition, Link, ActivationDefinition, Activation> OUTPUT = new RelationOne<>(Link::getOutput, "LINK-OUTPUT");
-    public static RelationOne<LinkDefinition, Link, SynapseDefinition, Synapse> SYNAPSE = new RelationOne<>(Link::getSynapse, "LINK-SYNAPSE");
+    public static final RelationSelf<ActivationDefinition, Activation> SELF = new RelationSelf<>(0, "LINK-SELF");
 
-    public static RelationOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_INPUT_LINK = new RelationOne<>(l -> l.getInput().getCorrespondingInputLink(l), "CORRESPONDING_INPUT_LINK");
-    public static RelationOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_OUTPUT_LINK = new RelationOne<>(l -> l.getOutput().getCorrespondingOutputLink(l), "CORRESPONDING_OUTPUT_LINK");
+    public static final RelationOne<LinkDefinition, Link, ActivationDefinition, Activation> INPUT = new RelationOne<>(Link::getInput, 1, "LINK-INPUT");
+    public static final RelationOne<LinkDefinition, Link, ActivationDefinition, Activation> OUTPUT = new RelationOne<>(Link::getOutput, 2, "LINK-OUTPUT");
+    public static final RelationOne<LinkDefinition, Link, SynapseDefinition, Synapse> SYNAPSE = new RelationOne<>(Link::getSynapse, 3, "LINK-SYNAPSE");
+
+    public static final RelationOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_INPUT_LINK = new RelationOne<>(l -> l.getInput().getCorrespondingInputLink(l), 4, "CORRESPONDING_INPUT_LINK");
+    public static final RelationOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_OUTPUT_LINK = new RelationOne<>(l -> l.getOutput().getCorrespondingOutputLink(l), 5, "CORRESPONDING_OUTPUT_LINK");
+
+    public static final Relation[] RELATIONS = {INPUT, OUTPUT, SYNAPSE, CORRESPONDING_INPUT_LINK, CORRESPONDING_OUTPUT_LINK};
 
     static {
         SYNAPSE.setReversed(SynapseDefinition.LINK);
@@ -57,8 +63,8 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     @Override
-    public Stream<Relation<LinkDefinition, Link, ?, ?>> getRelationTypes() {
-        return Stream.of(INPUT, OUTPUT, SYNAPSE, CORRESPONDING_INPUT_LINK, CORRESPONDING_OUTPUT_LINK);
+    public Relation<LinkDefinition, Link, ?, ?>[] getRelationTypes() {
+        return RELATIONS;
     }
 
     public Link instantiate(Synapse synapse, Activation input, Activation output) {

@@ -24,8 +24,10 @@ import network.aika.type.relations.Relation;
 import network.aika.type.relations.RelationMany;
 import network.aika.neurons.Neuron;
 import network.aika.neurons.Synapse;
+import network.aika.type.relations.RelationSelf;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -34,9 +36,13 @@ import java.util.stream.Stream;
  */
 public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
 
-    public static RelationMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> INPUT = new RelationMany<>(Neuron::getInputSynapsesAsStream, "NEURON-INPUT");
-    public static RelationMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> OUTPUT = new RelationMany<>(Neuron::getOutputSynapsesAsStream, "NEURON-OUTPUT");
-    public static RelationMany<NeuronDefinition, Neuron, ActivationDefinition, Activation> ACTIVATION = new RelationMany<>(null, "NEURON-ACTIVATION");
+    public static final RelationSelf<ActivationDefinition, Activation> SELF = new RelationSelf<>(0, "NEURON-SELF");
+
+    public static final RelationMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> INPUT = new RelationMany<>(Neuron::getInputSynapsesAsStream, 1, "NEURON-INPUT");
+    public static final RelationMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> OUTPUT = new RelationMany<>(Neuron::getOutputSynapsesAsStream, 2, "NEURON-OUTPUT");
+    public static final RelationMany<NeuronDefinition, Neuron, ActivationDefinition, Activation> ACTIVATION = new RelationMany<>(null, 3, "NEURON-ACTIVATION");
+
+    public static final Relation[] RELATIONS = {INPUT, OUTPUT, ACTIVATION};
 
     static {
         ACTIVATION.setReversed(ActivationDefinition.NEURON);
@@ -53,8 +59,8 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
     }
 
     @Override
-    public Stream<Relation<NeuronDefinition, Neuron, ?, ?>> getRelationTypes() {
-        return Stream.of(INPUT, OUTPUT, ACTIVATION);
+    public Relation<NeuronDefinition, Neuron, ?, ?>[] getRelationTypes() {
+        return RELATIONS;
     }
 
     public Neuron instantiate(Model m) {

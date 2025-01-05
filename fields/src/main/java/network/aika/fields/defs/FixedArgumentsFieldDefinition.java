@@ -78,14 +78,6 @@ public abstract class FixedArgumentsFieldDefinition<
             IT extends Type<IT, IO>,
             IO extends Obj<IT, IO>
             >
-    FixedArgumentsFieldDefinition<T, O> in(FieldDefinition<IT, IO> input, int arg) {
-        return in(SELF, input, arg);
-    }
-
-    public <
-            IT extends Type<IT, IO>,
-            IO extends Obj<IT, IO>
-            >
     FixedArgumentsFieldDefinition<T, O> in(RelationOne<T, O, IT, IO> relationType, FieldDefinition<IT, IO> input, int arg) {
         var fl = new ArgFieldLinkDefinition<>(input, this, relationType.getReverse(), arg);
         addInput(fl);

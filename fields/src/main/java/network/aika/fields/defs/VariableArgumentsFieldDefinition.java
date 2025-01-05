@@ -47,13 +47,6 @@ public class VariableArgumentsFieldDefinition<
     public <
             IT extends Type<IT, IO>,
             IO extends Obj<IT, IO>
-            > VariableArgumentsFieldDefinition<T, O> in(FieldDefinition<IT, IO> input) {
-        return in(SELF, input);
-    }
-
-    public <
-            IT extends Type<IT, IO>,
-            IO extends Obj<IT, IO>
             > VariableArgumentsFieldDefinition<T, O> in(Relation<T, O, IT, IO> relation, FieldDefinition<IT, IO> input) {
         var fl = new FieldLinkDefinition<>(input, this, relation.getReverse());
         addInput(fl);

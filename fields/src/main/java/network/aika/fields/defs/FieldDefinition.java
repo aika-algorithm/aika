@@ -99,7 +99,7 @@ public class FieldDefinition<
     public void propagateUpdate(O fromObj, double update) {
         for(int rel = 0; rel < getObjectType().getFlattenedType().getOutputs().length; rel++) {
             FieldLinkDefinition<T, O, ?, ?>[][] outputs = getObjectType().getFlattenedType().getOutputs()[rel];
-            Relation<T, O, ?, ?> relation = getObjectType().getRelationType(rel);
+            Relation<T, O, ?, ?> relation = getObjectType().getRelationTypes()[rel];
 
             if(outputs != null) {
                 relation.followAll(fromObj)
@@ -147,10 +147,6 @@ public class FieldDefinition<
                 outputs.stream();
     }
 
-    public FieldDefinition<T, O> out(FixedArgumentsFieldDefinition output, int arg) {
-        return out(SELF, output, arg);
-    }
-
     public <
             OT extends Type<OT, OO>,
             OO extends Obj<OT, OO>
@@ -162,13 +158,6 @@ public class FieldDefinition<
         assert relationType != null || objectType.isInstanceOf(output.objectType) || output.objectType.isInstanceOf(objectType);
 
         return this;
-    }
-
-    public <
-            OT extends Type<OT, OO>,
-            OO extends Obj<OT, OO>
-            > FieldDefinition<T, O> out(VariableArgumentsFieldDefinition<OT, OO> output) {
-        return out(SELF, output);
     }
 
     public <

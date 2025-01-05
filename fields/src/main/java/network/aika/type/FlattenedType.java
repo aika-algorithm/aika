@@ -18,6 +18,7 @@ package network.aika.type;
 
 import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.link.FieldLinkDefinition;
+import network.aika.type.relations.Relation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,16 +67,16 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
 
     @SuppressWarnings("unchecked")
     private FieldLinkDefinition<?, ?, T, O>[][][] flattenInputs() {
-        FieldLinkDefinition<?, ?, T, O>[][][] results = new FieldLinkDefinition[type.getRelationTypes().size()][][];
+        FieldLinkDefinition<?, ?, T, O>[][][] results = new FieldLinkDefinition[type.getRelationTypes().length][][];
 
-        type.getRelationTypes().forEach(rel -> {
+        for(Relation<T, O, ?, ?> rel: type.getRelationTypes()) {
             FieldLinkDefinition<?, ?, T, O>[][] resultsPerRelation = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
             for (Type<?, ?> relType : type.getTypeRegistry().getTypes()) {
                 resultsPerRelation[relType.getId()] = flattenInputsPerType(relType);
             }
 
             results[rel.getRelationId()] = resultsPerRelation;
-        });
+        };
 
         return results;
     }
@@ -103,16 +104,16 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
 
     @SuppressWarnings("unchecked")
     private FieldLinkDefinition<T, O, ?, ?>[][][] flattenOutputs() {
-        FieldLinkDefinition<T, O, ?, ?>[][][] results = new FieldLinkDefinition[type.getRelationTypes().size()][][];
+        FieldLinkDefinition<T, O, ?, ?>[][][] results = new FieldLinkDefinition[type.getRelationTypes().length][][];
 
-        type.getRelationTypes().forEach(rel -> {
+        for(Relation<T, O, ?, ?> rel: type.getRelationTypes()) {
             FieldLinkDefinition<T, O, ?, ?>[][] resultsPerRelation = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
             for (Type<?, ?> relType : type.getTypeRegistry().getTypes()) {
                 resultsPerRelation[relType.getId()] = flattenOutputsPerType(relType);
             }
 
             results[rel.getRelationId()] = resultsPerRelation;
-        });
+        };
 
         return results;
     }

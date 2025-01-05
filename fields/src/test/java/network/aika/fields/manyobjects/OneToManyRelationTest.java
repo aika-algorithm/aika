@@ -12,17 +12,10 @@ import org.junit.jupiter.api.Test;
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.SumField.sum;
 import static network.aika.fields.manyobjects.TestObjectMany.linkObjectsAndInitFields;
+import static network.aika.fields.manyobjects.TestTypeMany.TEST_RELATION_FROM;
 
 
 public class OneToManyRelationTest {
-
-    public static RelationMany<TestTypeMany, TestObjectMany, TestTypeOne, TestObjectOne> TEST_RELATION_FROM = new RelationMany<>((o, t) -> o.getRelatedTestObjects(), "TEST_FROM");
-    public static RelationOne<TestTypeOne, TestObjectOne, TestTypeMany, TestObjectMany> TEST_RELATION_TO = new RelationOne<>(TestObjectOne::getRelatedTestObject, "TEST_TO");
-
-    static {
-        TEST_RELATION_TO.setReversed(TEST_RELATION_FROM);
-        TEST_RELATION_FROM.setReversed(TEST_RELATION_TO);
-    }
 
     protected TestTypeOne typeA;
     protected TestTypeMany typeB;
