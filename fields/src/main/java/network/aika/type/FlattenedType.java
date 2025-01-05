@@ -67,9 +67,9 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
 
     @SuppressWarnings("unchecked")
     private FieldLinkDefinition<?, ?, T, O>[][][] flattenInputs() {
-        FieldLinkDefinition<?, ?, T, O>[][][] results = new FieldLinkDefinition[type.getRelationTypes().length][][];
+        FieldLinkDefinition<?, ?, T, O>[][][] results = new FieldLinkDefinition[type.getRelations().length][][];
 
-        for(Relation<T, O, ?, ?> rel: type.getRelationTypes()) {
+        for(Relation<T, O, ?, ?> rel: type.getRelations()) {
             FieldLinkDefinition<?, ?, T, O>[][] resultsPerRelation = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
             for (Type<?, ?> relType : type.getTypeRegistry().getTypes()) {
                 resultsPerRelation[relType.getId()] = flattenInputsPerType(relType);
@@ -104,9 +104,9 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
 
     @SuppressWarnings("unchecked")
     private FieldLinkDefinition<T, O, ?, ?>[][][] flattenOutputs() {
-        FieldLinkDefinition<T, O, ?, ?>[][][] results = new FieldLinkDefinition[type.getRelationTypes().length][][];
+        FieldLinkDefinition<T, O, ?, ?>[][][] results = new FieldLinkDefinition[type.getRelations().length][][];
 
-        for(Relation<T, O, ?, ?> rel: type.getRelationTypes()) {
+        for(Relation<T, O, ?, ?> rel: type.getRelations()) {
             FieldLinkDefinition<T, O, ?, ?>[][] resultsPerRelation = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
             for (Type<?, ?> relType : type.getTypeRegistry().getTypes()) {
                 resultsPerRelation[relType.getId()] = flattenOutputsPerType(relType);

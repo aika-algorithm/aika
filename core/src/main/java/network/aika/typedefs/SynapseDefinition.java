@@ -72,7 +72,7 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     }
 
     @Override
-    public Relation<SynapseDefinition, Synapse, ?, ?>[] getRelationTypes() {
+    public Relation<SynapseDefinition, Synapse, ?, ?>[] getRelations() {
         return RELATIONS;
     }
 

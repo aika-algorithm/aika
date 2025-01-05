@@ -31,7 +31,7 @@ public class SoftmaxNormType extends Type<SoftmaxNormType, SoftmaxNormObj> {
     }
 
     @Override
-    public Relation<SoftmaxNormType, SoftmaxNormObj, ?, ?>[] getRelationTypes() {
+    public Relation<SoftmaxNormType, SoftmaxNormObj, ?, ?>[] getRelations() {
         return new Relation[] {NORM_TO_OUTPUT, OUTPUT_TO_NORM};
     }
 }

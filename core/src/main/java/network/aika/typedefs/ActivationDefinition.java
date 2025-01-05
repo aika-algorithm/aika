@@ -63,7 +63,7 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
     }
 
     @Override
-    public Relation<ActivationDefinition, Activation, ?, ?>[] getRelationTypes() {
+    public Relation<ActivationDefinition, Activation, ?, ?>[] getRelations() {
         return RELATIONS;
     }
 

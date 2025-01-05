@@ -63,7 +63,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     @Override
-    public Relation<LinkDefinition, Link, ?, ?>[] getRelationTypes() {
+    public Relation<LinkDefinition, Link, ?, ?>[] getRelations() {
         return RELATIONS;
     }
 

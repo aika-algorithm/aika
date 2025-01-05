@@ -31,7 +31,7 @@ public class SoftmaxOutputType extends Type<SoftmaxOutputType, SoftmaxOutputObj>
     }
 
     @Override
-    public Relation<SoftmaxOutputType, SoftmaxOutputObj, ?, ?>[] getRelationTypes() {
+    public Relation<SoftmaxOutputType, SoftmaxOutputObj, ?, ?>[] getRelations() {
         return new Relation[] {CORRESPONDING_INPUT_LINK, CORRESPONDING_OUTPUT_LINK};
     }
 }

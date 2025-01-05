@@ -25,7 +25,7 @@ public class SoftmaxInputType extends Type<SoftmaxInputType, SoftmaxInputObj> {
     }
 
     @Override
-    public Relation<SoftmaxInputType, SoftmaxInputObj, ?, ?>[] getRelationTypes() {
+    public Relation<SoftmaxInputType, SoftmaxInputObj, ?, ?>[] getRelations() {
         return new Relation[] {INPUT_TO_NORM, NORM_TO_INPUT};
     }
 

@@ -59,7 +59,7 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
     }
 
     @Override
-    public Relation<NeuronDefinition, Neuron, ?, ?>[] getRelationTypes() {
+    public Relation<NeuronDefinition, Neuron, ?, ?>[] getRelations() {
         return RELATIONS;
     }
 

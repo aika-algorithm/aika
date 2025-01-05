@@ -25,7 +25,7 @@ public class TestTypeOne extends Type<TestTypeOne, TestObjectOne> {
     }
 
     @Override
-    public Relation<TestTypeOne, TestObjectOne, ?, ?>[] getRelationTypes() {
+    public Relation<TestTypeOne, TestObjectOne, ?, ?>[] getRelations() {
         return new Relation[] {TEST_RELATION_TO};
     }
 

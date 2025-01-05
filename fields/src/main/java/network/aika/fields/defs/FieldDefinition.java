@@ -24,7 +24,6 @@ import network.aika.type.relations.RelationOne;
 import network.aika.type.Obj;
 import network.aika.queue.ProcessingPhase;
 import network.aika.type.Type;
-import network.aika.type.relations.RelationSelf;
 import network.aika.utils.ToleranceUtils;
 
 import java.util.ArrayList;
@@ -99,7 +98,7 @@ public class FieldDefinition<
     public void propagateUpdate(O fromObj, double update) {
         for(int rel = 0; rel < getObjectType().getFlattenedType().getOutputs().length; rel++) {
             FieldLinkDefinition<T, O, ?, ?>[][] outputs = getObjectType().getFlattenedType().getOutputs()[rel];
-            Relation<T, O, ?, ?> relation = getObjectType().getRelationTypes()[rel];
+            Relation<T, O, ?, ?> relation = getObjectType().getRelations()[rel];
 
             if(outputs != null) {
                 relation.followAll(fromObj)
