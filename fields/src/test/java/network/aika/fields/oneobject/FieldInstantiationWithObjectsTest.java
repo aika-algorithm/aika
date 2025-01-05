@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.SumField.sum;
 import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
+import static network.aika.fields.oneobject.TestType.TEST_RELATION_TO;
 
 
 /**

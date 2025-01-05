@@ -11,6 +11,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static network.aika.fields.SoftmaxFields.softmax;
+import static network.aika.fields.softmax.SoftmaxInputType.NORM_TO_INPUT;
+import static network.aika.fields.softmax.SoftmaxNormType.OUTPUT_TO_NORM;
+import static network.aika.fields.softmax.SoftmaxOutputType.CORRESPONDING_INPUT_LINK;
 
 public class SoftmaxTest {
 

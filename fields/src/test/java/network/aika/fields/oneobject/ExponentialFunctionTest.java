@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import static network.aika.fields.ExponentialFunction.exp;
 import static network.aika.fields.InputField.inputField;
+import static network.aika.fields.oneobject.TestType.SELF;
 
 
 /**
@@ -42,7 +43,7 @@ public class ExponentialFunctionTest {
 
         FieldDefinition<TestType, TestObject> a = inputField(type, "a");
         FieldDefinition<TestType, TestObject> b = exp(type, "b")
-                .in(a, 0);
+                .in(SELF, a, 0);
 
         Obj o = new ObjImpl(type);
 

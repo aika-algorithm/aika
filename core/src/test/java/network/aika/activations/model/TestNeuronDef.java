@@ -38,6 +38,7 @@ import static network.aika.fields.SumField.sum;
 import static network.aika.misc.utils.Utils.TOLERANCE;
 import static network.aika.queue.Phase.INFERENCE;
 import static network.aika.queue.Phase.TRAINING;
+import static network.aika.typedefs.ActivationDefinition.SELF;
 
 /**
  *
@@ -83,10 +84,10 @@ public class TestNeuronDef {
                 "FIRED",
                 (fd, act) -> act.updateFiredStep(act.getField(fd)),
                 TOLERANCE)
-                .in(net, 0);
+                .in(SELF, net, 0);
 
         value = actFunc(node.activation, "VALUE", LIMITED_RECTIFIED_LINEAR_UNIT, TOLERANCE)
-                .in(net, 0)
+                .in(SELF, net, 0)
                 .setQueued(INFERENCE);
 
         weight = sum(edge.synapse, "WEIGHT");

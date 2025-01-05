@@ -21,6 +21,7 @@ import network.aika.fields.oneobject.TestType;
 import network.aika.type.TypeRegistry;
 import network.aika.type.TypeRegistryImpl;
 import network.aika.type.relations.RelationOne;
+import network.aika.type.relations.RelationSelf;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -31,13 +32,6 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 public class MultipleInheritanceTest {
 
-    public static RelationOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_FROM = new RelationOne<>(TestObject::getRelatedTestObject, "TEST_FROM");
-    public static RelationOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_TO = new RelationOne<>(TestObject::getRelatedTestObject, "TEST_TO");
-
-    static {
-        TEST_RELATION_TO.setReversed(TEST_RELATION_FROM);
-        TEST_RELATION_FROM.setReversed(TEST_RELATION_TO);
-    }
 
     protected TestType[][][] type;
 

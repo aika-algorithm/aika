@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.Multiplication.mul;
 import static network.aika.fields.SumField.sum;
+import static network.aika.fields.oneobject.TestType.SELF;
 
 
 /**
@@ -40,7 +41,7 @@ public class FieldInstantiationTest {
 
         FieldDefinition<TestType, TestObject> a = inputField(type, "a");
         FieldDefinition<TestType, TestObject> b = sum(type, "b")
-                .in(a);
+                .in(SELF, a);
 
         Obj o = new ObjImpl(type);
 
@@ -65,9 +66,9 @@ public class FieldInstantiationTest {
 
         FieldDefinition<TestType, TestObject> a = inputField(type, "a");
         FieldDefinition<TestType, TestObject> b = sum(type, "b")
-                .in(a);
+                .in(SELF, a);
         FieldDefinition<TestType, TestObject> c = sum(type, "c")
-                .in(b);
+                .in(SELF, b);
 
         Obj o = new ObjImpl(type);
 
@@ -89,8 +90,8 @@ public class FieldInstantiationTest {
         FieldDefinition<TestType, TestObject> b = inputField(type, "b");
 
         FieldDefinition c = mul(type, "c")
-                .in(a, 0)
-                .in(b, 1);
+                .in(SELF, a, 0)
+                .in(SELF, b, 1);
 
         Obj o = new ObjImpl(type);
 

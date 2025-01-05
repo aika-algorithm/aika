@@ -29,6 +29,7 @@ import static network.aika.fields.Addition.add;
 import static network.aika.fields.IdentityFunction.identity;
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.Subtraction.sub;
+import static network.aika.fields.oneobject.TestType.SELF;
 
 
 /**
@@ -61,16 +62,16 @@ public class TypeHierarchyTest {
         FieldDefinition<TestType, TestObject> b = inputField(parent, "b");
 
         FieldDefinition<TestType, TestObject> parentC = add(parent, "c")
-                .in(a, 0)
-                .in(b, 1);
+                .in(SELF, a, 0)
+                .in(SELF, b, 1);
 
         FieldDefinition<TestType, TestObject> c = sub(child, "c")
-                .in(a, 0)
-                .in(b, 1)
+                .in(SELF, a, 0)
+                .in(SELF, b, 1)
                 .setParent(parentC);
 
         FieldDefinition<TestType, TestObject> d = identity(parent, "d")
-                .in(c, 0);
+                .in(SELF, c, 0);
 
         registry.flattenTypeHierarchy();
 

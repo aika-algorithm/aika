@@ -7,14 +7,6 @@ import network.aika.type.relations.RelationOne;
 
 public abstract class AbstractTestWithObjects {
 
-    public static RelationOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_FROM = new RelationOne<>(TestObject::getRelatedTestObject, "TEST_FROM");
-    public static RelationOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_TO = new RelationOne<>(TestObject::getRelatedTestObject, "TEST_TO");
-
-    static {
-        TEST_RELATION_TO.setReversed(TEST_RELATION_FROM);
-        TEST_RELATION_FROM.setReversed(TEST_RELATION_TO);
-    }
-
     protected TestType typeA;
     protected TestType typeB;
 

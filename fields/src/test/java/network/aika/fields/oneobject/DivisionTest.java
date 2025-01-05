@@ -25,6 +25,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static network.aika.fields.Division.div;
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
+import static network.aika.fields.oneobject.TestType.TEST_RELATION_FROM;
 
 
 /**
