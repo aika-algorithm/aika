@@ -16,10 +16,8 @@ public class TestObjectOne extends ObjImpl<TestTypeOne, TestObjectOne, TypeRegis
         return relatedTestObject;
     }
 
-    public static void linkObjectsAndInitFields(TestObjectMany objA, TestObjectOne objB) {
+    public static void linkObjects(TestObjectMany objA, TestObjectOne objB) {
         objA.relatedTestObjects.add(objB);
         objB.relatedTestObject = objA;
-
-        objB.initFields(objA);
     }
 }

@@ -44,7 +44,7 @@ public class Division<
     }
 
     @Override
-    public void initializeField(Obj<?, ?> fromObj, O toObj) {
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(O toObj) {
         double dividend = getInputValueByArg(toObj, 0);
         double divisor = getInputValueByArg(toObj, 1);
 

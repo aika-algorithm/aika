@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.SortedSet;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  *
@@ -60,83 +62,58 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
         fieldsReverse = fieldsRev.toArray(new FieldDefinition[0]);
     }
 
+    @SuppressWarnings({"unchecked"})
     public void flattenFieldLinks() {
-        inputs = flattenInputs();
-        outputs = flattenOutputs();
+        inputs = flattenFieldLinks(FieldDefinition::getInputs, FieldLinkDefinition::getInput);
+        outputs = flattenFieldLinks(FieldDefinition::getOutputs, FieldLinkDefinition::getOutput);
     }
 
-    @SuppressWarnings("unchecked")
-    private FieldLinkDefinition<?, ?, T, O>[][][] flattenInputs() {
-        FieldLinkDefinition<?, ?, T, O>[][][] results = new FieldLinkDefinition[type.getRelations().length][][];
+    @SuppressWarnings({"rawtypes"})
+    private FieldLinkDefinition[][][] flattenFieldLinks(
+            Function<FieldDefinition, Stream<? extends FieldLinkDefinition>> fieldLinks,
+            Function<FieldLinkDefinition, FieldDefinition> linkedFD
+    ) {
+        FieldLinkDefinition[][][] results = new FieldLinkDefinition[type.getRelations().length][][];
 
-        for(Relation<T, O, ?, ?> rel: type.getRelations()) {
-            FieldLinkDefinition<?, ?, T, O>[][] resultsPerRelation = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
-            for (Type<?, ?> relType : type.getTypeRegistry().getTypes()) {
-                resultsPerRelation[relType.getId()] = flattenInputsPerType(relType);
+        for(Relation rel: type.getRelations()) {
+            FieldLinkDefinition[][] resultsPerRelation = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
+            for (Type relType : type.getTypeRegistry().getTypes()) {
+                resultsPerRelation[relType.getId()] = flattenPerType(relType, fieldLinks, linkedFD);
             }
 
             results[rel.getRelationId()] = resultsPerRelation;
         };
 
         return results;
+    }
+
+    @SuppressWarnings({"rawtypes"})
+    private FieldLinkDefinition[] flattenPerType(
+            Type<?, ?> relatedType,
+            Function<FieldDefinition, Stream<? extends FieldLinkDefinition>> fieldLinks,
+            Function<FieldLinkDefinition, FieldDefinition> linkedFD
+    ) {
+        List<FieldLinkDefinition<?, ?, T, O>> results = new ArrayList<>();
+        for (FieldDefinition<T, O> fd : fieldsReverse) {
+            fieldLinks.apply(fd)
+                    .filter(fl ->
+                            relatedType.isInstanceOf(linkedFD.apply(fl).getObjectType())
+                    )
+                    .filter(fl ->
+                            relatedType.getFlattenedType().fields[linkedFD.apply(fl).getFieldId()] >= 0
+                    )
+                    .forEach(results::add);
+        }
+
+        return results.toArray(new FieldLinkDefinition[0]);
     }
 
     public FieldLinkDefinition<?, ?, T, O>[][][] getInputs() {
         return inputs;
     }
 
-    @SuppressWarnings("unchecked")
-    private FieldLinkDefinition<?, ?, T, O>[] flattenInputsPerType(Type<?, ?> relType) {
-        List<FieldLinkDefinition<?, ?, T, O>> results = new ArrayList<>();
-        for (FieldDefinition<T, O> fd : fieldsReverse) {
-            fd.getInputs()
-                    .filter(fl ->
-                            relType.isInstanceOf(fl.getInput().getObjectType())
-                    )
-                    .filter(fl ->
-                            relType.getFlattenedType().fields[fl.getInput().getFieldId()] >= 0
-                    )
-                    .forEach(results::add);
-        }
-
-        return results.toArray(new FieldLinkDefinition[0]);
-    }
-
-    @SuppressWarnings("unchecked")
-    private FieldLinkDefinition<T, O, ?, ?>[][][] flattenOutputs() {
-        FieldLinkDefinition<T, O, ?, ?>[][][] results = new FieldLinkDefinition[type.getRelations().length][][];
-
-        for(Relation<T, O, ?, ?> rel: type.getRelations()) {
-            FieldLinkDefinition<T, O, ?, ?>[][] resultsPerRelation = new FieldLinkDefinition[type.getTypeRegistry().getTypes().size()][];
-            for (Type<?, ?> relType : type.getTypeRegistry().getTypes()) {
-                resultsPerRelation[relType.getId()] = flattenOutputsPerType(relType);
-            }
-
-            results[rel.getRelationId()] = resultsPerRelation;
-        };
-
-        return results;
-    }
-
     public FieldLinkDefinition<T, O, ?, ?>[][][] getOutputs() {
         return outputs;
-    }
-
-    @SuppressWarnings("unchecked")
-    private FieldLinkDefinition<T, O, ?, ?>[] flattenOutputsPerType(Type<?, ?> relType) {
-        List<FieldLinkDefinition<T, O, ?, ?>> results = new ArrayList<>();
-        for (FieldDefinition<T, O> fd : fieldsReverse) {
-            fd.getAllOutputs()
-                    .filter(fl ->
-                            relType.isInstanceOf(fl.getOutput().getObjectType())
-                    )
-                    .filter(fl ->
-                            relType.getFlattenedType().fields[fl.getOutput().getFieldId()] >= 0
-                    )
-                    .forEach(results::add);
-        }
-
-        return results.toArray(new FieldLinkDefinition[0]);
     }
 
     public short getFieldIndex(FieldDefinition<T, O> fd) {

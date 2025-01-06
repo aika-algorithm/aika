@@ -145,8 +145,7 @@ public class Field implements FieldInput, FieldOutput, FieldWritable {
     }
 
     private void propagateUpdate() {
-        getFieldDefinition()
-                .propagateUpdate(
+        getFieldDefinition().propagateUpdate(
                         getObject(),
                         updatedValue - value
                 );

@@ -42,10 +42,8 @@ public class Link extends ObjImpl<LinkDefinition, Link, Model> implements Elemen
         super(type);
         this.synapse = s;
         this.input = input;
-        initFields(null);
-
         this.output = output;
-        output.initFields(this);
+        initFields();
 
         input.addOutputLink(this);
         output.addInputLink(this);

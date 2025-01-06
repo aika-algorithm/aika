@@ -68,7 +68,7 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         return !children.isEmpty();
     }
 
-    public abstract Relation<T, O, ?, ?>[] getRelations();
+    public abstract <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> Relation<T, O, RT, RO>[] getRelations();
 
     public void initFlattenedType() {
         flattenedType = new FlattenedType<>((T)this);
@@ -160,16 +160,7 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
     }
 
     public Set<FieldDefinition<T, O>> getFieldDefinitions() {
-        HashSet<FieldDefinition<T, O>> results = new HashSet<>();
-        collectFieldDefinitions(results);
-        return results;
-    }
-
-    protected void collectFieldDefinitions(Set<FieldDefinition<T, O>> results) {
-        results.addAll(fieldDefinitions);
-        parents.forEach(p ->
-                p.collectFieldDefinitions(results)
-        );
+        return fieldDefinitions;
     }
 
     @SuppressWarnings("unchecked")

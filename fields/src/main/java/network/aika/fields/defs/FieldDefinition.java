@@ -28,6 +28,7 @@ import network.aika.utils.ToleranceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 /**
@@ -86,31 +87,6 @@ public class FieldDefinition<
         field.receiveUpdate(update);
     }
 
-    @SuppressWarnings("unchecked")
-    public void initializeField(Obj<?, ?> sourceObj, O obj) {
-        getInputs()
-                .forEach(fl ->
-                        fl.fetchFrom(sourceObj, obj)
-                );
-    }
-
-    @SuppressWarnings("unchecked")
-    public void propagateUpdate(O fromObj, double update) {
-        for(int rel = 0; rel < getObjectType().getFlattenedType().getOutputs().length; rel++) {
-            FieldLinkDefinition<T, O, ?, ?>[][] outputs = getObjectType().getFlattenedType().getOutputs()[rel];
-            Relation<T, O, ?, ?> relation = getObjectType().getRelations()[rel];
-
-            if(outputs != null) {
-                relation.followAll(fromObj)
-                        .forEach(toObj -> {
-                            for(FieldLinkDefinition fl: outputs[toObj.getType().getId()]) {
-                                fl.getOutput().receiveUpdate(toObj, fl, update);
-                            }
-                        });
-            }
-        }
-    }
-
     public FieldDefinition<T, O> getParent() {
         return parent;
     }
@@ -121,6 +97,39 @@ public class FieldDefinition<
         return this;
     }
 
+    @SuppressWarnings("unchecked")
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(O obj) {
+        followLinks(
+                obj,
+                getObjectType().getFlattenedType().getInputs(),
+                (fl, relObj) -> fl.fetchFromObject(relObj, obj)
+        );
+    }
+
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void propagateUpdate(O obj, double update) {
+        followLinks(
+                obj,
+                getObjectType().getFlattenedType().getOutputs(),
+                (fl, relObj) -> fl.getOutput().receiveUpdate(relObj, fl, update)
+        );
+    }
+
+    private <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void followLinks(O obj, FieldLinkDefinition[][][] a, BiConsumer<FieldLinkDefinition, RO> perFieldLink) {
+        for(int relationId = 0; relationId < a.length; relationId++) {
+            FieldLinkDefinition[][] b = a[relationId];
+
+            if(b != null) {
+                getObjectType().getRelations()[relationId].followAll(obj)
+                        .forEach(relatedObj -> {
+                                    for (FieldLinkDefinition fl : b[relatedObj.getType().getId()]) {
+                                        perFieldLink.accept(fl, (RO) relatedObj);
+                                    }
+                                }
+                        );
+            }
+        }
+    }
+
     public <
             IT extends Type<IT, IO>,
             IO extends Obj<IT, IO>
@@ -128,7 +137,7 @@ public class FieldDefinition<
         throw new UnsupportedOperationException();
     }
 
-    public Stream<? extends FieldLinkDefinition> getInputs() {
+    public Stream<? extends FieldLinkDefinition<?, ?, T, O>> getInputs() {
         throw new UnsupportedOperationException();
     }
 
@@ -136,11 +145,11 @@ public class FieldDefinition<
         outputs.add(fl);
     }
 
-    public Stream<? extends FieldLinkDefinition> getOutputs() {
+    public Stream<? extends FieldLinkDefinition<T, O, ?, ?>> getOutputs() {
         return outputs.stream();
     }
 
-    public Stream<? extends FieldLinkDefinition> getAllOutputs() {
+    public Stream<? extends FieldLinkDefinition<T, O, ?, ?>> getAllOutputs() {
         return parent != null ?
                 Stream.concat(outputs.stream(), parent.getAllOutputs()) :
                 outputs.stream();
@@ -163,7 +172,7 @@ public class FieldDefinition<
             OT extends Type<OT, OO>,
             OO extends Obj<OT, OO>
             > FieldDefinition<T, O> out(Relation<T, O, OT, OO> relation, VariableArgumentsFieldDefinition<OT, OO> output) {
-        FieldLinkDefinition fl = new FieldLinkDefinition(this, output, relation);
+        FieldLinkDefinition<T, O, OT, OO> fl = new FieldLinkDefinition<>(this, output, relation);
         output.addInput(fl);
         addOutput(fl);
 

@@ -19,10 +19,8 @@ public class TestObjectMany extends ObjImpl<TestTypeMany, TestObjectMany, TypeRe
         return relatedTestObjects.stream();
     }
 
-    public static void linkObjectsAndInitFields(TestObjectOne objA, TestObjectMany objB) {
+    public static void linkObjects(TestObjectOne objA, TestObjectMany objB) {
         objA.relatedTestObject = objB;
         objB.relatedTestObjects.add(objA);
-
-        objB.initFields(objA);
     }
 }

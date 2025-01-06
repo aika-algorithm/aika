@@ -44,7 +44,7 @@ public class Multiplication<
     }
 
     @Override
-    public void initializeField(Obj<?, ?> fromObj, O toObj) {
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(O toObj) {
         double valueArg0 = getInputValueByArg(toObj, 0);
         double valueArg1 = getInputValueByArg(toObj, 1);
 

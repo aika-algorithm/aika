@@ -17,7 +17,6 @@ public class FieldLinkDefinition<
     private final FieldDefinition<OT, OO> output;
     private final Relation<IT, IO, OT, OO> inputToOutputRelation;
 
-
     public FieldLinkDefinition(
             FieldDefinition<IT, IO> input,
             FieldDefinition<OT, OO> output,
@@ -44,20 +43,7 @@ public class FieldLinkDefinition<
         return inputToOutputRelation.getReverse();
     }
 
-    public void fetchFrom(IO sourceObj, OO obj) {
-        var rt = getOutputToInputRelationType();
-        if (sourceObj != null) {
-            if (rt.testRelation(obj, sourceObj))
-                fetchFromObject(sourceObj, obj);
-        } else {
-            rt.followAll(obj)
-                    .forEach(fo ->
-                        fetchFromObject(fo, obj)
-                    );
-        }
-    }
-
-    private void fetchFromObject(IO sourceObj, OO obj) {
+    public void fetchFromObject(IO sourceObj, OO obj) {
         double inputFieldValue = sourceObj.getFieldValue(input);
         output.receiveUpdate(obj, this, inputFieldValue);
     }
