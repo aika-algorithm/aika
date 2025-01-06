@@ -19,6 +19,7 @@ package network.aika.fields.defs;
 import network.aika.fields.field.Field;
 import network.aika.fields.link.ArgFieldLinkDefinition;
 import network.aika.fields.link.FieldLinkDefinition;
+import network.aika.type.FlattenedTypeRelation;
 import network.aika.type.relations.Relation;
 import network.aika.type.relations.RelationOne;
 import network.aika.type.Obj;
@@ -114,16 +115,15 @@ public class FieldDefinition<
         );
     }
 
-    private <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void followLinks(O obj, FieldLinkDefinition[][][] a, BiConsumer<FieldLinkDefinition, RO> perFieldLink) {
-        for(int relationId = 0; relationId < a.length; relationId++) {
-            FieldLinkDefinition[][] b = a[relationId];
+    private <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void followLinks(O obj, FlattenedTypeRelation[][] fTypeRels, BiConsumer<FieldLinkDefinition, RO> perFieldLink) {
+        for(int relationId = 0; relationId < fTypeRels.length; relationId++) {
+            FlattenedTypeRelation[] b = fTypeRels[relationId];
 
             if(b != null) {
                 getObjectType().getRelations()[relationId].followAll(obj)
                         .forEach(relatedObj -> {
-                                    for (FieldLinkDefinition fl : b[relatedObj.getType().getId()]) {
-                                        perFieldLink.accept(fl, (RO) relatedObj);
-                                    }
+                                    FlattenedTypeRelation c = b[relatedObj.getType().getId()];
+                                    c.followLinks((RO) relatedObj, this, perFieldLink);
                                 }
                         );
             }
