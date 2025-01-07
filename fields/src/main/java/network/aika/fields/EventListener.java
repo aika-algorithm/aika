@@ -18,6 +18,7 @@ package network.aika.fields;
 
 import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.defs.FixedArgumentsFieldDefinition;
+import network.aika.fields.field.Field;
 import network.aika.type.Obj;
 import network.aika.type.Type;
 
@@ -52,13 +53,13 @@ public class EventListener<
     }
 
     @Override
-    public void receiveUpdate(O obj, double u) {
-        super.receiveUpdate(obj, u);
+    public void receiveUpdate(Field<T, O> field, double u) {
+        super.receiveUpdate(field, u);
        // Activation act = (Activation) obj;
 
         //Field field = obj.getFieldOrCreate(this);
         //act.updateFiredStep(field);
 
-        triggerFunction.accept(this, (O) obj);
+        triggerFunction.accept(this, field.getObject());
     }
 }

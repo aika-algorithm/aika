@@ -17,6 +17,7 @@
 package network.aika.fields;
 
 import network.aika.fields.defs.FixedArgumentsFieldDefinition;
+import network.aika.fields.field.Field;
 import network.aika.fields.link.ArgFieldLinkDefinition;
 import network.aika.fields.link.FieldLinkDefinition;
 import network.aika.type.Obj;
@@ -39,12 +40,12 @@ public abstract class AbstractFunctionDefinition<
         super(objectType, name, numArgs, tolerance);
     }
 
-    protected abstract double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u);
+    protected abstract double computeUpdate(O obj, ArgFieldLinkDefinition<T, O, ?, ?> fl, double u);
 
     @Override
-    public void receiveUpdate(O obj, FieldLinkDefinition<?, ?, T, O> fl, double u) {
-        double update = computeUpdate(obj, (ArgFieldLinkDefinition<?, ?, T, O>) fl, u);
+    public void receiveUpdate(Field<T, O> field, FieldLinkDefinition<T, O, ?, ?> fl, double u) {
+        double update = computeUpdate(field.getObject(), (ArgFieldLinkDefinition<T, O, ?, ?>) fl, u);
 
-        receiveUpdate(obj, update);
+        receiveUpdate(field, update);
     }
 }

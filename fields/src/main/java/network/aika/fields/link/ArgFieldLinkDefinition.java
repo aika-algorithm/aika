@@ -2,6 +2,7 @@ package network.aika.fields.link;
 
 import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.defs.FixedArgumentsFieldDefinition;
+import network.aika.fields.direction.Direction;
 import network.aika.type.Type;
 import network.aika.type.relations.Relation;
 import network.aika.type.relations.RelationOne;
@@ -10,21 +11,22 @@ import network.aika.type.Obj;
 
 
 public class ArgFieldLinkDefinition<
-        IT extends Type<IT, IO>,
-        IO extends Obj<IT, IO>,
-        OT extends Type<OT, OO>,
-        OO extends Obj<OT, OO>
-        > extends FieldLinkDefinition<IT, IO, OT, OO> {
+        T extends Type<T, O>,
+        O extends Obj<T, O>,
+        RT extends Type<RT, RO>,
+        RO extends Obj<RT, RO>
+        > extends FieldLinkDefinition<T, O, RT, RO> {
 
     private final int argument;
 
     public ArgFieldLinkDefinition(
-            FieldDefinition<IT, IO> input,
-            FixedArgumentsFieldDefinition<OT, OO> output,
-            Relation<IT, IO, OT, OO> relation,
+            FieldDefinition<T, O> originFD,
+            FieldDefinition<RT, RO> relatedFD,
+            Relation<T, O, RT, RO> relation,
+            Direction direction,
             int argument
     ) {
-        super(input, output, relation);
+        super(originFD, relatedFD, relation, direction);
 
         this.argument = argument;
     }
@@ -33,21 +35,21 @@ public class ArgFieldLinkDefinition<
         return argument;
     }
 
-    public Field getInputField(OO obj) {
-        var rt = (RelationOne<OT, OO, IT, IO>) getOutputToInputRelationType();
-        IO inputObj = rt.followOne(obj);
+    public Field getInputField(O obj) {
+        var rt = (RelationOne<T, O, RT, RO>) getRelation();
+        RO inputObj = rt.followOne(obj);
 
-        return inputObj.getField(getInput());
+        return inputObj.getField(getRelatedFD());
     }
 
-    public double getInputValue(OO obj) {
+    public double getInputValue(O obj) {
         Field f = getInputField(obj);
         return f != null ?
                 f.getValue() :
                 0.0;
     }
 
-    public double getUpdatedInputValue(OO obj) {
+    public double getUpdatedInputValue(O obj) {
         Field f = getInputField(obj);
 
         return f != null ?

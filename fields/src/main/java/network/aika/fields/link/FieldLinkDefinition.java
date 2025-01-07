@@ -1,55 +1,55 @@
 package network.aika.fields.link;
 
 import network.aika.fields.defs.FieldDefinition;
+import network.aika.fields.direction.Direction;
+import network.aika.fields.field.Field;
 import network.aika.type.Type;
 import network.aika.type.relations.Relation;
 import network.aika.type.Obj;
 
 
 public class FieldLinkDefinition<
-        IT extends Type<IT, IO>,
-        IO extends Obj<IT, IO>,
-        OT extends Type<OT, OO>,
-        OO extends Obj<OT, OO>
+        T extends Type<T, O>,
+        O extends Obj<T, O>,
+        RT extends Type<RT, RO>,
+        RO extends Obj<RT, RO>
         > {
 
-    private final FieldDefinition<IT, IO> input;
-    private final FieldDefinition<OT, OO> output;
-    private final Relation<IT, IO, OT, OO> inputToOutputRelation;
+    private final FieldDefinition<T, O> originFD;
+    private final FieldDefinition<RT, RO> relatedFD;
+    private final Relation<T, O, RT, RO> relation;
+    private final Direction direction;
 
     public FieldLinkDefinition(
-            FieldDefinition<IT, IO> input,
-            FieldDefinition<OT, OO> output,
-            Relation<IT, IO, OT, OO> inputToOutputRelation
+            FieldDefinition<T, O> originFD,
+            FieldDefinition<RT, RO> relatedFD,
+            Relation<T, O, RT, RO> relation,
+            Direction direction
     ) {
-        this.input = input;
-        this.output = output;
-        this.inputToOutputRelation = inputToOutputRelation;
+        this.originFD = originFD;
+        this.relatedFD = relatedFD;
+        this.relation = relation;
+        this.direction = direction;
     }
 
-    public FieldDefinition<IT, IO> getInput() {
-        return input;
+    public FieldDefinition<T, O> getOriginFD() {
+        return originFD;
     }
 
-    public Relation<IT, IO, OT, OO> getInputToOutputRelationType() {
-        return inputToOutputRelation;
+    public FieldDefinition<RT, RO> getRelatedFD() {
+        return relatedFD;
     }
 
-    public FieldDefinition<OT, OO> getOutput() {
-        return output;
+    public Relation<T, O, RT, RO> getRelation() {
+        return relation;
     }
 
-    public Relation<OT, OO, IT, IO> getOutputToInputRelationType() {
-        return inputToOutputRelation.getReverse();
-    }
-
-    public void fetchFromObject(IO sourceObj, OO obj) {
-        double inputFieldValue = sourceObj.getFieldValue(input);
-        output.receiveUpdate(obj, this, inputFieldValue);
+    public Direction getDirection() {
+        return direction;
     }
 
     @Override
     public String toString() {
-        return input + " -- (" + inputToOutputRelation + ") -> " + output;
+        return originFD + " -- (" + relation + ") -> " + relatedFD;
     }
 }

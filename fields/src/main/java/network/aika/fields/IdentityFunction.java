@@ -44,7 +44,7 @@ public class IdentityFunction<
     }
 
     @Override
-    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u) {
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<T, O, ?, ?> fl, double u) {
         return u;
     }
 }

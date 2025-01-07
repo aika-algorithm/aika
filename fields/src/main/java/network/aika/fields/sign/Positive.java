@@ -14,24 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package network.aika.enums;
+package network.aika.fields.sign;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public enum Direction {
-    INPUT,
-    OUTPUT;
-
-    private Direction inverted;
-
-    static {
-        INPUT.inverted = OUTPUT;
-        OUTPUT.inverted = INPUT;
+public class Positive implements Sign {
+    @Override
+    public Sign invert() {
+        return NEG;
     }
 
-    public Direction invert() {
-        return inverted;
+
+    @Override
+    public int index() {
+        return 0;
+    }
+
+    public String toString() {
+        return "POS";
     }
 }

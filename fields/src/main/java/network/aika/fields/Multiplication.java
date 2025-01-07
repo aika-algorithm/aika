@@ -44,16 +44,16 @@ public class Multiplication<
     }
 
     @Override
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(O toObj) {
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(Field<T, O> field) {
+        O toObj = field.getObject();
         double valueArg0 = getInputValueByArg(toObj, 0);
         double valueArg1 = getInputValueByArg(toObj, 1);
 
-        Field field = toObj.getOrCreateField(this);
         field.setValue(valueArg0 * valueArg1);
     }
 
     @Override
-    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u) {
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<T, O, ?, ?> fl, double u) {
         return u * getInputValueByArg(
                 obj,
                 fl.getArgument() == 0 ?

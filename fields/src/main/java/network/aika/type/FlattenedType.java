@@ -64,21 +64,20 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
 
     @SuppressWarnings({"unchecked"})
     public void flattenFieldLinks() {
-        inputs = flattenFieldLinks(FieldDefinition::getInputs, FieldLinkDefinition::getInput);
-        outputs = flattenFieldLinks(FieldDefinition::getOutputs, FieldLinkDefinition::getOutput);
+        inputs = flattenFieldLinks(FieldDefinition::getInputs);
+        outputs = flattenFieldLinks(FieldDefinition::getOutputs);
     }
 
     @SuppressWarnings({"rawtypes"})
     private FlattenedTypeRelation[][] flattenFieldLinks(
-            Function<FieldDefinition, Stream<? extends FieldLinkDefinition>> fieldLinks,
-            Function<FieldLinkDefinition, FieldDefinition> linkedFD
+            Function<FieldDefinition, Stream<? extends FieldLinkDefinition>> fieldLinks
     ) {
         FlattenedTypeRelation[][] results = new FlattenedTypeRelation[type.getRelations().length][];
 
         for(Relation rel: type.getRelations()) {
             FlattenedTypeRelation[] resultsPerRelation = new FlattenedTypeRelation[type.getTypeRegistry().getTypes().size()];
             for (Type relatedType : type.getTypeRegistry().getTypes()) {
-                resultsPerRelation[relatedType.getId()] = flattenPerType(relatedType, fieldLinks, linkedFD);
+                resultsPerRelation[relatedType.getId()] = flattenPerType(relatedType, fieldLinks);
             }
 
             results[rel.getRelationId()] = resultsPerRelation;
@@ -90,16 +89,15 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
     @SuppressWarnings({"rawtypes"})
     private FlattenedTypeRelation flattenPerType(
             Type<?, ?> relatedType,
-            Function<FieldDefinition, Stream<? extends FieldLinkDefinition>> fieldLinksMapper,
-            Function<FieldLinkDefinition, FieldDefinition> linkedFDMapper
+            Function<FieldDefinition, Stream<? extends FieldLinkDefinition>> fieldLinksMapper
     ) {
         List<? extends FieldLinkDefinition> fieldLinks = Stream.of(fieldsReverse)
                 .flatMap(fd -> fieldLinksMapper.apply(fd))
                 .filter(fl ->
-                        relatedType.isInstanceOf(linkedFDMapper.apply(fl).getObjectType())
+                        relatedType.isInstanceOf(fl.getRelatedFD().getObjectType())
                 )
                 .filter(fl ->
-                        relatedType.getFlattenedType().fields[linkedFDMapper.apply(fl).getFieldId()] >= 0
+                        relatedType.getFlattenedType().fields[fl.getRelatedFD().getFieldId()] >= 0
                 )
                 .toList();
 

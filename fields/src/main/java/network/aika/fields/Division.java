@@ -44,19 +44,19 @@ public class Division<
     }
 
     @Override
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(O toObj) {
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(Field<T, O> field) {
+        O toObj = field.getObject();
         double dividend = getInputValueByArg(toObj, 0);
         double divisor = getInputValueByArg(toObj, 1);
 
         if(divisor == 0.0)
             return;
 
-        Field field = toObj.getOrCreateField(this);
         field.setValue(dividend / divisor);
     }
 
     @Override
-    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u) {
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<T, O, ?, ?> fl, double u) {
         if(fl.getArgument() == 0) {
             double divisor = getInputValueByArg(obj, 1);
             if(divisor == 0.0)

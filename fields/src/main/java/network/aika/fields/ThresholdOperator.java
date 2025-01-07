@@ -68,7 +68,7 @@ public class ThresholdOperator<
     }
 
     @Override
-    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u) {
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<T, O, ?, ?> fl, double u) {
         double value = obj.getOrCreateField(this).getValue();
         if(isFinal && value > 0.5)
             return 0.0;

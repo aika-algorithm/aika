@@ -43,7 +43,7 @@ public class Subtraction<
     }
 
     @Override
-    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u) {
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<T, O, ?, ?> fl, double u) {
         return fl.getArgument() == 0 ? u : -u;
     }
 }

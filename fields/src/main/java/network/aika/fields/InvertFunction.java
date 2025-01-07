@@ -45,7 +45,7 @@ public class InvertFunction<
     }
 
     @Override
-    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u)  {
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<T, O, ?, ?> fl, double u)  {
         double value = obj.getOrCreateField(this).getValue();
         return (1.0 - fl.getUpdatedInputValue(obj)) - value;
     }

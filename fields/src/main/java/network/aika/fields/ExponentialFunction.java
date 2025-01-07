@@ -44,15 +44,14 @@ public class ExponentialFunction<
     }
 
     @Override
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(O toObj) {
-        double valueArg0 = getInputValueByArg(toObj, 0);
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(Field<T, O> field) {
+        double valueArg0 = getInputValueByArg(field.getObject(), 0);
 
-        Field field = toObj.getOrCreateField(this);
         field.setValue(Math.exp(valueArg0));
     }
 
     @Override
-    protected double computeUpdate(O obj, ArgFieldLinkDefinition<?, ?, T, O> fl, double u)  {
+    protected double computeUpdate(O obj, ArgFieldLinkDefinition<T, O, ?, ?> fl, double u)  {
         return Math.exp(u);
     }
 }

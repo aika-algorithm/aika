@@ -16,6 +16,7 @@
  */
 package network.aika.fields.defs;
 
+import network.aika.fields.direction.Direction;
 import network.aika.fields.field.Field;
 import network.aika.fields.link.ArgFieldLinkDefinition;
 import network.aika.fields.link.FieldLinkDefinition;
@@ -29,16 +30,12 @@ import network.aika.utils.ToleranceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > {
+public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
 
     protected Integer fieldId;
 
@@ -73,18 +70,17 @@ public class FieldDefinition<
         this.fieldId = fieldId;
     }
 
-    public void receiveUpdate(O toObj, FieldLinkDefinition<?, ?, T, O> fieldLink, double update) {
-        receiveUpdate(toObj, update);
+    public void receiveUpdate(Field<T, O> field, FieldLinkDefinition<T, O, ?, ?> fieldLink, double update) {
+        receiveUpdate(field, update);
     }
 
-    protected void receiveUpdate(O toObj, double update) {
-        if(!toObj.isInstanceOf(objectType))
+    protected void receiveUpdate(Field<T, O> field, double update) {
+        if(!field.getObject().isInstanceOf(objectType))
             return;
 
         if(ToleranceUtils.belowTolerance(getTolerance(), update))
             return;
 
-        Field field = toObj.getOrCreateField(this);
         field.receiveUpdate(update);
     }
 
@@ -99,45 +95,41 @@ public class FieldDefinition<
     }
 
     @SuppressWarnings("unchecked")
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(O obj) {
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(Field<T, O> field) {
         followLinks(
-                obj,
-                getObjectType().getFlattenedType().getInputs(),
-                (fl, relObj) -> fl.fetchFromObject(relObj, obj)
+                field,
+                Direction.INPUT
         );
     }
 
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void propagateUpdate(O obj, double update) {
+    @SuppressWarnings("unchecked")
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void propagateUpdate(Field<T, O> field) {
         followLinks(
-                obj,
-                getObjectType().getFlattenedType().getOutputs(),
-                (fl, relObj) -> fl.getOutput().receiveUpdate(relObj, fl, update)
+                field,
+                Direction.OUTPUT
         );
     }
 
-    private <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void followLinks(O obj, FlattenedTypeRelation[][] fTypeRels, BiConsumer<FieldLinkDefinition, RO> perFieldLink) {
+    @SuppressWarnings("unchecked")
+    private <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void followLinks(Field<T, O> field, Direction direction) {
+        FlattenedTypeRelation[][] fTypeRels = direction.getFlattenedTypeRelations(getObjectType().getFlattenedType());
         for(int relationId = 0; relationId < fTypeRels.length; relationId++) {
-            FlattenedTypeRelation[] b = fTypeRels[relationId];
+            FlattenedTypeRelation[] ftr = fTypeRels[relationId];
 
-            if(b != null) {
-                getObjectType().getRelations()[relationId].followAll(obj)
-                        .forEach(relatedObj -> {
-                                    FlattenedTypeRelation c = b[relatedObj.getType().getId()];
-                                    c.followLinks((RO) relatedObj, this, perFieldLink);
-                                }
+            if(ftr != null) {
+                getObjectType().getRelations()[relationId].followAll(field.getObject())
+                        .forEach(relatedObj ->
+                                ftr[relatedObj.getType().getId()].followLinks(field, (RO) relatedObj, direction)
                         );
             }
         }
     }
 
-    public <
-            IT extends Type<IT, IO>,
-            IO extends Obj<IT, IO>
-            > void addInput(FieldLinkDefinition<IT, IO, T, O> fl) {
+    public void addInput(FieldLinkDefinition<T, O, ?, ?> fl) {
         throw new UnsupportedOperationException();
     }
 
-    public Stream<? extends FieldLinkDefinition<?, ?, T, O>> getInputs() {
+    public Stream<? extends FieldLinkDefinition<T, O, ?, ?>> getInputs() {
         throw new UnsupportedOperationException();
     }
 
@@ -158,12 +150,14 @@ public class FieldDefinition<
     public <
             OT extends Type<OT, OO>,
             OO extends Obj<OT, OO>
-            > FieldDefinition<T, O> out(RelationOne<T, O, OT, OO> relationType, FixedArgumentsFieldDefinition<OT, OO> output, int arg) {
-        ArgFieldLinkDefinition<T, O, OT, OO> fl = new ArgFieldLinkDefinition<>(this, output, relationType, arg);
-        output.addInput(fl);
-        addOutput(fl);
+            > FieldDefinition<T, O> out(RelationOne<T, O, OT, OO> relation, FixedArgumentsFieldDefinition<OT, OO> output, int arg) {
+        ArgFieldLinkDefinition<OT, OO, T, O> flIn = new ArgFieldLinkDefinition<>(output, this, relation.getReverse(), Direction.OUTPUT, arg);
+        output.addInput(flIn);
 
-        assert relationType != null || objectType.isInstanceOf(output.objectType) || output.objectType.isInstanceOf(objectType);
+        ArgFieldLinkDefinition<T, O, OT, OO> flOut = new ArgFieldLinkDefinition<>(this, output, relation, Direction.OUTPUT, arg);
+        addOutput(flOut);
+
+        assert relation != null || objectType.isInstanceOf(output.objectType) || output.objectType.isInstanceOf(objectType);
 
         return this;
     }
@@ -172,9 +166,12 @@ public class FieldDefinition<
             OT extends Type<OT, OO>,
             OO extends Obj<OT, OO>
             > FieldDefinition<T, O> out(Relation<T, O, OT, OO> relation, VariableArgumentsFieldDefinition<OT, OO> output) {
-        FieldLinkDefinition<T, O, OT, OO> fl = new FieldLinkDefinition<>(this, output, relation);
-        output.addInput(fl);
-        addOutput(fl);
+
+        FieldLinkDefinition<OT, OO, T, O> flIn = new FieldLinkDefinition<>(output, this, relation.getReverse(), Direction.OUTPUT);
+        output.addInput(flIn);
+
+        FieldLinkDefinition<T, O, OT, OO> flOut = new FieldLinkDefinition<>(this, output, relation, Direction.OUTPUT);
+        addOutput(flOut);
 
         assert relation != null || objectType.isInstanceOf(output.objectType) || output.objectType.isInstanceOf(objectType);
 

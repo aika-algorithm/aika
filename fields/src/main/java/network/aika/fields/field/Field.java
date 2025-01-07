@@ -20,6 +20,7 @@ import network.aika.fields.defs.FieldDefinition;
 import network.aika.type.Obj;
 import network.aika.queue.ProcessingPhase;
 import network.aika.queue.Queue;
+import network.aika.type.Type;
 import network.aika.utils.FieldWritable;
 import network.aika.utils.StringUtils;
 import network.aika.utils.ToleranceUtils;
@@ -31,13 +32,11 @@ import java.io.IOException;
 /**
  * @author Lukas Molzberger
  */
-public class Field implements FieldInput, FieldOutput, FieldWritable {
+public class Field<T extends Type<T, O>, O extends Obj<T, O>> implements FieldInput, FieldOutput, FieldWritable {
 
-//    private static double MIN_TOLERANCE = 0.0000000001;
+    private final FieldDefinition<T, O> fieldDefinition;
 
-    private final FieldDefinition fieldDefinition;
-
-    private final Obj object;
+    private final O object;
 
     protected double value;
 
@@ -69,7 +68,7 @@ public class Field implements FieldInput, FieldOutput, FieldWritable {
         return v > 0.0;
     }
 
-    public Field(Obj obj, FieldDefinition fd) {
+    public Field(O obj, FieldDefinition<T, O> fd) {
         this.object = obj;
         this.fieldDefinition = fd;
     }
@@ -93,7 +92,7 @@ public class Field implements FieldInput, FieldOutput, FieldWritable {
     }
 
     @Override
-    public Obj getObject() {
+    public O getObject() {
         return object;
     }
 
@@ -145,13 +144,14 @@ public class Field implements FieldInput, FieldOutput, FieldWritable {
     }
 
     private void propagateUpdate() {
-        getFieldDefinition().propagateUpdate(
-                        getObject(),
-                        updatedValue - value
-                );
+        getFieldDefinition().propagateUpdate(this);
 
         value = updatedValue;
         withinUpdate = false;
+    }
+
+    public double getUpdate() {
+        return updatedValue - value;
     }
 
     @Override

@@ -16,6 +16,7 @@ package network.aika.fields.defs;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import network.aika.fields.direction.Direction;
 import network.aika.fields.link.ArgFieldLinkDefinition;
 import network.aika.fields.link.FieldLinkDefinition;
 import network.aika.type.relations.RelationOne;
@@ -34,7 +35,7 @@ public abstract class FixedArgumentsFieldDefinition<
         O extends Obj<T, O>
         > extends FieldDefinition<T, O> {
 
-    private final ArgFieldLinkDefinition<?, ?, T, O>[] inputs;
+    private final ArgFieldLinkDefinition<T, O, ?, ?>[] inputs;
 
     public FixedArgumentsFieldDefinition(T objectType, String name, int numArgs) {
         super(objectType, name);
@@ -49,18 +50,14 @@ public abstract class FixedArgumentsFieldDefinition<
     }
 
     @Override
-    public Stream<? extends FieldLinkDefinition<?, ?, T, O>> getInputs() {
+    public Stream<? extends FieldLinkDefinition<T, O, ?, ?>> getInputs() {
         return Stream.of(inputs)
                 .filter(Objects::nonNull);
     }
 
     @Override
-    public <
-            IT extends Type<IT, IO>,
-            IO extends Obj<IT, IO>
-            >
-    void addInput(FieldLinkDefinition<IT, IO, T, O> fl) {
-        ArgFieldLinkDefinition<?, ?, T, O> afl = (ArgFieldLinkDefinition<IT, IO, T, O>) fl;
+    public void addInput(FieldLinkDefinition<T, O, ?, ?> fl) {
+        ArgFieldLinkDefinition<T, O, ?, ?> afl = (ArgFieldLinkDefinition<T, O, ?, ?>) fl;
         inputs[afl.getArgument()] = afl;
     }
 
@@ -79,9 +76,11 @@ public abstract class FixedArgumentsFieldDefinition<
             IO extends Obj<IT, IO>
             >
     FixedArgumentsFieldDefinition<T, O> in(RelationOne<T, O, IT, IO> relationType, FieldDefinition<IT, IO> input, int arg) {
-        var fl = new ArgFieldLinkDefinition<>(input, this, relationType.getReverse(), arg);
-        addInput(fl);
-        input.addOutput(fl);
+        var flIn = new ArgFieldLinkDefinition<>(this, input, relationType, Direction.INPUT, arg);
+        addInput(flIn);
+
+        var flOut = new ArgFieldLinkDefinition<>(input, this, relationType.getReverse(), Direction.OUTPUT, arg);
+        input.addOutput(flOut);
 
         assert relationType != null || objectType.isInstanceOf(input.objectType) || input.objectType.isInstanceOf(objectType);
 

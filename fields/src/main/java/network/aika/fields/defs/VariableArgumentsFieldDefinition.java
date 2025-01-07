@@ -16,6 +16,7 @@
  */
 package network.aika.fields.defs;
 
+import network.aika.fields.direction.Direction;
 import network.aika.fields.link.FieldLinkDefinition;
 import network.aika.type.Obj;
 import network.aika.type.relations.Relation;
@@ -34,7 +35,7 @@ public class VariableArgumentsFieldDefinition<
         O extends Obj<T, O>
         > extends FieldDefinition<T, O> {
 
-    protected List<FieldLinkDefinition<?, ?, T, O>> inputs = new ArrayList<>();
+    protected List<FieldLinkDefinition<T, O, ?, ?>> inputs = new ArrayList<>();
 
     public VariableArgumentsFieldDefinition(T objectType, String name) {
         super(objectType, name);
@@ -48,15 +49,17 @@ public class VariableArgumentsFieldDefinition<
             IT extends Type<IT, IO>,
             IO extends Obj<IT, IO>
             > VariableArgumentsFieldDefinition<T, O> in(Relation<T, O, IT, IO> relation, FieldDefinition<IT, IO> input) {
-        var fl = new FieldLinkDefinition<>(input, this, relation.getReverse());
-        addInput(fl);
-        input.addOutput(fl);
+        var flIn = new FieldLinkDefinition<>(this, input, relation, Direction.INPUT);
+        addInput(flIn);
+
+        var flOut = new FieldLinkDefinition<>( input, this, relation.getReverse(), Direction.OUTPUT);
+        input.addOutput(flOut);
 
         return this;
     }
 
     @Override
-    public Stream<FieldLinkDefinition<?, ?, T, O>> getInputs() {
+    public Stream<FieldLinkDefinition<T, O, ?, ?>> getInputs() {
         return inputs.stream();
     }
 
@@ -64,10 +67,7 @@ public class VariableArgumentsFieldDefinition<
         return inputs.size();
     }
 
-    public <
-            IT extends Type<IT, IO>,
-            IO extends Obj<IT, IO>
-            > void addInput(FieldLinkDefinition<IT, IO, T, O> fl) {
+    public void addInput(FieldLinkDefinition<T, O, ?, ?> fl) {
         inputs.add(fl);
     }
 }
