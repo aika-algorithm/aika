@@ -16,8 +16,7 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.field.Field;
-import network.aika.fields.link.ArgFieldLinkDefinition;
+import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.type.Obj;
 import network.aika.type.Type;
 
@@ -52,8 +51,8 @@ public class FieldActivationFunction<
     }
 
     @Override
-    protected double computeUpdate(O obj, ArgFieldLinkDefinition<T, O, ?, ?> fl, double u) {
+    protected double computeUpdate(O obj, FieldLinkDefinition<?, ?, T, O> fl, double u) {
         double value = obj.getOrCreateField(this).getValue();
-        return actFunction.f(fl.getUpdatedInputValue(obj)) - value;
+        return actFunction.f(fl.getRevered().getUpdatedInputValue(obj)) - value;
     }
 }

@@ -16,8 +16,8 @@
  */
 package network.aika.fields;
 
+import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.type.Type;
-import network.aika.fields.link.ArgFieldLinkDefinition;
 import network.aika.type.Obj;
 
 /**
@@ -44,7 +44,7 @@ public class InputField<
     }
 
     @Override
-    protected double computeUpdate(O obj, ArgFieldLinkDefinition<T, O, ?, ?> fl, double u) {
+    protected double computeUpdate(O obj, FieldLinkDefinition<?, ?, T, O> fl, double u) {
         return 0;
     }
 }

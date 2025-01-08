@@ -17,7 +17,6 @@
 package network.aika.fields.defs;
 
 import network.aika.fields.direction.Direction;
-import network.aika.fields.link.FieldLinkDefinition;
 import network.aika.type.Obj;
 import network.aika.type.relations.Relation;
 import network.aika.type.Type;
@@ -25,6 +24,8 @@ import network.aika.type.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static network.aika.fields.defs.FieldLinkDefinition.link;
 
 /**
  *
@@ -49,11 +50,8 @@ public class VariableArgumentsFieldDefinition<
             IT extends Type<IT, IO>,
             IO extends Obj<IT, IO>
             > VariableArgumentsFieldDefinition<T, O> in(Relation<T, O, IT, IO> relation, FieldDefinition<IT, IO> input) {
-        var flIn = new FieldLinkDefinition<>(this, input, relation, Direction.INPUT);
-        addInput(flIn);
 
-        var flOut = new FieldLinkDefinition<>( input, this, relation.getReverse(), Direction.OUTPUT);
-        input.addOutput(flOut);
+        link(input, this, relation.getReverse(), null);
 
         return this;
     }

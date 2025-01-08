@@ -18,8 +18,6 @@ package network.aika.fields.defs;
 
 import network.aika.fields.direction.Direction;
 import network.aika.fields.field.Field;
-import network.aika.fields.link.ArgFieldLinkDefinition;
-import network.aika.fields.link.FieldLinkDefinition;
 import network.aika.type.FlattenedTypeRelation;
 import network.aika.type.relations.Relation;
 import network.aika.type.relations.RelationOne;
@@ -31,6 +29,8 @@ import network.aika.utils.ToleranceUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static network.aika.fields.defs.FieldLinkDefinition.link;
 
 /**
  * @author Lukas Molzberger
@@ -70,7 +70,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
         this.fieldId = fieldId;
     }
 
-    public void receiveUpdate(Field<T, O> field, FieldLinkDefinition<T, O, ?, ?> fieldLink, double update) {
+    public void transmit(Field<T, O> field, FieldLinkDefinition<?, ?, T, O> fieldLink, double update) {
         receiveUpdate(field, update);
     }
 
@@ -150,12 +150,9 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
     public <
             OT extends Type<OT, OO>,
             OO extends Obj<OT, OO>
-            > FieldDefinition<T, O> out(RelationOne<T, O, OT, OO> relation, FixedArgumentsFieldDefinition<OT, OO> output, int arg) {
-        ArgFieldLinkDefinition<OT, OO, T, O> flIn = new ArgFieldLinkDefinition<>(output, this, relation.getReverse(), Direction.OUTPUT, arg);
-        output.addInput(flIn);
-
-        ArgFieldLinkDefinition<T, O, OT, OO> flOut = new ArgFieldLinkDefinition<>(this, output, relation, Direction.OUTPUT, arg);
-        addOutput(flOut);
+            >
+    FieldDefinition<T, O> out(RelationOne<T, O, OT, OO> relation, FixedArgumentsFieldDefinition<OT, OO> output, int arg) {
+        link(this, output, relation, arg);
 
         assert relation != null || objectType.isInstanceOf(output.objectType) || output.objectType.isInstanceOf(objectType);
 
@@ -165,13 +162,9 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
     public <
             OT extends Type<OT, OO>,
             OO extends Obj<OT, OO>
-            > FieldDefinition<T, O> out(Relation<T, O, OT, OO> relation, VariableArgumentsFieldDefinition<OT, OO> output) {
-
-        FieldLinkDefinition<OT, OO, T, O> flIn = new FieldLinkDefinition<>(output, this, relation.getReverse(), Direction.OUTPUT);
-        output.addInput(flIn);
-
-        FieldLinkDefinition<T, O, OT, OO> flOut = new FieldLinkDefinition<>(this, output, relation, Direction.OUTPUT);
-        addOutput(flOut);
+            >
+    FieldDefinition<T, O> out(Relation<T, O, OT, OO> relation, VariableArgumentsFieldDefinition<OT, OO> output) {
+        link(this, output, relation, null);
 
         assert relation != null || objectType.isInstanceOf(output.objectType) || output.objectType.isInstanceOf(objectType);
 

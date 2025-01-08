@@ -16,7 +16,7 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.link.ArgFieldLinkDefinition;
+import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.type.Obj;
 import network.aika.type.Type;
 
@@ -68,12 +68,12 @@ public class ThresholdOperator<
     }
 
     @Override
-    protected double computeUpdate(O obj, ArgFieldLinkDefinition<T, O, ?, ?> fl, double u) {
+    protected double computeUpdate(O obj, FieldLinkDefinition<?, ?, T, O> fl, double u) {
         double value = obj.getOrCreateField(this).getValue();
         if(isFinal && value > 0.5)
             return 0.0;
 
-        return threshold(fl.getUpdatedInputValue(obj)) - value;
+        return threshold(fl.getRevered().getUpdatedInputValue(obj)) - value;
     }
 
     protected double threshold(double x) {

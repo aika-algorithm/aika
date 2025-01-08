@@ -4,7 +4,7 @@ import network.aika.Document;
 import network.aika.activations.Activation;
 import network.aika.activations.Link;
 import network.aika.fields.defs.FieldDefinition;
-import network.aika.fields.link.FieldLinkDefinition;
+import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.fields.field.Field;
 import network.aika.type.ObjImpl;
 

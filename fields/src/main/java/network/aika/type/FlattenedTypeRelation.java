@@ -1,9 +1,8 @@
 package network.aika.type;
 
-import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.direction.Direction;
 import network.aika.fields.field.Field;
-import network.aika.fields.link.FieldLinkDefinition;
+import network.aika.fields.defs.FieldLinkDefinition;
 
 import java.util.List;
 

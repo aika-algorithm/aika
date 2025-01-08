@@ -96,13 +96,13 @@ public class Field<T extends Type<T, O>, O extends Obj<T, O>> implements FieldIn
         return object;
     }
 
-    public <F extends Field> F setQueued(Queue q, ProcessingPhase phase, boolean isNextRound) {
+    public <F extends Field<T, O>> F setQueued(Queue q, ProcessingPhase phase, boolean isNextRound) {
         interceptor = new QueueInterceptor(q, this, phase, isNextRound);
         return (F) this;
     }
 
     @Override
-    public FieldDefinition getFieldDefinition() {
+    public FieldDefinition<T, O> getFieldDefinition() {
         return fieldDefinition;
     }
 

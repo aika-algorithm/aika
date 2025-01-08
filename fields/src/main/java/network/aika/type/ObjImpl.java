@@ -35,7 +35,7 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
     protected T type;
 
-    private Field[] fields;
+    private Field<T, O>[] fields;
 
     public ObjImpl(T type) {
         this.type = type;
@@ -47,7 +47,7 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
         for(short i = 0; i < type.getFlattenedType().getNumberOfFields(); i++) {
             FieldDefinition<T, O> fd = type.getFlattenedType().getFieldDefinitionIdByIndex(i);
 
-            Field field = getOrCreateField(fd);
+            Field<T, O> field = getOrCreateField(fd);
             fd.initializeField(field);
         }
     }
@@ -63,24 +63,25 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
     }
 
     @Override
-    public void setFields(Field[] fields) {
+    public void setFields(Field<T, O>[] fields) {
         this.fields = fields;
     }
 
     @Override
-    public Field getField(FieldDefinition<T, O> fd) {
+    public Field<T, O> getField(FieldDefinition<T, O> fd) {
         short fieldIndex = type.getFlattenedType().getFieldIndex(fd);
 
         return fields[fieldIndex];
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Field getOrCreateField(FieldDefinition<T, O> fd) {
+    public Field<T, O> getOrCreateField(FieldDefinition<T, O> fd) {
         short fieldIndex = type.getFlattenedType().getFieldIndex(fd);
 
-        Field f = fields[fieldIndex];
+        Field<T, O> f = fields[fieldIndex];
         if(f == null) {
-            f = fields[fieldIndex] = new Field(this, fd);
+            f = fields[fieldIndex] = new Field<>((O) this, fd);
         }
 
         return f;
@@ -96,7 +97,7 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
     @Override
     public double getFieldValue(FieldDefinition<T, O> fd) {
-        Field f = getField(fd);
+        Field<T, O> f = getField(fd);
         return f != null ?
                 f.getValue() :
                 0.0;
@@ -104,14 +105,14 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
     @Override
     public double getFieldUpdatedValue(FieldDefinition<T, O> fd) {
-        Field f = getField(fd);
+        Field<T, O> f = getField(fd);
         return f != null ?
                 f.getUpdatedValue() :
                 0.0;
     }
 
     @Override
-    public Stream<Field> getFields() {
+    public Stream<Field<T, O>> getFields() {
         return Stream.of(fields)
                 .filter(Objects::nonNull);
     }
