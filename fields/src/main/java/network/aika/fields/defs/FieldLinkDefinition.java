@@ -22,8 +22,6 @@ public abstract class FieldLinkDefinition<
 
     private final Integer argument;
 
-    private FieldLinkDefinition<RT, RO, T, O> revered;
-
     public static <
             IT extends Type<IT, IO>,
             IO extends Obj<IT, IO>,
@@ -31,14 +29,14 @@ public abstract class FieldLinkDefinition<
             OO extends Obj<OT, OO>
             >
     void link(FieldDefinition<IT, IO> input, FieldDefinition<OT, OO> output, Relation<IT, IO, OT, OO> relation, Integer argument) {
-        FieldLinkDefinition<OT, OO, IT, IO> flo = new FieldLinkDefinitionOutputSide<>(output, input, relation.getReverse(), Direction.OUTPUT, argument);
-        FieldLinkDefinition<IT, IO, OT, OO> fli = new FieldLinkDefinitionInputSide<>(input, output, relation, Direction.INPUT, argument);
+        FieldLinkDefinitionOutputSide<OT, OO, IT, IO> flo = new FieldLinkDefinitionOutputSide<>(output, input, relation.getReverse(), Direction.OUTPUT, argument);
+        FieldLinkDefinitionInputSide<IT, IO, OT, OO> fli = new FieldLinkDefinitionInputSide<>(input, output, relation, Direction.INPUT, argument);
 
         output.addInput(flo);
         input.addOutput(fli);
 
-        flo.setRevered(fli);
-        fli.setRevered(flo);
+        flo.setInputSide(fli);
+        fli.setOutputSide(flo);
     }
 
     public FieldLinkDefinition(
@@ -82,14 +80,6 @@ public abstract class FieldLinkDefinition<
 
     public int getArgument() {
         return argument;
-    }
-
-    public FieldLinkDefinition<RT, RO, T, O> getRevered() {
-        return revered;
-    }
-
-    public void setRevered(FieldLinkDefinition<RT, RO, T, O> revered) {
-        this.revered = revered;
     }
 
     @Override

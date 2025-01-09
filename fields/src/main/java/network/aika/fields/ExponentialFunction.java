@@ -17,6 +17,7 @@
 package network.aika.fields;
 
 import network.aika.fields.defs.FieldLinkDefinition;
+import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.fields.field.Field;
 import network.aika.type.Obj;
 import network.aika.type.Type;
@@ -51,7 +52,7 @@ public class ExponentialFunction<
     }
 
     @Override
-    protected double computeUpdate(O obj, FieldLinkDefinition<?, ?, T, O> fl, double u)  {
+    protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u)  {
         return Math.exp(u);
     }
 }

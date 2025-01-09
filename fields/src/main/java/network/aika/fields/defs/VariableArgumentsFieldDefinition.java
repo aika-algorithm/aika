@@ -36,7 +36,7 @@ public class VariableArgumentsFieldDefinition<
         O extends Obj<T, O>
         > extends FieldDefinition<T, O> {
 
-    protected List<FieldLinkDefinition<T, O, ?, ?>> inputs = new ArrayList<>();
+    protected List<FieldLinkDefinitionOutputSide<T, O, ?, ?>> inputs = new ArrayList<>();
 
     public VariableArgumentsFieldDefinition(T objectType, String name) {
         super(objectType, name);
@@ -57,7 +57,7 @@ public class VariableArgumentsFieldDefinition<
     }
 
     @Override
-    public Stream<FieldLinkDefinition<T, O, ?, ?>> getInputs() {
+    public Stream<FieldLinkDefinitionOutputSide<T, O, ?, ?>> getInputs() {
         return inputs.stream();
     }
 
@@ -65,7 +65,7 @@ public class VariableArgumentsFieldDefinition<
         return inputs.size();
     }
 
-    public void addInput(FieldLinkDefinition<T, O, ?, ?> fl) {
+    public void addInput(FieldLinkDefinitionOutputSide<T, O, ?, ?> fl) {
         inputs.add(fl);
     }
 }

@@ -14,6 +14,8 @@ public class FieldLinkDefinitionOutputSide<
         IO extends Obj<IT, IO>
         > extends FieldLinkDefinition<OT, OO, IT, IO> {
 
+    private FieldLinkDefinitionInputSide<IT, IO, OT, OO> inputSide;
+
     public FieldLinkDefinitionOutputSide(FieldDefinition<OT, OO> output, FieldDefinition<IT, IO> input, Relation<OT, OO, IT, IO> relation, Direction direction, Integer argument) {
         super(output, input, relation, direction, argument);
     }
@@ -42,5 +44,13 @@ public class FieldLinkDefinitionOutputSide<
         return f != null ?
                 f.getUpdatedValue() :
                 0.0;
+    }
+
+    public FieldLinkDefinitionInputSide<IT, IO, OT, OO> getInputSide() {
+        return inputSide;
+    }
+
+    public void setInputSide(FieldLinkDefinitionInputSide<IT, IO, OT, OO> inputSide) {
+        this.inputSide = inputSide;
     }
 }

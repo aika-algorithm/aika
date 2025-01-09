@@ -13,11 +13,21 @@ public class FieldLinkDefinitionInputSide<
         OO extends Obj<OT, OO>
         > extends FieldLinkDefinition<IT, IO, OT, OO> {
 
+    private FieldLinkDefinitionOutputSide<OT, OO, IT, IO> outputSide;
+
     public FieldLinkDefinitionInputSide(FieldDefinition<IT, IO> input, FieldDefinition<OT, OO> output, Relation<IT, IO, OT, OO> relation, Direction direction, Integer argument) {
         super(input, output, relation, direction, argument);
     }
 
     public FieldLinkDefinitionInputSide(FieldDefinition<IT, IO> input, FieldDefinition<OT, OO> output, Relation<IT, IO, OT, OO> relation, Direction direction) {
         super(input, output, relation, direction);
+    }
+
+    public FieldLinkDefinitionOutputSide<OT, OO, IT, IO> getOutputSide() {
+        return outputSide;
+    }
+
+    public void setOutputSide(FieldLinkDefinitionOutputSide<OT, OO, IT, IO> outputSide) {
+        this.outputSide = outputSide;
     }
 }

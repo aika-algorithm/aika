@@ -41,7 +41,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
 
     protected String name;
 
-    protected List<FieldLinkDefinition<T, O, ?, ?>> outputs = new ArrayList<>();
+    protected List<FieldLinkDefinitionInputSide<T, O, ?, ?>> outputs = new ArrayList<>();
 
     protected FieldDefinition<T, O> parent;
 
@@ -70,8 +70,8 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
         this.fieldId = fieldId;
     }
 
-    public void transmit(Field<T, O> field, FieldLinkDefinition<?, ?, T, O> fieldLink, double update) {
-        receiveUpdate(field, update);
+    public void transmit(Field<T, O> targetField, FieldLinkDefinitionOutputSide<T, O, ?, ?> fieldLink, double update) {
+        receiveUpdate(targetField, update);
     }
 
     protected void receiveUpdate(Field<T, O> field, double update) {
@@ -125,19 +125,23 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
         }
     }
 
-    public void addInput(FieldLinkDefinition<T, O, ?, ?> fl) {
+    public void addInput(FieldLinkDefinitionOutputSide<T, O, ?, ?> fl) {
         throw new UnsupportedOperationException();
     }
 
-    public Stream<? extends FieldLinkDefinition<T, O, ?, ?>> getInputs() {
+    public <
+            RT extends Type<RT, RO>,
+            RO extends Obj<RT, RO>
+            >
+    Stream<FieldLinkDefinitionOutputSide<T, O, RT, RO>> getInputs() {
         throw new UnsupportedOperationException();
     }
 
-    public void addOutput(FieldLinkDefinition<T, O, ?, ?> fl) {
+    public void addOutput(FieldLinkDefinitionInputSide<T, O, ?, ?> fl) {
         outputs.add(fl);
     }
 
-    public Stream<? extends FieldLinkDefinition<T, O, ?, ?>> getOutputs() {
+    public Stream<FieldLinkDefinitionInputSide<T, O, ?, ?>> getOutputs() {
         return outputs.stream();
     }
 

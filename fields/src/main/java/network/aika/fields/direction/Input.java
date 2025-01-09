@@ -1,5 +1,6 @@
 package network.aika.fields.direction;
 
+import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.fields.field.Field;
 import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.type.FlattenedType;
@@ -33,6 +34,6 @@ public class Input implements Direction {
     >
     void transmit(Field<T, O> originField, FieldLinkDefinition<T, O, RT, RO> fl, RO relatedObject) {
         double inputFieldValue = relatedObject.getFieldValue(fl.getRelatedFD());
-        fl.getRelatedFD().transmit(originField, fl, inputFieldValue);
+        fl.getOriginFD().transmit(originField, (FieldLinkDefinitionOutputSide<T, O, RT, RO>) fl, inputFieldValue);
     }
 }

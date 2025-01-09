@@ -35,30 +35,29 @@ public abstract class FixedArgumentsFieldDefinition<
         O extends Obj<T, O>
         > extends FieldDefinition<T, O> {
 
-    private final FieldLinkDefinition<T, O, ?, ?>[] inputs;
+    private final FieldLinkDefinitionOutputSide<T, O, ?, ?>[] inputs;
 
     public FixedArgumentsFieldDefinition(T objectType, String name, int numArgs) {
         super(objectType, name);
 
-        inputs = new FieldLinkDefinition[numArgs];
+        inputs = new FieldLinkDefinitionOutputSide[numArgs];
     }
 
     public FixedArgumentsFieldDefinition(T objectType, String name, int numArgs, double tolerance) {
         super(objectType, name, tolerance);
 
-        inputs = new FieldLinkDefinition[numArgs];
+        inputs = new FieldLinkDefinitionOutputSide[numArgs];
     }
 
     @Override
-    public Stream<? extends FieldLinkDefinition<T, O, ?, ?>> getInputs() {
+    public Stream<FieldLinkDefinitionOutputSide<T, O, ?, ?>> getInputs() {
         return Stream.of(inputs)
                 .filter(Objects::nonNull);
     }
 
     @Override
-    public void addInput(FieldLinkDefinition<T, O, ?, ?> fl) {
-        FieldLinkDefinition<T, O, ?, ?> afl =  fl;
-        inputs[afl.getArgument()] = afl;
+    public void addInput(FieldLinkDefinitionOutputSide<T, O, ?, ?> fl) {
+        inputs[fl.getArgument()] = fl;
     }
 
     public double getInputValueByArg(O obj, int arg) {

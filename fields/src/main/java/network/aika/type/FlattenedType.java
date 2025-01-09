@@ -38,8 +38,8 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
     private final short[] fields;
     private final FieldDefinition<T, O>[] fieldsReverse;
 
-    private FlattenedTypeRelation[][] inputs; // From-Type, FD-List
-    private FlattenedTypeRelation[][] outputs; // To-Type, FD-List
+    private FlattenedTypeRelation<?, ?, T, O>[][] inputs; // From-Type, FD-List
+    private FlattenedTypeRelation<T, O, ?, ?>[][] outputs; // To-Type, FD-List
 
 
     @SuppressWarnings("unchecked")
@@ -64,13 +64,13 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
 
     @SuppressWarnings({"unchecked"})
     public void flattenFieldLinks() {
-        inputs = flattenFieldLinks(FieldDefinition::getInputs);
-        outputs = flattenFieldLinks(FieldDefinition::getOutputs);
+        inputs = flattenFieldLinks(fd -> fd.getInputs());
+        outputs = flattenFieldLinks(fd -> fd.getOutputs());
     }
 
     @SuppressWarnings({"rawtypes"})
     private FlattenedTypeRelation[][] flattenFieldLinks(
-            Function<FieldDefinition, Stream<? extends FieldLinkDefinition>> fieldLinks
+            Function<FieldDefinition, Stream<? extends FieldLinkDefinition<T, O, ?, ?>>> fieldLinks
     ) {
         FlattenedTypeRelation[][] results = new FlattenedTypeRelation[type.getRelations().length][];
 
@@ -89,9 +89,9 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
     @SuppressWarnings({"rawtypes"})
     private FlattenedTypeRelation flattenPerType(
             Type<?, ?> relatedType,
-            Function<FieldDefinition, Stream<? extends FieldLinkDefinition>> fieldLinksMapper
+            Function<FieldDefinition, Stream<? extends FieldLinkDefinition<T, O, ?, ?>>> fieldLinksMapper
     ) {
-        List<? extends FieldLinkDefinition> fieldLinks = Stream.of(fieldsReverse)
+        List<? extends FieldLinkDefinition<T, O, ?, ?>> fieldLinks = Stream.of(fieldsReverse)
                 .flatMap(fd -> fieldLinksMapper.apply(fd))
                 .filter(fl ->
                         relatedType.isInstanceOf(fl.getRelatedFD().getObjectType())
@@ -101,14 +101,14 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
                 )
                 .toList();
 
-        return new FlattenedTypeRelation(fieldLinks);
+        return new FlattenedTypeRelation<>(type.getTypeRegistry(), fieldLinks);
     }
 
-    public FlattenedTypeRelation[][] getInputs() {
+    public FlattenedTypeRelation<?, ?, T, O>[][] getInputs() {
         return inputs;
     }
 
-    public FlattenedTypeRelation[][] getOutputs() {
+    public FlattenedTypeRelation<T, O, ?, ?>[][] getOutputs() {
         return outputs;
     }
 

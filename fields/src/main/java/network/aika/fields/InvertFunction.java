@@ -17,6 +17,7 @@
 package network.aika.fields;
 
 import network.aika.fields.defs.FieldLinkDefinition;
+import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.type.Type;
 import network.aika.type.Obj;
 
@@ -45,8 +46,8 @@ public class InvertFunction<
     }
 
     @Override
-    protected double computeUpdate(O obj, FieldLinkDefinition<?, ?, T, O> fl, double u)  {
+    protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u)  {
         double value = obj.getOrCreateField(this).getValue();
-        return (1.0 - fl.getRevered().getUpdatedInputValue(obj)) - value;
+        return (1.0 - fl.getUpdatedInputValue(obj)) - value;
     }
 }
