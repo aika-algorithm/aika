@@ -24,7 +24,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.Multiplication.mul;
-import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
+import static network.aika.fields.oneobject.TestObject.linkObjects;
 import static network.aika.fields.oneobject.TestType.TEST_RELATION_FROM;
 
 
@@ -57,20 +57,26 @@ public class MultiplicationTest extends AbstractTestWithObjects {
         TestObject oa = typeA.instantiate();
         TestObject ob = typeB.instantiate();
 
-        if(linkingPos == 0)
-            linkObjectsAndInitFields(oa, ob);
+        if(linkingPos == 0) {
+            linkObjects(oa, ob);
+            ob.initFields();
+        }
 
         oa.setFieldValue(a, 5.0);
 
-        if(linkingPos == 1)
-            linkObjectsAndInitFields(oa, ob);
+        if(linkingPos == 1) {
+            linkObjects(oa, ob);
+            ob.initFields();
+        }
 
         Assertions.assertEquals(0.0, ob.getFieldValue(c));
 
         oa.setFieldValue(b, 5.0);
 
-        if(linkingPos == 2)
-            linkObjectsAndInitFields(oa, ob);
+        if(linkingPos == 2) {
+            linkObjects(oa, ob);
+            ob.initFields();
+        }
 
         Assertions.assertEquals(
                 25.0,

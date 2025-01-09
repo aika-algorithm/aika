@@ -1,6 +1,7 @@
 package network.aika.fields.softmax;
 
 import network.aika.fields.SoftmaxFields;
+import network.aika.type.ObjImpl;
 import network.aika.type.TypeRegistry;
 import network.aika.type.TypeRegistryImpl;
 import network.aika.type.relations.RelationMany;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.Arrays;
 
 import static network.aika.fields.SoftmaxFields.softmax;
 import static network.aika.fields.softmax.SoftmaxInputType.NORM_TO_INPUT;
@@ -70,12 +73,14 @@ public class SoftmaxTest {
         if(setInputValuesPos == 1)
             setInputValues(inputsObjs, softmaxFields);
 
-        SoftmaxNormObj.linkObjectsAndInitFields(inputsObjs, normObj);
+        SoftmaxNormObj.linkObjects(inputsObjs, normObj);
+        normObj.initFields();
 
         if(setInputValuesPos == 2)
             setInputValues(inputsObjs, softmaxFields);
 
-        SoftmaxOutputObj.linkObjectsAndInitFields(normObj, outputsObjs);
+        SoftmaxOutputObj.linkObjects(normObj, outputsObjs);
+        Arrays.stream(outputsObjs).forEach(ObjImpl::initFields);
 
         if(setInputValuesPos == 3)
             setInputValues(inputsObjs, softmaxFields);

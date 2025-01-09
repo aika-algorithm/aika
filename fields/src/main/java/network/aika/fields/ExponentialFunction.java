@@ -16,7 +16,6 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.fields.field.Field;
 import network.aika.type.Obj;

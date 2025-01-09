@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.SumField.sum;
-import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
+import static network.aika.fields.oneobject.TestObject.linkObjects;
 import static network.aika.fields.oneobject.TestType.TEST_RELATION_TO;
 
 
@@ -53,7 +53,8 @@ public class FieldInstantiationWithObjectsTest extends AbstractTestWithObjects {
 
         TestObject objA = typeA.instantiate();
         TestObject objB = typeB.instantiate();
-        linkObjectsAndInitFields(objA, objB);
+        linkObjects(objA, objB);
+        objB.initFields();
 
         objA.setFieldValue(fieldA, 5.0);
 
@@ -73,7 +74,8 @@ public class FieldInstantiationWithObjectsTest extends AbstractTestWithObjects {
 
         TestObject objB = new TestObject(typeB);
 
-        linkObjectsAndInitFields(objA, objB);
+        linkObjects(objA, objB);
+        objB.initFields();
 
         Assertions.assertEquals(
                 5.0,

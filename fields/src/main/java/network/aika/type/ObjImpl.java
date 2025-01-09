@@ -43,7 +43,7 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
     @SuppressWarnings("unchecked")
     @Override
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initFields() {
+    public void initFields() {
         for(short i = 0; i < type.getFlattenedType().getNumberOfFields(); i++) {
             FieldDefinition<T, O> fd = type.getFlattenedType().getFieldDefinitionIdByIndex(i);
 

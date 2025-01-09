@@ -24,7 +24,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static network.aika.fields.InputField.inputField;
 import static network.aika.fields.Subtraction.sub;
-import static network.aika.fields.oneobject.TestObject.linkObjectsAndInitFields;
+import static network.aika.fields.oneobject.TestObject.linkObjects;
 import static network.aika.fields.oneobject.TestType.TEST_RELATION_FROM;
 
 
@@ -58,18 +58,24 @@ public class SubtractionTest extends AbstractTestWithObjects {
         TestObject oa = typeA.instantiate();
         TestObject ob = typeB.instantiate();
 
-        if(linkingPos == 0)
-            linkObjectsAndInitFields(oa, ob);
+        if(linkingPos == 0) {
+            linkObjects(oa, ob);
+            ob.initFields();
+        }
 
         oa.setFieldValue(a, 50.0);
 
-        if(linkingPos == 1)
-            linkObjectsAndInitFields(oa, ob);
+        if(linkingPos == 1) {
+            linkObjects(oa, ob);
+            ob.initFields();
+        }
 
         oa.setFieldValue(b, 20.0);
 
-        if(linkingPos == 2)
-            linkObjectsAndInitFields(oa, ob);
+        if(linkingPos == 2) {
+            linkObjects(oa, ob);
+            ob.initFields();
+        }
 
         Assertions.assertEquals(
                 30.0,

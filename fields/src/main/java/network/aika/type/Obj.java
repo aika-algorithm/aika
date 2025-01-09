@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  */
 public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
 
-    <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initFields();
+    void initFields();
 
     T getType();
 
