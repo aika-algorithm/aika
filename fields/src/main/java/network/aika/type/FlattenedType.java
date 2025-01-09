@@ -18,6 +18,7 @@ package network.aika.type;
 
 import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.defs.FieldLinkDefinition;
+import network.aika.fields.direction.Direction;
 import network.aika.type.relations.Relation;
 
 import java.util.ArrayList;
@@ -64,20 +65,18 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
 
     @SuppressWarnings({"unchecked"})
     public void flattenFieldLinks() {
-        inputs = flattenFieldLinks(fd -> fd.getInputs());
-        outputs = flattenFieldLinks(fd -> fd.getOutputs());
+        inputs = flattenFieldLinks(Direction.INPUT);
+        outputs = flattenFieldLinks(Direction.OUTPUT);
     }
 
     @SuppressWarnings({"rawtypes"})
-    private FlattenedTypeRelation[][] flattenFieldLinks(
-            Function<FieldDefinition, Stream<? extends FieldLinkDefinition<T, O, ?, ?>>> fieldLinks
-    ) {
+    private FlattenedTypeRelation[][] flattenFieldLinks(Direction dir) {
         FlattenedTypeRelation[][] results = new FlattenedTypeRelation[type.getRelations().length][];
 
         for(Relation rel: type.getRelations()) {
             FlattenedTypeRelation[] resultsPerRelation = new FlattenedTypeRelation[type.getTypeRegistry().getTypes().size()];
             for (Type relatedType : type.getTypeRegistry().getTypes()) {
-                resultsPerRelation[relatedType.getId()] = flattenPerType(relatedType, fieldLinks);
+                resultsPerRelation[relatedType.getId()] = flattenPerType(relatedType, dir);
             }
 
             results[rel.getRelationId()] = resultsPerRelation;
@@ -86,13 +85,16 @@ public class FlattenedType<T extends Type<T, O>, O extends Obj<T, O>> {
         return results;
     }
 
-    @SuppressWarnings({"rawtypes"})
-    private FlattenedTypeRelation flattenPerType(
-            Type<?, ?> relatedType,
-            Function<FieldDefinition, Stream<? extends FieldLinkDefinition<T, O, ?, ?>>> fieldLinksMapper
+    private <
+            RT extends Type<RT, RO>,
+            RO extends Obj<RT, RO>
+            >
+    FlattenedTypeRelation<T, O, RT, RO> flattenPerType(
+            Type<RT, RO> relatedType,
+            Direction dir
     ) {
-        List<? extends FieldLinkDefinition<T, O, ?, ?>> fieldLinks = Stream.of(fieldsReverse)
-                .flatMap(fd -> fieldLinksMapper.apply(fd))
+        List<FieldLinkDefinition<T, O, ?, ?>> fieldLinks = Stream.of(fieldsReverse)
+                .<FieldLinkDefinition<T, O, ?, ?>>flatMap(dir::getFieldLinkDefinitions)
                 .filter(fl ->
                         relatedType.isInstanceOf(fl.getRelatedFD().getObjectType())
                 )

@@ -17,10 +17,9 @@ public class FlattenedTypeRelation<
 
     FieldLinkDefinition<T, O, RT, RO>[][] fieldLinks;
 
-    @SuppressWarnings("unchecked")
-    public FlattenedTypeRelation(TypeRegistry registry, List<? extends FieldLinkDefinition<T, O, ?, ?>> fieldLinks) {
-        Map<Integer, List<FieldLinkDefinition<T, O, RT, RO>>> groupedByRelatedFD =
-                ((List<? extends FieldLinkDefinition<T, O, RT, RO>>)fieldLinks).stream() // I just hate generics!!!!
+    public FlattenedTypeRelation(TypeRegistry registry, List<FieldLinkDefinition<T, O, ?, ?>> fieldLinks) {
+        Map<Integer, List<FieldLinkDefinition<T, O, ?, ?>>> groupedByRelatedFD =
+                fieldLinks.stream()
                 .collect(Collectors.groupingBy(fl ->
                         fl.getRelatedFD().getFieldId())
                 );

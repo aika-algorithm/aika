@@ -1,5 +1,6 @@
 package network.aika.fields.direction;
 
+import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.defs.FieldLinkDefinitionInputSide;
 import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.fields.field.Field;
@@ -8,6 +9,8 @@ import network.aika.type.FlattenedType;
 import network.aika.type.FlattenedTypeRelation;
 import network.aika.type.Obj;
 import network.aika.type.Type;
+
+import java.util.stream.Stream;
 
 
 public class Output implements Direction {
@@ -20,6 +23,15 @@ public class Output implements Direction {
     @Override
     public Direction invert() {
         return Direction.INPUT;
+    }
+
+    @Override
+    public <
+            T extends Type<T, O>,
+            O extends Obj<T, O>
+            >
+    Stream<FieldLinkDefinitionInputSide<T, O, ?, ?>> getFieldLinkDefinitions(FieldDefinition<T, O> fd) {
+        return fd.getOutputs();
     }
 
     @Override

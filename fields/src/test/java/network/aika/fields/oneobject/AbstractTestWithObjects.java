@@ -7,11 +7,13 @@ import network.aika.type.relations.RelationOne;
 
 public abstract class AbstractTestWithObjects {
 
+    protected TypeRegistry registry;
+
     protected TestType typeA;
     protected TestType typeB;
 
     public void init() {
-        TypeRegistry registry = new TypeRegistryImpl();
+        registry = new TypeRegistryImpl();
 
         typeA = new TestType(registry, "A")
                 .setClazz(TestObject.class);

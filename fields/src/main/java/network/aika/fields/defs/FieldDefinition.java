@@ -110,11 +110,11 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
         );
     }
 
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     private <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void followLinks(Field<T, O> field, Direction direction) {
-        FlattenedTypeRelation[][] fTypeRels = direction.getFlattenedTypeRelations(getObjectType().getFlattenedType());
+        FlattenedTypeRelation<T, O, RT, RO>[][] fTypeRels = direction.getFlattenedTypeRelations(getObjectType().getFlattenedType());
         for(int relationId = 0; relationId < fTypeRels.length; relationId++) {
-            FlattenedTypeRelation[] ftr = fTypeRels[relationId];
+            FlattenedTypeRelation<T, O, RT, RO>[] ftr = fTypeRels[relationId];
 
             if(ftr != null) {
                 getObjectType().getRelations()[relationId].followAll(field.getObject())
@@ -129,11 +129,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
         throw new UnsupportedOperationException();
     }
 
-    public <
-            RT extends Type<RT, RO>,
-            RO extends Obj<RT, RO>
-            >
-    Stream<FieldLinkDefinitionOutputSide<T, O, RT, RO>> getInputs() {
+    public Stream<FieldLinkDefinitionOutputSide<T, O, ?, ?>> getInputs() {
         throw new UnsupportedOperationException();
     }
 
