@@ -52,6 +52,8 @@ public class DivisionTest extends AbstractTestWithObjects {
                 .in(TEST_RELATION_FROM, a, 0)
                 .in(TEST_RELATION_FROM, b, 1);
 
+        registry.flattenTypeHierarchy();
+
         // Object and Field initialization
 
         TestObject oa = typeA.instantiate();

@@ -45,6 +45,8 @@ public class FieldInstantiationWithObjectsTest extends AbstractTestWithObjects {
         fieldA = inputField(typeA, "a");
         fieldB = sum(typeB, "b")
                 .in(TEST_RELATION_TO, fieldA);
+
+        registry.flattenTypeHierarchy();
     }
 
     @Test

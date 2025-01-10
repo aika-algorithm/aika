@@ -37,13 +37,15 @@ public class ExponentialFunctionTest {
 
     @Test
     public void testExponentialFunction() {
-        TypeRegistry reg = new TypeRegistryImpl();
+        TypeRegistry registry = new TypeRegistryImpl();
 
-        TestType type = new TestType(reg, "test");
+        TestType type = new TestType(registry, "test");
 
         FieldDefinition<TestType, TestObject> a = inputField(type, "a");
         FieldDefinition<TestType, TestObject> b = exp(type, "b")
                 .in(SELF, a, 0);
+
+        registry.flattenTypeHierarchy();
 
         Obj o = new ObjImpl(type);
 

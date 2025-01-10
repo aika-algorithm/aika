@@ -109,8 +109,6 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
                 LOG.debug(instance.toString());
             }
 
-            instance.setFields(new Field[flattenedType.getNumberOfFields()]);
-
             return instance;
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
@@ -151,6 +149,9 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
     }
 
     public FlattenedType<T, O> getFlattenedType() {
+        if(flattenedType == null)
+            throw new RuntimeException("Type has not been flattened yet. TypeRegistry.flattenTypeHierarchy() needs to be called beforehand.");
+
         return flattenedType;
     }
 

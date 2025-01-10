@@ -37,11 +37,13 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
     private Field<T, O>[] fields;
 
+    @SuppressWarnings("unchecked")
     public ObjImpl(T type) {
         this.type = type;
+
+        fields = new Field[type.getFlattenedType().getNumberOfFields()];
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void initFields() {
         for(short i = 0; i < type.getFlattenedType().getNumberOfFields(); i++) {
@@ -60,11 +62,6 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
     @Override
     public boolean isInstanceOf(T t) {
         return type.isInstanceOf(t);
-    }
-
-    @Override
-    public void setFields(Field<T, O>[] fields) {
-        this.fields = fields;
     }
 
     @Override

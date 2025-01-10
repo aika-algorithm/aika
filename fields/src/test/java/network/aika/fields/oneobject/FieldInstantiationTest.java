@@ -35,13 +35,17 @@ public class FieldInstantiationTest {
 
     @Test
     public void testFieldInstantiation() {
-        TypeRegistry reg = new TypeRegistryImpl();
+        TypeRegistry registry = new TypeRegistryImpl();
 
-        TestType type = new TestType(reg, "test");
+        TestType type = new TestType(registry, "test");
 
         FieldDefinition<TestType, TestObject> a = inputField(type, "a");
         FieldDefinition<TestType, TestObject> b = sum(type, "b")
                 .in(SELF, a);
+
+        registry.flattenTypeHierarchy();
+
+        // Object and Field initialization
 
         Obj o = new ObjImpl(type);
 
@@ -60,15 +64,19 @@ public class FieldInstantiationTest {
 
     @Test
     public void testFieldInstantiationChain() {
-        TypeRegistry reg = new TypeRegistryImpl();
+        TypeRegistry registry = new TypeRegistryImpl();
 
-        TestType type = new TestType(reg, "test");
+        TestType type = new TestType(registry, "test");
 
         FieldDefinition<TestType, TestObject> a = inputField(type, "a");
         FieldDefinition<TestType, TestObject> b = sum(type, "b")
                 .in(SELF, a);
         FieldDefinition<TestType, TestObject> c = sum(type, "c")
                 .in(SELF, b);
+
+        registry.flattenTypeHierarchy();
+
+        // Object and Field initialization
 
         Obj o = new ObjImpl(type);
 
@@ -82,9 +90,9 @@ public class FieldInstantiationTest {
 
     @Test
     public void testMultiplication() {
-        TypeRegistry reg = new TypeRegistryImpl();
+        TypeRegistry registry = new TypeRegistryImpl();
 
-        TestType type = new TestType(reg, "test");
+        TestType type = new TestType(registry, "test");
 
         FieldDefinition<TestType, TestObject> a = inputField(type, "a");
         FieldDefinition<TestType, TestObject> b = inputField(type, "b");
@@ -92,6 +100,10 @@ public class FieldInstantiationTest {
         FieldDefinition c = mul(type, "c")
                 .in(SELF, a, 0)
                 .in(SELF, b, 1);
+
+        registry.flattenTypeHierarchy();
+
+        // Object and Field initialization
 
         Obj o = new ObjImpl(type);
 

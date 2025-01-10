@@ -33,8 +33,6 @@ public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
 
     T getType();
 
-    void setFields(Field<T, O>[] fields);
-
     Field<T, O> getOrCreateField(FieldDefinition<T, O> fd);
 
     Field<T, O> getField(FieldDefinition<T, O> fd);

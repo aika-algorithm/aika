@@ -20,6 +20,7 @@ import static network.aika.fields.softmax.SoftmaxOutputType.CORRESPONDING_INPUT_
 
 public class SoftmaxTest {
 
+    protected TypeRegistry registry;
     protected SoftmaxInputType inputType;
     protected SoftmaxNormType normType;
     protected SoftmaxOutputType outputType;
@@ -28,7 +29,7 @@ public class SoftmaxTest {
 
     @BeforeEach
     public void init() {
-        TypeRegistry registry = new TypeRegistryImpl();
+        registry = new TypeRegistryImpl();
 
         inputType = new SoftmaxInputType(registry, "Input")
                 .setClazz(SoftmaxInputObj.class);
@@ -55,6 +56,7 @@ public class SoftmaxTest {
                         CORRESPONDING_INPUT_LINK,
                         "test softmax"
                 );
+        registry.flattenTypeHierarchy();
 
         // Object and Field initialization
         SoftmaxInputObj[] inputsObjs = new SoftmaxInputObj[inputValues.length];
