@@ -144,7 +144,8 @@ public class Field<T extends Type<T, O>, O extends Obj<T, O>> implements FieldIn
     }
 
     private void propagateUpdate() {
-        getFieldDefinition().propagateUpdate(this);
+        getFieldDefinition()
+                .propagateUpdate(this);
 
         value = updatedValue;
         withinUpdate = false;

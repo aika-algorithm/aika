@@ -21,7 +21,7 @@ public class FlattenedTypeRelation<
         Map<Integer, List<FieldLinkDefinition<T, O, ?, ?>>> groupedByRelatedFD =
                 fieldLinks.stream()
                 .collect(Collectors.groupingBy(fl ->
-                        fl.getRelatedFD().getFieldId())
+                        fl.getOriginFD().getFieldId())
                 );
 
         this.fieldLinks = new FieldLinkDefinition[registry.getNumberOfFields()][];
@@ -30,9 +30,16 @@ public class FlattenedTypeRelation<
                 );
     }
 
-    public void followLinks(Field<T, O> field, RO relatedObj, Direction direction) {
-        for (FieldLinkDefinition<T, O, RT, RO> fl : fieldLinks[field.getFieldDefinition().getFieldId()]) {
-            direction.transmit(field, fl, relatedObj);
+    public void followLinks(Direction direction, RO relatedObj, Field<T, O> field) {
+        FieldLinkDefinition<T, O, RT, RO>[] fls = fieldLinks[field.getFieldDefinition().getFieldId()];
+        if(fls != null) {
+            for (FieldLinkDefinition<T, O, RT, RO> fl : fls) {
+                direction.transmit(
+                        field,
+                        fl,
+                        relatedObj
+                );
+            }
         }
     }
 }

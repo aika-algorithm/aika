@@ -33,6 +33,7 @@ public class Input implements Direction {
         return fd.getInputs();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <
             T extends Type<T, O>,

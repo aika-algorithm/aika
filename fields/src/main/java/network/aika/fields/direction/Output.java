@@ -34,9 +34,16 @@ public class Output implements Direction {
         return fd.getOutputs();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public FlattenedTypeRelation[][] getFlattenedTypeRelations(FlattenedType flattenedType) {
-        return flattenedType.getOutputs();
+    public <
+            T extends Type<T, O>,
+            O extends Obj<T, O>,
+            RT extends Type<RT, RO>,
+            RO extends Obj<RT, RO>
+            >
+    FlattenedTypeRelation<T, O, RT, RO>[][] getFlattenedTypeRelations(FlattenedType<T, O> flattenedType) {
+        return (FlattenedTypeRelation<T, O, RT, RO>[][]) flattenedType.getOutputs();
     }
 
     @Override

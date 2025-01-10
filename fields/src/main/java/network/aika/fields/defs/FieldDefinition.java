@@ -94,7 +94,6 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
         return this;
     }
 
-    @SuppressWarnings("unchecked")
     public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(Field<T, O> field) {
         followLinks(
                 field,
@@ -102,7 +101,6 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
         );
     }
 
-    @SuppressWarnings("unchecked")
     public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void propagateUpdate(Field<T, O> field) {
         followLinks(
                 field,
@@ -110,16 +108,19 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
         );
     }
 
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     private <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void followLinks(Field<T, O> field, Direction direction) {
         FlattenedTypeRelation<T, O, RT, RO>[][] fTypeRels = direction.getFlattenedTypeRelations(getObjectType().getFlattenedType());
         for(int relationId = 0; relationId < fTypeRels.length; relationId++) {
             FlattenedTypeRelation<T, O, RT, RO>[] ftr = fTypeRels[relationId];
 
             if(ftr != null) {
-                getObjectType().getRelations()[relationId].followAll(field.getObject())
+                Relation<T, O, RT, RO> relation = (Relation<T, O, RT, RO>) getObjectType().getRelations()[relationId];
+
+                relation.followAll(field.getObject())
                         .forEach(relatedObj ->
-                                ftr[relatedObj.getType().getId()].followLinks(field, (RO) relatedObj, direction)
+                                ftr[relatedObj.getType().getId()]
+                                        .followLinks(direction, relatedObj, field)
                         );
             }
         }
@@ -139,12 +140,6 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
 
     public Stream<FieldLinkDefinitionInputSide<T, O, ?, ?>> getOutputs() {
         return outputs.stream();
-    }
-
-    public Stream<? extends FieldLinkDefinition<T, O, ?, ?>> getAllOutputs() {
-        return parent != null ?
-                Stream.concat(outputs.stream(), parent.getAllOutputs()) :
-                outputs.stream();
     }
 
     public <
