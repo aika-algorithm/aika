@@ -108,7 +108,7 @@ public class FieldInstantiationTest {
         Obj o = new ObjImpl(type);
 
         o.setFieldValue(a, 5.0);
-        Assertions.assertNull(o.getField(c));
+        Assertions.assertEquals(0.0, o.getField(c).getValue());
 
         o.setFieldValue(b, 5.0);
 

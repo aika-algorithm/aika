@@ -14,6 +14,8 @@ public class ObjectInstantiationTest extends AbstractTestWithObjects {
 
     @Test
     public void testObjectInstantiation() {
+        registry.flattenTypeHierarchy();
+
         TestObject oa = typeA.instantiate();
 
         Assertions.assertNotNull(oa);

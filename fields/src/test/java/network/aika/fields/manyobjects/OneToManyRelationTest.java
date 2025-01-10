@@ -15,13 +15,14 @@ import static network.aika.fields.manyobjects.TestTypeMany.TEST_RELATION_FROM;
 
 public class OneToManyRelationTest {
 
+    protected TypeRegistry registry;
     protected TestTypeOne typeA;
     protected TestTypeMany typeB;
 
 
     @BeforeEach
     public void init() {
-        TypeRegistry registry = new TypeRegistryImpl();
+        registry = new TypeRegistryImpl();
 
         typeA = new TestTypeOne(registry, "A")
                 .setClazz(TestObjectOne.class);
@@ -40,6 +41,7 @@ public class OneToManyRelationTest {
                 .in(TEST_RELATION_FROM, fieldA)
                 .in(TEST_RELATION_FROM, fieldB);
 
+        registry.flattenTypeHierarchy();
 
         // Object and Field initialization
 
