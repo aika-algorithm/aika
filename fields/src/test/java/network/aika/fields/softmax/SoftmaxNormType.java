@@ -8,15 +8,18 @@ import network.aika.type.relations.RelationOne;
 
 import java.util.List;
 
+import static network.aika.fields.softmax.SoftmaxInputType.INPUT_TO_NORM;
+import static network.aika.fields.softmax.SoftmaxOutputType.OUTPUT_TO_NORM;
+
 
 public class SoftmaxNormType extends Type<SoftmaxNormType, SoftmaxNormObj> {
 
+    public static RelationMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxInputType, SoftmaxInputObj> NORM_TO_INPUT = new RelationMany<>(SoftmaxNormObj::getInputs, 1, "NORM_TO_INPUT");
     public static RelationMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxOutputType, SoftmaxOutputObj> NORM_TO_OUTPUT = new RelationMany<>(SoftmaxNormObj::getOutputs, 0, "NORM_TO_OUTPUT");
-    public static RelationOne<SoftmaxOutputType, SoftmaxOutputObj, SoftmaxNormType, SoftmaxNormObj> OUTPUT_TO_NORM = new RelationOne<>(SoftmaxOutputObj::getNormObj, 1, "OUTPUT_TO_NORM");
 
     static {
+        NORM_TO_INPUT.setReversed(INPUT_TO_NORM);
         NORM_TO_OUTPUT.setReversed(OUTPUT_TO_NORM);
-        OUTPUT_TO_NORM.setReversed(NORM_TO_OUTPUT);
     }
 
     public SoftmaxNormType(TypeRegistry registry, String name) {
@@ -32,6 +35,6 @@ public class SoftmaxNormType extends Type<SoftmaxNormType, SoftmaxNormObj> {
 
     @Override
     public Relation<SoftmaxNormType, SoftmaxNormObj, ?, ?>[] getRelations() {
-        return new Relation[] {NORM_TO_OUTPUT, OUTPUT_TO_NORM};
+        return new Relation[] {NORM_TO_INPUT, NORM_TO_OUTPUT};
     }
 }
