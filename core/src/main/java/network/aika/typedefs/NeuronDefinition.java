@@ -42,7 +42,7 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
     public static final RelationMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> OUTPUT = new RelationMany<>(Neuron::getOutputSynapsesAsStream, 2, "NEURON-OUTPUT");
     public static final RelationMany<NeuronDefinition, Neuron, ActivationDefinition, Activation> ACTIVATION = new RelationMany<>(null, 3, "NEURON-ACTIVATION");
 
-    public static final Relation[] RELATIONS = {INPUT, OUTPUT, ACTIVATION};
+    public static final Relation[] RELATIONS = {SELF, INPUT, OUTPUT, ACTIVATION};
 
     static {
         ACTIVATION.setReversed(ActivationDefinition.NEURON);

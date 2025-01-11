@@ -41,7 +41,8 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
     public ObjImpl(T type) {
         this.type = type;
 
-        fields = new Field[type.getFlattenedType().getNumberOfFields()];
+        if(type != null)
+            fields = new Field[type.getFlattenedType().getNumberOfFields()];
     }
 
     @Override

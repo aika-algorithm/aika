@@ -46,6 +46,8 @@ public class MinimalNetworkTest {
         FieldDefinition<SynapseDefinition, Synapse> weight = typeModel.getNeuron().getWeight();
         FieldDefinition<ActivationDefinition, Activation> net = typeModel.getNeuron().getNet();
 
+        typeModel.flattenTypeHierarchy();
+
         Model m = new Model(typeModel)
                 .setConfig(new Config());
 

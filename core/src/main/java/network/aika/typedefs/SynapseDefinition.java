@@ -46,7 +46,7 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     public static final RelationOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> OUTPUT = new RelationOne<>(Synapse::getOutput, 2, "SYN-OUTPUT");
     public static final RelationMany<SynapseDefinition, Synapse, LinkDefinition, Link> LINK = new RelationMany<>(null, 3, "SYN-LINK");
 
-    public static final Relation[] RELATIONS = {INPUT, OUTPUT, LINK};
+    public static final Relation[] RELATIONS = {SELF, INPUT, OUTPUT, LINK};
 
     static {
         LINK.setReversed(LinkDefinition.SYNAPSE);

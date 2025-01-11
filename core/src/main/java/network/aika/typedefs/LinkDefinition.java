@@ -44,7 +44,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     public static final RelationOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_INPUT_LINK = new RelationOne<>(l -> l.getInput().getCorrespondingInputLink(l), 4, "CORRESPONDING_INPUT_LINK");
     public static final RelationOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_OUTPUT_LINK = new RelationOne<>(l -> l.getOutput().getCorrespondingOutputLink(l), 5, "CORRESPONDING_OUTPUT_LINK");
 
-    public static final Relation[] RELATIONS = {INPUT, OUTPUT, SYNAPSE, CORRESPONDING_INPUT_LINK, CORRESPONDING_OUTPUT_LINK};
+    public static final Relation[] RELATIONS = {SELF, INPUT, OUTPUT, SYNAPSE, CORRESPONDING_INPUT_LINK, CORRESPONDING_OUTPUT_LINK};
 
     static {
         SYNAPSE.setReversed(SynapseDefinition.LINK);
