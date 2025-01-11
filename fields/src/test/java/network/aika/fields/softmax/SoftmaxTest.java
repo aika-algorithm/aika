@@ -4,8 +4,6 @@ import network.aika.fields.SoftmaxFields;
 import network.aika.type.ObjImpl;
 import network.aika.type.TypeRegistry;
 import network.aika.type.TypeRegistryImpl;
-import network.aika.type.relations.RelationMany;
-import network.aika.type.relations.RelationOne;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
