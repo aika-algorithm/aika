@@ -17,6 +17,7 @@ import java.util.Map;
 
 import static network.aika.activations.TestBSTypes.A;
 import static network.aika.activations.TestBSTypes.B;
+import static network.aika.activations.TestUtils.getInputLink;
 import static network.aika.bindingsignal.Transition.of;
 import static network.aika.neurons.RefType.NEURON_EXTERNAL;
 
@@ -46,7 +47,8 @@ public class ConjunctiveActivationTest extends AbstractActivationTest {
 
         inputNodeDef.neuron.initFlattenedType();
         inputNodeDef.activation.initFlattenedType();
-        synapseDefinition.initFlattenedType();
+        firstInputEdgeDef.synapse.initFlattenedType();
+        firstInputEdgeDef.link.initFlattenedType();
 
         inputNeuron = inputNodeDef.neuron.instantiate(model);
         synapse = (ConjunctiveSynapse) synapseDefinition.instantiate(inputNeuron, neuron);
@@ -58,16 +60,16 @@ public class ConjunctiveActivationTest extends AbstractActivationTest {
 
         Activation iAct = inputNeuron.createActivation(null, doc, Map.of(A, bs0));
         Activation oAct = neuron.createActivation(null, doc, Map.of(B, bs0));
-/*
-        Assertions.assertNull(oAct.getInputLink(iAct, 0));
+
+        Assertions.assertNull(getInputLink(oAct, 0));
 
         bs0.addActivation(iAct);
 
-        Assertions.assertNull(oAct.getInputLink(iAct, 0));
+        Assertions.assertNull(getInputLink(oAct, 0));
 
         oAct.linkIncoming(null);
 
-        Assertions.assertNotNull(oAct.getInputLink(iAct, 0));
- */
+        Assertions.assertEquals(iAct, getInputLink(oAct, 0).getInput());
+
     }
 }
