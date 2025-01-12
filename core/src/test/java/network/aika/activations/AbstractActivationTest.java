@@ -24,6 +24,9 @@ public abstract class AbstractActivationTest {
         nodeDef = new NodeDefinition(typeRegistry, "test")
                 .setClazz(ConjunctiveActivation.class, Neuron.class);
 
+        nodeDef.activation.initFlattenedType();
+        nodeDef.neuron.initFlattenedType();
+
         doc = mock(Document.class);
         model = mock(Model.class);
 

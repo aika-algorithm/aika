@@ -44,6 +44,10 @@ public class ConjunctiveActivationTest extends AbstractActivationTest {
         SynapseDefinition synapseDefinition = firstInputEdgeDef.synapse
                 .setTransition(of(A, B));
 
+        inputNodeDef.neuron.initFlattenedType();
+        inputNodeDef.activation.initFlattenedType();
+        synapseDefinition.initFlattenedType();
+
         inputNeuron = inputNodeDef.neuron.instantiate(model);
         synapse = (ConjunctiveSynapse) synapseDefinition.instantiate(inputNeuron, neuron);
     }
