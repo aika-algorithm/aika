@@ -32,7 +32,7 @@ public interface TypeRegistry {
 
     <T extends Type<?, ?>> T getType(short typeId);
 
-    int getNumberOfFields();
+    int getNumberOfFieldDefinitions();
 
     void flattenTypeHierarchy();
 }

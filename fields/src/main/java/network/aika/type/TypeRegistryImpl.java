@@ -56,7 +56,7 @@ public class TypeRegistryImpl implements TypeRegistry {
     }
 
     @Override
-    public int getNumberOfFields() {
+    public int getNumberOfFieldDefinitions() {
         return fieldIdCounter;
     }
 

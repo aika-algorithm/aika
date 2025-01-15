@@ -24,7 +24,7 @@ public class FlattenedTypeRelation<
                         fl.getOriginFD().getFieldId())
                 );
 
-        this.fieldLinks = new FieldLinkDefinition[registry.getNumberOfFields()][];
+        this.fieldLinks = new FieldLinkDefinition[registry.getNumberOfFieldDefinitions()][];
         groupedByRelatedFD.forEach((id, list) ->
                         this.fieldLinks[id] = list.toArray(new FieldLinkDefinition[0])
                 );

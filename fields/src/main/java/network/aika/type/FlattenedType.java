@@ -24,7 +24,6 @@ import network.aika.type.relations.Relation;
 import network.aika.utils.ArrayUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -43,18 +42,20 @@ public class FlattenedType<
 
     private final short[] fields;
     private final FieldDefinition<T, O>[][] fieldsReverse;
+    private final int numberOfFields;
 
     private FlattenedTypeRelation<T, O, RT, RO>[][] mapping;
 
     @SuppressWarnings("unchecked")
-    private FlattenedType(Direction dir, T type, Map<FieldDefinition<T, O>, Short> fieldMappings) {
+    private FlattenedType(Direction dir, T type, Map<FieldDefinition<T, O>, Short> fieldMappings, int numberOfFields) {
         this.direction = dir;
         this.type = type;
+        this.numberOfFields = numberOfFields;
 
-        fields = new short[type.getTypeRegistry().getNumberOfFields()];
+        fields = new short[type.getTypeRegistry().getNumberOfFieldDefinitions()];
         Arrays.fill(fields, (short) -1);
 
-        fieldsReverse = new FieldDefinition[fieldMappings.size()][];
+        fieldsReverse = new FieldDefinition[numberOfFields][];
         for(Map.Entry<FieldDefinition<T, O>, Short> e: fieldMappings.entrySet()) {
             fields[e.getKey().getFieldId()] = e.getValue();
             fieldsReverse[e.getValue()] = new FieldDefinition[] {e.getKey()};
@@ -80,7 +81,7 @@ public class FlattenedType<
             fieldMappings.put(fd, i);
         }
 
-       return new FlattenedType<>(Direction.INPUT, type, fieldMappings);
+       return new FlattenedType<>(Direction.INPUT, type, fieldMappings, requiredFields.size());
     }
 
     public static <
@@ -98,7 +99,7 @@ public class FlattenedType<
             fieldMappings.put(fd, fieldIndex);
         }
 
-        return new FlattenedType<>(Direction.OUTPUT, type, fieldMappings);
+        return new FlattenedType<>(Direction.OUTPUT, type, fieldMappings, inputSide.numberOfFields);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
