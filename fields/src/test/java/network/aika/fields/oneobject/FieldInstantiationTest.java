@@ -49,16 +49,16 @@ public class FieldInstantiationTest {
 
         Obj o = new ObjImpl(type);
 
-        Assertions.assertNull(o.getField(a));
-        Assertions.assertNull(o.getField(b));
+        Assertions.assertNull(o.getFieldOutput(a));
+        Assertions.assertNull(o.getFieldOutput(b));
 
         o.setFieldValue(a, 5.0);
 
-        Assertions.assertNotNull(o.getField(b));
+        Assertions.assertNotNull(o.getFieldOutput(b));
 
         Assertions.assertEquals(
                 5.0,
-                o.getField(b).getValue()
+                o.getFieldOutput(b).getValue()
         );
     }
 
@@ -84,7 +84,7 @@ public class FieldInstantiationTest {
 
         Assertions.assertEquals(
                 5.0,
-                o.getField(c).getValue()
+                o.getFieldOutput(c).getValue()
         );
     }
 
@@ -108,13 +108,13 @@ public class FieldInstantiationTest {
         Obj o = new ObjImpl(type);
 
         o.setFieldValue(a, 5.0);
-        Assertions.assertEquals(0.0, o.getField(c).getValue());
+        Assertions.assertEquals(0.0, o.getFieldOutput(c).getValue());
 
         o.setFieldValue(b, 5.0);
 
         Assertions.assertEquals(
                 25.0,
-                o.getField(c).getValue()
+                o.getFieldOutput(c).getValue()
         );
     }
 }

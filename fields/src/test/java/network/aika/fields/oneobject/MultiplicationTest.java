@@ -83,7 +83,7 @@ public class MultiplicationTest extends AbstractTestWithObjects {
 
         Assertions.assertEquals(
                 25.0,
-                ob.getField(c).getValue()
+                ob.getFieldOutput(c).getValue()
         );
     }
 }

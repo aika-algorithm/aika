@@ -28,7 +28,7 @@ public class FieldLinkDefinitionOutputSide<
         var rt = (RelationOne<OT, OO, IT, IO>) getRelation();
         IO inputObj = rt.followOne(obj);
 
-        return inputObj.getField(getRelatedFD());
+        return inputObj.getFieldOutput(getRelatedFD());
     }
 
     public double getInputValue(OO obj) {

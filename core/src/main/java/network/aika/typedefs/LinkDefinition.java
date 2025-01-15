@@ -50,6 +50,8 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
         SYNAPSE.setReversed(SynapseDefinition.LINK);
         INPUT.setReversed(ActivationDefinition.OUTPUT);
         OUTPUT.setReversed(ActivationDefinition.INPUT);
+        CORRESPONDING_INPUT_LINK.setReversed(CORRESPONDING_OUTPUT_LINK);
+        CORRESPONDING_OUTPUT_LINK.setReversed(CORRESPONDING_INPUT_LINK);
     }
 
     private SynapseDefinition synapse;

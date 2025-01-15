@@ -6,7 +6,6 @@ import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.fields.field.Field;
 import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.type.FlattenedType;
-import network.aika.type.FlattenedTypeRelation;
 import network.aika.type.Obj;
 import network.aika.type.Type;
 
@@ -34,16 +33,14 @@ public class Output implements Direction {
         return fd.getOutputs();
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
     public <
             T extends Type<T, O>,
             O extends Obj<T, O>,
             RT extends Type<RT, RO>,
             RO extends Obj<RT, RO>
             >
-    FlattenedTypeRelation<T, O, RT, RO>[][] getFlattenedTypeRelations(FlattenedType<T, O> flattenedType) {
-        return (FlattenedTypeRelation<T, O, RT, RO>[][]) flattenedType.getOutputs();
+    FlattenedType<T, O, RT, RO> getFlattenedType(Type<T, O> type) {
+        return (FlattenedType<T, O, RT, RO>) type.getFlattenedTypeOutputSide();
     }
 
     @Override
@@ -55,6 +52,10 @@ public class Output implements Direction {
     >
     void transmit(Field<T, O> originField, FieldLinkDefinition<T, O, RT, RO> fl, RO relatedObject) {
         FieldLinkDefinitionOutputSide<RT, RO, T, O> flo = ((FieldLinkDefinitionInputSide<T, O, RT, RO>)fl).getOutputSide();
-        fl.getRelatedFD().transmit(relatedObject.getOrCreateField(fl.getRelatedFD()), flo, originField.getUpdate());
+        fl.getRelatedFD().transmit(
+                relatedObject.getOrCreateFieldInput(fl.getRelatedFD()),
+                flo,
+                originField.getUpdate()
+        );
     }
 }

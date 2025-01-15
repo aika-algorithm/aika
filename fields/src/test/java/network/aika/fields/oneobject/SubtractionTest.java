@@ -81,7 +81,7 @@ public class SubtractionTest extends AbstractTestWithObjects {
 
         Assertions.assertEquals(
                 30.0,
-                ob.getField(c).getValue()
+                ob.getFieldOutput(c).getValue()
         );
     }
 }

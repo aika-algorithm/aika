@@ -32,7 +32,7 @@ public interface Direction {
             RT extends Type<RT, RO>,
             RO extends Obj<RT, RO>
     >
-    FlattenedTypeRelation<T, O, RT, RO>[][] getFlattenedTypeRelations(FlattenedType<T, O> flattenedType);
+    FlattenedType<T, O, RT, RO> getFlattenedType(Type<T, O> type);
 
     <
             T extends Type<T, O>,

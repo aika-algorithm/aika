@@ -42,15 +42,15 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
         this.type = type;
 
         if(type != null)
-            fields = new Field[type.getFlattenedType().getNumberOfFields()];
+            fields = new Field[type.getFlattenedTypeInputSide().getNumberOfFields()];
     }
 
     @Override
     public void initFields() {
-        for(short i = 0; i < type.getFlattenedType().getNumberOfFields(); i++) {
-            FieldDefinition<T, O> fd = type.getFlattenedType().getFieldDefinitionIdByIndex(i);
+        for(short i = 0; i < type.getFlattenedTypeInputSide().getNumberOfFields(); i++) {
+            FieldDefinition<T, O> fd = type.getFlattenedTypeInputSide().getFieldDefinitionIdByIndex(i);
 
-            Field<T, O> field = getOrCreateField(fd);
+            Field<T, O> field = getOrCreateFieldInput(fd);
             fd.initializeField(field);
         }
     }
@@ -66,16 +66,16 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
     }
 
     @Override
-    public Field<T, O> getField(FieldDefinition<T, O> fd) {
-        short fieldIndex = type.getFlattenedType().getFieldIndex(fd);
+    public Field<T, O> getFieldOutput(FieldDefinition<T, O> fd) {
+        short fieldIndex = type.getFlattenedTypeOutputSide().getFieldIndex(fd);
 
         return fields[fieldIndex];
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Field<T, O> getOrCreateField(FieldDefinition<T, O> fd) {
-        short fieldIndex = type.getFlattenedType().getFieldIndex(fd);
+    public Field<T, O> getOrCreateFieldInput(FieldDefinition<T, O> fd) {
+        short fieldIndex = type.getFlattenedTypeInputSide().getFieldIndex(fd);
 
         Field<T, O> f = fields[fieldIndex];
         if(f == null) {
@@ -88,14 +88,14 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
     @SuppressWarnings("unchecked")
     @Override
     public O setFieldValue(FieldDefinition<T, O> fd, double v) {
-        getOrCreateField(fd)
+        getOrCreateFieldInput(fd)
                 .setValue(v);
         return (O) this;
     }
 
     @Override
     public double getFieldValue(FieldDefinition<T, O> fd) {
-        Field<T, O> f = getField(fd);
+        Field<T, O> f = getFieldOutput(fd);
         return f != null ?
                 f.getValue() :
                 0.0;
@@ -103,7 +103,7 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
     @Override
     public double getFieldUpdatedValue(FieldDefinition<T, O> fd) {
-        Field<T, O> f = getField(fd);
+        Field<T, O> f = getFieldOutput(fd);
         return f != null ?
                 f.getUpdatedValue() :
                 0.0;

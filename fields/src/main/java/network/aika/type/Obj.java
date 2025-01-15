@@ -33,9 +33,9 @@ public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
 
     T getType();
 
-    Field<T, O> getOrCreateField(FieldDefinition<T, O> fd);
+    Field<T, O> getOrCreateFieldInput(FieldDefinition<T, O> fd);
 
-    Field<T, O> getField(FieldDefinition<T, O> fd);
+    Field<T, O> getFieldOutput(FieldDefinition<T, O> fd);
 
     Stream<Field<T, O>> getFields();
 

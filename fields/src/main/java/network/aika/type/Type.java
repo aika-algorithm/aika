@@ -25,6 +25,12 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static network.aika.fields.direction.Direction.INPUT;
+import static network.aika.fields.direction.Direction.OUTPUT;
+import static network.aika.type.FlattenedType.createInputFlattenedType;
+import static network.aika.type.FlattenedType.createOutputFlattenedType;
 
 /**
  * @author Lukas Molzberger
@@ -51,7 +57,8 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     private Integer depth;
 
-    private FlattenedType<T, O> flattenedType;
+    private FlattenedType<T, O, ?, ?> flattenedTypeInputSide;
+    private FlattenedType<T, O, ?, ?> flattenedTypeOutputSide;
 
     public Type(TypeRegistry registry, String name) {
         this.name = name;
@@ -71,7 +78,17 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
     public abstract <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> Relation<T, O, RT, RO>[] getRelations();
 
     public void initFlattenedType() {
-        flattenedType = new FlattenedType<>((T)this);
+        Set<FieldDefinition<T, O>> fieldDefs = getCollectFlattenedFieldDefinitions();
+
+        flattenedTypeInputSide = createInputFlattenedType((T)this, fieldDefs);
+        flattenedTypeOutputSide = createOutputFlattenedType((T)this, fieldDefs, flattenedTypeInputSide);
+    }
+
+    public Set<FieldDefinition<T, O>> getCollectFlattenedFieldDefinitions() {
+        return collectTypes()
+                .stream()
+                .flatMap(t -> t.getFieldDefinitions().stream())
+                .collect(Collectors.toSet());
     }
 
     public SortedSet<Type<T, O>> collectTypes() {
@@ -148,11 +165,18 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         return registry;
     }
 
-    public FlattenedType<T, O> getFlattenedType() {
-        if(flattenedType == null)
+    public FlattenedType<T, O, ?, ?> getFlattenedTypeInputSide() {
+        if(flattenedTypeInputSide == null)
             throw new RuntimeException("Type has not been flattened yet. TypeRegistry.flattenTypeHierarchy() needs to be called beforehand.");
 
-        return flattenedType;
+        return flattenedTypeInputSide;
+    }
+
+    public FlattenedType<T, O, ?, ?> getFlattenedTypeOutputSide() {
+        if(flattenedTypeOutputSide == null)
+            throw new RuntimeException("Type has not been flattened yet. TypeRegistry.flattenTypeHierarchy() needs to be called beforehand.");
+
+        return flattenedTypeOutputSide;
     }
 
     public void setFieldDefinition(FieldDefinition<T, O> fieldDef) {

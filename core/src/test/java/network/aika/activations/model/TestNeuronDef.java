@@ -82,7 +82,7 @@ public class TestNeuronDef {
         fired = eventListener(
                 node.activation,
                 "FIRED",
-                (fd, act) -> act.updateFiredStep(act.getField(fd)),
+                (fd, act) -> act.updateFiredStep(act.getFieldOutput(fd)),
                 TOLERANCE)
                 .in(SELF, net, 0);
 

@@ -82,14 +82,14 @@ public class DivisionTest extends AbstractTestWithObjects {
 
         Assertions.assertEquals(
                 5.0,
-                ob.getField(c).getValue()
+                ob.getFieldOutput(c).getValue()
         );
 
         oa.setFieldValue(b, 10.0);
 
         Assertions.assertEquals(
                 2.5,
-                ob.getField(c).getValue()
+                ob.getFieldOutput(c).getValue()
         );
     }
 }

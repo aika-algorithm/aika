@@ -56,7 +56,7 @@ public class OneToManyRelationTest {
 
         Assertions.assertEquals(
                 10.0,
-                objB.getField(fieldC).getValue()
+                objB.getFieldOutput(fieldC).getValue()
         );
     }
 }

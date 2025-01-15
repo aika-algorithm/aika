@@ -62,7 +62,7 @@ public class FieldInstantiationWithObjectsTest extends AbstractTestWithObjects {
 
         Assertions.assertEquals(
                 5.0,
-                objB.getOrCreateField(fieldB).getValue()
+                objB.getOrCreateFieldInput(fieldB).getValue()
         );
     }
 
@@ -81,7 +81,7 @@ public class FieldInstantiationWithObjectsTest extends AbstractTestWithObjects {
 
         Assertions.assertEquals(
                 5.0,
-                objB.getField(fieldB).getValue()
+                objB.getFieldOutput(fieldB).getValue()
         );
     }
 }

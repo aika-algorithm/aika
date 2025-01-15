@@ -49,16 +49,16 @@ public class ExponentialFunctionTest {
 
         Obj o = new ObjImpl(type);
 
-        Assertions.assertNull(o.getField(a));
-        Assertions.assertNull(o.getField(b));
+        Assertions.assertNull(o.getFieldOutput(a));
+        Assertions.assertNull(o.getFieldOutput(b));
 
         o.setFieldValue(a, 5.0);
 
-        Assertions.assertNotNull(o.getField(b));
+        Assertions.assertNotNull(o.getFieldOutput(b));
 
         Assertions.assertEquals(
                 148.413159102576603,
-                o.getField(b).getValue()
+                o.getFieldOutput(b).getValue()
         );
     }
 }

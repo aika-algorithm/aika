@@ -70,8 +70,9 @@ public class TypeRegistryImpl implements TypeRegistry {
                 .forEach(Type::initFlattenedType);
 
         sortedTypes
-                .forEach(t ->
-                        t.getFlattenedType().flatten()
-                );
+                .forEach(t -> {
+                    t.getFlattenedTypeInputSide().flatten();
+                    t.getFlattenedTypeOutputSide().flatten();
+                });
     }
 }

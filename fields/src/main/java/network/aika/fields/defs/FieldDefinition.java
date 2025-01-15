@@ -28,6 +28,7 @@ import network.aika.utils.ToleranceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static network.aika.fields.defs.FieldLinkDefinition.link;
@@ -35,7 +36,7 @@ import static network.aika.fields.defs.FieldLinkDefinition.link;
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
+public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implements Comparable<FieldDefinition<T, O>> {
 
     protected Integer fieldId;
 
@@ -44,6 +45,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
     protected List<FieldLinkDefinitionInputSide<T, O, ?, ?>> outputs = new ArrayList<>();
 
     protected FieldDefinition<T, O> parent;
+    protected List<FieldDefinition<T, O>> children = new ArrayList<>();
 
     protected T objectType;
 
@@ -90,40 +92,39 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
 
     public FieldDefinition<T, O> setParent(FieldDefinition<T, O> parent) {
         this.parent = parent;
+        parent.children.add(this);
 
         return this;
     }
 
+    public List<FieldDefinition<T, O>> getChildren() {
+        return children;
+    }
+
+    public boolean isFieldRequired(Set<FieldDefinition<T, O>> fieldDefs) {
+        return resolveInheritedFieldDefinition(fieldDefs) == this;
+    }
+
+    public FieldDefinition<T, O> resolveInheritedFieldDefinition(Set<FieldDefinition<T, O>> fieldDefs) {
+        return children.stream()
+                .filter(fieldDefs::contains)
+                .map(fd ->
+                        fd.resolveInheritedFieldDefinition(fieldDefs)
+                )
+                .findFirst()
+                .orElse(this);
+    }
+
     public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(Field<T, O> field) {
-        followLinks(
-                field,
-                Direction.INPUT
-        );
+        getObjectType()
+                .getFlattenedTypeInputSide()
+                .followLinks(field);
     }
 
     public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void propagateUpdate(Field<T, O> field) {
-        followLinks(
-                field,
-                Direction.OUTPUT
-        );
-    }
-
-    @SuppressWarnings("unchecked")
-    private <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void followLinks(Field<T, O> field, Direction direction) {
-        FlattenedTypeRelation<T, O, RT, RO>[][] fTypeRels = direction.getFlattenedTypeRelations(getObjectType().getFlattenedType());
-        for(int relationId = 0; relationId < fTypeRels.length; relationId++) {
-            FlattenedTypeRelation<T, O, RT, RO>[] ftr = fTypeRels[relationId];
-
-            if(ftr != null) {
-                Relation<T, O, RT, RO> relation = (Relation<T, O, RT, RO>) getObjectType().getRelations()[relationId];
-
-                relation.followAll(field.getObject())
-                        .forEach(relatedObj ->
-                                ftr[relatedObj.getType().getId()]
-                                        .followLinks(direction, relatedObj, field)
-                        );
-            }
-        }
+        getObjectType()
+                .getFlattenedTypeOutputSide()
+                .followLinks(field);
     }
 
     public void addInput(FieldLinkDefinitionOutputSide<T, O, ?, ?> fl) {
@@ -228,5 +229,10 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> {
 
     public String toString() {
         return getFieldId() + ":" + name;
+    }
+
+    @Override
+    public int compareTo(FieldDefinition<T, O> fd) {
+        return fieldId.compareTo(fd.fieldId);
     }
 }

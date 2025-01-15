@@ -107,7 +107,7 @@ public class SoftmaxTest {
 
         double[] outputValues = new double[inputValues.length];
         for(int i = 0; i < outputValues.length; i++)
-            outputValues[i] = outputsObjs[i].getField(softmaxFields.getOutputs()).getValue();
+            outputValues[i] = outputsObjs[i].getFieldOutput(softmaxFields.getOutputs()).getValue();
 
         Assertions.assertArrayEquals(
                 new double[] {0.10043668122270742, 0.17903930131004367, 0.36681222707423583, 0.052401746724890834, 0.3013100436681223},
