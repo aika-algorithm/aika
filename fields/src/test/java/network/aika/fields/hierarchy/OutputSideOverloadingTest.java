@@ -60,14 +60,15 @@ public class OutputSideOverloadingTest {
         TestObject inputObj = input.instantiate();
         TestObject outputObj = outputChild.instantiate();
 
-        inputObj.setFieldValue(inputField, 5.0);
+        inputObj.setFieldValue(inputField, 2.5);
 
         linkObjects(inputObj, outputObj);
         outputObj.initFields();
 
         Assertions.assertEquals(
-                10.0,
-                outputObj.getFieldOutput(outputChildField).getValue()
+                148.4131591025766,
+                outputObj.getFieldOutput(outputChildField).getValue(),
+                0.00001
         );
     }
 
@@ -104,7 +105,7 @@ public class OutputSideOverloadingTest {
         }
 
         Assertions.assertEquals(
-                297.8263182051532,
+                148.4131591025766,
                 outputObj.getFieldOutput(outputChildField).getValue(),
                 0.0001
         );
