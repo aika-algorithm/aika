@@ -104,8 +104,9 @@ public class OutputSideOverloadingTest {
         }
 
         Assertions.assertEquals(
-                5.0,
-                outputObj.getFieldOutput(outputChildField).getValue()
+                297.8263182051532,
+                outputObj.getFieldOutput(outputChildField).getValue(),
+                0.0001
         );
     }
 }

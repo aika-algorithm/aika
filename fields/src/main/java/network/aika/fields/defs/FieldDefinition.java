@@ -114,14 +114,9 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
     }
 
     public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(Field<T, O> field) {
-        getObjectType()
+        field.getObject()
+                .getType()
                 .getFlattenedTypeInputSide()
-                .followLinks(field);
-    }
-
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void propagateUpdate(Field<T, O> field) {
-        getObjectType()
-                .getFlattenedTypeOutputSide()
                 .followLinks(field);
     }
 

@@ -36,7 +36,6 @@ public class FlattenedTypeRelation<
         }
     }
 
-
     public void followLinks(Direction direction, RO relatedObj, Field<T, O> field) {
         FieldLinkDefinition<T, O, RT, RO>[] fls = fieldLinks[field.getId()];
         if(fls != null) {
