@@ -4,9 +4,9 @@ import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.field.Field;
 import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.type.FlattenedType;
-import network.aika.type.FlattenedTypeRelation;
 import network.aika.type.Obj;
 import network.aika.type.Type;
+import network.aika.type.relations.Relation;
 
 import java.util.stream.Stream;
 
@@ -33,6 +33,8 @@ public interface Direction {
             RO extends Obj<RT, RO>
     >
     FlattenedType<T, O, RT, RO> getFlattenedType(Type<T, O> type);
+
+    Relation<?, ?, ?, ?> getRelation(Relation<?, ?, ?, ?> rel);
 
     <
             T extends Type<T, O>,

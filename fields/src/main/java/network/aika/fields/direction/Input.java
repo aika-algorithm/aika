@@ -7,6 +7,7 @@ import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.type.FlattenedType;
 import network.aika.type.Obj;
 import network.aika.type.Type;
+import network.aika.type.relations.Relation;
 
 import java.util.stream.Stream;
 
@@ -39,6 +40,11 @@ public class Input implements Direction {
             >
     FlattenedType<T, O, RT, RO> getFlattenedType(Type<T, O> type) {
         return (FlattenedType<T, O, RT, RO>) type.getFlattenedTypeInputSide();
+    }
+
+    @Override
+    public Relation<?, ?, ?, ?> getRelation(Relation<?, ?, ?, ?> rel) {
+        return rel;
     }
 
     @Override

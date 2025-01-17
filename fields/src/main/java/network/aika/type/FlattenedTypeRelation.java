@@ -1,5 +1,6 @@
 package network.aika.type;
 
+import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.direction.Direction;
 import network.aika.fields.field.Field;
 import network.aika.fields.defs.FieldLinkDefinition;
@@ -17,21 +18,27 @@ public class FlattenedTypeRelation<
 
     FieldLinkDefinition<T, O, RT, RO>[][] fieldLinks;
 
-    public FlattenedTypeRelation(TypeRegistry registry, List<FieldLinkDefinition<T, O, ?, ?>> fieldLinks) {
-        Map<Integer, List<FieldLinkDefinition<T, O, ?, ?>>> groupedByRelatedFD =
-                fieldLinks.stream()
+    public FlattenedTypeRelation(FlattenedType<T, O, RT, RO> flattenedType, List<FieldLinkDefinition<T, O, ?, ?>> fls) {
+        Map<Integer, List<FieldLinkDefinition<T, O, ?, ?>>> groupedByOriginFD =
+                fls.stream()
                 .collect(Collectors.groupingBy(fl ->
-                        fl.getOriginFD().getFieldId())
+                        fl.getOriginFD().getId())
                 );
 
-        this.fieldLinks = new FieldLinkDefinition[registry.getNumberOfFieldDefinitions()][];
-        groupedByRelatedFD.forEach((id, list) ->
-                        this.fieldLinks[id] = list.toArray(new FieldLinkDefinition[0])
-                );
+        fieldLinks = new FieldLinkDefinition[flattenedType.getFieldsReverse().length][];
+        for(short i = 0; i < fieldLinks.length; i++) {
+            for(FieldDefinition<T, O> fd : flattenedType.getFieldsReverse()[i]) {
+                List<FieldLinkDefinition<T, O, ?, ?>> list = groupedByOriginFD.get(fd.getId());
+                if (list != null) {
+                    fieldLinks[i] = list.toArray(new FieldLinkDefinition[0]);
+                }
+            }
+        }
     }
 
+
     public void followLinks(Direction direction, RO relatedObj, Field<T, O> field) {
-        FieldLinkDefinition<T, O, RT, RO>[] fls = fieldLinks[field.getFieldDefinition().getFieldId()];
+        FieldLinkDefinition<T, O, RT, RO>[] fls = fieldLinks[field.getId()];
         if(fls != null) {
             for (FieldLinkDefinition<T, O, RT, RO> fl : fls) {
                 direction.transmit(

@@ -79,7 +79,7 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
         Field<T, O> f = fields[fieldIndex];
         if(f == null) {
-            f = fields[fieldIndex] = new Field<>((O) this, fd);
+            f = fields[fieldIndex] = new Field<>((O) this, fd, fieldIndex);
         }
 
         return f;

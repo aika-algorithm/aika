@@ -55,10 +55,17 @@ public class FlattenedType<
         fields = new short[type.getTypeRegistry().getNumberOfFieldDefinitions()];
         Arrays.fill(fields, (short) -1);
 
+        Map<Short, List<FieldDefinition<T, O>>> groupedMap = new HashMap<>();
+        for (Map.Entry<FieldDefinition<T, O>, Short> e : fieldMappings.entrySet()) {
+            fields[e.getKey().getId()] = e.getValue();
+
+            groupedMap.computeIfAbsent(e.getValue(), k -> new ArrayList<>())
+                    .add(e.getKey());
+        }
+
         fieldsReverse = new FieldDefinition[numberOfFields][];
-        for(Map.Entry<FieldDefinition<T, O>, Short> e: fieldMappings.entrySet()) {
-            fields[e.getKey().getFieldId()] = e.getValue();
-            fieldsReverse[e.getValue()] = new FieldDefinition[] {e.getKey()};
+        for(Map.Entry<Short, List<FieldDefinition<T, O>>> e: groupedMap.entrySet()) {
+            fieldsReverse[e.getKey()] = e.getValue().toArray(new FieldDefinition[0]);
         }
     }
 
@@ -94,7 +101,7 @@ public class FlattenedType<
         Map<FieldDefinition<T, O>, Short> fieldMappings = new TreeMap<>();
         for(FieldDefinition<T, O> fd: fieldDefs) {
             FieldDefinition<T, O> resolvedFD = fd.resolveInheritedFieldDefinition(fieldDefs);
-            short fieldIndex = inputSide.fields[resolvedFD.getFieldId()];
+            short fieldIndex = inputSide.fields[resolvedFD.getId()];
 
             fieldMappings.put(fd, fieldIndex);
         }
@@ -109,12 +116,35 @@ public class FlattenedType<
         for(Relation rel: type.getRelations()) {
             FlattenedTypeRelation<T, O, RT, RO>[] resultsPerRelation = new FlattenedTypeRelation[type.getTypeRegistry().getTypes().size()];
             for (Type relatedType : type.getTypeRegistry().getTypes()) {
-                resultsPerRelation[relatedType.getId()] = flattenPerType(direction, rel, relatedType);
+                resultsPerRelation[relatedType.getId()] = flattenPerType(rel, relatedType);
             }
 
             if(!ArrayUtils.isAllNull(resultsPerRelation))
                 mapping[rel.getRelationId()] = resultsPerRelation;
         }
+    }
+
+    private FlattenedTypeRelation<T, O, RT, RO> flattenPerType(
+            Relation<T, O, RT, RO> relation,
+            Type<RT, RO> relatedType
+    ) {
+        List<FieldLinkDefinition<T, O, ?, ?>> fieldLinks = Stream.of(fieldsReverse)
+                .flatMap(Stream::of)
+                .<FieldLinkDefinition<T, O, ?, ?>>flatMap(direction::getFieldLinkDefinitions)
+                .filter(fl ->
+                        direction.getRelation(fl.getRelation()).getRelationId() == relation.getRelationId()
+                )
+                .filter(fl ->
+                        relatedType.isInstanceOf(fl.getRelatedFD().getObjectType())
+                )
+                .filter(fl ->
+                        direction.invert().getFlattenedType(relatedType).fields[fl.getRelatedFD().getId()] >= 0
+                )
+                .toList();
+
+        return fieldLinks.isEmpty() ?
+                null :
+                new FlattenedTypeRelation<>(this, fieldLinks);
     }
 
     @SuppressWarnings("unchecked")
@@ -134,32 +164,12 @@ public class FlattenedType<
         }
     }
 
-    private FlattenedTypeRelation<T, O, RT, RO> flattenPerType(
-            Direction dir,
-            Relation<T, O, RT, RO> relation,
-            Type<RT, RO> relatedType
-    ) {
-        List<FieldLinkDefinition<T, O, ?, ?>> fieldLinks = Stream.of(fieldsReverse)
-                .flatMap(Stream::of)
-                .<FieldLinkDefinition<T, O, ?, ?>>flatMap(dir::getFieldLinkDefinitions)
-                .filter(fl ->
-                        fl.getRelation().getRelationId() == relation.getRelationId()
-                )
-                .filter(fl ->
-                        relatedType.isInstanceOf(fl.getRelatedFD().getObjectType())
-                )
-                .filter(fl ->
-                        dir.invert().getFlattenedType(relatedType).fields[fl.getRelatedFD().getFieldId()] >= 0
-                )
-                .toList();
-
-        return fieldLinks.isEmpty() ?
-                null :
-                new FlattenedTypeRelation<>(type.getTypeRegistry(), fieldLinks);
+    public FieldDefinition<T, O>[][] getFieldsReverse() {
+        return fieldsReverse;
     }
 
     public short getFieldIndex(FieldDefinition<T, O> fd) {
-        return fields[fd.getFieldId()];
+        return fields[fd.getId()];
     }
 
     public short getNumberOfFields() {

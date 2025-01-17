@@ -16,9 +16,7 @@
  */
 package network.aika.fields.defs;
 
-import network.aika.fields.direction.Direction;
 import network.aika.fields.field.Field;
-import network.aika.type.FlattenedTypeRelation;
 import network.aika.type.relations.Relation;
 import network.aika.type.relations.RelationOne;
 import network.aika.type.Obj;
@@ -181,7 +179,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return objectType;
     }
 
-    public Integer getFieldId() {
+    public Integer getId() {
         return fieldId;
     }
 
@@ -228,7 +226,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
     }
 
     public String toString() {
-        return getFieldId() + ":" + name;
+        return getId() + ":" + name;
     }
 
     @Override

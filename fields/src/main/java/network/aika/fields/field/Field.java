@@ -36,6 +36,7 @@ public class Field<T extends Type<T, O>, O extends Obj<T, O>> implements FieldIn
 
     private final FieldDefinition<T, O> fieldDefinition;
 
+    private final short id;
     private final O object;
 
     protected double value;
@@ -68,11 +69,16 @@ public class Field<T extends Type<T, O>, O extends Obj<T, O>> implements FieldIn
         return v > 0.0;
     }
 
-    public Field(O obj, FieldDefinition<T, O> fd) {
+
+    public Field(O obj, FieldDefinition<T, O> fd, short id) {
         this.object = obj;
         this.fieldDefinition = fd;
+        this.id = id;
     }
 
+    public short getId() {
+        return id;
+    }
 
     @Override
     public boolean isWithinUpdate() {
