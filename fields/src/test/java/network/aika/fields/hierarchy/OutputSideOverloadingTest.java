@@ -97,7 +97,7 @@ public class OutputSideOverloadingTest {
             outputObj.initFields();
         }
 
-        inputObj.setFieldValue(inputField, 5.0);
+        inputObj.setFieldValue(inputField, 2.5);
 
         if("init".equalsIgnoreCase(transmitMethod)) {
             linkObjects(inputObj, outputObj);

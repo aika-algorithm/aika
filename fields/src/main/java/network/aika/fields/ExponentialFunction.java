@@ -52,6 +52,6 @@ public class ExponentialFunction<
 
     @Override
     protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u)  {
-        return Math.exp(getInputValueByArg(obj, 0)) - obj.getFieldValue(this);
+        return Math.exp(getUpdatedInputValueByArg(obj, 0)) - obj.getFieldValue(this);
     }
 }
