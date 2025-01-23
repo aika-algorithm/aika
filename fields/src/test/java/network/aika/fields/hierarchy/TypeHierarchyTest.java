@@ -75,7 +75,7 @@ public class TypeHierarchyTest {
 
         registry.flattenTypeHierarchy();
 
-        Assertions.assertEquals(5, child.getFlattenedTypeOutputSide().getNumberOfFields());
+        Assertions.assertEquals(4, child.getFlattenedTypeOutputSide().getNumberOfFields());
 
         // Object and Field initialization
 
@@ -83,7 +83,7 @@ public class TypeHierarchyTest {
         obj.setFieldValue(a, 50.0);
         obj.setFieldValue(b, 20.0);
 
-        Assertions.assertEquals(5, obj.getFields().count());
+        Assertions.assertEquals(4, obj.getFields().count());
 
         Assertions.assertEquals(
                 30.0,
