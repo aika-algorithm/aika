@@ -9,6 +9,7 @@
         <module>fields</module>
         <module>core</module>
         <module>debug</module>
+        <module>python-bindings</module>
     </modules>
     <name>aika-project</name>
     <url>https://aika.network</url>

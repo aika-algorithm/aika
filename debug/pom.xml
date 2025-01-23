@@ -12,12 +12,6 @@
     <artifactId>aika-debug</artifactId>
     <version>${revision}</version>
 
-    <properties>
-        <maven.compiler.source>22</maven.compiler.source>
-        <maven.compiler.target>22</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>network.aika</groupId>
