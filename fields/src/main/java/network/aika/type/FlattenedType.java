@@ -157,11 +157,19 @@ public class FlattenedType<
 
                 relation.followAll(field.getObject())
                         .forEach(relatedObj ->
-                                ftr[relatedObj.getType().getId()]
-                                        .followLinks(direction, relatedObj, field)
+                                followLinks(
+                                        ftr[relatedObj.getType().getId()],
+                                        relatedObj,
+                                        field
+                                )
                         );
             }
         }
+    }
+
+    private void followLinks(FlattenedTypeRelation<T, O, RT, RO> ftr, RO relatedObj, Field<T, O> field) {
+        if(ftr != null)
+            ftr.followLinks(direction, relatedObj, field);
     }
 
     public FieldDefinition<T, O>[][] getFieldsReverse() {
