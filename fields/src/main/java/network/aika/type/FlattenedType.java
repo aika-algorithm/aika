@@ -132,7 +132,7 @@ public class FlattenedType<
                 .flatMap(Stream::of)
                 .<FieldLinkDefinition<T, O, ?, ?>>flatMap(direction::getFieldLinkDefinitions)
                 .filter(fl ->
-                        direction.getRelation(fl.getRelation()).getRelationId() == relation.getRelationId()
+                        fl.getRelation().getRelationId() == relation.getRelationId()
                 )
                 .filter(fl ->
                         relatedType.isInstanceOf(fl.getRelatedFD().getObjectType())

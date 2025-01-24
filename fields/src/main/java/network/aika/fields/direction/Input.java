@@ -43,11 +43,6 @@ public class Input implements Direction {
     }
 
     @Override
-    public Relation<?, ?, ?, ?> getRelation(Relation<?, ?, ?, ?> rel) {
-        return rel;
-    }
-
-    @Override
     public <
             T extends Type<T, O>,
             O extends Obj<T, O>,

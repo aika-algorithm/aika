@@ -34,8 +34,6 @@ public interface Direction {
     >
     FlattenedType<T, O, RT, RO> getFlattenedType(Type<T, O> type);
 
-    Relation<?, ?, ?, ?> getRelation(Relation<?, ?, ?, ?> rel);
-
     <
             T extends Type<T, O>,
             O extends Obj<T, O>,

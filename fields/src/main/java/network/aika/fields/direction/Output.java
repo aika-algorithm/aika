@@ -45,11 +45,6 @@ public class Output implements Direction {
     }
 
     @Override
-    public Relation<?, ?, ?, ?> getRelation(Relation<?, ?, ?, ?> rel) {
-        return rel.getReverse();
-    }
-
-    @Override
     public <
             T extends Type<T, O>,
             O extends Obj<T, O>,

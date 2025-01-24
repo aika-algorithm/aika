@@ -105,6 +105,9 @@ public class SoftmaxTest {
         if(setInputValuesPos == 3)
             setInputValues(inputsObjs, softmaxFields);
 
+        double normValue = normObj.getFieldValue(softmaxFields.getNorm());
+        Assertions.assertEquals(22.9, normValue);
+
         double[] outputValues = new double[inputValues.length];
         for(int i = 0; i < outputValues.length; i++)
             outputValues[i] = outputsObjs[i].getFieldOutput(softmaxFields.getOutputs()).getValue();
