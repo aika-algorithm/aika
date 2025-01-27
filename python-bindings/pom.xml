@@ -3,6 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>network.aika</groupId>
         <artifactId>aika-project</artifactId>
@@ -20,7 +21,7 @@
             <plugin>
                 <groupId>org.graalvm.nativeimage</groupId>
                 <artifactId>native-image-maven-plugin</artifactId>
-                <version>21.2.0</version> <!-- Use the appropriate version for GraalVM -->
+                <version>21.2.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -28,42 +29,66 @@
                         </goals>
                         <configuration>
                             <imageName>libhello-world</imageName>
-                            <!-- Optional: Enable the no-fallback option -->
                             <buildArgs>
                                 <buildArg>--no-fallback</buildArg>
                                 <buildArg>--shared</buildArg>
+                                <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
                             </buildArgs>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-            <!-- Plugin to invoke CMake for C++ code compilation -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.5.0</version>
+            <!-- Add CMake plugin -->
+<!--            <plugin>
+                <groupId>com.googlecode.cmake-maven-project</groupId>
+                <artifactId>cmake-maven-plugin</artifactId>
+                <version>3.30.2-b1</version>
                 <executions>
                     <execution>
-                        <phase>compile</phase>
+                        <id>cmake-generate</id>
+                        <phase>process-resources</phase>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <executable>cmake</executable>
-                            <arguments>
-                                <argument>-DCMAKE_BUILD_TYPE=Release</argument>
-                                <argument>-DCMAKE_POSITION_INDEPENDENT_CODE=ON</argument>
-                                <argument>-S</argument>
-                                <argument>${project.basedir}/src/main/cpp</argument> <!-- C++ source directory -->
-                                <argument>-B</argument>
-                                <argument>${cmake.dir}</argument> <!-- CMake build directory -->
-                            </arguments>
+                            <sourcePath>src/main/cpp</sourcePath>
+                            <targetPath>target</targetPath>
+                            <environmentVariables>
+                                <CMAKE_MAKE_PROGRAM>/usr/bin/make</CMAKE_MAKE_PROGRAM>
+                            </environmentVariables>
+                            <options>
+                                <option>
+                                    -D CMAKE_MAKE_PROGRAM=/usr/bin/make
+                                </option>
+                                <option>
+                                    -D CMAKE_C_COMPILER=/usr/bin/clang
+                                </option>
+                                <option>
+                                    -D CMAKE_CXX_COMPILER=/usr/bin/g++
+                                </option>
+                            </options>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>setup-virtualenv</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>src/main/python/setup_env.sh</executable>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin> -->
         </plugins>
     </build>
 
