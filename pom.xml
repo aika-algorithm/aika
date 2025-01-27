@@ -9,7 +9,6 @@
         <module>fields</module>
         <module>core</module>
         <module>debug</module>
-        <module>python-bindings</module>
     </modules>
     <name>aika-project</name>
     <url>https://aika.network</url>
@@ -64,6 +63,8 @@
     <properties>
         <revision>2.0.9-rc31</revision>
 
+        <maven.compiler.source>23</maven.compiler.source>
+        <maven.compiler.target>23</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- dependencies used only for tests: -->
@@ -85,11 +86,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>22</source>
-                    <target>22</target>
-                    <encoding>utf-8</encoding>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
 
