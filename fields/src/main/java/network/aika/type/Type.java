@@ -17,7 +17,6 @@
 package network.aika.type;
 
 import network.aika.fields.defs.FieldDefinition;
-import network.aika.fields.field.Field;
 import network.aika.type.relations.Relation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,15 +26,13 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static network.aika.fields.direction.Direction.INPUT;
-import static network.aika.fields.direction.Direction.OUTPUT;
 import static network.aika.type.FlattenedType.createInputFlattenedType;
 import static network.aika.type.FlattenedType.createOutputFlattenedType;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
+public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Type.class);
 
@@ -54,6 +51,8 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
     private final TypeRegistry registry;
 
     private final Set<FieldDefinition<T, O>> fieldDefinitions = new HashSet<>();
+
+    private final List<Relation<T, O, ?, ?>> relations = new ArrayList<>();
 
     private Integer depth;
 
@@ -75,7 +74,9 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         return !children.isEmpty();
     }
 
-    public abstract <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> Relation<T, O, RT, RO>[] getRelations();
+    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> Relation<T, O, RT, RO>[] getRelations() {
+        return relations.toArray(new Relation[0]);
+    }
 
     public void initFlattenedType() {
         Set<FieldDefinition<T, O>> fieldDefs = getCollectFlattenedFieldDefinitions();
@@ -114,7 +115,7 @@ public abstract class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         return depth;
     }
 
-    protected O instantiate(List<Class<?>> parameterTypes, List<Object> parameters) {
+    public O instantiate(List<Class<?>> parameterTypes, List<Object> parameters) {
         if(isAbstract())
             throw new RuntimeException("Unable to instantiate abstract type " + name);
 
