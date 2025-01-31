@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 import static network.aika.fields.softmax.SoftmaxInputType.CORRESPONDING_OUTPUT_LINK;
 import static network.aika.fields.softmax.SoftmaxInputType.INPUT_TO_NORM;
 import static network.aika.fields.softmax.SoftmaxNormType.NORM_TO_INPUT;
+import static network.aika.fields.softmax.SoftmaxNormType.NORM_TO_OUTPUT;
 
 /**
  *
@@ -54,7 +55,7 @@ public class SoftmaxNormObj extends ObjImpl {
     public Stream<Obj> followManyRelation(Relation rel) {
         if(rel == NORM_TO_INPUT)
             return getInputs().map(o -> o) ;
-        else if(rel == CORRESPONDING_OUTPUT_LINK)
+        else if(rel == NORM_TO_OUTPUT)
             return getOutputs().map(o -> o) ;
         else
             throw new RuntimeException("Invalid Relation");
