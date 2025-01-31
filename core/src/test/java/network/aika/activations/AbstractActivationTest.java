@@ -21,8 +21,7 @@ public abstract class AbstractActivationTest {
     @BeforeEach
     public void init() {
         typeRegistry = mock(TypeRegistry.class);
-        nodeDef = new NodeDefinition(typeRegistry, "test")
-                .setClazz(ConjunctiveActivation.class, Neuron.class);
+        nodeDef = new NodeDefinition(typeRegistry, "test");
 
         nodeDef.activation.initFlattenedType();
         nodeDef.neuron.initFlattenedType();

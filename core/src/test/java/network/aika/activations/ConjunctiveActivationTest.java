@@ -34,11 +34,9 @@ public class ConjunctiveActivationTest extends AbstractActivationTest {
     public void init() {
         super.init();
 
-        NodeDefinition inputNodeDef = new NodeDefinition(typeRegistry, "input")
-                .setClazz(ConjunctiveActivation.class, Neuron.class);
+        NodeDefinition inputNodeDef = new NodeDefinition(typeRegistry, "input");
 
         EdgeDefinition firstInputEdgeDef = new EdgeDefinition(typeRegistry, "test")
-                .setClazz(Link.class, ConjunctiveSynapse.class)
                 .setInput(inputNodeDef)
                 .setOutput(nodeDef);
 

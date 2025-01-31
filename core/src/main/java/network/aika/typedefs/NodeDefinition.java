@@ -18,12 +18,6 @@ public class NodeDefinition {
         activation.setNeuron(neuron);
     }
 
-    public NodeDefinition setClazz(Class<? extends Activation> activationClazz, Class<? extends Neuron> neuronClazz) {
-        activation.setClazz(activationClazz);
-        neuron.setClazz(neuronClazz);
-        return this;
-    }
-
     public NodeDefinition addParent(NodeDefinition parent) {
         neuron.addParent(parent.neuron);
         activation.addParent(parent.activation);

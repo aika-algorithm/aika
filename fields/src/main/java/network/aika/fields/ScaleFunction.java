@@ -16,7 +16,6 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.type.Type;
 import network.aika.type.Obj;
@@ -24,16 +23,10 @@ import network.aika.type.Obj;
 /**
  * @author Lukas Molzberger
  */
-public class ScaleFunction<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends AbstractFunctionDefinition<T, O> {
+public class ScaleFunction extends AbstractFunctionDefinition {
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > ScaleFunction<T, O> scale(T ref, String name, double scale) {
-        return new ScaleFunction<>(
+    public static ScaleFunction scale(Type ref, String name, double scale) {
+        return new ScaleFunction(
                 ref,
                 name,
                 scale
@@ -42,14 +35,14 @@ public class ScaleFunction<
 
     private final double scale;
 
-    public ScaleFunction(T ref, String name, double scale) {
+    public ScaleFunction(Type ref, String name, double scale) {
         super(ref, name, 1);
 
         this.scale = scale;
     }
 
     @Override
-    protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u) {
+    protected double computeUpdate(Obj obj, FieldLinkDefinitionOutputSide fl, double u) {
         return scale * u;
     }
 }

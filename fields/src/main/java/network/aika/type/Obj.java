@@ -20,6 +20,7 @@ package network.aika.type;
 import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.field.Field;
 import network.aika.queue.Queue;
+import network.aika.type.relations.Relation;
 
 import java.util.stream.Stream;
 
@@ -27,27 +28,31 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public interface Obj<T extends Type<T, O>, O extends Obj<T, O>> {
+public interface Obj {
 
     void initFields();
 
-    T getType();
+    Type getType();
 
-    Field<T, O> getOrCreateFieldInput(FieldDefinition<T, O> fd);
+    Stream<? extends Obj> followManyRelation(Relation rel);
 
-    Field<T, O> getFieldOutput(FieldDefinition<T, O> fd);
+    Obj followSingleRelation(Relation rel);
 
-    Stream<Field<T, O>> getFields();
+    Field getOrCreateFieldInput(FieldDefinition fd);
 
-    O setFieldValue(FieldDefinition<T, O> fd, double v);
+    Field getFieldOutput(FieldDefinition fd);
 
-    double getFieldValue(FieldDefinition<T, O> fd);
+    Stream<Field> getFields();
 
-    double getFieldUpdatedValue(FieldDefinition<T, O> fd);
+    Obj setFieldValue(FieldDefinition fd, double v);
+
+    double getFieldValue(FieldDefinition fd);
+
+    double getFieldUpdatedValue(FieldDefinition fd);
 
     Queue getQueue();
 
     String toKeyString();
 
-    boolean isInstanceOf(T objectType);
+    boolean isInstanceOf(Type objectType);
 }

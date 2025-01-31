@@ -32,12 +32,12 @@ import java.io.IOException;
 /**
  * @author Lukas Molzberger
  */
-public class Field<T extends Type<T, O>, O extends Obj<T, O>> implements FieldInput, FieldOutput, FieldWritable {
+public class Field implements FieldInput, FieldOutput, FieldWritable {
 
-    private final FieldDefinition<T, O> fieldDefinition;
+    private final FieldDefinition fieldDefinition;
 
     private final short id;
-    private final O object;
+    private final Obj object;
 
     protected double value;
 
@@ -70,7 +70,7 @@ public class Field<T extends Type<T, O>, O extends Obj<T, O>> implements FieldIn
     }
 
 
-    public Field(O obj, FieldDefinition<T, O> fd, short id) {
+    public Field(Obj obj, FieldDefinition fd, short id) {
         this.object = obj;
         this.fieldDefinition = fd;
         this.id = id;
@@ -98,17 +98,17 @@ public class Field<T extends Type<T, O>, O extends Obj<T, O>> implements FieldIn
     }
 
     @Override
-    public O getObject() {
+    public Obj getObject() {
         return object;
     }
 
-    public <F extends Field<T, O>> F setQueued(Queue q, ProcessingPhase phase, boolean isNextRound) {
+    public Field setQueued(Queue q, ProcessingPhase phase, boolean isNextRound) {
         interceptor = new QueueInterceptor(q, this, phase, isNextRound);
-        return (F) this;
+        return this;
     }
 
     @Override
-    public FieldDefinition<T, O> getFieldDefinition() {
+    public FieldDefinition getFieldDefinition() {
         return fieldDefinition;
     }
 

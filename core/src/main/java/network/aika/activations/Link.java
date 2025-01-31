@@ -20,6 +20,8 @@ import network.aika.Model;
 import network.aika.Document;
 import network.aika.Element;
 import network.aika.ModelProvider;
+import network.aika.type.Obj;
+import network.aika.type.relations.Relation;
 import network.aika.typedefs.LinkDefinition;
 import network.aika.neurons.Synapse;
 import network.aika.type.ObjImpl;
@@ -27,11 +29,17 @@ import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
 import network.aika.queue.Timestamp;
 
+import java.util.stream.Stream;
+
+import static network.aika.misc.direction.Direction.INPUT;
+import static network.aika.misc.direction.Direction.OUTPUT;
+import static network.aika.typedefs.LinkDefinition.SELF;
+
 /**
  *
  * @author Lukas Molzberger
  */
-public class Link extends ObjImpl<LinkDefinition, Link, Model> implements Element, ModelProvider, QueueProvider {
+public class Link extends ObjImpl implements Element, ModelProvider, QueueProvider {
 
     protected Synapse synapse;
 
@@ -47,6 +55,29 @@ public class Link extends ObjImpl<LinkDefinition, Link, Model> implements Elemen
 
         input.addOutputLink(this);
         output.addInputLink(this);
+    }
+
+    @Override
+    public Stream<Obj> followManyRelation(Relation rel) {
+        throw new RuntimeException("Invalid Relation");
+    }
+
+    @Override
+    public Obj followSingleRelation(Relation rel) {
+        if(rel == SELF)
+            return this;
+        else if(rel == LinkDefinition.INPUT)
+            return input;
+        else if(rel == LinkDefinition.OUTPUT)
+            return output;
+        else if(rel == LinkDefinition.SYNAPSE)
+            return synapse;
+        else if(rel == LinkDefinition.CORRESPONDING_INPUT_LINK)
+            return getInput().getCorrespondingInputLink(this);
+        else if(rel == LinkDefinition.CORRESPONDING_OUTPUT_LINK)
+            return getOutput().getCorrespondingOutputLink(this);
+        else
+            throw new RuntimeException("Invalid Relation");
     }
 
     @Override

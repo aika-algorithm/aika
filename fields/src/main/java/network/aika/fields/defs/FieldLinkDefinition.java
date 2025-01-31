@@ -8,29 +8,18 @@ import network.aika.type.Obj;
 import network.aika.type.relations.RelationOne;
 
 
-public abstract class FieldLinkDefinition<
-        T extends Type<T, O>,
-        O extends Obj<T, O>,
-        RT extends Type<RT, RO>,
-        RO extends Obj<RT, RO>
-        > {
+public abstract class FieldLinkDefinition {
 
-    private final FieldDefinition<T, O> originFD;
-    private final FieldDefinition<RT, RO> relatedFD;
-    private final Relation<T, O, RT, RO> relation;
+    private final FieldDefinition originFD;
+    private final FieldDefinition relatedFD;
+    private final Relation relation;
     private final Direction direction;
 
     private final Integer argument;
 
-    public static <
-            IT extends Type<IT, IO>,
-            IO extends Obj<IT, IO>,
-            OT extends Type<OT, OO>,
-            OO extends Obj<OT, OO>
-            >
-    void link(FieldDefinition<IT, IO> input, FieldDefinition<OT, OO> output, Relation<IT, IO, OT, OO> relation, Integer argument) {
-        FieldLinkDefinitionOutputSide<OT, OO, IT, IO> flo = new FieldLinkDefinitionOutputSide<>(output, input, relation.getReverse(), Direction.OUTPUT, argument);
-        FieldLinkDefinitionInputSide<IT, IO, OT, OO> fli = new FieldLinkDefinitionInputSide<>(input, output, relation, Direction.INPUT, argument);
+    public static void link(FieldDefinition input, FieldDefinition output, Relation relation, Integer argument) {
+        FieldLinkDefinitionOutputSide flo = new FieldLinkDefinitionOutputSide(output, input, relation.getReverse(), Direction.OUTPUT, argument);
+        FieldLinkDefinitionInputSide fli = new FieldLinkDefinitionInputSide(input, output, relation, Direction.INPUT, argument);
 
         output.addInput(flo);
         input.addOutput(fli);
@@ -40,9 +29,9 @@ public abstract class FieldLinkDefinition<
     }
 
     public FieldLinkDefinition(
-            FieldDefinition<T, O> originFD,
-            FieldDefinition<RT, RO> relatedFD,
-            Relation<T, O, RT, RO> relation,
+            FieldDefinition originFD,
+            FieldDefinition relatedFD,
+            Relation relation,
             Direction direction,
             Integer argument
     ) {
@@ -54,23 +43,23 @@ public abstract class FieldLinkDefinition<
     }
 
     public FieldLinkDefinition(
-            FieldDefinition<T, O> originFD,
-            FieldDefinition<RT, RO> relatedFD,
-            Relation<T, O, RT, RO> relation,
+            FieldDefinition originFD,
+            FieldDefinition relatedFD,
+            Relation relation,
             Direction direction
     ) {
         this(originFD, relatedFD, relation, direction, null);
     }
 
-    public FieldDefinition<T, O> getOriginFD() {
+    public FieldDefinition getOriginFD() {
         return originFD;
     }
 
-    public FieldDefinition<RT, RO> getRelatedFD() {
+    public FieldDefinition getRelatedFD() {
         return relatedFD;
     }
 
-    public Relation<T, O, RT, RO> getRelation() {
+    public Relation getRelation() {
         return relation;
     }
 

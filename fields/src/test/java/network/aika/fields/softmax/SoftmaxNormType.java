@@ -31,10 +31,10 @@ import static network.aika.fields.softmax.SoftmaxOutputType.OUTPUT_TO_NORM;
  *
  * @author Lukas Molzberger
  */
-public class SoftmaxNormType extends Type<SoftmaxNormType, SoftmaxNormObj> {
+public class SoftmaxNormType extends Type {
 
-    public static RelationMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxInputType, SoftmaxInputObj> NORM_TO_INPUT = new RelationMany<>(SoftmaxNormObj::getInputs, 0, "NORM_TO_INPUT");
-    public static RelationMany<SoftmaxNormType, SoftmaxNormObj, SoftmaxOutputType, SoftmaxOutputObj> NORM_TO_OUTPUT = new RelationMany<>(SoftmaxNormObj::getOutputs, 1, "NORM_TO_OUTPUT");
+    public static RelationMany NORM_TO_INPUT = new RelationMany( 0, "NORM_TO_INPUT");
+    public static RelationMany NORM_TO_OUTPUT = new RelationMany( 1, "NORM_TO_OUTPUT");
 
     static {
         NORM_TO_INPUT.setReversed(INPUT_TO_NORM);
@@ -46,14 +46,11 @@ public class SoftmaxNormType extends Type<SoftmaxNormType, SoftmaxNormObj> {
     }
 
     public SoftmaxNormObj instantiate() {
-        return instantiate(
-                List.of(SoftmaxNormType.class),
-                List.of(this)
-        );
+        return new SoftmaxNormObj(this);
     }
 
     @Override
-    public Relation<SoftmaxNormType, SoftmaxNormObj, ?, ?>[] getRelations() {
+    public Relation[] getRelations() {
         return new Relation[] {NORM_TO_INPUT, NORM_TO_OUTPUT};
     }
 }

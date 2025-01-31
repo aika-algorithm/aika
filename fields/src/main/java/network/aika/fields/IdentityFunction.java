@@ -16,7 +16,6 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.type.Type;
 import network.aika.type.Obj;
@@ -24,28 +23,22 @@ import network.aika.type.Obj;
 /**
  * @author Lukas Molzberger
  */
-public class IdentityFunction<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends AbstractFunctionDefinition<T, O> {
+public class IdentityFunction extends AbstractFunctionDefinition {
 
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > IdentityFunction<T, O> identity(T ref, String name) {
-        return new IdentityFunction<>(
+    public static IdentityFunction identity(Type ref, String name) {
+        return new IdentityFunction(
                 ref,
                 name
         );
     }
 
-    public IdentityFunction(T ref, String name) {
+    public IdentityFunction(Type ref, String name) {
         super(ref, name, 1);
     }
 
     @Override
-    protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u) {
+    protected double computeUpdate(Obj obj, FieldLinkDefinitionOutputSide fl, double u) {
         return u;
     }
 }

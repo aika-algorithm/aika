@@ -33,8 +33,8 @@ import static network.aika.fields.oneobject.TestType.TEST_RELATION_TO;
 public class FieldInstantiationWithObjectsTest extends AbstractTestWithObjects {
     
 
-    private FieldDefinition<TestType, TestObject> fieldA;
-    private FieldDefinition<TestType, TestObject> fieldB;
+    private FieldDefinition fieldA;
+    private FieldDefinition fieldB;
 
 
     @BeforeEach

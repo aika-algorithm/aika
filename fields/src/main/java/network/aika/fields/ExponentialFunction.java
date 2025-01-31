@@ -24,34 +24,28 @@ import network.aika.type.Type;
 /**
  * @author Lukas Molzberger
  */
-public class ExponentialFunction<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends AbstractFunctionDefinition<T, O> {
+public class ExponentialFunction extends AbstractFunctionDefinition {
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > ExponentialFunction<T, O> exp(T ref, String name) {
-        return new ExponentialFunction<>(
+    public static ExponentialFunction exp(Type ref, String name) {
+        return new ExponentialFunction(
                 ref,
                 name
         );
     }
 
-    public ExponentialFunction(T ref, String name) {
+    public ExponentialFunction(Type ref, String name) {
         super(ref, name, 1);
     }
 
     @Override
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(Field<T, O> field) {
+    public void initializeField(Field field) {
         double valueArg0 = getInputValueByArg(field.getObject(), 0);
 
         field.setValue(Math.exp(valueArg0));
     }
 
     @Override
-    protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u)  {
+    protected double computeUpdate(Obj obj, FieldLinkDefinitionOutputSide fl, double u)  {
         return Math.exp(getUpdatedInputValueByArg(obj, 0)) - obj.getFieldValue(this);
     }
 }

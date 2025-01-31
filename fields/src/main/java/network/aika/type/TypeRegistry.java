@@ -24,13 +24,13 @@ import java.util.List;
  */
 public interface TypeRegistry {
 
-    short register(Type<?, ?> type);
+    short register(Type type);
 
-    List<Type<?, ?>> getTypes();
+    List<Type> getTypes();
 
     int createFieldId();
 
-    <T extends Type<?, ?>> T getType(short typeId);
+    Type getType(short typeId);
 
     int getNumberOfFieldDefinitions();
 

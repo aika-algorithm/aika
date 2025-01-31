@@ -49,14 +49,14 @@ public class TestNeuronDef {
     final NodeDefinition node;
     final EdgeDefinition edge;
 
-    FieldDefinition<NeuronDefinition, Neuron> bias;
+    FieldDefinition bias;
 
-    VariableArgumentsFieldDefinition<ActivationDefinition, Activation> net;
-    FieldDefinition<ActivationDefinition, Activation> value;
-    FixedArgumentsFieldDefinition<ActivationDefinition, Activation> fired;
+    VariableArgumentsFieldDefinition net;
+    FieldDefinition value;
+    FixedArgumentsFieldDefinition fired;
 
-    VariableArgumentsFieldDefinition<SynapseDefinition, Synapse> weight;
-    FixedArgumentsFieldDefinition<LinkDefinition, Link> weightedInput;
+    VariableArgumentsFieldDefinition weight;
+    FixedArgumentsFieldDefinition weightedInput;
 
 
     public TestNeuronDef(TestTypeModel typeModel) {
@@ -65,10 +65,6 @@ public class TestNeuronDef {
     }
 
     public void init() {
-        node.setClazz(ConjunctiveActivation.class, Neuron.class);
-
-        edge.setClazz(Link.class, ConjunctiveSynapse.class);
-
         edge.synapse.setTransition(of(A, B));
 
         edge.setInput(node);
@@ -78,7 +74,7 @@ public class TestNeuronDef {
                 .setQueued(TRAINING);
 
         net = sum(node.activation, "NET");
-
+/*
         fired = eventListener(
                 node.activation,
                 "FIRED",
@@ -97,6 +93,8 @@ public class TestNeuronDef {
         weightedInput.in(LinkDefinition.INPUT, value, 0)
                 .in(LinkDefinition.SYNAPSE, weight, 1)
                 .out(LinkDefinition.OUTPUT, net);
+
+ */
     }
 
     public NodeDefinition getNode() {
@@ -123,15 +121,15 @@ public class TestNeuronDef {
         return edge.synapse;
     }
 
-    public FieldDefinition<NeuronDefinition, Neuron> getBias() {
+    public FieldDefinition getBias() {
         return bias;
     }
 
-    public FieldDefinition<SynapseDefinition, Synapse> getWeight() {
+    public FieldDefinition getWeight() {
         return weight;
     }
 
-    public FieldDefinition<ActivationDefinition, Activation> getNet() {
+    public FieldDefinition getNet() {
         return net;
     }
 }

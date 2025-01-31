@@ -45,10 +45,10 @@ public class MultiplicationTest extends AbstractTestWithObjects {
 
         // Type and Math Model initialization
 
-        FieldDefinition<TestType, TestObject> a = inputField(typeA, "a");
-        FieldDefinition<TestType, TestObject> b = inputField(typeA, "b");
+        FieldDefinition a = inputField(typeA, "a");
+        FieldDefinition b = inputField(typeA, "b");
 
-        FieldDefinition<TestType, TestObject> c = mul(typeB, "c")
+        FieldDefinition c = mul(typeB, "c")
                 .in(TEST_RELATION_FROM, a, 0)
                 .in(TEST_RELATION_FROM, b, 1);
 

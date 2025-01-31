@@ -49,22 +49,15 @@ public class SoftmaxTest {
     public void init() {
         registry = new TypeRegistryImpl();
 
-        inputType = new SoftmaxInputType(registry, "Input")
-                .setClazz(SoftmaxInputObj.class);
-
-        normType = new SoftmaxNormType(registry, "Norm")
-                .setClazz(SoftmaxNormObj.class);
-
-        outputType = new SoftmaxOutputType(registry, "Output")
-                .setClazz(SoftmaxOutputObj.class);
+        inputType = new SoftmaxInputType(registry, "Input");
+        normType = new SoftmaxNormType(registry, "Norm");
+        outputType = new SoftmaxOutputType(registry, "Output");
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3})
     public void testSoftmax(int setInputValuesPos) {
-        SoftmaxFields<SoftmaxInputType, SoftmaxInputObj,
-                SoftmaxNormType, SoftmaxNormObj,
-                SoftmaxOutputType, SoftmaxOutputObj> softmaxFields =
+        SoftmaxFields softmaxFields =
                 softmax(
                         inputType,
                         normType,
@@ -119,7 +112,7 @@ public class SoftmaxTest {
         );
     }
 
-    private void setInputValues(SoftmaxInputObj[] inputsObjs, SoftmaxFields<SoftmaxInputType, SoftmaxInputObj, SoftmaxNormType, SoftmaxNormObj, SoftmaxOutputType, SoftmaxOutputObj> softmaxField) {
+    private void setInputValues(SoftmaxInputObj[] inputsObjs, SoftmaxFields softmaxField) {
         for (int i = 0; i < inputValues.length; i++)
             inputsObjs[i].setFieldValue(softmaxField.getInputs(), inputValues[i]);
     }

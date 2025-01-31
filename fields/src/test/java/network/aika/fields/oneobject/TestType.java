@@ -18,7 +18,6 @@ package network.aika.fields.oneobject;
 
 import network.aika.type.Type;
 import network.aika.type.TypeRegistry;
-import network.aika.type.relations.Relation;
 import network.aika.type.relations.RelationOne;
 import network.aika.type.relations.RelationSelf;
 
@@ -28,12 +27,12 @@ import java.util.List;
  *
  * @author Lukas Molzberger
  */
-public class TestType extends Type<TestType, TestObject> {
+public class TestType extends Type {
 
-    public static final RelationSelf<TestType, TestObject> SELF = new RelationSelf<>(0, "TEST_SELF");
+    public static final RelationSelf SELF = new RelationSelf(0, "TEST_SELF");
 
-    public static final RelationOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_FROM = new RelationOne<>(TestObject::getRelatedTestObject, 1, "TEST_FROM");
-    public static final RelationOne<TestType, TestObject, TestType, TestObject> TEST_RELATION_TO = new RelationOne<>(TestObject::getRelatedTestObject, 2, "TEST_TO");
+    public static final RelationOne TEST_RELATION_FROM = new RelationOne(1, "TEST_FROM");
+    public static final RelationOne TEST_RELATION_TO = new RelationOne(2, "TEST_TO");
 
     static {
         TEST_RELATION_TO.setReversed(TEST_RELATION_FROM);
@@ -42,17 +41,11 @@ public class TestType extends Type<TestType, TestObject> {
 
     public TestType(TypeRegistry registry, String name) {
         super(registry, name);
-    }
 
-    @Override
-    public Relation<TestType, TestObject, TestType, TestObject>[] getRelations() {
-        return new Relation[] {SELF, TEST_RELATION_FROM, TEST_RELATION_TO};
+        relations.addAll(List.of(SELF, TEST_RELATION_FROM, TEST_RELATION_TO));
     }
 
     public TestObject instantiate() {
-        return instantiate(
-                List.of(TestType.class),
-                List.of(this)
-        );
+        return new TestObject(this);
     }
 }

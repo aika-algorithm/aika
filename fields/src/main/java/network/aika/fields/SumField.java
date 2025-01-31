@@ -25,16 +25,10 @@ import static network.aika.utils.ToleranceUtils.TOLERANCE;
 /**
  * @author Lukas Molzberger
  */
-public class SumField<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends VariableArgumentsFieldDefinition<T, O> {
+public class SumField extends VariableArgumentsFieldDefinition {
 
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > SumField<T, O> sum(T ref, String name) {
+    public static SumField sum(Type ref, String name) {
         return new SumField(
                 ref,
                 name,
@@ -42,7 +36,7 @@ public class SumField<
         );
     }
 
-    public SumField(T ref, String name, double tolerance) {
+    public SumField(Type ref, String name, double tolerance) {
         super(ref, name, tolerance);
     }
 }

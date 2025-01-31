@@ -16,7 +16,6 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.fields.field.Field;
 import network.aika.type.Obj;
@@ -25,28 +24,22 @@ import network.aika.type.Type;
 /**
  * @author Lukas Molzberger
  */
-public class Division<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends AbstractFunctionDefinition<T, O> {
+public class Division extends AbstractFunctionDefinition {
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > Division<T, O> div(T ref, String name) {
-        return new Division<>(
+    public static Division div(Type ref, String name) {
+        return new Division(
                 ref,
                 name
         );
     }
 
-    public Division(T ref, String name) {
+    public Division(Type ref, String name) {
         super(ref, name, 2);
     }
 
     @Override
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(Field<T, O> field) {
-        O toObj = field.getObject();
+    public void initializeField(Field field) {
+        Obj toObj = field.getObject();
         double dividend = getInputValueByArg(toObj, 0);
         double divisor = getInputValueByArg(toObj, 1);
 
@@ -57,7 +50,7 @@ public class Division<
     }
 
     @Override
-    protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u) {
+    protected double computeUpdate(Obj obj, FieldLinkDefinitionOutputSide fl, double u) {
         if(fl.getArgument() == 0) {
             double divisor = getInputValueByArg(obj, 1);
             if(divisor == 0.0)

@@ -23,19 +23,13 @@ import network.aika.type.Type;
 /**
  * @author Lukas Molzberger
  */
-public class FieldActivationFunction<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends AbstractFunctionDefinition<T, O> {
+public class FieldActivationFunction extends AbstractFunctionDefinition {
 
     private ActivationFunction actFunction;
 
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > FieldActivationFunction<T, O> actFunc(T ref, String name, ActivationFunction actF, Double tolerance) {
-        return new FieldActivationFunction<>(
+    public static FieldActivationFunction actFunc(Type ref, String name, ActivationFunction actF, Double tolerance) {
+        return new FieldActivationFunction(
                 ref,
                 name,
                 actF,
@@ -43,7 +37,7 @@ public class FieldActivationFunction<
         );
     }
 
-    public FieldActivationFunction(T ref, String name, ActivationFunction actFunction, Double tolerance) {
+    public FieldActivationFunction(Type ref, String name, ActivationFunction actFunction, Double tolerance) {
         super(ref, name, 1);
 
         this.tolerance = tolerance;
@@ -51,7 +45,7 @@ public class FieldActivationFunction<
     }
 
     @Override
-    protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u) {
+    protected double computeUpdate(Obj obj, FieldLinkDefinitionOutputSide fl, double u) {
         double value = obj.getOrCreateFieldInput(this).getValue();
         return actFunction.f(fl.getUpdatedInputValue(obj)) - value;
     }

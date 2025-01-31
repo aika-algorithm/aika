@@ -26,35 +26,26 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public class RelationOne<
-        FD extends Type<FD, F>,
-        F extends Obj<FD, F>,
-        TD extends Type<TD, T>,
-        T extends Obj<TD, T>
-        > extends AbstractRelation<FD, F, TD, T> {
+public class RelationOne extends AbstractRelation {
 
-    private final Function<F, T> followFunction;
-
-    public RelationOne(Function<F, T> followFunction, int relationId, String relationName) {
+    public RelationOne(int relationId, String relationName) {
         super(relationId, relationName);
-        this.followFunction = followFunction;
     }
 
-    public T followOne(F fromObj) {
-        T toObj = followFunction.apply(fromObj);
-        return toObj;
+    public Obj followOne(Obj fromObj) {
+        return fromObj.followSingleRelation(this);
     }
 
     @Override
-    public Stream<T> followAll(F fromObj) {
-        T toObj = followOne(fromObj);
+    public Stream<Obj> followMany(Obj fromObj) {
+        Obj toObj = followOne(fromObj);
         return toObj != null ?
                 Stream.of(toObj) :
                 Stream.empty();
     }
 
     @Override
-    public boolean testRelation(F fromObj, T toObj) {
+    public boolean testRelation(Obj fromObj, Obj toObj) {
         return followOne(fromObj) == toObj;
     }
 

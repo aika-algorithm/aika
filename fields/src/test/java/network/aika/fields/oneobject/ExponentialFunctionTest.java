@@ -41,13 +41,13 @@ public class ExponentialFunctionTest {
 
         TestType type = new TestType(registry, "test");
 
-        FieldDefinition<TestType, TestObject> a = inputField(type, "a");
-        FieldDefinition<TestType, TestObject> b = exp(type, "b")
+        FieldDefinition a = inputField(type, "a");
+        FieldDefinition b = exp(type, "b")
                 .in(SELF, a, 0);
 
         registry.flattenTypeHierarchy();
 
-        Obj o = new ObjImpl(type);
+        Obj o = type.instantiate();
 
         Assertions.assertNull(o.getFieldOutput(a));
         Assertions.assertNull(o.getFieldOutput(b));

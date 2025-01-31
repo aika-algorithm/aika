@@ -16,7 +16,6 @@
  */
 package network.aika.type.relations;
 
-import network.aika.type.Type;
 import network.aika.type.Obj;
 
 import java.util.stream.Stream;
@@ -25,22 +24,17 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public interface Relation<
-        FD extends Type<FD, F>,
-        F extends Obj<FD, F>,
-        TD extends Type<TD, T>,
-        T extends Obj<TD, T>
-        > {
+public interface Relation {
 
     int getRelationId();
 
-    void setReversed(Relation<TD, T, FD, F> reversed);
+    void setReversed(Relation reversed);
 
-    Relation<TD, T, FD, F> getReverse();
+    Relation getReverse();
 
-    Stream<T> followAll(F fromObj);
+    Stream<? extends Obj> followMany(Obj fromObj);
 
-    boolean testRelation(F fromObj, T toObj);
+    boolean testRelation(Obj fromObj, Obj toObj);
 
     String getRelationLabel();
 }

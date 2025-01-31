@@ -16,7 +16,6 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.fields.field.Field;
 import network.aika.type.Type;
@@ -25,28 +24,22 @@ import network.aika.type.Obj;
 /**
  * @author Lukas Molzberger
  */
-public class Multiplication<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends AbstractFunctionDefinition<T, O> {
+public class Multiplication extends AbstractFunctionDefinition {
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > Multiplication<T, O> mul(T ref, String name) {
-        return new Multiplication<>(
+    public static Multiplication mul(Type ref, String name) {
+        return new Multiplication(
                 ref,
                 name
         );
     }
 
-    public Multiplication(T ref, String name) {
+    public Multiplication(Type ref, String name) {
         super(ref, name, 2);
     }
 
     @Override
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(Field<T, O> field) {
-        O toObj = field.getObject();
+    public void initializeField(Field field) {
+        Obj toObj = field.getObject();
         double valueArg0 = getInputValueByArg(toObj, 0);
         double valueArg1 = getInputValueByArg(toObj, 1);
 
@@ -54,7 +47,7 @@ public class Multiplication<
     }
 
     @Override
-    protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u) {
+    protected double computeUpdate(Obj obj, FieldLinkDefinitionOutputSide fl, double u) {
         return u * getInputValueByArg(
                 obj,
                 fl.getArgument() == 0 ?

@@ -21,7 +21,6 @@ import network.aika.type.relations.Relation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -32,32 +31,30 @@ import static network.aika.type.FlattenedType.createOutputFlattenedType;
 /**
  * @author Lukas Molzberger
  */
-public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
+public class Type {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Type.class);
 
-    public static final Comparator<Type<?, ?>> TYPE_COMPARATOR = Comparator.
-            <Type<?, ?>>comparingInt(Type::getDepth)
+    public static final Comparator<Type> TYPE_COMPARATOR = Comparator.
+            comparingInt(Type::getDepth)
             .thenComparing(Type::getId);
 
     private final short id;
     private final String name;
 
-    private Class<? extends O> clazz;
-
-    protected final List<T> parents = new ArrayList<>();
-    protected final List<T> children = new ArrayList<>();
+    protected final List<Type> parents = new ArrayList<>();
+    protected final List<Type> children = new ArrayList<>();
 
     private final TypeRegistry registry;
 
-    private final Set<FieldDefinition<T, O>> fieldDefinitions = new HashSet<>();
+    private final Set<FieldDefinition> fieldDefinitions = new HashSet<>();
 
-    private final List<Relation<T, O, ?, ?>> relations = new ArrayList<>();
+    protected List<Relation> relations = new ArrayList<>();
 
     private Integer depth;
 
-    private FlattenedType<T, O, ?, ?> flattenedTypeInputSide;
-    private FlattenedType<T, O, ?, ?> flattenedTypeOutputSide;
+    private FlattenedType flattenedTypeInputSide;
+    private FlattenedType flattenedTypeOutputSide;
 
     public Type(TypeRegistry registry, String name) {
         this.name = name;
@@ -74,31 +71,32 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         return !children.isEmpty();
     }
 
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> Relation<T, O, RT, RO>[] getRelations() {
+
+    public Relation[] getRelations() {
         return relations.toArray(new Relation[0]);
     }
 
     public void initFlattenedType() {
-        Set<FieldDefinition<T, O>> fieldDefs = getCollectFlattenedFieldDefinitions();
+        Set<FieldDefinition> fieldDefs = getCollectFlattenedFieldDefinitions();
 
-        flattenedTypeInputSide = createInputFlattenedType((T)this, fieldDefs);
-        flattenedTypeOutputSide = createOutputFlattenedType((T)this, fieldDefs, flattenedTypeInputSide);
+        flattenedTypeInputSide = createInputFlattenedType(this, fieldDefs);
+        flattenedTypeOutputSide = createOutputFlattenedType(this, fieldDefs, flattenedTypeInputSide);
     }
 
-    public Set<FieldDefinition<T, O>> getCollectFlattenedFieldDefinitions() {
+    public Set<FieldDefinition> getCollectFlattenedFieldDefinitions() {
         return collectTypes()
                 .stream()
                 .flatMap(t -> t.getFieldDefinitions().stream())
                 .collect(Collectors.toSet());
     }
 
-    public SortedSet<Type<T, O>> collectTypes() {
-        TreeSet<Type<T, O>> sortedTypes = new TreeSet<>(TYPE_COMPARATOR);
+    public SortedSet<Type> collectTypes() {
+        TreeSet<Type> sortedTypes = new TreeSet<>(TYPE_COMPARATOR);
         collectTypesRecursiveStep(sortedTypes);
         return sortedTypes;
     }
 
-    public void collectTypesRecursiveStep(SortedSet<Type<T, O>> sortedTypes) {
+    public void collectTypesRecursiveStep(SortedSet<Type> sortedTypes) {
         parents.forEach(p ->
                 p.collectTypesRecursiveStep(sortedTypes)
         );
@@ -115,42 +113,10 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         return depth;
     }
 
-    public O instantiate(List<Class<?>> parameterTypes, List<Object> parameters) {
-        if(isAbstract())
-            throw new RuntimeException("Unable to instantiate abstract type " + name);
-
-        try {
-            O instance = getClazz().getConstructor(parameterTypes.toArray(new Class[0]))
-                    .newInstance(parameters.toArray(new Object[0]));
-
-            if(LOG.isDebugEnabled()) {
-                LOG.debug(instance.toString());
-            }
-
-            return instance;
-        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public T setClazz(Class<? extends O> clazz) {
-        this.clazz = clazz;
-        return (T) this;
-    }
-
-    public Class<? extends O> getClazz() {
-        return clazz != null ?
-                clazz :
-                getFromParent(Type::getClazz);
-    }
-
-    @SuppressWarnings("rawtypes")
     public boolean isInstanceOf(Obj obj) {
         return isInstanceOf(obj.getType());
     }
 
-    @SuppressWarnings("rawtypes")
     public boolean isInstanceOf(Type type) {
         return this == type ||
                 parents.stream().anyMatch(p ->
@@ -166,48 +132,47 @@ public class Type<T extends Type<T, O>, O extends Obj<T, O>> {
         return registry;
     }
 
-    public FlattenedType<T, O, ?, ?> getFlattenedTypeInputSide() {
+    public FlattenedType getFlattenedTypeInputSide() {
         if(flattenedTypeInputSide == null)
             throw new RuntimeException("Type has not been flattened yet. TypeRegistry.flattenTypeHierarchy() needs to be called beforehand.");
 
         return flattenedTypeInputSide;
     }
 
-    public FlattenedType<T, O, ?, ?> getFlattenedTypeOutputSide() {
+    public FlattenedType getFlattenedTypeOutputSide() {
         if(flattenedTypeOutputSide == null)
             throw new RuntimeException("Type has not been flattened yet. TypeRegistry.flattenTypeHierarchy() needs to be called beforehand.");
 
         return flattenedTypeOutputSide;
     }
 
-    public void setFieldDefinition(FieldDefinition<T, O> fieldDef) {
+    public void setFieldDefinition(FieldDefinition fieldDef) {
         fieldDef.setFieldId(registry.createFieldId());
         fieldDefinitions.add(fieldDef);
     }
 
-    public Set<FieldDefinition<T, O>> getFieldDefinitions() {
+    public Set<FieldDefinition> getFieldDefinitions() {
         return fieldDefinitions;
     }
 
-    @SuppressWarnings("unchecked")
-    public T addParent(T p) {
+    public <T extends Type> Type addParent(T p) {
         parents.add(p);
-        p.children.add((T) this);
+        p.children.add(this);
 
-        return (T) this;
+        return this;
     }
 
-    public List<T> getParents() {
+    public List<? extends Type> getParents() {
         return parents;
     }
 
-    public List<T> getChildren() {
+    public List<? extends Type> getChildren() {
         return children;
     }
 
-    protected <X> X getFromParent(Function<T, X> f) {
+    protected <R> R getFromParent(Function<Type, R> f) {
         return parents.stream()
-                .map(f::apply)
+                .map(f)
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(null);

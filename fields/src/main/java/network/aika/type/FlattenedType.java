@@ -30,24 +30,19 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public class FlattenedType<
-        T extends Type<T, O>,
-        O extends Obj<T, O>,
-        RT extends Type<RT, RO>,
-        RO extends Obj<RT, RO>
-        > {
+public class FlattenedType {
 
     private final Direction direction;
-    private final T type;
+    private final Type type;
 
     private final short[] fields;
-    private final FieldDefinition<T, O>[][] fieldsReverse;
+    private final FieldDefinition[][] fieldsReverse;
     private final int numberOfFields;
 
-    private FlattenedTypeRelation<T, O, RT, RO>[][] mapping;
+    private FlattenedTypeRelation[][] mapping;
 
     @SuppressWarnings("unchecked")
-    private FlattenedType(Direction dir, T type, Map<FieldDefinition<T, O>, Short> fieldMappings, int numberOfFields) {
+    private FlattenedType(Direction dir, Type type, Map<FieldDefinition, Short> fieldMappings, int numberOfFields) {
         this.direction = dir;
         this.type = type;
         this.numberOfFields = numberOfFields;
@@ -55,8 +50,8 @@ public class FlattenedType<
         fields = new short[type.getTypeRegistry().getNumberOfFieldDefinitions()];
         Arrays.fill(fields, (short) -1);
 
-        Map<Short, List<FieldDefinition<T, O>>> groupedMap = new HashMap<>();
-        for (Map.Entry<FieldDefinition<T, O>, Short> e : fieldMappings.entrySet()) {
+        Map<Short, List<FieldDefinition>> groupedMap = new HashMap<>();
+        for (Map.Entry<FieldDefinition, Short> e : fieldMappings.entrySet()) {
             fields[e.getKey().getId()] = e.getValue();
 
             groupedMap.computeIfAbsent(e.getValue(), k -> new ArrayList<>())
@@ -64,49 +59,37 @@ public class FlattenedType<
         }
 
         fieldsReverse = new FieldDefinition[numberOfFields][];
-        for(Map.Entry<Short, List<FieldDefinition<T, O>>> e: groupedMap.entrySet()) {
+        for(Map.Entry<Short, List<FieldDefinition>> e: groupedMap.entrySet()) {
             fieldsReverse[e.getKey()] = e.getValue().toArray(new FieldDefinition[0]);
         }
     }
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>,
-            RT extends Type<RT, RO>,
-            RO extends Obj<RT, RO>
-            >
-    FlattenedType<T, O, RT, RO> createInputFlattenedType(T type, Set<FieldDefinition<T, O>> fieldDefs) {
-        Map<FieldDefinition<T, O>, Short> fieldMappings = new TreeMap<>();
+    public static FlattenedType createInputFlattenedType(Type type, Set<FieldDefinition> fieldDefs) {
+        Map<FieldDefinition, Short> fieldMappings = new TreeMap<>();
 
-        List<FieldDefinition<T, O>> requiredFields = fieldDefs
+        List<FieldDefinition> requiredFields = fieldDefs
                 .stream()
                 .filter(fd -> fd.isFieldRequired(fieldDefs))
                 .toList();
 
         for(short i = 0; i < requiredFields.size(); i++) {
-            FieldDefinition<T, O> fd = requiredFields.get(i);
+            FieldDefinition fd = requiredFields.get(i);
             fieldMappings.put(fd, i);
         }
 
-       return new FlattenedType<>(Direction.INPUT, type, fieldMappings, requiredFields.size());
+       return new FlattenedType(Direction.INPUT, type, fieldMappings, requiredFields.size());
     }
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>,
-            RT extends Type<RT, RO>,
-            RO extends Obj<RT, RO>
-            >
-    FlattenedType<T, O, RT, RO> createOutputFlattenedType(T type, Set<FieldDefinition<T, O>> fieldDefs, FlattenedType<T, O, RT, RO> inputSide) {
-        Map<FieldDefinition<T, O>, Short> fieldMappings = new TreeMap<>();
-        for(FieldDefinition<T, O> fd: fieldDefs) {
-            FieldDefinition<T, O> resolvedFD = fd.resolveInheritedFieldDefinition(fieldDefs);
+    public static FlattenedType createOutputFlattenedType(Type type, Set<FieldDefinition> fieldDefs, FlattenedType inputSide) {
+        Map<FieldDefinition, Short> fieldMappings = new TreeMap<>();
+        for(FieldDefinition fd: fieldDefs) {
+            FieldDefinition resolvedFD = fd.resolveInheritedFieldDefinition(fieldDefs);
             short fieldIndex = inputSide.fields[resolvedFD.getId()];
 
             fieldMappings.put(fd, fieldIndex);
         }
 
-        return new FlattenedType<>(Direction.OUTPUT, type, fieldMappings, inputSide.numberOfFields);
+        return new FlattenedType(Direction.OUTPUT, type, fieldMappings, inputSide.numberOfFields);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -114,7 +97,7 @@ public class FlattenedType<
         mapping = new FlattenedTypeRelation[type.getRelations().length][];
 
         for(Relation rel: type.getRelations()) {
-            FlattenedTypeRelation<T, O, RT, RO>[] resultsPerRelation = new FlattenedTypeRelation[type.getTypeRegistry().getTypes().size()];
+            FlattenedTypeRelation[] resultsPerRelation = new FlattenedTypeRelation[type.getTypeRegistry().getTypes().size()];
             for (Type relatedType : type.getTypeRegistry().getTypes()) {
                 resultsPerRelation[relatedType.getId()] = flattenPerType(rel, relatedType);
             }
@@ -124,13 +107,13 @@ public class FlattenedType<
         }
     }
 
-    private FlattenedTypeRelation<T, O, RT, RO> flattenPerType(
-            Relation<T, O, RT, RO> relation,
-            Type<RT, RO> relatedType
+    private FlattenedTypeRelation flattenPerType(
+            Relation relation,
+            Type relatedType
     ) {
-        List<FieldLinkDefinition<T, O, ?, ?>> fieldLinks = Stream.of(fieldsReverse)
+        List<FieldLinkDefinition> fieldLinks = Stream.of(fieldsReverse)
                 .flatMap(Stream::of)
-                .<FieldLinkDefinition<T, O, ?, ?>>flatMap(direction::getFieldLinkDefinitions)
+                .<FieldLinkDefinition>flatMap(direction::getFieldLinkDefinitions)
                 .filter(fl ->
                         fl.getRelation().getRelationId() == relation.getRelationId()
                 )
@@ -144,18 +127,17 @@ public class FlattenedType<
 
         return fieldLinks.isEmpty() ?
                 null :
-                new FlattenedTypeRelation<>(this, fieldLinks);
+                new FlattenedTypeRelation(this, fieldLinks);
     }
 
-    @SuppressWarnings("unchecked")
-    public void followLinks(Field<T, O> field) {
+    public void followLinks(Field field) {
         for(int relationId = 0; relationId < mapping.length; relationId++) {
-            FlattenedTypeRelation<T, O, RT, RO>[] ftr = mapping[relationId];
+            FlattenedTypeRelation[] ftr = mapping[relationId];
 
             if(ftr != null) {
-                Relation<T, O, RT, RO> relation = (Relation<T, O, RT, RO>) type.getRelations()[relationId];
+                Relation relation = type.getRelations()[relationId];
 
-                relation.followAll(field.getObject())
+                relation.followMany(field.getObject())
                         .forEach(relatedObj ->
                                 followLinks(
                                         ftr[relatedObj.getType().getId()],
@@ -167,16 +149,16 @@ public class FlattenedType<
         }
     }
 
-    private void followLinks(FlattenedTypeRelation<T, O, RT, RO> ftr, RO relatedObj, Field<T, O> field) {
+    private void followLinks(FlattenedTypeRelation ftr, Obj relatedObj, Field field) {
         if(ftr != null)
             ftr.followLinks(direction, relatedObj, field);
     }
 
-    public FieldDefinition<T, O>[][] getFieldsReverse() {
+    public FieldDefinition[][] getFieldsReverse() {
         return fieldsReverse;
     }
 
-    public short getFieldIndex(FieldDefinition<T, O> fd) {
+    public short getFieldIndex(FieldDefinition fd) {
         return fields[fd.getId()];
     }
 
@@ -184,11 +166,11 @@ public class FlattenedType<
         return (short) fieldsReverse.length;
     }
 
-    public T getType() {
+    public Type getType() {
         return type;
     }
 
-    public FieldDefinition<T, O> getFieldDefinitionIdByIndex(short idx) {
+    public FieldDefinition getFieldDefinitionIdByIndex(short idx) {
         return fieldsReverse[idx][0];
     }
 }

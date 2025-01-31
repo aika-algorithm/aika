@@ -27,18 +27,12 @@ import java.util.function.BiConsumer;
 /**
  * @author Lukas Molzberger
  */
-public class EventListener<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends FixedArgumentsFieldDefinition<T, O> {
+public class EventListener extends FixedArgumentsFieldDefinition {
 
-    private BiConsumer<FieldDefinition<T, O>, O> triggerFunction;
+    private BiConsumer<FieldDefinition, Obj> triggerFunction;
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > EventListener<T, O> eventListener(T ref, String name, BiConsumer<FieldDefinition<T, O>, O> triggerFunction, Double tolerance) {
-        return new EventListener<>(
+    public static EventListener eventListener(Type ref, String name, BiConsumer<FieldDefinition, Obj> triggerFunction, Double tolerance) {
+        return new EventListener(
                 ref,
                 name,
                 triggerFunction,
@@ -46,14 +40,14 @@ public class EventListener<
         );
     }
 
-    public EventListener(T ref, String name, BiConsumer<FieldDefinition<T, O>, O> triggerFunction, Double tolerance) {
+    public EventListener(Type ref, String name, BiConsumer<FieldDefinition, Obj> triggerFunction, Double tolerance) {
         super(ref, name, 1, tolerance);
 
         this.triggerFunction = triggerFunction;
     }
 
     @Override
-    public void receiveUpdate(Field<T, O> field, double u) {
+    public void receiveUpdate(Field field, double u) {
         super.receiveUpdate(field, u);
        // Activation act = (Activation) obj;
 

@@ -11,9 +11,9 @@ import java.util.List;
 import static network.aika.fields.manyobjects.TestTypeOne.TEST_RELATION_TO;
 
 
-public class TestTypeMany extends Type<TestTypeMany, TestObjectMany> {
+public class TestTypeMany extends Type {
 
-    public static RelationMany<TestTypeMany, TestObjectMany, TestTypeOne, TestObjectOne> TEST_RELATION_FROM = new RelationMany<>(TestObjectMany::getRelatedTestObjects, 0, "TEST_FROM");
+    public static RelationMany TEST_RELATION_FROM = new RelationMany(0, "TEST_FROM");
 
     static {
         TEST_RELATION_FROM.setReversed(TEST_RELATION_TO);
@@ -24,14 +24,11 @@ public class TestTypeMany extends Type<TestTypeMany, TestObjectMany> {
     }
 
     @Override
-    public Relation<TestTypeMany, TestObjectMany, ?, ?>[] getRelations() {
+    public Relation[] getRelations() {
         return new Relation[] {TEST_RELATION_FROM};
     }
 
     public TestObjectMany instantiate() {
-        return instantiate(
-                List.of(TestTypeMany.class),
-                List.of(this)
-        );
+        return new TestObjectMany(this);
     }
 }

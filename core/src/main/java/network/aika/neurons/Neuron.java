@@ -19,10 +19,13 @@ package network.aika.neurons;
 import network.aika.bindingsignal.BindingSignal;
 import network.aika.bindingsignal.BSType;
 import network.aika.misc.utils.ReadWriteLock;
+import network.aika.type.Obj;
 import network.aika.type.Type;
 import network.aika.Model;
 import network.aika.Document;
 import network.aika.ModelProvider;
+import network.aika.type.TypeRegistry;
+import network.aika.type.relations.Relation;
 import network.aika.typedefs.NeuronDefinition;
 import network.aika.typedefs.SynapseDefinition;
 import network.aika.activations.Activation;
@@ -45,12 +48,14 @@ import static network.aika.misc.direction.Direction.OUTPUT;
 import static network.aika.neurons.RefType.*;
 import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
+import static network.aika.typedefs.NeuronDefinition.ACTIVATION;
+import static network.aika.typedefs.NeuronDefinition.SELF;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class Neuron extends ObjImpl<NeuronDefinition, Neuron, Model> implements Element, ModelProvider, QueueProvider, Comparable<Neuron> {
+public class Neuron extends ObjImpl implements Element, ModelProvider, QueueProvider, Comparable<Neuron> {
 
     protected static final Logger LOG = LoggerFactory.getLogger(Neuron.class);
 
@@ -89,6 +94,26 @@ public class Neuron extends ObjImpl<NeuronDefinition, Neuron, Model> implements 
 
     public Neuron(NeuronDefinition type, Model model) {
         this(type, model, model.createNeuronId());
+    }
+
+    @Override
+    public Stream<Obj> followManyRelation(Relation rel) {
+        if(rel == NeuronDefinition.INPUT)
+            return getInputSynapsesAsStream().map(o -> o);
+        else if(rel == NeuronDefinition.OUTPUT)
+            return getOutputSynapsesAsStream().map(o -> o);
+        else if(rel == NeuronDefinition.ACTIVATION)
+            return null;
+        else
+            throw new RuntimeException("Invalid Relation");
+    }
+
+    @Override
+    public Obj followSingleRelation(Relation rel) {
+        if(rel == SELF)
+            return this;
+        else
+            throw new RuntimeException("Invalid Relation");
     }
 
     public Long getId() {
@@ -142,12 +167,9 @@ public class Neuron extends ObjImpl<NeuronDefinition, Neuron, Model> implements 
         return synapseIdCounter++;
     }
 
-    public final boolean isTrainingAllowed() {
-        return this.getType().isTrainingAllowed();
-    }
 
     public final Activation createActivation(Activation parent, Document doc, Map<BSType, BindingSignal> bindingSignals) {
-        return this.getType().getActivation()
+        return ((NeuronDefinition)this.getType()).getActivation()
                 .instantiate(doc.createActivationId(), parent, this, doc, bindingSignals);
     }
 
@@ -270,7 +292,7 @@ public class Neuron extends ObjImpl<NeuronDefinition, Neuron, Model> implements 
         return syn;
     }
 
-    public Synapse getInputSynapseByType(Type<SynapseDefinition, Synapse> synapseType) {
+    public Synapse getInputSynapseByType(Type synapseType) {
         inputLock.acquireReadLock();
         Synapse is = getInputSynapsesByType(synapseType)
                 .findAny()
@@ -279,12 +301,12 @@ public class Neuron extends ObjImpl<NeuronDefinition, Neuron, Model> implements 
         return is;
     }
 
-    public Stream<Synapse> getInputSynapsesByType(Type<SynapseDefinition, Synapse> synapseType) {
+    public Stream<Synapse> getInputSynapsesByType(Type synapseType) {
         return getInputSynapsesAsStream()
                 .filter(synapseType::isInstanceOf);
     }
 
-    public Synapse getOutputSynapseByType(Type<SynapseDefinition, Synapse> synapseType) {
+    public Synapse getOutputSynapseByType(Type synapseType) {
         outputLock.acquireReadLock();
         Synapse os = getOutputSynapsesByType(synapseType)
                 .findAny()
@@ -293,7 +315,7 @@ public class Neuron extends ObjImpl<NeuronDefinition, Neuron, Model> implements 
         return os;
     }
 
-    public Stream<Synapse> getOutputSynapsesByType(Type<SynapseDefinition, Synapse> synapseType) {
+    public Stream<Synapse> getOutputSynapsesByType(Type synapseType) {
         return getOutputSynapsesAsStream()
                 .filter(synapseType::isInstanceOf);
     }
@@ -390,27 +412,26 @@ public class Neuron extends ObjImpl<NeuronDefinition, Neuron, Model> implements 
         out.writeInt(synapseIdCounter);
     }
 
-    public static Neuron read(DataInput in, Model m) throws Exception {
+    public static Neuron read(DataInput in, TypeRegistry tr) throws Exception {
         short neuronTypeId = in.readShort();
-        NeuronDefinition neuronDefinition = m.getTypeRegistry()
-                .getType(neuronTypeId);
-        Neuron n = neuronDefinition.instantiate(m);
-        n.readFields(in, m);
+        NeuronDefinition neuronDefinition = (NeuronDefinition) tr.getType(neuronTypeId);
+        Neuron n = neuronDefinition.instantiate((Model)tr);
+        n.readFields(in, tr);
         return n;
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws IOException {
-        super.readFields(in, m);
+    public void readFields(DataInput in, TypeRegistry tr) throws IOException {
+        super.readFields(in, tr);
 
         while (in.readBoolean()) {
-            Synapse syn = Synapse.read(in, m);
-            syn.link(m);
+            Synapse syn = Synapse.read(in, tr);
+            syn.link((Model)tr);
         }
 
         while (in.readBoolean()) {
-            Synapse syn = Synapse.read(in, m);
-            syn.link(m);
+            Synapse syn = Synapse.read(in, tr);
+            syn.link((Model)tr);
         }
 
         while (in.readBoolean()) {

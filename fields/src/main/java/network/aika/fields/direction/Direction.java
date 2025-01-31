@@ -20,25 +20,9 @@ public interface Direction {
 
     Direction invert();
 
-    <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            >
-    Stream<? extends FieldLinkDefinition<T, O, ?, ?>> getFieldLinkDefinitions(FieldDefinition<T, O> fd);
+    Stream<? extends FieldLinkDefinition> getFieldLinkDefinitions(FieldDefinition fd);
 
-    <
-            T extends Type<T, O>,
-            O extends Obj<T, O>,
-            RT extends Type<RT, RO>,
-            RO extends Obj<RT, RO>
-    >
-    FlattenedType<T, O, RT, RO> getFlattenedType(Type<T, O> type);
+    FlattenedType getFlattenedType(Type type);
 
-    <
-            T extends Type<T, O>,
-            O extends Obj<T, O>,
-            RT extends Type<RT, RO>,
-            RO extends Obj<RT, RO>
-    >
-    void transmit(Field<T, O> originField, FieldLinkDefinition<T, O, RT, RO> fl, RO relatedObject);
+   void transmit(Field originField, FieldLinkDefinition fl, Obj relatedObject);
 }

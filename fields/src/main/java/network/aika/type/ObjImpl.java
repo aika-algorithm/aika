@@ -20,6 +20,7 @@ import network.aika.fields.defs.FieldDefinition;
 import network.aika.fields.field.Field;
 import network.aika.queue.Queue;
 import network.aika.queue.QueueProvider;
+import network.aika.type.relations.Relation;
 import network.aika.utils.Writable;
 
 import java.io.DataInput;
@@ -31,14 +32,14 @@ import java.util.stream.Stream;
 /**
  * @author Lukas Molzberger
  */
-public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Obj<T, O>, QueueProvider, Writable<M> {
+public abstract class ObjImpl implements Obj, QueueProvider, Writable<TypeRegistry> {
 
-    protected T type;
+    protected Type type;
 
-    private Field<T, O>[] fields;
+    private Field[] fields;
 
     @SuppressWarnings("unchecked")
-    public ObjImpl(T type) {
+    public ObjImpl(Type type) {
         this.type = type;
 
         if(type != null)
@@ -48,25 +49,35 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
     @Override
     public void initFields() {
         for(short i = 0; i < type.getFlattenedTypeInputSide().getNumberOfFields(); i++) {
-            FieldDefinition<T, O> fd = type.getFlattenedTypeInputSide().getFieldDefinitionIdByIndex(i);
+            FieldDefinition fd = type.getFlattenedTypeInputSide().getFieldDefinitionIdByIndex(i);
 
-            Field<T, O> field = getOrCreateFieldInput(fd);
+            Field field = getOrCreateFieldInput(fd);
             fd.initializeField(field);
         }
     }
 
     @Override
-    public T getType() {
+    public Type getType() {
         return type;
     }
 
     @Override
-    public boolean isInstanceOf(T t) {
+    public Stream<Obj> followManyRelation(Relation rel) {
+        return Stream.empty();
+    }
+
+    @Override
+    public Obj followSingleRelation(Relation rel) {
+        return null;
+    }
+
+    @Override
+    public boolean isInstanceOf(Type t) {
         return type.isInstanceOf(t);
     }
 
     @Override
-    public Field<T, O> getFieldOutput(FieldDefinition<T, O> fd) {
+    public Field getFieldOutput(FieldDefinition fd) {
         short fieldIndex = type.getFlattenedTypeOutputSide().getFieldIndex(fd);
 
         return fields[fieldIndex];
@@ -74,12 +85,12 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
     @SuppressWarnings("unchecked")
     @Override
-    public Field<T, O> getOrCreateFieldInput(FieldDefinition<T, O> fd) {
+    public Field getOrCreateFieldInput(FieldDefinition fd) {
         short fieldIndex = type.getFlattenedTypeInputSide().getFieldIndex(fd);
 
-        Field<T, O> f = fields[fieldIndex];
+        Field f = fields[fieldIndex];
         if(f == null) {
-            f = fields[fieldIndex] = new Field<>((O) this, fd, fieldIndex);
+            f = fields[fieldIndex] = new Field(this, fd, fieldIndex);
         }
 
         return f;
@@ -87,30 +98,30 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
 
     @SuppressWarnings("unchecked")
     @Override
-    public O setFieldValue(FieldDefinition<T, O> fd, double v) {
+    public Obj setFieldValue(FieldDefinition fd, double v) {
         getOrCreateFieldInput(fd)
                 .setValue(v);
-        return (O) this;
+        return this;
     }
 
     @Override
-    public double getFieldValue(FieldDefinition<T, O> fd) {
-        Field<T, O> f = getFieldOutput(fd);
+    public double getFieldValue(FieldDefinition fd) {
+        Field f = getFieldOutput(fd);
         return f != null ?
                 f.getValue() :
                 0.0;
     }
 
     @Override
-    public double getFieldUpdatedValue(FieldDefinition<T, O> fd) {
-        Field<T, O> f = getFieldOutput(fd);
+    public double getFieldUpdatedValue(FieldDefinition fd) {
+        Field f = getFieldOutput(fd);
         return f != null ?
                 f.getUpdatedValue() :
                 0.0;
     }
 
     @Override
-    public Stream<Field<T, O>> getFields() {
+    public Stream<Field> getFields() {
         return Stream.of(fields)
                 .filter(Objects::nonNull);
     }
@@ -126,7 +137,7 @@ public class ObjImpl<T extends Type<T, O>, O extends Obj<T, O>, M> implements Ob
     }
 
     @Override
-    public void readFields(DataInput in, M m) throws IOException {
+    public void readFields(DataInput in, TypeRegistry m) throws IOException {
         // TODO: implement
     }
 

@@ -49,7 +49,7 @@ public class DumpTypes {
             sb.append("  output: " + linkDefinition.getOutput().getName() + "\n");
     }
 
-    public static void dumpFields(StringBuilder sb, Type<?, ?> type) {
+    public static void dumpFields(StringBuilder sb, Type type) {
         if(type.getFieldDefinitions().isEmpty())
             return;
 
@@ -60,7 +60,7 @@ public class DumpTypes {
                 );
     }
 
-    private static void dumpInputFieldLinks(StringBuilder sb, FieldDefinition<?, ?> fd) {
+    private static void dumpInputFieldLinks(StringBuilder sb, FieldDefinition fd) {
         if(fd.getInputs().findAny().isEmpty())
             return;
 
@@ -72,9 +72,8 @@ public class DumpTypes {
         sb.append("\n");
     }
 
-    public static void dumpType(StringBuilder sb, Type<?, ?> type) {
+    public static void dumpType(StringBuilder sb, Type type) {
         sb.append(type.getName() + "\n");
-        sb.append("  class: " + type.getClazz().getSimpleName() + "\n");
 
         if(!type.getParents().isEmpty()) {
             sb.append("  parents: " + type.getParents().stream()

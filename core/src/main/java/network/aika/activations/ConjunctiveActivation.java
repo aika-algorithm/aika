@@ -22,6 +22,7 @@ import network.aika.neurons.Neuron;
 import network.aika.neurons.Synapse;
 import network.aika.typedefs.ActivationDefinition;
 import network.aika.bindingsignal.BSType;
+import network.aika.typedefs.SynapseDefinition;
 
 import java.util.Map;
 import java.util.NavigableMap;
@@ -51,7 +52,7 @@ public class ConjunctiveActivation extends Activation {
         neuron
                 .getInputSynapsesAsStream()
                 .filter(s ->
-                        s.getType().isIncomingLinkingCandidate(getBindingSignals().keySet())
+                        ((SynapseDefinition)s.getType()).isIncomingLinkingCandidate(getBindingSignals().keySet())
                 )
                 .forEach(s ->
                         linkIncoming(s, excludedInputAct)

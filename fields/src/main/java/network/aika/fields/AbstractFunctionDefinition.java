@@ -27,23 +27,20 @@ import network.aika.type.Type;
  *
  * @author Lukas Molzberger
  */
-public abstract class AbstractFunctionDefinition<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends FixedArgumentsFieldDefinition<T, O> {
+public abstract class AbstractFunctionDefinition extends FixedArgumentsFieldDefinition {
 
-    public AbstractFunctionDefinition(T objectType, String name, int numArgs) {
+    public AbstractFunctionDefinition(Type objectType, String name, int numArgs) {
         super(objectType, name, numArgs);
     }
 
-    public AbstractFunctionDefinition(T objectType, String name, int numArgs, double tolerance) {
+    public AbstractFunctionDefinition(Type objectType, String name, int numArgs, double tolerance) {
         super(objectType, name, numArgs, tolerance);
     }
 
-    protected abstract double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u);
+    protected abstract double computeUpdate(Obj obj, FieldLinkDefinitionOutputSide fl, double u);
 
     @Override
-    public void transmit(Field<T, O> targetField, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u) {
+    public void transmit(Field targetField, FieldLinkDefinitionOutputSide fl, double u) {
         double update = computeUpdate(targetField.getObject(), fl, u);
 
         receiveUpdate(targetField, update);

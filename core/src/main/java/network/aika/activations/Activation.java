@@ -24,6 +24,8 @@ import network.aika.bindingsignal.BindingSignal;
 import network.aika.neurons.Synapse;
 import network.aika.bindingsignal.BSType;
 import network.aika.neurons.Neuron;
+import network.aika.type.Obj;
+import network.aika.type.relations.Relation;
 import network.aika.typedefs.*;
 import network.aika.fields.field.FieldOutput;
 import network.aika.type.ObjImpl;
@@ -36,12 +38,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static network.aika.misc.direction.Direction.INPUT;
+import static network.aika.misc.direction.Direction.OUTPUT;
 import static network.aika.queue.Timestamp.NOT_SET;
+import static network.aika.typedefs.ActivationDefinition.NEURON;
+import static network.aika.typedefs.ActivationDefinition.SELF;
 
 /**
  * @author Lukas Molzberger
  */
-public abstract class Activation extends ObjImpl<ActivationDefinition, Activation, Model> implements Element, ModelProvider, QueueProvider, Comparable<Activation> {
+public abstract class Activation extends ObjImpl implements Element, ModelProvider, QueueProvider, Comparable<Activation> {
 
     public static final Comparator<Activation> ID_COMPARATOR = Comparator.comparingInt(Activation::getId);
 
@@ -79,6 +85,26 @@ public abstract class Activation extends ObjImpl<ActivationDefinition, Activatio
         neuron.updateLastUsed(doc.getId());
 
         setCreated(doc.getCurrentTimestamp());
+    }
+
+    @Override
+    public Stream<Obj> followManyRelation(Relation rel) {
+        if(rel == ActivationDefinition.INPUT)
+            return getInputLinks().map(o -> o);
+        else if(rel == OUTPUT)
+            return getOutputLinks().map(o -> o);
+        else
+            throw new RuntimeException("Invalid Relation");
+    }
+
+    @Override
+    public Obj followSingleRelation(Relation rel) {
+        if(rel == SELF)
+            return this;
+        else if(rel == NEURON)
+            return neuron;
+        else
+            throw new RuntimeException("Invalid Relation");
     }
 
     public ActivationKey getKey() {
@@ -144,7 +170,7 @@ public abstract class Activation extends ObjImpl<ActivationDefinition, Activatio
         neuron.getOutputSynapses()
                 .stream()
                 .filter(s ->
-                        s.getType().isOutgoingLinkingCandidate(getBindingSignals().keySet())
+                        ((SynapseDefinition)s.getType()).isOutgoingLinkingCandidate(getBindingSignals().keySet())
                 )
                 .forEach(this::linkOutgoing);
     }

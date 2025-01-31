@@ -16,7 +16,6 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.type.Type;
 import network.aika.type.Obj;
@@ -24,27 +23,21 @@ import network.aika.type.Obj;
 /**
  * @author Lukas Molzberger
  */
-public class Addition<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends AbstractFunctionDefinition<T, O> {
+public class Addition extends AbstractFunctionDefinition {
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > Addition<T, O> add(T ref, String name) {
-        return new Addition<>(
+    public static Addition add(Type ref, String name) {
+        return new Addition(
                 ref,
                 name
         );
     }
 
-    public Addition(T ref, String name) {
+    public Addition(Type ref, String name) {
         super(ref, name, 2);
     }
 
     @Override
-    protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u) {
+    protected double computeUpdate(Obj obj, FieldLinkDefinitionOutputSide fl, double u) {
         return u;
     }
 }

@@ -33,16 +33,16 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public class LinkDefinition extends Type<LinkDefinition, Link> {
+public class LinkDefinition extends Type {
 
-    public static final RelationSelf<ActivationDefinition, Activation> SELF = new RelationSelf<>(0, "LINK-SELF");
+    public static final RelationSelf SELF = new RelationSelf(0, "LINK-SELF");
 
-    public static final RelationOne<LinkDefinition, Link, ActivationDefinition, Activation> INPUT = new RelationOne<>(Link::getInput, 1, "LINK-INPUT");
-    public static final RelationOne<LinkDefinition, Link, ActivationDefinition, Activation> OUTPUT = new RelationOne<>(Link::getOutput, 2, "LINK-OUTPUT");
-    public static final RelationOne<LinkDefinition, Link, SynapseDefinition, Synapse> SYNAPSE = new RelationOne<>(Link::getSynapse, 3, "LINK-SYNAPSE");
+    public static final RelationOne INPUT = new RelationOne(1, "LINK-INPUT");
+    public static final RelationOne OUTPUT = new RelationOne(2, "LINK-OUTPUT");
+    public static final RelationOne SYNAPSE = new RelationOne(3, "LINK-SYNAPSE");
 
-    public static final RelationOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_INPUT_LINK = new RelationOne<>(l -> l.getInput().getCorrespondingInputLink(l), 4, "CORRESPONDING_INPUT_LINK");
-    public static final RelationOne<LinkDefinition, Link, LinkDefinition, Link> CORRESPONDING_OUTPUT_LINK = new RelationOne<>(l -> l.getOutput().getCorrespondingOutputLink(l), 5, "CORRESPONDING_OUTPUT_LINK");
+    public static final RelationOne CORRESPONDING_INPUT_LINK = new RelationOne(4, "CORRESPONDING_INPUT_LINK");
+    public static final RelationOne CORRESPONDING_OUTPUT_LINK = new RelationOne(5, "CORRESPONDING_OUTPUT_LINK");
 
     public static final Relation[] RELATIONS = {SELF, INPUT, OUTPUT, SYNAPSE, CORRESPONDING_INPUT_LINK, CORRESPONDING_OUTPUT_LINK};
 
@@ -65,7 +65,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     }
 
     @Override
-    public Relation<LinkDefinition, Link, ?, ?>[] getRelations() {
+    public Relation[] getRelations() {
         return RELATIONS;
     }
 
@@ -73,16 +73,13 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
         assert input.getType().isInstanceOf(getInput());
         assert output.getType().isInstanceOf(getOutput());
 
-        return instantiate(
-                List.of(LinkDefinition.class, Synapse.class, Activation.class, Activation.class),
-                List.of(this, synapse, input, output)
-        );
+        return new Link(this, synapse, input, output);
     }
 
     public SynapseDefinition getSynapse() {
         return synapse != null ?
                 synapse :
-                getFromParent(LinkDefinition::getSynapse);
+                getFromParent(p -> ((LinkDefinition)p).getSynapse());
     }
 
     public LinkDefinition setSynapse(SynapseDefinition synapse) {
@@ -96,7 +93,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     public ActivationDefinition getInput() {
         return input != null ?
                 input :
-                getFromParent(LinkDefinition::getInput);
+                getFromParent(p -> ((LinkDefinition)p).getInput());
     }
 
     public LinkDefinition setInput(ActivationDefinition input) {
@@ -110,7 +107,7 @@ public class LinkDefinition extends Type<LinkDefinition, Link> {
     public ActivationDefinition getOutput() {
         return output != null ?
                 output :
-                getFromParent(LinkDefinition::getOutput);
+                getFromParent(p -> ((LinkDefinition)p).getOutput());
     }
 
     public LinkDefinition setOutput(ActivationDefinition output) {

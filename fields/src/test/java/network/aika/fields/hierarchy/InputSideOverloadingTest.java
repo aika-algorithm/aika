@@ -29,25 +29,19 @@ public class InputSideOverloadingTest {
     public void init() {
         registry = new TypeRegistryImpl();
 
-        inputParent = new TestType(registry, "inputParent")
-                .setClazz(TestObject.class);
-
-        inputChild = new TestType(registry, "inputChild")
-                .setClazz(TestObject.class)
-                .addParent(inputParent);
-
-        output = new TestType(registry, "output")
-                .setClazz(TestObject.class);
+        inputParent = new TestType(registry, "inputParent");
+        inputChild = new TestType(registry, "inputChild");
+        output = new TestType(registry, "output");
     }
 
     @Test
     public void testOverloadingGetInputField() {
-        FieldDefinition<TestType, TestObject> inputFieldParent = inputField(inputParent, "inputParentField");
-        FieldDefinition<TestType, TestObject> inputFieldChild = inputField(inputChild, "inputChildField")
+        FieldDefinition inputFieldParent = inputField(inputParent, "inputParentField");
+        FieldDefinition inputFieldChild = inputField(inputChild, "inputChildField")
                 .setParent(inputFieldParent);
 
 
-        FieldDefinition<TestType, TestObject> outputField = mul(output, "output")
+        FieldDefinition outputField = mul(output, "output")
                 .in(TEST_RELATION_FROM, inputFieldParent, 0)
                 .in(TEST_RELATION_FROM, inputFieldParent, 1);
 
@@ -73,12 +67,12 @@ public class InputSideOverloadingTest {
     @ParameterizedTest
     @CsvSource({"propagate", "init"})
     public void testOverloading(String transmitMethod) {
-        FieldDefinition<TestType, TestObject> inputFieldParent = inputField(inputParent, "inputParentField");
-        FieldDefinition<TestType, TestObject> inputFieldChild = inputField(inputChild, "inputChildField")
+        FieldDefinition inputFieldParent = inputField(inputParent, "inputParentField");
+        FieldDefinition inputFieldChild = inputField(inputChild, "inputChildField")
                 .setParent(inputFieldParent);
 
 
-        FieldDefinition<TestType, TestObject> outputField = identity(output, "output")
+        FieldDefinition outputField = identity(output, "output")
                 .in(TEST_RELATION_FROM, inputFieldParent, 0);
 
         registry.flattenTypeHierarchy();

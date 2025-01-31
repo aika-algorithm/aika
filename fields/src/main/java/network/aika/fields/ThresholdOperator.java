@@ -24,36 +24,27 @@ import network.aika.type.Type;
 /**
  * @author Lukas Molzberger
  */
-public class ThresholdOperator<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends AbstractFunctionDefinition<T, O> {
+public class ThresholdOperator extends AbstractFunctionDefinition {
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > ThresholdOperator<T, O> threshold(T ref, String name, double threshold, Comparison type) {
-        return new ThresholdOperator<>(ref, name, threshold, type);
+    public static ThresholdOperator threshold(Type ref, String name, double threshold, Comparison type) {
+        return new ThresholdOperator(ref, name, threshold, type);
     }
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > ThresholdOperator<T, O> threshold(T ref, String name, double threshold, Comparison type, boolean isFinal) {
-        return new ThresholdOperator<>(ref, name, threshold, type, isFinal);
+    public static ThresholdOperator threshold(Type ref, String name, double threshold, Comparison type, boolean isFinal) {
+        return new ThresholdOperator(ref, name, threshold, type, isFinal);
     }
 
     private double threshold;
     private ThresholdOperator.Comparison comparison;
     private boolean isFinal;
 
-    public ThresholdOperator(T ref, String name, double threshold, Comparison type) {
+    public ThresholdOperator(Type ref, String name, double threshold, Comparison type) {
         super(ref, name, 1);
         this.threshold = threshold;
         this.comparison = type;
     }
 
-    public ThresholdOperator(T ref, String name, double threshold, Comparison type, boolean isFinal) {
+    public ThresholdOperator(Type ref, String name, double threshold, Comparison type, boolean isFinal) {
         super(ref, name, 1);
         this.threshold = threshold;
         this.comparison = type;
@@ -68,7 +59,7 @@ public class ThresholdOperator<
     }
 
     @Override
-    protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u) {
+    protected double computeUpdate(Obj obj, FieldLinkDefinitionOutputSide fl, double u) {
         double value = obj.getOrCreateFieldInput(this).getValue();
         if(isFinal && value > 0.5)
             return 0.0;

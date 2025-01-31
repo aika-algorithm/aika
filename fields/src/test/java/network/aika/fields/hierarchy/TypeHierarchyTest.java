@@ -45,11 +45,9 @@ public class TypeHierarchyTest {
     public void init() {
         registry = new TypeRegistryImpl();
 
-        parent = new TestType(registry, "Parent")
-                .setClazz(TestObject.class);
+        parent = new TestType(registry, "Parent");
 
-        child = new TestType(registry, "Child")
-                .setClazz(TestObject.class)
+        child = (TestType) new TestType(registry, "Child")
                 .addParent(parent);
     }
 
@@ -58,19 +56,19 @@ public class TypeHierarchyTest {
 
         // Type and Math Model initialization
 
-        FieldDefinition<TestType, TestObject> a = inputField(parent, "a");
-        FieldDefinition<TestType, TestObject> b = inputField(parent, "b");
+        FieldDefinition a = inputField(parent, "a");
+        FieldDefinition b = inputField(parent, "b");
 
-        FieldDefinition<TestType, TestObject> parentC = add(parent, "c")
+        FieldDefinition parentC = add(parent, "c")
                 .in(SELF, a, 0)
                 .in(SELF, b, 1);
 
-        FieldDefinition<TestType, TestObject> c = sub(child, "c")
+        FieldDefinition c = sub(child, "c")
                 .in(SELF, a, 0)
                 .in(SELF, b, 1)
                 .setParent(parentC);
 
-        FieldDefinition<TestType, TestObject> d = identity(parent, "d")
+        FieldDefinition d = identity(parent, "d")
                 .in(SELF, c, 0);
 
         registry.flattenTypeHierarchy();

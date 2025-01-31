@@ -16,7 +16,6 @@
  */
 package network.aika.fields;
 
-import network.aika.fields.defs.FieldLinkDefinition;
 import network.aika.fields.defs.FieldLinkDefinitionOutputSide;
 import network.aika.type.Type;
 import network.aika.type.Obj;
@@ -24,28 +23,22 @@ import network.aika.type.Obj;
 /**
  * @author Lukas Molzberger
  */
-public class InputField<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends AbstractFunctionDefinition<T, O> {
+public class InputField extends AbstractFunctionDefinition {
 
 
-    public static <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            > InputField<T, O> inputField(T ref, String name) {
-        return new InputField<>(
+    public static InputField inputField(Type ref, String name) {
+        return new InputField(
                 ref,
                 name
         );
     }
 
-    public InputField(T ref, String name) {
+    public InputField(Type ref, String name) {
         super(ref, name, 0);
     }
 
     @Override
-    protected double computeUpdate(O obj, FieldLinkDefinitionOutputSide<T, O, ?, ?> fl, double u) {
+    protected double computeUpdate(Obj obj, FieldLinkDefinitionOutputSide fl, double u) {
         return 0;
     }
 }

@@ -55,19 +55,15 @@ public class MultipleInheritanceTest {
     }
 
     private void initTypeHierarchy(int topLevel, String topLevelLabel, TypeRegistry registry) {
-        TestType root = type[topLevel][0][0] = new TestType(registry, topLevelLabel)
-                .setClazz(TestObject.class);
+        TestType root = type[topLevel][0][0] = new TestType(registry, topLevelLabel);
 
-        TestType subType0 = type[topLevel][1][0] = new TestType(registry, topLevelLabel + "-SubType-0")
-                .setClazz(TestObject.class)
+        TestType subType0 = type[topLevel][1][0] = (TestType) new TestType(registry, topLevelLabel + "-SubType-0")
                 .addParent(root);
 
-        TestType subType1 = type[topLevel][1][1] = new TestType(registry, topLevelLabel + "-SubType-1")
-                .setClazz(TestObject.class)
+        TestType subType1 = type[topLevel][1][1] = (TestType) new TestType(registry, topLevelLabel + "-SubType-1")
                 .addParent(root);
 
-        TestType subSubType = type[topLevel][2][0] = new TestType(registry, topLevelLabel + "-SubSubType-0")
-                .setClazz(TestObject.class)
+        TestType subSubType = type[topLevel][2][0] = (TestType) new TestType(registry, topLevelLabel + "-SubSubType-0")
                 .addParent(subType0)
                 .addParent(subType1);
     }

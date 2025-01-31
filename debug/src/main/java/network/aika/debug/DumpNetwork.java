@@ -13,7 +13,6 @@ import java.util.stream.Stream;
 
 import static network.aika.utils.StringUtils.depthToSpace;
 
-@SuppressWarnings("rawtypes")
 public class DumpNetwork {
 
     public static String dumpActivations(OutputConfig oc, Document doc) {
@@ -77,7 +76,7 @@ public class DumpNetwork {
     }
 
     public static String dumpFieldLinks(OutputConfig oc, Field f, int depth) {
-        FieldDefinition<?, ?> fd = f.getFieldDefinition();
+        FieldDefinition fd = f.getFieldDefinition();
         if(f.getFieldDefinition().getInputs().findAny().isEmpty())
             return "";
 

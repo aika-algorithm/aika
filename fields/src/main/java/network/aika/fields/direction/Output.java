@@ -26,33 +26,17 @@ public class Output implements Direction {
     }
 
     @Override
-    public <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            >
-    Stream<FieldLinkDefinitionInputSide<T, O, ?, ?>> getFieldLinkDefinitions(FieldDefinition<T, O> fd) {
+    public Stream<FieldLinkDefinitionInputSide> getFieldLinkDefinitions(FieldDefinition fd) {
         return fd.getOutputs();
     }
 
-    public <
-            T extends Type<T, O>,
-            O extends Obj<T, O>,
-            RT extends Type<RT, RO>,
-            RO extends Obj<RT, RO>
-            >
-    FlattenedType<T, O, RT, RO> getFlattenedType(Type<T, O> type) {
-        return (FlattenedType<T, O, RT, RO>) type.getFlattenedTypeOutputSide();
+    public FlattenedType getFlattenedType(Type type) {
+        return type.getFlattenedTypeOutputSide();
     }
 
     @Override
-    public <
-            T extends Type<T, O>,
-            O extends Obj<T, O>,
-            RT extends Type<RT, RO>,
-            RO extends Obj<RT, RO>
-    >
-    void transmit(Field<T, O> originField, FieldLinkDefinition<T, O, RT, RO> fl, RO relatedObject) {
-        FieldLinkDefinitionOutputSide<RT, RO, T, O> flo = ((FieldLinkDefinitionInputSide<T, O, RT, RO>)fl).getOutputSide();
+    public void transmit(Field originField, FieldLinkDefinition fl, Obj relatedObject) {
+        FieldLinkDefinitionOutputSide flo = ((FieldLinkDefinitionInputSide)fl).getOutputSide();
         fl.getRelatedFD().transmit(
                 relatedObject.getOrCreateFieldInput(fl.getRelatedFD()),
                 flo,

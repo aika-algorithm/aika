@@ -34,13 +34,13 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
+public class NeuronDefinition extends Type {
 
-    public static final RelationSelf<ActivationDefinition, Activation> SELF = new RelationSelf<>(0, "NEURON-SELF");
+    public static final RelationSelf SELF = new RelationSelf(0, "NEURON-SELF");
 
-    public static final RelationMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> INPUT = new RelationMany<>(Neuron::getInputSynapsesAsStream, 1, "NEURON-INPUT");
-    public static final RelationMany<NeuronDefinition, Neuron, SynapseDefinition, Synapse> OUTPUT = new RelationMany<>(Neuron::getOutputSynapsesAsStream, 2, "NEURON-OUTPUT");
-    public static final RelationMany<NeuronDefinition, Neuron, ActivationDefinition, Activation> ACTIVATION = new RelationMany<>(null, 3, "NEURON-ACTIVATION");
+    public static final RelationMany INPUT = new RelationMany(1, "NEURON-INPUT");
+    public static final RelationMany OUTPUT = new RelationMany(2, "NEURON-OUTPUT");
+    public static final RelationMany ACTIVATION = new RelationMany(3, "NEURON-ACTIVATION");
 
     public static final Relation[] RELATIONS = {SELF, INPUT, OUTPUT, ACTIVATION};
 
@@ -50,8 +50,6 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
         OUTPUT.setReversed(SynapseDefinition.INPUT);
     }
 
-    private Boolean trainingAllowed;
-
     private ActivationDefinition activation;
 
     public NeuronDefinition(TypeRegistry registry, String name) {
@@ -59,21 +57,18 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
     }
 
     @Override
-    public Relation<NeuronDefinition, Neuron, ?, ?>[] getRelations() {
+    public Relation[] getRelations() {
         return RELATIONS;
     }
 
     public Neuron instantiate(Model m) {
-        return instantiate(
-                List.of(NeuronDefinition.class, Model.class),
-                List.of(this, m)
-        );
+        return new Neuron(this, m);
     }
 
     public ActivationDefinition getActivation() {
         return activation != null ?
                 activation :
-                getFromParent(NeuronDefinition::getActivation);
+                getFromParent(p -> ((NeuronDefinition)p).getActivation());
     }
 
     public NeuronDefinition setActivation(ActivationDefinition activation) {
@@ -81,17 +76,4 @@ public class NeuronDefinition extends Type<NeuronDefinition, Neuron> {
 
         return this;
     }
-
-    public NeuronDefinition setTrainingAllowed(boolean trainingAllowed) {
-        this.trainingAllowed = trainingAllowed;
-
-        return this;
-    }
-
-    public Boolean isTrainingAllowed() {
-        return trainingAllowed != null ?
-                trainingAllowed :
-                getFromParent(NeuronDefinition::isTrainingAllowed);
-    }
-
 }

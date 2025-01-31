@@ -17,8 +17,7 @@
 package network.aika.typedefs;
 
 import network.aika.Document;
-import network.aika.activations.Activation;
-import network.aika.activations.Link;
+import network.aika.activations.*;
 import network.aika.bindingsignal.BindingSignal;
 import network.aika.type.relations.Relation;
 import network.aika.type.relations.RelationMany;
@@ -36,14 +35,19 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public class ActivationDefinition extends Type<ActivationDefinition, Activation> {
+public class ActivationDefinition extends Type {
 
+    public enum ActivationSubType {
+        CONJUNCTIVE,
+        DISJUNCTIVE,
+        INHIBITORY
+    }
 
-    public static final RelationSelf<ActivationDefinition, Activation> SELF = new RelationSelf<>(0, "ACT-SELF");
+    public static final RelationSelf SELF = new RelationSelf(0, "ACT-SELF");
 
-    public static final RelationMany<ActivationDefinition, Activation, LinkDefinition, Link> INPUT = new RelationMany<>(Activation::getInputLinks, 1, "ACT-INPUT");
-    public static final RelationMany<ActivationDefinition, Activation, LinkDefinition, Link> OUTPUT = new RelationMany<>(Activation::getOutputLinks, 2, "ACT-OUTPUT");
-    public static final RelationOne<ActivationDefinition, Activation, NeuronDefinition, Neuron> NEURON = new RelationOne<>(Activation::getNeuron, 3, "ACT-NEURON");
+    public static final RelationMany INPUT = new RelationMany( 1, "ACT-INPUT");
+    public static final RelationMany OUTPUT = new RelationMany( 2, "ACT-OUTPUT");
+    public static final RelationOne NEURON = new RelationOne(3, "ACT-NEURON");
 
     public static final Relation[] RELATIONS = {SELF, INPUT, OUTPUT, NEURON};
 
@@ -53,6 +57,7 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
         OUTPUT.setReversed(LinkDefinition.INPUT);
     }
 
+    ActivationSubType subType;
 
     NeuronDefinition neuron;
 
@@ -63,21 +68,36 @@ public class ActivationDefinition extends Type<ActivationDefinition, Activation>
     }
 
     @Override
-    public Relation<ActivationDefinition, Activation, ?, ?>[] getRelations() {
+    public Relation[] getRelations() {
         return RELATIONS;
     }
 
     public Activation instantiate(int actId, Activation parent, Neuron n, Document doc, Map<BSType, BindingSignal> bindingSignals) {
-        return instantiate(
-                List.of(ActivationDefinition.class, Activation.class, Integer.class, Neuron.class, Document.class, Map.class),
-                Arrays.asList(this, parent, actId, n, doc, bindingSignals)
-        );
+        switch (subType) {
+            case CONJUNCTIVE:
+                return new ConjunctiveActivation(this, parent, actId, n, doc, bindingSignals);
+            case DISJUNCTIVE:
+                return new DisjunctiveActivation(this, parent, actId, n, doc, bindingSignals);
+            case INHIBITORY:
+                return new InhibitoryActivation(this, parent, actId, n, doc, bindingSignals);
+            default:
+                return null;
+        }
+    }
+
+    public ActivationSubType getSubType() {
+        return subType;
+    }
+
+    public ActivationDefinition setSubType(ActivationSubType subType) {
+        this.subType = subType;
+        return this;
     }
 
     public NeuronDefinition getNeuron() {
         return neuron != null ?
                 neuron :
-                getFromParent(ActivationDefinition::getNeuron);
+                getFromParent(p -> ((ActivationDefinition)p).getNeuron());
     }
 
     public ActivationDefinition setNeuron(NeuronDefinition neuron) {

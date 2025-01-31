@@ -24,33 +24,17 @@ public class Input implements Direction {
     }
 
     @Override
-    public <
-            T extends Type<T, O>,
-            O extends Obj<T, O>
-            >
-    Stream<FieldLinkDefinitionOutputSide<T, O, ?, ?>> getFieldLinkDefinitions(FieldDefinition<T, O> fd) {
+    public Stream<FieldLinkDefinitionOutputSide> getFieldLinkDefinitions(FieldDefinition fd) {
         return fd.getInputs();
     }
 
-    public <
-            T extends Type<T, O>,
-            O extends Obj<T, O>,
-            RT extends Type<RT, RO>,
-            RO extends Obj<RT, RO>
-            >
-    FlattenedType<T, O, RT, RO> getFlattenedType(Type<T, O> type) {
-        return (FlattenedType<T, O, RT, RO>) type.getFlattenedTypeInputSide();
+    public FlattenedType getFlattenedType(Type type) {
+        return type.getFlattenedTypeInputSide();
     }
 
     @Override
-    public <
-            T extends Type<T, O>,
-            O extends Obj<T, O>,
-            RT extends Type<RT, RO>,
-            RO extends Obj<RT, RO>
-    >
-    void transmit(Field<T, O> originField, FieldLinkDefinition<T, O, RT, RO> fl, RO relatedObject) {
+    public void transmit(Field originField, FieldLinkDefinition fl, Obj relatedObject) {
         double inputFieldValue = relatedObject.getFieldValue(fl.getRelatedFD());
-        fl.getOriginFD().transmit(originField, (FieldLinkDefinitionOutputSide<T, O, RT, RO>) fl, inputFieldValue);
+        fl.getOriginFD().transmit(originField, (FieldLinkDefinitionOutputSide) fl, inputFieldValue);
     }
 }

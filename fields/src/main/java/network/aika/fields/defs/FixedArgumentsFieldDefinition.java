@@ -30,51 +30,44 @@ import static network.aika.fields.defs.FieldLinkDefinition.link;
  *
  * @author Lukas Molzberger
  */
-public abstract class FixedArgumentsFieldDefinition<
-        T extends Type<T, O>,
-        O extends Obj<T, O>
-        > extends FieldDefinition<T, O> {
+public abstract class FixedArgumentsFieldDefinition extends FieldDefinition {
 
-    private final FieldLinkDefinitionOutputSide<T, O, ?, ?>[] inputs;
+    private final FieldLinkDefinitionOutputSide[] inputs;
 
-    public FixedArgumentsFieldDefinition(T objectType, String name, int numArgs) {
+    public FixedArgumentsFieldDefinition(Type objectType, String name, int numArgs) {
         super(objectType, name);
 
         inputs = new FieldLinkDefinitionOutputSide[numArgs];
     }
 
-    public FixedArgumentsFieldDefinition(T objectType, String name, int numArgs, double tolerance) {
+    public FixedArgumentsFieldDefinition(Type objectType, String name, int numArgs, double tolerance) {
         super(objectType, name, tolerance);
 
         inputs = new FieldLinkDefinitionOutputSide[numArgs];
     }
 
     @Override
-    public Stream<FieldLinkDefinitionOutputSide<T, O, ?, ?>> getInputs() {
+    public Stream<FieldLinkDefinitionOutputSide> getInputs() {
         return Stream.of(inputs)
                 .filter(Objects::nonNull);
     }
 
     @Override
-    public void addInput(FieldLinkDefinitionOutputSide<T, O, ?, ?> fl) {
+    public void addInput(FieldLinkDefinitionOutputSide fl) {
         inputs[fl.getArgument()] = fl;
     }
 
-    public double getInputValueByArg(O obj, int arg) {
+    public double getInputValueByArg(Obj obj, int arg) {
         var fl = inputs[arg];
         return fl.getInputValue(obj);
     }
 
-    public double getUpdatedInputValueByArg(O obj, int arg) {
+    public double getUpdatedInputValueByArg(Obj obj, int arg) {
         var fl = inputs[arg];
         return fl.getUpdatedInputValue(obj);
     }
 
-    public <
-            IT extends Type<IT, IO>,
-            IO extends Obj<IT, IO>
-            >
-    FixedArgumentsFieldDefinition<T, O> in(RelationOne<T, O, IT, IO> relation, FieldDefinition<IT, IO> input, int arg) {
+    public FixedArgumentsFieldDefinition in(RelationOne relation, FieldDefinition input, int arg) {
         link(input, this, relation.getReverse(), arg);
 
         assert relation != null || objectType.isInstanceOf(input.objectType) || input.objectType.isInstanceOf(objectType);

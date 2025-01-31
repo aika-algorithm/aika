@@ -16,10 +16,8 @@
  */
 package network.aika.neurons;
 
-import network.aika.Model;
-import network.aika.activations.Link;
+import network.aika.type.TypeRegistry;
 import network.aika.typedefs.SynapseDefinition;
-import network.aika.queue.Timestamp;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -48,8 +46,8 @@ public class ConjunctiveSynapse extends Synapse {
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws IOException {
-        super.readFields(in, m);
+    public void readFields(DataInput in, TypeRegistry tr) throws IOException {
+        super.readFields(in, tr);
 
         propagable = in.readBoolean();
     }

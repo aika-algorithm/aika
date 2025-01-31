@@ -21,6 +21,10 @@ import network.aika.activations.Activation;
 import network.aika.Element;
 import network.aika.bindingsignal.BindingSignal;
 import network.aika.activations.Link;
+import network.aika.type.Obj;
+import network.aika.type.TypeRegistry;
+import network.aika.type.relations.Relation;
+import network.aika.typedefs.LinkDefinition;
 import network.aika.typedefs.SynapseDefinition;
 import network.aika.bindingsignal.BSType;
 import network.aika.bindingsignal.Transition;
@@ -37,17 +41,19 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static network.aika.queue.Timestamp.MAX;
 import static network.aika.queue.Timestamp.MIN;
 import static network.aika.neurons.RefType.SYNAPSE_IN;
 import static network.aika.neurons.RefType.SYNAPSE_OUT;
+import static network.aika.typedefs.LinkDefinition.SELF;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse, Model> implements Element, QueueProvider {
+public abstract class Synapse extends ObjImpl implements Element, QueueProvider {
 
     protected static final Logger log = LoggerFactory.getLogger(Synapse.class);
 
@@ -66,6 +72,26 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse, Model>
         link(input.getModel(), input, output);
     }
 
+    @Override
+    public Stream<Obj> followManyRelation(Relation rel) {
+        if(rel == SynapseDefinition.LINK)
+            return null;
+        else
+            throw new RuntimeException("Invalid Relation");
+    }
+
+    @Override
+    public Obj followSingleRelation(Relation rel) {
+        if(rel == SynapseDefinition.SELF)
+            return this;
+        else if(rel == SynapseDefinition.INPUT)
+            return getInput();
+        else if(rel == SynapseDefinition.OUTPUT)
+            return getOutput();
+        else
+            throw new RuntimeException("Invalid Relation");
+    }
+
     public int getSynapseId() {
         return synapseId;
     }
@@ -74,10 +100,9 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse, Model>
         this.synapseId = synapseId;
     }
 
-
     public Map<BSType, BindingSignal> transitionForward(Map<BSType, BindingSignal> inputBindingSignals) {
         Map<BSType, BindingSignal> outputTransitions = new HashMap<>();
-        Transition[] transitions = type.getTransition();
+        Transition[] transitions = ((SynapseDefinition)type).getTransition();
         for (Transition t : transitions) {
             BindingSignal bs = inputBindingSignals.get(t.from());
             if (bs != null) {
@@ -152,13 +177,13 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse, Model>
             output.linkIncoming(input);
         }
 
-        return getType()
+        return ((SynapseDefinition)getType())
                 .getLink()
                 .instantiate(this, input, output);
     }
 
     public final Direction getStoredAt() {
-        return getType().getStoredAt();
+        return ((SynapseDefinition)getType()).getStoredAt();
     }
 
     public NeuronReference getInputRef() {
@@ -206,18 +231,18 @@ public abstract class Synapse extends ObjImpl<SynapseDefinition, Synapse, Model>
         out.writeLong(output.getId());
     }
 
-    public static Synapse read(DataInput in, Model m) throws IOException {
+    public static Synapse read(DataInput in, TypeRegistry tr) throws IOException {
         short synTypeId = in.readShort();
-        SynapseDefinition synapseDefinition = m.getTypeRegistry()
+        SynapseDefinition synapseDefinition = (SynapseDefinition) tr
                 .getType(synTypeId);
         Synapse syn = synapseDefinition.instantiate();
-        syn.readFields(in, m);
+        syn.readFields(in, tr);
         return syn;
     }
 
     @Override
-    public void readFields(DataInput in, Model m) throws IOException {
-        super.readFields(in, m);
+    public void readFields(DataInput in, TypeRegistry tr) throws IOException {
+        super.readFields(in, tr);
         synapseId = in.readInt();
         input = new NeuronReference(in.readLong(), SYNAPSE_IN);
         output = new NeuronReference(in.readLong(), SYNAPSE_OUT);

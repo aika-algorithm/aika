@@ -25,34 +25,34 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public class RelationSelf<T extends Type<T, O>, O extends Obj<T, O>> extends RelationOne<T, O, T, O> {
+public class RelationSelf extends RelationOne {
 
     public RelationSelf(int relationId, String relationName) {
-       super(null, relationId, relationName);
+       super(relationId, relationName);
     }
 
     @Override
-    public void setReversed(Relation<T, O, T, O> reversed) {
+    public void setReversed(Relation reversed) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Relation<T, O, T, O> getReverse() {
+    public Relation getReverse() {
         return this;
     }
 
     @Override
-    public O followOne(O fromObj) {
+    public Obj followOne(Obj fromObj) {
         return fromObj;
     }
 
     @Override
-    public Stream<O> followAll(O fromObj) {
+    public Stream<Obj> followMany(Obj fromObj) {
         return Stream.of(fromObj);
     }
 
     @Override
-    public boolean testRelation(O fromObj, O toObj) {
+    public boolean testRelation(Obj fromObj, Obj toObj) {
         return fromObj == toObj;
     }
 }

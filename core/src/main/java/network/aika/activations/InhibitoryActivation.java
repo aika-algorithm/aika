@@ -21,6 +21,7 @@ import network.aika.bindingsignal.BSType;
 import network.aika.bindingsignal.BindingSignal;
 import network.aika.neurons.Neuron;
 import network.aika.typedefs.ActivationDefinition;
+import network.aika.typedefs.SynapseDefinition;
 
 import java.util.Map;
 import java.util.NavigableMap;
@@ -59,8 +60,8 @@ public class InhibitoryActivation extends Activation {
     }
 
     public int getInputKey(Link l) {
-        BSType wildcard = type.getWildcard();
-        BSType inputBSType = l.getSynapse().getType().mapTransitionBackward(wildcard);
+        BSType wildcard = ((ActivationDefinition) type).getWildcard();
+        BSType inputBSType = ((SynapseDefinition)l.getSynapse().getType()).mapTransitionBackward(wildcard);
         BindingSignal inputBS = l.getInput().getBindingSignal(inputBSType);
         return inputBS.getTokenId();
     }
@@ -77,8 +78,8 @@ public class InhibitoryActivation extends Activation {
     }
 
     public int getOutputKey(Link l) {
-        BSType wildcard = type.getWildcard();
-        BSType outputBSType = l.getSynapse().getType().mapTransitionForward(wildcard);
+        BSType wildcard = ((ActivationDefinition) type).getWildcard();
+        BSType outputBSType = ((SynapseDefinition)l.getSynapse().getType()).mapTransitionForward(wildcard);
         BindingSignal outputBS = l.getOutput().getBindingSignal(outputBSType);
         return outputBS.getTokenId();
     }

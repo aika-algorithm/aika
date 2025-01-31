@@ -34,10 +34,7 @@ public abstract class AbstractTestWithObjects {
     public void init() {
         registry = new TypeRegistryImpl();
 
-        typeA = new TestType(registry, "A")
-                .setClazz(TestObject.class);
-
-        typeB = new TestType(registry, "B")
-                .setClazz(TestObject.class);
+        typeA = new TestType(registry, "A");
+        typeB = new TestType(registry, "B");
     }
 }

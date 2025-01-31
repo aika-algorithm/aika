@@ -28,25 +28,24 @@ import static network.aika.type.Type.TYPE_COMPARATOR;
  */
 public class TypeRegistryImpl implements TypeRegistry {
 
-    private List<Type<?, ?>> types = new ArrayList<>();
+    private List<Type> types = new ArrayList<>();
 
     private int fieldIdCounter = 0;
 
     @Override
-    public short register(Type<?, ?> type) {
+    public short register(Type type) {
         short id = (short) types.size();
         types.add(type);
         return id;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T extends Type<?, ?>> T getType(short typeId) {
-        return (T) types.get(typeId);
+    public Type getType(short typeId) {
+        return types.get(typeId);
     }
 
     @Override
-    public List<Type<?, ?>> getTypes() {
+    public List<Type> getTypes() {
         return types;
     }
 
@@ -62,7 +61,7 @@ public class TypeRegistryImpl implements TypeRegistry {
 
     @Override
     public void flattenTypeHierarchy() {
-        TreeSet<Type<?, ?>> sortedTypes = new TreeSet<>(TYPE_COMPARATOR);
+        TreeSet<Type> sortedTypes = new TreeSet<>(TYPE_COMPARATOR);
 
         sortedTypes.addAll(types);
 

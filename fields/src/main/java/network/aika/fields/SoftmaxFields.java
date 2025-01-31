@@ -29,32 +29,18 @@ import static network.aika.fields.SumField.sum;
 /**
  * @author Lukas Molzberger
  */
-public class SoftmaxFields<
-        IT extends Type<IT, IO>,
-        IO extends Obj<IT, IO>,
-        NT extends Type<NT, NO>,
-        NO extends Obj<NT, NO>,
-        OT extends Type<OT, OO>,
-        OO extends Obj<OT, OO>
-        > {
+public class SoftmaxFields {
 
-    public static <
-            IT extends Type<IT, IO>,
-            IO extends Obj<IT, IO>,
-            NT extends Type<NT, NO>,
-            NO extends Obj<NT, NO>,
-            OT extends Type<OT, OO>,
-            OO extends Obj<OT, OO>
-            > SoftmaxFields<IT, IO, NT, NO, OT, OO> softmax(
-                    IT inputRef,
-                    NT normRef,
-                    OT outputRef,
-                    RelationMany<NT, NO, IT, IO> normInputRelation,
-                    RelationOne<OT, OO, NT, NO> normOutputRelation,
-                    RelationOne<OT, OO, IT, IO> inputRelation,
+    public static SoftmaxFields softmax(
+                    Type inputRef,
+                    Type normRef,
+                    Type outputRef,
+                    RelationMany normInputRelation,
+                    RelationOne normOutputRelation,
+                    RelationOne inputRelation,
                     String name
     ) {
-        return new SoftmaxFields<>(
+        return new SoftmaxFields(
                 inputRef,
                 normRef,
                 outputRef,
@@ -64,18 +50,18 @@ public class SoftmaxFields<
                 name);
     }
 
-    private final ExponentialFunction<IT, IO> inputs;
-    private final FieldDefinition<NT, NO> norm;
-    private final FieldDefinition<OT, OO> outputs;
+    private final ExponentialFunction inputs;
+    private final FieldDefinition norm;
+    private final FieldDefinition outputs;
 
 
     public SoftmaxFields(
-            IT inputRef,
-            NT normRef,
-            OT outputRef,
-            RelationMany<NT, NO, IT, IO> normInputRelation,
-            RelationOne<OT, OO, NT, NO> normOutputRelation,
-            RelationOne<OT, OO, IT, IO> inputRelation,
+            Type inputRef,
+            Type normRef,
+            Type outputRef,
+            RelationMany normInputRelation,
+            RelationOne normOutputRelation,
+            RelationOne inputRelation,
             String name
     ) {
         inputs = exp(inputRef, name);
@@ -87,15 +73,15 @@ public class SoftmaxFields<
                 .in(normOutputRelation, norm, 1);
     }
 
-    public ExponentialFunction<IT, IO> getInputs() {
+    public ExponentialFunction getInputs() {
         return inputs;
     }
 
-    public FieldDefinition<NT, NO> getNorm() {
+    public FieldDefinition getNorm() {
         return norm;
     }
 
-    public FieldDefinition<OT, OO> getOutputs() {
+    public FieldDefinition getOutputs() {
         return outputs;
     }
 }

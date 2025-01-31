@@ -34,18 +34,18 @@ import static network.aika.fields.defs.FieldLinkDefinition.link;
 /**
  * @author Lukas Molzberger
  */
-public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implements Comparable<FieldDefinition<T, O>> {
+public class FieldDefinition implements Comparable<FieldDefinition> {
 
     protected Integer fieldId;
 
     protected String name;
 
-    protected List<FieldLinkDefinitionInputSide<T, O, ?, ?>> outputs = new ArrayList<>();
+    protected List<FieldLinkDefinitionInputSide> outputs = new ArrayList<>();
 
-    protected FieldDefinition<T, O> parent;
-    protected List<FieldDefinition<T, O>> children = new ArrayList<>();
+    protected FieldDefinition parent;
+    protected List<FieldDefinition> children = new ArrayList<>();
 
-    protected T objectType;
+    protected Type objectType;
 
     protected Double tolerance;
 
@@ -53,14 +53,14 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
     protected boolean isNextRound;
 
 
-    public FieldDefinition(T objectType, String name) {
+    public FieldDefinition(Type objectType, String name) {
         this.name = name;
         this.objectType = objectType;
 
         objectType.setFieldDefinition(this);
     }
 
-    public FieldDefinition(T objectType, String name, double tolerance) {
+    public FieldDefinition(Type objectType, String name, double tolerance) {
         this(objectType, name);
 
         this.tolerance = tolerance;
@@ -70,11 +70,11 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         this.fieldId = fieldId;
     }
 
-    public void transmit(Field<T, O> targetField, FieldLinkDefinitionOutputSide<T, O, ?, ?> fieldLink, double update) {
+    public void transmit(Field targetField, FieldLinkDefinitionOutputSide fieldLink, double update) {
         receiveUpdate(targetField, update);
     }
 
-    protected void receiveUpdate(Field<T, O> field, double update) {
+    protected void receiveUpdate(Field field, double update) {
         if(!field.getObject().isInstanceOf(objectType))
             return;
 
@@ -84,26 +84,26 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         field.receiveUpdate(update);
     }
 
-    public FieldDefinition<T, O> getParent() {
+    public FieldDefinition getParent() {
         return parent;
     }
 
-    public FieldDefinition<T, O> setParent(FieldDefinition<T, O> parent) {
+    public FieldDefinition setParent(FieldDefinition parent) {
         this.parent = parent;
         parent.children.add(this);
 
         return this;
     }
 
-    public List<FieldDefinition<T, O>> getChildren() {
+    public List<FieldDefinition> getChildren() {
         return children;
     }
 
-    public boolean isFieldRequired(Set<FieldDefinition<T, O>> fieldDefs) {
+    public boolean isFieldRequired(Set<FieldDefinition> fieldDefs) {
         return resolveInheritedFieldDefinition(fieldDefs) == this;
     }
 
-    public FieldDefinition<T, O> resolveInheritedFieldDefinition(Set<FieldDefinition<T, O>> fieldDefs) {
+    public FieldDefinition resolveInheritedFieldDefinition(Set<FieldDefinition> fieldDefs) {
         return children.stream()
                 .filter(fieldDefs::contains)
                 .map(fd ->
@@ -113,34 +113,30 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
                 .orElse(this);
     }
 
-    public <RT extends Type<RT, RO>, RO extends Obj<RT, RO>> void initializeField(Field<T, O> field) {
+    public void initializeField(Field field) {
         field.getObject()
                 .getType()
                 .getFlattenedTypeInputSide()
                 .followLinks(field);
     }
 
-    public void addInput(FieldLinkDefinitionOutputSide<T, O, ?, ?> fl) {
+    public void addInput(FieldLinkDefinitionOutputSide fl) {
         throw new UnsupportedOperationException();
     }
 
-    public Stream<FieldLinkDefinitionOutputSide<T, O, ?, ?>> getInputs() {
+    public Stream<FieldLinkDefinitionOutputSide> getInputs() {
         throw new UnsupportedOperationException();
     }
 
-    public void addOutput(FieldLinkDefinitionInputSide<T, O, ?, ?> fl) {
+    public void addOutput(FieldLinkDefinitionInputSide fl) {
         outputs.add(fl);
     }
 
-    public Stream<FieldLinkDefinitionInputSide<T, O, ?, ?>> getOutputs() {
+    public Stream<FieldLinkDefinitionInputSide> getOutputs() {
         return outputs.stream();
     }
 
-    public <
-            OT extends Type<OT, OO>,
-            OO extends Obj<OT, OO>
-            >
-    FieldDefinition<T, O> out(RelationOne<T, O, OT, OO> relation, FixedArgumentsFieldDefinition<OT, OO> output, int arg) {
+    public FieldDefinition out(RelationOne relation, FixedArgumentsFieldDefinition output, int arg) {
         link(this, output, relation, arg);
 
         assert relation != null || objectType.isInstanceOf(output.objectType) || output.objectType.isInstanceOf(objectType);
@@ -148,11 +144,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return this;
     }
 
-    public <
-            OT extends Type<OT, OO>,
-            OO extends Obj<OT, OO>
-            >
-    FieldDefinition<T, O> out(Relation<T, O, OT, OO> relation, VariableArgumentsFieldDefinition<OT, OO> output) {
+    public FieldDefinition out(Relation relation, VariableArgumentsFieldDefinition output) {
         link(this, output, relation, null);
 
         assert relation != null || objectType.isInstanceOf(output.objectType) || output.objectType.isInstanceOf(objectType);
@@ -160,7 +152,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return this;
     }
 
-    public FieldDefinition<T, O> setName(String name) {
+    public FieldDefinition setName(String name) {
         this.name = name;
 
         return this;
@@ -170,7 +162,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return name;
     }
 
-    public T getObjectType() {
+    public Type getObjectType() {
         return objectType;
     }
 
@@ -178,7 +170,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return fieldId;
     }
 
-    public FieldDefinition<T, O> setObjectType(T objectType) {
+    public FieldDefinition setObjectType(Type objectType) {
         this.objectType = objectType;
 
         return this;
@@ -188,7 +180,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return tolerance;
     }
 
-    public FieldDefinition<T, O> setTolerance(Double tolerance) {
+    public FieldDefinition setTolerance(Double tolerance) {
         this.tolerance = tolerance;
 
         return this;
@@ -198,7 +190,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return phase;
     }
 
-    public FieldDefinition<T, O> setPhase(ProcessingPhase phase) {
+    public FieldDefinition setPhase(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;
@@ -208,13 +200,13 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
         return isNextRound;
     }
 
-    public FieldDefinition<T, O> setNextRound(boolean nextRound) {
+    public FieldDefinition setNextRound(boolean nextRound) {
         isNextRound = nextRound;
 
         return this;
     }
 
-    public FieldDefinition<T, O> setQueued(ProcessingPhase phase) {
+    public FieldDefinition setQueued(ProcessingPhase phase) {
         this.phase = phase;
 
         return this;
@@ -225,7 +217,7 @@ public class FieldDefinition<T extends Type<T, O>, O extends Obj<T, O>> implemen
     }
 
     @Override
-    public int compareTo(FieldDefinition<T, O> fd) {
+    public int compareTo(FieldDefinition fd) {
         return fieldId.compareTo(fd.fieldId);
     }
 }

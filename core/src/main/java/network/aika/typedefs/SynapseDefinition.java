@@ -16,9 +16,10 @@
  */
 package network.aika.typedefs;
 
-import network.aika.activations.Activation;
-import network.aika.activations.Link;
+import network.aika.activations.*;
 import network.aika.bindingsignal.BSType;
+import network.aika.neurons.ConjunctiveSynapse;
+import network.aika.neurons.DisjunctiveSynapse;
 import network.aika.type.relations.Relation;
 import network.aika.type.relations.RelationMany;
 import network.aika.type.relations.RelationOne;
@@ -38,13 +39,18 @@ import java.util.stream.Stream;
  *
  * @author Lukas Molzberger
  */
-public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
+public class SynapseDefinition extends Type {
 
-    public static final RelationSelf<ActivationDefinition, Activation> SELF = new RelationSelf<>(0, "SYN-SELF");
+    public enum SynapseSubType {
+        CONJUNCTIVE,
+        DISJUNCTIVE
+    }
 
-    public static final RelationOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> INPUT = new RelationOne<>(Synapse::getInput, 1, "SYN-INPUT");
-    public static final RelationOne<SynapseDefinition, Synapse, NeuronDefinition, Neuron> OUTPUT = new RelationOne<>(Synapse::getOutput, 2, "SYN-OUTPUT");
-    public static final RelationMany<SynapseDefinition, Synapse, LinkDefinition, Link> LINK = new RelationMany<>(null, 3, "SYN-LINK");
+    public static final RelationSelf SELF = new RelationSelf(0, "SYN-SELF");
+
+    public static final RelationOne INPUT = new RelationOne(1, "SYN-INPUT");
+    public static final RelationOne OUTPUT = new RelationOne(2, "SYN-OUTPUT");
+    public static final RelationMany LINK = new RelationMany(3, "SYN-LINK");
 
     public static final Relation[] RELATIONS = {SELF, INPUT, OUTPUT, LINK};
 
@@ -53,6 +59,8 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
         INPUT.setReversed(NeuronDefinition.OUTPUT);
         OUTPUT.setReversed(NeuronDefinition.INPUT);
     }
+
+    SynapseSubType subType;
 
     private LinkDefinition link;
 
@@ -72,31 +80,49 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     }
 
     @Override
-    public Relation<SynapseDefinition, Synapse, ?, ?>[] getRelations() {
+    public Relation[] getRelations() {
         return RELATIONS;
     }
 
     public Synapse instantiate() {
-        return instantiate(
-                List.of(SynapseDefinition.class),
-                List.of(this)
-        );
+        switch (subType) {
+            case CONJUNCTIVE:
+                return new ConjunctiveSynapse(this);
+            case DISJUNCTIVE:
+                return new DisjunctiveSynapse(this);
+
+            default:
+                return null;
+        }
     }
 
     public Synapse instantiate(Neuron input, Neuron output) {
         assert input.getType().isInstanceOf(getInput());
         assert output.getType().isInstanceOf(getOutput());
 
-        return instantiate(
-                List.of(SynapseDefinition.class, Neuron.class, Neuron.class),
-                List.of(this, input, output)
-        );
+        switch (subType) {
+            case CONJUNCTIVE:
+                return new ConjunctiveSynapse(this, input, output);
+            case DISJUNCTIVE:
+                return new DisjunctiveSynapse(this, input, output);
+            default:
+                return null;
+        }
+    }
+
+    public SynapseSubType getSubType() {
+        return subType;
+    }
+
+    public SynapseDefinition setSubType(SynapseSubType subType) {
+        this.subType = subType;
+        return this;
     }
 
     public NeuronDefinition getInput() {
         return input != null ?
                 input :
-                getFromParent(SynapseDefinition::getInput);
+                getFromParent(p -> ((SynapseDefinition)p).getInput());
     }
 
     public SynapseDefinition setInput(NeuronDefinition input) {
@@ -110,7 +136,7 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     public NeuronDefinition getOutput() {
         return output != null ?
                 output :
-                getFromParent(SynapseDefinition::getOutput);
+                getFromParent(p -> ((SynapseDefinition)p).getOutput());
     }
 
     public SynapseDefinition setOutput(NeuronDefinition outputDef) {
@@ -124,7 +150,7 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     public LinkDefinition getLink() {
         return link != null ?
                 link :
-                getFromParent(SynapseDefinition::getLink);
+                getFromParent(p -> ((SynapseDefinition)p).getLink());
     }
 
     public SynapseDefinition setLink(LinkDefinition link) {
@@ -170,7 +196,7 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     public Transition[] getTransition() {
         return transition != null ?
                 transition :
-                getFromParent(SynapseDefinition::getTransition);
+                getFromParent(p -> ((SynapseDefinition)p).getTransition());
     }
 
     public SynapseDefinition setTransition(Transition... transition) {
@@ -182,19 +208,13 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     public Direction getStoredAt() {
         return storedAt != null ?
                 storedAt :
-                getFromParent(SynapseDefinition::getStoredAt);
+                getFromParent(p -> ((SynapseDefinition)p).getStoredAt());
     }
 
     public SynapseDefinition setStoredAt(Direction storedAt) {
         this.storedAt = storedAt;
 
         return this;
-    }
-
-    public Boolean isTrainingAllowed() {
-        return trainingAllowed != null ?
-                trainingAllowed :
-                getFromParent(SynapseDefinition::isTrainingAllowed);
     }
 
     public SynapseDefinition setTrainingAllowed(boolean trainingAllowed) {
@@ -206,7 +226,7 @@ public class SynapseDefinition extends Type<SynapseDefinition, Synapse> {
     public SynapseDefinition getInstanceSynapseType() {
         return instanceSynapseType != null ?
                 instanceSynapseType :
-                getFromParent(SynapseDefinition::getInstanceSynapseType);
+                getFromParent(p -> ((SynapseDefinition)p).getInstanceSynapseType());
     }
 
     public SynapseDefinition setInstanceSynapseType(SynapseDefinition instanceSynapseType) {

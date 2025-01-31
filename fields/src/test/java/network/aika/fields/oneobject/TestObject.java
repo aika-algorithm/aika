@@ -16,19 +16,38 @@
  */
 package network.aika.fields.oneobject;
 
+import network.aika.type.Obj;
 import network.aika.type.ObjImpl;
 import network.aika.type.TypeRegistry;
+import network.aika.type.relations.Relation;
+
+import java.util.stream.Stream;
+
+import static network.aika.fields.oneobject.TestType.TEST_RELATION_FROM;
+import static network.aika.fields.oneobject.TestType.TEST_RELATION_TO;
+import static network.aika.fields.softmax.SoftmaxInputType.CORRESPONDING_OUTPUT_LINK;
+import static network.aika.fields.softmax.SoftmaxInputType.INPUT_TO_NORM;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class TestObject extends ObjImpl<TestType, TestObject, TypeRegistry> {
+public class TestObject extends ObjImpl {
 
     TestObject relatedTestObject;
 
     public TestObject(TestType type) {
         super(type);
+    }
+
+    @Override
+    public Obj followSingleRelation(Relation rel) {
+        if(rel == TEST_RELATION_FROM)
+            return getRelatedTestObject();
+        else if(rel == TEST_RELATION_TO)
+            return getRelatedTestObject();
+        else
+            throw new RuntimeException("Invalid Relation");
     }
 
     public TestObject getRelatedTestObject() {
@@ -38,5 +57,10 @@ public class TestObject extends ObjImpl<TestType, TestObject, TypeRegistry> {
     public static void linkObjects(TestObject objA, TestObject objB) {
         objA.relatedTestObject = objB;
         objB.relatedTestObject = objA;
+    }
+
+    @Override
+    public Stream<Obj> followManyRelation(Relation rel) {
+        return Stream.of(relatedTestObject);
     }
 }

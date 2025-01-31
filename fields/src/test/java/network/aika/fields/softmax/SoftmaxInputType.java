@@ -32,10 +32,10 @@ import static network.aika.fields.softmax.SoftmaxOutputType.CORRESPONDING_INPUT_
  *
  * @author Lukas Molzberger
  */
-public class SoftmaxInputType extends Type<SoftmaxInputType, SoftmaxInputObj> {
+public class SoftmaxInputType extends Type {
 
-    public static RelationOne<SoftmaxInputType, SoftmaxInputObj, SoftmaxNormType, SoftmaxNormObj> INPUT_TO_NORM = new RelationOne<>(SoftmaxInputObj::getNormObject, 0, "INPUT_TO_NORM");
-    public static RelationOne<SoftmaxInputType, SoftmaxInputObj, SoftmaxOutputType, SoftmaxOutputObj> CORRESPONDING_OUTPUT_LINK = new RelationOne<>(SoftmaxInputObj::getCorrespondingOutputLink, 1, "CORRESPONDING_OUTPUT_LINK");
+    public static RelationOne INPUT_TO_NORM = new RelationOne(0, "INPUT_TO_NORM");
+    public static RelationOne CORRESPONDING_OUTPUT_LINK = new RelationOne(1, "CORRESPONDING_OUTPUT_LINK");
 
     static {
         INPUT_TO_NORM.setReversed(NORM_TO_INPUT);
@@ -47,14 +47,11 @@ public class SoftmaxInputType extends Type<SoftmaxInputType, SoftmaxInputObj> {
     }
 
     @Override
-    public Relation<SoftmaxInputType, SoftmaxInputObj, ?, ?>[] getRelations() {
+    public Relation[] getRelations() {
         return new Relation[] {INPUT_TO_NORM, CORRESPONDING_OUTPUT_LINK};
     }
 
     public SoftmaxInputObj instantiate(int bsId) {
-        return instantiate(
-                List.of(SoftmaxInputType.class, Integer.class),
-                List.of(this, bsId)
-        );
+        return new SoftmaxInputObj(this, bsId);
     }
 }

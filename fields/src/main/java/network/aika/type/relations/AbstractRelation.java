@@ -23,17 +23,12 @@ import network.aika.type.Obj;
  *
  * @author Lukas Molzberger
  */
-public abstract class AbstractRelation<
-        FD extends Type<FD, F>,
-        F extends Obj<FD, F>,
-        TD extends Type<TD, T>,
-        T extends Obj<TD, T>
-        > implements Relation<FD, F, TD, T> {
+public abstract class AbstractRelation implements Relation {
 
     private int relationId;
     protected String relationName;
 
-    private Relation<TD, T, FD, F> reversed;
+    private Relation reversed;
 
     public AbstractRelation(int relationId, String relationName) {
         this.relationId = relationId;
@@ -46,11 +41,11 @@ public abstract class AbstractRelation<
     }
 
     @Override
-    public void setReversed(Relation<TD, T, FD, F> reversed) {
+    public void setReversed(Relation reversed) {
         this.reversed = reversed;
     }
 
-    public Relation<TD, T, FD, F> getReverse() {
+    public Relation getReverse() {
         return reversed;
     }
 

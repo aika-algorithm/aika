@@ -24,20 +24,18 @@ public class OneToManyRelationTest {
     public void init() {
         registry = new TypeRegistryImpl();
 
-        typeA = new TestTypeOne(registry, "A")
-                .setClazz(TestObjectOne.class);
+        typeA = new TestTypeOne(registry, "A");
 
-        typeB = new TestTypeMany(registry, "B")
-                .setClazz(TestObjectMany.class);
+        typeB = new TestTypeMany(registry, "B");
     }
 
     @Test
     public void testInitFields() {
 
-        FieldDefinition<TestTypeOne, TestObjectOne> fieldA = inputField(typeA, "a");
-        FieldDefinition<TestTypeOne, TestObjectOne> fieldB = inputField(typeA, "b");
+        FieldDefinition fieldA = inputField(typeA, "a");
+        FieldDefinition fieldB = inputField(typeA, "b");
 
-        FieldDefinition<TestTypeMany, TestObjectMany> fieldC = sum(typeB, "b")
+        FieldDefinition fieldC = sum(typeB, "b")
                 .in(TEST_RELATION_FROM, fieldA)
                 .in(TEST_RELATION_FROM, fieldB);
 

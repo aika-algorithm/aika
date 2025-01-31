@@ -16,18 +16,24 @@
  */
 package network.aika.fields.softmax;
 
+import network.aika.type.Obj;
 import network.aika.type.ObjImpl;
 import network.aika.type.TypeRegistry;
+import network.aika.type.relations.Relation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static network.aika.fields.softmax.SoftmaxInputType.CORRESPONDING_OUTPUT_LINK;
+import static network.aika.fields.softmax.SoftmaxInputType.INPUT_TO_NORM;
+import static network.aika.fields.softmax.SoftmaxNormType.NORM_TO_INPUT;
+
 /**
  *
  * @author Lukas Molzberger
  */
-public class SoftmaxNormObj extends ObjImpl<SoftmaxNormType, SoftmaxNormObj, TypeRegistry> {
+public class SoftmaxNormObj extends ObjImpl {
 
     List<SoftmaxInputObj> inputs = new ArrayList<>();
     List<SoftmaxOutputObj> outputs = new ArrayList<>();
@@ -36,13 +42,22 @@ public class SoftmaxNormObj extends ObjImpl<SoftmaxNormType, SoftmaxNormObj, Typ
         super(type);
     }
 
-
     public static void linkObjects(SoftmaxInputObj[] inputsObjs, SoftmaxNormObj normObj) {
         for (int i = 0; i < inputsObjs.length; i++) {
             SoftmaxInputObj inputObj = inputsObjs[i];
             inputObj.normObject = normObj;
             normObj.inputs.add(inputObj);
         }
+    }
+
+    @Override
+    public Stream<Obj> followManyRelation(Relation rel) {
+        if(rel == NORM_TO_INPUT)
+            return getInputs().map(o -> o) ;
+        else if(rel == CORRESPONDING_OUTPUT_LINK)
+            return getOutputs().map(o -> o) ;
+        else
+            throw new RuntimeException("Invalid Relation");
     }
 
     public SoftmaxInputObj getInput(int bsId) {

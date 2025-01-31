@@ -9,17 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class FlattenedTypeRelation<
-        T extends Type<T, O>,
-        O extends Obj<T, O>,
-        RT extends Type<RT, RO>,
-        RO extends Obj<RT, RO>
-        > {
+public class FlattenedTypeRelation {
 
-    FieldLinkDefinition<T, O, RT, RO>[][] fieldLinks;
+    FieldLinkDefinition[][] fieldLinks;
 
-    public FlattenedTypeRelation(FlattenedType<T, O, RT, RO> flattenedType, List<FieldLinkDefinition<T, O, ?, ?>> fls) {
-        Map<Integer, List<FieldLinkDefinition<T, O, ?, ?>>> groupedByOriginFD =
+    public FlattenedTypeRelation(FlattenedType flattenedType, List<FieldLinkDefinition> fls) {
+        Map<Integer, List<FieldLinkDefinition>> groupedByOriginFD =
                 fls.stream()
                 .collect(Collectors.groupingBy(fl ->
                         fl.getOriginFD().getId())
@@ -27,8 +22,8 @@ public class FlattenedTypeRelation<
 
         fieldLinks = new FieldLinkDefinition[flattenedType.getFieldsReverse().length][];
         for(short i = 0; i < fieldLinks.length; i++) {
-            for(FieldDefinition<T, O> fd : flattenedType.getFieldsReverse()[i]) {
-                List<FieldLinkDefinition<T, O, ?, ?>> list = groupedByOriginFD.get(fd.getId());
+            for(FieldDefinition fd : flattenedType.getFieldsReverse()[i]) {
+                List<FieldLinkDefinition> list = groupedByOriginFD.get(fd.getId());
                 if (list != null) {
                     fieldLinks[i] = list.toArray(new FieldLinkDefinition[0]);
                 }
@@ -36,10 +31,10 @@ public class FlattenedTypeRelation<
         }
     }
 
-    public void followLinks(Direction direction, RO relatedObj, Field<T, O> field) {
-        FieldLinkDefinition<T, O, RT, RO>[] fls = fieldLinks[field.getId()];
+    public void followLinks(Direction direction, Obj relatedObj, Field field) {
+        FieldLinkDefinition[] fls = fieldLinks[field.getId()];
         if(fls != null) {
-            for (FieldLinkDefinition<T, O, RT, RO> fl : fls) {
+            for (FieldLinkDefinition fl : fls) {
                 direction.transmit(
                         field,
                         fl,

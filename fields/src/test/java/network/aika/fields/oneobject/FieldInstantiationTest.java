@@ -39,15 +39,15 @@ public class FieldInstantiationTest {
 
         TestType type = new TestType(registry, "test");
 
-        FieldDefinition<TestType, TestObject> a = inputField(type, "a");
-        FieldDefinition<TestType, TestObject> b = sum(type, "b")
+        FieldDefinition a = inputField(type, "a");
+        FieldDefinition b = sum(type, "b")
                 .in(SELF, a);
 
         registry.flattenTypeHierarchy();
 
         // Object and Field initialization
 
-        Obj o = new ObjImpl(type);
+        Obj o = type.instantiate();
 
         Assertions.assertNull(o.getFieldOutput(a));
         Assertions.assertNull(o.getFieldOutput(b));
@@ -68,17 +68,17 @@ public class FieldInstantiationTest {
 
         TestType type = new TestType(registry, "test");
 
-        FieldDefinition<TestType, TestObject> a = inputField(type, "a");
-        FieldDefinition<TestType, TestObject> b = sum(type, "b")
+        FieldDefinition a = inputField(type, "a");
+        FieldDefinition b = sum(type, "b")
                 .in(SELF, a);
-        FieldDefinition<TestType, TestObject> c = sum(type, "c")
+        FieldDefinition c = sum(type, "c")
                 .in(SELF, b);
 
         registry.flattenTypeHierarchy();
 
         // Object and Field initialization
 
-        Obj o = new ObjImpl(type);
+        Obj o = type.instantiate();
 
         o.setFieldValue(a, 5.0);
 
@@ -94,8 +94,8 @@ public class FieldInstantiationTest {
 
         TestType type = new TestType(registry, "test");
 
-        FieldDefinition<TestType, TestObject> a = inputField(type, "a");
-        FieldDefinition<TestType, TestObject> b = inputField(type, "b");
+        FieldDefinition a = inputField(type, "a");
+        FieldDefinition b = inputField(type, "b");
 
         FieldDefinition c = mul(type, "c")
                 .in(SELF, a, 0)
@@ -105,7 +105,7 @@ public class FieldInstantiationTest {
 
         // Object and Field initialization
 
-        Obj o = new ObjImpl(type);
+        Obj o = type.instantiate();
 
         o.setFieldValue(a, 5.0);
         Assertions.assertEquals(0.0, o.getFieldOutput(c).getValue());

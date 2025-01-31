@@ -18,12 +18,6 @@ public class EdgeDefinition {
         link.setSynapse(synapse);
     }
 
-    public EdgeDefinition setClazz(Class<? extends Link> linkClazz, Class<? extends Synapse> synapseClazz) {
-        link.setClazz(linkClazz);
-        synapse.setClazz(synapseClazz);
-        return this;
-    }
-
     public EdgeDefinition addParent(EdgeDefinition parent) {
         synapse.addParent(parent.synapse);
         link.addParent(parent.link);

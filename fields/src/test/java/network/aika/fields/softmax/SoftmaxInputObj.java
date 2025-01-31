@@ -16,14 +16,21 @@
  */
 package network.aika.fields.softmax;
 
+import network.aika.type.Obj;
 import network.aika.type.ObjImpl;
 import network.aika.type.TypeRegistry;
+import network.aika.type.relations.Relation;
+
+import java.util.stream.Stream;
+
+import static network.aika.fields.softmax.SoftmaxInputType.CORRESPONDING_OUTPUT_LINK;
+import static network.aika.fields.softmax.SoftmaxInputType.INPUT_TO_NORM;
 
 /**
  *
  * @author Lukas Molzberger
  */
-public class SoftmaxInputObj extends ObjImpl<SoftmaxInputType, SoftmaxInputObj, TypeRegistry> {
+public class SoftmaxInputObj extends ObjImpl {
 
     SoftmaxNormObj normObject;
     Integer bsId;
@@ -31,6 +38,16 @@ public class SoftmaxInputObj extends ObjImpl<SoftmaxInputType, SoftmaxInputObj, 
     public SoftmaxInputObj(SoftmaxInputType type, Integer bsId) {
         super(type);
         this.bsId = bsId;
+    }
+
+    @Override
+    public Obj followSingleRelation(Relation rel) {
+        if(rel == INPUT_TO_NORM)
+            return getNormObject();
+        else if(rel == CORRESPONDING_OUTPUT_LINK)
+            return getCorrespondingOutputLink();
+        else
+            throw new RuntimeException("Invalid Relation");
     }
 
     public SoftmaxNormObj getNormObject() {

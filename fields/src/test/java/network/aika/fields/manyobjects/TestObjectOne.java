@@ -4,7 +4,7 @@ import network.aika.type.ObjImpl;
 import network.aika.type.TypeRegistry;
 
 
-public class TestObjectOne extends ObjImpl<TestTypeOne, TestObjectOne, TypeRegistry> {
+public class TestObjectOne extends ObjImpl {
 
     TestObjectMany relatedTestObject;
 
