@@ -1,4 +1,4 @@
-Cannot generate into /Users/lukasmolzberger/CLionProjects/aika
-It was created with incompatible generator 'Unix Makefiles'
+Cannot generate into /Users/lukasmolzberger/CLionProjects/aika-cpp
+It is already used for project /Users/lukasmolzberger/CLionProjects/aika
 
 Please either delete it manually or select another generation directory

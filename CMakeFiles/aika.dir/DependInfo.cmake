@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/lukasmolzberger/CLionProjects/aika/src/fields/TypeRegistry.cpp" "CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o" "gcc" "CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o.d"
-  "/Users/lukasmolzberger/CLionProjects/aika/src/main.cpp" "CMakeFiles/aika.dir/src/main.cpp.o" "gcc" "CMakeFiles/aika.dir/src/main.cpp.o.d"
+  "/Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/TypeRegistry.cpp" "CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o" "gcc" "CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o.d"
+  "/Users/lukasmolzberger/CLionProjects/aika-cpp/src/main.cpp" "CMakeFiles/aika.dir/src/main.cpp.o" "gcc" "CMakeFiles/aika.dir/src/main.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

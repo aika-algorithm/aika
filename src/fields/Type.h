@@ -10,6 +10,12 @@
 #include <stdexcept>
 #include <iostream>
 
+class TypeRegistry;
+class FieldDefinition;
+class Relation;
+class FlattenedType;
+class Obj;
+class Field;
 
 class Type {
 protected:

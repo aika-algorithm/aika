@@ -33,11 +33,12 @@ void TypeRegistry::flattenTypeHierarchy() {
     for (const auto& type : sortedTypes) {
         type->initFlattenedType();
     }
-
+/*
     for (const auto& type : sortedTypes) {
         type->getFlattenedTypeInputSide().flatten();
         type->getFlattenedTypeOutputSide().flatten();
     }
+ */
 }
 
 bool TypeRegistry::TypeComparator::operator()(const std::shared_ptr<Type>& t1, const std::shared_ptr<Type>& t2) const {

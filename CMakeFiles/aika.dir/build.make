@@ -53,10 +53,10 @@ RM = /opt/homebrew/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/lukasmolzberger/CLionProjects/aika
+CMAKE_SOURCE_DIR = /Users/lukasmolzberger/CLionProjects/aika-cpp
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/lukasmolzberger/CLionProjects/aika
+CMAKE_BINARY_DIR = /Users/lukasmolzberger/CLionProjects/aika-cpp
 
 # Include any dependencies generated for this target.
 include CMakeFiles/aika.dir/depend.make
@@ -75,30 +75,30 @@ CMakeFiles/aika.dir/codegen:
 CMakeFiles/aika.dir/src/main.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/main.cpp.o: src/main.cpp
 CMakeFiles/aika.dir/src/main.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/aika.dir/src/main.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/main.cpp.o -MF CMakeFiles/aika.dir/src/main.cpp.o.d -o CMakeFiles/aika.dir/src/main.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/aika.dir/src/main.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/main.cpp.o -MF CMakeFiles/aika.dir/src/main.cpp.o.d -o CMakeFiles/aika.dir/src/main.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/main.cpp
 
 CMakeFiles/aika.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/aika.dir/src/main.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lukasmolzberger/CLionProjects/aika/src/main.cpp > CMakeFiles/aika.dir/src/main.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lukasmolzberger/CLionProjects/aika-cpp/src/main.cpp > CMakeFiles/aika.dir/src/main.cpp.i
 
 CMakeFiles/aika.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aika.dir/src/main.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lukasmolzberger/CLionProjects/aika/src/main.cpp -o CMakeFiles/aika.dir/src/main.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lukasmolzberger/CLionProjects/aika-cpp/src/main.cpp -o CMakeFiles/aika.dir/src/main.cpp.s
 
 CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o: src/fields/TypeRegistry.cpp
 CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o -MF CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o.d -o CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika/src/fields/TypeRegistry.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o -MF CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o.d -o CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/TypeRegistry.cpp
 
 CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lukasmolzberger/CLionProjects/aika/src/fields/TypeRegistry.cpp > CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.i
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/TypeRegistry.cpp > CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.i
 
 CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lukasmolzberger/CLionProjects/aika/src/fields/TypeRegistry.cpp -o CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.s
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/TypeRegistry.cpp -o CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.s
 
 # Object files for target aika
 aika_OBJECTS = \
@@ -112,7 +112,7 @@ aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/main.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/build.make
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/lukasmolzberger/CLionProjects/aika/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared module aika.cpython-312-darwin.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared module aika.cpython-312-darwin.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/aika.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -124,6 +124,6 @@ CMakeFiles/aika.dir/clean:
 .PHONY : CMakeFiles/aika.dir/clean
 
 CMakeFiles/aika.dir/depend:
-	cd /Users/lukasmolzberger/CLionProjects/aika && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/lukasmolzberger/CLionProjects/aika /Users/lukasmolzberger/CLionProjects/aika /Users/lukasmolzberger/CLionProjects/aika /Users/lukasmolzberger/CLionProjects/aika /Users/lukasmolzberger/CLionProjects/aika/CMakeFiles/aika.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /Users/lukasmolzberger/CLionProjects/aika-cpp && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/lukasmolzberger/CLionProjects/aika-cpp /Users/lukasmolzberger/CLionProjects/aika-cpp /Users/lukasmolzberger/CLionProjects/aika-cpp /Users/lukasmolzberger/CLionProjects/aika-cpp /Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles/aika.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/aika.dir/depend
 
