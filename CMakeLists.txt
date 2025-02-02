@@ -5,9 +5,14 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Add source files
 set(SOURCES
-        src/main.cpp
-        src/fields/TypeRegistry.cpp
+        src/fields/type.cpp
+        src/fields/type_registry.cpp
+        src/fields/type_registry_python.cpp
+        src/network/model.cpp
 )
+
+include_directories(${PROJECT_SOURCE_DIR}/include)
+message(STATUS "Project Source Dir: ${PROJECT_SOURCE_DIR}")
 
 add_subdirectory(pybind11)
 pybind11_add_module(aika ${SOURCES})

@@ -129,53 +129,114 @@ aika/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/build
 .PHONY : aika/fast
 
-src/fields/TypeRegistry.o: src/fields/TypeRegistry.cpp.o
-.PHONY : src/fields/TypeRegistry.o
+#=============================================================================
+# Target rules for targets named pybind11_headers
+
+# Build rule for target.
+pybind11_headers: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 pybind11_headers
+.PHONY : pybind11_headers
+
+# fast build rule for target.
+pybind11_headers/fast:
+	$(MAKE) $(MAKESILENT) -f pybind11/CMakeFiles/pybind11_headers.dir/build.make pybind11/CMakeFiles/pybind11_headers.dir/build
+.PHONY : pybind11_headers/fast
+
+src/fields/type.o: src/fields/type.cpp.o
+.PHONY : src/fields/type.o
 
 # target to build an object file
-src/fields/TypeRegistry.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.o
-.PHONY : src/fields/TypeRegistry.cpp.o
+src/fields/type.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/type.cpp.o
+.PHONY : src/fields/type.cpp.o
 
-src/fields/TypeRegistry.i: src/fields/TypeRegistry.cpp.i
-.PHONY : src/fields/TypeRegistry.i
+src/fields/type.i: src/fields/type.cpp.i
+.PHONY : src/fields/type.i
 
 # target to preprocess a source file
-src/fields/TypeRegistry.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.i
-.PHONY : src/fields/TypeRegistry.cpp.i
+src/fields/type.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/type.cpp.i
+.PHONY : src/fields/type.cpp.i
 
-src/fields/TypeRegistry.s: src/fields/TypeRegistry.cpp.s
-.PHONY : src/fields/TypeRegistry.s
+src/fields/type.s: src/fields/type.cpp.s
+.PHONY : src/fields/type.s
 
 # target to generate assembly for a file
-src/fields/TypeRegistry.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/TypeRegistry.cpp.s
-.PHONY : src/fields/TypeRegistry.cpp.s
+src/fields/type.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/type.cpp.s
+.PHONY : src/fields/type.cpp.s
 
-src/main.o: src/main.cpp.o
-.PHONY : src/main.o
+src/fields/type_registry.o: src/fields/type_registry.cpp.o
+.PHONY : src/fields/type_registry.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+src/fields/type_registry.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/type_registry.cpp.o
+.PHONY : src/fields/type_registry.cpp.o
 
-src/main.i: src/main.cpp.i
-.PHONY : src/main.i
+src/fields/type_registry.i: src/fields/type_registry.cpp.i
+.PHONY : src/fields/type_registry.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+src/fields/type_registry.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/type_registry.cpp.i
+.PHONY : src/fields/type_registry.cpp.i
 
-src/main.s: src/main.cpp.s
-.PHONY : src/main.s
+src/fields/type_registry.s: src/fields/type_registry.cpp.s
+.PHONY : src/fields/type_registry.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+src/fields/type_registry.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/type_registry.cpp.s
+.PHONY : src/fields/type_registry.cpp.s
+
+src/fields/type_registry_python.o: src/fields/type_registry_python.cpp.o
+.PHONY : src/fields/type_registry_python.o
+
+# target to build an object file
+src/fields/type_registry_python.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.o
+.PHONY : src/fields/type_registry_python.cpp.o
+
+src/fields/type_registry_python.i: src/fields/type_registry_python.cpp.i
+.PHONY : src/fields/type_registry_python.i
+
+# target to preprocess a source file
+src/fields/type_registry_python.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.i
+.PHONY : src/fields/type_registry_python.cpp.i
+
+src/fields/type_registry_python.s: src/fields/type_registry_python.cpp.s
+.PHONY : src/fields/type_registry_python.s
+
+# target to generate assembly for a file
+src/fields/type_registry_python.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.s
+.PHONY : src/fields/type_registry_python.cpp.s
+
+src/network/model.o: src/network/model.cpp.o
+.PHONY : src/network/model.o
+
+# target to build an object file
+src/network/model.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/network/model.cpp.o
+.PHONY : src/network/model.cpp.o
+
+src/network/model.i: src/network/model.cpp.i
+.PHONY : src/network/model.i
+
+# target to preprocess a source file
+src/network/model.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/network/model.cpp.i
+.PHONY : src/network/model.cpp.i
+
+src/network/model.s: src/network/model.cpp.s
+.PHONY : src/network/model.s
+
+# target to generate assembly for a file
+src/network/model.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/network/model.cpp.s
+.PHONY : src/network/model.cpp.s
 
 # Help Target
 help:
@@ -186,12 +247,19 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... aika"
-	@echo "... src/fields/TypeRegistry.o"
-	@echo "... src/fields/TypeRegistry.i"
-	@echo "... src/fields/TypeRegistry.s"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... pybind11_headers"
+	@echo "... src/fields/type.o"
+	@echo "... src/fields/type.i"
+	@echo "... src/fields/type.s"
+	@echo "... src/fields/type_registry.o"
+	@echo "... src/fields/type_registry.i"
+	@echo "... src/fields/type_registry.s"
+	@echo "... src/fields/type_registry_python.o"
+	@echo "... src/fields/type_registry_python.i"
+	@echo "... src/fields/type_registry_python.s"
+	@echo "... src/network/model.o"
+	@echo "... src/network/model.i"
+	@echo "... src/network/model.s"
 .PHONY : help
 
 
