@@ -41,7 +41,7 @@ public:
     std::vector<std::shared_ptr<Relation>> getRelations() const;
     void initFlattenedType();
     std::set<std::shared_ptr<FieldDefinition>> getCollectFlattenedFieldDefinitions();
-    std::set<std::shared_ptr<Type>> collectTypes() const;
+    std::set<std::shared_ptr<Type>> collectTypes();
     void collectTypesRecursiveStep(std::set<std::shared_ptr<Type>>& sortedTypes);
     int getDepth();
     bool isInstanceOf(std::shared_ptr<Obj> obj);

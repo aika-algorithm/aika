@@ -22,8 +22,7 @@ public:
     short registerType(std::shared_ptr<Type> type);
 
     // Retrieves a type by ID
-    template <typename T>
-    std::shared_ptr<T> getType(short typeId);
+    std::shared_ptr<Type> getType(short typeId);
 
     // Returns all registered types
     std::vector<std::shared_ptr<Type>> getTypes() const;

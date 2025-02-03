@@ -1,4 +1,7 @@
+#include "fields/type.h"
+#include "fields/field.h"
 #include "fields/field_definition.h"
+#include "fields/obj.h"
 #include <iostream>
 #include <sstream>
 
@@ -23,7 +26,7 @@ void FieldDefinition::transmit(std::shared_ptr<Field> targetField, std::shared_p
 void FieldDefinition::receiveUpdate(std::shared_ptr<Field> field, double update) {
     if (!field->getObject()->isInstanceOf(objectType)) return;
 
-    if (ToleranceUtils::belowTolerance(getTolerance().value_or(0.0), update)) return;
+//    if (ToleranceUtils::belowTolerance(getTolerance().value_or(0.0), update)) return;
 
     field->receiveUpdate(update);
 }
@@ -35,7 +38,7 @@ std::shared_ptr<FieldDefinition> FieldDefinition::getParent() const {
 std::shared_ptr<FieldDefinition> FieldDefinition::setParent(std::shared_ptr<FieldDefinition> parent) {
     this->parent = parent;
     parent->children.push_back(shared_from_this());
-    return *this;
+    return std::shared_ptr<FieldDefinition>(this);
 }
 
 std::vector<std::shared_ptr<FieldDefinition>> FieldDefinition::getChildren() const {
@@ -127,7 +130,7 @@ FieldDefinition& FieldDefinition::setPhase(std::shared_ptr<ProcessingPhase> phas
     return *this;
 }
 
-bool FieldDefinition::isNextRound() const {
+bool FieldDefinition::getIsNextRound() const {
     return isNextRound;
 }
 

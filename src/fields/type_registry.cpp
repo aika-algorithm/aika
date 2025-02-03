@@ -12,9 +12,8 @@ short TypeRegistry::registerType(std::shared_ptr<Type> type) {
     return id;
 }
 
-template <typename T>
-std::shared_ptr<T> TypeRegistry::getType(short typeId) {
-    return std::dynamic_pointer_cast<T>(types[typeId]);
+std::shared_ptr<Type> TypeRegistry::getType(short typeId) {
+    return std::shared_ptr(types[typeId]);
 }
 
 std::vector<std::shared_ptr<Type>> TypeRegistry::getTypes() const {

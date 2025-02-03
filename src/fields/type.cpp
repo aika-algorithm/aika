@@ -1,6 +1,7 @@
 #include "fields/type.h"
 #include "fields/obj.h"
 #include "fields/type_registry.h"
+#include "fields/field_definition.h"
 #include <iostream>
 #include <set>
 #include <algorithm>
@@ -44,7 +45,7 @@ std::set<std::shared_ptr<FieldDefinition>> Type::getCollectFlattenedFieldDefinit
     return fieldDefs;
 }
 
-std::set<std::shared_ptr<Type>> Type::collectTypes() const {
+std::set<std::shared_ptr<Type>> Type::collectTypes() {
     std::set<std::shared_ptr<Type>> sortedTypes;
     collectTypesRecursiveStep(sortedTypes);
     return sortedTypes;
@@ -72,7 +73,7 @@ bool Type::isInstanceOf(std::shared_ptr<Obj> obj) {
 }
 
 bool Type::isInstanceOf(std::shared_ptr<Type> type) {
-    return this == type || std::any_of(parents.begin(), parents.end(), [&](const auto& p) {
+    return id == type->id || std::any_of(parents.begin(), parents.end(), [&](const auto& p) {
         return p->isInstanceOf(type);
     });
 }

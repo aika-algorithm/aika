@@ -65,7 +65,7 @@ public:
     FieldDefinition& setTolerance(std::optional<double> tolerance);
     std::shared_ptr<ProcessingPhase> getPhase() const;
     FieldDefinition& setPhase(std::shared_ptr<ProcessingPhase> phase);
-    bool isNextRound() const;
+    bool getIsNextRound() const;
     FieldDefinition& setNextRound(bool nextRound);
     FieldDefinition& setQueued(std::shared_ptr<ProcessingPhase> phase);
 
