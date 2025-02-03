@@ -29,7 +29,7 @@ std::shared_ptr<Obj> Field::getObject() {
 }
 
 Field& Field::setQueued(std::shared_ptr<Queue> q, std::shared_ptr<ProcessingPhase> phase, bool isNextRound) {
-  //  interceptor = std::make_shared<QueueInterceptor>(q, std::shared_ptr<Field>(this), phase, isNextRound);
+    interceptor = std::make_shared<QueueInterceptor>(q, std::shared_ptr<Field>(this), phase, isNextRound);
     return *this;
 }
 
