@@ -142,6 +142,54 @@ pybind11_headers/fast:
 	$(MAKE) $(MAKESILENT) -f pybind11/CMakeFiles/pybind11_headers.dir/build.make pybind11/CMakeFiles/pybind11_headers.dir/build
 .PHONY : pybind11_headers/fast
 
+src/fields/field.o: src/fields/field.cpp.o
+.PHONY : src/fields/field.o
+
+# target to build an object file
+src/fields/field.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/field.cpp.o
+.PHONY : src/fields/field.cpp.o
+
+src/fields/field.i: src/fields/field.cpp.i
+.PHONY : src/fields/field.i
+
+# target to preprocess a source file
+src/fields/field.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/field.cpp.i
+.PHONY : src/fields/field.cpp.i
+
+src/fields/field.s: src/fields/field.cpp.s
+.PHONY : src/fields/field.s
+
+# target to generate assembly for a file
+src/fields/field.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/field.cpp.s
+.PHONY : src/fields/field.cpp.s
+
+src/fields/field_definition.o: src/fields/field_definition.cpp.o
+.PHONY : src/fields/field_definition.o
+
+# target to build an object file
+src/fields/field_definition.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/field_definition.cpp.o
+.PHONY : src/fields/field_definition.cpp.o
+
+src/fields/field_definition.i: src/fields/field_definition.cpp.i
+.PHONY : src/fields/field_definition.i
+
+# target to preprocess a source file
+src/fields/field_definition.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/field_definition.cpp.i
+.PHONY : src/fields/field_definition.cpp.i
+
+src/fields/field_definition.s: src/fields/field_definition.cpp.s
+.PHONY : src/fields/field_definition.s
+
+# target to generate assembly for a file
+src/fields/field_definition.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/field_definition.cpp.s
+.PHONY : src/fields/field_definition.cpp.s
+
 src/fields/type.o: src/fields/type.cpp.o
 .PHONY : src/fields/type.o
 
@@ -248,6 +296,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... aika"
 	@echo "... pybind11_headers"
+	@echo "... src/fields/field.o"
+	@echo "... src/fields/field.i"
+	@echo "... src/fields/field.s"
+	@echo "... src/fields/field_definition.o"
+	@echo "... src/fields/field_definition.i"
+	@echo "... src/fields/field_definition.s"
 	@echo "... src/fields/type.o"
 	@echo "... src/fields/type.i"
 	@echo "... src/fields/type.s"

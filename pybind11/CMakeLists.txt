@@ -181,6 +181,7 @@ if(NOT TARGET pybind11_headers)
   add_library(pybind11_headers INTERFACE
           ../src/network/Model.cpp
           ../include/network/Model.h
+          ../src/fields/utils.cpp
   )
   add_library(pybind11::pybind11_headers ALIAS pybind11_headers) # to match exported target
   add_library(pybind11::headers ALIAS pybind11_headers) # easier to use/remember

@@ -29,7 +29,7 @@ std::shared_ptr<Obj> Field::getObject() {
 }
 
 Field& Field::setQueued(std::shared_ptr<Queue> q, std::shared_ptr<ProcessingPhase> phase, bool isNextRound) {
-    interceptor = std::make_shared<QueueInterceptor>(q, shared_from_this(), phase, isNextRound);
+  //  interceptor = std::make_shared<QueueInterceptor>(q, std::shared_ptr<Field>(this), phase, isNextRound);
     return *this;
 }
 
@@ -60,9 +60,9 @@ void Field::setValue(double v) {
 }
 
 void Field::triggerUpdate(double u) {
-    if (ToleranceUtils::belowTolerance(getTolerance(), u)) {
-        return;
-    }
+//    if (ToleranceUtils::belowTolerance(getTolerance(), u)) {
+//        return;
+//    }
 
     withinUpdate = true;
     updatedValue = value + u;
@@ -70,7 +70,7 @@ void Field::triggerUpdate(double u) {
 }
 
 void Field::propagateUpdate() {
-    object->getType()->getFlattenedTypeOutputSide()->followLinks(shared_from_this());
+    object->getType()->getFlattenedTypeOutputSide()->followLinks(std::shared_ptr<Field>(this));
     value = updatedValue;
     withinUpdate = false;
 }
@@ -91,14 +91,6 @@ void Field::receiveUpdate(double u) {
     triggerUpdate(u);
 }
 
-void Field::write(std::shared_ptr<DataOutput> out) {
-    out->writeDouble(value);
-}
-
-void Field::readFields(std::shared_ptr<DataInput> in) {
-    value = in->readDouble();
-}
-
 std::string Field::toString() const {
     std::stringstream ss;
     ss << getName() << ": " << getValueString();
@@ -106,4 +98,5 @@ std::string Field::toString() const {
 }
 
 std::string Field::getValueString() const {
-    return StringUtils
+    return toString();
+}
