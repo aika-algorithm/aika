@@ -1,6 +1,6 @@
-#include "fields/flattened_type_relation.h"
 #include <algorithm>
 #include <iterator>
+#include "fields/flattened_type_relation.h"
 
 FlattenedTypeRelation::FlattenedTypeRelation(std::shared_ptr<FlattenedType> flattenedType, const std::list<std::shared_ptr<FieldLinkDefinition>>& fls) {
     std::map<int, std::list<std::shared_ptr<FieldLinkDefinition>>> groupedByOriginFD;

@@ -53,9 +53,9 @@ class RelationSelf : public RelationOne {
 public:
     RelationSelf(int relationId, const std::string& relationName);
 
-    void setReversed(std::shared_ptr<Relation> reversed) override;
-    std::shared_ptr<Relation> getReverse() const override;
-    std::shared_ptr<Obj> followOne(std::shared_ptr<Obj> fromObj) const override;
+    void setReversed(std::shared_ptr<Relation> reversed);
+    std::shared_ptr<Relation> getReverse() const;
+    std::shared_ptr<Obj> followOne(std::shared_ptr<Obj> fromObj) const;
     std::vector<std::shared_ptr<Obj>> followMany(std::shared_ptr<Obj> fromObj) const override;
     bool testRelation(std::shared_ptr<Obj> fromObj, std::shared_ptr<Obj> toObj) const override;
 };

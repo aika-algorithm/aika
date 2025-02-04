@@ -1,8 +1,9 @@
-#include "fields/obj.h"
-#include "fields/type.h"
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
+
+#include "fields/obj.h"
+#include "fields/type.h"
 
 Obj::Obj(std::shared_ptr<Type> type) : type(type) {
     if (type != nullptr) {

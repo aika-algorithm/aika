@@ -2,17 +2,17 @@
 #ifndef FIELD_UPDATE_H
 #define FIELD_UPDATE_H
 
-#include "fields/step.h"
-#include "fields/queue_interceptor.h"
-#include "fields/processing_phase.h"
-#include "Obj.h"
 #include <memory>
 #include <cmath>
 #include <string>
 #include <iostream>
 
+#include "fields/step.h"
+#include "fields/queue_interceptor.h"
+#include "fields/obj.h"
+
 template <typename E>
-class FieldUpdate : public Step<E> where E : public Obj, public QueueProvider {
+class FieldUpdate : public Step<E>, Obj, QueueProvider {
 private:
     std::shared_ptr<QueueInterceptor> interceptor;
     std::shared_ptr<ProcessingPhase> phase;
@@ -31,7 +31,7 @@ public:
     int getSortValue() const;
     double getDelta() const;
     std::shared_ptr<Queue> getQueue() const override;
-    void createQueueKey(Timestamp timestamp, int round) override;
+    void createQueueKey(long timestamp, int round) override;
     void process() override;
 
     std::shared_ptr<ProcessingPhase> getPhase() const override;

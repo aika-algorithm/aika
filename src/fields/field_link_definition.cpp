@@ -1,6 +1,5 @@
+
 #include "fields/field_link_definition.h"
-#include "fields/field_link_definitionInputSide.h"
-#include "fields/field_link_definitionOutputSide.h"
 
 void FieldLinkDefinition::link(std::shared_ptr<FieldDefinition> input,
                                 std::shared_ptr<FieldDefinition> output,

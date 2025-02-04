@@ -10,14 +10,11 @@
 #include <type_traits>
 #include <sstream>
 
-class Type;
-class Field;
-class Relation;
-class FieldDefinition;
-class Queue;
+#include <fields/type.h>
+#include <fields/queue.h>
 
 
-class Obj  { // : public QueueProvider
+class Obj : public QueueProvider {
 protected:
     std::shared_ptr<Type> type;
     std::vector<std::shared_ptr<Field>> fields;

@@ -1,9 +1,10 @@
+#include <iostream>
+#include <sstream>
+
 #include "fields/type.h"
 #include "fields/field.h"
 #include "fields/field_definition.h"
 #include "fields/obj.h"
-#include <iostream>
-#include <sstream>
 
 FieldDefinition::FieldDefinition(std::shared_ptr<Type> objectType, const std::string& name)
     : objectType(objectType), name(name), isNextRound(false) {

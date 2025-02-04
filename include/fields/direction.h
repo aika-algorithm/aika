@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <functional>
+
 #include "fields/field_link_definition.h"
 #include "fields/field_definition.h"
 #include "fields/flattened_type.h"

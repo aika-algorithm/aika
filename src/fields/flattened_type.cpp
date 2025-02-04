@@ -3,8 +3,8 @@
 #include "fields/relation.h"
 #include "fields/obj.h"
 #include "fields/field.h"
-#include "utils.h"
-#include "queue_interceptor.h"
+#include "fields/utils.h"
+#include "fields/queue_interceptor.h"
 
 FlattenedType::FlattenedType(Direction dir, std::shared_ptr<Type> type, const std::map<std::shared_ptr<FieldDefinition>, short>& fieldMappings, int numberOfFields)
     : direction(dir), type(type), numberOfFields(numberOfFields) {

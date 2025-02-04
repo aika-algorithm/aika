@@ -1,7 +1,7 @@
 
+#include <limits>
 #include "fields/field_update.h"
 #include "fields/utils.h"
-#include <limits>
 
 template <typename E>
 FieldUpdate<E>::FieldUpdate(std::shared_ptr<ProcessingPhase> p, std::shared_ptr<QueueInterceptor> qf)
@@ -55,7 +55,7 @@ std::shared_ptr<Queue> FieldUpdate<E>::getQueue() const {
 }
 
 template <typename E>
-void FieldUpdate<E>::createQueueKey(Timestamp timestamp, int round) {
+void FieldUpdate<E>::createQueueKey(long timestamp, int round) {
     queueKey = std::make_shared<FieldQueueKey>(round, getPhase(), sortValue, timestamp);
 }
 

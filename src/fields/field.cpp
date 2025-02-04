@@ -1,9 +1,11 @@
-#include "fields/field.h"
-#include "fields/obj.h"
-#include "fields/field_definition.h"
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
+
+#include "fields/field.h"
+#include "fields/obj.h"
+#include "fields/field_definition.h"
+#include "fields/queue_interceptor.h"
 
 Field::Field(std::shared_ptr<Obj> obj, std::shared_ptr<FieldDefinition> fd, short id)
     : object(obj), fieldDefinition(fd), id(id), value(0.0), updatedValue(0.0), withinUpdate(false), interceptor(nullptr) {}

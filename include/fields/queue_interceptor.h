@@ -5,8 +5,8 @@
 #include <memory>
 #include "Field.h"
 #include "Queue.h"
-#include "ProcessingPhase.h"
-#include "FieldUpdate.h"
+#include "fields/queue_key.h"
+#include "fields/field_update.h"
 
 class QueueInterceptor {
 private:

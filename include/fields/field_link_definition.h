@@ -4,6 +4,7 @@
 
 #include <string>
 #include <memory>
+
 #include "fields/field_definition.h"
 #include "fields/relation.h"
 #include "fields/direction.h"

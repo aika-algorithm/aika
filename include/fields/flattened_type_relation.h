@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include <list>
+
 #include "fields/direction.h"
 #include "fields/obj.h"
 #include "fields/field.h"

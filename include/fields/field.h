@@ -7,9 +7,10 @@
 #include <sstream>
 #include <optional>
 
-class Obj;
-class Field;
-class FieldDefinition;
+#include "fields/field_definition.h"
+#include "fields/obj.h"
+
+
 class Queue;
 class QueueInterceptor;
 class ProcessingPhase;
