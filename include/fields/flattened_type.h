@@ -6,10 +6,7 @@
 #include <map>
 #include <set>
 #include <vector>
-#include <algorithm>
-#include <optional>
-#include <functional>
-#include <stdexcept>
+
 #include "fields/type.h"
 #include "fields/field_definition.h"
 #include "fields/field_link_definition.h"
@@ -18,14 +15,14 @@
 
 class FlattenedType {
 private:
-    Direction direction;
+    std::shared_ptr<Direction> direction;
     std::shared_ptr<Type> type;
     std::vector<short> fields;
     std::vector<std::vector<std::shared_ptr<FieldDefinition>>> fieldsReverse;
     int numberOfFields;
     std::vector<std::vector<std::shared_ptr<FlattenedTypeRelation>>> mapping;
 
-    FlattenedType(Direction dir, std::shared_ptr<Type> type, const std::map<std::shared_ptr<FieldDefinition>, short>& fieldMappings, int numberOfFields);
+    FlattenedType(std::shared_ptr<Direction> dir, std::shared_ptr<Type> type, const std::map<std::shared_ptr<FieldDefinition>, short>& fieldMappings, int numberOfFields);
 
 public:
     static std::shared_ptr<FlattenedType> createInputFlattenedType(std::shared_ptr<Type> type, const std::set<std::shared_ptr<FieldDefinition>>& fieldDefs);

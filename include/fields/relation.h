@@ -5,7 +5,8 @@
 #include <vector>
 #include <string>
 #include <functional>
-#include "fields/obj.h"
+
+class Obj;
 
 
 class Relation {

@@ -6,11 +6,14 @@
 #include <vector>
 #include <functional>
 
-#include "fields/field_link_definition.h"
 #include "fields/field_definition.h"
 #include "fields/flattened_type.h"
 #include "fields/field.h"
 #include "fields/obj.h"
+
+class FieldLinkDefinition;
+class FlattenedType;
+
 
 class Direction {
 public:
@@ -33,7 +36,7 @@ class Input : public Direction {
 public:
     int getDirectionId() const override;
     std::shared_ptr<Direction> invert() const override;
-    std::vector<std::shared_ptr<FieldLinkDefinitionOutputSide>> getFieldLinkDefinitions(std::shared_ptr<FieldDefinition> fd) const override;
+    std::vector<std::shared_ptr<FieldLinkDefinition>> getFieldLinkDefinitions(std::shared_ptr<FieldDefinition> fd) const override;
     std::shared_ptr<FlattenedType> getFlattenedType(std::shared_ptr<Type> type) const override;
     void transmit(std::shared_ptr<Field> originField,
                   std::shared_ptr<FieldLinkDefinition> fl,
@@ -45,7 +48,7 @@ class Output : public Direction {
 public:
     int getDirectionId() const override;
     std::shared_ptr<Direction> invert() const override;
-    std::vector<std::shared_ptr<FieldLinkDefinitionInputSide>> getFieldLinkDefinitions(std::shared_ptr<FieldDefinition> fd) const override;
+    std::vector<std::shared_ptr<FieldLinkDefinition>> getFieldLinkDefinitions(std::shared_ptr<FieldDefinition> fd) const override;
     std::shared_ptr<FlattenedType> getFlattenedType(std::shared_ptr<Type> type) const override;
     void transmit(std::shared_ptr<Field> originField,
                   std::shared_ptr<FieldLinkDefinition> fl,

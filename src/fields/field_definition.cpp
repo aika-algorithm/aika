@@ -4,6 +4,7 @@
 #include "fields/type.h"
 #include "fields/field.h"
 #include "fields/field_definition.h"
+#include "fields/field_link_definition.h"
 #include "fields/obj.h"
 
 FieldDefinition::FieldDefinition(std::shared_ptr<Type> objectType, const std::string& name)
@@ -79,15 +80,9 @@ std::vector<std::shared_ptr<FieldLinkDefinitionInputSide>> FieldDefinition::getO
     return outputs;
 }
 
-FieldDefinition& FieldDefinition::out(std::shared_ptr<Relation> relation, std::shared_ptr<FixedArgumentsFieldDefinition> output, int arg) {
-    link(shared_from_this(), output, relation, arg);
-    assert(relation || objectType->isInstanceOf(output->getObjectType()) || output->getObjectType()->isInstanceOf(objectType));
-    return *this;
-}
-
-FieldDefinition& FieldDefinition::out(std::shared_ptr<Relation> relation, std::shared_ptr<VariableArgumentsFieldDefinition> output) {
-    link(shared_from_this(), output, relation, nullptr);
-    assert(relation || objectType->isInstanceOf(output->getObjectType()) || output->getObjectType()->isInstanceOf(objectType));
+FieldDefinition& FieldDefinition::out(std::shared_ptr<Relation> relation, std::shared_ptr<FieldDefinition> output, int arg) {
+    FieldLinkDefinition::link(std::shared_ptr<FieldDefinition>(this), output, relation, arg);
+//    assert(relation || objectType->isInstanceOf(output->getObjectType()) || output->getObjectType()->isInstanceOf(objectType));
     return *this;
 }
 
@@ -155,5 +150,3 @@ bool FieldDefinition::operator<(const FieldDefinition& fd) const {
     return fieldId.value_or(0) < fd.fieldId.value_or(0);
 }
 
-// Explicit instantiation of shared_from_this
-template std::shared_ptr<FieldDefinition> FieldDefinition::shared_from_this();

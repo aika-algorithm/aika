@@ -3,10 +3,12 @@
 
 #include <memory>
 
-#include "fields/queue.h"
+#include "queue_provider.h"
 #include "fields/queue_key.h"
 
-template <typename E>
+class Queue;
+
+
 class Step : public QueueProvider {
     protected:
     bool isQueued;
@@ -24,8 +26,7 @@ class Step : public QueueProvider {
     virtual void createQueueKey(std::shared_ptr<long> timestamp, int round) = 0;
     virtual void process() = 0;
     virtual std::shared_ptr<ProcessingPhase> getPhase() const = 0;
-    static bool add(std::shared_ptr<Step<E>> s);
-    virtual std::shared_ptr<E> getElement() const = 0;
+    static bool add(std::shared_ptr<Step> s);
 };
 
 #endif // STEP_H

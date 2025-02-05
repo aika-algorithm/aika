@@ -9,12 +9,13 @@
 #include "fields/relation.h"
 #include "fields/direction.h"
 
+
 class FieldLinkDefinition {
 private:
     std::shared_ptr<FieldDefinition> originFD;
     std::shared_ptr<FieldDefinition> relatedFD;
     std::shared_ptr<Relation> relation;
-    Direction direction;
+    std::shared_ptr<Direction> direction;
     std::optional<int> argument;
 
 public:
@@ -26,18 +27,18 @@ public:
     FieldLinkDefinition(std::shared_ptr<FieldDefinition> originFD,
                         std::shared_ptr<FieldDefinition> relatedFD,
                         std::shared_ptr<Relation> relation,
-                        Direction direction,
+                        std::shared_ptr<Direction> direction,
                         std::optional<int> argument);
 
     FieldLinkDefinition(std::shared_ptr<FieldDefinition> originFD,
                         std::shared_ptr<FieldDefinition> relatedFD,
                         std::shared_ptr<Relation> relation,
-                        Direction direction);
+                        std::shared_ptr<Direction> direction);
 
     std::shared_ptr<FieldDefinition> getOriginFD() const;
     std::shared_ptr<FieldDefinition> getRelatedFD() const;
     std::shared_ptr<Relation> getRelation() const;
-    Direction getDirection() const;
+    std::shared_ptr<Direction> getDirection() const;
     int getArgument() const;
 
     std::string toString() const;
@@ -53,7 +54,7 @@ public:
     FieldLinkDefinitionInputSide(std::shared_ptr<FieldDefinition> input,
                                  std::shared_ptr<FieldDefinition> output,
                                  std::shared_ptr<Relation> relation,
-                                 Direction direction,
+                                 std::shared_ptr<Direction> direction,
                                  std::optional<int> argument = std::nullopt);
 
     std::shared_ptr<FieldLinkDefinitionOutputSide> getOutputSide() const;
@@ -70,13 +71,13 @@ public:
     FieldLinkDefinitionOutputSide(std::shared_ptr<FieldDefinition> output,
                                   std::shared_ptr<FieldDefinition> input,
                                   std::shared_ptr<Relation> relation,
-                                  Direction direction,
+                                  std::shared_ptr<Direction> direction,
                                   std::optional<int> argument = std::nullopt);
 
     FieldLinkDefinitionOutputSide(std::shared_ptr<FieldDefinition> output,
                                   std::shared_ptr<FieldDefinition> input,
                                   std::shared_ptr<Relation> relation,
-                                  Direction direction);
+                                  std::shared_ptr<Direction> direction);
 
     std::shared_ptr<Field> getInputField(std::shared_ptr<Obj> obj);
     double getInputValue(std::shared_ptr<Obj> obj);

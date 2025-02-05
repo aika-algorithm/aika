@@ -5,13 +5,9 @@
 #include <memory>
 #include <vector>
 #include <iostream>
-#include <functional>
-#include <optional>
-#include <type_traits>
-#include <sstream>
 
 #include <fields/type.h>
-#include <fields/queue.h>
+#include <fields/queue_provider.h>
 
 
 class Obj : public QueueProvider {

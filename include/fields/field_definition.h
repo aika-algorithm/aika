@@ -53,8 +53,7 @@ public:
     void addOutput(std::shared_ptr<FieldLinkDefinitionInputSide> fl);
     std::vector<std::shared_ptr<FieldLinkDefinitionInputSide>> getOutputs();
 
-    FieldDefinition& out(std::shared_ptr<Relation> relation, std::shared_ptr<FixedArgumentsFieldDefinition> output, int arg);
-    FieldDefinition& out(std::shared_ptr<Relation> relation, std::shared_ptr<VariableArgumentsFieldDefinition> output);
+    FieldDefinition& out(std::shared_ptr<Relation> relation, std::shared_ptr<FieldDefinition> output, int arg);
 
     FieldDefinition& setName(const std::string& name);
     std::string getName() const;

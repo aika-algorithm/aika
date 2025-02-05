@@ -10,10 +10,11 @@
 #include <stdexcept>
 #include <iostream>
 
+#include "fields/flattened_type.h"
+
 class TypeRegistry;
 class FieldDefinition;
 class Relation;
-class FlattenedType;
 class Obj;
 class Field;
 

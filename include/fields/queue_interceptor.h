@@ -3,8 +3,8 @@
 #define QUEUE_INTERCEPTOR_H
 
 #include <memory>
-#include "Field.h"
-#include "Queue.h"
+#include "fields/field.h"
+#include "fields/queue.h"
 #include "fields/queue_key.h"
 #include "fields/field_update.h"
 

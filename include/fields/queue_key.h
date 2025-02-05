@@ -6,6 +6,8 @@
 #include <functional>
 #include <string>
 
+class QueueKey;
+
 class ProcessingPhase {
 public:
     virtual int rank() const = 0; // Pure virtual function to get the rank of the phase
@@ -33,6 +35,15 @@ private:
     int round;
     std::shared_ptr<ProcessingPhase> phase;
     std::shared_ptr<long> currentTimestamp;
+};
+
+struct QueueKeyComparator {
+    bool operator()(const QueueKey& lhs, const QueueKey& rhs) const {
+        // Custom comparison logic, could be similar to the `operator<` in QueueKey
+        if (lhs.getRound() != rhs.getRound()) return lhs.getRound() < rhs.getRound();
+        if (lhs.getPhase() != rhs.getPhase()) return lhs.getPhase() < rhs.getPhase();
+        return lhs.getCurrentTimestamp() < rhs.getCurrentTimestamp();
+    }
 };
 
 #endif //QUEUE_KEY_H
