@@ -37,9 +37,38 @@ if(NOT DEFINED CMAKE_OBJDUMP)
   set(CMAKE_OBJDUMP "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/objdump")
 endif()
 
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("/Users/lukasmolzberger/CLionProjects/aika-cpp/pybind11/cmake_install.cmake")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+   "/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/aika.cpython-312-darwin.so")
+  if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  file(INSTALL DESTINATION "/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika" TYPE MODULE FILES "/Users/lukasmolzberger/CLionProjects/aika-cpp/aika.cpython-312-darwin.so")
+  if(EXISTS "$ENV{DESTDIR}/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/aika.cpython-312-darwin.so" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/aika.cpython-312-darwin.so")
+    if(CMAKE_INSTALL_DO_STRIP)
+      execute_process(COMMAND "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip" -x "$ENV{DESTDIR}/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/aika.cpython-312-darwin.so")
+    endif()
+  endif()
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  include("/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles/aika.dir/install-cxx-module-bmi-Debug.cmake" OPTIONAL)
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
+   "/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/")
+  if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
+    message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
+  endif()
+  file(INSTALL DESTINATION "/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include" TYPE DIRECTORY FILES "/Users/lukasmolzberger/CLionProjects/aika-cpp/include/")
 endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
