@@ -31,7 +31,7 @@ Obj* Field::getObject() {
 }
 
 Field& Field::setQueued(Queue* q, ProcessingPhase* phase, bool isNextRound) {
-    interceptor = std::make_shared<QueueInterceptor>(q, this, phase, isNextRound);
+    interceptor = new QueueInterceptor(q, this, phase, isNextRound);
     return *this;
 }
 

@@ -21,7 +21,7 @@ class Field;
 class Type {
 
 public:
-    static std::function<bool(const std::shared_ptr<Type>&, const std::shared_ptr<Type>&)> TYPE_COMPARATOR;
+    static std::function<bool(Type*, Type*)> TYPE_COMPARATOR;
 
     short id;
     std::string name;
@@ -32,7 +32,7 @@ public:
     std::vector<Relation*> relations;
     FlattenedType* flattenedTypeInputSide;
     FlattenedType* flattenedTypeOutputSide;
-    int depth;
+    std::optional<int> depth;
 
 public:
     Type(TypeRegistry* registry, const std::string& name);

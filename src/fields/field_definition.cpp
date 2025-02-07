@@ -44,45 +44,45 @@ FieldDefinition* FieldDefinition::setParent(FieldDefinition* parent) {
     return this;
 }
 
-std::vector<std::shared_ptr<FieldDefinition>> FieldDefinition::getChildren() const {
+std::vector<FieldDefinition*> FieldDefinition::getChildren() const {
     return children;
 }
 
-bool FieldDefinition::isFieldRequired(const std::set<std::shared_ptr<FieldDefinition>>& fieldDefs) {
-    return resolveInheritedFieldDefinition(fieldDefs) == shared_from_this();
+bool FieldDefinition::isFieldRequired(const std::set<FieldDefinition*>& fieldDefs) {
+    return resolveInheritedFieldDefinition(fieldDefs) == this;
 }
 
-std::shared_ptr<FieldDefinition> FieldDefinition::resolveInheritedFieldDefinition(const std::set<std::shared_ptr<FieldDefinition>>& fieldDefs) {
+FieldDefinition* FieldDefinition::resolveInheritedFieldDefinition(const std::set<FieldDefinition*>& fieldDefs) {
     for (const auto& child : children) {
         if (fieldDefs.find(child) != fieldDefs.end()) {
             return child->resolveInheritedFieldDefinition(fieldDefs);
         }
     }
-    return shared_from_this();
+    return this;
 }
 
-void FieldDefinition::initializeField(std::shared_ptr<Field> field) {
+void FieldDefinition::initializeField(Field* field) {
     field->getObject()->getType()->getFlattenedTypeInputSide()->followLinks(field);
 }
 
-void FieldDefinition::addInput(std::shared_ptr<FieldLinkDefinitionOutputSide> fl) {
+void FieldDefinition::addInput(FieldLinkDefinitionOutputSide* fl) {
     throw std::logic_error("Unsupported operation.");
 }
 
-std::vector<std::shared_ptr<FieldLinkDefinitionOutputSide>> FieldDefinition::getInputs() {
+std::vector<FieldLinkDefinitionOutputSide*> FieldDefinition::getInputs() {
     throw std::logic_error("Unsupported operation.");
 }
 
-void FieldDefinition::addOutput(std::shared_ptr<FieldLinkDefinitionInputSide> fl) {
+void FieldDefinition::addOutput(FieldLinkDefinitionInputSide* fl) {
     outputs.push_back(fl);
 }
 
-std::vector<std::shared_ptr<FieldLinkDefinitionInputSide>> FieldDefinition::getOutputs() {
+std::vector<FieldLinkDefinitionInputSide*> FieldDefinition::getOutputs() {
     return outputs;
 }
 
-FieldDefinition& FieldDefinition::out(std::shared_ptr<Relation> relation, std::shared_ptr<FieldDefinition> output, int arg) {
-    FieldLinkDefinition::link(std::shared_ptr<FieldDefinition>(this), output, relation, arg);
+FieldDefinition& FieldDefinition::out(Relation* relation, FieldDefinition* output, int arg) {
+    FieldLinkDefinition::link(this, output, relation, arg);
 //    assert(relation || objectType->isInstanceOf(output->getObjectType()) || output->getObjectType()->isInstanceOf(objectType));
     return *this;
 }
@@ -96,7 +96,7 @@ std::string FieldDefinition::getName() const {
     return name;
 }
 
-std::shared_ptr<Type> FieldDefinition::getObjectType() const {
+Type* FieldDefinition::getObjectType() const {
     return objectType;
 }
 
@@ -104,7 +104,7 @@ int FieldDefinition::getId() const {
     return fieldId;
 }
 
-FieldDefinition& FieldDefinition::setObjectType(std::shared_ptr<Type> objectType) {
+FieldDefinition& FieldDefinition::setObjectType(Type* objectType) {
     this->objectType = objectType;
     return *this;
 }
@@ -118,11 +118,11 @@ FieldDefinition& FieldDefinition::setTolerance(std::optional<double> tolerance) 
     return *this;
 }
 
-std::shared_ptr<ProcessingPhase> FieldDefinition::getPhase() const {
+ProcessingPhase* FieldDefinition::getPhase() const {
     return phase;
 }
 
-FieldDefinition& FieldDefinition::setPhase(std::shared_ptr<ProcessingPhase> phase) {
+FieldDefinition& FieldDefinition::setPhase(ProcessingPhase* phase) {
     this->phase = phase;
     return *this;
 }
@@ -136,7 +136,7 @@ FieldDefinition& FieldDefinition::setNextRound(bool nextRound) {
     return *this;
 }
 
-FieldDefinition& FieldDefinition::setQueued(std::shared_ptr<ProcessingPhase> phase) {
+FieldDefinition& FieldDefinition::setQueued(ProcessingPhase* phase) {
     this->phase = phase;
     return *this;
 }

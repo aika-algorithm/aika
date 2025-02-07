@@ -6,17 +6,17 @@
 TypeRegistry::TypeRegistry() {
 }
 
-short TypeRegistry::registerType(std::shared_ptr<Type> type) {
+short TypeRegistry::registerType(Type* type) {
     short id = types.size();
     types.push_back(type);
     return id;
 }
 
-std::shared_ptr<Type> TypeRegistry::getType(short typeId) {
-    return std::shared_ptr(types[typeId]);
+Type* TypeRegistry::getType(int typeId) {
+    return types[typeId];
 }
 
-std::vector<std::shared_ptr<Type>> TypeRegistry::getTypes() const {
+std::vector<Type*> TypeRegistry::getTypes() const {
     return types;
 }
 
@@ -43,7 +43,7 @@ void TypeRegistry::flattenTypeHierarchy() {
  */
 }
 
-bool TypeRegistry::TypeComparator::operator()(const std::shared_ptr<Type>& t1, const std::shared_ptr<Type>& t2) const {
+bool TypeRegistry::TypeComparator::operator()(const Type* t1, const Type* t2) const {
     // Implement comparison logic here (e.g., based on some attribute of Type)
     // Example:
     // return t1->someAttribute() < t2->someAttribute();

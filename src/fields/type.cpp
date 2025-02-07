@@ -7,15 +7,15 @@
 #include <algorithm>
 #include <stdexcept>
 
-std::function<bool(const std::shared_ptr<Type>&, const std::shared_ptr<Type>&)> Type::TYPE_COMPARATOR =
-    [](const std::shared_ptr<Type>& t1, const std::shared_ptr<Type>& t2) {
+std::function<bool(Type*, Type*)> Type::TYPE_COMPARATOR =
+    [](Type* t1, Type* t2) {
         if (t1->getDepth() != t2->getDepth()) return t1->getDepth() < t2->getDepth();
         return t1->getId() < t2->getId();
     };
 
-Type::Type(std::shared_ptr<TypeRegistry> registry, const std::string& name)
+Type::Type(TypeRegistry* registry, const std::string& name)
     : registry(registry), name(name), depth(std::nullopt) {
-    id = registry->registerType(std::shared_ptr<Type>(this));
+    id = registry->registerType(this);
 }
 
 short Type::getId() const {
@@ -26,7 +26,7 @@ bool Type::isAbstract() const {
     return !children.empty();
 }
 
-std::vector<std::shared_ptr<Relation>> Type::getRelations() const {
+std::vector<Relation*> Type::getRelations() const {
     return relations;
 }
 
@@ -36,8 +36,8 @@ void Type::initFlattenedType() {
 //    flattenedTypeOutputSide = createOutputFlattenedType(std::shared_ptr<Type>(this), fieldDefs, flattenedTypeInputSide);
 }
 
-std::set<std::shared_ptr<FieldDefinition>> Type::getCollectFlattenedFieldDefinitions() {
-    std::set<std::shared_ptr<FieldDefinition>> fieldDefs;
+std::set<FieldDefinition*> Type::getCollectFlattenedFieldDefinitions() {
+    std::set<FieldDefinition*> fieldDefs;
     for (const auto& t : collectTypes()) {
         auto tFieldDefs = t->getFieldDefinitions();
         fieldDefs.insert(tFieldDefs.begin(), tFieldDefs.end());
@@ -45,17 +45,17 @@ std::set<std::shared_ptr<FieldDefinition>> Type::getCollectFlattenedFieldDefinit
     return fieldDefs;
 }
 
-std::set<std::shared_ptr<Type>> Type::collectTypes() {
-    std::set<std::shared_ptr<Type>> sortedTypes;
+std::set<Type*> Type::collectTypes() {
+    std::set<Type*> sortedTypes;
     collectTypesRecursiveStep(sortedTypes);
     return sortedTypes;
 }
 
-void Type::collectTypesRecursiveStep(std::set<std::shared_ptr<Type>>& sortedTypes) {
+void Type::collectTypesRecursiveStep(std::set<Type*>& sortedTypes) {
     for (const auto& p : parents) {
         p->collectTypesRecursiveStep(sortedTypes);
     }
-    sortedTypes.insert(std::shared_ptr<Type>(this));
+    sortedTypes.insert(this);
 }
 
 int Type::getDepth() {
@@ -68,11 +68,11 @@ int Type::getDepth() {
     return depth.value();
 }
 
-bool Type::isInstanceOf(std::shared_ptr<Obj> obj) {
+bool Type::isInstanceOf(Obj* obj) {
     return isInstanceOf(obj->getType());
 }
 
-bool Type::isInstanceOf(std::shared_ptr<Type> type) {
+bool Type::isInstanceOf(Type* type) {
     return id == type->id || std::any_of(parents.begin(), parents.end(), [&](const auto& p) {
         return p->isInstanceOf(type);
     });
@@ -82,18 +82,18 @@ std::string Type::getName() const {
     return name;
 }
 
-std::shared_ptr<TypeRegistry> Type::getTypeRegistry() {
+TypeRegistry* Type::getTypeRegistry() {
     return registry;
 }
 
-std::shared_ptr<FlattenedType> Type::getFlattenedTypeInputSide() {
+FlattenedType* Type::getFlattenedTypeInputSide() {
     if (!flattenedTypeInputSide) {
         throw std::runtime_error("Type has not been flattened yet. TypeRegistry.flattenTypeHierarchy() needs to be called beforehand.");
     }
     return flattenedTypeInputSide;
 }
 
-std::shared_ptr<FlattenedType> Type::getFlattenedTypeOutputSide() {
+FlattenedType* Type::getFlattenedTypeOutputSide() {
     if (!flattenedTypeOutputSide) {
         throw std::runtime_error("Type has not been flattened yet. TypeRegistry.flattenTypeHierarchy() needs to be called beforehand.");
     }
@@ -115,16 +115,16 @@ Type& Type::addParent(Type* p) {
     return *this;
 }
 
-std::vector<std::shared_ptr<Type>> Type::getParents() const {
+std::vector<Type*> Type::getParents() const {
     return parents;
 }
 
-std::vector<std::shared_ptr<Type>> Type::getChildren() const {
+std::vector<Type*> Type::getChildren() const {
     return children;
 }
 
 template <typename R>
-R Type::getFromParent(std::function<R(std::shared_ptr<Type>)> f) {
+R Type::getFromParent(std::function<R(Type*)> f) {
     for (const auto& p : parents) {
         R result = f(p);
         if (result) {
@@ -138,5 +138,3 @@ std::string Type::toString() const {
     return name;
 }
 
-// Explicit instantiation of shared_from_this
-template std::shared_ptr<Type> Type::getFromParent<std::shared_ptr<Type>>(std::function<std::shared_ptr<Type>(std::shared_ptr<Type>)>);

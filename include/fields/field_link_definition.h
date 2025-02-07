@@ -80,7 +80,7 @@ public:
                                   Relation* relation,
                                   Direction* direction);
 
-    Field getInputField(Obj* obj);
+    Field* getInputField(Obj* obj);
     double getInputValue(Obj* obj);
     double getUpdatedInputValue(Obj* obj);
 
