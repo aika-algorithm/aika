@@ -1,42 +1,41 @@
-#ifndef FLATTENEDTYPE_H
-#define FLATTENEDTYPE_H
+#ifndef FLATTENED_TYPE_H
+#define FLATTENED_TYPE_H
 
-#include <string>
-#include <memory>
 #include <map>
-#include <set>
-#include <vector>
 
-#include "fields/type.h"
 #include "fields/field_definition.h"
-#include "fields/field_link_definition.h"
 #include "fields/flattened_type_relation.h"
 #include "fields/direction.h"
 
+class Type;
+
+
 class FlattenedType {
 private:
-    std::shared_ptr<Direction> direction;
-    std::shared_ptr<Type> type;
-    std::vector<short> fields;
-    std::vector<std::vector<std::shared_ptr<FieldDefinition>>> fieldsReverse;
+    Direction* direction;
+    Type* type;
+    int* fields;
+    FieldDefinition*** fieldsReverse;
     int numberOfFields;
-    std::vector<std::vector<std::shared_ptr<FlattenedTypeRelation>>> mapping;
+    FlattenedTypeRelation*** mapping;
 
-    FlattenedType(std::shared_ptr<Direction> dir, std::shared_ptr<Type> type, const std::map<std::shared_ptr<FieldDefinition>, short>& fieldMappings, int numberOfFields);
+    FlattenedType(Direction* dir, Type* type, const std::map<FieldDefinition*, int>& fieldMappings, int numberOfFields);
+
+    FlattenedTypeRelation* flattenPerType(Relation* relation, Type* relatedType);
 
 public:
-    static std::shared_ptr<FlattenedType> createInputFlattenedType(std::shared_ptr<Type> type, const std::set<std::shared_ptr<FieldDefinition>>& fieldDefs);
-    static std::shared_ptr<FlattenedType> createOutputFlattenedType(std::shared_ptr<Type> type, const std::set<std::shared_ptr<FieldDefinition>>& fieldDefs, std::shared_ptr<FlattenedType> inputSide);
+    static FlattenedType* createInputFlattenedType(Type* type, const std::set<FieldDefinition*>& fieldDefs);
+    static FlattenedType* createOutputFlattenedType(Type* type, const std::set<FieldDefinition*>& fieldDefs, FlattenedType* inputSide);
 
     void flatten();
-    void followLinks(std::shared_ptr<Field> field);
+    void followLinks(Field* field);
 
-    short getFieldIndex(std::shared_ptr<FieldDefinition> fd);
+    short getFieldIndex(FieldDefinition* fd);
     short getNumberOfFields() const;
-    std::shared_ptr<Type> getType() const;
-    std::shared_ptr<FieldDefinition> getFieldDefinitionIdByIndex(short idx);
+    Type* getType() const;
+    FieldDefinition* getFieldDefinitionIdByIndex(short idx);
 
-    void followLinks(std::shared_ptr<FlattenedTypeRelation> ftr, std::shared_ptr<Obj> relatedObj, std::shared_ptr<Field> field);
+    void followLinks(FlattenedTypeRelation* ftr, Obj* relatedObj, Field* field);
 };
 
-#endif // FLATTENEDTYPE_H
+#endif // FLATTENED_TYPE_H

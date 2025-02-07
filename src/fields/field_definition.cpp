@@ -7,12 +7,13 @@
 #include "fields/field_link_definition.h"
 #include "fields/obj.h"
 
-FieldDefinition::FieldDefinition(std::shared_ptr<Type> objectType, const std::string& name)
+
+FieldDefinition::FieldDefinition(Type* objectType, const std::string& name)
     : objectType(objectType), name(name), isNextRound(false) {
-    objectType->setFieldDefinition(shared_from_this());
+    objectType->setFieldDefinition(this);
 }
 
-FieldDefinition::FieldDefinition(std::shared_ptr<Type> objectType, const std::string& name, double tolerance)
+FieldDefinition::FieldDefinition(Type* objectType, const std::string& name, double tolerance)
     : FieldDefinition(objectType, name) {
     this->tolerance = tolerance;
 }
@@ -21,11 +22,11 @@ void FieldDefinition::setFieldId(int fieldId) {
     this->fieldId = fieldId;
 }
 
-void FieldDefinition::transmit(std::shared_ptr<Field> targetField, std::shared_ptr<FieldLinkDefinitionOutputSide> fieldLink, double update) {
+void FieldDefinition::transmit(Field* targetField, FieldLinkDefinitionOutputSide* fieldLink, double update) {
     receiveUpdate(targetField, update);
 }
 
-void FieldDefinition::receiveUpdate(std::shared_ptr<Field> field, double update) {
+void FieldDefinition::receiveUpdate(Field* field, double update) {
     if (!field->getObject()->isInstanceOf(objectType)) return;
 
 //    if (ToleranceUtils::belowTolerance(getTolerance().value_or(0.0), update)) return;
@@ -33,14 +34,14 @@ void FieldDefinition::receiveUpdate(std::shared_ptr<Field> field, double update)
     field->receiveUpdate(update);
 }
 
-std::shared_ptr<FieldDefinition> FieldDefinition::getParent() const {
+FieldDefinition* FieldDefinition::getParent() const {
     return parent;
 }
 
-std::shared_ptr<FieldDefinition> FieldDefinition::setParent(std::shared_ptr<FieldDefinition> parent) {
+FieldDefinition* FieldDefinition::setParent(FieldDefinition* parent) {
     this->parent = parent;
-    parent->children.push_back(shared_from_this());
-    return std::shared_ptr<FieldDefinition>(this);
+    parent->children.push_back(this);
+    return this;
 }
 
 std::vector<std::shared_ptr<FieldDefinition>> FieldDefinition::getChildren() const {
@@ -99,7 +100,7 @@ std::shared_ptr<Type> FieldDefinition::getObjectType() const {
     return objectType;
 }
 
-std::optional<int> FieldDefinition::getId() const {
+int FieldDefinition::getId() const {
     return fieldId;
 }
 
@@ -142,11 +143,11 @@ FieldDefinition& FieldDefinition::setQueued(std::shared_ptr<ProcessingPhase> pha
 
 std::string FieldDefinition::toString() const {
     std::stringstream ss;
-    ss << getId().value_or(-1) << ":" << name;
+    ss << getId() << ":" << name;
     return ss.str();
 }
 
 bool FieldDefinition::operator<(const FieldDefinition& fd) const {
-    return fieldId.value_or(0) < fd.fieldId.value_or(0);
+    return fieldId < fd.fieldId;
 }
 

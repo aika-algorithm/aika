@@ -1,4 +1,7 @@
 
+#include <sstream>
+#include <memory>
+
 #include "fields/field_link_definition.h"
 
 void FieldLinkDefinition::link(std::shared_ptr<FieldDefinition> input,
@@ -49,9 +52,9 @@ int FieldLinkDefinition::getArgument() const {
 }
 
 std::string FieldLinkDefinition::toString() const {
-    std::stringstream ss;
-    //ss << *originFD << " -- (" << *relation << ") -> " << *relatedFD;
-    return ss.str();
+//    std::stringstream ss;
+//    ss << *originFD << " -- (" << *relation << ") -> " << *relatedFD;
+    return ""; //ss.str();
 }
 
 

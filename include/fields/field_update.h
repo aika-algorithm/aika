@@ -14,15 +14,15 @@
 
 class FieldUpdate : public Step, Obj {
 private:
-    std::shared_ptr<QueueInterceptor> interceptor;
-    std::shared_ptr<ProcessingPhase> phase;
+    QueueInterceptor* interceptor;
+    ProcessingPhase* phase;
     int sortValue = INT_MAX;
     double delta = 0.0;
 
     void updateSortValue(double delta);
 
 public:
-    FieldUpdate(std::shared_ptr<ProcessingPhase> p, std::shared_ptr<QueueInterceptor> qf);
+    FieldUpdate(ProcessingPhase* p, QueueInterceptor* qf);
 
     bool incrementRound();
     void updateDelta(double delta, bool replaceUpdate);
@@ -30,13 +30,13 @@ public:
 
     int getSortValue() const;
     double getDelta() const;
-    std::shared_ptr<Queue> getQueue() const;
+    Queue* getQueue() const;
     void createQueueKey(long timestamp, int round);
     void process();
 
-    std::shared_ptr<ProcessingPhase> getPhase() const;
+    ProcessingPhase* getPhase() const;
 
-    std::shared_ptr<QueueInterceptor> getInterceptor() const;
+    QueueInterceptor* getInterceptor() const;
     std::string toShortString() const;
     std::string toString() const;
 };

@@ -12,24 +12,24 @@
 
 class Obj : public QueueProvider {
 protected:
-    std::shared_ptr<Type> type;
-    std::vector<std::shared_ptr<Field>> fields;
+    Type* type;
+    std::vector<Field*> fields;
 
 public:
-    explicit Obj(std::shared_ptr<Type> type);
+    explicit Obj(Type* type);
 
     void initFields();
-    std::shared_ptr<Type> getType() const;
-    std::shared_ptr<Obj> followManyRelation(std::shared_ptr<Relation> rel);
-    std::shared_ptr<Obj> followSingleRelation(std::shared_ptr<Relation> rel);
-    bool isInstanceOf(std::shared_ptr<Type> t);
-    std::shared_ptr<Field> getFieldOutput(std::shared_ptr<FieldDefinition> fd);
-    std::shared_ptr<Field> getOrCreateFieldInput(std::shared_ptr<FieldDefinition> fd);
-    Obj& setFieldValue(std::shared_ptr<FieldDefinition> fd, double v);
-    double getFieldValue(std::shared_ptr<FieldDefinition> fd);
-    double getFieldUpdatedValue(std::shared_ptr<FieldDefinition> fd);
-    std::vector<std::shared_ptr<Field>> getFields();
-    std::shared_ptr<Queue> getQueue();
+    Type* getType() const;
+    Obj* followManyRelation(Relation* rel);
+    Obj* followSingleRelation(Relation* rel);
+    bool isInstanceOf(Type* t);
+    Field* getFieldOutput(FieldDefinition* fd);
+    Field* getOrCreateFieldInput(FieldDefinition* fd);
+    Obj& setFieldValue(FieldDefinition* fd, double v);
+    double getFieldValue(FieldDefinition* fd);
+    double getFieldUpdatedValue(FieldDefinition* fd);
+    std::vector<Field*> getFields();
+    Queue* getQueue();
 
     std::string toKeyString();
     std::string toString() const;

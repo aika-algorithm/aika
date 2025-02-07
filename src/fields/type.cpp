@@ -100,18 +100,18 @@ std::shared_ptr<FlattenedType> Type::getFlattenedTypeOutputSide() {
     return flattenedTypeOutputSide;
 }
 
-void Type::setFieldDefinition(std::shared_ptr<FieldDefinition> fieldDef) {
+void Type::setFieldDefinition(FieldDefinition* fieldDef) {
     fieldDef->setFieldId(registry->createFieldId());
     fieldDefinitions.insert(fieldDef);
 }
 
-std::set<std::shared_ptr<FieldDefinition>> Type::getFieldDefinitions() const {
+std::set<FieldDefinition*> Type::getFieldDefinitions() const {
     return fieldDefinitions;
 }
 
-Type& Type::addParent(std::shared_ptr<Type> p) {
+Type& Type::addParent(Type* p) {
     parents.push_back(p);
-    p->children.push_back(std::shared_ptr<Type>(this));
+    p->children.push_back(this);
     return *this;
 }
 

@@ -2,10 +2,6 @@
 #define FIELD_H
 
 #include <string>
-#include <memory>
-#include <iostream>
-#include <sstream>
-#include <optional>
 
 #include "fields/field_definition.h"
 #include "fields/obj.h"
@@ -16,35 +12,34 @@ class QueueInterceptor;
 class ProcessingPhase;
 
 
-
 class Field {
 private:
-    std::shared_ptr<FieldDefinition> fieldDefinition;
-    short id;
-    std::shared_ptr<Obj> object;
+    FieldDefinition* fieldDefinition;
+    int id;
+    Obj* object;
     double value;
     double updatedValue;
     bool withinUpdate;
-    std::shared_ptr<QueueInterceptor> interceptor;
+    QueueInterceptor* interceptor;
 
 public:
-    Field(std::shared_ptr<Obj> obj, std::shared_ptr<FieldDefinition> fd, short id);
+    Field(Obj* obj, FieldDefinition* fd, int id);
 
-    short getId() const;
+    int getId() const;
     bool isWithinUpdate();
     double getValue();
     double getUpdatedValue();
-    std::shared_ptr<Obj> getObject();
+    Obj* getObject();
 
-    Field& setQueued(std::shared_ptr<Queue> q, std::shared_ptr<ProcessingPhase> phase, bool isNextRound);
+    Field& setQueued(Queue* q, ProcessingPhase* phase, bool isNextRound);
 
-    std::shared_ptr<FieldDefinition> getFieldDefinition();
+    FieldDefinition* getFieldDefinition();
 
     double getTolerance() const;
     std::string getName() const;
 
-    std::shared_ptr<QueueInterceptor> getInterceptor();
-    void setInterceptor(std::shared_ptr<QueueInterceptor> interceptor);
+    QueueInterceptor* getInterceptor();
+    void setInterceptor(QueueInterceptor* interceptor);
 
     void setValue(double v);
     void triggerUpdate(double u);
@@ -56,8 +51,8 @@ public:
     std::string toString() const;
     std::string getValueString() const;
 
-    static bool isTrue(std::shared_ptr<Field> f);
-    static bool isTrue(std::shared_ptr<Field> f, bool updatedValue);
+    static bool isTrue(Field* f);
+    static bool isTrue(Field* f, bool updatedValue);
     static bool isTrue(double v);
 };
 

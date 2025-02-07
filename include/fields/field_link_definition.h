@@ -8,37 +8,38 @@
 #include "fields/field_definition.h"
 #include "fields/relation.h"
 #include "fields/direction.h"
+#include "fields/obj.h"
 
 
 class FieldLinkDefinition {
 private:
-    std::shared_ptr<FieldDefinition> originFD;
-    std::shared_ptr<FieldDefinition> relatedFD;
-    std::shared_ptr<Relation> relation;
-    std::shared_ptr<Direction> direction;
+    FieldDefinition* originFD;
+    FieldDefinition* relatedFD;
+    Relation* relation;
+    Direction* direction;
     std::optional<int> argument;
 
 public:
-    static void link(std::shared_ptr<FieldDefinition> input,
-                     std::shared_ptr<FieldDefinition> output,
-                     std::shared_ptr<Relation> relation,
+    static void link(FieldDefinition* input,
+                     FieldDefinition* output,
+                     Relation* relation,
                      std::optional<int> argument);
 
-    FieldLinkDefinition(std::shared_ptr<FieldDefinition> originFD,
-                        std::shared_ptr<FieldDefinition> relatedFD,
-                        std::shared_ptr<Relation> relation,
-                        std::shared_ptr<Direction> direction,
+    FieldLinkDefinition(FieldDefinition* originFD,
+                        FieldDefinition* relatedFD,
+                        Relation* relation,
+                        Direction* direction,
                         std::optional<int> argument);
 
-    FieldLinkDefinition(std::shared_ptr<FieldDefinition> originFD,
-                        std::shared_ptr<FieldDefinition> relatedFD,
-                        std::shared_ptr<Relation> relation,
-                        std::shared_ptr<Direction> direction);
+    FieldLinkDefinition(FieldDefinition* originFD,
+                        FieldDefinition* relatedFD,
+                        Relation* relation,
+                        Direction* direction);
 
-    std::shared_ptr<FieldDefinition> getOriginFD() const;
-    std::shared_ptr<FieldDefinition> getRelatedFD() const;
-    std::shared_ptr<Relation> getRelation() const;
-    std::shared_ptr<Direction> getDirection() const;
+    FieldDefinition* getOriginFD() const;
+    FieldDefinition* getRelatedFD() const;
+    Relation* getRelation() const;
+    Direction* getDirection() const;
     int getArgument() const;
 
     std::string toString() const;
@@ -48,43 +49,43 @@ public:
 
 class FieldLinkDefinitionInputSide : public FieldLinkDefinition {
 private:
-    std::shared_ptr<FieldLinkDefinitionOutputSide> outputSide;
+    FieldLinkDefinitionOutputSide* outputSide;
 
 public:
-    FieldLinkDefinitionInputSide(std::shared_ptr<FieldDefinition> input,
-                                 std::shared_ptr<FieldDefinition> output,
-                                 std::shared_ptr<Relation> relation,
-                                 std::shared_ptr<Direction> direction,
+    FieldLinkDefinitionInputSide(FieldDefinition* input,
+                                 FieldDefinition* output,
+                                 Relation* relation,
+                                 Direction* direction,
                                  std::optional<int> argument = std::nullopt);
 
-    std::shared_ptr<FieldLinkDefinitionOutputSide> getOutputSide() const;
-    void setOutputSide(std::shared_ptr<FieldLinkDefinitionOutputSide> outputSide);
+    FieldLinkDefinitionOutputSide* getOutputSide() const;
+    void setOutputSide(FieldLinkDefinitionOutputSide* outputSide);
 };
 
 
 
 class FieldLinkDefinitionOutputSide : public FieldLinkDefinition {
 private:
-    std::shared_ptr<FieldLinkDefinitionInputSide> inputSide;
+    FieldLinkDefinitionInputSide* inputSide;
 
 public:
-    FieldLinkDefinitionOutputSide(std::shared_ptr<FieldDefinition> output,
-                                  std::shared_ptr<FieldDefinition> input,
-                                  std::shared_ptr<Relation> relation,
-                                  std::shared_ptr<Direction> direction,
+    FieldLinkDefinitionOutputSide(FieldDefinition* output,
+                                  FieldDefinition* input,
+                                  Relation* relation,
+                                  Direction* direction,
                                   std::optional<int> argument = std::nullopt);
 
-    FieldLinkDefinitionOutputSide(std::shared_ptr<FieldDefinition> output,
-                                  std::shared_ptr<FieldDefinition> input,
-                                  std::shared_ptr<Relation> relation,
-                                  std::shared_ptr<Direction> direction);
+    FieldLinkDefinitionOutputSide(FieldDefinition* output,
+                                  FieldDefinition* input,
+                                  Relation* relation,
+                                  Direction* direction);
 
-    std::shared_ptr<Field> getInputField(std::shared_ptr<Obj> obj);
-    double getInputValue(std::shared_ptr<Obj> obj);
-    double getUpdatedInputValue(std::shared_ptr<Obj> obj);
+    Field getInputField(Obj* obj);
+    double getInputValue(Obj* obj);
+    double getUpdatedInputValue(Obj* obj);
 
-    std::shared_ptr<FieldLinkDefinitionInputSide> getInputSide() const;
-    void setInputSide(std::shared_ptr<FieldLinkDefinitionInputSide> inputSide);
+    FieldLinkDefinitionInputSide* getInputSide() const;
+    void setInputSide(FieldLinkDefinitionInputSide* inputSide);
 };
 
 #endif //FIELD_LINK_DEFINITION_H

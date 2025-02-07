@@ -25,40 +25,40 @@ public:
 
     short id;
     std::string name;
-    std::vector<std::shared_ptr<Type>> parents;
-    std::vector<std::shared_ptr<Type>> children;
-    std::shared_ptr<TypeRegistry> registry;
-    std::set<std::shared_ptr<FieldDefinition>> fieldDefinitions;
-    std::vector<std::shared_ptr<Relation>> relations;
-    std::shared_ptr<FlattenedType> flattenedTypeInputSide;
-    std::shared_ptr<FlattenedType> flattenedTypeOutputSide;
-    std::optional<int> depth;
+    std::vector<Type*> parents;
+    std::vector<Type*> children;
+    TypeRegistry* registry;
+    std::set<FieldDefinition*> fieldDefinitions;
+    std::vector<Relation*> relations;
+    FlattenedType* flattenedTypeInputSide;
+    FlattenedType* flattenedTypeOutputSide;
+    int depth;
 
 public:
-    Type(std::shared_ptr<TypeRegistry> registry, const std::string& name);
+    Type(TypeRegistry* registry, const std::string& name);
 
     short getId() const;
     bool isAbstract() const;
-    std::vector<std::shared_ptr<Relation>> getRelations() const;
+    std::vector<Relation*> getRelations() const;
     void initFlattenedType();
-    std::set<std::shared_ptr<FieldDefinition>> getCollectFlattenedFieldDefinitions();
-    std::set<std::shared_ptr<Type>> collectTypes();
-    void collectTypesRecursiveStep(std::set<std::shared_ptr<Type>>& sortedTypes);
+    std::set<FieldDefinition*> getCollectFlattenedFieldDefinitions();
+    std::set<Type*> collectTypes();
+    void collectTypesRecursiveStep(std::set<Type*>& sortedTypes);
     int getDepth();
-    bool isInstanceOf(std::shared_ptr<Obj> obj);
-    bool isInstanceOf(std::shared_ptr<Type> type);
+    bool isInstanceOf(Obj* obj);
+    bool isInstanceOf(Type* type);
     std::string getName() const;
-    std::shared_ptr<TypeRegistry> getTypeRegistry();
-    std::shared_ptr<FlattenedType> getFlattenedTypeInputSide();
-    std::shared_ptr<FlattenedType> getFlattenedTypeOutputSide();
-    void setFieldDefinition(std::shared_ptr<FieldDefinition> fieldDef);
-    std::set<std::shared_ptr<FieldDefinition>> getFieldDefinitions() const;
-    Type& addParent(std::shared_ptr<Type> p);
-    std::vector<std::shared_ptr<Type>> getParents() const;
-    std::vector<std::shared_ptr<Type>> getChildren() const;
+    TypeRegistry* getTypeRegistry();
+    FlattenedType* getFlattenedTypeInputSide();
+    FlattenedType* getFlattenedTypeOutputSide();
+    void setFieldDefinition(FieldDefinition* fieldDef);
+    std::set<FieldDefinition*> getFieldDefinitions() const;
+    Type& addParent(Type* p);
+    std::vector<Type*> getParents() const;
+    std::vector<Type*> getChildren() const;
 
     template <typename R>
-    R getFromParent(std::function<R(std::shared_ptr<Type>)> f);
+    R getFromParent(std::function<R(Type*)> f);
 
     std::string toString() const;
 };

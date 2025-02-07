@@ -2,7 +2,6 @@
 #ifndef QUEUE_KEY_H
 #define QUEUE_KEY_H
 
-#include <memory>
 #include <functional>
 #include <string>
 
@@ -19,22 +18,22 @@ public:
 class QueueKey : public std::enable_shared_from_this<QueueKey> {
 public:
     static const int MAX_ROUND = std::numeric_limits<int>::max();
-    static const std::function<bool(const std::shared_ptr<QueueKey>, const std::shared_ptr<QueueKey>)> COMPARATOR;
+    static const std::function<bool(const QueueKey*, const QueueKey*)> COMPARATOR;
 
-    QueueKey(int round, std::shared_ptr<ProcessingPhase> phase, std::shared_ptr<long> currentTimestamp);
+    QueueKey(int round, ProcessingPhase* phase, long currentTimestamp);
 
     int getRound() const;
     std::string getRoundStr() const;
-    std::shared_ptr<ProcessingPhase> getPhase() const;
+    ProcessingPhase* getPhase() const;
     std::string getPhaseStr() const;
-    std::shared_ptr<long> getCurrentTimestamp() const;
+    long getCurrentTimestamp() const;
 
-    bool operator<(const std::shared_ptr<QueueKey>& other) const;
+    bool operator<(const QueueKey& other) const;
 
 private:
     int round;
-    std::shared_ptr<ProcessingPhase> phase;
-    std::shared_ptr<long> currentTimestamp;
+    ProcessingPhase* phase;
+    long currentTimestamp;
 };
 
 struct QueueKeyComparator {

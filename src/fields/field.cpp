@@ -7,10 +7,10 @@
 #include "fields/field_definition.h"
 #include "fields/queue_interceptor.h"
 
-Field::Field(std::shared_ptr<Obj> obj, std::shared_ptr<FieldDefinition> fd, short id)
+Field::Field(Obj* obj, FieldDefinition* fd, int id)
     : object(obj), fieldDefinition(fd), id(id), value(0.0), updatedValue(0.0), withinUpdate(false), interceptor(nullptr) {}
 
-short Field::getId() const {
+int Field::getId() const {
     return id;
 }
 
@@ -26,16 +26,16 @@ double Field::getUpdatedValue() {
     return withinUpdate ? updatedValue : value;
 }
 
-std::shared_ptr<Obj> Field::getObject() {
+Obj* Field::getObject() {
     return object;
 }
 
-Field& Field::setQueued(std::shared_ptr<Queue> q, std::shared_ptr<ProcessingPhase> phase, bool isNextRound) {
-    interceptor = std::make_shared<QueueInterceptor>(q, std::shared_ptr<Field>(this), phase, isNextRound);
+Field& Field::setQueued(Queue* q, ProcessingPhase* phase, bool isNextRound) {
+    interceptor = std::make_shared<QueueInterceptor>(q, this, phase, isNextRound);
     return *this;
 }
 
-std::shared_ptr<FieldDefinition> Field::getFieldDefinition() {
+FieldDefinition* Field::getFieldDefinition() {
     return fieldDefinition;
 }
 
@@ -47,11 +47,11 @@ std::string Field::getName() const {
     return fieldDefinition->getName();
 }
 
-std::shared_ptr<QueueInterceptor> Field::getInterceptor() {
+QueueInterceptor* Field::getInterceptor() {
     return interceptor;
 }
 
-void Field::setInterceptor(std::shared_ptr<QueueInterceptor> interceptor) {
+void Field::setInterceptor(QueueInterceptor* interceptor) {
     this->interceptor = interceptor;
 }
 
@@ -72,7 +72,7 @@ void Field::triggerUpdate(double u) {
 }
 
 void Field::propagateUpdate() {
-    object->getType()->getFlattenedTypeOutputSide()->followLinks(std::shared_ptr<Field>(this));
+    object->getType()->getFlattenedTypeOutputSide()->followLinks(this);
     value = updatedValue;
     withinUpdate = false;
 }

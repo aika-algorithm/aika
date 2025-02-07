@@ -222,6 +222,78 @@ src/fields/field_definition.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/field_definition.cpp.s
 .PHONY : src/fields/field_definition.cpp.s
 
+src/fields/field_link_definition.o: src/fields/field_link_definition.cpp.o
+.PHONY : src/fields/field_link_definition.o
+
+# target to build an object file
+src/fields/field_link_definition.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.o
+.PHONY : src/fields/field_link_definition.cpp.o
+
+src/fields/field_link_definition.i: src/fields/field_link_definition.cpp.i
+.PHONY : src/fields/field_link_definition.i
+
+# target to preprocess a source file
+src/fields/field_link_definition.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.i
+.PHONY : src/fields/field_link_definition.cpp.i
+
+src/fields/field_link_definition.s: src/fields/field_link_definition.cpp.s
+.PHONY : src/fields/field_link_definition.s
+
+# target to generate assembly for a file
+src/fields/field_link_definition.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.s
+.PHONY : src/fields/field_link_definition.cpp.s
+
+src/fields/flattened_type.o: src/fields/flattened_type.cpp.o
+.PHONY : src/fields/flattened_type.o
+
+# target to build an object file
+src/fields/flattened_type.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/flattened_type.cpp.o
+.PHONY : src/fields/flattened_type.cpp.o
+
+src/fields/flattened_type.i: src/fields/flattened_type.cpp.i
+.PHONY : src/fields/flattened_type.i
+
+# target to preprocess a source file
+src/fields/flattened_type.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/flattened_type.cpp.i
+.PHONY : src/fields/flattened_type.cpp.i
+
+src/fields/flattened_type.s: src/fields/flattened_type.cpp.s
+.PHONY : src/fields/flattened_type.s
+
+# target to generate assembly for a file
+src/fields/flattened_type.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/flattened_type.cpp.s
+.PHONY : src/fields/flattened_type.cpp.s
+
+src/fields/flattened_type_relation.o: src/fields/flattened_type_relation.cpp.o
+.PHONY : src/fields/flattened_type_relation.o
+
+# target to build an object file
+src/fields/flattened_type_relation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.o
+.PHONY : src/fields/flattened_type_relation.cpp.o
+
+src/fields/flattened_type_relation.i: src/fields/flattened_type_relation.cpp.i
+.PHONY : src/fields/flattened_type_relation.i
+
+# target to preprocess a source file
+src/fields/flattened_type_relation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.i
+.PHONY : src/fields/flattened_type_relation.cpp.i
+
+src/fields/flattened_type_relation.s: src/fields/flattened_type_relation.cpp.s
+.PHONY : src/fields/flattened_type_relation.s
+
+# target to generate assembly for a file
+src/fields/flattened_type_relation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.s
+.PHONY : src/fields/flattened_type_relation.cpp.s
+
 src/fields/type.o: src/fields/type.cpp.o
 .PHONY : src/fields/type.o
 
@@ -337,6 +409,15 @@ help:
 	@echo "... src/fields/field_definition.o"
 	@echo "... src/fields/field_definition.i"
 	@echo "... src/fields/field_definition.s"
+	@echo "... src/fields/field_link_definition.o"
+	@echo "... src/fields/field_link_definition.i"
+	@echo "... src/fields/field_link_definition.s"
+	@echo "... src/fields/flattened_type.o"
+	@echo "... src/fields/flattened_type.i"
+	@echo "... src/fields/flattened_type.s"
+	@echo "... src/fields/flattened_type_relation.o"
+	@echo "... src/fields/flattened_type_relation.i"
+	@echo "... src/fields/flattened_type_relation.s"
 	@echo "... src/fields/type.o"
 	@echo "... src/fields/type.i"
 	@echo "... src/fields/type.s"

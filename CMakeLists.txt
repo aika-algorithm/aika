@@ -11,9 +11,12 @@ set(CMAKE_CXX_STANDARD 20)
 set(SOURCES
         src/fields/field.cpp
         src/fields/field_definition.cpp
+        src/fields/field_link_definition.cpp
         src/fields/type.cpp
         src/fields/type_registry.cpp
         src/fields/type_registry_python.cpp
+        src/fields/flattened_type.cpp
+        src/fields/flattened_type_relation.cpp
         src/network/model.cpp
 )
 

@@ -6,7 +6,7 @@
 #include "fields/utils.h"
 #include "fields/queue_interceptor.h"
 
-FlattenedType::FlattenedType(Direction dir, std::shared_ptr<Type> type, const std::map<std::shared_ptr<FieldDefinition>, short>& fieldMappings, int numberOfFields)
+FlattenedType::FlattenedType(Direction* dir, Type* type, const std::map<FieldDefinition*, int>& fieldMappings, int numberOfFields)
     : direction(dir), type(type), numberOfFields(numberOfFields) {
 
     fields.resize(type->getTypeRegistry()->getNumberOfFieldDefinitions(), -1);
@@ -23,10 +23,10 @@ FlattenedType::FlattenedType(Direction dir, std::shared_ptr<Type> type, const st
     }
 }
 
-std::shared_ptr<FlattenedType> FlattenedType::createInputFlattenedType(std::shared_ptr<Type> type, const std::set<std::shared_ptr<FieldDefinition>>& fieldDefs) {
-    std::map<std::shared_ptr<FieldDefinition>, short> fieldMappings;
+FlattenedType* FlattenedType::createInputFlattenedType(Type* type, const std::set<FieldDefinition*>& fieldDefs) {
+    std::map<FieldDefinition*, int> fieldMappings;
 
-    std::vector<std::shared_ptr<FieldDefinition>> requiredFields;
+    std::vector<FieldDefinition*> requiredFields;
     for (const auto& fd : fieldDefs) {
         if (fd->isFieldRequired(fieldDefs)) {
             requiredFields.push_back(fd);
@@ -37,18 +37,31 @@ std::shared_ptr<FlattenedType> FlattenedType::createInputFlattenedType(std::shar
         fieldMappings[requiredFields[i]] = i;
     }
 
-    return std::make_shared<FlattenedType>(Direction::INPUT, type, fieldMappings, requiredFields.size());
+    return new FlattenedType(Direction::INPUT, type, fieldMappings, requiredFields.size());
 }
 
-std::shared_ptr<FlattenedType> FlattenedType::createOutputFlattenedType(std::shared_ptr<Type> type, const std::set<std::shared_ptr<FieldDefinition>>& fieldDefs, std::shared_ptr<FlattenedType> inputSide) {
-    std::map<std::shared_ptr<FieldDefinition>, short> fieldMappings;
+std::shared_ptr<FlattenedType> FlattenedType::createOutputFlattenedType(Type* type, const std::set<FieldDefinition*>& fieldDefs, FlattenedType* inputSide) {
+    std::map<std::shared_ptr<FieldDefinition>, int> fieldMappings;
     for (const auto& fd : fieldDefs) {
         auto resolvedFD = fd->resolveInheritedFieldDefinition(fieldDefs);
         short fieldIndex = inputSide->fields[resolvedFD->getId()];
         fieldMappings[fd] = fieldIndex;
     }
 
-    return std::make_shared<FlattenedType>(Direction::OUTPUT, type, fieldMappings, inputSide->numberOfFields);
+    return std::shared_ptr<FlattenedType>(new FlattenedType(Direction::OUTPUT, type, fieldMappings, inputSide->numberOfFields));
+}
+
+#include <iostream>
+#include <vector>
+
+template <typename T>
+bool isAllNull(const std::vector<T>& vec) {
+    for (const auto& element : vec) {
+        if (element != nullptr) {
+            return false; // As soon as a non-null element is found, return false
+        }
+    }
+    return true; // If no non-null element is found, return true
 }
 
 void FlattenedType::flatten() {
@@ -60,7 +73,7 @@ void FlattenedType::flatten() {
             resultsPerRelation[relatedType->getId()] = flattenPerType(rel, relatedType);
         }
 
-        if (!ArrayUtils::isAllNull(resultsPerRelation)) {
+        if (!isAllNull(resultsPerRelation)) {
             mapping[rel->getRelationId()] = resultsPerRelation;
         }
     }
@@ -70,16 +83,22 @@ std::shared_ptr<FlattenedTypeRelation> FlattenedType::flattenPerType(std::shared
     std::vector<std::shared_ptr<FieldLinkDefinition>> fieldLinks;
 
     for (const auto& fieldArr : fieldsReverse) {
-        for (const auto& fl : fieldArr) {
-            if (fl->getRelation()->getRelationId() == relation->getRelationId() &&
-                relatedType->isInstanceOf(fl->getRelatedFD()->getObjectType()) &&
-                direction.invert()->getFlattenedType(relatedType)->fields[fl->getRelatedFD()->getId()] >= 0) {
-                fieldLinks.push_back(fl);
+        for (const auto& fd : fieldArr) {
+            for(const auto& fl : direction->getFieldLinkDefinitions(fd)) {
+                if (fl->getRelation()->getRelationId() == relation->getRelationId() &&
+                    relatedType->isInstanceOf(fl->getRelatedFD()->getObjectType()) &&
+                    direction->invert()->getFlattenedType(relatedType)->fields[fl->getRelatedFD()->getId()] >= 0) {
+                    fieldLinks.push_back(fl);
+                }
             }
         }
     }
 
-    return fieldLinks.empty() ? nullptr : std::make_shared<FlattenedTypeRelation>(this, fieldLinks);
+    return fieldLinks.empty() ?
+                              nullptr :
+                              std::shared_ptr<FlattenedTypeRelation>(
+                                  new FlattenedTypeRelation(std::shared_ptr<FlattenedType>(this), fieldLinks)
+                                  );
 }
 
 void FlattenedType::followLinks(std::shared_ptr<Field> field) {
