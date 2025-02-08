@@ -29,23 +29,19 @@ int TypeRegistry::getNumberOfFieldDefinitions() const {
 }
 
 void TypeRegistry::flattenTypeHierarchy() {
+    for (const auto& type : types) {
+        type->initDepth();
+    }
+
     // TreeSet equivalent is std::set in C++, sorted by the comparator
-    std::set<std::shared_ptr<Type>, TypeComparator> sortedTypes(types.begin(), types.end());
-/*
+    std::set<Type*, Type::TypeComparator> sortedTypes(types.begin(), types.end());
+
     for (const auto& type : sortedTypes) {
         type->initFlattenedType();
     }
 
     for (const auto& type : sortedTypes) {
-        type->getFlattenedTypeInputSide().flatten();
-        type->getFlattenedTypeOutputSide().flatten();
+        type->getFlattenedTypeInputSide()->flatten();
+        type->getFlattenedTypeOutputSide()->flatten();
     }
- */
-}
-
-bool TypeRegistry::TypeComparator::operator()(const Type* t1, const Type* t2) const {
-    // Implement comparison logic here (e.g., based on some attribute of Type)
-    // Example:
-    // return t1->someAttribute() < t2->someAttribute();
-    return false; // Example placeholder, you need to implement the real comparison logic
 }

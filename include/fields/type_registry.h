@@ -33,10 +33,6 @@ public:
     // Flattens the type hierarchy
     void flattenTypeHierarchy();
 
-    // Comparator for sorting types (if needed)
-    struct TypeComparator {
-        bool operator()(const Type* t1, const Type* t2) const;
-    };
 };
 
 

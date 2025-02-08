@@ -21,7 +21,9 @@ class Field;
 class Type {
 
 public:
-    static std::function<bool(Type*, Type*)> TYPE_COMPARATOR;
+    struct TypeComparator {
+        bool operator()(const Type* t1, const Type* t2) const;
+    };
 
     short id;
     std::string name;
@@ -33,6 +35,7 @@ public:
     FlattenedType* flattenedTypeInputSide;
     FlattenedType* flattenedTypeOutputSide;
     std::optional<int> depth;
+    void initDepth();
 
 public:
     Type(TypeRegistry* registry, const std::string& name);
@@ -44,7 +47,7 @@ public:
     std::set<FieldDefinition*> getCollectFlattenedFieldDefinitions();
     std::set<Type*> collectTypes();
     void collectTypesRecursiveStep(std::set<Type*>& sortedTypes);
-    int getDepth();
+    int getDepth() const;
     bool isInstanceOf(Obj* obj);
     bool isInstanceOf(Type* type);
     std::string getName() const;

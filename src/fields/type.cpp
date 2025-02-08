@@ -7,11 +7,10 @@
 #include <algorithm>
 #include <stdexcept>
 
-std::function<bool(Type*, Type*)> Type::TYPE_COMPARATOR =
-    [](Type* t1, Type* t2) {
-        if (t1->getDepth() != t2->getDepth()) return t1->getDepth() < t2->getDepth();
-        return t1->getId() < t2->getId();
-    };
+bool Type::TypeComparator::operator()(const Type *t1, const Type *t2) const {
+    if (t1->getDepth() != t2->getDepth()) return t1->getDepth() < t2->getDepth();
+    return t1->getId() < t2->getId();
+};
 
 Type::Type(TypeRegistry* registry, const std::string& name)
     : registry(registry), name(name), depth(std::nullopt) {
@@ -58,13 +57,16 @@ void Type::collectTypesRecursiveStep(std::set<Type*>& sortedTypes) {
     sortedTypes.insert(this);
 }
 
-int Type::getDepth() {
+void Type::initDepth() {
     if (!depth.has_value()) {
         depth = 0;
         for (const auto& p : parents) {
             depth = std::max(depth.value(), p->getDepth() + 1);
         }
     }
+}
+
+int Type::getDepth() const {
     return depth.value();
 }
 
