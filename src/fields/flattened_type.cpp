@@ -6,20 +6,26 @@
 #include "fields/utils.h"
 #include "fields/queue_interceptor.h"
 
+
 FlattenedType::FlattenedType(Direction* dir, Type* type, const std::map<FieldDefinition*, int>& fieldMappings, int numberOfFields)
     : direction(dir), type(type), numberOfFields(numberOfFields) {
 
-    fields.resize(type->getTypeRegistry()->getNumberOfFieldDefinitions(), -1);
+    fields = new int[type->getTypeRegistry()->getNumberOfFieldDefinitions()];
 
-    std::map<short, std::vector<std::shared_ptr<FieldDefinition>>> groupedMap;
+    std::map<int, std::vector<FieldDefinition*>> groupedMap;
     for (const auto& e : fieldMappings) {
         fields[e.first->getId()] = e.second;
         groupedMap[e.second].push_back(e.first);
     }
 
-    fieldsReverse.resize(numberOfFields);
+    fieldsReverse = new FieldDefinition**[numberOfFields];
     for (const auto& e : groupedMap) {
-        fieldsReverse[e.first] = e.second;
+        FieldDefinition** tmp = new FieldDefinition*[e.second.size()];
+        for (int i = 0; i < e.second.size(); i++) {
+          tmp[i] = e.second[i];
+        }
+
+        fieldsReverse[e.first] = tmp;
     }
 }
 
