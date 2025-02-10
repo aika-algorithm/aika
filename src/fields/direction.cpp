@@ -18,7 +18,7 @@ Direction* Input::invert() const {
     return Direction::OUTPUT; // Return the OUTPUT direction
 }
 
-std::vector<FieldLinkDefinitionOutputSide*> Input::getFieldLinkDefinitions(FieldDefinition* fd) const {
+std::vector<FieldLinkDefinition*> Input::getFieldLinkDefinitions(FieldDefinition* fd) const {
     return fd->getInputs(); // Return the input field link definitions of the given FieldDefinition
 }
 
@@ -30,8 +30,7 @@ void Input::transmit(Field* originField,
                      FieldLinkDefinition* fl,
                      Obj* relatedObject) const {
     double inputFieldValue = relatedObject->getFieldValue(fl->getRelatedFD()); // Get the field value from the related object
-    auto outputSide = std::dynamic_pointer_cast<FieldLinkDefinitionOutputSide>(fl); // Cast the field link to output side
-    fl->getOriginFD()->transmit(originField, outputSide, inputFieldValue); // Transmit the value to the output field
+    fl->getOriginFD()->transmit(originField, fl->getOppositeSide(), inputFieldValue); // Transmit the value to the output field
 }
 
 
@@ -43,7 +42,7 @@ Direction* Output::invert() const {
     return Direction::INPUT; // Return the INPUT direction as the inverse
 }
 
-std::vector<FieldLinkDefinitionInputSide*> Output::getFieldLinkDefinitions(FieldDefinition* fd) const {
+std::vector<FieldLinkDefinition*> Output::getFieldLinkDefinitions(FieldDefinition* fd) const {
     return fd->getOutputs(); // Return the output field link definitions for the given FieldDefinition
 }
 
@@ -54,13 +53,10 @@ FlattenedType* Output::getFlattenedType(Type* type) const {
 void Output::transmit(Field* originField,
                       FieldLinkDefinition* fl,
                       Obj* relatedObject) const {
-    // Cast the FieldLinkDefinition to the InputSide type
-    auto flo = std::dynamic_pointer_cast<FieldLinkDefinitionOutputSide>(fl);
-
     // Transmit the related field value using the related field definition
     fl->getRelatedFD()->transmit(
         relatedObject->getOrCreateFieldInput(fl->getRelatedFD()), // Create or get the input field
-        flo, // Use the output side of the link
+        fl->getOppositeSide(),
         originField->getUpdate() // Pass the update of the origin field
     );
 }

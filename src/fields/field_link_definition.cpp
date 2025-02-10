@@ -8,14 +8,14 @@ void FieldLinkDefinition::link(FieldDefinition* input,
                                 FieldDefinition* output,
                                 Relation* relation,
                                 std::optional<int> argument) {
-    auto flo = new FieldLinkDefinitionOutputSide(output, input, relation->getReverse(), Direction::OUTPUT, argument);
-    auto fli = new FieldLinkDefinitionInputSide(input, output, relation, Direction::INPUT, argument);
+    auto flo = new FieldLinkDefinition(output, input, relation->getReverse(), Direction::OUTPUT, argument);
+    auto fli = new FieldLinkDefinition(input, output, relation, Direction::INPUT, argument);
 
     output->addInput(flo);
     input->addOutput(fli);
 
-    flo->setInputSide(fli);
-    fli->setOutputSide(flo);
+    flo->setOppositeSide(fli);
+    fli->setOppositeSide(flo);
 }
 
 FieldLinkDefinition::FieldLinkDefinition(FieldDefinition* originFD,
@@ -58,58 +58,27 @@ std::string FieldLinkDefinition::toString() const {
 }
 
 
-FieldLinkDefinitionInputSide::FieldLinkDefinitionInputSide(
-    FieldDefinition* input,
-    FieldDefinition* output,
-    Relation* relation,
-    Direction* direction,
-    std::optional<int> argument)
-    : FieldLinkDefinition(input, output, relation, direction, argument) {}
 
-FieldLinkDefinitionOutputSide* FieldLinkDefinitionInputSide::getOutputSide() const {
-    return outputSide;
-}
-
-void FieldLinkDefinitionInputSide::setOutputSide(FieldLinkDefinitionOutputSide* outputSide) {
-    this->outputSide = outputSide;
-}
-
-
-FieldLinkDefinitionOutputSide::FieldLinkDefinitionOutputSide(
-    FieldDefinition* output,
-    FieldDefinition* input,
-    Relation* relation,
-    Direction* direction,
-    std::optional<int> argument)
-    : FieldLinkDefinition(output, input, relation, direction, argument) {}
-
-FieldLinkDefinitionOutputSide::FieldLinkDefinitionOutputSide(
-    FieldDefinition* output,
-    FieldDefinition* input,
-    Relation* relation,
-    Direction* direction)
-    : FieldLinkDefinition(output, input, relation, direction) {}
-
-Field* FieldLinkDefinitionOutputSide::getInputField(Obj* obj) {
+Field* FieldLinkDefinition::getInputField(Obj* obj) {
     RelationOne* rt = (RelationOne*) getRelation();
     auto inputObj = rt->followOne(obj);
     return inputObj->getFieldOutput(getRelatedFD());
 }
 
-double FieldLinkDefinitionOutputSide::getInputValue(Obj* obj) {
+double FieldLinkDefinition::getInputValue(Obj* obj) {
     auto f = getInputField(obj);
     return (f != nullptr) ? f->getValue() : 0.0;
 }
 
-double FieldLinkDefinitionOutputSide::getUpdatedInputValue(Obj* obj) {
+double FieldLinkDefinition::getUpdatedInputValue(Obj* obj) {
     auto f = getInputField(obj);
     return (f != nullptr) ? f->getUpdatedValue() : 0.0;
 }
 
-FieldLinkDefinitionInputSide* FieldLinkDefinitionOutputSide::getInputSide() const {
-    return inputSide;
+FieldLinkDefinition* FieldLinkDefinition::getOppositeSide() const {
+    return oppositeSide;
 }
 
-void FieldLinkDefinitionOutputSide::setInputSide(FieldLinkDefinitionInputSide* inputSide) {
-    this->inputSide = inputSide;
+void FieldLinkDefinition::setOppositeSide(FieldLinkDefinition* os) {
+    oppositeSide = os;
 }

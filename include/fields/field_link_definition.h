@@ -13,6 +13,7 @@
 
 class FieldLinkDefinition {
 private:
+    FieldLinkDefinition* oppositeSide;
     FieldDefinition* originFD;
     FieldDefinition* relatedFD;
     Relation* relation;
@@ -36,56 +37,20 @@ public:
                         Relation* relation,
                         Direction* direction);
 
+    FieldLinkDefinition* getOppositeSide() const;
+    void setOppositeSide(FieldLinkDefinition* os);
+
     FieldDefinition* getOriginFD() const;
     FieldDefinition* getRelatedFD() const;
     Relation* getRelation() const;
     Direction* getDirection() const;
     int getArgument() const;
 
-    std::string toString() const;
-};
-
-
-
-class FieldLinkDefinitionInputSide : public FieldLinkDefinition {
-private:
-    FieldLinkDefinitionOutputSide* outputSide;
-
-public:
-    FieldLinkDefinitionInputSide(FieldDefinition* input,
-                                 FieldDefinition* output,
-                                 Relation* relation,
-                                 Direction* direction,
-                                 std::optional<int> argument = std::nullopt);
-
-    FieldLinkDefinitionOutputSide* getOutputSide() const;
-    void setOutputSide(FieldLinkDefinitionOutputSide* outputSide);
-};
-
-
-
-class FieldLinkDefinitionOutputSide : public FieldLinkDefinition {
-private:
-    FieldLinkDefinitionInputSide* inputSide;
-
-public:
-    FieldLinkDefinitionOutputSide(FieldDefinition* output,
-                                  FieldDefinition* input,
-                                  Relation* relation,
-                                  Direction* direction,
-                                  std::optional<int> argument = std::nullopt);
-
-    FieldLinkDefinitionOutputSide(FieldDefinition* output,
-                                  FieldDefinition* input,
-                                  Relation* relation,
-                                  Direction* direction);
-
     Field* getInputField(Obj* obj);
     double getInputValue(Obj* obj);
     double getUpdatedInputValue(Obj* obj);
 
-    FieldLinkDefinitionInputSide* getInputSide() const;
-    void setInputSide(FieldLinkDefinitionInputSide* inputSide);
+    std::string toString() const;
 };
 
 #endif //FIELD_LINK_DEFINITION_H

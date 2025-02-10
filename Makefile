@@ -174,6 +174,30 @@ aika/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/build
 .PHONY : aika/fast
 
+src/fields/direction.o: src/fields/direction.cpp.o
+.PHONY : src/fields/direction.o
+
+# target to build an object file
+src/fields/direction.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/direction.cpp.o
+.PHONY : src/fields/direction.cpp.o
+
+src/fields/direction.i: src/fields/direction.cpp.i
+.PHONY : src/fields/direction.i
+
+# target to preprocess a source file
+src/fields/direction.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/direction.cpp.i
+.PHONY : src/fields/direction.cpp.i
+
+src/fields/direction.s: src/fields/direction.cpp.s
+.PHONY : src/fields/direction.s
+
+# target to generate assembly for a file
+src/fields/direction.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/direction.cpp.s
+.PHONY : src/fields/direction.cpp.s
+
 src/fields/field.o: src/fields/field.cpp.o
 .PHONY : src/fields/field.o
 
@@ -403,6 +427,9 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... aika"
+	@echo "... src/fields/direction.o"
+	@echo "... src/fields/direction.i"
+	@echo "... src/fields/direction.s"
 	@echo "... src/fields/field.o"
 	@echo "... src/fields/field.i"
 	@echo "... src/fields/field.s"

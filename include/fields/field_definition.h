@@ -1,5 +1,5 @@
-#ifndef FIELDDDEFINITION_H
-#define FIELDDDEFINITION_H
+#ifndef FIELD_DEFINITION_H
+#define FIELD_DEFINITION_H
 
 #include <string>
 #include <memory>
@@ -11,8 +11,7 @@
 #include <stdexcept>
 
 class Field;
-class FieldLinkDefinitionInputSide;
-class FieldLinkDefinitionOutputSide;
+class FieldLinkDefinition;
 class Type;
 class Relation;
 class FixedArgumentsFieldDefinition;
@@ -25,7 +24,7 @@ class FieldDefinition {
 protected:
     int fieldId;
     std::string name;
-    std::vector<FieldLinkDefinitionInputSide*> outputs;
+    std::vector<FieldLinkDefinition*> outputs;
     FieldDefinition* parent;
     std::vector<FieldDefinition*> children;
     Type* objectType;
@@ -38,7 +37,7 @@ public:
     FieldDefinition(Type* objectType, const std::string& name, double tolerance);
 
     void setFieldId(int fieldId);
-    void transmit(Field* targetField, FieldLinkDefinitionOutputSide* fieldLink, double update);
+    void transmit(Field* targetField, FieldLinkDefinition* fieldLink, double update);
     void receiveUpdate(Field* field, double update);
 
     FieldDefinition* getParent() const;
@@ -49,10 +48,10 @@ public:
     FieldDefinition* resolveInheritedFieldDefinition(const std::set<FieldDefinition*>& fieldDefs);
 
     void initializeField(Field* field);
-    void addInput(FieldLinkDefinitionOutputSide* fl);
-    std::vector<FieldLinkDefinitionOutputSide*> getInputs();
-    void addOutput(FieldLinkDefinitionInputSide* fl);
-    std::vector<FieldLinkDefinitionInputSide*> getOutputs();
+    void addInput(FieldLinkDefinition* fl);
+    std::vector<FieldLinkDefinition*> getInputs();
+    void addOutput(FieldLinkDefinition* fl);
+    std::vector<FieldLinkDefinition*> getOutputs();
 
     FieldDefinition& out(Relation* relation, FieldDefinition* output, int arg);
 
@@ -74,4 +73,4 @@ public:
     bool operator<(const FieldDefinition& fd) const; // For sorting (compareTo)
 };
 
-#endif // FIELDDDEFINITION_H
+#endif // FIELD_DEFINITION_H

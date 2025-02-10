@@ -22,7 +22,7 @@ void FieldDefinition::setFieldId(int fieldId) {
     this->fieldId = fieldId;
 }
 
-void FieldDefinition::transmit(Field* targetField, FieldLinkDefinitionOutputSide* fieldLink, double update) {
+void FieldDefinition::transmit(Field* targetField, FieldLinkDefinition* fieldLink, double update) {
     receiveUpdate(targetField, update);
 }
 
@@ -65,19 +65,19 @@ void FieldDefinition::initializeField(Field* field) {
     field->getObject()->getType()->getFlattenedTypeInputSide()->followLinks(field);
 }
 
-void FieldDefinition::addInput(FieldLinkDefinitionOutputSide* fl) {
+void FieldDefinition::addInput(FieldLinkDefinition* fl) {
     throw std::logic_error("Unsupported operation.");
 }
 
-std::vector<FieldLinkDefinitionOutputSide*> FieldDefinition::getInputs() {
+std::vector<FieldLinkDefinition*> FieldDefinition::getInputs() {
     throw std::logic_error("Unsupported operation.");
 }
 
-void FieldDefinition::addOutput(FieldLinkDefinitionInputSide* fl) {
+void FieldDefinition::addOutput(FieldLinkDefinition* fl) {
     outputs.push_back(fl);
 }
 
-std::vector<FieldLinkDefinitionInputSide*> FieldDefinition::getOutputs() {
+std::vector<FieldLinkDefinition*> FieldDefinition::getOutputs() {
     return outputs;
 }
 
