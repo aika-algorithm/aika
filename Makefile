@@ -318,6 +318,30 @@ src/fields/flattened_type_relation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.s
 .PHONY : src/fields/flattened_type_relation.cpp.s
 
+src/fields/queue_interceptor.o: src/fields/queue_interceptor.cpp.o
+.PHONY : src/fields/queue_interceptor.o
+
+# target to build an object file
+src/fields/queue_interceptor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.o
+.PHONY : src/fields/queue_interceptor.cpp.o
+
+src/fields/queue_interceptor.i: src/fields/queue_interceptor.cpp.i
+.PHONY : src/fields/queue_interceptor.i
+
+# target to preprocess a source file
+src/fields/queue_interceptor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.i
+.PHONY : src/fields/queue_interceptor.cpp.i
+
+src/fields/queue_interceptor.s: src/fields/queue_interceptor.cpp.s
+.PHONY : src/fields/queue_interceptor.s
+
+# target to generate assembly for a file
+src/fields/queue_interceptor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.s
+.PHONY : src/fields/queue_interceptor.cpp.s
+
 src/fields/type.o: src/fields/type.cpp.o
 .PHONY : src/fields/type.o
 
@@ -445,6 +469,9 @@ help:
 	@echo "... src/fields/flattened_type_relation.o"
 	@echo "... src/fields/flattened_type_relation.i"
 	@echo "... src/fields/flattened_type_relation.s"
+	@echo "... src/fields/queue_interceptor.o"
+	@echo "... src/fields/queue_interceptor.i"
+	@echo "... src/fields/queue_interceptor.s"
 	@echo "... src/fields/type.o"
 	@echo "... src/fields/type.i"
 	@echo "... src/fields/type.s"

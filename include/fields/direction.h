@@ -4,12 +4,11 @@
 
 #include <vector>
 
-
+class Obj;
 class Field;
 class FieldDefinition;
 class FieldLinkDefinition;
 class FlattenedType;
-class Obj;
 class Type;
 
 

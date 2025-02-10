@@ -4,8 +4,7 @@
 #include <vector>
 #include <string>
 
-class Obj;
-
+#include <fields/obj.h>
 
 class Relation {
 protected:

@@ -1,29 +1,30 @@
 
-#include "fields/queue_interceptor.h"
-#include "fields/field_update.h"
 #include "fields/step.h"
+#include "fields/field_update.h"
+#include "fields/queue_interceptor.h"
 
-QueueInterceptor::QueueInterceptor(std::shared_ptr<Queue> q,
-                                   std::shared_ptr<Field> f,
-                                   std::shared_ptr<ProcessingPhase> phase,
+
+QueueInterceptor::QueueInterceptor(Queue* q,
+                                   Field* f,
+                                   ProcessingPhase& phase,
                                    bool isNextRound)
     : queue(q), field(f), phase(phase), isNextRound(isNextRound), step(nullptr) {}
 
-std::shared_ptr<FieldUpdate> QueueInterceptor::getStep() const {
+FieldUpdate* QueueInterceptor::getStep() const {
     return step;
 }
 
-std::shared_ptr<Field> QueueInterceptor::getField() const {
+Field* QueueInterceptor::getField() const {
     return field;
 }
 
-bool QueueInterceptor::isNextRound() const {
+bool QueueInterceptor::getIsNextRound() const {
     return isNextRound;
 }
 
-std::shared_ptr<FieldUpdate> QueueInterceptor::getOrCreateStep() {
+FieldUpdate* QueueInterceptor::getOrCreateStep() {
     if (!step) {
-        step = std::make_shared<FieldUpdate>(phase, shared_from_this());
+        step = new FieldUpdate(phase, this);
     }
     return step;
 }
@@ -32,18 +33,18 @@ void QueueInterceptor::receiveUpdate(double u, bool replaceUpdate) {
     auto s = getOrCreateStep();
     s->updateDelta(u, replaceUpdate);
 
-    if (u != 0.0 && !s->isQueued()) {
+    if (u != 0.0 && !s->getIsQueued()) {
         if (!Step::add(s)) {
             process(s);
         }
     }
 }
 
-void QueueInterceptor::process(std::shared_ptr<FieldUpdate> s) {
+void QueueInterceptor::process(FieldUpdate* s) {
     step = nullptr;
     field->triggerUpdate(s->getDelta());
 }
 
-std::shared_ptr<Queue> QueueInterceptor::getQueue() const {
+Queue* QueueInterceptor::getQueue() const {
     return queue;
 }

@@ -30,7 +30,7 @@ Obj* Field::getObject() {
     return object;
 }
 
-Field& Field::setQueued(Queue* q, ProcessingPhase* phase, bool isNextRound) {
+Field& Field::setQueued(Queue* q, ProcessingPhase& phase, bool isNextRound) {
     interceptor = new QueueInterceptor(q, this, phase, isNextRound);
     return *this;
 }

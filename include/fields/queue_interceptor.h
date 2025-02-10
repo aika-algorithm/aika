@@ -2,21 +2,23 @@
 #ifndef QUEUE_INTERCEPTOR_H
 #define QUEUE_INTERCEPTOR_H
 
-#include "fields/field.h"
-#include "fields/field_update.h"
+
+class FieldUpdate;
+class Queue;
+class ProcessingPhase;
 
 class QueueInterceptor {
 private:
-    ProcessingPhase* phase;
+    ProcessingPhase& phase;
     FieldUpdate* step;
     Field* field;
     Queue* queue;
-    bool isNextRound;
+    const bool isNextRound;
 
 public:
     QueueInterceptor(Queue* q,
                      Field* f,
-                     ProcessingPhase* phase,
+                     ProcessingPhase& phase,
                      bool isNextRound);
 
     FieldUpdate* getStep() const;

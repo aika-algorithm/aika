@@ -5,10 +5,10 @@
 
 #include "fields/field_definition.h"
 #include "fields/obj.h"
+#include "fields/queue_interceptor.h"
 
 
 class Queue;
-class QueueInterceptor;
 class ProcessingPhase;
 
 
@@ -31,7 +31,7 @@ public:
     double getUpdatedValue();
     Obj* getObject();
 
-    Field& setQueued(Queue* q, ProcessingPhase* phase, bool isNextRound);
+    Field& setQueued(Queue* q, ProcessingPhase& phase, bool isNextRound);
 
     FieldDefinition* getFieldDefinition();
 

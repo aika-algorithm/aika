@@ -3,39 +3,34 @@
 #include "fields/field_update.h"
 #include "fields/utils.h"
 
-template <typename E>
-FieldUpdate<E>::FieldUpdate(std::shared_ptr<ProcessingPhase> p, std::shared_ptr<QueueInterceptor> qf)
+FieldUpdate::FieldUpdate(ProcessingPhase& p, QueueInterceptor* qf)
     : phase(p), interceptor(qf) {}
 
-template <typename E>
-bool FieldUpdate<E>::incrementRound() {
-    return interceptor->isNextRound();
+bool FieldUpdate::incrementRound() {
+    return interceptor->getIsNextRound();
 }
 
-template <typename E>
-void FieldUpdate<E>::updateSortValue(double delta) {
+void FieldUpdate::updateSortValue(double delta) {
     int newSortValue = ApproximateComparisonValueUtil::convert(delta);
     if (std::abs(sortValue - newSortValue) == 0) {
         return;
     }
 
-    if (isQueued()) {
+    if (getIsQueued()) {
         auto q = getQueue();
-        q->removeStep(shared_from_this());
+        q->removeStep(this);
         sortValue = newSortValue;
-        q->addStep(shared_from_this());
+        q->addStep(this);
     } else {
         sortValue = newSortValue;
     }
 }
 
-template <typename E>
-int FieldUpdate<E>::getSortValue() const {
+int FieldUpdate::getSortValue() const {
     return sortValue;
 }
 
-template <typename E>
-void FieldUpdate<E>::updateDelta(double delta, bool replaceUpdate) {
+void FieldUpdate::updateDelta(double delta, bool replaceUpdate) {
     if (replaceUpdate)
         this->delta = 0;
 
@@ -44,54 +39,38 @@ void FieldUpdate<E>::updateDelta(double delta, bool replaceUpdate) {
     updateSortValue(std::abs(this->delta));
 }
 
-template <typename E>
-void FieldUpdate<E>::reset() {
+void FieldUpdate::reset() {
     delta = 0.0;
 }
 
-template <typename E>
-std::shared_ptr<Queue> FieldUpdate<E>::getQueue() const {
+Queue* FieldUpdate::getQueue() const {
     return interceptor->getQueue();
 }
 
-template <typename E>
-void FieldUpdate<E>::createQueueKey(long timestamp, int round) {
-    queueKey = std::make_shared<FieldQueueKey>(round, getPhase(), sortValue, timestamp);
+void FieldUpdate::createQueueKey(long timestamp, int round) {
+    queueKey =new FieldQueueKey(round, getPhase(), sortValue, timestamp);
 }
 
-template <typename E>
-void FieldUpdate<E>::process() {
-    interceptor->process(shared_from_this());
+void FieldUpdate::process() {
+    interceptor->process(this);
 }
 
-template <typename E>
-std::shared_ptr<ProcessingPhase> FieldUpdate<E>::getPhase() const {
+ProcessingPhase& FieldUpdate::getPhase() const {
     return phase;
 }
 
-template <typename E>
-std::shared_ptr<E> FieldUpdate<E>::getElement() const {
-    return std::dynamic_pointer_cast<E>(interceptor->getField()->getObject());
-}
-
-template <typename E>
-std::shared_ptr<QueueInterceptor> FieldUpdate<E>::getInterceptor() const {
+QueueInterceptor* FieldUpdate::getInterceptor() const {
     return interceptor;
 }
 
-template <typename E>
-std::string FieldUpdate<E>::toShortString() const {
+std::string FieldUpdate::toShortString() const {
     return " Round:" + std::to_string(getQueueKey()->getRound()) +
            " Delta:" + std::to_string(delta);
 }
 
-template <typename E>
-std::string FieldUpdate<E>::toString() const {
-    return getElement()->toString() + " Delta:" + std::to_string(delta) +
+std::string FieldUpdate::toString() const {
+    return interceptor->getField()->toString() + " Delta:" + std::to_string(delta) +
            " Field: " + interceptor->getField()->toString() +
            " Ref:" + interceptor->getField()->getObject()->toString();
 }
-
-// Explicit template instantiations (if needed)
-template class FieldUpdate<Obj>;
 

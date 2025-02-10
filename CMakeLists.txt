@@ -18,6 +18,8 @@ set(SOURCES
         src/fields/flattened_type.cpp
         src/fields/flattened_type_relation.cpp
         src/fields/direction.cpp
+        src/fields/queue_interceptor.cpp
+        src/fields/field_update.cpp
         src/network/model.cpp
 )
 
