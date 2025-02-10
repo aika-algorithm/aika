@@ -8,19 +8,20 @@
 #include "fields/direction.h"
 
 class Type;
+class FlattenedTypeRelation;
 
 
 class FlattenedType {
 private:
     Direction* direction;
     Type* type;
-    int* fields;
-    FieldDefinition*** fieldsReverse;
+
     int numberOfFields;
-    FlattenedTypeRelation*** mapping;
+    int* fields;
+    FieldDefinition*** fieldsReverse; // Number of fields | List of rev. field mappings terminated by nullptr.
+    FlattenedTypeRelation*** mapping; // Number of Relations | Number of Types
 
     FlattenedType(Direction* dir, Type* type, const std::map<FieldDefinition*, int>& fieldMappings, int numberOfFields);
-
     FlattenedTypeRelation* flattenPerType(Relation* relation, Type* relatedType);
 
 public:
@@ -30,9 +31,11 @@ public:
     void flatten();
     void followLinks(Field* field);
 
-    short getFieldIndex(FieldDefinition* fd);
-    short getNumberOfFields() const;
+    int getFieldIndex(FieldDefinition* fd);
+    int getNumberOfFields() const;
     Type* getType() const;
+
+    FieldDefinition*** getFieldsReverse();
     FieldDefinition* getFieldDefinitionIdByIndex(short idx);
 
     void followLinks(FlattenedTypeRelation* ftr, Obj* relatedObj, Field* field);

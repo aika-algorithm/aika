@@ -2,9 +2,6 @@
 #define FLATTENED_TYPE_RELATION_H
 
 #include <vector>
-#include <map>
-#include <memory>
-#include <list>
 
 #include "fields/direction.h"
 #include "fields/field.h"
@@ -15,7 +12,9 @@ class Obj;
 
 class FlattenedTypeRelation {
 private:
-    std::vector<FieldLinkDefinition*>* fieldLinks;
+    FlattenedType* flattenedType;
+
+    FieldLinkDefinition*** fieldLinks;
 
 public:
     FlattenedTypeRelation(FlattenedType* flattenedType, const std::vector<FieldLinkDefinition*>& fls);

@@ -5,6 +5,7 @@
 #include "fields/field.h"
 #include "fields/utils.h"
 #include "fields/queue_interceptor.h"
+#include "fields/null_terminated_array.h"
 
 
 FlattenedType::FlattenedType(Direction* dir, Type* type, const std::map<FieldDefinition*, int>& fieldMappings, int numberOfFields)
@@ -20,12 +21,7 @@ FlattenedType::FlattenedType(Direction* dir, Type* type, const std::map<FieldDef
 
     fieldsReverse = new FieldDefinition**[numberOfFields];
     for (const auto& e : groupedMap) {
-        FieldDefinition** tmp = new FieldDefinition*[e.second.size()];
-        for (int i = 0; i < e.second.size(); i++) {
-          tmp[i] = e.second[i];
-        }
-
-        fieldsReverse[e.first] = tmp;
+        fieldsReverse[e.first] = nullTerminatedArrayFromVector<FieldDefinition*>(e.second);
     }
 }
 
@@ -68,25 +64,31 @@ bool isAllNull(const std::vector<T>& vec) {
 }
 
 void FlattenedType::flatten() {
-    mapping.resize(type->getRelations().size());
+    mapping = new FlattenedTypeRelation**[type->getRelations().size()];
 
     for (const auto& rel : type->getRelations()) {
-        std::vector<std::shared_ptr<FlattenedTypeRelation>> resultsPerRelation(type->getTypeRegistry()->getTypes().size());
+        std::vector<FlattenedTypeRelation*> resultsPerRelation(type->getTypeRegistry()->getTypes().size());
         for (const auto& relatedType : type->getTypeRegistry()->getTypes()) {
             resultsPerRelation[relatedType->getId()] = flattenPerType(rel, relatedType);
         }
 
         if (!isAllNull(resultsPerRelation)) {
-            mapping[rel->getRelationId()] = resultsPerRelation;
+            FlattenedTypeRelation** tmp = new FlattenedTypeRelation*[resultsPerRelation.size()];
+            for (int i = 0; i < resultsPerRelation.size(); i++) {
+                tmp[i] = resultsPerRelation[i];
+            }
+
+            mapping[rel->getRelationId()] = tmp;
         }
     }
 }
 
 FlattenedTypeRelation* FlattenedType::flattenPerType(Relation* relation, Type* relatedType) {
-    std::vector<std::shared_ptr<FieldLinkDefinition>> fieldLinks;
+    std::vector<FieldLinkDefinition*> fieldLinks;
 
-    for (const auto& fieldArr : fieldsReverse) {
-        for (const auto& fd : fieldArr) {
+    for (int i = 0; i < numberOfFields; i++) {
+        NullTerminatedArray<FieldDefinition*> fdArray(fieldsReverse[i]);
+        for (FieldDefinition* fd : fdArray) {
             for(const auto& fl : direction->getFieldLinkDefinitions(fd)) {
                 if (fl->getRelation()->getRelationId() == relation->getRelationId() &&
                     relatedType->isInstanceOf(fl->getRelatedFD()->getObjectType()) &&
@@ -103,15 +105,14 @@ FlattenedTypeRelation* FlattenedType::flattenPerType(Relation* relation, Type* r
 }
 
 void FlattenedType::followLinks(Field* field) {
-    for (int relationId = 0; relationId < mapping.size(); relationId++) {
+    for (int relationId = 0; relationId < type->getRelations().size(); relationId++) {
         auto& ftr = mapping[relationId];
 
         if (ftr != nullptr) {
             auto relation = type->getRelations()[relationId];
-            relation->followMany(field->getObject())
-                    .forEach([&](Obj* relatedObj) {
-                        followLinks(ftr[relatedObj->getType()->getId()], relatedObj, field);
-                    });
+            for(Obj* relatedObj: relation->followMany(field->getObject())) {
+                followLinks(ftr[relatedObj->getType()->getId()], relatedObj, field);
+            }
         }
     }
 }
@@ -127,11 +128,15 @@ int FlattenedType::getFieldIndex(FieldDefinition* fd) {
 }
 
 int FlattenedType::getNumberOfFields() const {
-    return fieldsReverse.size();
+    return numberOfFields;
 }
 
 Type* FlattenedType::getType() const {
     return type;
+}
+
+FieldDefinition*** FlattenedType::getFieldsReverse() {
+    return fieldsReverse;
 }
 
 FieldDefinition* FlattenedType::getFieldDefinitionIdByIndex(short idx) {

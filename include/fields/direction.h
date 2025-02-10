@@ -2,15 +2,15 @@
 #ifndef DIRECTION_H
 #define DIRECTION_H
 
-#include <memory>
 #include <vector>
 
 
+class Field;
 class FieldDefinition;
 class FieldLinkDefinition;
 class FlattenedType;
 class Obj;
-class Field;
+class Type;
 
 
 class Direction {

@@ -25,7 +25,7 @@ public:
         bool operator()(const Type* t1, const Type* t2) const;
     };
 
-    short id;
+    int id;
     std::string name;
     std::vector<Type*> parents;
     std::vector<Type*> children;
