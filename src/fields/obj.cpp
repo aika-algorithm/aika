@@ -5,7 +5,7 @@
 #include "fields/obj.h"
 #include "fields/type.h"
 
-Obj::Obj(std::shared_ptr<Type> type) : type(type) {
+Obj::Obj(Type* type) : type(type) {
     if (type != nullptr) {
         fields.resize(type->getFlattenedTypeInputSide()->getNumberOfFields());
     }
@@ -19,58 +19,58 @@ void Obj::initFields() {
     }
 }
 
-std::shared_ptr<Type> Obj::getType() const {
+Type* Obj::getType() const {
     return type;
 }
 
-std::shared_ptr<Obj> Obj::followManyRelation(std::shared_ptr<Relation> rel) {
+Obj* Obj::followManyRelation(Relation* rel) {
     return nullptr; // Implementation as required, for now returning nullptr
 }
 
-std::shared_ptr<Obj> Obj::followSingleRelation(std::shared_ptr<Relation> rel) {
+Obj* Obj::followSingleRelation(Relation* rel) {
     return nullptr; // Implementation as required, for now returning nullptr
 }
 
-bool Obj::isInstanceOf(std::shared_ptr<Type> t) {
+bool Obj::isInstanceOf(Type* t) {
     return type->isInstanceOf(t);
 }
 
-std::shared_ptr<Field> Obj::getFieldOutput(std::shared_ptr<FieldDefinition> fd) {
+Field* Obj::getFieldOutput(FieldDefinition* fd) {
     short fieldIndex = type->getFlattenedTypeOutputSide()->getFieldIndex(fd);
     return fields[fieldIndex];
 }
 
-std::shared_ptr<Field> Obj::getOrCreateFieldInput(std::shared_ptr<FieldDefinition> fd) {
+Field* Obj::getOrCreateFieldInput(FieldDefinition* fd) {
     short fieldIndex = type->getFlattenedTypeInputSide()->getFieldIndex(fd);
     if (!fields[fieldIndex]) {
-        fields[fieldIndex] = std::make_shared<Field>(shared_from_this(), fd, fieldIndex);
+        fields[fieldIndex] = new Field(this, fd, fieldIndex);
     }
     return fields[fieldIndex];
 }
 
-Obj& Obj::setFieldValue(std::shared_ptr<FieldDefinition> fd, double v) {
+Obj& Obj::setFieldValue(FieldDefinition* fd, double v) {
     getOrCreateFieldInput(fd)->setValue(v);
     return *this;
 }
 
-double Obj::getFieldValue(std::shared_ptr<FieldDefinition> fd) {
+double Obj::getFieldValue(FieldDefinition* fd) {
     auto f = getFieldOutput(fd);
     return f ? f->getValue() : 0.0;
 }
 
-double Obj::getFieldUpdatedValue(std::shared_ptr<FieldDefinition> fd) {
+double Obj::getFieldUpdatedValue(FieldDefinition* fd) {
     auto f = getFieldOutput(fd);
     return f ? f->getUpdatedValue() : 0.0;
 }
 
-std::vector<std::shared_ptr<Field>> Obj::getFields() {
+std::vector<Field*> Obj::getFields() {
     std::vector<std::shared_ptr<Field>> nonNullFields;
     std::copy_if(fields.begin(), fields.end(), std::back_inserter(nonNullFields),
                  [](const auto& field) { return field != nullptr; });
     return nonNullFields;
 }
 
-std::shared_ptr<Queue> Obj::getQueue() {
+Queue* Obj::getQueue() {
     return nullptr; // Implementation for queue handling, for now returning nullptr
 }
 

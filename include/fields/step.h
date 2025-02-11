@@ -21,11 +21,11 @@ class Step : public QueueProvider {
     bool getIsQueued() const;
     QueueKey* getQueueKey() const;
 
-    virtual Queue* getQueue() const = 0;
+    virtual Queue* getQueue() const;
     virtual bool incrementRound();
     virtual void createQueueKey(long timestamp, int round) = 0;
     virtual void process() = 0;
-    virtual ProcessingPhase* getPhase() const = 0;
+    virtual ProcessingPhase& getPhase() const;
     static bool add(Step* s);
 };
 

@@ -20,13 +20,13 @@ long Queue::getNextTimestamp() {
     return timestampCounter++;
 }
 
-void Queue::addStep(std::shared_ptr<Step> s) {
+void Queue::addStep(Step* s) {
     s->createQueueKey(getNextTimestamp(), getRound(s));
     queue[s->getQueueKey()] = s;
     s->setQueued(true);
 }
 
-int Queue::getRound(std::shared_ptr<Step> s) {
+int Queue::getRound(Step* s) {
     int round;
     if (s->getPhase()->isDelayed())
         round = QueueKey::MAX_ROUND;
@@ -47,15 +47,15 @@ int Queue::getCurrentRound() {
     return (r == QueueKey::MAX_ROUND) ? 0 : r;
 }
 
-void Queue::removeStep(std::shared_ptr<Step> s) {
+void Queue::removeStep(Step* s) {
     auto removedStep = queue.erase(s->getQueueKey());
     if (removedStep == 0)
         throw std::runtime_error("Step not found");
     s->setQueued(false);
 }
 
-std::vector<std::shared_ptr<Step>> Queue::getQueueEntries() {
-    std::vector<std::shared_ptr<Step>> entries;
+std::vector<Step*> Queue::getQueueEntries() {
+    std::vector<Step*> entries;
     for (const auto& entry : queue) {
         entries.push_back(entry.second);
     }
@@ -66,7 +66,7 @@ void Queue::process() {
     process(nullptr);
 }
 
-void Queue::process(std::function<bool(std::shared_ptr<Step>)> filter) {
+void Queue::process(std::function<bool(Step*)> filter) {
     long startTime = std::chrono::system_clock::now().time_since_epoch().count();
 
     while (!queue.empty()) {

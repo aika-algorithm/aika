@@ -4,6 +4,7 @@
 
 
 class FieldUpdate;
+class Field;
 class Queue;
 class ProcessingPhase;
 

@@ -12,7 +12,7 @@ const std::function<bool(const std::shared_ptr<QueueKey>, const std::shared_ptr<
         return false;
 };
 
-QueueKey::QueueKey(int round, std::shared_ptr<ProcessingPhase> phase, std::shared_ptr<Timestamp> currentTimestamp)
+QueueKey::QueueKey(int round, ProcessingPhase& phase, long currentTimestamp)
     : round(round), phase(phase), currentTimestamp(currentTimestamp) {}
 
 int QueueKey::getRound() const {
@@ -23,7 +23,7 @@ std::string QueueKey::getRoundStr() const {
     return std::to_string(getRound());
 }
 
-std::shared_ptr<ProcessingPhase> QueueKey::getPhase() const {
+ProcessingPhase& QueueKey::getPhase() const {
     return phase;
 }
 
@@ -31,11 +31,11 @@ std::string QueueKey::getPhaseStr() const {
     return getPhase()->toString() + "-" + getPhase()->toString();
 }
 
-std::shared_ptr<Timestamp> QueueKey::getCurrentTimestamp() const {
+long QueueKey::getCurrentTimestamp() const {
     return currentTimestamp;
 }
 
-bool QueueKey::operator<(const std::shared_ptr<QueueKey>& other) const {
-    return COMPARATOR(shared_from_this(), other);
+bool QueueKey::operator<(const QueueKey* other) const {
+    return COMPARATOR(this, other);
 }
 

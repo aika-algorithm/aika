@@ -48,7 +48,7 @@ Queue* FieldUpdate::getQueue() const {
 }
 
 void FieldUpdate::createQueueKey(long timestamp, int round) {
-    queueKey =new FieldQueueKey(round, getPhase(), sortValue, timestamp);
+    queueKey = new FieldQueueKey(round, getPhase(), sortValue, timestamp);
 }
 
 void FieldUpdate::process() {

@@ -8,7 +8,7 @@ class Queue;
 
 class QueueProvider {
 public:
-    virtual Queue* getQueue() = 0; // Pure virtual function
+    virtual Queue* getQueue() const; // Pure virtual function
 
     virtual ~QueueProvider() = default; // Virtual destructor for proper cleanup
 };
