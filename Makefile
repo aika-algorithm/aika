@@ -390,6 +390,30 @@ src/fields/queue_interceptor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.s
 .PHONY : src/fields/queue_interceptor.cpp.s
 
+src/fields/step.o: src/fields/step.cpp.o
+.PHONY : src/fields/step.o
+
+# target to build an object file
+src/fields/step.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/step.cpp.o
+.PHONY : src/fields/step.cpp.o
+
+src/fields/step.i: src/fields/step.cpp.i
+.PHONY : src/fields/step.i
+
+# target to preprocess a source file
+src/fields/step.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/step.cpp.i
+.PHONY : src/fields/step.cpp.i
+
+src/fields/step.s: src/fields/step.cpp.s
+.PHONY : src/fields/step.s
+
+# target to generate assembly for a file
+src/fields/step.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/step.cpp.s
+.PHONY : src/fields/step.cpp.s
+
 src/fields/type.o: src/fields/type.cpp.o
 .PHONY : src/fields/type.o
 
@@ -550,6 +574,9 @@ help:
 	@echo "... src/fields/queue_interceptor.o"
 	@echo "... src/fields/queue_interceptor.i"
 	@echo "... src/fields/queue_interceptor.s"
+	@echo "... src/fields/step.o"
+	@echo "... src/fields/step.i"
+	@echo "... src/fields/step.s"
 	@echo "... src/fields/type.o"
 	@echo "... src/fields/type.i"
 	@echo "... src/fields/type.s"

@@ -22,6 +22,7 @@ set(SOURCES
         src/fields/field_update.cpp
         src/fields/utils.cpp
         src/fields/queue.cpp
+        src/fields/step.cpp
         src/network/model.cpp
 )
 
