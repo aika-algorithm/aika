@@ -15,12 +15,12 @@ public:
     virtual ~ProcessingPhase() = default; // Virtual destructor for proper cleanup
 };
 
-class QueueKey : public std::enable_shared_from_this<QueueKey> {
+class QueueKey {
 public:
     static const int MAX_ROUND = std::numeric_limits<int>::max();
     static const std::function<bool(const QueueKey*, const QueueKey*)> COMPARATOR;
 
-    QueueKey(int round, ProcessingPhase* phase, long currentTimestamp);
+    QueueKey(int round, ProcessingPhase& phase, long currentTimestamp);
 
     int getRound() const;
     std::string getRoundStr() const;
@@ -32,17 +32,38 @@ public:
 
 private:
     int round;
-    ProcessingPhase* phase;
+    ProcessingPhase& phase;
     long currentTimestamp;
 };
 
 struct QueueKeyComparator {
-    bool operator()(const QueueKey& lhs, const QueueKey& rhs) const {
+    bool operator()(const QueueKey* lhs, const QueueKey* rhs) const {
         // Custom comparison logic, could be similar to the `operator<` in QueueKey
-        if (lhs.getRound() != rhs.getRound()) return lhs.getRound() < rhs.getRound();
-        if (lhs.getPhase() != rhs.getPhase()) return lhs.getPhase() < rhs.getPhase();
-        return lhs.getCurrentTimestamp() < rhs.getCurrentTimestamp();
+        if (lhs->getRound() != rhs->getRound()) return lhs->getRound() < rhs->getRound();
+        if (lhs->getPhase() != rhs->getPhase()) return lhs->getPhase() < rhs->getPhase();
+        return lhs->getCurrentTimestamp() < rhs->getCurrentTimestamp();
     }
+};
+
+
+class FieldQueueKey : public QueueKey {
+public:
+    // Constructor
+    FieldQueueKey(int round, ProcessingPhase& phase, int sortValue, long currentTimestamp);
+
+    // Getters
+    int getSortValue() const;
+
+    // Overridden Methods
+    bool operator<(const QueueKey& other) const;
+    std::string toString();
+
+private:
+    // Private members
+    int sortValue;
+
+    // Helper method for string conversion
+    std::string getSortValueAsString() const;
 };
 
 #endif //QUEUE_KEY_H

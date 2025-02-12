@@ -20,6 +20,8 @@ set(SOURCES
         src/fields/direction.cpp
         src/fields/queue_interceptor.cpp
         src/fields/field_update.cpp
+        src/fields/utils.cpp
+        src/fields/queue.cpp
         src/network/model.cpp
 )
 

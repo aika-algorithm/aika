@@ -6,9 +6,10 @@
 
 #include "fields/obj.h"
 #include "fields/step.h"
+#include "fields/queue.h"
 
 
-class FieldUpdate : public Step, Obj {
+class FieldUpdate : public Step {
 private:
     QueueInterceptor* interceptor;
     ProcessingPhase& phase;

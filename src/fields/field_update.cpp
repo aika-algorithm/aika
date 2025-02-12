@@ -11,7 +11,7 @@ bool FieldUpdate::incrementRound() {
 }
 
 void FieldUpdate::updateSortValue(double delta) {
-    int newSortValue = ApproximateComparisonValueUtil::convert(delta);
+    int newSortValue = convertSortValue(delta);
     if (std::abs(sortValue - newSortValue) == 0) {
         return;
     }

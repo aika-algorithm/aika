@@ -342,6 +342,30 @@ src/fields/flattened_type_relation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.s
 .PHONY : src/fields/flattened_type_relation.cpp.s
 
+src/fields/queue.o: src/fields/queue.cpp.o
+.PHONY : src/fields/queue.o
+
+# target to build an object file
+src/fields/queue.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/queue.cpp.o
+.PHONY : src/fields/queue.cpp.o
+
+src/fields/queue.i: src/fields/queue.cpp.i
+.PHONY : src/fields/queue.i
+
+# target to preprocess a source file
+src/fields/queue.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/queue.cpp.i
+.PHONY : src/fields/queue.cpp.i
+
+src/fields/queue.s: src/fields/queue.cpp.s
+.PHONY : src/fields/queue.s
+
+# target to generate assembly for a file
+src/fields/queue.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/queue.cpp.s
+.PHONY : src/fields/queue.cpp.s
+
 src/fields/queue_interceptor.o: src/fields/queue_interceptor.cpp.o
 .PHONY : src/fields/queue_interceptor.o
 
@@ -438,6 +462,30 @@ src/fields/type_registry_python.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.s
 .PHONY : src/fields/type_registry_python.cpp.s
 
+src/fields/utils.o: src/fields/utils.cpp.o
+.PHONY : src/fields/utils.o
+
+# target to build an object file
+src/fields/utils.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/utils.cpp.o
+.PHONY : src/fields/utils.cpp.o
+
+src/fields/utils.i: src/fields/utils.cpp.i
+.PHONY : src/fields/utils.i
+
+# target to preprocess a source file
+src/fields/utils.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/utils.cpp.i
+.PHONY : src/fields/utils.cpp.i
+
+src/fields/utils.s: src/fields/utils.cpp.s
+.PHONY : src/fields/utils.s
+
+# target to generate assembly for a file
+src/fields/utils.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/utils.cpp.s
+.PHONY : src/fields/utils.cpp.s
+
 src/network/model.o: src/network/model.cpp.o
 .PHONY : src/network/model.o
 
@@ -496,6 +544,9 @@ help:
 	@echo "... src/fields/flattened_type_relation.o"
 	@echo "... src/fields/flattened_type_relation.i"
 	@echo "... src/fields/flattened_type_relation.s"
+	@echo "... src/fields/queue.o"
+	@echo "... src/fields/queue.i"
+	@echo "... src/fields/queue.s"
 	@echo "... src/fields/queue_interceptor.o"
 	@echo "... src/fields/queue_interceptor.i"
 	@echo "... src/fields/queue_interceptor.s"
@@ -508,6 +559,9 @@ help:
 	@echo "... src/fields/type_registry_python.o"
 	@echo "... src/fields/type_registry_python.i"
 	@echo "... src/fields/type_registry_python.s"
+	@echo "... src/fields/utils.o"
+	@echo "... src/fields/utils.i"
+	@echo "... src/fields/utils.s"
 	@echo "... src/network/model.o"
 	@echo "... src/network/model.i"
 	@echo "... src/network/model.s"

@@ -23,12 +23,12 @@ long Queue::getNextTimestamp() {
 void Queue::addStep(Step* s) {
     s->createQueueKey(getNextTimestamp(), getRound(s));
     queue[s->getQueueKey()] = s;
-    s->setQueued(true);
+    s->setIsQueued(true);
 }
 
 int Queue::getRound(Step* s) {
     int round;
-    if (s->getPhase()->isDelayed())
+    if (s->getPhase().isDelayed())
         round = QueueKey::MAX_ROUND;
     else
         round = getCurrentRound();
@@ -51,7 +51,7 @@ void Queue::removeStep(Step* s) {
     auto removedStep = queue.erase(s->getQueueKey());
     if (removedStep == 0)
         throw std::runtime_error("Step not found");
-    s->setQueued(false);
+    s->setIsQueued(false);
 }
 
 std::vector<Step*> Queue::getQueueEntries() {
@@ -74,7 +74,7 @@ void Queue::process(std::function<bool(Step*)> filter) {
 
         currentStep = queue.begin()->second;
         queue.erase(queue.begin());
-        currentStep->setQueued(false);
+        currentStep->setIsQueued(false);
 
         timestampOnProcess = getCurrentTimestamp();
         if (!filter || filter(currentStep)) {
