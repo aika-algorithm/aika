@@ -5,7 +5,6 @@
 #include <functional>
 #include <string>
 
-class QueueKey;
 
 class ProcessingPhase {
 public:
@@ -24,7 +23,7 @@ public:
 
     int getRound() const;
     std::string getRoundStr() const;
-    ProcessingPhase* getPhase() const;
+    ProcessingPhase& getPhase() const;
     std::string getPhaseStr() const;
     long getCurrentTimestamp() const;
 
@@ -40,7 +39,7 @@ struct QueueKeyComparator {
     bool operator()(const QueueKey* lhs, const QueueKey* rhs) const {
         // Custom comparison logic, could be similar to the `operator<` in QueueKey
         if (lhs->getRound() != rhs->getRound()) return lhs->getRound() < rhs->getRound();
-        if (lhs->getPhase() != rhs->getPhase()) return lhs->getPhase() < rhs->getPhase();
+        if (lhs->getPhase().rank() != rhs->getPhase().rank()) return lhs->getPhase().rank() < rhs->getPhase().rank();
         return lhs->getCurrentTimestamp() < rhs->getCurrentTimestamp();
     }
 };
@@ -56,7 +55,7 @@ public:
 
     // Overridden Methods
     bool operator<(const QueueKey& other) const;
-    std::string toString();
+    std::string toString() const;
 
 private:
     // Private members

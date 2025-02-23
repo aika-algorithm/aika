@@ -4,9 +4,9 @@
 
 #include <string>
 
+#include "fields/queue.h"
 #include "fields/obj.h"
 #include "fields/step.h"
-#include "fields/queue.h"
 
 
 class FieldUpdate : public Step {
