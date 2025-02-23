@@ -13,7 +13,7 @@
 class Obj : public QueueProvider {
 protected:
     Type* type;
-    std::vector<Field*> fields;
+    Field** fields;
 
 public:
     explicit Obj(Type* type);
@@ -28,7 +28,7 @@ public:
     Obj& setFieldValue(FieldDefinition* fd, double v);
     double getFieldValue(FieldDefinition* fd);
     double getFieldUpdatedValue(FieldDefinition* fd);
-    std::vector<Field*> getFields();
+    Field** getFields();
     Queue* getQueue();
 
     std::string toKeyString();

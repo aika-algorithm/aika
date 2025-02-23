@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <algorithm>
 
@@ -7,7 +8,7 @@
 
 Obj::Obj(Type* type) : type(type) {
     if (type != nullptr) {
-        fields.resize(type->getFlattenedTypeInputSide()->getNumberOfFields());
+        fields = new Field*[type->getFlattenedTypeInputSide()->getNumberOfFields()];
     }
 }
 
@@ -63,11 +64,8 @@ double Obj::getFieldUpdatedValue(FieldDefinition* fd) {
     return f ? f->getUpdatedValue() : 0.0;
 }
 
-std::vector<Field*> Obj::getFields() {
-    std::vector<std::shared_ptr<Field>> nonNullFields;
-    std::copy_if(fields.begin(), fields.end(), std::back_inserter(nonNullFields),
-                 [](const auto& field) { return field != nullptr; });
-    return nonNullFields;
+Field** Obj::getFields() {
+    return fields;
 }
 
 Queue* Obj::getQueue() {

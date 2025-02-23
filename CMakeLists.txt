@@ -12,6 +12,7 @@ set(SOURCES
         src/fields/field.cpp
         src/fields/field_definition.cpp
         src/fields/field_link_definition.cpp
+        src/fields/obj.cpp
         src/fields/type.cpp
         src/fields/type_registry.cpp
         src/fields/type_registry_python.cpp
