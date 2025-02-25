@@ -18,6 +18,7 @@ set(SOURCES
         src/fields/type_registry_python.cpp
         src/fields/flattened_type.cpp
         src/fields/flattened_type_relation.cpp
+        src/fields/relation.cpp
         src/fields/direction.cpp
         src/fields/queue_interceptor.cpp
         src/fields/field_update.cpp

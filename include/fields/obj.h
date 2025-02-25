@@ -2,12 +2,10 @@
 #define OBJ_H
 
 #include <string>
-#include <memory>
-#include <vector>
-#include <iostream>
 
 #include <fields/type.h>
 #include <fields/queue_provider.h>
+#include <fields/rel_obj_iterator.h>
 
 
 class Obj : public QueueProvider {
@@ -20,8 +18,8 @@ public:
 
     void initFields();
     Type* getType() const;
-    Obj* followManyRelation(Relation* rel);
-    Obj* followSingleRelation(Relation* rel);
+    virtual RelatedObjectIterable& followManyRelation(Relation* rel) const = 0;
+    virtual Obj* followSingleRelation(Relation* rel) = 0;
     bool isInstanceOf(Type* t);
     Field* getFieldOutput(FieldDefinition* fd);
     Field* getOrCreateFieldInput(FieldDefinition* fd);

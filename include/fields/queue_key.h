@@ -17,7 +17,6 @@ public:
 class QueueKey {
 public:
     static const int MAX_ROUND = std::numeric_limits<int>::max();
-    static const std::function<bool(const QueueKey*, const QueueKey*)> COMPARATOR;
 
     QueueKey(int round, ProcessingPhase& phase, long currentTimestamp);
 

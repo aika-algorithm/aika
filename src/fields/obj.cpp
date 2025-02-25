@@ -24,14 +24,6 @@ Type* Obj::getType() const {
     return type;
 }
 
-Obj* Obj::followManyRelation(Relation* rel) {
-    return nullptr; // Implementation as required, for now returning nullptr
-}
-
-Obj* Obj::followSingleRelation(Relation* rel) {
-    return nullptr; // Implementation as required, for now returning nullptr
-}
-
 bool Obj::isInstanceOf(Type* t) {
     return type->isInstanceOf(t);
 }

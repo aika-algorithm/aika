@@ -25,7 +25,7 @@ std::string Relation::toString() const {
 RelationMany::RelationMany(int relationId, const std::string& relationName)
     : Relation(relationId, relationName) {}
 
-std::vector<Obj*> RelationMany::followMany(Obj* fromObj) const {
+RelatedObjectIterable& RelationMany::followMany(Obj* fromObj) {
     return fromObj->followManyRelation(this); // Call the followManyRelation method of the Obj object
 }
 
@@ -45,7 +45,7 @@ Obj* RelationOne::followOne(Obj* fromObj) const {
     return fromObj->followSingleRelation(this); // Call the followSingleRelation method of the Obj object
 }
 
-std::vector<Obj*> RelationOne::followMany(Obj* fromObj) const {
+RelatedObjectIterable& RelationOne::followMany(Obj* fromObj) const {
     auto toObj = followOne(fromObj); // Follow the relation one
     return toObj != nullptr ? std::vector<Obj*>{toObj} : std::vector<Obj*>(); // Return as a vector
 }
@@ -74,7 +74,7 @@ Obj* RelationSelf::followOne(Obj* fromObj) const {
     return fromObj; // A self-relation follows to the same object
 }
 
-std::vector<Obj*> RelationSelf::followMany(Obj* fromObj) const {
+RelatedObjectIterable& RelationSelf::followMany(Obj* fromObj) const {
     return {fromObj}; // A self-relation follows to the same object
 }
 
