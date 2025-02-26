@@ -43,6 +43,10 @@ void FieldUpdate::reset() {
     delta = 0.0;
 }
 
+double FieldUpdate::getDelta() const {
+    return delta;
+}
+
 Queue* FieldUpdate::getQueue() const {
     return interceptor->getQueue();
 }

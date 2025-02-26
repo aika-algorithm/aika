@@ -110,11 +110,14 @@ void FlattenedType::followLinks(Field* field) {
 
         if (ftr != nullptr) {
             auto relation = type->getRelations()[relationId];
-            auto it = relation->followMany(field->getObject()).iterator();
+            auto iterable = relation->followMany(field->getObject());
+            auto it = iterable->iterator();
             while (it->hasNext()) {
                 auto relatedObj = it->next();
                 followLinks(ftr[relatedObj->getType()->getId()], relatedObj, field);
             }
+            delete it;
+            delete iterable;
         }
     }
 }

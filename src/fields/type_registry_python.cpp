@@ -18,7 +18,10 @@ PYBIND11_MODULE(aika, m)
   .def(py::init<ProcessingPhase&, QueueInterceptor*>());
 
   py::class_<Type>(m, "Type")
-    .def(py::init<TypeRegistry*, const std::string&>());
+  .def(py::init<TypeRegistry*, const std::string&>())
+  .def("__str__", [](const Type &t) {
+        return t.toString();
+  });
 
   py::class_<TypeRegistry>(m, "TypeRegistry")
     .def(py::init<>())

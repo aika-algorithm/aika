@@ -12,6 +12,26 @@ public:
     virtual Obj* next() = 0;
 };
 
+class SingleObjectIterator : public RelatedObjectIterator {
+    Obj* _obj;
+
+public:
+    SingleObjectIterator(Obj* obj) : _obj(obj) {}
+
+    ~SingleObjectIterator() = default;
+
+    bool hasNext() {
+        return _obj != nullptr;
+    }
+
+    Obj* next() {
+        auto obj = _obj;
+        _obj = nullptr;
+        return obj;
+    }
+};
+
+
 template <typename MapType>
 class MapRelObjIterator : public RelatedObjectIterator {
 public:
@@ -51,6 +71,17 @@ public:
 
     virtual RelatedObjectIterator* iterator() const = 0;
 
+};
+
+class SingleObjectIterable : public RelatedObjectIterable {
+    Obj* _obj;
+
+public:
+    SingleObjectIterable(Obj* obj) : _obj(obj) {}
+
+    SingleObjectIterator* iterator() const {
+        return new SingleObjectIterator(_obj);
+    }
 };
 
 #endif //REL_OBJ_ITERATOR_H

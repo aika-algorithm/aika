@@ -18,8 +18,8 @@ public:
 
     void initFields();
     Type* getType() const;
-    virtual RelatedObjectIterable& followManyRelation(Relation* rel) const = 0;
-    virtual Obj* followSingleRelation(Relation* rel) = 0;
+    virtual RelatedObjectIterable* followManyRelation(Relation* rel) const = 0;
+    virtual Obj* followSingleRelation(const Relation* rel) = 0;
     bool isInstanceOf(Type* t);
     Field* getFieldOutput(FieldDefinition* fd);
     Field* getOrCreateFieldInput(FieldDefinition* fd);
