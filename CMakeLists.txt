@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(SOURCES
         src/fields/field.cpp
         src/fields/field_definition.cpp
+        src/fields/abstract_function_definition.cpp
         src/fields/field_link_definition.cpp
         src/fields/obj.cpp
         src/fields/type.cpp

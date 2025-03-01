@@ -174,6 +174,30 @@ aika/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/build
 .PHONY : aika/fast
 
+src/fields/abstract_function_definition.o: src/fields/abstract_function_definition.cpp.o
+.PHONY : src/fields/abstract_function_definition.o
+
+# target to build an object file
+src/fields/abstract_function_definition.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/abstract_function_definition.cpp.o
+.PHONY : src/fields/abstract_function_definition.cpp.o
+
+src/fields/abstract_function_definition.i: src/fields/abstract_function_definition.cpp.i
+.PHONY : src/fields/abstract_function_definition.i
+
+# target to preprocess a source file
+src/fields/abstract_function_definition.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/abstract_function_definition.cpp.i
+.PHONY : src/fields/abstract_function_definition.cpp.i
+
+src/fields/abstract_function_definition.s: src/fields/abstract_function_definition.cpp.s
+.PHONY : src/fields/abstract_function_definition.s
+
+# target to generate assembly for a file
+src/fields/abstract_function_definition.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aika.dir/build.make CMakeFiles/aika.dir/src/fields/abstract_function_definition.cpp.s
+.PHONY : src/fields/abstract_function_definition.cpp.s
+
 src/fields/direction.o: src/fields/direction.cpp.o
 .PHONY : src/fields/direction.o
 
@@ -619,6 +643,9 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... aika"
+	@echo "... src/fields/abstract_function_definition.o"
+	@echo "... src/fields/abstract_function_definition.i"
+	@echo "... src/fields/abstract_function_definition.s"
 	@echo "... src/fields/direction.o"
 	@echo "... src/fields/direction.i"
 	@echo "... src/fields/direction.s"

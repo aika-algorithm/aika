@@ -37,7 +37,7 @@ public:
     FieldDefinition(Type* objectType, const std::string& name, double tolerance);
 
     void setFieldId(int fieldId);
-    void transmit(Field* targetField, FieldLinkDefinition* fieldLink, double update);
+    virtual void transmit(Field* targetField, FieldLinkDefinition* fieldLink, double update);
     void receiveUpdate(Field* field, double update);
 
     FieldDefinition* getParent() const;

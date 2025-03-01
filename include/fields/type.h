@@ -35,6 +35,7 @@ public:
     FlattenedType* flattenedTypeInputSide;
     FlattenedType* flattenedTypeOutputSide;
     std::optional<int> depth;
+
     void initDepth();
 
 public:
