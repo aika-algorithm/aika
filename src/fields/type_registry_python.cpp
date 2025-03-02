@@ -1,4 +1,3 @@
-
 #include <pybind11/pybind11.h>
 
 #include "fields/field_update.h"
@@ -24,8 +23,8 @@ PYBIND11_MODULE(aika, m)
         return t.toString();
   })
   .def("inputField", [](const Type &ref, const std::string &name) {
-      new InputField(
-                ref,
+      return new InputField(
+                const_cast<Type*>(&ref),
                 name
         );
   });

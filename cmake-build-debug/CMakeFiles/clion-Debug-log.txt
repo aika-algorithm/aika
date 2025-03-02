@@ -1,0 +1,6 @@
+/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DPython_EXECUTABLE=/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/bin/python -DPython3_EXECUTABLE=/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/bin/python -S /Users/lukasmolzberger/CLionProjects/aika-cpp -B /Users/lukasmolzberger/CLionProjects/aika-cpp
+-- Found pybind11: /opt/homebrew/include (found version "2.13.6")
+-- Project Source Dir: /Users/lukasmolzberger/CLionProjects/aika-cpp
+-- Configuring done (0.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/lukasmolzberger/CLionProjects/aika-cpp

@@ -8,9 +8,9 @@
 #include "fields/obj.h"
 
 class InputField : public AbstractFunctionDefinition {
+    static int zero;
+
 public:
-    // Factory method equivalent to the static method in Java
-    static InputField* inputField(Type* ref, const std::string& name);
 
     // Constructor
     InputField(Type* ref, const std::string& name);
