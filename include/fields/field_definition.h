@@ -24,6 +24,7 @@ class FieldDefinition {
 protected:
     int fieldId;
     std::string name;
+    std::vector<FieldLinkDefinition*> inputs;
     std::vector<FieldLinkDefinition*> outputs;
     FieldDefinition* parent;
     std::vector<FieldDefinition*> children;
@@ -33,8 +34,8 @@ protected:
     bool isNextRound;
 
 public:
-    FieldDefinition(Type* objectType, const std::string& name);
-    FieldDefinition(Type* objectType, const std::string& name, double tolerance);
+
+    FieldDefinition(Type* objectType, const std::string& name, int* numArgs, double tolerance);
 
     void setFieldId(int fieldId);
     virtual void transmit(Field* targetField, FieldLinkDefinition* fieldLink, double update);

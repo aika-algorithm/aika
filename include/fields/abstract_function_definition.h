@@ -1,6 +1,7 @@
 #ifndef ABSTRACT_FUNCTION_DEFINITION_H
 #define ABSTRACT_FUNCTION_DEFINITION_H
 
+#include "fields/field_definition.h"
 #include "fields/type.h"
 #include "fields/obj.h"
 #include "fields/field.h"
@@ -8,8 +9,7 @@
 class AbstractFunctionDefinition : public FieldDefinition {
 public:
     // Constructors
-    AbstractFunctionDefinition(Type* objectType, const std::string& name, int numArgs);
-    AbstractFunctionDefinition(Type* objectType, const std::string& name, int numArgs, double tolerance);
+    AbstractFunctionDefinition(Type* objectType, const std::string& name, int* numArgs, double tolerance);
 
     // Destructor
     virtual ~AbstractFunctionDefinition() = default;

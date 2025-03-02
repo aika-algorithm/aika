@@ -8,14 +8,14 @@
 #include "fields/obj.h"
 
 
-FieldDefinition::FieldDefinition(Type* objectType, const std::string& name)
+FieldDefinition::FieldDefinition(Type* objectType, const std::string& name, int* numArgs, double tolerance)
     : objectType(objectType), name(name), isNextRound(false) {
-    objectType->setFieldDefinition(this);
-}
-
-FieldDefinition::FieldDefinition(Type* objectType, const std::string& name, double tolerance)
-    : FieldDefinition(objectType, name) {
     this->tolerance = tolerance;
+    objectType->setFieldDefinition(this);
+
+    if (numArgs != nullptr) {
+        inputs.reserve(*numArgs);
+    }
 }
 
 void FieldDefinition::setFieldId(int fieldId) {
