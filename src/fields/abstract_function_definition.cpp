@@ -2,7 +2,7 @@
 
 
 // Constructor with 4 arguments
-AbstractFunctionDefinition::AbstractFunctionDefinition(Type* objectType, const std::string& name, int* numArgs, double tolerance)
+AbstractFunctionDefinition::AbstractFunctionDefinition(Type* objectType, const std::string& name, int numArgs, double tolerance)
     : FieldDefinition(objectType, name, numArgs, tolerance) {}
 
 // Transmit method

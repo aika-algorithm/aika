@@ -9,7 +9,7 @@
 class AbstractFunctionDefinition : public FieldDefinition {
 public:
     // Constructors
-    AbstractFunctionDefinition(Type* objectType, const std::string& name, int* numArgs, double tolerance);
+    AbstractFunctionDefinition(Type* objectType, const std::string& name, int numArgs, double tolerance);
 
     // Destructor
     virtual ~AbstractFunctionDefinition() = default;

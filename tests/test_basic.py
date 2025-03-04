@@ -7,5 +7,5 @@ print(hasattr(aika, "TypeRegistry"))
 
 tr = aika.TypeRegistry()
 
-t =aika.Type(tr)
+t = aika.Type(tr)
 

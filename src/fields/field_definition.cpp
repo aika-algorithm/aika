@@ -8,13 +8,13 @@
 #include "fields/obj.h"
 
 
-FieldDefinition::FieldDefinition(Type* objectType, const std::string& name, int* numArgs, double tolerance)
+FieldDefinition::FieldDefinition(Type* objectType, const std::string& name, int numArgs, double tolerance)
     : objectType(objectType), name(name), isNextRound(false) {
     this->tolerance = tolerance;
     objectType->setFieldDefinition(this);
 
-    if (numArgs != nullptr) {
-        inputs.reserve(*numArgs);
+    if (numArgs > 0) {
+        inputs.reserve(numArgs);
     }
 }
 
@@ -79,6 +79,12 @@ void FieldDefinition::addOutput(FieldLinkDefinition* fl) {
 
 std::vector<FieldLinkDefinition*> FieldDefinition::getOutputs() {
     return outputs;
+}
+
+FieldDefinition& FieldDefinition::in(Relation* relation, FieldDefinition* input, int arg) {
+    FieldLinkDefinition::link(input, this, relation, arg);
+//    assert(relation || objectType->isInstanceOf(output->getObjectType()) || output->getObjectType()->isInstanceOf(objectType));
+    return *this;
 }
 
 FieldDefinition& FieldDefinition::out(Relation* relation, FieldDefinition* output, int arg) {

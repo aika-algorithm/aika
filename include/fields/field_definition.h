@@ -35,10 +35,11 @@ protected:
 
 public:
 
-    FieldDefinition(Type* objectType, const std::string& name, int* numArgs, double tolerance);
+    FieldDefinition(Type* objectType, const std::string& name, int numArgs, double tolerance);
+    virtual ~FieldDefinition() = default;
 
     void setFieldId(int fieldId);
-    virtual void transmit(Field* targetField, FieldLinkDefinition* fieldLink, double update);
+    virtual void transmit(Field* targetField, FieldLinkDefinition* fieldLink, double update) = 0;
     void receiveUpdate(Field* field, double update);
 
     FieldDefinition* getParent() const;
@@ -54,6 +55,7 @@ public:
     void addOutput(FieldLinkDefinition* fl);
     std::vector<FieldLinkDefinition*> getOutputs();
 
+    FieldDefinition& in(Relation* relation, FieldDefinition* input, int arg);
     FieldDefinition& out(Relation* relation, FieldDefinition* output, int arg);
 
     FieldDefinition& setName(const std::string& name);
