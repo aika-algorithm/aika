@@ -12,6 +12,8 @@ set(SOURCES
         src/fields/field.cpp
         src/fields/field_definition.cpp
         src/fields/abstract_function_definition.cpp
+        src/fields/input_field.cpp
+        src/fields/subtraction.cpp
         src/fields/field_link_definition.cpp
         src/fields/obj.cpp
         src/fields/type.cpp
@@ -27,6 +29,8 @@ set(SOURCES
         src/fields/queue.cpp
         src/fields/queue_key.cpp
         src/fields/step.cpp
+        src/fields/test_type.cpp
+        src/fields/test_object.cpp
         src/network/model.cpp
 )
 

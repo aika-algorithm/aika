@@ -111,10 +111,38 @@ CMakeFiles/aika.dir/src/fields/abstract_function_definition.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aika.dir/src/fields/abstract_function_definition.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/abstract_function_definition.cpp -o CMakeFiles/aika.dir/src/fields/abstract_function_definition.cpp.s
 
+CMakeFiles/aika.dir/src/fields/input_field.cpp.o: CMakeFiles/aika.dir/flags.make
+CMakeFiles/aika.dir/src/fields/input_field.cpp.o: src/fields/input_field.cpp
+CMakeFiles/aika.dir/src/fields/input_field.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/aika.dir/src/fields/input_field.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/input_field.cpp.o -MF CMakeFiles/aika.dir/src/fields/input_field.cpp.o.d -o CMakeFiles/aika.dir/src/fields/input_field.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/input_field.cpp
+
+CMakeFiles/aika.dir/src/fields/input_field.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/aika.dir/src/fields/input_field.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/input_field.cpp > CMakeFiles/aika.dir/src/fields/input_field.cpp.i
+
+CMakeFiles/aika.dir/src/fields/input_field.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aika.dir/src/fields/input_field.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/input_field.cpp -o CMakeFiles/aika.dir/src/fields/input_field.cpp.s
+
+CMakeFiles/aika.dir/src/fields/subtraction.cpp.o: CMakeFiles/aika.dir/flags.make
+CMakeFiles/aika.dir/src/fields/subtraction.cpp.o: src/fields/subtraction.cpp
+CMakeFiles/aika.dir/src/fields/subtraction.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/aika.dir/src/fields/subtraction.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/subtraction.cpp.o -MF CMakeFiles/aika.dir/src/fields/subtraction.cpp.o.d -o CMakeFiles/aika.dir/src/fields/subtraction.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/subtraction.cpp
+
+CMakeFiles/aika.dir/src/fields/subtraction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/aika.dir/src/fields/subtraction.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/subtraction.cpp > CMakeFiles/aika.dir/src/fields/subtraction.cpp.i
+
+CMakeFiles/aika.dir/src/fields/subtraction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aika.dir/src/fields/subtraction.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/subtraction.cpp -o CMakeFiles/aika.dir/src/fields/subtraction.cpp.s
+
 CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.o: src/fields/field_link_definition.cpp
 CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.o -MF CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.o.d -o CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/field_link_definition.cpp
 
 CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.i: cmake_force
@@ -128,7 +156,7 @@ CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/obj.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/obj.cpp.o: src/fields/obj.cpp
 CMakeFiles/aika.dir/src/fields/obj.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/aika.dir/src/fields/obj.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/aika.dir/src/fields/obj.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/obj.cpp.o -MF CMakeFiles/aika.dir/src/fields/obj.cpp.o.d -o CMakeFiles/aika.dir/src/fields/obj.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/obj.cpp
 
 CMakeFiles/aika.dir/src/fields/obj.cpp.i: cmake_force
@@ -142,7 +170,7 @@ CMakeFiles/aika.dir/src/fields/obj.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/type.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/type.cpp.o: src/fields/type.cpp
 CMakeFiles/aika.dir/src/fields/type.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/aika.dir/src/fields/type.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/aika.dir/src/fields/type.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/type.cpp.o -MF CMakeFiles/aika.dir/src/fields/type.cpp.o.d -o CMakeFiles/aika.dir/src/fields/type.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/type.cpp
 
 CMakeFiles/aika.dir/src/fields/type.cpp.i: cmake_force
@@ -156,7 +184,7 @@ CMakeFiles/aika.dir/src/fields/type.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/type_registry.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/type_registry.cpp.o: src/fields/type_registry.cpp
 CMakeFiles/aika.dir/src/fields/type_registry.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/aika.dir/src/fields/type_registry.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/aika.dir/src/fields/type_registry.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/type_registry.cpp.o -MF CMakeFiles/aika.dir/src/fields/type_registry.cpp.o.d -o CMakeFiles/aika.dir/src/fields/type_registry.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/type_registry.cpp
 
 CMakeFiles/aika.dir/src/fields/type_registry.cpp.i: cmake_force
@@ -170,7 +198,7 @@ CMakeFiles/aika.dir/src/fields/type_registry.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.o: src/fields/type_registry_python.cpp
 CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.o -MF CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.o.d -o CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/type_registry_python.cpp
 
 CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.i: cmake_force
@@ -184,7 +212,7 @@ CMakeFiles/aika.dir/src/fields/type_registry_python.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/flattened_type.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/flattened_type.cpp.o: src/fields/flattened_type.cpp
 CMakeFiles/aika.dir/src/fields/flattened_type.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/aika.dir/src/fields/flattened_type.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/aika.dir/src/fields/flattened_type.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/flattened_type.cpp.o -MF CMakeFiles/aika.dir/src/fields/flattened_type.cpp.o.d -o CMakeFiles/aika.dir/src/fields/flattened_type.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/flattened_type.cpp
 
 CMakeFiles/aika.dir/src/fields/flattened_type.cpp.i: cmake_force
@@ -198,7 +226,7 @@ CMakeFiles/aika.dir/src/fields/flattened_type.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.o: src/fields/flattened_type_relation.cpp
 CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.o -MF CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.o.d -o CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/flattened_type_relation.cpp
 
 CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.i: cmake_force
@@ -212,7 +240,7 @@ CMakeFiles/aika.dir/src/fields/flattened_type_relation.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/relation.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/relation.cpp.o: src/fields/relation.cpp
 CMakeFiles/aika.dir/src/fields/relation.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/aika.dir/src/fields/relation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/aika.dir/src/fields/relation.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/relation.cpp.o -MF CMakeFiles/aika.dir/src/fields/relation.cpp.o.d -o CMakeFiles/aika.dir/src/fields/relation.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/relation.cpp
 
 CMakeFiles/aika.dir/src/fields/relation.cpp.i: cmake_force
@@ -226,7 +254,7 @@ CMakeFiles/aika.dir/src/fields/relation.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/direction.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/direction.cpp.o: src/fields/direction.cpp
 CMakeFiles/aika.dir/src/fields/direction.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/aika.dir/src/fields/direction.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/aika.dir/src/fields/direction.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/direction.cpp.o -MF CMakeFiles/aika.dir/src/fields/direction.cpp.o.d -o CMakeFiles/aika.dir/src/fields/direction.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/direction.cpp
 
 CMakeFiles/aika.dir/src/fields/direction.cpp.i: cmake_force
@@ -240,7 +268,7 @@ CMakeFiles/aika.dir/src/fields/direction.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.o: src/fields/queue_interceptor.cpp
 CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.o -MF CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.o.d -o CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/queue_interceptor.cpp
 
 CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.i: cmake_force
@@ -254,7 +282,7 @@ CMakeFiles/aika.dir/src/fields/queue_interceptor.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/field_update.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/field_update.cpp.o: src/fields/field_update.cpp
 CMakeFiles/aika.dir/src/fields/field_update.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/aika.dir/src/fields/field_update.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/aika.dir/src/fields/field_update.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/field_update.cpp.o -MF CMakeFiles/aika.dir/src/fields/field_update.cpp.o.d -o CMakeFiles/aika.dir/src/fields/field_update.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/field_update.cpp
 
 CMakeFiles/aika.dir/src/fields/field_update.cpp.i: cmake_force
@@ -268,7 +296,7 @@ CMakeFiles/aika.dir/src/fields/field_update.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/utils.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/utils.cpp.o: src/fields/utils.cpp
 CMakeFiles/aika.dir/src/fields/utils.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/aika.dir/src/fields/utils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/aika.dir/src/fields/utils.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/utils.cpp.o -MF CMakeFiles/aika.dir/src/fields/utils.cpp.o.d -o CMakeFiles/aika.dir/src/fields/utils.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/utils.cpp
 
 CMakeFiles/aika.dir/src/fields/utils.cpp.i: cmake_force
@@ -282,7 +310,7 @@ CMakeFiles/aika.dir/src/fields/utils.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/queue.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/queue.cpp.o: src/fields/queue.cpp
 CMakeFiles/aika.dir/src/fields/queue.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/aika.dir/src/fields/queue.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/aika.dir/src/fields/queue.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/queue.cpp.o -MF CMakeFiles/aika.dir/src/fields/queue.cpp.o.d -o CMakeFiles/aika.dir/src/fields/queue.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/queue.cpp
 
 CMakeFiles/aika.dir/src/fields/queue.cpp.i: cmake_force
@@ -296,7 +324,7 @@ CMakeFiles/aika.dir/src/fields/queue.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/queue_key.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/queue_key.cpp.o: src/fields/queue_key.cpp
 CMakeFiles/aika.dir/src/fields/queue_key.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/aika.dir/src/fields/queue_key.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/aika.dir/src/fields/queue_key.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/queue_key.cpp.o -MF CMakeFiles/aika.dir/src/fields/queue_key.cpp.o.d -o CMakeFiles/aika.dir/src/fields/queue_key.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/queue_key.cpp
 
 CMakeFiles/aika.dir/src/fields/queue_key.cpp.i: cmake_force
@@ -310,7 +338,7 @@ CMakeFiles/aika.dir/src/fields/queue_key.cpp.s: cmake_force
 CMakeFiles/aika.dir/src/fields/step.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/fields/step.cpp.o: src/fields/step.cpp
 CMakeFiles/aika.dir/src/fields/step.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/aika.dir/src/fields/step.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/aika.dir/src/fields/step.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/step.cpp.o -MF CMakeFiles/aika.dir/src/fields/step.cpp.o.d -o CMakeFiles/aika.dir/src/fields/step.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/step.cpp
 
 CMakeFiles/aika.dir/src/fields/step.cpp.i: cmake_force
@@ -321,10 +349,38 @@ CMakeFiles/aika.dir/src/fields/step.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aika.dir/src/fields/step.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/step.cpp -o CMakeFiles/aika.dir/src/fields/step.cpp.s
 
+CMakeFiles/aika.dir/src/fields/test_type.cpp.o: CMakeFiles/aika.dir/flags.make
+CMakeFiles/aika.dir/src/fields/test_type.cpp.o: src/fields/test_type.cpp
+CMakeFiles/aika.dir/src/fields/test_type.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/aika.dir/src/fields/test_type.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/test_type.cpp.o -MF CMakeFiles/aika.dir/src/fields/test_type.cpp.o.d -o CMakeFiles/aika.dir/src/fields/test_type.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/test_type.cpp
+
+CMakeFiles/aika.dir/src/fields/test_type.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/aika.dir/src/fields/test_type.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/test_type.cpp > CMakeFiles/aika.dir/src/fields/test_type.cpp.i
+
+CMakeFiles/aika.dir/src/fields/test_type.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aika.dir/src/fields/test_type.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/test_type.cpp -o CMakeFiles/aika.dir/src/fields/test_type.cpp.s
+
+CMakeFiles/aika.dir/src/fields/test_object.cpp.o: CMakeFiles/aika.dir/flags.make
+CMakeFiles/aika.dir/src/fields/test_object.cpp.o: src/fields/test_object.cpp
+CMakeFiles/aika.dir/src/fields/test_object.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/aika.dir/src/fields/test_object.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/fields/test_object.cpp.o -MF CMakeFiles/aika.dir/src/fields/test_object.cpp.o.d -o CMakeFiles/aika.dir/src/fields/test_object.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/test_object.cpp
+
+CMakeFiles/aika.dir/src/fields/test_object.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/aika.dir/src/fields/test_object.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/test_object.cpp > CMakeFiles/aika.dir/src/fields/test_object.cpp.i
+
+CMakeFiles/aika.dir/src/fields/test_object.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aika.dir/src/fields/test_object.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lukasmolzberger/CLionProjects/aika-cpp/src/fields/test_object.cpp -o CMakeFiles/aika.dir/src/fields/test_object.cpp.s
+
 CMakeFiles/aika.dir/src/network/model.cpp.o: CMakeFiles/aika.dir/flags.make
 CMakeFiles/aika.dir/src/network/model.cpp.o: src/network/model.cpp
 CMakeFiles/aika.dir/src/network/model.cpp.o: CMakeFiles/aika.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/aika.dir/src/network/model.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/aika.dir/src/network/model.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aika.dir/src/network/model.cpp.o -MF CMakeFiles/aika.dir/src/network/model.cpp.o.d -o CMakeFiles/aika.dir/src/network/model.cpp.o -c /Users/lukasmolzberger/CLionProjects/aika-cpp/src/network/model.cpp
 
 CMakeFiles/aika.dir/src/network/model.cpp.i: cmake_force
@@ -340,6 +396,8 @@ aika_OBJECTS = \
 "CMakeFiles/aika.dir/src/fields/field.cpp.o" \
 "CMakeFiles/aika.dir/src/fields/field_definition.cpp.o" \
 "CMakeFiles/aika.dir/src/fields/abstract_function_definition.cpp.o" \
+"CMakeFiles/aika.dir/src/fields/input_field.cpp.o" \
+"CMakeFiles/aika.dir/src/fields/subtraction.cpp.o" \
 "CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.o" \
 "CMakeFiles/aika.dir/src/fields/obj.cpp.o" \
 "CMakeFiles/aika.dir/src/fields/type.cpp.o" \
@@ -355,6 +413,8 @@ aika_OBJECTS = \
 "CMakeFiles/aika.dir/src/fields/queue.cpp.o" \
 "CMakeFiles/aika.dir/src/fields/queue_key.cpp.o" \
 "CMakeFiles/aika.dir/src/fields/step.cpp.o" \
+"CMakeFiles/aika.dir/src/fields/test_type.cpp.o" \
+"CMakeFiles/aika.dir/src/fields/test_object.cpp.o" \
 "CMakeFiles/aika.dir/src/network/model.cpp.o"
 
 # External object files for target aika
@@ -363,6 +423,8 @@ aika_EXTERNAL_OBJECTS =
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/field.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/field_definition.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/abstract_function_definition.cpp.o
+aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/input_field.cpp.o
+aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/subtraction.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/field_link_definition.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/obj.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/type.cpp.o
@@ -378,10 +440,12 @@ aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/utils.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/queue.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/queue_key.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/step.cpp.o
+aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/test_type.cpp.o
+aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/fields/test_object.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/src/network/model.cpp.o
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/build.make
 aika.cpython-312-darwin.so: CMakeFiles/aika.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Linking CXX shared module aika.cpython-312-darwin.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/lukasmolzberger/CLionProjects/aika-cpp/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Linking CXX shared module aika.cpython-312-darwin.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/aika.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

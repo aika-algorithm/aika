@@ -7,7 +7,7 @@
 				{
 					"build" : ".",
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-.-Debug-3997a2be27d09e73605f.json",
+					"jsonFile" : "directory-.-Debug-0297211b3f536e974587.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.30"
@@ -40,7 +40,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "aika::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-aika-Debug-2080a1601d5559e5ae5e.json",
+					"jsonFile" : "target-aika-Debug-d3d57ee930dd468c4d4c.json",
 					"name" : "aika",
 					"projectIndex" : 0
 				}

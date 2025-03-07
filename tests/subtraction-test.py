@@ -12,7 +12,7 @@ class MyTestCase(unittest.TestCase):
         typeB = aika.Type(registry, "B")
 
         a = typeA.inputField("a")
-        b = typeA.inputField("b")
+        b = typeB.inputField("b")
 
         c = typeB.sub("c")
         c.in(TEST_RELATION_FROM, a, 0)
