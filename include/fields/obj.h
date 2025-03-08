@@ -27,7 +27,6 @@ public:
     double getFieldValue(FieldDefinition* fd);
     double getFieldUpdatedValue(FieldDefinition* fd);
     Field** getFields();
-    Queue* getQueue();
 
     std::string toKeyString();
     std::string toString() const;

@@ -60,10 +60,6 @@ Field** Obj::getFields() {
     return fields;
 }
 
-Queue* Obj::getQueue() {
-    return nullptr; // Implementation for queue handling, for now returning nullptr
-}
-
 std::string Obj::toKeyString() {
     return ""; // Implementation as needed
 }

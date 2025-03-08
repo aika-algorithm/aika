@@ -4,8 +4,9 @@
 #include "fields/type.h"
 #include "fields/relation.h"
 #include "fields/type_registry.h"
-#include "fields/test_object.h"
 #include <vector>
+
+class TestObject;
 
 class TestType : public Type {
 public:

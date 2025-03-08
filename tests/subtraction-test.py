@@ -8,8 +8,8 @@ class MyTestCase(unittest.TestCase):
     def testSubtraction(self):
         registry = aika.TypeRegistry()
 
-        typeA = aika.Type(registry, "A")
-        typeB = aika.Type(registry, "B")
+        typeA = aika.TestType(registry, "A")
+        typeB = aika.TestType(registry, "B")
 
         a = typeA.inputField("a")
         b = typeB.inputField("b")

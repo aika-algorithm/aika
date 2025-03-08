@@ -1,4 +1,5 @@
 #include "fields/test_type.h"
+#include "fields/test_object.h"
 
 // Initialize static members
 RelationOne TestType::SELF(0, "TEST_SELF");

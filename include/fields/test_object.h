@@ -26,6 +26,8 @@ public:
 
     // Follow a many-relation
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
+
+    Queue* getQueue() const override;
 };
 
 #endif // TEST_OBJECT_H

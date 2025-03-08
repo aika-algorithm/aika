@@ -4,7 +4,7 @@
 TestObject::TestObject(TestType* type) : Obj(type) {}
 
 // Follow a single relation
-Obj* followSingleRelation(const Relation* rel) {
+Obj* TestObject::followSingleRelation(const Relation* rel) {
     if (rel == &TestType::TEST_RELATION_FROM || rel == &TestType::TEST_RELATION_TO) {
         return getRelatedTestObject();
     } else {
@@ -24,6 +24,10 @@ void TestObject::linkObjects(TestObject* objA, TestObject* objB) {
 }
 
 // Follow a many-relation (returns a vector instead of Stream)
-RelatedObjectIterable* followManyRelation(Relation* rel) {
-    return new SingleObjectIterator(relatedTestObject);
+RelatedObjectIterable* TestObject::followManyRelation(Relation* rel) const {
+    return new SingleObjectIterable(relatedTestObject);
+}
+
+Queue* TestObject::getQueue() const {
+    return nullptr;
 }
