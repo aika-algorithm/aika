@@ -6,6 +6,11 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(True, False)  # add assertion here
 
     def testSubtraction(self):
+        TEST_RELATION_FROM = aika.RelationOne(1, "TEST_FROM")
+        TEST_RELATION_TO = aika.RelationOne(2, "TEST_TO")
+        TEST_RELATION_TO.setReversed(TEST_RELATION_FROM)
+        TEST_RELATION_FROM.setReversed(TEST_RELATION_TO)
+
         registry = aika.TypeRegistry()
 
         typeA = aika.TestType(registry, "A")

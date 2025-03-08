@@ -9,8 +9,8 @@ int Relation::getRelationId() const {
     return relationId;
 }
 
-void Relation::setReversed(Relation* reversed) {
-    this->reversed = reversed;
+void Relation::setReversed(Relation* rev) {
+    reversed = rev;
 }
 
 Relation* Relation::getReverse() {

@@ -1,11 +1,13 @@
 #include <pybind11/pybind11.h>
 
+#include "fields/relation.h"
 #include "fields/field_definition.h"
 #include "fields/field_update.h"
 #include "fields/type.h"
 #include "fields/type_registry.h"
 #include "fields/input_field.h"
 #include "fields/subtraction.h"
+#include "fields/test_type.h"
 
 
 // ----------------
@@ -17,7 +19,16 @@ namespace py = pybind11;
 PYBIND11_MODULE(aika, m)
 {
       // Bind Relation
-      py::class_<Relation>(m, "Relation");
+      py::class_<Relation>(m, "Relation")
+            .def("setReversed", [](Relation &rel, Relation* reversed) {
+                  rel.setReversed(reversed);
+            });
+
+      py::class_<RelationOne, Relation>(m, "RelationOne")
+            .def(py::init<int, const std::string&>());
+
+      py::class_<RelationMany, Relation>(m, "RelationMany")
+            .def(py::init<int, const std::string&>());      
 
       py::class_<FieldUpdate>(m, "FieldUpdate")
             .def(py::init<ProcessingPhase&, QueueInterceptor*>());
@@ -58,6 +69,9 @@ PYBIND11_MODULE(aika, m)
                         name
                   );
             }, py::return_value_policy::take_ownership);
+
+      py::class_<TestType, Type>(m, "TestType")
+            .def(py::init<TypeRegistry*, const std::string&>());    
 
       py::class_<TypeRegistry>(m, "TypeRegistry")
             .def(py::init<>())
