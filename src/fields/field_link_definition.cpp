@@ -16,6 +16,7 @@ void FieldLinkDefinition::link(FieldDefinition* input,
 
     flo->setOppositeSide(fli);
     fli->setOppositeSide(flo);
+   
 }
 
 FieldLinkDefinition::FieldLinkDefinition(FieldDefinition* originFD,

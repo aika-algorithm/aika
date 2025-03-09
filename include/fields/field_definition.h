@@ -55,8 +55,8 @@ public:
     void addOutput(FieldLinkDefinition* fl);
     std::vector<FieldLinkDefinition*> getOutputs();
 
-    FieldDefinition& in(Relation* relation, FieldDefinition* input, int arg);
-    FieldDefinition& out(Relation* relation, FieldDefinition* output, int arg);
+    FieldDefinition& input(Relation& relation, FieldDefinition& input, int arg);
+    FieldDefinition& output(Relation& relation, FieldDefinition& output, int arg);
 
     FieldDefinition& setName(const std::string& name);
     std::string getName() const;

@@ -3,7 +3,7 @@
 
 // Constructor
 Subtraction::Subtraction(Type* ref, const std::string& name)
-    : AbstractFunctionDefinition(ref, name, 0, 0.0) {}
+    : AbstractFunctionDefinition(ref, name, 2, 0.0) {}
 
 // Overridden computeUpdate method
 double Subtraction::computeUpdate(Obj* obj, FieldLinkDefinition* fl, double u) {

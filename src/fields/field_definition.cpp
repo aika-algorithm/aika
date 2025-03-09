@@ -14,6 +14,7 @@ FieldDefinition::FieldDefinition(Type* objectType, const std::string& name, int 
     objectType->setFieldDefinition(this);
 
     if (numArgs > 0) {
+        std::cout << "numArgs : " << numArgs << std::endl;
         inputs.reserve(numArgs);
     }
 }
@@ -66,11 +67,16 @@ void FieldDefinition::initializeField(Field* field) {
 }
 
 void FieldDefinition::addInput(FieldLinkDefinition* fl) {
-    throw std::logic_error("Unsupported operation.");
+    std::cout << "fl->getArgument() : " << fl->getArgument() << " inputs.size : " << inputs.size() << std::endl;
+
+    if(fl->getArgument() >= 0) 
+        inputs[fl->getArgument()] = fl;
+    else
+        inputs.push_back(fl);    
 }
 
 std::vector<FieldLinkDefinition*> FieldDefinition::getInputs() {
-    throw std::logic_error("Unsupported operation.");
+    return inputs;
 }
 
 void FieldDefinition::addOutput(FieldLinkDefinition* fl) {
@@ -81,14 +87,14 @@ std::vector<FieldLinkDefinition*> FieldDefinition::getOutputs() {
     return outputs;
 }
 
-FieldDefinition& FieldDefinition::in(Relation* relation, FieldDefinition* input, int arg) {
-    FieldLinkDefinition::link(input, this, relation, arg);
+FieldDefinition& FieldDefinition::input(Relation& relation, FieldDefinition& input, int arg) {
+    FieldLinkDefinition::link(&input, this, &relation, arg);
 //    assert(relation || objectType->isInstanceOf(output->getObjectType()) || output->getObjectType()->isInstanceOf(objectType));
     return *this;
 }
 
-FieldDefinition& FieldDefinition::out(Relation* relation, FieldDefinition* output, int arg) {
-    FieldLinkDefinition::link(this, output, relation, arg);
+FieldDefinition& FieldDefinition::output(Relation& relation, FieldDefinition& output, int arg) {
+    FieldLinkDefinition::link(this, &output, &relation, arg);
 //    assert(relation || objectType->isInstanceOf(output->getObjectType()) || output->getObjectType()->isInstanceOf(objectType));
     return *this;
 }

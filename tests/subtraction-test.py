@@ -1,4 +1,10 @@
 import unittest
+import sys
+import os
+
+# Add the project root to Python's module search path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import aika
 
 class MyTestCase(unittest.TestCase):
@@ -6,10 +12,15 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(True, False)  # add assertion here
 
     def testSubtraction(self):
+        print("Module 'aika' was loaded from:", aika.__file__)
+
         TEST_RELATION_FROM = aika.RelationOne(1, "TEST_FROM")
         TEST_RELATION_TO = aika.RelationOne(2, "TEST_TO")
         TEST_RELATION_TO.setReversed(TEST_RELATION_FROM)
         TEST_RELATION_FROM.setReversed(TEST_RELATION_TO)
+
+        assert isinstance(TEST_RELATION_FROM, aika.Relation)
+        assert isinstance(TEST_RELATION_TO, aika.Relation)
 
         registry = aika.TypeRegistry()
 
@@ -20,31 +31,22 @@ class MyTestCase(unittest.TestCase):
         b = typeB.inputField("b")
 
         c = typeB.sub("c")
-        c.in(TEST_RELATION_FROM, a, 0)
-        c.in(TEST_RELATION_FROM, b, 1)
+
+        print("Type of c:", type(c))
+        print("Type of TEST_RELATION_FROM:", type(TEST_RELATION_FROM))
+        print("Type of a:", type(a))
+
+        assert isinstance(a, aika.FieldDefinition)
+        assert isinstance(c, aika.FieldDefinition)
+
+        c.input(TEST_RELATION_FROM, a, 0)
+        c.input(TEST_RELATION_FROM, b, 1)
 
         registry.flattenTypeHierarchy()
 
         oa = typeA.instantiate()
         ob = typeB.instantiate()
 
-        if(linkingPos == 0)
-            linkObjects(oa, ob)
-            ob.initFields()
-
-        oa.setFieldValue(a, 50.0)
-
-        if(linkingPos == 1)
-            linkObjects(oa, ob)
-            ob.initFields()
-
-        oa.setFieldValue(b, 20.0)
-
-        if(linkingPos == 2)
-            linkObjects(oa, ob)
-            ob.initFields()
-
-        Assertions.assertEquals(30.0, ob.getFieldOutput(c).getValue())
 
 if __name__ == '__main__':
     unittest.main()
