@@ -1,5 +1,9 @@
 # Aika
 
+## Project Status
+
+Work in progress!
+
 ## Project Overview
 
 Aika (Artificial Intelligence for Knowledge Acquisition) is an experimental AI framework that offers a new approach to neural network design. Originally implemented in Java, Aika has been migrated to a C++ core with Python bindings, combining high performance with Python’s ease of use. Similar to PyTorch, Aika allows you to **define the functional graph of a neural network’s mathematical model in Python while executing the heavy computations in C++**. This means you can construct your model using intuitive Python code, and under the hood Aika leverages efficient C++ for execution.
