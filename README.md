@@ -41,9 +41,6 @@ After these steps, the `aika` package should be installed in your environment, a
 Below is an example (from the test suite) demonstrating how to use Aika’s Python API. In this snippet, we define two simple types `A` and `B`, create input fields on them, define a derived field `c` as a subtraction (`sub`) operation on type `B`, and then link the inputs of `c` to the fields of `A` and `B` using a relation. Finally, we instantiate objects of those types to show how the type definitions lead to actual runtime objects:
 
 ```python
-def test_something(self):
-    self.assertEqual(True, False)  # add assertion here
-
 def testSubtraction(self):
     print("Module 'aika' was loaded from:", aika.__file__)
 
