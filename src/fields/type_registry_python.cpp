@@ -35,9 +35,9 @@ PYBIND11_MODULE(aika, m)
 
       // Bind FieldDefinition first
       py::class_<FieldDefinition>(m, "FieldDefinition")
-            .def("in", &FieldDefinition::in, py::return_value_policy::reference_internal, 
+            .def("input", &FieldDefinition::input, py::return_value_policy::reference_internal, 
                   py::arg("relation"), py::arg("input"), py::arg("arg"))
-            .def("out", &FieldDefinition::out, py::return_value_policy::reference_internal, 
+            .def("output", &FieldDefinition::output, py::return_value_policy::reference_internal, 
                   py::arg("relation"), py::arg("output"), py::arg("arg"));
 
       // Bind AbstractFunctionDefinition (inherits from FieldDefinition)
@@ -46,7 +46,7 @@ PYBIND11_MODULE(aika, m)
       // Bind Subtraction (inherits from AbstractFunctionDefinition)
       py::class_<Subtraction, AbstractFunctionDefinition>(m, "Subtraction");
 
-      py::class_<InputField>(m, "InputField")
+      py::class_<InputField, FieldDefinition>(m, "InputField")
             .def(py::init<Type*, const std::string &>())
             .def("__str__", [](const InputField &f) {
                   return f.toString();
@@ -76,5 +76,6 @@ PYBIND11_MODULE(aika, m)
       py::class_<TypeRegistry>(m, "TypeRegistry")
             .def(py::init<>())
             .def("getType", &TypeRegistry::getType)
-            .def("registerType", &TypeRegistry::registerType);
+            .def("registerType", &TypeRegistry::registerType)
+            .def("flattenTypeHierarchy", &TypeRegistry::flattenTypeHierarchy);
 }
