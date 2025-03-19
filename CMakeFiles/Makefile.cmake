@@ -14,7 +14,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/CMakeGenericSystem.cmake"
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/CMakeInitializeConfigs.cmake"
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/CMakeLanguageInformation.cmake"
-  "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/CMakeParseArguments.cmake"
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/CMakeSystemSpecificInformation.cmake"
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/CMakeSystemSpecificInitialize.cmake"
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/CheckCXXCompilerFlag.cmake"
@@ -28,7 +27,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindPackageMessage.cmake"
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindPython.cmake"
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindPython/Support.cmake"
-  "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/FindPythonInterp.cmake"
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/Internal/CheckCompilerFlag.cmake"
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/Internal/CheckFlagCommonConfig.cmake"
   "/Users/lukasmolzberger/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.30/Modules/Internal/CheckSourceCompiles.cmake"
@@ -44,12 +42,11 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.30.5/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.30.5/CMakeSystem.cmake"
   "CMakeLists.txt"
-  "/opt/homebrew/share/cmake/pybind11/FindPythonLibsNew.cmake"
   "/opt/homebrew/share/cmake/pybind11/pybind11Common.cmake"
   "/opt/homebrew/share/cmake/pybind11/pybind11Config.cmake"
   "/opt/homebrew/share/cmake/pybind11/pybind11ConfigVersion.cmake"
+  "/opt/homebrew/share/cmake/pybind11/pybind11NewTools.cmake"
   "/opt/homebrew/share/cmake/pybind11/pybind11Targets.cmake"
-  "/opt/homebrew/share/cmake/pybind11/pybind11Tools.cmake"
   )
 
 # The corresponding makefile is:

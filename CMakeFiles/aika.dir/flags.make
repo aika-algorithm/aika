@@ -4,9 +4,9 @@
 # compile CXX with /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
 CXX_DEFINES = -DPYBIND11_DETAILED_ERROR_MESSAGES -DVERSION_INFO="" -Daika_EXPORTS
 
-CXX_INCLUDES = -I/Users/lukasmolzberger/CLionProjects/aika-cpp/include -isystem /opt/homebrew/include -isystem /Library/Frameworks/Python.framework/Versions/3.12/include/python3.12
+CXX_INCLUDES = -I/Users/lukasmolzberger/CLionProjects/aika-cpp/include -isystem /Library/Frameworks/Python.framework/Versions/3.12/include/python3.12 -isystem /opt/homebrew/include
 
-CXX_FLAGSarm64 = -g -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.7 -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -fcolor-diagnostics -frtti
+CXX_FLAGSarm64 = -g -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -frtti
 
-CXX_FLAGS = -g -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.7 -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -fcolor-diagnostics -frtti
+CXX_FLAGS = -g -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -frtti
 

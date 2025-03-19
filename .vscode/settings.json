@@ -2,6 +2,15 @@
     "files.associations": {
         "vector": "cpp",
         "typeindex": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "__config": "cpp",
+        "charconv": "cpp",
+        "filesystem": "cpp",
+        "istream": "cpp",
+        "iterator": "cpp",
+        "locale": "cpp",
+        "memory": "cpp",
+        "string": "cpp",
+        "complex": "cpp"
     }
 }

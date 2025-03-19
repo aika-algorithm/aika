@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python with C++ Debugging",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/.venv/bin/python",
+            "args": ["-m", "aika"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "targetArchitecture": "arm64",
+            "setupCommands": [
+                { "text": "-enable-pretty-printing", "description": "Enable GDB pretty printing", "ignoreFailures": true }
+            ]
+        }
+    ]
+}
