@@ -8,7 +8,6 @@ set(CMAKE_CXX_STANDARD 20)
 find_package(Python REQUIRED COMPONENTS Interpreter Development REQUIRED)
 find_package(pybind11 REQUIRED)
 
-
 # Add source files
 set(SOURCES
         src/fields/field.cpp
