@@ -63,76 +63,261 @@ A Python-based example specification demonstrating the use of the Fields and Neu
 
 ### General Coding Guidelines
 - **Setup**: C++ library using CMake as the build system and pybind11 for Python integration (similar to PyTorch).
-- **Directory Structure**:
-  ```
-  - include
-    - fields
-    - network
-  - src
-    - fields
-    - network
-  ```
+---The C++ code is intended to be high performance with as little overhead as possible. The code base should avoid smart pointers and manage its memory manully. 
+For perfomance critical portions of the code, dynamic data structures should be avoided and array based data-structure should be used instead. ---
 
-### Fields Module Classes
-1. **Type Hierarchy and Object Graph**:
-   - `type_registry_python.cpp`: Python-specific type registry bindings.
-   - `type_registry.cpp`: Manages type registrations.
-   - `type.cpp`: Defines base types for objects.
-   - `obj.cpp`: Represents object instances.
-   - `relation.cpp`: Handles relationships between objects.
 
-2. **Field Graph and Definitions**:
-   - `field_definition.cpp`: Defines field types.
-   - `field.cpp`: Implements field instances.
-   - `field_link_definition.cpp`: Defines field input edges.
-   - `field_update.cpp`: Manages field value updates.
-   - `abstract_function_definition.cpp`: Base for mathematical function definitions.
+#### Overall Description of the Fields Module
 
-3. **Flattened Types**:
-   - `flattened_type.cpp`: Preprocessed flat type structures for runtime efficiency.
-   - `flattened_type_relation.cpp`: Relations in flattened types.
+The fields module is the mathematical core of the AIKA neural network framework, designed to support flexible, sparse, and non-layered representations of neural computations. It implements a dual-graph structure comprising the **field graph** and the **object graph**, which together serve as the computational substrate for the actual neural network implementation. The field graph is a declarative, graph-based representation of mathematical models, where nodes are computational units called "fields" that perform operations such as addition, multiplication, or thresholding, and edges represent data flow between these units. Each field is tied to an object in the object graph—such as a neuron or activation—via a type hierarchy that defines the structure and capabilities of network elements.
 
-4. **Event Processing**:
-   - `queue.cpp`: Event queue implementation.
-   - `queue_key.cpp`: Event ordering keys.
-   - `step.cpp`: Event processing steps.
-   - `queue_interceptor.cpp`: Event interception logic.
+Fields are defined by the `FieldDefinition` class, which specifies the type of computation (e.g., fixed-argument operations like `Addition` or variable-argument operations like `SumField`) and their connections through `FieldLinkDefinition`. These connections, directed by `Direction` implementations (`Input` and `Output`), form the edges of the field graph, facilitating event-driven updates that propagate through the network via an event queue managed by classes like `QueueInterceptor`. At runtime, the `Field` class instantiates these definitions, maintaining current and updated values for computations and coordinating updates with the queue system.
 
-5. **Mathematical Functions**:
-   - `input_field.cpp`: Input field handling.
-   - `addition.cpp`, `subtraction.cpp`, `multiplication.cpp`: Basic arithmetic operations.
-   - `sum_field.cpp`: Summation function.
-   - `identity_field.cpp`: Identity function.
-   - `soft_max_fields.cpp`: Softmax function.
-   - `scale_function.cpp`: Scaling operations.
-   - `threshold_operator.cpp`: Thresholding logic.
-   - `invert_function.cpp`: Inversion function.
+The type hierarchy, implemented by `Type` and optimized by `FlattenedType`, organizes network elements hierarchically, supporting multiple inheritance and efficient runtime access to field definitions and relations. Objects in the object graph, represented by the `Obj` class, serve as containers for fields, linking mathematical computations to the neural network's structure. Relations between objects, defined in the `network.aika.type.relations` package (e.g., `RelationOne`, `RelationMany`), guide the propagation of data and binding signals across the network.
 
-6. **Utilities**:
-   - `direction.cpp`: Direction-related utilities.
-   - `utils.cpp`: General helper functions.
+This module supports AIKA's sparse activation paradigm by ensuring that only relevant fields are updated, leveraging tolerance thresholds and event-driven processing to maintain efficiency. Mathematical operations are encapsulated in specialized classes (e.g., `Multiplication`, `SoftmaxFields`), providing a flexible toolkit for constructing complex models. Together, these components enable the fields module to underpin the dynamic and scalable behavior of the AIKA framework.
 
-#### High-Level Description for each class
 
-##### Type class
-The Type class, housed within the Fields Module of the AIKA framework, serves as a cornerstone of the project's type hierarchy, defining the structural blueprint for network elements such as neurons and synapses. This class is pivotal in enabling AIKA's flexible, non-layered architecture by supporting multiple inheritance, which allows types to inherit properties and behaviors from multiple parent types. This capability fosters a rich and adaptable system for modeling complex relationships within the neural network.
+##### Grouped Descriptions by Functionality
 
-Each Type instance encapsulates field definitions, which are mathematical properties or functions tied to the field graph—a declarative representation of the network's computational models. These definitions bridge the static structure of the network to its mathematical underpinnings. Additionally, the class manages relations, which likely play a role in facilitating binding signals that propagate through the activation network, supporting relational references during dynamic inference.
+To provide an intermediate granularity, classes are grouped by their primary roles within the fields module, reflecting their contributions to the field graph, object graph, and event-driven updates.
 
-To enhance runtime efficiency—a key goal of AIKA for managing large-scale, sparse networks—the Type class includes mechanisms to generate flattened type structures. These precomputed representations streamline access to hierarchical information, aligning with the framework's emphasis on selective activation and relevance-based processing. By defining the types of objects instantiated in the object graph, which represents the static knowledge of the neural network (e.g., neurons and synapses), the Type class underpins the Neural Network Module, ensuring a seamless integration of static and dynamic components.
+###### Field Definitions and Mathematical Operations
+- **Purpose**: Define the computational units (fields) in the field graph and specify their mathematical behavior.
+- **Classes**:
+  - `FieldDefinition`: Base class for defining fields, managing properties like name, object type, and tolerance, and handling connections.
+  - `FixedArgumentsFieldDefinition`: Extends `FieldDefinition` for operations with a fixed number of inputs (e.g., binary operations).
+  - `VariableArgumentsFieldDefinition`: Extends `FieldDefinition` for operations with a variable number of inputs (e.g., summation).
+  - `AbstractFunctionDefinition`: Abstract base for mathematical functions with fixed arguments, providing update computation logic.
+  - Specific Operations: `Addition`, `Subtraction`, `Multiplication`, `Division`, `ExponentialFunction`, `ScaleFunction`, `InvertFunction`, `IdentityFunction`, `FieldActivationFunction`, `ThresholdOperator`, `SumField`, `SoftmaxFields`, `InputField`, `EventListener`.
+- **Relation to Project**: These classes form the nodes of the field graph, implementing the mathematical models required for neural computations. They support the type hierarchy by associating operations with object types and enable sparse activation through selective updates.
 
-In essence, the Type class embodies AIKA's innovative approach by providing a flexible, hierarchical foundation for network elements, optimizing performance through flattened structures, and linking mathematical models to the network's static and dynamic behaviors.
+###### Field Links and Data Flow
+- **Purpose**: Establish and manage connections between fields, defining the edges of the field graph.
+- **Classes**:
+  - `FieldLinkDefinition`: Base class for links, specifying origin and related field definitions, relation, and direction.
+  - `Direction` (interface), `Input`, `Output`: Define the direction of data flow in links.
+- **Relation to Project**: These classes enable the graph-based representation of mathematical models, directing data flow and supporting event-driven updates by transmitting changes along the field graph.
 
-### Neural Network Module
-*(Note: Specific classes were not provided in the original description. The following is inferred based on context.)*
-Likely includes classes for:
-- Neurons and synapses (static graph).
-- Activations and links (dynamic graph).
-- Linker implementation.
-- Binding signal management.
+###### Runtime Fields and Updates
+- **Purpose**: Manage the runtime state of fields and coordinate updates within the event-driven system.
+- **Classes**:
+  - `Field`: Runtime instance of a field, holding values and managing updates.
+  - `FieldInput`, `FieldOutput`: Interfaces for accessing field states and receiving updates.
+  - `QueueInterceptor`: Integrates field updates with the event queue, ensuring proper timing and ordering.
+  - `UpdateListener`: Interface for entities that respond to field updates.
+- **Relation to Project**: These classes instantiate the field graph at runtime, linking it to the object graph and supporting asynchronous updates critical for dynamic inference.
 
-### Additional Notes
-- **Inter-Module Dependency**: The Neural Network Module builds on the Fields Module.
-- **Unit Tests**: Should cover all classes and functionalities for correctness.
-- **Python Integration**: The example model uses pybind11 to interface with the C++ library, demonstrating practical application.
+###### Type Hierarchy and Object Management
+- **Purpose**: Structure network elements and associate them with fields and relations.
+- **Classes**:
+  - `Type`: Defines the type hierarchy with multiple inheritance, associating field definitions and relations.
+  - `FlattenedType`: Optimized, flattened representation of the type hierarchy for runtime efficiency.
+  - `Obj`: Represent objects in the object graph, managing their fields and relations.
+- **Relation to Project**: These classes implement the type hierarchy and object graph, enabling flexible topology and efficient access to computational units.
+
+###### Supporting Utilities
+- **Purpose**: Provide auxiliary functionality for the fields module.
+- **Classes**: Found in `network.aika.utils` (e.g., `ToleranceUtils`, `StringUtils`, `ApproximateComparisonValueUtil`, `ArrayUtils`).
+- **Relation to Project**: Enhance robustness and efficiency, supporting tolerance checks, string formatting, and array operations.
+
+
+##### Per-File Descriptions
+
+Below are detailed descriptions for key classes within the fields module, focusing on those in `network.aika.fields`, `network.aika.fields.defs`, `network.aika.fields.direction`, `network.aika.fields.field`, and related type classes. Each description includes purpose, key features, and relation to the AIKA project.
+
+###### `network.aika.fields`
+
+1. **AbstractFunctionDefinition.java**
+   - **Purpose**: Base class for mathematical functions with a fixed number of arguments in the field graph.
+   - **Key Features**:
+     - Extends `FixedArgumentsFieldDefinition` to specify a fixed number of inputs.
+     - Abstract method `computeUpdate` calculates updates based on input changes.
+     - Transmits updates to connected fields via `transmit`.
+   - **Relation**: Provides a foundation for mathematical operations, enabling the declarative field graph.
+
+2. **ActivationFunction.java**
+   - **Purpose**: Interface for activation functions used in fields (e.g., neural activation).
+   - **Key Features**:
+     - Defines `f` (function output) and `outerGrad` (gradient for optimization).
+   - **Relation**: Supports dynamic inference by applying activation logic to field values.
+
+3. **Addition.java**
+   - **Purpose**: Implements addition as a binary operation in the field graph.
+   - **Key Features**:
+     - Takes two inputs and passes updates directly (sum of inputs).
+   - **Relation**: A basic building block for mathematical models in the neural network.
+
+4. **Division.java**
+   - **Purpose**: Implements division as a binary operation.
+   - **Key Features**:
+     - Initializes field with dividend/divisor; computes updates considering divisor changes.
+   - **Relation**: Supports complex computations, handling edge cases like division by zero.
+
+5. **EventListener.java**
+   - **Purpose**: Triggers a function when a field updates, supporting event-driven behavior.
+   - **Key Features**:
+     - Takes a single input and a `BiConsumer` trigger function.
+     - Executes the trigger on update receipt.
+   - **Relation**: Facilitates asynchronous processing, e.g., neuron firing events.
+
+6. **ExponentialFunction.java**
+   - **Purpose**: Applies an exponential function to a single input.
+   - **Key Features**:
+     - Initializes with `exp(input)`; computes update as difference from current value.
+   - **Relation**: Useful for activation functions or probability calculations.
+
+7. **FieldActivationFunction.java**
+   - **Purpose**: Applies a custom activation function to a field.
+   - **Key Features**:
+     - Uses an `ActivationFunction` instance; computes update based on function output.
+   - **Relation**: Enhances flexibility in modeling neural activation behaviors.
+
+8. **IdentityFunction.java**
+   - **Purpose**: Passes input directly as output (identity operation).
+   - **Key Features**:
+     - Single input; update equals input change.
+   - **Relation**: Simplifies field graph connections where no transformation is needed.
+
+9. **InputField.java**
+   - **Purpose**: Represents an input source with no computation.
+   - **Key Features**:
+     - Zero inputs; returns zero update (placeholder for external inputs).
+   - **Relation**: Serves as an entry point for data into the field graph.
+
+10. **InvertFunction.java**
+    - **Purpose**: Inverts input (1 - input).
+    - **Key Features**:
+      - Single input; computes update as inverted value change.
+    - **Relation**: Useful for inhibitory effects or normalization.
+
+11. **Multiplication.java**
+    - **Purpose**: Implements multiplication as a binary operation.
+    - **Key Features**:
+      - Initializes with product of two inputs; update scales with the other input.
+    - **Relation**: Core operation for weighting or combining signals.
+
+12. **ScaleFunction.java**
+    - **Purpose**: Scales input by a constant factor.
+    - **Key Features**:
+      - Single input; update is input change times scale factor.
+    - **Relation**: Adjusts signal magnitude in the field graph.
+
+13. **SoftmaxFields.java**
+    - **Purpose**: Implements a softmax operation across multiple inputs.
+    - **Key Features**:
+      - Composes `ExponentialFunction`, `SumField`, and `Division` to normalize inputs.
+      - Uses relations to connect input, normalization, and output fields.
+    - **Relation**: Enables probability distributions, key for classification tasks.
+
+14. **Subtraction.java**
+    - **Purpose**: Implements subtraction as a binary operation.
+    - **Key Features**:
+      - Two inputs; update is positive for first input, negative for second.
+    - **Relation**: Supports difference-based computations in models.
+
+15. **SumField.java**
+    - **Purpose**: Sums a variable number of inputs.
+    - **Key Features**:
+      - Extends `VariableArgumentsFieldDefinition`; aggregates all inputs.
+    - **Relation**: Facilitates aggregation, critical for summing activations.
+
+16. **ThresholdOperator.java**
+    - **Purpose**: Applies a threshold to determine binary output (0 or 1).
+    - **Key Features**:
+      - Single input; supports comparisons (e.g., above, below); optional final state.
+    - **Relation**: Implements sparse activation by thresholding field values.
+
+### `network.aika.fields.defs`
+
+1. **FieldDefinition.java**
+   - **Purpose**: Defines a field in the field graph, serving as a blueprint.
+   - **Key Features**:
+     - Manages name, object type, tolerance, phase, and connections (inputs/outputs).
+     - Initializes fields and propagates updates with tolerance checks.
+   - **Relation**: Core class for declaring mathematical models in the field graph.
+
+2. **FieldLinkDefinition.java**
+   - **Purpose**: Defines edges between fields, specifying data flow.
+   - **Key Features**:
+     - Links origin and related field definitions with a relation and direction.
+     - Static `link` method pairs input and output sides.
+   - **Relation**: Forms the graph structure, enabling dynamic updates.
+
+
+###### `network.aika.fields.direction`
+
+1. **Direction.java**
+   - **Purpose**: Interface for directing data flow in field links.
+   - **Key Features**:
+     - Defines methods for direction ID, inversion, link retrieval, and transmission.
+   - **Relation**: Ensures proper flow in the field graph, supporting event-driven updates.
+
+2. **Input.java**
+   - **Purpose**: Implements input direction for field links.
+   - **Key Features**:
+     - Retrieves input links; transmits values from related fields to origin.
+   - **Relation**: Directs incoming data, integral to graph traversal.
+
+3. **Output.java**
+   - **Purpose**: Implements output direction for field links.
+   - **Key Features**:
+     - Retrieves output links; transmits updates to related fields.
+   - **Relation**: Propagates changes outward, enabling network responsiveness.
+
+###### `network.aika.fields.field`
+
+1. **Field.java**
+   - **Purpose**: Runtime instance of a field, managing state and updates.
+   - **Key Features**:
+     - Holds current and updated values; integrates with queue via `QueueInterceptor`.
+     - Propagates updates using flattened type relations.
+   - **Relation**: Executes computations in the field graph, tied to object graph entities.
+
+2. **FieldInput.java**
+   - **Purpose**: Interface for fields receiving updates.
+   - **Key Features**:
+     - Extends `UpdateListener` for update reception.
+   - **Relation**: Ensures fields can respond to incoming changes.
+
+3. **FieldOutput.java**
+   - **Purpose**: Interface for accessing field state.
+   - **Key Features**:
+     - Provides value access (current/updated) and metadata.
+   - **Relation**: Exposes field results for downstream use or monitoring.
+
+4. **QueueInterceptor.java**
+   - **Purpose**: Mediates field updates with the event queue.
+   - **Key Features**:
+     - Queues updates via `FieldUpdate`; processes when triggered.
+   - **Relation**: Implements event-driven processing, ensuring temporal order.
+
+5. **UpdateListener.java**
+   - **Purpose**: Interface for entities reacting to field updates.
+   - **Key Features**:
+     - Defines `receiveUpdate` method.
+   - **Relation**: Supports event-driven interactions across the network.
+
+###### `network.aika.type`
+
+1. **Type.java**
+   - **Purpose**: Defines the type hierarchy for network elements.
+   - **Key Features**:
+     - Supports multiple inheritance; manages field definitions and relations.
+     - Generates flattened types for efficiency.
+   - **Relation**: Structures the object graph, linking static knowledge to computations.
+
+2. **FlattenedType.java**
+   - **Purpose**: Optimized representation of the type hierarchy.
+   - **Key Features**:
+     - Maps field definitions to indices; flattens relations for runtime use.
+     - Follows links to propagate updates.
+   - **Relation**: Enhances performance for large, sparse networks.
+
+3. **Obj.java**
+   - **Purpose**: Base implementation of `Obj`.
+   - **Key Features**:
+     - Manages fields, relations, and queue access. Initializes and stores fields based on type; provides field access methods.
+   - **Relation**: Concrete representation of network objects, integrating with fields.
+
 
