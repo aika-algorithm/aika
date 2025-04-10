@@ -63,8 +63,8 @@ A Python-based example specification demonstrating the use of the Fields and Neu
 
 ### General Coding Guidelines
 - **Setup**: C++ library using CMake as the build system and pybind11 for Python integration (similar to PyTorch).
----The C++ code is intended to be high performance with as little overhead as possible. The code base should avoid smart pointers and manage its memory manully. 
-For perfomance critical portions of the code, dynamic data structures should be avoided and array based data-structure should be used instead. ---
+The C++ code is intended to be high performance with as little overhead as possible. The code base should avoid smart pointers and manage its memory manully. 
+For perfomance critical portions of the code, dynamic data structures should be avoided and array based data-structure should be used instead.
 
 
 #### Overall Description of the Fields Module
@@ -204,7 +204,7 @@ Below are detailed descriptions for key classes within the fields module, focusi
     - **Relation**: Adjusts signal magnitude in the field graph.
 
 13. **SoftmaxFields.java**
-    - **Purpose**: Implements a softmax operation across multiple inputs.
+    - **Purpose**: Implements a softmax operation across multiple inputs and input objects.
     - **Key Features**:
       - Composes `ExponentialFunction`, `SumField`, and `Division` to normalize inputs.
       - Uses relations to connect input, normalization, and output fields.
@@ -228,7 +228,7 @@ Below are detailed descriptions for key classes within the fields module, focusi
       - Single input; supports comparisons (e.g., above, below); optional final state.
     - **Relation**: Implements sparse activation by thresholding field values.
 
-### `network.aika.fields.defs`
+###### `network.aika.fields.defs`
 
 1. **FieldDefinition.java**
    - **Purpose**: Defines a field in the field graph, serving as a blueprint.
@@ -319,5 +319,174 @@ Below are detailed descriptions for key classes within the fields module, focusi
    - **Key Features**:
      - Manages fields, relations, and queue access. Initializes and stores fields based on type; provides field access methods.
    - **Relation**: Concrete representation of network objects, integrating with fields.
+
+Below is a structured textual description of the neural network module from the AIKA project's Java codebase. This description is designed to be high-level yet detailed enough to serve as a blueprint for implementing equivalent C++ classes. It captures the purpose and functionality of each class, relates them to the neural network module's goals as outlined in the AIKA project description, and fills in missing details where applicable. The description is organized at multiple granularities: an overall summary, per-package overviews, and detailed per-class descriptions for key components.
+
+
+#### Neural Network Module
+
+##### Overall Description of the Neural Network Module
+
+The neural network module in AIKA is a core component of an innovative neural network framework that emphasizes flexibility, sparsity, and dynamic inference over traditional layered architectures. It separates the static structure of the neural network—composed of neurons and synapses—from the dynamic activation network, which consists of activations and links tied to specific input data (e.g., tokenized text). This separation enables efficient processing of large-scale networks by activating only relevant subsections based on input and thresholds, a concept known as sparse activation.
+
+Key features include:
+- **Neurons**: Static computational units defined by a type hierarchy, managing synapses and capable of suspension to optimize memory usage.
+- **Synapses**: Connections between neurons, with types (e.g., conjunctive, disjunctive) determining signal propagation and binding signal transitions.
+- **Activations**: Dynamic instances of neurons, created for specific inputs, handling binding signals and linking logic.
+- **Links**: Connections between activations, mirroring synapses and facilitating the flow of binding signals during inference.
+- **Binding Signals (BS)**: Relational references that propagate through the network, ensuring coherent activation patterns by defining valid connections.
+- **Event-Driven Processing**: Managed via a time-ordered queue, processing events like neuron firings and link instantiations asynchronously.
+- **Linker**: A distributed mechanism (not a single class) that transfers the neural network structure to the activation network by creating activations and links based on firing events and binding signal propagation.
+
+The module builds on the fields module, which provides the mathematical foundation through graph-based computations. The type hierarchy, implemented in the `typedefs` package, defines the properties and behaviors of network elements, supporting the flexible topology required for dynamic responses. This design aligns with AIKA's goal of handling large, sparse networks efficiently, leveraging selective activation and relational coherence via binding signals.
+
+##### Per-Package Descriptions
+
+##### `network.aika`
+**Purpose**: Provides core framework classes for configuration, document management, and model oversight.  
+- **Config**: Stores settings like learning rate and timeouts, influencing training and processing behavior.
+- **Document**: Represents an input instance (e.g., a document), managing activations, binding signals, and the processing queue.
+- **Element**: Interface for activation graph elements (activations and links), tracking creation and firing timestamps.
+- **Model**: Oversees the neural network, managing neurons, documents, and suspension logic.
+- **ModelProvider**: Interface for accessing the model instance.  
+**Relation to Project**: These classes establish the framework's foundation, coordinating the static neural network and dynamic inference processes.
+
+###### `network.aika.activations`
+**Purpose**: Manages dynamic inference through activations and links.  
+- **Activation**: Abstract base for activations, with subtypes (`ConjunctiveActivation`, `DisjunctiveActivation`, `InhibitoryActivation`) handling specific linking behaviors.
+- **ActivationKey**: Record for uniquely identifying activations.
+- **Link**: Connects activations, carrying binding signals and reflecting synapse relationships.  
+**Relation to Project**: Implements the activation network, enabling sparse and dynamic responses to input data.
+
+###### `network.aika.bindingsignal`
+**Purpose**: Defines and manages binding signals for relational coherence.  
+- **BSType**: Interface for binding signal types.
+- **BindingSignal**: Represents a binding signal tied to a token, tracking associated activations.
+- **Transition**: Defines binding signal transitions across synapses.  
+**Relation to Project**: Ensures valid connections in the activation graph, a key feature of AIKA’s sparse activation mechanism.
+
+###### `network.aika.misc.direction`
+**Purpose**: Specifies directionality for synapses and links.  
+- **Direction**: Interface with implementations `Input` and `Output`.  
+**Relation to Project**: Supports the graph structure by defining data flow directions.
+
+###### `network.aika.misc.exceptions`
+**Purpose**: Custom exceptions for error handling (e.g., `LockException`, `MissingNeuronException`, `NeuronSerializationException`).  
+**Relation to Project**: Enhances robustness, though not directly tied to neural functionality.
+
+###### `network.aika.misc.suspension`
+**Purpose**: Manages neuron suspension to reduce memory usage.  
+- **SuspensionCallback**: Interface for suspension logic, with implementations `FSSuspensionCallback` (file-based) and `InMemorySuspensionCallback` (memory-based).  
+**Relation to Project**: Optimizes resource use for large networks, supporting scalability.
+
+###### `network.aika.misc.utils`
+**Purpose**: Utility classes for concurrency and general operations.  
+- **ReadWriteLock**: Manages concurrent access.
+- **Utils**: Provides helper functions (e.g., tolerance checks).  
+**Relation to Project**: Supports efficient and safe operation of the framework.
+
+###### `network.aika.neurons`
+**Purpose**: Defines the static neural network structure.  
+- **Neuron**: Represents a neuron, managing synapses and references.
+- **Synapse**: Abstract base for synapses (`ConjunctiveSynapse`, `DisjunctiveSynapse`), handling connections and signal transitions.
+- **NeuronReference**: Tracks neuron references with suspension support.
+- **RefType**: Enum for reference types.  
+**Relation to Project**: Forms the static knowledge base, enabling dynamic instantiation in the activation network.
+
+###### `network.aika.queue`
+**Purpose**: Implements event-driven processing.  
+- **ElementStep**: Abstract step for queue elements.
+- **Phase**: Enum for processing phases.
+- **Queue**: Manages the event queue.
+- **QueueProvider**: Interface for queue access.
+- **Timestamp**: Tracks event timing.  
+**Relation to Project**: Ensures temporal ordering of inference events.
+
+###### `network.aika.queue.steps`
+**Purpose**: Defines specific queue steps.  
+- **Fired**: Handles activation firing and linking.
+- **Save**: Saves neuron states.  
+**Relation to Project**: Implements key inference and persistence actions.
+
+###### `network.aika.typedefs`
+**Purpose**: Defines the type hierarchy for network elements.  
+- **ActivationDefinition**: Specifies activation types and properties.
+- **EdgeDefinition**: Pairs synapse and link definitions.
+- **LinkDefinition**: Defines link types.
+- **NodeDefinition**: Pairs neuron and activation definitions.
+- **NeuronDefinition**: Defines neuron types.
+- **SynapseDefinition**: Defines synapse types and transitions.  
+**Relation to Project**: Provides flexibility and extensibility through a structured type system.
+
+
+##### Detailed Class Descriptions
+
+Below are detailed descriptions of key classes, focusing on their purpose, features, and relation to the neural network module.
+
+###### `network.aika.Document`
+- **Purpose**: Represents a single input instance (e.g., a text document), coordinating its processing.
+- **Key Features**:
+  - Manages activations (`TreeMap<Integer, Activation>`), binding signals (`TreeMap<Integer, BindingSignal>`), and a processing queue.
+  - Methods: `addActivation`, `createActivationId`, `addToken` (creates activations with binding signals), `process` (executes queued steps).
+  - Tracks document lifecycle with `disconnect` for cleanup.
+- **Relation**: Serves as the entry point for input processing, orchestrating the activation network’s dynamic inference.
+
+###### `network.aika.activations.Activation`
+- **Purpose**: Abstract base class for activations, representing dynamic neuron instances.
+- **Key Features**:
+  - Stores binding signals (`Map<BSType, BindingSignal>`), input/output links (`NavigableMap<Integer, Link>`), and firing state (`Timestamp fired`).
+  - Methods: `linkOutgoing` (creates output links), `propagate` (extends network via synapses), `branch` (handles conflicting binding signals).
+  - Subtypes (`ConjunctiveActivation`, etc.) implement specific linking logic.
+- **Relation**: Central to sparse activation, selectively activating and linking based on thresholds and binding signals.
+
+###### `network.aika.neurons.Neuron`
+- **Purpose**: Represents a static neuron in the neural network.
+- **Key Features**:
+  - Manages input (`Map<Integer, Synapse>`) and output synapses (`Map<Long, Synapse>`), propagable neurons (`Map<Long, NeuronReference>`), and reference counting.
+  - Methods: `createActivation` (instantiates activations), `addInputSynapse`/`addOutputSynapse` (manages connections), `wakeupPropagable` (reactivates neurons).
+  - Supports suspension via `NeuronReference`.
+- **Relation**: Forms the static structure, enabling multiple dynamic activations per neuron.
+
+###### `network.aika.neurons.Synapse`
+- **Purpose**: Abstract base for synapses, connecting neurons and defining signal flow.
+- **Key Features**:
+  - Tracks input/output neurons via `NeuronReference`, synapse ID, and propagability.
+  - Methods: `createLink` (instantiates links), `transitionForward` (maps binding signals), `link`/`unlink` (manages connections).
+  - Subtypes (`ConjunctiveSynapse`, `DisjunctiveSynapse`) specialize behavior.
+- **Relation**: Defines connectivity and signal propagation, critical for the Linker’s role in transferring structure to the activation network.
+
+###### `network.aika.bindingsignal.BindingSignal`
+- **Purpose**: Represents a binding signal tied to a token, ensuring relational coherence.
+- **Key Features**:
+  - Holds token ID and document reference; tracks activations (`NavigableMap<ActivationKey, Activation>`).
+  - Methods: `addActivation`, `getActivations` (retrieves activations for a neuron).
+- **Relation**: Implements binding signals, ensuring valid connections during inference.
+
+###### `network.aika.queue.Queue`
+- **Purpose**: Manages the event queue for time-ordered processing.
+- **Key Features**:
+  - Extends a base queue, processing steps (`Step`) with phases (`Phase`) and timestamps (`Timestamp`).
+  - Ensures correct event ordering (e.g., firing before linking).
+- **Relation**: Drives event-driven processing, maintaining temporal integrity of inference steps.
+
+###### `network.aika.typedefs.*` (Type Hierarchy Classes)
+- **Purpose**: Define types for activations, neurons, synapses, and links.
+- **Key Features**:
+  - `ActivationDefinition`, `NeuronDefinition`, `SynapseDefinition`, etc., use registries (`TypeRegistry`) and relations (`Relation`) to specify properties.
+  - Methods: `instantiate` creates concrete instances; inheritance supports extensibility.
+- **Relation**: Enables a flexible, hierarchical structure for network elements, supporting AIKA’s non-layered design.
+
+##### Filling in Missing Parts
+
+The project description mentions the **Linker** as a distinct component transferring structure from the neural network to the activation network. In the codebase, this functionality is distributed:
+- **Activation.linkOutgoing()**: Triggers link creation based on output synapses and binding signals.
+- **Synapse.createLink()**: Instantiates links between activations, respecting transitions.
+- **Neuron.createActivation()**: Generates activations with binding signals.
+
+**Sparse Activation** is implemented through:
+- **Activation.updateFiredStep()**: Checks thresholds to trigger firing.
+- **Linker Logic**: Selective linking via `collectLinkingTargets` and binding signal checks ensures only relevant connections are made.
+
+**Event-Driven Processing** is fully realized in the `Queue` class and steps like `Fired`, aligning with the asynchronous update requirement.
 
 
