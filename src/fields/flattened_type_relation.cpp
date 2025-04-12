@@ -23,18 +23,29 @@ FlattenedTypeRelation::FlattenedTypeRelation(FlattenedType* ft, const std::vecto
 
     // Fill fieldLinks with the grouped FieldLinkDefinitions
     for (int i = 0; i < flattenedType->getNumberOfFields(); ++i) {
-        NullTerminatedArray fdArray(flattenedType->getFieldsReverse()[i]);
+        FieldDefinition** fdArray = flattenedType->getFieldsReverse()[i];
 
-        for (FieldDefinition* fd : fdArray) {
-            fieldLinks[i] = nullTerminatedArrayFromVector<FieldLinkDefinition*>(*groupedByOriginFD[fd->getId()]);
+        int j = 0;
+        while (fdArray[j] != nullptr) {
+            FieldDefinition* fd = fdArray[j];
+            j++;
+
+            std::vector<FieldLinkDefinition*>* fls = groupedByOriginFD[fd->getId()];
+            if(fls != nullptr) {
+                fieldLinks[i] = nullTerminatedArrayFromVector<FieldLinkDefinition*>(*fls);
+            }
         }
     }
 }
 
 void FlattenedTypeRelation::followLinks(Direction* direction, Obj* relatedObj, Field* field) {
-    NullTerminatedArray flArray(fieldLinks[field->getId()]);
+    FieldLinkDefinition** flArray = fieldLinks[field->getId()];
 
-    for (FieldLinkDefinition* fl : flArray) {
+    int i = 0;
+    while (flArray[i] != nullptr) {
+        FieldLinkDefinition* fl = flArray[i];
+        i++;
+
         direction->transmit(field, fl, relatedObj);
     }
 }

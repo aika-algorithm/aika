@@ -2,6 +2,7 @@
 #include "fields/obj.h"
 #include "fields/type_registry.h"
 #include "fields/field_definition.h"
+#include "fields/flattened_type.h"
 #include <iostream>
 #include <set>
 #include <algorithm>
@@ -31,8 +32,9 @@ std::vector<Relation*> Type::getRelations() const {
 
 void Type::initFlattenedType() {
     auto fieldDefs = getCollectFlattenedFieldDefinitions();
-//    flattenedTypeInputSide = createInputFlattenedType(std::shared_ptr<Type>(this), fieldDefs);
-//    flattenedTypeOutputSide = createOutputFlattenedType(std::shared_ptr<Type>(this), fieldDefs, flattenedTypeInputSide);
+
+    flattenedTypeInputSide = FlattenedType::createInputFlattenedType(this, fieldDefs);
+    flattenedTypeOutputSide = FlattenedType::createOutputFlattenedType(this, fieldDefs, flattenedTypeInputSide);
 }
 
 std::set<FieldDefinition*> Type::getCollectFlattenedFieldDefinitions() {

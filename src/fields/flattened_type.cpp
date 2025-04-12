@@ -87,16 +87,22 @@ FlattenedTypeRelation* FlattenedType::flattenPerType(Relation* relation, Type* r
     std::vector<FieldLinkDefinition*> fieldLinks;
 
     for (int i = 0; i < numberOfFields; i++) {
-        NullTerminatedArray fdArray(fieldsReverse[i]);
-        for (FieldDefinition* fd : fdArray) {
-            for(const auto& fl : direction->getFieldLinkDefinitions(fd)) {
+        FieldDefinition** fdArray = fieldsReverse[i];
+
+        int j = 0;
+        while (fdArray[j] != nullptr) {
+            FieldDefinition* fd = fdArray[j];
+            j++;
+
+            std::vector<FieldLinkDefinition*> fls = direction->getFieldLinkDefinitions(fd);
+            for(FieldLinkDefinition* fl : fls) {
                 if (fl->getRelation()->getRelationId() == relation->getRelationId() &&
                     relatedType->isInstanceOf(fl->getRelatedFD()->getObjectType()) &&
                     direction->invert()->getFlattenedType(relatedType)->fields[fl->getRelatedFD()->getId()] >= 0) {
                     fieldLinks.push_back(fl);
                 }
             }
-        }
+       }
     }
 
     return fieldLinks.empty() ?
