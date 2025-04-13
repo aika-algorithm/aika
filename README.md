@@ -21,6 +21,7 @@ In summary, Aika diverges from conventional neural network frameworks by separat
 To install and set up Aika, make sure you have a Python 3 environment (a virtual environment is recommended) and the necessary build tools (CMake, a C++ compiler, etc.). Once you have the Aika source code, use the following commands to build and install the project:
 
 ```bash
+python3 -m venv .venv
 source .venv/bin/activate
 make clean
 cmake --build . --target install

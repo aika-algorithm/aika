@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 3.30)
 project(aika)
 
+set(PYTHON_SITE_PACKAGES /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages)
 set(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk)
 set(CMAKE_CXX_STANDARD 20)
 
 # Find Python and pybind11
 find_package(Python REQUIRED COMPONENTS Interpreter Development REQUIRED)
 find_package(pybind11 REQUIRED)
+
 
 # Add source files
 set(SOURCES
