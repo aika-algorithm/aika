@@ -1,3 +1,11 @@
+/**
+ * @file flattened_type.cpp
+ * @brief Implementation of the FlattenedType class.
+ * 
+ * This file contains the implementation of the FlattenedType class methods,
+ * which provide optimized type hierarchy representation and traversal.
+ */
+
 #include "fields/flattened_type.h"
 #include "fields/type_registry.h"
 #include "fields/relation.h"
@@ -8,6 +16,16 @@
 #include "fields/null_terminated_array.h"
 
 
+/**
+ * @brief Constructs a FlattenedType for the given type
+ * 
+ * Initializes the flattened representation by:
+ * 1. Collecting all field definitions
+ * 2. Creating index mappings
+ * 3. Flattening type relations
+ * 
+ * @param type The type to flatten
+ */
 FlattenedType::FlattenedType(Direction* dir, Type* type, const std::map<FieldDefinition*, int>& fieldMappings, int numberOfFields)
     : direction(dir), type(type), numberOfFields(numberOfFields) {
 

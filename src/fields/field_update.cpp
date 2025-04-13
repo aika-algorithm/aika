@@ -1,8 +1,28 @@
+/**
+ * @file field_update.cpp
+ * @brief Implements the FieldUpdate class functionality.
+ * 
+ * This file contains the implementation of the FieldUpdate class,
+ * which manages field value changes as steps in the event queue.
+ * It handles the creation, queuing, and processing of field updates,
+ * ensuring proper temporal ordering of changes in the field graph.
+ */
 
+#include <climits>
+#include <sstream>
 
 #include "fields/field_update.h"
 #include "fields/utils.h"
 
+/**
+ * @brief Constructs a new FieldUpdate step
+ * 
+ * Initializes the update step with the given phase and interceptor.
+ * Sets initial values for delta and queued state.
+ * 
+ * @param phase The processing phase for this update
+ * @param interceptor The QueueInterceptor managing this update
+ */
 FieldUpdate::FieldUpdate(ProcessingPhase& p, QueueInterceptor* qf)
     : phase(p), interceptor(qf) {}
 

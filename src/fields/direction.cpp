@@ -1,4 +1,13 @@
+/**
+ * @file direction.cpp
+ * @brief Implements the Direction interface and its Input/Output implementations.
+ * 
+ * This file contains the implementation of the Direction interface and its
+ * concrete implementations (Input and Output) for managing field connection
+ * directionality in the field graph.
+ */
 
+#include <sstream>
 #include "fields/direction.h"
 #include "fields/field_definition.h"
 #include "fields/field_link_definition.h"
@@ -6,6 +15,7 @@
 #include "fields/obj.h"
 #include "fields/flattened_type.h"
 
+// Initialize static members
 Direction* Direction::INPUT = new Input();
 Direction* Direction::OUTPUT = new Output();
 
