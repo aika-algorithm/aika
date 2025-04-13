@@ -14,7 +14,6 @@ FieldDefinition::FieldDefinition(Type* objectType, const std::string& name, int 
     objectType->setFieldDefinition(this);
 
     if (numArgs > 0) {
-        std::cout << "numArgs : " << numArgs << std::endl;
         inputs.reserve(numArgs);
     }
 }
@@ -67,8 +66,6 @@ void FieldDefinition::initializeField(Field* field) {
 }
 
 void FieldDefinition::addInput(FieldLinkDefinition* fl) {
-    std::cout << "fl->getArgument() : " << fl->getArgument() << " inputs.size : " << inputs.size() << std::endl;
-
     if(fl->getArgument() >= 0) 
         inputs[fl->getArgument()] = fl;
     else
