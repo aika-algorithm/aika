@@ -4,10 +4,12 @@
 #include "fields/field_definition.h"
 #include "fields/field_update.h"
 #include "fields/type.h"
+#include "fields/obj.h"
 #include "fields/type_registry.h"
 #include "fields/input_field.h"
 #include "fields/subtraction.h"
 #include "fields/test_type.h"
+#include "fields/test_object.h"
 
 
 // ----------------
@@ -70,8 +72,17 @@ PYBIND11_MODULE(aika, m)
                   );
             }, py::return_value_policy::take_ownership);
 
+      py::class_<Obj>(m, "Obj")
+            .def("__str__", [](const Obj &t) {
+                  return t.toString();
+            });
+
       py::class_<TestType, Type>(m, "TestType")
-            .def(py::init<TypeRegistry*, const std::string&>());    
+            .def(py::init<TypeRegistry*, const std::string&>())
+            .def("instantiate", &TestType::instantiate, py::return_value_policy::take_ownership);    
+
+      py::class_<TestObject, Obj>(m, "TestObj")
+            .def(py::init<TestType*>());    
 
       py::class_<TypeRegistry>(m, "TypeRegistry")
             .def(py::init<>())
