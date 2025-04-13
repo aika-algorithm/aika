@@ -1,10 +1,51 @@
-build/
-dist/
-_build/
-_generate/
+.DS_Store
+
+# Ignore build directories
+/build/
+/cmake-build-*/
+/.cmake/
+
+# Ignore CMake generated files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+CTestTestfile.cmake
+cmake_install.cmake
+Makefile
+
+# Ignore compiled object files
+*.o
+*.obj
+*.lo
+*.la
+*.al
+
+# Ignore shared libraries
 *.so
+*.dylib
+*.dll
+
+# Ignore static libraries
+*.a
+*.lib
+
+# Ignore Python cache and compiled files
+__pycache__/
 *.py[cod]
-*.egg-info
-*env*
-*.iml
-.idea
+
+# Ignore Pybind11 generated files
+*.pyd
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Ignore user-specific files
+*.user
+*.DS_Store
+*.vscode/
+.idea/
+
+.DS_Store
