@@ -48,4 +48,10 @@ __pycache__/
 *.vscode/
 .idea/
 
+# Ignore virtual environment
+.venv/
+.venv/include/
+.venv/include/*.h
+.venv/include/**/*.h
+
 .DS_Store
