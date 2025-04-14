@@ -10,6 +10,7 @@
 #include "fields/subtraction.h"
 #include "fields/test_type.h"
 #include "fields/test_object.h"
+#include "fields/field.h"
 
 
 // ----------------
@@ -64,29 +65,44 @@ PYBIND11_MODULE(aika, m)
                         const_cast<Type*>(&ref),
                         name
                   );
-            }, py::return_value_policy::take_ownership)
+            }, py::return_value_policy::reference_internal)
             .def("sub", [](const Type &ref, const std::string &name) {
                   return new Subtraction(
                         const_cast<Type*>(&ref),
                         name
                   );
-            }, py::return_value_policy::take_ownership);
+            }, py::return_value_policy::reference_internal);
 
       py::class_<Obj>(m, "Obj")
             .def("__str__", [](const Obj &t) {
                   return t.toString();
-            });
+            })
+            .def("setFieldValue", &Obj::setFieldValue)
+            .def("getFieldValue", &Obj::getFieldValue)
+            .def("initFields", &Obj::initFields)
+            .def("getType", &Obj::getType, py::return_value_policy::reference_internal)
+            .def("isInstanceOf", &Obj::isInstanceOf)
+            .def("getFieldOutput", &Obj::getFieldOutput, py::return_value_policy::reference_internal)
+            .def("getOrCreateFieldInput", &Obj::getOrCreateFieldInput, py::return_value_policy::reference_internal);
 
       py::class_<TestType, Type>(m, "TestType")
             .def(py::init<TypeRegistry*, const std::string&>())
-            .def("instantiate", &TestType::instantiate, py::return_value_policy::take_ownership);    
+            .def("instantiate", &TestType::instantiate, py::return_value_policy::reference_internal);    
 
       py::class_<TestObject, Obj>(m, "TestObj")
-            .def(py::init<TestType*>());    
+            .def(py::init<TestType*>())
+            .def_static("linkObjects", &TestObject::linkObjects);    
 
       py::class_<TypeRegistry>(m, "TypeRegistry")
             .def(py::init<>())
             .def("getType", &TypeRegistry::getType)
             .def("registerType", &TypeRegistry::registerType)
             .def("flattenTypeHierarchy", &TypeRegistry::flattenTypeHierarchy);
+
+      py::class_<Field>(m, "Field")
+            .def("getValue", &Field::getValue)
+            .def("getUpdatedValue", &Field::getUpdatedValue)
+            .def("__str__", [](const Field &f) {
+                  return f.toString();
+            });
 }

@@ -21,7 +21,6 @@ set(SOURCES
         src/fields/obj.cpp
         src/fields/type.cpp
         src/fields/type_registry.cpp
-        src/fields/type_registry_python.cpp
         src/fields/flattened_type.cpp
         src/fields/flattened_type_relation.cpp
         src/fields/relation.cpp
@@ -34,6 +33,7 @@ set(SOURCES
         src/fields/step.cpp
         src/fields/test_type.cpp
         src/fields/test_object.cpp
+        src/fields/python_bindings.cpp
         src/network/model.cpp
 )
 

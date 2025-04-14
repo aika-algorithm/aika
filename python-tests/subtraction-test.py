@@ -1,6 +1,7 @@
 import unittest
 import sys
 import os
+from parameterized import parameterized
 
 # Add the project root to Python's module search path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -9,7 +10,12 @@ import aika
 
 class MyTestCase(unittest.TestCase):
 
-    def testSubtraction(self):
+    @parameterized.expand([
+        (0, "linking_pos_0"),
+        (1, "linking_pos_1"),
+        (2, "linking_pos_2")
+    ])
+    def testSubtraction(self, linking_pos, test_name):
         print("Module 'aika' was loaded from:", aika.__file__)
 
         TEST_RELATION_FROM = aika.RelationOne(1, "TEST_FROM")
@@ -45,6 +51,23 @@ class MyTestCase(unittest.TestCase):
         oa = typeA.instantiate()
         ob = typeB.instantiate()
 
+        if linking_pos == 0:
+            aika.TestObj.linkObjects(oa, ob)
+            ob.initFields()
+
+        oa.setFieldValue(a, 50.0)
+
+        if linking_pos == 1:
+            aika.TestObj.linkObjects(oa, ob)
+            ob.initFields()
+
+        oa.setFieldValue(b, 20.0)
+
+        if linking_pos == 2:
+            aika.TestObj.linkObjects(oa, ob)
+            ob.initFields()
+
+        self.assertEqual(30.0, ob.getFieldOutput(c).getValue())
 
 if __name__ == '__main__':
     unittest.main()

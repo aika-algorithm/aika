@@ -28,6 +28,12 @@ cmake --build . --target install
 python tests/subtraction-test.py
 ```
 
+Additionally, ensure that the `parameterized` package is installed for running parameterized tests. You can install it using:
+
+```bash
+pip install parameterized
+```
+
 **Steps explained:**
 
 1. Activate the Python virtual environment (here, `.venv`) so that Python dependencies and the installation target are set up correctly.
