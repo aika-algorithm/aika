@@ -112,8 +112,22 @@ Direction* FieldLinkDefinition::getDirection() const {
  * 
  * @return The argument position
  */
-int FieldLinkDefinition::getArgument() const {
-    return argument.value_or(0);
+std::optional<int> FieldLinkDefinition::getArgument() const {
+    return argument;
+}
+
+/**
+ * @brief Gets the argument as a string
+ * 
+ * Returns "no argument" if no argument position is set.
+ * 
+ * @return The argument position as a string
+ */
+std::string FieldLinkDefinition::getArgumentAsString() const {
+    if (argument) {
+        return std::to_string(argument.value());
+    }
+    return "no argument";
 }
 
 /**
@@ -122,8 +136,7 @@ int FieldLinkDefinition::getArgument() const {
  * @return String representation
  */
 std::string FieldLinkDefinition::toString() const {
-    // TODO: Implement proper string representation
-    return "";
+    return "FieldLinkDefinition(" + originFD->getName() + " -> " + relatedFD->getName() + ")";
 }
 
 /**

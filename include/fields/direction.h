@@ -11,6 +11,7 @@
 #define DIRECTION_H
 
 #include <vector>
+#include <string>
 
 class Obj;
 class Field;
@@ -50,13 +51,15 @@ public:
      */
     virtual int getDirectionId() const = 0;
 
+    virtual std::string getName() const = 0;
+
+
     /**
      * @brief Gets the inverse direction
      * 
      * @return The opposite direction
      */
     virtual Direction* invert() const = 0;
-
     /**
      * @brief Gets the link definition for a field
      * 
@@ -99,6 +102,7 @@ public:
 class Input : public Direction {
 public:
     int getDirectionId() const override;
+    std::string getName() const override;
     Direction* invert() const override;
     std::vector<FieldLinkDefinition*> getFieldLinkDefinitions(FieldDefinition* fd) const override;
     FlattenedType* getFlattenedType(Type* type) const override;
@@ -117,6 +121,7 @@ public:
 class Output : public Direction {
 public:
     int getDirectionId() const override;
+    std::string getName() const override;
     Direction* invert() const override;
     std::vector<FieldLinkDefinition*> getFieldLinkDefinitions(FieldDefinition* fd) const override;
     FlattenedType* getFlattenedType(Type* type) const override;

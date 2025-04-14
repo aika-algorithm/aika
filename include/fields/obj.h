@@ -21,7 +21,8 @@ public:
     virtual RelatedObjectIterable* followManyRelation(Relation* rel) const = 0;
     virtual Obj* followSingleRelation(const Relation* rel) = 0;
     bool isInstanceOf(Type* t);
-    Field* getFieldOutput(FieldDefinition* fd);
+    Field* getFieldInput(FieldDefinition* fd) const;
+    Field* getFieldOutput(FieldDefinition* fd) const;
     Field* getOrCreateFieldInput(FieldDefinition* fd);
     Obj& setFieldValue(FieldDefinition* fd, double v);
     double getFieldValue(FieldDefinition* fd);
@@ -30,6 +31,7 @@ public:
 
     std::string toKeyString();
     std::string toString() const;
+    std::string getFieldAsString(FieldDefinition* fd) const;
 };
 
 #endif // OBJ_H

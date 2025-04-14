@@ -51,23 +51,31 @@ class MyTestCase(unittest.TestCase):
         oa = typeA.instantiate()
         ob = typeB.instantiate()
 
+        print("linking_pos:", linking_pos)
+
         if linking_pos == 0:
             aika.TestObj.linkObjects(oa, ob)
             ob.initFields()
 
         oa.setFieldValue(a, 50.0)
+        print("oa.getFieldValue(a):", oa.getFieldValue(a))
 
         if linking_pos == 1:
             aika.TestObj.linkObjects(oa, ob)
             ob.initFields()
 
         oa.setFieldValue(b, 20.0)
+        print("oa.getFieldValue(b):", oa.getFieldValue(b))
 
         if linking_pos == 2:
             aika.TestObj.linkObjects(oa, ob)
             ob.initFields()
 
-        self.assertEqual(30.0, ob.getFieldOutput(c).getValue())
+        print("ob.getFieldValue(c):", ob.getFieldValue(c))
+
+        print("ob.getFieldAsString(c):", ob.getFieldAsString(c))
+
+        self.assertEqual(30.0, ob.getFieldValue(b))
 
 if __name__ == '__main__':
     unittest.main()

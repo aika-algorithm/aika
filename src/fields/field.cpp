@@ -217,9 +217,7 @@ void Field::receiveUpdate(double u) {
  * @return String representation in the format "name: value"
  */
 std::string Field::toString() const {
-    std::stringstream ss;
-    ss << getName() << ": " << getValueString();
-    return ss.str();
+    return getName() + ": " + getValueString();
 }
 
 /**
@@ -228,5 +226,5 @@ std::string Field::toString() const {
  * @return Value string representation
  */
 std::string Field::getValueString() const {
-    return toString();
+    return std::to_string(value);
 }

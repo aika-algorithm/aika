@@ -16,6 +16,7 @@ void Obj::initFields() {
     for (short i = 0; i < type->getFlattenedTypeInputSide()->getNumberOfFields(); ++i) {
         auto fd = type->getFlattenedTypeInputSide()->getFieldDefinitionIdByIndex(i);
         auto field = getOrCreateFieldInput(fd);
+
         fd->initializeField(field);
     }
 }
@@ -28,17 +29,26 @@ bool Obj::isInstanceOf(Type* t) {
     return type->isInstanceOf(t);
 }
 
-Field* Obj::getFieldOutput(FieldDefinition* fd) {
+Field* Obj::getFieldInput(FieldDefinition* fd) const {
+    short fieldIndex = type->getFlattenedTypeInputSide()->getFieldIndex(fd);
+    return fields[fieldIndex];
+}
+
+Field* Obj::getFieldOutput(FieldDefinition* fd) const {
     short fieldIndex = type->getFlattenedTypeOutputSide()->getFieldIndex(fd);
     return fields[fieldIndex];
 }
 
 Field* Obj::getOrCreateFieldInput(FieldDefinition* fd) {
     short fieldIndex = type->getFlattenedTypeInputSide()->getFieldIndex(fd);
-    if (!fields[fieldIndex]) {
-        fields[fieldIndex] = new Field(this, fd, fieldIndex);
+
+    auto field = fields[fieldIndex];
+    if (field == nullptr) {
+        std::cout << "Creating field " << fd->getName() << std::endl;
+        field = new Field(this, fd, fieldIndex);
+        fields[fieldIndex] = field;
     }
-    return fields[fieldIndex];
+    return field;
 }
 
 Obj& Obj::setFieldValue(FieldDefinition* fd, double v) {
@@ -66,6 +76,17 @@ std::string Obj::toKeyString() {
 
 std::string Obj::toString() const {
     std::stringstream ss;
-    ss << type;
+    ss << type->getId() << ":" << type->getName();
+    return ss.str();
+}
+
+std::string Obj::getFieldAsString(FieldDefinition* fd) const {
+    std::stringstream ss;
+    ss << toString() << " fd:" << fd->toString() << " Number of inputs:" << fd->getInputs().size() << std::endl;
+
+    for (auto fl : fd->getInputs()) {
+        ss << "  arg:" << fl->getArgumentAsString() << " rel:" << fl->getRelation() << " inputField:" << fl->getRelatedFD()->getName() << std::endl;
+    }
+
     return ss.str();
 }

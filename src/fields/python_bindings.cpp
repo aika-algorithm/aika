@@ -77,6 +77,7 @@ PYBIND11_MODULE(aika, m)
             .def("__str__", [](const Obj &t) {
                   return t.toString();
             })
+            .def("getFieldAsString", &Obj::getFieldAsString)
             .def("setFieldValue", &Obj::setFieldValue)
             .def("getFieldValue", &Obj::getFieldValue)
             .def("initFields", &Obj::initFields)

@@ -57,6 +57,7 @@ public:
     int getFieldIndex(FieldDefinition* fd);
     int getNumberOfFields() const;
     Type* getType() const;
+    Direction* getDirection() const;
 
     FieldDefinition*** getFieldsReverse();
     FieldDefinition* getFieldDefinitionIdByIndex(short idx);

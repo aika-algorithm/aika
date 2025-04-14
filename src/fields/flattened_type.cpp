@@ -125,6 +125,8 @@ void FlattenedType::flatten() {
     mapping = new FlattenedTypeRelation**[type->getRelations().size()];
 
     for (const auto& rel : type->getRelations()) {
+        std::cout << "FlattenedType::flatten rel " << rel->getRelationLabel() << std::endl;
+
         std::vector<FlattenedTypeRelation*> resultsPerRelation(type->getTypeRegistry()->getTypes().size());
         for (const auto& relatedType : type->getTypeRegistry()->getTypes()) {
             resultsPerRelation[relatedType->getId()] = flattenPerType(rel, relatedType);
@@ -155,6 +157,8 @@ void FlattenedType::flatten() {
 FlattenedTypeRelation* FlattenedType::flattenPerType(Relation* relation, Type* relatedType) {
     std::vector<FieldLinkDefinition*> fieldLinks;
 
+    std::cout << "FlattenedType::flattenPerType begin " << relation->getRelationLabel() << " " << relatedType->getName() << std::endl;
+    
     for (int i = 0; i < numberOfFields; i++) {
         FieldDefinition** fdArray = fieldsReverse[i];
 
@@ -172,6 +176,8 @@ FlattenedTypeRelation* FlattenedType::flattenPerType(Relation* relation, Type* r
                 }
             }
        }
+
+       std::cout << "FlattenedType::flattenPerType end fieldLinks " << fieldLinks.size() << std::endl;
     }
 
     return fieldLinks.empty() ?
@@ -198,6 +204,7 @@ void FlattenedType::followLinks(Field* field) {
             auto it = iterable->iterator();
             while (it->hasNext()) {
                 auto relatedObj = it->next();
+
                 followLinks(ftr[relatedObj->getType()->getId()], relatedObj, field);
             }
             delete it;
@@ -255,6 +262,17 @@ int FlattenedType::getNumberOfFields() const {
  */ 
 Type* FlattenedType::getType() const {
     return type;
+}
+
+/**
+ * @brief Gets the direction
+ * 
+ * This function gets the direction in the flattened type.
+ * 
+ * @return The direction in the flattened type
+ */ 
+Direction* FlattenedType::getDirection() const {
+    return direction;
 }
 
 /**

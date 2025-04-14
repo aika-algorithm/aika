@@ -132,7 +132,10 @@ public:
      * 
      * @return The argument position
      */
-    int getArgument() const;
+     std::optional<int> getArgument() const;
+
+     std::string getArgumentAsString() const;
+
 
     /**
      * @brief Gets the input field for a given object

@@ -33,7 +33,7 @@ FieldDefinition::FieldDefinition(Type* objectType, const std::string& name, int 
     objectType->setFieldDefinition(this);
 
     if (numArgs > 0) {
-        inputs.reserve(numArgs);
+        inputs.resize(numArgs);
     }
 }
 
@@ -148,6 +148,11 @@ FieldDefinition* FieldDefinition::resolveInheritedFieldDefinition(const std::set
  * @param field The field to initialize
  */
 void FieldDefinition::initializeField(Field* field) {
+    std::cout << "Initializing field " << std::endl;
+    std::cout << "Field " << field << std::endl;
+    std::cout << "Field object type " << field->getObject()->getType() << std::endl;
+    std::cout << "Field object type flattened type input side " << field->getObject()->getType()->getFlattenedTypeInputSide() << std::endl;
+
     field->getObject()->getType()->getFlattenedTypeInputSide()->followLinks(field);
 }
 
@@ -159,10 +164,20 @@ void FieldDefinition::initializeField(Field* field) {
  * @param fl The field link to add
  */
 void FieldDefinition::addInput(FieldLinkDefinition* fl) {
-    if(fl->getArgument() >= 0) 
-        inputs[fl->getArgument()] = fl;
-    else
-        inputs.push_back(fl);    
+    std::cout << "Adding input " << fl->toString() << std::endl;
+    std::cout << " Argument:" << fl->getArgumentAsString() << std::endl;
+
+    if (fl->getArgument().has_value()) {
+        int arg = fl->getArgument().value();
+        if (arg >= inputs.size()) {
+            inputs.resize(arg + 1);
+        }
+        inputs[arg] = fl;
+    } else {
+        inputs.push_back(fl);
+    }
+
+    std::cout << " Number of inputs:" << getInputs().size() << std::endl;
 }
 
 /**

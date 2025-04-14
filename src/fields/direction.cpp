@@ -24,6 +24,10 @@ int Input::getDirectionId() const {
     return 0; // Return 0 for the "input" direction
 }
 
+std::string Input::getName() const {
+    return "input"; // Return the name of the input direction
+}
+
 Direction* Input::invert() const {
     return Direction::OUTPUT; // Return the OUTPUT direction
 }
@@ -46,6 +50,10 @@ void Input::transmit(Field* originField,
 
 int Output::getDirectionId() const {
     return 1; // Return 1 for the "output" direction
+}
+
+std::string Output::getName() const {
+    return "output"; // Return the name of the output direction
 }
 
 Direction* Output::invert() const {
