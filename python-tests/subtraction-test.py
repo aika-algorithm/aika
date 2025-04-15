@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import aika
 
-class MyTestCase(unittest.TestCase):
+class MySubtractionTestCase(unittest.TestCase):
 
     @parameterized.expand([
         (0, "linking_pos_0"),
