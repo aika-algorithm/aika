@@ -81,10 +81,10 @@ std::string Obj::toString() const {
 
 std::string Obj::getFieldAsString(FieldDefinition* fd) const {
     std::stringstream ss;
-    ss << toString() << " fd:" << fd->toString() << " Number of inputs:" << fd->getInputs().size() << std::endl;
+    ss << toString() << " fd:<" << fd->toString() << "> Number of inputs:" << fd->getInputs().size() << std::endl;
 
     for (auto fl : fd->getInputs()) {
-        ss << "  arg:" << fl->getArgumentAsString() << " rel:" << fl->getRelation() << " inputField:" << fl->getRelatedFD()->getName() << std::endl;
+        ss << "  arg:" << fl->getArgumentAsString() << " rel:<" << fl->getRelation()->getRelationId() << ":" << fl->getRelation()->getRelationLabel() << "> inputField:" << fl->getRelatedFD()->getName() << std::endl;
     }
 
     return ss.str();
