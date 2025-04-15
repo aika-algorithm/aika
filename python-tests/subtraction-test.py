@@ -32,7 +32,7 @@ class MyTestCase(unittest.TestCase):
         typeB = aika.TestType(registry, "B")
 
         a = typeA.inputField("a")
-        b = typeB.inputField("b")
+        b = typeA.inputField("b")
 
         c = typeB.sub("c")
 

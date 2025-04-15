@@ -132,6 +132,8 @@ void FlattenedType::flatten() {
             resultsPerRelation[relatedType->getId()] = flattenPerType(rel, relatedType);
         }
 
+        // TODO: Check if resultsPerRelation is correctly filled.
+
         if (!isAllNull(resultsPerRelation)) {
             FlattenedTypeRelation** tmp = new FlattenedTypeRelation*[resultsPerRelation.size()];
             for (int i = 0; i < resultsPerRelation.size(); i++) {
@@ -157,7 +159,7 @@ void FlattenedType::flatten() {
 FlattenedTypeRelation* FlattenedType::flattenPerType(Relation* relation, Type* relatedType) {
     std::vector<FieldLinkDefinition*> fieldLinks;
 
-    std::cout << "FlattenedType::flattenPerType begin " << relation->getRelationLabel() << " " << relatedType->getName() << std::endl;
+    std::cout << "FlattenedType::flattenPerType begin rel:" << relation->getRelationLabel() << " relatedType:" << relatedType->getName() << std::endl;
     
     for (int i = 0; i < numberOfFields; i++) {
         FieldDefinition** fdArray = fieldsReverse[i];
@@ -176,9 +178,9 @@ FlattenedTypeRelation* FlattenedType::flattenPerType(Relation* relation, Type* r
                 }
             }
        }
-
-       std::cout << "FlattenedType::flattenPerType end fieldLinks " << fieldLinks.size() << std::endl;
     }
+    
+    std::cout << "FlattenedType::flattenPerType end rel:" << relation->getRelationLabel() << " relatedType:" << relatedType->getName() << " numFieldLinks:" << fieldLinks.size() << std::endl;
 
     return fieldLinks.empty() ?
                               nullptr :
