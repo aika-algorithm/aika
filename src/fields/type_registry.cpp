@@ -41,10 +41,7 @@ void TypeRegistry::flattenTypeHierarchy() {
     }
 
     for (const auto& type : sortedTypes) {
-        std::cout << "Flattening type " << type->getName() << std::endl;
         type->getFlattenedTypeInputSide()->flatten();
-        std::cout << "Flattening type " << type->getName() << " input side done" << std::endl;
         type->getFlattenedTypeOutputSide()->flatten();
-        std::cout << "Flattening type " << type->getName() << " output side done" << std::endl;
     }
 }

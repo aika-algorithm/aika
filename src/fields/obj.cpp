@@ -44,7 +44,6 @@ Field* Obj::getOrCreateFieldInput(FieldDefinition* fd) {
 
     auto field = fields[fieldIndex];
     if (field == nullptr) {
-        std::cout << "Creating field " << fd->getName() << std::endl;
         field = new Field(this, fd, fieldIndex);
         fields[fieldIndex] = field;
     }
