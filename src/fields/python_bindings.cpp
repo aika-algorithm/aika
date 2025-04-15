@@ -11,6 +11,7 @@
 #include "fields/test_type.h"
 #include "fields/test_object.h"
 #include "fields/field.h"
+#include "fields/addition.h"
 
 
 // ----------------
@@ -49,6 +50,9 @@ PYBIND11_MODULE(aika, m)
       // Bind Subtraction (inherits from AbstractFunctionDefinition)
       py::class_<Subtraction, AbstractFunctionDefinition>(m, "Subtraction");
 
+      // Bind Addition (inherits from AbstractFunctionDefinition)
+      py::class_<Addition, AbstractFunctionDefinition>(m, "Addition");
+
       py::class_<InputField, FieldDefinition>(m, "InputField")
             .def(py::init<Type*, const std::string &>())
             .def("__str__", [](const InputField &f) {
@@ -68,6 +72,12 @@ PYBIND11_MODULE(aika, m)
             }, py::return_value_policy::reference_internal)
             .def("sub", [](const Type &ref, const std::string &name) {
                   return new Subtraction(
+                        const_cast<Type*>(&ref),
+                        name
+                  );
+            }, py::return_value_policy::reference_internal)
+            .def("add", [](const Type &ref, const std::string &name) {
+                  return new Addition(
                         const_cast<Type*>(&ref),
                         name
                   );
