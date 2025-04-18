@@ -126,7 +126,7 @@ public:
      * @brief Initializes a field instance based on this definition
      * @param field The field to initialize
      */
-    void initializeField(Field* field);
+    virtual void initializeField(Field* field);
 
     /**
      * @brief Adds an input field link

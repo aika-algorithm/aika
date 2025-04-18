@@ -8,7 +8,11 @@ Obj* TestObject::followSingleRelation(const Relation* rel) {
     if (rel == &TestType::TEST_RELATION_FROM || rel == &TestType::TEST_RELATION_TO) {
         return getRelatedTestObject();
     } else {
-        throw std::runtime_error("Invalid Relation");
+        if(rel != nullptr) {
+            throw std::runtime_error("Object:" + this->toString() + " Invalid Relation:" + std::to_string(rel->getRelationId()) + ":" + rel->getRelationLabel());
+        } else {
+            throw std::runtime_error("Object:" + this->toString() + " Invalid Relation: nullptr");
+        }
     }
 }
 

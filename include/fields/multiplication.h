@@ -11,6 +11,8 @@ public:
     // Constructor
     Multiplication(Type* ref, const std::string& name);
 
+    void initializeField(Field* field) override;
+
     // Overridden method from AbstractFunctionDefinition
     double computeUpdate(Obj* obj, FieldLinkDefinition* fl, double u) override;
 };
