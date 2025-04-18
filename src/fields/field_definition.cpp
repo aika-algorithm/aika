@@ -208,7 +208,7 @@ std::vector<FieldLinkDefinition*> FieldDefinition::getOutputs() {
  * @return This field definition for method chaining
  */
 FieldDefinition& FieldDefinition::input(Relation& relation, FieldDefinition& input, int arg) {
-    FieldLinkDefinition::link(&input, this, &relation, arg);
+    FieldLinkDefinition::link(&input, this, relation.getReverse(), arg);
 //    assert(relation || objectType->isInstanceOf(output->getObjectType()) || output->getObjectType()->isInstanceOf(objectType));
     return *this;
 }

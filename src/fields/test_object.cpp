@@ -5,7 +5,7 @@ TestObject::TestObject(TestType* type) : Obj(type) {}
 
 // Follow a single relation
 Obj* TestObject::followSingleRelation(const Relation* rel) {
-    if (rel == &TestType::TEST_RELATION_FROM || rel == &TestType::TEST_RELATION_TO) {
+    if (rel->getRelationId() == TestType::TEST_RELATION_FROM.getRelationId() || rel->getRelationId() == TestType::TEST_RELATION_TO.getRelationId()) {
         return getRelatedTestObject();
     } else {
         if(rel != nullptr) {
