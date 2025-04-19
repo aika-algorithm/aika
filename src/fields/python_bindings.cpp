@@ -14,6 +14,7 @@
 #include "fields/addition.h"
 #include "fields/multiplication.h"
 #include "fields/division.h"
+#include "fields/exponential_function.h"
 
 
 // ----------------
@@ -61,6 +62,8 @@ PYBIND11_MODULE(aika, m)
       // Bind Division (inherits from AbstractFunctionDefinition)
       py::class_<Division, AbstractFunctionDefinition>(m, "Division");
 
+      py::class_<ExponentialFunction, AbstractFunctionDefinition>(m, "ExponentialFunction");
+
       py::class_<InputField, FieldDefinition>(m, "InputField")
             .def(py::init<Type*, const std::string &>())
             .def("__str__", [](const InputField &f) {
@@ -98,6 +101,12 @@ PYBIND11_MODULE(aika, m)
             }, py::return_value_policy::reference_internal)
             .def("div", [](const Type &ref, const std::string &name) {
                   return new Division(
+                        const_cast<Type*>(&ref),
+                        name
+                  );
+            }, py::return_value_policy::reference_internal)
+            .def("exp", [](const Type &ref, const std::string &name) {
+                  return new ExponentialFunction(
                         const_cast<Type*>(&ref),
                         name
                   );

@@ -6,8 +6,6 @@ Multiplication::Multiplication(Type* ref, const std::string& name)
 
 void Multiplication::initializeField(Field* field) {
     Obj* toObj = field->getObject();
-    FieldDefinition* fieldDef = field->getFieldDefinition();
-    std::vector<FieldLinkDefinition*> inputs = fieldDef->getInputs();
     double valueArg0 = inputs[0]->getInputValue(toObj);
     double valueArg1 = inputs[1]->getInputValue(toObj);
 
