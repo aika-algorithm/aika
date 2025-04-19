@@ -13,6 +13,7 @@
 #include "fields/field.h"
 #include "fields/addition.h"
 #include "fields/multiplication.h"
+#include "fields/division.h"
 
 
 // ----------------
@@ -57,6 +58,9 @@ PYBIND11_MODULE(aika, m)
       // Bind Multiplication (inherits from AbstractFunctionDefinition)
       py::class_<Multiplication, AbstractFunctionDefinition>(m, "Multiplication");
 
+      // Bind Division (inherits from AbstractFunctionDefinition)
+      py::class_<Division, AbstractFunctionDefinition>(m, "Division");
+
       py::class_<InputField, FieldDefinition>(m, "InputField")
             .def(py::init<Type*, const std::string &>())
             .def("__str__", [](const InputField &f) {
@@ -88,6 +92,12 @@ PYBIND11_MODULE(aika, m)
             }, py::return_value_policy::reference_internal)
             .def("mul", [](const Type &ref, const std::string &name) {
                   return new Multiplication(
+                        const_cast<Type*>(&ref),
+                        name
+                  );
+            }, py::return_value_policy::reference_internal)
+            .def("div", [](const Type &ref, const std::string &name) {
+                  return new Division(
                         const_cast<Type*>(&ref),
                         name
                   );

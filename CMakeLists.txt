@@ -19,6 +19,7 @@ set(SOURCES
         src/fields/addition.cpp
         src/fields/subtraction.cpp
         src/fields/multiplication.cpp
+        src/fields/division.cpp
         src/fields/field_link_definition.cpp
         src/fields/obj.cpp
         src/fields/type.cpp
