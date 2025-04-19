@@ -21,6 +21,7 @@ set(SOURCES
         src/fields/multiplication.cpp
         src/fields/division.cpp
         src/fields/exponential_function.cpp
+        src/fields/summation.cpp
         src/fields/field_link_definition.cpp
         src/fields/obj.cpp
         src/fields/type.cpp

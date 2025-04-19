@@ -15,6 +15,7 @@
 #include "fields/multiplication.h"
 #include "fields/division.h"
 #include "fields/exponential_function.h"
+#include "fields/summation.h"
 
 
 // ----------------
@@ -64,6 +65,9 @@ PYBIND11_MODULE(aika, m)
 
       py::class_<ExponentialFunction, AbstractFunctionDefinition>(m, "ExponentialFunction");
 
+      // Bind Summation (inherits from AbstractFunctionDefinition)
+      py::class_<Summation, AbstractFunctionDefinition>(m, "Summation");
+
       py::class_<InputField, FieldDefinition>(m, "InputField")
             .def(py::init<Type*, const std::string &>())
             .def("__str__", [](const InputField &f) {
@@ -107,6 +111,12 @@ PYBIND11_MODULE(aika, m)
             }, py::return_value_policy::reference_internal)
             .def("exp", [](const Type &ref, const std::string &name) {
                   return new ExponentialFunction(
+                        const_cast<Type*>(&ref),
+                        name
+                  );
+            }, py::return_value_policy::reference_internal)
+            .def("sum", [](const Type &ref, const std::string &name) {
+                  return new Summation(
                         const_cast<Type*>(&ref),
                         name
                   );
