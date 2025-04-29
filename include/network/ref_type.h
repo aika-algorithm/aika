@@ -1,0 +1,16 @@
+#ifndef NETWORK_REF_TYPE_H
+#define NETWORK_REF_TYPE_H
+
+enum class RefType {
+    NEURON_EXTERNAL,
+    PERSISTENCE,
+    SYNAPSE_IN,
+    SYNAPSE_OUT,
+    PROPAGABLE,
+    TEMPLATE,
+    CATEGORY,
+    TEMPLATE_MODEL,
+    OTHER
+};
+
+#endif // NETWORK_REF_TYPE_H 

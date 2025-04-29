@@ -4,6 +4,11 @@
 
 #include "network/model.h"
 #include "fields/type_registry.h"
+#include "network/neuron.h"
+#include "network/document.h"
+#include "network/suspension_callback.h"
+#include "network/in_memory_suspension_callback.h"
+#include <iostream>
 
 /*#include "Config.h"
 #include "type_registry.h"
@@ -14,17 +19,15 @@
 
 class TypeRegistry;
 
-Model::Model(TypeRegistry *typeRegistry) {
-//    suspensionCallback = new SuspensionCallback();
-}
+Model::Model(TypeRegistry *typeRegistry)
+    : typeRegistry(typeRegistry), suspensionCallback(new InMemorySuspensionCallback()), documentIdCounter(0), N(0) {}
 
 long Model::getTimeout() const {
     return 0; //config ? config->getTimeout() : 0;
 }
 
 long Model::createNeuronId() {
-    return 0;
- //   return suspensionCallback->createId();
+    return suspensionCallback->createId();
 }
 
 long Model::getLowestDocumentId() {
@@ -38,14 +41,12 @@ long Model::getLowestDocumentId() {
 TypeRegistry *Model::getTypeRegistry() {
     return typeRegistry;
 }
-/*
+
 void Model::registerDocument(Document *doc) {
-    std::lock_guard<std::mutex> lock(documentMutex);
     documents[doc->getId()] = doc;
 }
 
 void Model::deregisterDocument(Document *doc) {
-    std::lock_guard<std::mutex> lock(documentMutex);
     documents.erase(doc->getId());
     lastProcessedDocument = std::max(lastProcessedDocument, doc->getId());
 }
@@ -58,7 +59,6 @@ std::vector<Neuron *> Model::getActiveNeurons() {
     }
     return neurons;
 }
-*/
 
 void Model::registerTokenId(int tokenId, Neuron *in) {
    // suspensionCallback->putTokenId(tokenId, in->getId());
@@ -95,75 +95,63 @@ void Model::setN(long n) {
     N = n;
 }
 
-bool Model::canBeSuspended(long lastUsed) {
+bool Model::canBeSuspended(long lastUsed) const {
     long tId = getLowestDocumentId();
-    if (tId == -1) {
+    if (tId == 0) {
         tId = lastProcessedDocument;
     }
-    return true; //lastUsed < tId - (config ? config->getNeuronProviderRetention() : 0);
+    return lastUsed < tId - config.getNeuronProviderRetention();
 }
 
-/*
 Neuron *Model::getNeuron(long id) {
-    std::lock_guard<std::mutex> lock(neuronMutex);
-    auto it = activeNeurons.find(id);
-    return it != activeNeurons.end() ? it->second : nullptr;
+    return activeNeurons[id];
 }
 
 void Model::registerNeuron(Neuron *n) {
-    std::lock_guard<std::mutex> lock(neuronMutex);
-    auto existing = activeNeurons.insert({n->getId(), n});
-    if (!existing.second) {
-        LOG << "Attempted to register Neuron twice: (n:" << n->getId() << ")\n";
-    }
+    activeNeurons[n->getId()] = n;
 }
 
-void Model::unregisterNeuron(Neuron *n) {
-    std::lock_guard<std::mutex> lock(neuronMutex);
-    auto removed = activeNeurons.erase(n->getId());
-    if (!removed) {
-        LOG << "Attempted to remove Neuron twice: (n:" << n->getId() << ")\n";
-    }
+void Model::unregister(Neuron *n) {
+    activeNeurons.erase(n->getId());
 }
-*/
 
 void Model::open(bool create) {
-/*    if (create) {
+    if (create) {
         suspensionCallback->prepareNewModel();
     } else {
         suspensionCallback->loadIndex(this);
     }
     suspensionCallback->open();
-*/
 }
 
 void Model::close(bool store) {
-/*    if (store) {
+    if (store) {
         suspensionCallback->saveIndex(this);
     }
     suspensionCallback->close();
-*/
 }
 
 long Model::createThoughtId() {
-    return documentIdCounter.fetch_add(1) + 1;
+    return ++documentIdCounter;
 }
 
-/*
 Config *Model::getConfig() {
     if (!config) {
         config = new Config();
     }
     return config;
 }
-*/
 
-void Model::write(std::ostream &out) const {
-    out.write(reinterpret_cast<const char *>(&N), sizeof(N));
+void Model::setConfig(Config *config) {
+    this->config = config;
 }
 
-void Model::read(std::istream &in) {
-    in.read(reinterpret_cast<char *>(&N), sizeof(N));
+void Model::write(std::ostream &out) const {
+    out << N;
+}
+
+void Model::readFields(std::istream &in, Model *m) {
+    in >> N;
 }
 
 std::string Model::toString() const {
