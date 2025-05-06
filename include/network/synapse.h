@@ -1,16 +1,17 @@
 #ifndef NETWORK_SYNAPSE_H
 #define NETWORK_SYNAPSE_H
 
+#include "fields/type_registry.h"
+#include "fields/obj.h"
+#include "fields/queue_provider.h"
+
 #include "network/element.h"
-#include "network/queue_provider.h"
 #include "network/neuron_reference.h"
 #include "network/binding_signal.h"
 #include "network/link.h"
-#include "network/obj_impl.h"
 #include "network/timestamp.h"
 #include "network/direction.h"
 #include "network/model.h"
-#include "network/type_registry.h"
 
 #include <map>
 #include <vector>

@@ -1,12 +1,14 @@
 #ifndef NETWORK_LINK_H
 #define NETWORK_LINK_H
 
-#include "network/obj_impl.h"
+#include "fields/queue_provider.h"
+#include "fields/obj.h"
+
 #include "network/element.h"
 #include "network/model_provider.h"
-#include "network/queue_provider.h"
 #include "network/typedefs.h"
 #include "network/timestamp.h"
+
 #include <string>
 
 class Synapse;
@@ -14,7 +16,7 @@ class Activation;
 class Document;
 class Model;
 
-class Link : public ObjImpl, public Element, public ModelProvider, public QueueProvider {
+class Link : public Obj, public Element, public ModelProvider, public QueueProvider {
 public:
     Link(LinkDefinition* type, Synapse* s, Activation* input, Activation* output);
 

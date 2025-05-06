@@ -1,10 +1,10 @@
 #ifndef NETWORK_NEURON_H
 #define NETWORK_NEURON_H
 
-#include "network/obj_impl.h"
+#include "fields/obj.h"
+#include "fields/queue_provider.h"
 #include "network/element.h"
 #include "network/model_provider.h"
-#include "network/queue_provider.h"
 #include "network/read_write_lock.h"
 #include "network/neuron_reference.h"
 #include "network/synapse.h"

@@ -3,13 +3,14 @@
 
 #include <map>
 #include <set>
+
+#include "fields/queue.h"
+#include "fields/step.h"
+#include "fields/queue_provider.h"
 #include "network/model_provider.h"
-#include "network/queue_provider.h"
 #include "network/activation.h"
 #include "network/binding_signal.h"
 #include "network/neuron.h"
-#include "network/queue.h"
-#include "network/step.h"
 
 class Document : public Queue, public ModelProvider, public QueueProvider {
 public:

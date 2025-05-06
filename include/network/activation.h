@@ -1,17 +1,20 @@
 #ifndef NETWORK_ACTIVATION_H
 #define NETWORK_ACTIVATION_H
 
-#include <map>
-#include <set>
-#include <vector>
+
+#include "fields/queue_provider.h"
+
 #include "network/element.h"
 #include "network/model_provider.h"
-#include "network/queue_provider.h"
 #include "network/neuron.h"
 #include "network/document.h"
 #include "network/binding_signal.h"
 #include "network/link.h"
 #include "network/timestamp.h"
+
+#include <map>
+#include <set>
+#include <vector>
 
 class Activation : public Element, public ModelProvider, public QueueProvider {
 public:
