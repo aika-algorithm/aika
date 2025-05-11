@@ -2,13 +2,12 @@
 #define NETWORK_ACTIVATION_H
 
 
-#include "fields/queue_provider.h"
+#include "fields/obj.h"
 
 #include "network/activation_definition.h"
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/neuron.h"
-#include "network/document.h"
 #include "network/binding_signal.h"
 #include "network/link.h"
 #include "network/timestamp.h"
@@ -17,7 +16,9 @@
 #include <set>
 #include <vector>
 
-class Activation : public Element, public ModelProvider, public QueueProvider {
+class Document;
+
+class Activation : public Obj, public Element, public ModelProvider {
 public:
     static const std::function<bool(Activation*, Activation*)> ID_COMPARATOR;
 

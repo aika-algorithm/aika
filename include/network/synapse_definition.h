@@ -1,20 +1,19 @@
 #ifndef NETWORK_SYNAPSE_DEFINITION_H
 #define NETWORK_SYNAPSE_DEFINITION_H
 
+#include "fields/type.h"
+#include "fields/type_registry.h"
+#include "fields/relation.h"
+
 #include "network/activation.h"
 #include "network/binding_signal.h"
 #include "network/conjunctive_synapse.h"
 #include "network/disjunctive_synapse.h"
-#include "network/relation.h"
-#include "network/relation_many.h"
-#include "network/relation_one.h"
 #include "network/neuron.h"
 #include "network/synapse.h"
 #include "network/transition.h"
 #include "network/direction.h"
-#include "network/type.h"
-#include "network/type_registry.h"
-#include "network/relation_self.h"
+
 
 #include <set>
 #include <vector>

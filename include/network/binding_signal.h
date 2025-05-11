@@ -3,10 +3,11 @@
 
 #include <map>
 #include <set>
-#include "network/activation.h"
 #include "network/activation_key.h"
-#include "document.h"
-#include "neuron.h"
+#include "network/neuron.h"
+
+class Activation;
+class Document;
 
 class BindingSignal {
 public:

@@ -3,12 +3,10 @@
 
 #include "fields/type.h"
 #include "fields/type_registry.h"
+#include "fields/relation.h"
 
 #include "network/activation.h"
 #include "network/link.h"
-#include "network/relation.h"
-#include "network/relation_one.h"
-#include "network/relation_self.h"
 #include "network/synapse.h"
 
 #include <string>

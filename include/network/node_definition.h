@@ -2,8 +2,9 @@
 #define NETWORK_NODE_DEFINITION_H
 
 #include "fields/type_registry.h"
-#include "network/activation_definition.h"
-#include "network/neuron_definition.h"
+
+class NeuronDefinition;
+class ActivationDefinition;
 
 class NodeDefinition {
 public:

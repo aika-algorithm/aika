@@ -2,7 +2,8 @@
 #define NETWORK_NEURON_H
 
 #include "fields/obj.h"
-#include "fields/queue_provider.h"
+
+#include "network/neuron_definition.h"
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/read_write_lock.h"
@@ -13,7 +14,7 @@
 #include <vector>
 #include <string>
 
-class Neuron : public ObjImpl, public Element, public ModelProvider, public QueueProvider {
+class Neuron : public Obj, public Element, public ModelProvider {
 public:
     Neuron(NeuronDefinition* type, Model* model, long id);
     Neuron(NeuronDefinition* type, Model* model);

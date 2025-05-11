@@ -3,8 +3,8 @@
 
 #include "fields/type_registry.h"
 #include "fields/obj.h"
-#include "fields/queue_provider.h"
 
+#include "network/synapse_definition.h"
 #include "network/element.h"
 #include "network/neuron_reference.h"
 #include "network/binding_signal.h"
@@ -16,7 +16,7 @@
 #include <map>
 #include <vector>
 
-class Synapse : public ObjImpl, public Element, public QueueProvider {
+class Synapse : public Obj, public Element {
 public:
     Synapse(SynapseDefinition* type);
     Synapse(SynapseDefinition* type, Neuron* input, Neuron* output);
