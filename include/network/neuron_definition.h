@@ -1,14 +1,12 @@
 #ifndef NETWORK_NEURON_DEFINITION_H
 #define NETWORK_NEURON_DEFINITION_H
 
+#include "fields/relation.h"
+#include "fields/type.h"
+#include "fields/type_registry.h"
 #include "network/activation.h"
 #include "network/model.h"
 #include "network/neuron.h"
-#include "network/relation.h"
-#include "network/relation_many.h"
-#include "network/relation_self.h"
-#include "network/type.h"
-#include "network/type_registry.h"
 
 #include <string>
 #include <vector>

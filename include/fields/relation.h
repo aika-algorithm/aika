@@ -18,7 +18,7 @@ public:
 
     int getRelationId() const;
     void setReversed(Relation* reversed);
-    Relation* getReverse();
+    virtual Relation* getReverse();
     virtual RelatedObjectIterable* followMany(Obj* fromObj) = 0;
     virtual bool testRelation(Obj* fromObj, Obj* toObj) const = 0;
     virtual std::string getRelationLabel() const = 0;
@@ -41,7 +41,17 @@ class RelationOne : public Relation {
 public:
     RelationOne(int relationId, const std::string& relationName);
 
-    Obj* followOne(Obj* fromObj) const;
+    virtual Obj* followOne(Obj* fromObj) const;
+    RelatedObjectIterable* followMany(Obj* fromObj) override;
+    bool testRelation(Obj* fromObj, Obj* toObj) const override;
+    std::string getRelationLabel() const override;
+};
+
+class RelationSelf : public RelationOne {
+public:
+    RelationSelf(int relationId, const std::string& relationName);
+
+    Obj* followOne(Obj* fromObj) const override;
     RelatedObjectIterable* followMany(Obj* fromObj) override;
     bool testRelation(Obj* fromObj, Obj* toObj) const override;
     std::string getRelationLabel() const override;

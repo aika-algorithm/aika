@@ -1,5 +1,5 @@
-
 #include "fields/relation.h"
+#include <stdexcept>
 
 
 Relation::Relation(int relationId, const std::string& relationName)
@@ -50,4 +50,24 @@ bool RelationOne::testRelation(Obj* fromObj, Obj* toObj) const {
 
 std::string RelationOne::getRelationLabel() const {
     return relationName + " (One)"; // Append " (One)" to the relation name
+}
+
+// RelationSelf implementation
+RelationSelf::RelationSelf(int relationId, const std::string& relationName)
+    : RelationOne(relationId, relationName) {}
+
+Obj* RelationSelf::followOne(Obj* fromObj) const {
+    return fromObj; // Return the same object
+}
+
+RelatedObjectIterable* RelationSelf::followMany(Obj* fromObj) {
+    return new SingleObjectIterable(fromObj); // Return a singleton iterable with the same object
+}
+
+bool RelationSelf::testRelation(Obj* fromObj, Obj* toObj) const {
+    return fromObj == toObj; // Test if both objects are the same
+}
+
+std::string RelationSelf::getRelationLabel() const {
+    return relationName + " (Self)"; // Append " (Self)" to the relation name
 }

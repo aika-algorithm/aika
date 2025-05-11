@@ -39,6 +39,9 @@ PYBIND11_MODULE(aika, m)
       py::class_<RelationMany, Relation>(m, "RelationMany")
             .def(py::init<int, const std::string&>());      
 
+      py::class_<RelationSelf, RelationOne>(m, "RelationSelf")
+            .def(py::init<int, const std::string&>());
+
       py::class_<FieldUpdate>(m, "FieldUpdate")
             .def(py::init<ProcessingPhase&, QueueInterceptor*>());
 

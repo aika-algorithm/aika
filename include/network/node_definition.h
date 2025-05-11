@@ -1,9 +1,9 @@
 #ifndef NETWORK_NODE_DEFINITION_H
 #define NETWORK_NODE_DEFINITION_H
 
+#include "fields/type_registry.h"
 #include "network/activation_definition.h"
 #include "network/neuron_definition.h"
-#include "network/type_registry.h"
 
 class NodeDefinition {
 public:
