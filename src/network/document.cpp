@@ -1,4 +1,5 @@
 #include "network/document.h"
+#include "network/activation.h"
 #include "network/model.h"
 
 Document::Document(Model* m, int length) : model(m), length(length), activationIdCounter(0), isStale(false) {

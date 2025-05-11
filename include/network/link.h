@@ -31,12 +31,12 @@ public:
     bool isCausal();
     static bool isCausal(Activation* iAct, Activation* oAct);
     Document* getDocument();
-    Queue* getQueue() override;
+    Queue* getQueue() const override;
     Model* getModel() override;
     std::string getInputKeyString();
     std::string getOutputKeyString();
-    std::string toString() override;
-    std::string toKeyString() override;
+    std::string toString();
+    std::string toKeyString();
 
 private:
     Synapse* synapse;

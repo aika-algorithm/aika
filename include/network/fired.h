@@ -1,7 +1,7 @@
 #ifndef NETWORK_FIRED_H
 #define NETWORK_FIRED_H
 
-#include "network/step.h"
+#include "fields/step.h"
 #include "network/activation.h"
 #include "network/phase.h"
 #include "network/queue.h"

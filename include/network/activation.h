@@ -4,6 +4,7 @@
 
 #include "fields/queue_provider.h"
 
+#include "network/activation_definition.h"
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/neuron.h"

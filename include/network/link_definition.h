@@ -1,14 +1,15 @@
 #ifndef NETWORK_LINK_DEFINITION_H
 #define NETWORK_LINK_DEFINITION_H
 
+#include "fields/type.h"
+#include "fields/type_registry.h"
+
 #include "network/activation.h"
 #include "network/link.h"
 #include "network/relation.h"
 #include "network/relation_one.h"
 #include "network/relation_self.h"
 #include "network/synapse.h"
-#include "network/type.h"
-#include "network/type_registry.h"
 
 #include <string>
 #include <vector>
