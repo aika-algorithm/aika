@@ -57,9 +57,11 @@ public:
     Neuron* getOutput() const;
     Neuron* getOutput(Model* m) const;
 
+/*
     virtual void write(DataOutput* out) const = 0;
     static Synapse* read(DataInput* in, TypeRegistry* tr);
     virtual void readFields(DataInput* in, TypeRegistry* tr) = 0;
+*/
 
     Timestamp getCreated() const override;
     Timestamp getFired() const override;
@@ -68,8 +70,8 @@ public:
 
     Queue* getQueue() const override;
 
-    std::string toString() const override;
-    std::string toKeyString() const override;
+    std::string toString() const;
+    std::string toKeyString() const;
 
 protected:
     int synapseId;

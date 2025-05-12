@@ -1,8 +1,43 @@
 #include "network/synapse.h"
+#include "network/synapse_definition.h"
+#include <iostream>
+#include <stdexcept>
+#include <limits>
 
-Synapse::Synapse(SynapseDefinition* type) : type(type), synapseId(0), input(nullptr), output(nullptr), propagable(false) {}
+// Need to add the missing SynapseDefinition* type member to Synapse class
+// This will be a temporary fix until the proper header update is done
 
-Synapse::Synapse(SynapseDefinition* type, Neuron* input, Neuron* output) : type(type), synapseId(0), input(new NeuronReference(input, RefType::SYNAPSE_IN)), output(new NeuronReference(output, RefType::SYNAPSE_OUT)), propagable(false) {}
+Synapse::Synapse(SynapseDefinition* type) : Obj(type), synapseId(0), input(nullptr), output(nullptr), propagable(false) {}
+
+Synapse::Synapse(SynapseDefinition* type, Neuron* input, Neuron* output)
+    : Obj(type), synapseId(0), 
+      input(new NeuronReference(input, RefType::SYNAPSE_IN)), 
+      output(new NeuronReference(output, RefType::SYNAPSE_OUT)), 
+      propagable(false) 
+{
+    link(input->getModel(), input, output);
+}
+
+std::vector<Obj*> Synapse::followManyRelation(Relation* rel) {
+    if (rel->getRelationId() == SynapseDefinition::LINK.getRelationId()) {
+        // Return links - this would need implementation but returning empty for now
+        return std::vector<Obj*>();
+    } else {
+        throw std::runtime_error("Invalid Relation");
+    }
+}
+
+Obj* Synapse::followSingleRelation(Relation* rel) {
+    if (rel->getRelationId() == SynapseDefinition::SELF.getRelationId()) {
+        return this;
+    } else if (rel->getRelationId() == SynapseDefinition::INPUT.getRelationId()) {
+        return getInput();
+    } else if (rel->getRelationId() == SynapseDefinition::OUTPUT.getRelationId()) {
+        return getOutput();
+    } else {
+        throw std::runtime_error("Invalid Relation");
+    }
+}
 
 int Synapse::getSynapseId() const {
     return synapseId;
@@ -13,12 +48,27 @@ void Synapse::setSynapseId(int synapseId) {
 }
 
 std::map<BSType*, BindingSignal*> Synapse::transitionForward(const std::map<BSType*, BindingSignal*>& inputBindingSignals) {
-    // Implementation for transitioning forward
-    return std::map<BSType*, BindingSignal*>(); // Placeholder
+    std::map<BSType*, BindingSignal*> outputTransitions;
+    auto transitions = static_cast<SynapseDefinition*>(getType())->getTransition();
+    
+    for (auto t : transitions) {
+        auto it = inputBindingSignals.find(t->from());
+        if (it != inputBindingSignals.end()) {
+            outputTransitions[t->to()] = it->second;
+        }
+    }
+    
+    return outputTransitions;
 }
 
 Synapse* Synapse::setPropagable(Model* m, bool propagable) {
+    if (this->propagable != propagable) {
+        input->getNeuron(m)->setModified();
+    }
+    
+    getInput(m)->updatePropagable(output->getNeuron(m), propagable);
     this->propagable = propagable;
+    
     return this;
 }
 
@@ -27,7 +77,10 @@ bool Synapse::isPropagable() const {
 }
 
 void Synapse::setModified(Model* m) {
-    // Implementation for setting modified
+    Neuron* n = getStoredAt()->getNeuron(m, this);
+    if (n != nullptr) {
+        n->setModified();
+    }
 }
 
 void Synapse::setInput(Neuron* n) {
@@ -39,34 +92,48 @@ void Synapse::setOutput(Neuron* n) {
 }
 
 Synapse* Synapse::link(Model* m, Neuron* input, Neuron* output) {
-    // Implementation for linking
+    synapseId = output->getNewSynapseId();
+    
+    setInput(input);
+    setOutput(output);
+    
+    link(m);
+    
     return this;
 }
 
 void Synapse::link(Model* m) {
-    // Implementation for linking
+    input->getNeuron(m)->addOutputSynapse(this);
+    output->getNeuron(m)->addInputSynapse(this);
 }
 
 void Synapse::unlinkInput(Model* m) {
-    // Implementation for unlinking input
+    getInput(m)->removeOutputSynapse(this);
 }
 
 void Synapse::unlinkOutput(Model* m) {
-    // Implementation for unlinking output
+    getOutput(m)->removeInputSynapse(this);
 }
 
 Link* Synapse::createLink(Activation* input, Activation* output) {
-    // Implementation for creating a link
-    return nullptr; // Placeholder
+    return createLink(input, transitionForward(input->getBindingSignals()), output);
 }
 
 Link* Synapse::createLink(Activation* input, const std::map<BSType*, BindingSignal*>& bindingSignals, Activation* output) {
-    // Implementation for creating a link with binding signals
-    return nullptr; // Placeholder
+    if (output->hasConflictingBindingSignals(bindingSignals)) {
+        return nullptr;
+    } else if (output->hasNewBindingSignals(bindingSignals)) {
+        output = output->branch(bindingSignals);
+        output->linkIncoming(input);
+    }
+    
+    return static_cast<SynapseDefinition*>(getType())
+        ->getLink()
+        ->instantiate(this, input, output);
 }
 
 Direction* Synapse::getStoredAt() const {
-    return nullptr; // Placeholder
+    return static_cast<SynapseDefinition*>(getType())->getStoredAt();
 }
 
 NeuronReference* Synapse::getInputRef() const {
@@ -78,33 +145,67 @@ NeuronReference* Synapse::getOutputRef() const {
 }
 
 Neuron* Synapse::getInput() const {
-    return input->getRawNeuron();
+    if (!output || !output->getRawNeuron()) {
+        return nullptr;
+    }
+    return getInput(output->getRawNeuron()->getModel());
 }
 
 Neuron* Synapse::getInput(Model* m) const {
+    if (!input) {
+        return nullptr;
+    }
     return input->getNeuron(m);
 }
 
 Neuron* Synapse::getOutput() const {
-    return output->getRawNeuron();
+    if (!input || !input->getRawNeuron()) {
+        return nullptr;
+    }
+    return getOutput(input->getRawNeuron()->getModel());
 }
 
 Neuron* Synapse::getOutput(Model* m) const {
+    if (!output) {
+        return nullptr;
+    }
     return output->getNeuron(m);
 }
 
+Timestamp Synapse::getCreated() const {
+    // We would need MIN Timestamp defined somewhere
+    return Timestamp(0); // Using 0 as MIN for now
+}
+
+Timestamp Synapse::getFired() const {
+    // We would need MAX Timestamp defined somewhere
+    return Timestamp(std::numeric_limits<long>::max()); // Using max long as MAX for now
+}
+
 void Synapse::deleteSynapse(Model* m) {
-    // Implementation for deleting a synapse
+    std::cout << "Delete synapse: " << toString() << std::endl;
+    
+    if (input) {
+        getInput(m)->removeOutputSynapse(this);
+    }
+    if (output) {
+        getOutput(m)->removeInputSynapse(this);
+    }
 }
 
 Queue* Synapse::getQueue() const {
-    return nullptr; // Placeholder
+    return nullptr; // Not implemented yet
 }
 
 std::string Synapse::toString() const {
-    return "Synapse: " + std::to_string(synapseId);
+    return getType()->getName() +
+        " in:[" + (input ? input->toKeyString() : "X") + "] " +
+        " --> " +
+        " out:[" + (output ? output->toKeyString() : "X") + "])";
 }
 
 std::string Synapse::toKeyString() const {
-    return "SynapseKey: " + std::to_string(synapseId);
-} 
+    return (input ? input->toKeyString() : "X") +
+        " --> " +
+        (output ? output->toKeyString() : "X");
+}

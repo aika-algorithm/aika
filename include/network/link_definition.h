@@ -7,10 +7,13 @@
 
 #include "network/activation.h"
 #include "network/link.h"
-#include "network/synapse.h"
 
 #include <string>
 #include <vector>
+
+class Link;
+class SynapseDefinition;
+
 
 class LinkDefinition : public Type {
 public:
@@ -36,7 +39,7 @@ public:
     ActivationDefinition* getOutput() const;
     LinkDefinition* setOutput(ActivationDefinition* output);
 
-    std::string toString() const override;
+    std::string toString() const;
 
 private:
     SynapseDefinition* synapse;

@@ -8,6 +8,7 @@
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/neuron.h"
+#include "network/bs_type.h"
 #include "network/binding_signal.h"
 #include "network/link.h"
 #include "network/timestamp.h"
