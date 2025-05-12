@@ -12,6 +12,7 @@
 #include <vector>
 
 class Link;
+class Synapse;
 class SynapseDefinition;
 
 

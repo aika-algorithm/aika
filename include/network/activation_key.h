@@ -12,4 +12,13 @@ private:
     int actId;
 };
 
+struct ActivationKeyComparator {
+    bool operator()(ActivationKey* a, ActivationKey* b) const {
+        if(a->getNeuronId() != b->getNeuronId())
+            return a->getNeuronId() < b->getNeuronId();
+        else
+            return a->getActId() < b->getActId();
+    }
+};
+
 #endif // NETWORK_ACTIVATION_KEY_H 

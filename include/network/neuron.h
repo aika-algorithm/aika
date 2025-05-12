@@ -19,7 +19,7 @@ public:
     Neuron(NeuronDefinition* type, Model* model, long id);
     Neuron(NeuronDefinition* type, Model* model);
 
-    Stream<Obj*> followManyRelation(Relation* rel) override;
+    RelatedObjectIterable* followManyRelation(Relation* rel) override;
     Obj* followSingleRelation(Relation* rel) override;
     long getId() const;
     void updatePropagable(Neuron* n, bool isPropagable);
