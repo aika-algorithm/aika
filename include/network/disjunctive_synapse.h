@@ -8,6 +8,9 @@ public:
     DisjunctiveSynapse(SynapseDefinition* type);
     DisjunctiveSynapse(SynapseDefinition* type, Neuron* input, Neuron* output);
 
+    RelatedObjectIterable* followManyRelation(Relation* rel) const override;
+    Obj* followSingleRelation(const Relation* rel) override;
+
     void link(Model* m) override;
 
 private:

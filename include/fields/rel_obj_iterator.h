@@ -1,6 +1,8 @@
 #ifndef REL_OBJ_ITERATOR_H
 #define REL_OBJ_ITERATOR_H
 
+#include <vector>
+
 class Obj;
 
 class RelatedObjectIterator {
@@ -31,6 +33,27 @@ public:
     }
 };
 
+class VectorObjectIterator : public RelatedObjectIterator {
+    std::vector<Obj*> _objects;
+    size_t _currentIndex;
+
+public:
+    VectorObjectIterator(const std::vector<Obj*>& objects) 
+        : _objects(objects), _currentIndex(0) {}
+
+    ~VectorObjectIterator() = default;
+
+    bool hasNext() override {
+        return _currentIndex < _objects.size();
+    }
+
+    Obj* next() override {
+        if (!hasNext()) {
+            return nullptr;
+        }
+        return _objects[_currentIndex++];
+    }
+};
 
 template <typename MapType>
 class MapRelObjIterator : public RelatedObjectIterator {
@@ -79,8 +102,19 @@ class SingleObjectIterable : public RelatedObjectIterable {
 public:
     SingleObjectIterable(Obj* obj) : _obj(obj) {}
 
-    SingleObjectIterator* iterator() const {
+    SingleObjectIterator* iterator() const override {
         return new SingleObjectIterator(_obj);
+    }
+};
+
+class VectorObjectIterable : public RelatedObjectIterable {
+    std::vector<Obj*> _objects;
+
+public:
+    VectorObjectIterable(const std::vector<Obj*>& objects) : _objects(objects) {}
+
+    VectorObjectIterator* iterator() const override {
+        return new VectorObjectIterator(_objects);
     }
 };
 

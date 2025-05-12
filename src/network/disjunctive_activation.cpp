@@ -1,9 +1,25 @@
 #include "network/disjunctive_activation.h"
+#include "fields/relation.h"
+#include "fields/rel_obj_iterator.h"
 
 DisjunctiveActivation::DisjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType, BindingSignal*> bindingSignals)
     : Activation(t, parent, id, n, doc, bindingSignals) {}
 
 DisjunctiveActivation::~DisjunctiveActivation() {}
+
+RelatedObjectIterable* DisjunctiveActivation::followManyRelation(Relation* rel) const {
+    if (rel->getRelationName() == "INPUT") {
+        // Convert inputLinks to a vector of Obj*
+        std::vector<Obj*> objs;
+        for (const auto& pair : inputLinks) {
+            objs.push_back(static_cast<Obj*>(pair.second));
+        }
+        return new VectorObjectIterable(objs);
+    } else {
+        // Use base class implementation for other relations
+        return Activation::followManyRelation(rel);
+    }
+}
 
 void DisjunctiveActivation::linkIncoming(Activation* excludedInputAct) {
     // Implementation for linking incoming activations

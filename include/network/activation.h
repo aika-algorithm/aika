@@ -26,6 +26,10 @@ public:
     Activation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType, BindingSignal*> bindingSignals);
     virtual ~Activation();
 
+    // Implementation of Obj virtual methods
+    RelatedObjectIterable* followManyRelation(Relation* rel) const override;
+    Obj* followSingleRelation(const Relation* rel) override;
+    
     ActivationKey getKey();
     Activation* getParent();
     void addOutputLink(Link* l);

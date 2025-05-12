@@ -23,6 +23,36 @@ Neuron::Neuron(NeuronDefinition* type, Model* model, long id)
 
 Neuron::Neuron(NeuronDefinition* type, Model* model)
     : Neuron(type, model, model->createNeuronId()) {}
+    
+RelatedObjectIterable* Neuron::followManyRelation(Relation* rel) const {
+    if (rel->getRelationName() == "INPUT_SYNAPSES") {
+        // Convert input synapses to a vector of Obj*
+        std::vector<Obj*> objs;
+        for (const auto& pair : inputSynapses) {
+            objs.push_back(static_cast<Obj*>(pair.second));
+        }
+        return new VectorObjectIterable(objs);
+    } else if (rel->getRelationName() == "OUTPUT_SYNAPSES") {
+        // Convert output synapses to a vector of Obj*
+        std::vector<Obj*> objs;
+        for (const auto& pair : outputSynapses) {
+            objs.push_back(static_cast<Obj*>(pair.second));
+        }
+        return new VectorObjectIterable(objs);
+    } else {
+        throw std::runtime_error("Invalid Relation for Neuron: " + rel->getRelationName());
+    }
+}
+
+Obj* Neuron::followSingleRelation(const Relation* rel) {
+    if (rel->getRelationName() == "SELF") {
+        return this;
+    } else if (rel->getRelationName() == "MODEL") {
+        return model;
+    } else {
+        throw std::runtime_error("Invalid Relation for Neuron: " + rel->getRelationName());
+    }
+}
 
 long Neuron::getId() const {
     return id;

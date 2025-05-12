@@ -1,11 +1,15 @@
 #include "network/activation.h"
+#include "network/direction.h"
+#include "network/input.h"
+#include "network/output.h"
+#include "network/activation_definition.h"
 
 const std::function<bool(Activation*, Activation*)> Activation::ID_COMPARATOR = [](Activation* a1, Activation* a2) {
     return a1->getId() < a2->getId();
 };
 
 Activation::Activation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType, BindingSignal*> bindingSignals)
-    : id(id), neuron(n), doc(doc), bindingSignals(bindingSignals), parent(parent), created(Timestamp::NOT_SET), fired(Timestamp::NOT_SET), firedStep(new Fired(this)) {
+    : Obj(t), id(id), neuron(n), doc(doc), bindingSignals(bindingSignals), parent(parent), created(Timestamp::NOT_SET), fired(Timestamp::NOT_SET), firedStep(new Fired(this)) {
     doc->addActivation(this);
     neuron->updateLastUsed(doc->getId());
     setCreated(doc->getCurrentTimestamp());
@@ -13,6 +17,35 @@ Activation::Activation(ActivationDefinition* t, Activation* parent, int id, Neur
 
 Activation::~Activation() {
     delete firedStep;
+}
+
+RelatedObjectIterable* Activation::followManyRelation(Relation* rel) const {
+    // Create a custom iterable for each relation type
+    if (rel->getRelationName() == "INPUT") {
+        // Since getInputLinks() is pure virtual, derived classes should implement specialized behavior
+        // This base implementation handles the common case for OUTPUT relations
+        return nullptr;
+    } else if (rel->getRelationName() == "OUTPUT") {
+        // Convert getOutputLinks() vector to an iterable
+        std::vector<Link*> links = const_cast<Activation*>(this)->getOutputLinks();
+        std::vector<Obj*> objs;
+        for (Link* link : links) {
+            objs.push_back(static_cast<Obj*>(link));
+        }
+        return new VectorObjectIterable(objs);
+    } else {
+        throw std::runtime_error("Invalid Relation: " + rel->getRelationName());
+    }
+}
+
+Obj* Activation::followSingleRelation(const Relation* rel) {
+    if (rel->getRelationName() == "SELF") {
+        return this;
+    } else if (rel->getRelationName() == "NEURON") {
+        return neuron;
+    } else {
+        throw std::runtime_error("Invalid Relation");
+    }
 }
 
 ActivationKey Activation::getKey() {

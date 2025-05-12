@@ -17,18 +17,18 @@ Link::Link(LinkDefinition* type, Synapse* s, Activation* input, Activation* outp
     output->addInputLink(this);
 }
 
-Stream<Obj*> Link::followManyRelation(Relation* rel) {
-    throw std::runtime_error("Invalid Relation");
+RelatedObjectIterable* Link::followManyRelation(Relation* rel) const {
+    throw std::runtime_error("Invalid Relation: " + rel->getRelationName());
 }
 
-Obj* Link::followSingleRelation(Relation* rel) {
-    if (rel == SELF) return this;
-    if (rel == LinkDefinition::INPUT) return input;
-    if (rel == LinkDefinition::OUTPUT) return output;
-    if (rel == LinkDefinition::SYNAPSE) return synapse;
-    if (rel == LinkDefinition::CORRESPONDING_INPUT_LINK) return input->getCorrespondingInputLink(this);
-    if (rel == LinkDefinition::CORRESPONDING_OUTPUT_LINK) return output->getCorrespondingOutputLink(this);
-    throw std::runtime_error("Invalid Relation");
+Obj* Link::followSingleRelation(const Relation* rel) {
+    if (rel->getRelationName() == "SELF") return this;
+    if (rel->getRelationName() == "INPUT") return input;
+    if (rel->getRelationName() == "OUTPUT") return output;
+    if (rel->getRelationName() == "SYNAPSE") return synapse;
+    if (rel->getRelationName() == "CORRESPONDING_INPUT_LINK") return input->getCorrespondingInputLink(this);
+    if (rel->getRelationName() == "CORRESPONDING_OUTPUT_LINK") return output->getCorrespondingOutputLink(this);
+    throw std::runtime_error("Invalid Relation: " + rel->getRelationName());
 }
 
 Timestamp Link::getFired() {

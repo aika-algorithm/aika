@@ -19,8 +19,8 @@ public:
     Neuron(NeuronDefinition* type, Model* model, long id);
     Neuron(NeuronDefinition* type, Model* model);
 
-    RelatedObjectIterable* followManyRelation(Relation* rel) override;
-    Obj* followSingleRelation(Relation* rel) override;
+    RelatedObjectIterable* followManyRelation(Relation* rel) const override;
+    Obj* followSingleRelation(const Relation* rel) override;
     long getId() const;
     void updatePropagable(Neuron* n, bool isPropagable);
     void wakeupPropagable();

@@ -23,8 +23,8 @@ public:
 
     virtual ~Synapse() = default;
 
-    virtual RelatedObjectIterable* followManyRelation(Relation* rel) = 0;
-    virtual Obj* followSingleRelation(Relation* rel) = 0;
+    virtual RelatedObjectIterable* followManyRelation(Relation* rel) const = 0;
+    virtual Obj* followSingleRelation(const Relation* rel) = 0;
 
     int getSynapseId() const;
     void setSynapseId(int synapseId);

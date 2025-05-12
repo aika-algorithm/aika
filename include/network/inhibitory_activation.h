@@ -10,6 +10,8 @@ class InhibitoryActivation : public Activation {
 public:
     InhibitoryActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
 
+    RelatedObjectIterable* followManyRelation(Relation* rel) const override;
+    
     void addInputLink(Link* l) override;
     Link* getInputLink(int bsId);
     int getInputKey(Link* l);

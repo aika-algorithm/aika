@@ -20,8 +20,8 @@ class Link : public Obj, public Element, public ModelProvider {
 public:
     Link(LinkDefinition* type, Synapse* s, Activation* input, Activation* output);
 
-    RelatedObjectIterable* followManyRelation(Relation* rel) override;
-    Obj* followSingleRelation(Relation* rel) override;
+    RelatedObjectIterable* followManyRelation(Relation* rel) const override;
+    Obj* followSingleRelation(const Relation* rel) override;
     Timestamp getFired() override;
     Timestamp getCreated() override;
     Synapse* getSynapse();

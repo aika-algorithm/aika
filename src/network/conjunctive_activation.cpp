@@ -1,11 +1,27 @@
 #include "network/conjunctive_activation.h"
 #include "network/synapse.h"
 #include "network/synapse_definition.h"
+#include "fields/relation.h"
+#include "fields/rel_obj_iterator.h"
 
 ConjunctiveActivation::ConjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType, BindingSignal*> bindingSignals)
     : Activation(t, parent, id, n, doc, bindingSignals) {}
 
 ConjunctiveActivation::~ConjunctiveActivation() {}
+
+RelatedObjectIterable* ConjunctiveActivation::followManyRelation(Relation* rel) const {
+    if (rel->getRelationName() == "INPUT") {
+        // Convert inputLinks to a vector of Obj*
+        std::vector<Obj*> objs;
+        for (const auto& pair : inputLinks) {
+            objs.push_back(static_cast<Obj*>(pair.second));
+        }
+        return new VectorObjectIterable(objs);
+    } else {
+        // Use base class implementation for other relations
+        return Activation::followManyRelation(rel);
+    }
+}
 
 void ConjunctiveActivation::linkIncoming(Activation* excludedInputAct) {
     for (auto& s : neuron->getInputSynapsesAsStream()) {
