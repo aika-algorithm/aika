@@ -1,4 +1,5 @@
 #include "network/save.h"
+#include "fields/step.h"
 
 void Save::add(Neuron* n) {
     Step::add(new Save(n));
@@ -6,10 +7,12 @@ void Save::add(Neuron* n) {
 
 Save::Save(Neuron* n) : ElementStep(n) {}
 
-Phase Save::getPhase() {
+Phase Save::getPhase() const {
     return Phase::SAVE;
 }
 
 void Save::process() {
-    getElement()->save();
+    // Cast the Element* to Neuron* before calling save()
+    Neuron* neuron = static_cast<Neuron*>(getElement());
+    neuron->save();
 } 

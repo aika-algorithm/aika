@@ -1,16 +1,20 @@
 #include "network/fired.h"
 #include "network/activation.h"
-#include "network/field_queue_key.h"
-#include "network/approximate_comparison_value_util.h"
-#include "network/string_utils.h"
+#include "fields/queue_key.h"
+#include "network/fired_queue_key.h"
+#include <string>
+#include <sstream>
+#include <iomanip>
 
-Fired::Fired(Activation* act) : act(act), net(0.0), sortValue(0) {}
+Fired::Fired(Activation* act) : Step(), act(act), net(0.0), sortValue(0) {}
 
 void Fired::createQueueKey(Timestamp timestamp, int round) {
-    queueKey = new FieldQueueKey(round, getPhase(), sortValue, timestamp);
+    queueKey = new FiredQueueKey(round, getPhase(), getElement(), timestamp);
 }
 
 void Fired::process() {
+    Activation* act = getElement();
+    
     act->setFired();
 
     // Only once the activation is fired, will it be visible to other neurons.
@@ -23,10 +27,12 @@ void Fired::process() {
 
 void Fired::updateNet(double net) {
     this->net = net;
-    sortValue = ApproximateComparisonValueUtil::convert(net);
+    // Simple conversion to int for sort value (handles approximate comparison)
+    // The original Java uses ApproximateComparisonValueUtil
+    sortValue = static_cast<int>(net * 1000.0); // Scale to preserve 3 decimals of precision
 }
 
-Phase Fired::getPhase() {
+Phase Fired::getPhase() const {
     return Phase::FIRED;
 }
 
@@ -34,10 +40,17 @@ Activation* Fired::getElement() {
     return act;
 }
 
-Queue* Fired::getQueue() {
+Queue* Fired::getQueue() const {
     return act->getDocument();
 }
 
-std::string Fired::toString() {
-    return std::to_string(getElement()) + " net:" + StringUtils::doubleToString(net);
+bool Fired::isQueued() const {
+    return isQueued;
+}
+
+std::string Fired::toString() const {
+    // Format the double with fixed precision (3 decimal places)
+    std::ostringstream ss;
+    ss << std::fixed << std::setprecision(3) << net;
+    return getElement()->toString() + " net:" + ss.str();
 } 

@@ -5,19 +5,22 @@
 #include "network/activation.h"
 #include "network/phase.h"
 #include "network/queue.h"
+#include "network/timestamp.h"
 #include <string>
 
-class Fired : public Step<Activation> {
+class Fired : public Step {
 public:
     Fired(Activation* act);
+    virtual ~Fired() = default;
 
     void createQueueKey(Timestamp timestamp, int round) override;
     void process() override;
     void updateNet(double net);
-    Phase getPhase() override;
-    Activation* getElement() override;
-    Queue* getQueue() override;
-    std::string toString() override;
+    Phase getPhase() const override;
+    Activation* getElement();
+    Queue* getQueue() const override;
+    std::string toString() const override;
+    bool isQueued() const;
 
 private:
     Activation* act;

@@ -51,7 +51,7 @@ public:
     Timestamp getFired();
     void setFired();
     void setFired(Timestamp f);
-    void updateFiredStep(FieldOutput* net);
+    void updateFiredStep(Field* net);
     Queue* getQueue();
     Neuron* getNeuron();
     Document* getDocument();

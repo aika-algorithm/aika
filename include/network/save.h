@@ -4,14 +4,16 @@
 #include "network/element_step.h"
 #include "network/neuron.h"
 #include "network/phase.h"
+#include "fields/step.h"
 
-class Save : public ElementStep<Neuron> {
+class Save : public ElementStep {
 public:
     static void add(Neuron* n);
 
     Save(Neuron* n);
+    virtual ~Save() = default;
 
-    Phase getPhase() override;
+    Phase getPhase() const override;
     void process() override;
 };
 
