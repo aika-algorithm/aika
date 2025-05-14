@@ -1,10 +1,10 @@
 #ifndef NETWORK_SAVE_H
 #define NETWORK_SAVE_H
 
+#include "fields/step.h"
 #include "network/element_step.h"
 #include "network/neuron.h"
 #include "network/phase.h"
-#include "fields/step.h"
 
 class Save : public ElementStep {
 public:
@@ -13,7 +13,7 @@ public:
     Save(Neuron* n);
     virtual ~Save() = default;
 
-    Phase getPhase() const override;
+    const Phase& getPhase() const override;
     void process() override;
 };
 

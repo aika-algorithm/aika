@@ -11,6 +11,7 @@
 #include "network/bs_type.h"
 #include "network/binding_signal.h"
 #include "network/link.h"
+#include "network/fired.h"
 #include "network/timestamp.h"
 
 #include <map>

@@ -7,7 +7,7 @@ void Save::add(Neuron* n) {
 
 Save::Save(Neuron* n) : ElementStep(n) {}
 
-Phase Save::getPhase() const {
+const Phase& Save::getPhase() const {
     return Phase::SAVE;
 }
 

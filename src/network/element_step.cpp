@@ -2,11 +2,11 @@
 
 ElementStep::ElementStep(Element* element) : element(element) {}
 
-Queue* ElementStep::getQueue() {
+Queue* ElementStep::getQueue() const {
     return element->getQueue();
 }
 
-void ElementStep::createQueueKey(Timestamp timestamp, int round) {
+void ElementStep::createQueueKey(long timestamp, int round) {
     queueKey = new FiredQueueKey(round, getPhase(), element, timestamp);
 }
 

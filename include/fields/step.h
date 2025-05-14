@@ -46,7 +46,7 @@ public:
     virtual bool incrementRound();
     virtual void createQueueKey(long timestamp, int round) = 0;
     virtual void process() = 0;
-    virtual ProcessingPhase& getPhase() const = 0;
+    virtual const ProcessingPhase& getPhase() const = 0;
     static bool add(Step* s);
 
 };

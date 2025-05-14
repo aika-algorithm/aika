@@ -2,8 +2,9 @@
 #define NETWORK_ELEMENT_H
 
 #include "network/timestamp.h"
+#include "fields/queue_provider.h"
 
-class Element {
+class Element : public QueueProvider {
 public:
     virtual ~Element() = default;
     virtual Timestamp getCreated() = 0;

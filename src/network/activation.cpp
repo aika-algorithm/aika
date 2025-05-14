@@ -167,7 +167,7 @@ void Activation::setFired(Timestamp f) {
     fired = f;
 }
 
-void Activation::updateFiredStep(FieldOutput* net) {
+void Activation::updateFiredStep(Field* net) {
     if (!net->exceedsThreshold() || fired != Timestamp::NOT_SET) {
         return;
     }

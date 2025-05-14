@@ -9,8 +9,9 @@
 class ElementStep : public Step {
 public:
     ElementStep(Element* element);
-    Queue* getQueue() override;
-    void createQueueKey(Timestamp timestamp, int round) override;
+    Queue* getQueue() const override;
+    void createQueueKey(long timestamp, int round) override;
+    virtual const ProcessingPhase& getPhase() const override = 0; // Make this pure virtual for derived classes
     Element* getElement();
     std::string toString() const override;
 

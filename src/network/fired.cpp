@@ -8,7 +8,7 @@
 
 Fired::Fired(Activation* act) : Step(), act(act), net(0.0), sortValue(0) {}
 
-void Fired::createQueueKey(Timestamp timestamp, int round) {
+void Fired::createQueueKey(long timestamp, int round) {
     queueKey = new FiredQueueKey(round, getPhase(), getElement(), timestamp);
 }
 
@@ -32,7 +32,7 @@ void Fired::updateNet(double net) {
     sortValue = static_cast<int>(net * 1000.0); // Scale to preserve 3 decimals of precision
 }
 
-Phase Fired::getPhase() const {
+const Phase& Fired::getPhase() const {
     return Phase::FIRED;
 }
 
@@ -45,7 +45,7 @@ Queue* Fired::getQueue() const {
 }
 
 bool Fired::isQueued() const {
-    return isQueued;
+    return getIsQueued();
 }
 
 std::string Fired::toString() const {
