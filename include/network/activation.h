@@ -28,24 +28,24 @@ public:
 
     // Implementation of Obj virtual methods
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
-    Obj* followSingleRelation(const Relation* rel) override;
+    Obj* followSingleRelation(const Relation* rel) const override;
     
-    ActivationKey getKey();
-    Activation* getParent();
+    ActivationKey getKey() const;
+    Activation* getParent() const;
     void addOutputLink(Link* l);
     virtual void addInputLink(Link* l) = 0;
-    BindingSignal* getBindingSignal(BSType s);
-    std::map<BSType, BindingSignal*> getBindingSignals();
-    bool hasConflictingBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals);
-    bool isConflictingBindingSignal(BSType s, BindingSignal* targetBS);
-    bool hasNewBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals);
+    BindingSignal* getBindingSignal(BSType s) const;
+    std::map<BSType, BindingSignal*> getBindingSignals() const;
+    bool hasConflictingBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals) const;
+    bool isConflictingBindingSignal(BSType s, BindingSignal* targetBS) const;
+    bool hasNewBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals) const;
     Activation* branch(std::map<BSType, BindingSignal*> bindingSignals);
     void linkOutgoing();
     void linkOutgoing(Synapse* targetSyn);
     void propagate(Synapse* targetSyn);
     virtual void linkIncoming(Activation* excludedInputAct) = 0;
     std::set<Activation*> collectLinkingTargets(Neuron* n);
-    int getId();
+    int getId() const;
     long getCreated() const override;
     void setCreated(long ts);
     long getFired() const override;
@@ -53,23 +53,23 @@ public:
     void setFired(long f);
     void updateFiredStep(Field* net);
     Queue* getQueue() const override;
-    Neuron* getNeuron();
-    Document* getDocument();
-    Model* getModel() override;
-    Config* getConfig() override;
-    Link* getCorrespondingInputLink(Link* l);
-    Link* getCorrespondingOutputLink(Link* l);
-    std::vector<Link*> getInputLinks(LinkDefinition* linkDefinition);
-    virtual std::vector<Link*> getInputLinks() = 0;
-    std::vector<Link*> getOutputLinks(LinkDefinition* linkDefinition);
-    std::vector<Link*> getOutputLinks();
-    Link* getOutputLink(Neuron* n);
-    std::vector<Link*> getOutputLinks(Synapse* s);
-    int compareTo(Activation* act);
-    bool equals(Activation* o);
-    int hashCode();
-    std::string toString();
-    std::string toKeyString();
+    Neuron* getNeuron() const;
+    Document* getDocument() const;
+    Model* getModel() const override;
+    Config* getConfig() const override;
+    Link* getCorrespondingInputLink(const Link* l) const;
+    Link* getCorrespondingOutputLink(const Link* l) const;
+    std::vector<Link*> getInputLinks(LinkDefinition* linkDefinition) const;
+    virtual std::vector<Link*> getInputLinks() const = 0;
+    std::vector<Link*> getOutputLinks(LinkDefinition* linkDefinition) const;
+    std::vector<Link*> getOutputLinks() const;
+    Link* getOutputLink(Neuron* n) const;
+    std::vector<Link*> getOutputLinks(Synapse* s) const;
+    int compareTo(Activation* act) const;
+    bool equals(Activation* o) const;
+    int hashCode() const;
+    std::string toString() const override;
+    std::string toKeyString() const override;
 
 protected:
     int id;

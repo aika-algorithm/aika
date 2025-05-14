@@ -21,23 +21,23 @@ public:
     Link(LinkDefinition* type, Synapse* s, Activation* input, Activation* output);
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
-    Obj* followSingleRelation(const Relation* rel) override;
+    Obj* followSingleRelation(const Relation* rel) const override;
     long getFired() const override;
     long getCreated() const override;
-    Synapse* getSynapse();
+    Synapse* getSynapse() const;
     void setSynapse(Synapse* synapse);
-    Activation* getInput();
-    Activation* getOutput();
-    bool isCausal();
+    Activation* getInput() const;
+    Activation* getOutput() const;
+    bool isCausal() const;
     static bool isCausal(Activation* iAct, Activation* oAct);
-    Document* getDocument();
+    Document* getDocument() const;
     Queue* getQueue() const override;
-    Model* getModel() override;
-    Config* getConfig() override;
-    std::string getInputKeyString();
-    std::string getOutputKeyString();
-    std::string toString();
-    std::string toKeyString();
+    Model* getModel() const override;
+    Config* getConfig() const override;
+    std::string getInputKeyString() const;
+    std::string getOutputKeyString() const;
+    std::string toString() const;
+    std::string toKeyString() const;
 
 private:
     Synapse* synapse;

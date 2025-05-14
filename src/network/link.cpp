@@ -21,8 +21,8 @@ RelatedObjectIterable* Link::followManyRelation(Relation* rel) const {
     throw std::runtime_error("Invalid Relation: " + rel->getRelationName());
 }
 
-Obj* Link::followSingleRelation(const Relation* rel) {
-    if (rel->getRelationName() == "SELF") return this;
+Obj* Link::followSingleRelation(const Relation* rel) const {
+    if (rel->getRelationName() == "SELF") return const_cast<Link*>(this);
     if (rel->getRelationName() == "INPUT") return input;
     if (rel->getRelationName() == "OUTPUT") return output;
     if (rel->getRelationName() == "SYNAPSE") return synapse;
@@ -39,7 +39,7 @@ long Link::getCreated() const {
     return input && isCausal() ? input->getCreated() : output->getCreated();
 }
 
-Synapse* Link::getSynapse() {
+Synapse* Link::getSynapse() const {
     return synapse;
 }
 
@@ -47,15 +47,15 @@ void Link::setSynapse(Synapse* synapse) {
     this->synapse = synapse;
 }
 
-Activation* Link::getInput() {
+Activation* Link::getInput() const {
     return input;
 }
 
-Activation* Link::getOutput() {
+Activation* Link::getOutput() const {
     return output;
 }
 
-bool Link::isCausal() {
+bool Link::isCausal() const {
     return !input || isCausal(input, output);
 }
 
@@ -63,7 +63,7 @@ bool Link::isCausal(Activation* iAct, Activation* oAct) {
     return iAct->getFired() < oAct->getFired();
 }
 
-Document* Link::getDocument() {
+Document* Link::getDocument() const {
     return output->getDocument();
 }
 
@@ -71,26 +71,26 @@ Queue* Link::getQueue() const {
     return output->getDocument();
 }
 
-Model* Link::getModel() {
+Model* Link::getModel() const {
     return output->getModel();
 }
 
-Config* Link::getConfig() {
+Config* Link::getConfig() const {
     return output->getModel()->getConfig();
 }
 
-std::string Link::getInputKeyString() {
+std::string Link::getInputKeyString() const {
     return input ? input->toKeyString() : "id:X n:[" + synapse->getInput() + "]";
 }
 
-std::string Link::getOutputKeyString() {
+std::string Link::getOutputKeyString() const {
     return output ? output->toKeyString() : "id:X n:[" + synapse->getOutput() + "]";
 }
 
-std::string Link::toString() {
+std::string Link::toString() const {
     return type->getName() + " in:[" + getInputKeyString() + "] ==> out:[" + getOutputKeyString() + "]";
 }
 
-std::string Link::toKeyString() {
+std::string Link::toKeyString() const {
     return getInputKeyString() + " ==> " + getOutputKeyString();
 } 

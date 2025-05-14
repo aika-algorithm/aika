@@ -13,7 +13,7 @@ public:
     
     void linkIncoming(Activation* excludedInputAct) override;
     void addInputLink(Link* l) override;
-    std::vector<Link*> getInputLinks() override;
+    std::vector<Link*> getInputLinks() const override;
 
 private:
     std::map<int, Link*> inputLinks;

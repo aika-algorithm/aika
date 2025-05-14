@@ -31,7 +31,7 @@ void DisjunctiveActivation::addInputLink(Link* l) {
     inputLinks[iAct->getId()] = l;
 }
 
-std::vector<Link*> DisjunctiveActivation::getInputLinks() {
+std::vector<Link*> DisjunctiveActivation::getInputLinks() const {
     std::vector<Link*> result;
     for (const auto& pair : inputLinks) {
         result.push_back(pair.second);

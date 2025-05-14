@@ -6,8 +6,8 @@
 class Element : public QueueProvider {
 public:
     virtual ~Element() = default;
-    virtual long getCreated() = 0;
-    virtual long getFired() = 0;
+    virtual long getCreated() const = 0;
+    virtual long getFired() const = 0;
     // inherited from QueueProvider
     virtual Queue* getQueue() const = 0;
 };

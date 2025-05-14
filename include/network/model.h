@@ -29,7 +29,7 @@ public:
     void open(bool create);
     void close(bool store);
     long createThoughtId();
-    Config* getConfig();
+    Config* getConfig() const;
     void setConfig(Config* config);
     void write(std::ostream& out) const;
     void readFields(std::istream& in, Model* m);

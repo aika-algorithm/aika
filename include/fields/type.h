@@ -49,12 +49,12 @@ public:
     std::set<Type*> collectTypes();
     void collectTypesRecursiveStep(std::set<Type*>& sortedTypes);
     int getDepth() const;
-    bool isInstanceOf(Obj* obj);
-    bool isInstanceOf(Type* type);
+    bool isInstanceOf(Obj* obj) const;
+    bool isInstanceOf(Type* type) const;
     std::string getName() const;
-    TypeRegistry* getTypeRegistry();
-    FlattenedType* getFlattenedTypeInputSide();
-    FlattenedType* getFlattenedTypeOutputSide();
+    TypeRegistry* getTypeRegistry() const;
+    FlattenedType* getFlattenedTypeInputSide() const;
+    FlattenedType* getFlattenedTypeOutputSide() const;
     void setFieldDefinition(FieldDefinition* fieldDef);
     std::set<FieldDefinition*> getFieldDefinitions() const;
     Type& addParent(Type* p);

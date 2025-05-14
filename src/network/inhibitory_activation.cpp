@@ -35,11 +35,15 @@ void InhibitoryActivation::addInputLink(Link* l) {
     inputLinks[bsId] = l;
 }
 
-Link* InhibitoryActivation::getInputLink(int bsId) {
-    return inputLinks[bsId];
+Link* InhibitoryActivation::getInputLink(int bsId) const {
+    auto it = inputLinks.find(bsId);
+    if (it != inputLinks.end()) {
+        return it->second;
+    }
+    return nullptr;
 }
 
-int InhibitoryActivation::getInputKey(Link* l) {
+int InhibitoryActivation::getInputKey(Link* l) const {
     BSType* wildcard = static_cast<ActivationDefinition*>(type)->getWildcard();
     BSType* inputBSType = static_cast<SynapseDefinition*>(l->getSynapse()->getType())->mapTransitionBackward(wildcard);
     BindingSignal* inputBS = l->getInput()->getBindingSignal(inputBSType);
@@ -52,11 +56,15 @@ void InhibitoryActivation::addOutputLink(Link* l) {
     outputLinks[bsId] = l;
 }
 
-Link* InhibitoryActivation::getOutputLink(int bsId) {
-    return outputLinks[bsId];
+Link* InhibitoryActivation::getOutputLink(int bsId) const {
+    auto it = outputLinks.find(bsId);
+    if (it != outputLinks.end()) {
+        return it->second;
+    }
+    return nullptr;
 }
 
-int InhibitoryActivation::getOutputKey(Link* l) {
+int InhibitoryActivation::getOutputKey(Link* l) const {
     BSType* wildcard = static_cast<ActivationDefinition*>(type)->getWildcard();
     BSType* outputBSType = static_cast<SynapseDefinition*>(l->getSynapse()->getType())->mapTransitionForward(wildcard);
     BindingSignal* outputBS = l->getOutput()->getBindingSignal(outputBSType);
@@ -65,7 +73,7 @@ int InhibitoryActivation::getOutputKey(Link* l) {
 
 void InhibitoryActivation::linkIncoming(Activation* excludedInputAct) {}
 
-std::vector<Link*> InhibitoryActivation::getInputLinks() {
+std::vector<Link*> InhibitoryActivation::getInputLinks() const {
     std::vector<Link*> result;
     for (const auto& pair : inputLinks) {
         result.push_back(pair.second);
@@ -73,7 +81,7 @@ std::vector<Link*> InhibitoryActivation::getInputLinks() {
     return result;
 }
 
-std::vector<Link*> InhibitoryActivation::getOutputLinks() {
+std::vector<Link*> InhibitoryActivation::getOutputLinks() const {
     std::vector<Link*> result;
     for (const auto& pair : outputLinks) {
         result.push_back(pair.second);
@@ -81,12 +89,12 @@ std::vector<Link*> InhibitoryActivation::getOutputLinks() {
     return result;
 }
 
-Link* InhibitoryActivation::getCorrespondingInputLink(Link* l) {
-    int bsId = getOutputKey(l);
+Link* InhibitoryActivation::getCorrespondingInputLink(const Link* l) const {
+    int bsId = getOutputKey(const_cast<Link*>(l));
     return getInputLink(bsId);
 }
 
-Link* InhibitoryActivation::getCorrespondingOutputLink(Link* l) {
-    int bsId = getInputKey(l);
+Link* InhibitoryActivation::getCorrespondingOutputLink(const Link* l) const {
+    int bsId = getInputKey(const_cast<Link*>(l));
     return getOutputLink(bsId);
 } 

@@ -1,9 +1,9 @@
 #include "network/model_provider.h"
 
-Model* ModelProvider::getModel() {
+Model* ModelProvider::getModel() const {
     return model;
 }
 
-Config* ModelProvider::getConfig() {
+Config* ModelProvider::getConfig() const {
     return model->getConfig();
 } 

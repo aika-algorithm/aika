@@ -28,8 +28,8 @@ public:
     int getNewSynapseId();
     Activation* createActivation(Activation* parent, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
     void deleteNeuron();
-    Model* getModel() override;
-    Config* getConfig() override;
+    Model* getModel() const override;
+    Config* getConfig() const override;
     void setModified();
     void resetModified();
     bool isModified() const;

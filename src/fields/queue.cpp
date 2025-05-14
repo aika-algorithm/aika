@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cassert>
 
-long Queue::getTimeout() {
+long Queue::getTimeout() const {
     return std::numeric_limits<long>::max();
 }
 

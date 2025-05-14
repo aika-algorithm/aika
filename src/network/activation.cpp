@@ -38,9 +38,9 @@ RelatedObjectIterable* Activation::followManyRelation(Relation* rel) const {
     }
 }
 
-Obj* Activation::followSingleRelation(const Relation* rel) {
+Obj* Activation::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationName() == "SELF") {
-        return this;
+        return const_cast<Activation*>(this);
     } else if (rel->getRelationName() == "NEURON") {
         return neuron;
     } else {
@@ -48,11 +48,11 @@ Obj* Activation::followSingleRelation(const Relation* rel) {
     }
 }
 
-ActivationKey Activation::getKey() {
+ActivationKey Activation::getKey() const {
     return ActivationKey(neuron->getId(), id);
 }
 
-Activation* Activation::getParent() {
+Activation* Activation::getParent() const {
     return parent;
 }
 
@@ -62,15 +62,19 @@ void Activation::addOutputLink(Link* l) {
     outputLinks[oAct->getId()] = l;
 }
 
-BindingSignal* Activation::getBindingSignal(BSType s) {
-    return bindingSignals[s];
+BindingSignal* Activation::getBindingSignal(BSType s) const {
+    auto it = bindingSignals.find(s);
+    if (it != bindingSignals.end()) {
+        return it->second;
+    }
+    return nullptr;
 }
 
-std::map<BSType, BindingSignal*> Activation::getBindingSignals() {
+std::map<BSType, BindingSignal*> Activation::getBindingSignals() const {
     return bindingSignals;
 }
 
-bool Activation::hasConflictingBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals) {
+bool Activation::hasConflictingBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals) const {
     for (const auto& e : targetBindingSignals) {
         if (isConflictingBindingSignal(e.first, e.second)) {
             return true;
@@ -79,12 +83,13 @@ bool Activation::hasConflictingBindingSignals(std::map<BSType, BindingSignal*> t
     return false;
 }
 
-bool Activation::isConflictingBindingSignal(BSType s, BindingSignal* targetBS) {
-    BindingSignal* bs = bindingSignals[s];
+bool Activation::isConflictingBindingSignal(BSType s, BindingSignal* targetBS) const {
+    auto it = bindingSignals.find(s);
+    BindingSignal* bs = (it != bindingSignals.end()) ? it->second : nullptr;
     return bs != nullptr && targetBS != bs;
 }
 
-bool Activation::hasNewBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals) {
+bool Activation::hasNewBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals) const {
     for (const auto& e : targetBindingSignals) {
         if (bindingSignals.find(e.first) == bindingSignals.end()) {
             return true;
@@ -143,7 +148,7 @@ std::set<Activation*> Activation::collectLinkingTargets(Neuron* n) {
     return result;
 }
 
-int Activation::getId() {
+int Activation::getId() const {
     return id;
 }
 
@@ -184,39 +189,39 @@ Queue* Activation::getQueue() const {
     return doc;
 }
 
-Neuron* Activation::getNeuron() {
+Neuron* Activation::getNeuron() const {
     return neuron;
 }
 
-Document* Activation::getDocument() {
+Document* Activation::getDocument() const {
     return doc;
 }
 
-Model* Activation::getModel() {
+Model* Activation::getModel() const {
     return neuron->getModel();
 }
 
-Config* Activation::getConfig() {
+Config* Activation::getConfig() const {
     return neuron->getModel()->getConfig();
 }
 
-Link* Activation::getCorrespondingInputLink(Link* l) {
+Link* Activation::getCorrespondingInputLink(const Link* l) const {
     return nullptr;
 }
 
-Link* Activation::getCorrespondingOutputLink(Link* l) {
+Link* Activation::getCorrespondingOutputLink(const Link* l) const {
     return nullptr;
 }
 
-std::vector<Link*> Activation::getInputLinks(LinkDefinition* linkDefinition) {
+std::vector<Link*> Activation::getInputLinks(LinkDefinition* linkDefinition) const {
     return getInputLinks();
 }
 
-std::vector<Link*> Activation::getOutputLinks(LinkDefinition* linkDefinition) {
+std::vector<Link*> Activation::getOutputLinks(LinkDefinition* linkDefinition) const {
     return getOutputLinks();
 }
 
-std::vector<Link*> Activation::getOutputLinks() {
+std::vector<Link*> Activation::getOutputLinks() const {
     std::vector<Link*> result;
     for (const auto& pair : outputLinks) {
         result.push_back(pair.second);
@@ -224,11 +229,15 @@ std::vector<Link*> Activation::getOutputLinks() {
     return result;
 }
 
-Link* Activation::getOutputLink(Neuron* n) {
-    return outputLinks[n->getId()];
+Link* Activation::getOutputLink(Neuron* n) const {
+    auto it = outputLinks.find(n->getId());
+    if (it != outputLinks.end()) {
+        return it->second;
+    }
+    return nullptr;
 }
 
-std::vector<Link*> Activation::getOutputLinks(Synapse* s) {
+std::vector<Link*> Activation::getOutputLinks(Synapse* s) const {
     std::vector<Link*> result;
     for (auto& l : getOutputLinks()) {
         if (l->getSynapse() == s) {
@@ -238,22 +247,22 @@ std::vector<Link*> Activation::getOutputLinks(Synapse* s) {
     return result;
 }
 
-int Activation::compareTo(Activation* act) {
+int Activation::compareTo(Activation* act) const {
     return ID_COMPARATOR(this, act) ? -1 : (ID_COMPARATOR(act, this) ? 1 : 0);
 }
 
-bool Activation::equals(Activation* o) {
+bool Activation::equals(Activation* o) const {
     return this == o || (o != nullptr && id == o->id);
 }
 
-int Activation::hashCode() {
+int Activation::hashCode() const {
     return std::hash<int>()(id);
 }
 
-std::string Activation::toString() {
+std::string Activation::toString() const {
     return type->getName() + " " + toKeyString();
 }
 
-std::string Activation::toKeyString() {
+std::string Activation::toKeyString() const {
     return "id:" + std::to_string(getId()) + " n:[" + neuron->toKeyString() + "]";
 } 

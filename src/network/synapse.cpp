@@ -172,14 +172,14 @@ Neuron* Synapse::getOutput(Model* m) const {
     return output->getNeuron(m);
 }
 
-Timestamp Synapse::getCreated() const {
-    // We would need MIN Timestamp defined somewhere
-    return Timestamp(0); // Using 0 as MIN for now
+long Synapse::getCreated() const {
+    // Return minimum timestamp value
+    return 0; // Using 0 as MIN for now
 }
 
-Timestamp Synapse::getFired() const {
-    // We would need MAX Timestamp defined somewhere
-    return Timestamp(std::numeric_limits<long>::max()); // Using max long as MAX for now
+long Synapse::getFired() const {
+    // Return maximum timestamp value
+    return std::numeric_limits<long>::max(); // Using max long as MAX for now
 }
 
 void Synapse::deleteSynapse(Model* m) {

@@ -25,7 +25,7 @@ Type* Obj::getType() const {
     return type;
 }
 
-bool Obj::isInstanceOf(Type* t) {
+bool Obj::isInstanceOf(Type* t) const {
     return type->isInstanceOf(t);
 }
 
@@ -55,21 +55,21 @@ Obj& Obj::setFieldValue(FieldDefinition* fd, double v) {
     return *this;
 }
 
-double Obj::getFieldValue(FieldDefinition* fd) {
+double Obj::getFieldValue(FieldDefinition* fd) const {
     auto f = getFieldOutput(fd);
     return f ? f->getValue() : 0.0;
 }
 
-double Obj::getFieldUpdatedValue(FieldDefinition* fd) {
+double Obj::getFieldUpdatedValue(FieldDefinition* fd) const {
     auto f = getFieldOutput(fd);
     return f ? f->getUpdatedValue() : 0.0;
 }
 
-Field** Obj::getFields() {
+Field** Obj::getFields() const {
     return fields;
 }
 
-std::string Obj::toKeyString() {
+std::string Obj::toKeyString() const {
     return ""; // Implementation as needed
 }
 

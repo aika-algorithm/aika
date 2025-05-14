@@ -20,8 +20,8 @@ public:
     long getId() const;
     long getTimeout() const override;
     void process(std::function<bool(Step*)> filter);
-    Model* getModel() override;
-    Config* getConfig() override;
+    Model* getModel() const override;
+    Config* getConfig() const override;
     Step* getCurrentStep();
     void addActivation(Activation* act);
     std::set<Activation*> getActivations();

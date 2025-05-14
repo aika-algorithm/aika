@@ -119,11 +119,11 @@ void Neuron::deleteNeuron() {
     outputLock.releaseReadLock();
 }
 
-Model* Neuron::getModel() {
+Model* Neuron::getModel() const {
     return model;
 }
 
-Config* Neuron::getConfig() {
+Config* Neuron::getConfig() const {
     return model->getConfig();
 }
 
@@ -275,12 +275,12 @@ Synapse* Neuron::selectInputSynapse(std::function<bool(Synapse*)> predicate) con
     return syn;
 }
 
-Timestamp Neuron::getCreated() const {
-    return Timestamp::MIN;
+long Neuron::getCreated() const {
+    return -1; // Minimum timestamp value
 }
 
-Timestamp Neuron::getFired() const {
-    return Timestamp::MAX;
+long Neuron::getFired() const {
+    return 9223372036854775807L; // MAX_LONG value as maximum timestamp
 }
 
 Queue* Neuron::getQueue() const {

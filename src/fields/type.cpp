@@ -72,11 +72,11 @@ int Type::getDepth() const {
     return depth.value();
 }
 
-bool Type::isInstanceOf(Obj* obj) {
+bool Type::isInstanceOf(Obj* obj) const {
     return isInstanceOf(obj->getType());
 }
 
-bool Type::isInstanceOf(Type* type) {
+bool Type::isInstanceOf(Type* type) const {
     return id == type->id || std::any_of(parents.begin(), parents.end(), [&](const auto& p) {
         return p->isInstanceOf(type);
     });
@@ -86,18 +86,18 @@ std::string Type::getName() const {
     return name;
 }
 
-TypeRegistry* Type::getTypeRegistry() {
+TypeRegistry* Type::getTypeRegistry() const {
     return registry;
 }
 
-FlattenedType* Type::getFlattenedTypeInputSide() {
+FlattenedType* Type::getFlattenedTypeInputSide() const {
     if (!flattenedTypeInputSide) {
         throw std::runtime_error("Type has not been flattened yet. TypeRegistry.flattenTypeHierarchy() needs to be called beforehand.");
     }
     return flattenedTypeInputSide;
 }
 
-FlattenedType* Type::getFlattenedTypeOutputSide() {
+FlattenedType* Type::getFlattenedTypeOutputSide() const {
     if (!flattenedTypeOutputSide) {
         throw std::runtime_error("Type has not been flattened yet. TypeRegistry.flattenTypeHierarchy() needs to be called beforehand.");
     }

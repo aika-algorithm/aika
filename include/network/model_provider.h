@@ -7,8 +7,8 @@
 class ModelProvider {
 public:
     virtual ~ModelProvider() = default;
-    virtual Model* getModel() = 0;
-    virtual Config* getConfig() = 0;
+    virtual Model* getModel() const = 0;
+    virtual Config* getConfig() const = 0;
 
 protected:
     Model* model;

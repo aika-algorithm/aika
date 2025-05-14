@@ -16,7 +16,7 @@ public:
     explicit TestObject(TestType* type);
 
     // Follow a single relation
-    Obj* followSingleRelation(const Relation* rel) override;
+    Obj* followSingleRelation(const Relation* rel) const override;
 
     // Get related test object
     TestObject* getRelatedTestObject() const;

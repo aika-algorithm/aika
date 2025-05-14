@@ -45,7 +45,7 @@ void ConjunctiveActivation::addInputLink(Link* l) {
     inputLinks[syn->getSynapseId()] = l;
 }
 
-std::vector<Link*> ConjunctiveActivation::getInputLinks() {
+std::vector<Link*> ConjunctiveActivation::getInputLinks() const {
     std::vector<Link*> result;
     for (const auto& pair : inputLinks) {
         result.push_back(pair.second);
