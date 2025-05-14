@@ -5,7 +5,6 @@
 #include "fields/queue.h"
 #include "network/activation.h"
 #include "network/phase.h"
-#include "network/timestamp.h"
 #include <string>
 
 class Fired : public Step {

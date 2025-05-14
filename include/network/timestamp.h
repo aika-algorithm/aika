@@ -1,29 +1,11 @@
 #ifndef NETWORK_TIMESTAMP_H
 #define NETWORK_TIMESTAMP_H
 
-#include <string>
+// This is a compatibility header.
+// The Timestamp class has been replaced with direct use of long values.
+// The constant Timestamp::NOT_SET has been replaced with the value -1.
 
-class Timestamp {
-public:
-    static const Timestamp NOT_SET;
+// For backwards compatibility, define NOT_SET as -1
+constexpr long NOT_SET = -1;
 
-    Timestamp();
-    Timestamp(long time);
-
-    long getTime() const;
-    void setTime(long time);
-
-    bool operator==(const Timestamp& other) const;
-    bool operator!=(const Timestamp& other) const;
-    bool operator<(const Timestamp& other) const;
-    bool operator>(const Timestamp& other) const;
-    bool operator<=(const Timestamp& other) const;
-    bool operator>=(const Timestamp& other) const;
-
-    std::string toString() const;
-
-private:
-    long time;
-};
-
-#endif // NETWORK_TIMESTAMP_H 
+#endif // NETWORK_TIMESTAMP_H

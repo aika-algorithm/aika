@@ -9,7 +9,7 @@ const std::function<bool(Activation*, Activation*)> Activation::ID_COMPARATOR = 
 };
 
 Activation::Activation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType, BindingSignal*> bindingSignals)
-    : Obj(t), id(id), neuron(n), doc(doc), bindingSignals(bindingSignals), parent(parent), created(Timestamp::NOT_SET), fired(Timestamp::NOT_SET), firedStep(new Fired(this)) {
+    : Obj(t), id(id), neuron(n), doc(doc), bindingSignals(bindingSignals), parent(parent), created(-1), fired(-1), firedStep(new Fired(this)) {
     doc->addActivation(this);
     neuron->updateLastUsed(doc->getId());
     setCreated(doc->getCurrentTimestamp());
@@ -147,15 +147,15 @@ int Activation::getId() {
     return id;
 }
 
-Timestamp Activation::getCreated() {
+long Activation::getCreated() {
     return created;
 }
 
-void Activation::setCreated(Timestamp ts) {
+void Activation::setCreated(long ts) {
     created = ts;
 }
 
-Timestamp Activation::getFired() {
+long Activation::getFired() {
     return fired;
 }
 
@@ -163,12 +163,12 @@ void Activation::setFired() {
     fired = doc->getCurrentTimestamp();
 }
 
-void Activation::setFired(Timestamp f) {
+void Activation::setFired(long f) {
     fired = f;
 }
 
 void Activation::updateFiredStep(Field* net) {
-    if (!net->exceedsThreshold() || fired != Timestamp::NOT_SET) {
+    if (!net->exceedsThreshold() || fired != -1) {
         return;
     }
 

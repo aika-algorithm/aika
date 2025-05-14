@@ -48,8 +48,8 @@ public:
     Synapse* getOutputSynapseByType(Type* synapseType) const;
     std::vector<Synapse*> getOutputSynapsesByType(Type* synapseType) const;
     Synapse* selectInputSynapse(std::function<bool(Synapse*)> predicate) const;
-    Timestamp getCreated() override;
-    Timestamp getFired() override;
+    long getCreated() override;
+    long getFired() override;
     Queue* getQueue() override;
     void increaseRefCount(RefType rt);
     void decreaseRefCount(RefType rt);

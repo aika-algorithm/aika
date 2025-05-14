@@ -12,7 +12,6 @@
 #include "network/binding_signal.h"
 #include "network/link.h"
 #include "network/fired.h"
-#include "network/timestamp.h"
 
 #include <map>
 #include <set>
@@ -47,11 +46,11 @@ public:
     virtual void linkIncoming(Activation* excludedInputAct) = 0;
     std::set<Activation*> collectLinkingTargets(Neuron* n);
     int getId();
-    Timestamp getCreated();
-    void setCreated(Timestamp ts);
-    Timestamp getFired();
+    long getCreated() override;
+    void setCreated(long ts);
+    long getFired() override;
     void setFired();
-    void setFired(Timestamp f);
+    void setFired(long f);
     void updateFiredStep(Field* net);
     Queue* getQueue();
     Neuron* getNeuron();

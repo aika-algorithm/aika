@@ -22,8 +22,8 @@ public:
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
     Obj* followSingleRelation(const Relation* rel) override;
-    Timestamp getFired() override;
-    Timestamp getCreated() override;
+    long getFired() override;
+    long getCreated() override;
     Synapse* getSynapse();
     void setSynapse(Synapse* synapse);
     Activation* getInput();

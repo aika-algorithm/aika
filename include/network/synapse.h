@@ -63,8 +63,8 @@ public:
     virtual void readFields(DataInput* in, TypeRegistry* tr) = 0;
 */
 
-    Timestamp getCreated() const override;
-    Timestamp getFired() const override;
+    long getCreated() const override;
+    long getFired() const override;
 
     void deleteSynapse(Model* m);
 

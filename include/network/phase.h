@@ -2,6 +2,7 @@
 #define NETWORK_PHASE_H
 
 #include "fields/queue_key.h"
+#include <string>
 
 // First define the enum for Phase types
 enum class PhaseType {
@@ -14,7 +15,7 @@ enum class PhaseType {
 };
 
 // Phase class that implements ProcessingPhase interface
-class Phase : public ProcessingPhase {
+class Phase final : public ProcessingPhase {
 public:
     Phase(PhaseType type) : type(type) {}
 
@@ -32,6 +33,19 @@ public:
 
     bool isDelayed() const override {
         return type == PhaseType::SAVE; // Only SAVE phase is delayed
+    }
+
+    // For string representation
+    std::string toString() const {
+        switch (type) {
+            case PhaseType::INFERENCE: return "INFERENCE";
+            case PhaseType::FIRED: return "FIRED";
+            case PhaseType::INSTANTIATION_TRIGGER: return "INSTANTIATION_TRIGGER";
+            case PhaseType::TRAINING: return "TRAINING";
+            case PhaseType::INACTIVE_LINKS: return "INACTIVE_LINKS";
+            case PhaseType::SAVE: return "SAVE";
+            default: return "UNKNOWN";
+        }
     }
 
     // Static instances for convenience
