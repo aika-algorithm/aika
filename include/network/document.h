@@ -28,7 +28,7 @@ public:
     Activation* getActivationByNeuron(Neuron* outputNeuron);
     int createActivationId();
     void disconnect();
-    Queue* getQueue() override;
+    Queue* getQueue() const override;
     Activation* addToken(Neuron* n, BSType* bsType, int tokenId);
     BindingSignal* getOrCreateBindingSignal(int tokenId);
     BindingSignal* getBindingSignal(int tokenId);

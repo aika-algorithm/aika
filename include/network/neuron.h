@@ -29,6 +29,7 @@ public:
     Activation* createActivation(Activation* parent, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
     void deleteNeuron();
     Model* getModel() override;
+    Config* getConfig() override;
     void setModified();
     void resetModified();
     bool isModified() const;
@@ -48,9 +49,9 @@ public:
     Synapse* getOutputSynapseByType(Type* synapseType) const;
     std::vector<Synapse*> getOutputSynapsesByType(Type* synapseType) const;
     Synapse* selectInputSynapse(std::function<bool(Synapse*)> predicate) const;
-    long getCreated() override;
-    long getFired() override;
-    Queue* getQueue() override;
+    long getCreated() const override;
+    long getFired() const override;
+    Queue* getQueue() const override;
     void increaseRefCount(RefType rt);
     void decreaseRefCount(RefType rt);
     int getRefCount() const;

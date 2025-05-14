@@ -119,8 +119,12 @@ void Neuron::deleteNeuron() {
     outputLock.releaseReadLock();
 }
 
-Model* Neuron::getModel() const {
+Model* Neuron::getModel() {
     return model;
+}
+
+Config* Neuron::getConfig() {
+    return model->getConfig();
 }
 
 void Neuron::setModified() {

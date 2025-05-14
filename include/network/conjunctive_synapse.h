@@ -10,10 +10,10 @@ public:
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
     Obj* followSingleRelation(const Relation* rel) override;
-
+/*
     void write(DataOutput* out) override;
     void readFields(DataInput* in, TypeRegistry* tr) override;
-
+*/
 private:
     bool propagable;
 };

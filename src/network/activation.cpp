@@ -147,7 +147,7 @@ int Activation::getId() {
     return id;
 }
 
-long Activation::getCreated() {
+long Activation::getCreated() const {
     return created;
 }
 
@@ -155,7 +155,7 @@ void Activation::setCreated(long ts) {
     created = ts;
 }
 
-long Activation::getFired() {
+long Activation::getFired() const {
     return fired;
 }
 
@@ -180,7 +180,7 @@ void Activation::updateFiredStep(Field* net) {
     doc->addStep(firedStep);
 }
 
-Queue* Activation::getQueue() {
+Queue* Activation::getQueue() const {
     return doc;
 }
 
@@ -194,6 +194,10 @@ Document* Activation::getDocument() {
 
 Model* Activation::getModel() {
     return neuron->getModel();
+}
+
+Config* Activation::getConfig() {
+    return neuron->getModel()->getConfig();
 }
 
 Link* Activation::getCorrespondingInputLink(Link* l) {

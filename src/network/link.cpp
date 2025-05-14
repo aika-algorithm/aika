@@ -31,11 +31,11 @@ Obj* Link::followSingleRelation(const Relation* rel) {
     throw std::runtime_error("Invalid Relation: " + rel->getRelationName());
 }
 
-Timestamp Link::getFired() {
+long Link::getFired() const {
     return input && isCausal() ? input->getFired() : output->getFired();
 }
 
-Timestamp Link::getCreated() {
+long Link::getCreated() const {
     return input && isCausal() ? input->getCreated() : output->getCreated();
 }
 
@@ -67,12 +67,16 @@ Document* Link::getDocument() {
     return output->getDocument();
 }
 
-Queue* Link::getQueue() {
+Queue* Link::getQueue() const {
     return output->getDocument();
 }
 
 Model* Link::getModel() {
     return output->getModel();
+}
+
+Config* Link::getConfig() {
+    return output->getModel()->getConfig();
 }
 
 std::string Link::getInputKeyString() {

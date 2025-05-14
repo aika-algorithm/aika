@@ -22,7 +22,7 @@ private:
     void checkTimeout(long startTime);
 
 public:
-    long getTimeout();
+    virtual long getTimeout() const;
     long getTimestampOnProcess();
     long getCurrentTimestamp();
     long getNextTimestamp();

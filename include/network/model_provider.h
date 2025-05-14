@@ -6,8 +6,9 @@
 
 class ModelProvider {
 public:
-    virtual Model* getModel();
-    virtual Config* getConfig();
+    virtual ~ModelProvider() = default;
+    virtual Model* getModel() = 0;
+    virtual Config* getConfig() = 0;
 
 protected:
     Model* model;

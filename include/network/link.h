@@ -22,8 +22,8 @@ public:
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
     Obj* followSingleRelation(const Relation* rel) override;
-    long getFired() override;
-    long getCreated() override;
+    long getFired() const override;
+    long getCreated() const override;
     Synapse* getSynapse();
     void setSynapse(Synapse* synapse);
     Activation* getInput();
@@ -33,6 +33,7 @@ public:
     Document* getDocument();
     Queue* getQueue() const override;
     Model* getModel() override;
+    Config* getConfig() override;
     std::string getInputKeyString();
     std::string getOutputKeyString();
     std::string toString();
