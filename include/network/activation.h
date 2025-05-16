@@ -68,8 +68,8 @@ public:
     int compareTo(Activation* act) const;
     bool equals(Activation* o) const;
     int hashCode() const;
-    std::string toString() const override;
-    std::string toKeyString() const override;
+    std::string toString() const;
+    std::string toKeyString() const;
 
 protected:
     int id;
@@ -77,8 +77,8 @@ protected:
     Document* doc;
     std::map<BSType, BindingSignal*> bindingSignals;
     Activation* parent;
-    Timestamp created;
-    Timestamp fired;
+    long created;
+    long fired;
     Fired* firedStep;
     std::map<int, Link*> outputLinks;
 };

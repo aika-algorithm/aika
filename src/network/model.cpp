@@ -100,7 +100,7 @@ bool Model::canBeSuspended(long lastUsed) const {
     if (tId == 0) {
         tId = lastProcessedDocument;
     }
-    return lastUsed < tId - config.getNeuronProviderRetention();
+    return lastUsed < tId - config->getNeuronProviderRetention();
 }
 
 Neuron *Model::getNeuron(long id) {

@@ -18,7 +18,7 @@ public:
     const Phase& getPhase() const override;
     Activation* getElement();
     Queue* getQueue() const override;
-    std::string toString() const override;
+    std::string toString() const;
     bool isQueued() const;
 
 private:

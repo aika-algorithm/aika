@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <mutex>
 
 class Neuron;
 class Document;
@@ -19,9 +20,11 @@ public:
     long createNeuronId();
     void registerDocument(Document* doc);
     void deregisterDocument(Document* doc);
+    long getLowestDocumentId();
     void addToN(int l);
     long getN() const;
     void setN(long n);
+    long getTimeout() const;
     bool canBeSuspended(long lastUsed) const;
     Neuron* getNeuron(long id);
     void registerNeuron(Neuron* n);
@@ -35,6 +38,10 @@ public:
     void readFields(std::istream& in, Model* m);
     std::string toString() const;
 
+    TypeRegistry* getTypeRegistry();
+    std::vector<Neuron*> getActiveNeurons();
+    void registerTokenId(int tokenId, Neuron* in);
+
 private:
     TypeRegistry* typeRegistry;
     SuspensionCallback* suspensionCallback;
@@ -44,6 +51,8 @@ private:
     std::map<long, Neuron*> activeNeurons;
     std::map<long, Document*> documents;
     long lastProcessedDocument;
+    std::mutex documentMutex;
+    std::mutex neuronMutex;
 };
 
 #endif // NETWORK_MODEL_H
