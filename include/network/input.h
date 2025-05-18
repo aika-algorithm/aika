@@ -4,9 +4,9 @@
 #include "network/direction.h"
 #include <string>
 
-class Input : public Direction {
+class NetworkInput : public NetworkDirection {
 public:
-    Direction* invert() override;
+    NetworkDirection* invert() override;
 
     template <typename I>
     I getInput(I from, I to);
@@ -18,8 +18,8 @@ public:
     Activation* getActivation(Link* l) override;
     BSType* transition(BSType* s, Transition* trns) override;
     int getOrder() override;
-    void write(std::ostream& out) override;
-    std::string toString() override;
+//    void write(std::ostream& out) override;
+    std::string toString();
 };
 
 #endif // NETWORK_INPUT_H 

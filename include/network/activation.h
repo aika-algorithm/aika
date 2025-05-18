@@ -9,9 +9,13 @@
 #include "network/model_provider.h"
 #include "network/neuron.h"
 #include "network/bs_type.h"
-#include "network/binding_signal.h"
-#include "network/link.h"
-#include "network/fired.h"
+// Forward declarations to avoid circular includes
+class BindingSignal;
+class Link;
+class Fired;
+class Synapse;
+class LinkDefinition;
+class ActivationKey;
 
 #include <map>
 #include <set>
@@ -23,7 +27,7 @@ class Activation : public Obj, public Element, public ModelProvider {
 public:
     static const std::function<bool(Activation*, Activation*)> ID_COMPARATOR;
 
-    Activation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType, BindingSignal*> bindingSignals);
+    Activation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
     virtual ~Activation();
 
     // Implementation of Obj virtual methods
@@ -34,12 +38,12 @@ public:
     Activation* getParent() const;
     void addOutputLink(Link* l);
     virtual void addInputLink(Link* l) = 0;
-    BindingSignal* getBindingSignal(BSType s) const;
-    std::map<BSType, BindingSignal*> getBindingSignals() const;
-    bool hasConflictingBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals) const;
-    bool isConflictingBindingSignal(BSType s, BindingSignal* targetBS) const;
-    bool hasNewBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals) const;
-    Activation* branch(std::map<BSType, BindingSignal*> bindingSignals);
+    BindingSignal* getBindingSignal(BSType* s) const;
+    std::map<BSType*, BindingSignal*> getBindingSignals() const;
+    bool hasConflictingBindingSignals(std::map<BSType*, BindingSignal*> targetBindingSignals) const;
+    bool isConflictingBindingSignal(BSType* s, BindingSignal* targetBS) const;
+    bool hasNewBindingSignals(std::map<BSType*, BindingSignal*> targetBindingSignals) const;
+    Activation* branch(std::map<BSType*, BindingSignal*> bindingSignals);
     void linkOutgoing();
     void linkOutgoing(Synapse* targetSyn);
     void propagate(Synapse* targetSyn);
@@ -75,7 +79,7 @@ protected:
     int id;
     Neuron* neuron;
     Document* doc;
-    std::map<BSType, BindingSignal*> bindingSignals;
+    std::map<BSType*, BindingSignal*> bindingSignals;
     Activation* parent;
     long created;
     long fired;

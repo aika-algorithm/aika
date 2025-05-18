@@ -2,6 +2,8 @@
 #include "network/activation.h"
 #include "fields/queue_key.h"
 #include "network/fired_queue_key.h"
+#include "network/binding_signal.h"
+#include "network/document.h"
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -36,12 +38,13 @@ const Phase& Fired::getPhase() const {
     return Phase::FIRED;
 }
 
-Activation* Fired::getElement() {
+Activation* Fired::getElement() const {
     return act;
 }
 
 Queue* Fired::getQueue() const {
-    return act->getDocument();
+    Document* doc = act->getDocument();
+    return doc->getQueue();
 }
 
 bool Fired::isQueued() const {

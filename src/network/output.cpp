@@ -1,34 +1,37 @@
 #include "network/output.h"
+#include "network/input.h"
 
-Direction* Output::invert() {
-    return INPUT;
+NetworkDirection* NetworkOutput::invert() {
+    return NetworkDirection::INPUT;
 }
 
-Neuron* Output::getNeuron(Model* m, Synapse* s) {
+Neuron* NetworkOutput::getNeuron(Model* m, Synapse* s) {
     return s->getOutput(m);
 }
 
-Activation* Output::getActivation(Link* l) {
+Activation* NetworkOutput::getActivation(Link* l) {
     return l ? l->getOutput() : nullptr;
 }
 
-BSType* Output::transition(BSType* s, Transition* trns) {
-    for (auto& t : trns) {
-        if (t.from() == s) {
-            return t.to();
-        }
+BSType* NetworkOutput::transition(BSType* s, Transition* trns) {
+    // Transition has from() and to() methods but isn't an array
+    // Check if the 'from' matches our input
+    if (trns->from() == s) {
+        return trns->to();
     }
     return nullptr;
 }
 
-int Output::getOrder() {
+int NetworkOutput::getOrder() {
     return 1;
 }
 
-void Output::write(std::ostream& out) {
+/*
+void NetworkOutput::write(std::ostream& out) {
     out << true;
 }
+*/
 
-std::string Output::toString() {
+std::string NetworkOutput::toString() {
     return "OUTPUT";
 } 

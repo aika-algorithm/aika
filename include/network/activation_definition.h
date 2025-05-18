@@ -2,10 +2,11 @@
 #define NETWORK_ACTIVATION_DEFINITION_H
 
 #include "network/node_definition.h"
+#include "fields/type.h"
 
-class ActivationDefinition : public NodeDefinition {
+class ActivationDefinition : public Type {
 public:
-    ActivationDefinition();
+    ActivationDefinition(TypeRegistry* registry, const std::string& name);
     virtual ~ActivationDefinition();
 
     // Add any additional methods or members specific to ActivationDefinition here

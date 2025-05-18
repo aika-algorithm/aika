@@ -2,6 +2,12 @@
 #include "network/input.h"
 #include "network/output.h"
 
-Direction* Direction::read(DataInput* in) {
-    return in->readBoolean() ? new Output() : new Input();
-} 
+// Initialize the static variables
+NetworkDirection* NetworkDirection::INPUT = new NetworkInput();
+NetworkDirection* NetworkDirection::OUTPUT = new NetworkOutput();
+
+/*
+NetworkDirection* NetworkDirection::read(DataInput* in) {
+    return in->readBoolean() ? new NetworkOutput() : new NetworkInput();
+}
+*/

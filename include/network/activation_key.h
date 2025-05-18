@@ -13,11 +13,11 @@ private:
 };
 
 struct ActivationKeyComparator {
-    bool operator()(ActivationKey* a, ActivationKey* b) const {
-        if(a->getNeuronId() != b->getNeuronId())
-            return a->getNeuronId() < b->getNeuronId();
+    bool operator()(const ActivationKey& a, const ActivationKey& b) const {
+        if(a.getNeuronId() != b.getNeuronId())
+            return a.getNeuronId() < b.getNeuronId();
         else
-            return a->getActId() < b->getActId();
+            return a.getActId() < b.getActId();
     }
 };
 

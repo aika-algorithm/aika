@@ -1,6 +1,7 @@
 #include "network/activation_definition.h"
 
-ActivationDefinition::ActivationDefinition() {
+ActivationDefinition::ActivationDefinition(TypeRegistry* registry, const std::string& name)
+    : Type(registry, name) {
     // Constructor implementation
 }
 

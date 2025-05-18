@@ -15,14 +15,14 @@ public:
     void addInputLink(Link* l) override;
     Link* getInputLink(int bsId) const;
     int getInputKey(Link* l) const;
-    void addOutputLink(Link* l) override;
+    void addOutputLink(Link* l);
     Link* getOutputLink(int bsId) const;
     int getOutputKey(Link* l) const;
     void linkIncoming(Activation* excludedInputAct) override;
     std::vector<Link*> getInputLinks() const override;
-    std::vector<Link*> getOutputLinks() const override;
-    Link* getCorrespondingInputLink(const Link* l) const override;
-    Link* getCorrespondingOutputLink(const Link* l) const override;
+    std::vector<Link*> getOutputLinks() const;
+    Link* getCorrespondingInputLink(const Link* l) const;
+    Link* getCorrespondingOutputLink(const Link* l) const;
 
 private:
     std::map<int, Link*> inputLinks;

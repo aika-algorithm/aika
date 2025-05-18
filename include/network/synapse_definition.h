@@ -7,12 +7,13 @@
 
 #include "network/activation.h"
 #include "network/binding_signal.h"
-#include "network/conjunctive_synapse.h"
-#include "network/disjunctive_synapse.h"
-#include "network/neuron.h"
-#include "network/synapse.h"
 #include "network/transition.h"
-#include "network/direction.h"
+// Forward declarations
+class Synapse;
+class Neuron;
+class NeuronDefinition;
+class LinkDefinition;
+class NetworkDirection;
 
 
 #include <set>
@@ -29,7 +30,8 @@ public:
     static const RelationOne INPUT;
     static const RelationOne OUTPUT;
     static const RelationMany LINK;
-    static const std::vector<Relation> RELATIONS;
+    // Cannot store abstract class Relation in vector, need to use pointers instead
+    // static const std::vector<Relation> RELATIONS;
 
     SynapseDefinition(TypeRegistry* registry, const std::string& name);
 
@@ -59,15 +61,15 @@ public:
     std::vector<Transition*> getTransition() const;
     SynapseDefinition* setTransition(const std::vector<Transition*>& transition);
 
-    Direction* getStoredAt() const;
-    SynapseDefinition* setStoredAt(Direction* storedAt);
+    NetworkDirection* getStoredAt() const;
+    SynapseDefinition* setStoredAt(NetworkDirection* storedAt);
 
     SynapseDefinition* setTrainingAllowed(bool trainingAllowed);
 
     SynapseDefinition* getInstanceSynapseType() const;
     SynapseDefinition* setInstanceSynapseType(SynapseDefinition* instanceSynapseType);
 
-    std::string toString() const override;
+    std::string toString() const;
 
 private:
     SynapseSubType subType;
@@ -79,7 +81,7 @@ private:
 
     std::vector<Transition*> transition;
 
-    Direction* storedAt;
+    NetworkDirection* storedAt;
 
     bool trainingAllowed;
 

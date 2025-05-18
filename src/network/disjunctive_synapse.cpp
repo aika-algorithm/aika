@@ -8,18 +8,18 @@ DisjunctiveSynapse::DisjunctiveSynapse(SynapseDefinition* type, Neuron* input, N
 
 RelatedObjectIterable* DisjunctiveSynapse::followManyRelation(Relation* rel) const {
     // Typically synapses don't have "many" relationships
-    throw std::runtime_error("Invalid Relation for DisjunctiveSynapse: " + rel->getRelationName());
+    throw std::runtime_error("Invalid Relation for DisjunctiveSynapse: " + rel->getRelationLabel());
 }
 
-Obj* DisjunctiveSynapse::followSingleRelation(const Relation* rel) {
-    if (rel->getRelationName() == "SELF") {
-        return this;
-    } else if (rel->getRelationName() == "INPUT") {
+Obj* DisjunctiveSynapse::followSingleRelation(const Relation* rel) const {
+    if (rel->getRelationLabel() == "SELF") {
+        return const_cast<DisjunctiveSynapse*>(this);
+    } else if (rel->getRelationLabel() == "INPUT") {
         return getInput();
-    } else if (rel->getRelationName() == "OUTPUT") {
+    } else if (rel->getRelationLabel() == "OUTPUT") {
         return getOutput();
     } else {
-        throw std::runtime_error("Invalid Relation for DisjunctiveSynapse: " + rel->getRelationName());
+        throw std::runtime_error("Invalid Relation for DisjunctiveSynapse: " + rel->getRelationLabel());
     }
 }
 

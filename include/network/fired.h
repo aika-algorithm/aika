@@ -16,7 +16,7 @@ public:
     void process() override;
     void updateNet(double net);
     const Phase& getPhase() const override;
-    Activation* getElement();
+    Activation* getElement() const;
     Queue* getQueue() const override;
     std::string toString() const;
     bool isQueued() const;

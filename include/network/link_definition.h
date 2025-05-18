@@ -24,11 +24,12 @@ public:
     static const RelationOne SYNAPSE;
     static const RelationOne CORRESPONDING_INPUT_LINK;
     static const RelationOne CORRESPONDING_OUTPUT_LINK;
-    static const std::vector<Relation> RELATIONS;
+    // We can't use vector of abstract class Relation directly
+    // static const std::vector<Relation> RELATIONS;
 
     LinkDefinition(TypeRegistry* registry, const std::string& name);
 
-    std::vector<Relation> getRelations() const;
+    std::vector<Relation*> getRelations() const;
     Link* instantiate(Synapse* synapse, Activation* input, Activation* output);
 
     SynapseDefinition* getSynapse() const;

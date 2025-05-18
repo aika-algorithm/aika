@@ -6,7 +6,7 @@
 
 class DisjunctiveActivation : public Activation {
 public:
-    DisjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType, BindingSignal*> bindingSignals);
+    DisjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
     virtual ~DisjunctiveActivation();
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;

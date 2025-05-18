@@ -6,22 +6,22 @@
 
 class ReadWriteLock {
 public:
-    void acquireWriteLock();
-    void acquireReadLock();
-    void releaseWriteLock();
-    void releaseReadLock();
+    void acquireWriteLock() const;
+    void acquireReadLock() const;
+    void releaseWriteLock() const;
+    void releaseReadLock() const;
 
 private:
-    int readers = 0;
-    int writers = 0;
-    int writeRequests = 0;
-    long writerThreadId = -1;
-    int waitForReadLock = 0;
-    int waitForWriteLock = 0;
+    mutable int readers = 0;
+    mutable int writers = 0;
+    mutable int writeRequests = 0;
+    mutable long writerThreadId = -1;
+    mutable int waitForReadLock = 0;
+    mutable int waitForWriteLock = 0;
 
-    std::mutex writeLock;
-    std::mutex mtx;
-    std::condition_variable cv;
+    mutable std::mutex writeLock;
+    mutable std::mutex mtx;
+    mutable std::condition_variable cv;
 };
 
 #endif // NETWORK_READ_WRITE_LOCK_H 

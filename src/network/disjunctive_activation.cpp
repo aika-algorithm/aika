@@ -1,14 +1,16 @@
 #include "network/disjunctive_activation.h"
 #include "fields/relation.h"
 #include "fields/rel_obj_iterator.h"
+#include "network/link.h"
+#include <cassert>
 
-DisjunctiveActivation::DisjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType, BindingSignal*> bindingSignals)
+DisjunctiveActivation::DisjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
     : Activation(t, parent, id, n, doc, bindingSignals) {}
 
 DisjunctiveActivation::~DisjunctiveActivation() {}
 
 RelatedObjectIterable* DisjunctiveActivation::followManyRelation(Relation* rel) const {
-    if (rel->getRelationName() == "INPUT") {
+    if (rel->getRelationLabel() == "INPUT") {
         // Convert inputLinks to a vector of Obj*
         std::vector<Obj*> objs;
         for (const auto& pair : inputLinks) {

@@ -7,8 +7,15 @@
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/read_write_lock.h"
-#include "network/neuron_reference.h"
-#include "network/synapse.h"
+#include "network/ref_type.h" // Include RefType enum
+
+// Forward declarations to break circular dependencies
+class Activation;
+class Synapse;
+class BSType;
+class BindingSignal;
+class Document;
+class NeuronReference; // Forward declare NeuronReference
 #include <map>
 #include <set>
 #include <vector>
@@ -20,9 +27,11 @@ public:
     Neuron(NeuronDefinition* type, Model* model);
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
-    Obj* followSingleRelation(const Relation* rel) override;
+    Obj* followSingleRelation(const Relation* rel) const override;
     long getId() const;
     void updatePropagable(Neuron* n, bool isPropagable);
+    void addPropagable(Neuron* n);
+    void removePropagable(Neuron* n);
     void wakeupPropagable();
     std::set<NeuronReference*> getPropagable() const;
     int getNewSynapseId();
@@ -38,6 +47,8 @@ public:
     void removeInputSynapse(Synapse* s);
     void addOutputSynapse(Synapse* s);
     void removeOutputSynapse(Synapse* s);
+    std::vector<Synapse*> getInputSynapses() const;
+    std::vector<Synapse*> getOutputSynapses() const;
     std::vector<Synapse*> getInputSynapsesAsStream() const;
     std::vector<Synapse*> getOutputSynapsesAsStream() const;
     Synapse* getOutputSynapse(Neuron* n) const;
@@ -78,7 +89,7 @@ private:
     std::map<long, Synapse*> outputSynapses;
     std::map<long, NeuronReference*> propagable;
     int refCount;
-    int refCountByType[RefType::OTHER + 1];
+    int refCountByType[static_cast<int>(RefType::OTHER) + 1];
     long lastUsed;
     bool modified;
 };

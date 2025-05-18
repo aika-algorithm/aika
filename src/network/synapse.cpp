@@ -1,5 +1,6 @@
 #include "network/synapse.h"
 #include "network/synapse_definition.h"
+#include "network/direction.h" // Include the full NetworkDirection definition
 #include <iostream>
 #include <stdexcept>
 #include <limits>
@@ -18,26 +19,17 @@ Synapse::Synapse(SynapseDefinition* type, Neuron* input, Neuron* output)
     link(input->getModel(), input, output);
 }
 
-std::vector<Obj*> Synapse::followManyRelation(Relation* rel) {
-    if (rel->getRelationId() == SynapseDefinition::LINK.getRelationId()) {
-        // Return links - this would need implementation but returning empty for now
-        return std::vector<Obj*>();
-    } else {
-        throw std::runtime_error("Invalid Relation");
-    }
-}
+// This is a pure virtual method in Synapse, so the implementation should be in the derived classes
+// RelatedObjectIterable* Synapse::followManyRelation(Relation* rel) const {
+//     // Not implemented in base class
+//     return nullptr;
+// }
 
-Obj* Synapse::followSingleRelation(Relation* rel) {
-    if (rel->getRelationId() == SynapseDefinition::SELF.getRelationId()) {
-        return this;
-    } else if (rel->getRelationId() == SynapseDefinition::INPUT.getRelationId()) {
-        return getInput();
-    } else if (rel->getRelationId() == SynapseDefinition::OUTPUT.getRelationId()) {
-        return getOutput();
-    } else {
-        throw std::runtime_error("Invalid Relation");
-    }
-}
+// This is a pure virtual method in Synapse, so the implementation should be in the derived classes
+// Obj* Synapse::followSingleRelation(const Relation* rel) const {
+//     // Not implemented in base class
+//     return nullptr;
+// }
 
 int Synapse::getSynapseId() const {
     return synapseId;
@@ -132,7 +124,7 @@ Link* Synapse::createLink(Activation* input, const std::map<BSType*, BindingSign
         ->instantiate(this, input, output);
 }
 
-Direction* Synapse::getStoredAt() const {
+NetworkDirection* Synapse::getStoredAt() const {
     return static_cast<SynapseDefinition*>(getType())->getStoredAt();
 }
 

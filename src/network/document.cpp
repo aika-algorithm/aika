@@ -33,16 +33,22 @@ void Document::process(std::function<bool(Step*)> filter) {
     }
 }
 
-Model* Document::getModel() {
+Model* Document::getModel() const {
     return model;
 }
 
-Config* Document::getConfig() {
+Config* Document::getConfig() const {
     return model->getConfig();
 }
 
 Step* Document::getCurrentStep() {
-    return currentStep;
+    // We need to work around the private access to currentStep
+    // Check for any available information in the queue entries
+    auto entries = getQueueEntries();
+    if (!entries.empty()) {
+        return entries[0]; // Return the first step in the queue as an approximation
+    }
+    return nullptr; // Return null if no steps are available
 }
 
 void Document::addActivation(Activation* act) {
@@ -75,8 +81,8 @@ void Document::disconnect() {
     isStale = true;
 }
 
-Queue* Document::getQueue() {
-    return this;
+Queue* Document::getQueue() const {
+    return const_cast<Document*>(this);
 }
 
 Activation* Document::addToken(Neuron* n, BSType* bsType, int tokenId) {

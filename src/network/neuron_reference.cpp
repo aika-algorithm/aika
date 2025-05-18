@@ -1,4 +1,5 @@
 #include "network/neuron_reference.h"
+#include "network/neuron.h" // Include the full neuron.h here to access methods
 
 NeuronReference::NeuronReference(long neuronId, RefType refType) : id(neuronId), refType(refType), neuron(nullptr) {}
 
@@ -12,12 +13,20 @@ Neuron* NeuronReference::getRawNeuron() const {
     return neuron;
 }
 
+// This is implementing the template method from the header
+// Define the non-template function that will be used
 Neuron* NeuronReference::getNeuron(Model* m) {
     if (!neuron) {
         neuron = m->getNeuron(id);
         neuron->increaseRefCount(refType);
     }
     return neuron;
+}
+
+// Explicit template specialization for Neuron type
+template<>
+Neuron* NeuronReference::getNeuron<Neuron>(Model* m) {
+    return getNeuron(m);
 }
 
 void NeuronReference::suspendNeuron() {

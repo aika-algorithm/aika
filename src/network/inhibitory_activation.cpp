@@ -2,21 +2,23 @@
 #include "network/activation_definition.h"
 #include "network/synapse_definition.h"
 #include "network/binding_signal.h"
+#include "network/synapse.h"
 #include "fields/relation.h"
 #include "fields/rel_obj_iterator.h"
+#include <cassert>
 
 InhibitoryActivation::InhibitoryActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
     : Activation(t, parent, id, n, doc, bindingSignals) {}
     
 RelatedObjectIterable* InhibitoryActivation::followManyRelation(Relation* rel) const {
-    if (rel->getRelationName() == "INPUT") {
+    if (rel->getRelationLabel() == "INPUT") {
         // Convert inputLinks to a vector of Obj*
         std::vector<Obj*> objs;
         for (const auto& pair : inputLinks) {
             objs.push_back(static_cast<Obj*>(pair.second));
         }
         return new VectorObjectIterable(objs);
-    } else if (rel->getRelationName() == "OUTPUT") {
+    } else if (rel->getRelationLabel() == "OUTPUT") {
         // For InhibitoryActivation, we override both INPUT and OUTPUT handling
         std::vector<Obj*> objs;
         for (const auto& pair : outputLinks) {
@@ -44,7 +46,9 @@ Link* InhibitoryActivation::getInputLink(int bsId) const {
 }
 
 int InhibitoryActivation::getInputKey(Link* l) const {
-    BSType* wildcard = static_cast<ActivationDefinition*>(type)->getWildcard();
+    // TODO: Need to properly implement getWildcard method
+    // BSType* wildcard = static_cast<ActivationDefinition*>(type)->getWildcard();
+    BSType* wildcard = nullptr; // Temporary fix
     BSType* inputBSType = static_cast<SynapseDefinition*>(l->getSynapse()->getType())->mapTransitionBackward(wildcard);
     BindingSignal* inputBS = l->getInput()->getBindingSignal(inputBSType);
     return inputBS->getTokenId();
@@ -65,7 +69,9 @@ Link* InhibitoryActivation::getOutputLink(int bsId) const {
 }
 
 int InhibitoryActivation::getOutputKey(Link* l) const {
-    BSType* wildcard = static_cast<ActivationDefinition*>(type)->getWildcard();
+    // TODO: Need to properly implement getWildcard method
+    // BSType* wildcard = static_cast<ActivationDefinition*>(type)->getWildcard();
+    BSType* wildcard = nullptr; // Temporary fix
     BSType* outputBSType = static_cast<SynapseDefinition*>(l->getSynapse()->getType())->mapTransitionForward(wildcard);
     BindingSignal* outputBS = l->getOutput()->getBindingSignal(outputBSType);
     return outputBS->getTokenId();

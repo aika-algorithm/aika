@@ -20,7 +20,7 @@ public:
     long createNeuronId();
     void registerDocument(Document* doc);
     void deregisterDocument(Document* doc);
-    long getLowestDocumentId();
+    long getLowestDocumentId() const;
     void addToN(int l);
     long getN() const;
     void setN(long n);
@@ -51,8 +51,8 @@ private:
     std::map<long, Neuron*> activeNeurons;
     std::map<long, Document*> documents;
     long lastProcessedDocument;
-    std::mutex documentMutex;
-    std::mutex neuronMutex;
+    mutable std::mutex documentMutex;
+    mutable std::mutex neuronMutex;
 };
 
 #endif // NETWORK_MODEL_H

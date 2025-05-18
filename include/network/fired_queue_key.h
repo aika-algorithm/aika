@@ -12,8 +12,8 @@ public:
 
     long getFired() const;
     long getCreated() const;
-    std::string toString() const override;
-    int compareTo(QueueKey* qk) const override;
+    std::string toString() const;
+    int compareTo(QueueKey* qk) const;
 
 private:
     static const std::function<int(const FiredQueueKey*, const FiredQueueKey*)> COMPARATOR;

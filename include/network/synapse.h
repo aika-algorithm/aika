@@ -10,8 +10,9 @@
 #include "network/binding_signal.h"
 #include "network/link.h"
 #include "network/timestamp.h"
-#include "network/direction.h"
-#include "network/model.h"
+// Forward declarations
+class NetworkDirection;
+class Model;
 
 #include <map>
 #include <vector>
@@ -23,8 +24,8 @@ public:
 
     virtual ~Synapse() = default;
 
-    virtual RelatedObjectIterable* followManyRelation(Relation* rel) const = 0;
-    virtual Obj* followSingleRelation(const Relation* rel) = 0;
+    virtual RelatedObjectIterable* followManyRelation(Relation* rel) const override = 0;
+    virtual Obj* followSingleRelation(const Relation* rel) const override = 0;
 
     int getSynapseId() const;
     void setSynapseId(int synapseId);
@@ -47,7 +48,7 @@ public:
     Link* createLink(Activation* input, Activation* output);
     Link* createLink(Activation* input, const std::map<BSType*, BindingSignal*>& bindingSignals, Activation* output);
 
-    Direction* getStoredAt() const;
+    NetworkDirection* getStoredAt() const;
 
     NeuronReference* getInputRef() const;
     NeuronReference* getOutputRef() const;

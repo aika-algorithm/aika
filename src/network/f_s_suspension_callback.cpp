@@ -3,6 +3,10 @@
 #include <fstream>
 #include <iostream>
 
+// Define constants for file prefixes
+const std::string MODEL = "model";
+const std::string INDEX = "index";
+
 FSSuspensionCallback::FSSuspensionCallback(const std::filesystem::path& path, const std::string& modelLabel)
     : path(path), modelLabel(modelLabel), currentId(0) {}
 

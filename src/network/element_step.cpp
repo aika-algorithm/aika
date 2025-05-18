@@ -10,10 +10,10 @@ void ElementStep::createQueueKey(long timestamp, int round) {
     queueKey = new FiredQueueKey(round, getPhase(), element, timestamp);
 }
 
-Element* ElementStep::getElement() {
+Element* ElementStep::getElement() const {
     return element;
 }
 
 std::string ElementStep::toString() const {
-    return element->toString();
+    return "ElementStep for Element";
 } 

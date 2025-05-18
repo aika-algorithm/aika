@@ -12,22 +12,22 @@
 
 #include <string>
 
-class Output : public Direction {
+class NetworkOutput : public NetworkDirection {
 public:
-    Direction* invert() override;
+    NetworkDirection* invert() override;
 
     template <typename I>
-    I getInput(I from, I to) override;
+    I getInput(I from, I to);
 
     template <typename O>
-    O getOutput(O from, O to) override;
+    O getOutput(O from, O to);
 
     Neuron* getNeuron(Model* m, Synapse* s) override;
     Activation* getActivation(Link* l) override;
     BSType* transition(BSType* s, Transition* trns) override;
     int getOrder() override;
-    void write(std::ostream& out) override;
-    std::string toString() override;
+//    void write(std::ostream& out) override;
+    std::string toString();
 };
 
 #endif // NETWORK_OUTPUT_H 

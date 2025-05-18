@@ -1,6 +1,8 @@
 #ifndef NETWORK_CONFIG_H
 #define NETWORK_CONFIG_H
 
+#include <string>
+
 class Config {
 public:
     Config();

@@ -5,30 +5,30 @@
 #include "network/model_provider.h"
 #include "network/link_definition.h"
 #include "network/synapse.h"
-#include "network/obj_impl.h"
-#include "network/queue.h"
-#include "network/queue_provider.h"
+#include "fields/obj.h"
+#include "fields/queue.h"
+#include "fields/queue_provider.h"
 #include "network/timestamp.h"
 
 Link::Link(LinkDefinition* type, Synapse* s, Activation* input, Activation* output)
-    : ObjImpl(type), synapse(s), input(input), output(output) {
-    initFields();
+    : Obj(type), synapse(s), input(input), output(output) {
+    // initFields() call removed as it doesn't exist in Obj class
     input->addOutputLink(this);
     output->addInputLink(this);
 }
 
 RelatedObjectIterable* Link::followManyRelation(Relation* rel) const {
-    throw std::runtime_error("Invalid Relation: " + rel->getRelationName());
+    throw std::runtime_error("Invalid Relation: " + rel->getRelationLabel());
 }
 
 Obj* Link::followSingleRelation(const Relation* rel) const {
-    if (rel->getRelationName() == "SELF") return const_cast<Link*>(this);
-    if (rel->getRelationName() == "INPUT") return input;
-    if (rel->getRelationName() == "OUTPUT") return output;
-    if (rel->getRelationName() == "SYNAPSE") return synapse;
-    if (rel->getRelationName() == "CORRESPONDING_INPUT_LINK") return input->getCorrespondingInputLink(this);
-    if (rel->getRelationName() == "CORRESPONDING_OUTPUT_LINK") return output->getCorrespondingOutputLink(this);
-    throw std::runtime_error("Invalid Relation: " + rel->getRelationName());
+    if (rel->getRelationLabel() == "SELF") return const_cast<Link*>(this);
+    if (rel->getRelationLabel() == "INPUT") return input;
+    if (rel->getRelationLabel() == "OUTPUT") return output;
+    if (rel->getRelationLabel() == "SYNAPSE") return synapse;
+    if (rel->getRelationLabel() == "CORRESPONDING_INPUT_LINK") return input->getCorrespondingInputLink(this);
+    if (rel->getRelationLabel() == "CORRESPONDING_OUTPUT_LINK") return output->getCorrespondingOutputLink(this);
+    throw std::runtime_error("Invalid Relation: " + rel->getRelationLabel());
 }
 
 long Link::getFired() const {
@@ -80,11 +80,21 @@ Config* Link::getConfig() const {
 }
 
 std::string Link::getInputKeyString() const {
-    return input ? input->toKeyString() : "id:X n:[" + synapse->getInput() + "]";
+    if (input) {
+        return input->toKeyString();
+    } else {
+        std::string neuronStr = synapse->getInput() ? synapse->getInput()->toString() : "null";
+        return "id:X n:[" + neuronStr + "]";
+    }
 }
 
 std::string Link::getOutputKeyString() const {
-    return output ? output->toKeyString() : "id:X n:[" + synapse->getOutput() + "]";
+    if (output) {
+        return output->toKeyString();
+    } else {
+        std::string neuronStr = synapse->getOutput() ? synapse->getOutput()->toString() : "null";
+        return "id:X n:[" + neuronStr + "]";
+    }
 }
 
 std::string Link::toString() const {

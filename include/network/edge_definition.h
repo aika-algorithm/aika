@@ -3,7 +3,7 @@
 
 #include "network/typedefs.h"
 
-class EdgeDefinition : public Type {
+class EdgeDefinition {
 public:
     EdgeDefinition();
     virtual ~EdgeDefinition();

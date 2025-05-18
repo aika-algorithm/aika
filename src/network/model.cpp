@@ -30,7 +30,7 @@ long Model::createNeuronId() {
     return suspensionCallback->createId();
 }
 
-long Model::getLowestDocumentId() {
+long Model::getLowestDocumentId() const {
     std::lock_guard<std::mutex> lock(documentMutex);
     if (documents.empty()) {
         return -1; // Equivalent to returning null in Java
@@ -135,9 +135,9 @@ long Model::createThoughtId() {
     return ++documentIdCounter;
 }
 
-Config *Model::getConfig() {
+Config *Model::getConfig() const {
     if (!config) {
-        config = new Config();
+        const_cast<Model*>(this)->config = new Config();
     }
     return config;
 }

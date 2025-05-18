@@ -6,12 +6,13 @@
 
 class ConjunctiveActivation : public Activation {
 public:
-    ConjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType, BindingSignal*> bindingSignals);
+    ConjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
     virtual ~ConjunctiveActivation();
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
     
     void linkIncoming(Activation* excludedInputAct) override;
+    void linkIncoming(Synapse* targetSyn, Activation* excludedInputAct);
     void addInputLink(Link* l) override;
     std::vector<Link*> getInputLinks() const override;
 

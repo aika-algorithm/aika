@@ -3,14 +3,15 @@
 #include "network/synapse_definition.h"
 #include "fields/relation.h"
 #include "fields/rel_obj_iterator.h"
+#include <cassert>
 
-ConjunctiveActivation::ConjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType, BindingSignal*> bindingSignals)
+ConjunctiveActivation::ConjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
     : Activation(t, parent, id, n, doc, bindingSignals) {}
 
 ConjunctiveActivation::~ConjunctiveActivation() {}
 
 RelatedObjectIterable* ConjunctiveActivation::followManyRelation(Relation* rel) const {
-    if (rel->getRelationName() == "INPUT") {
+    if (rel->getRelationLabel() == "INPUT") {
         // Convert inputLinks to a vector of Obj*
         std::vector<Obj*> objs;
         for (const auto& pair : inputLinks) {
@@ -25,7 +26,12 @@ RelatedObjectIterable* ConjunctiveActivation::followManyRelation(Relation* rel) 
 
 void ConjunctiveActivation::linkIncoming(Activation* excludedInputAct) {
     for (auto& s : neuron->getInputSynapsesAsStream()) {
-        if (static_cast<SynapseDefinition*>(s->getType())->isIncomingLinkingCandidate(getBindingSignals().keySet())) {
+        // Extract keys from the map (BSType* pointers)
+        std::set<BSType*> bsKeys;
+        for (const auto& pair : getBindingSignals()) {
+            bsKeys.insert(pair.first);
+        }
+        if (static_cast<SynapseDefinition*>(s->getType())->isIncomingLinkingCandidate(bsKeys)) {
             linkIncoming(s, excludedInputAct);
         }
     }

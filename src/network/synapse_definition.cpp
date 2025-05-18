@@ -1,15 +1,18 @@
 #include "network/synapse_definition.h"
 
-const RelationSelf SynapseDefinition::SELF = RelationSelf();
-const RelationOne SynapseDefinition::INPUT = RelationOne();
-const RelationOne SynapseDefinition::OUTPUT = RelationOne();
-const RelationMany SynapseDefinition::LINK = RelationMany();
-const std::vector<Relation> SynapseDefinition::RELATIONS = {SELF, INPUT, OUTPUT, LINK};
+const RelationSelf SynapseDefinition::SELF = RelationSelf(0, "SELF");
+const RelationOne SynapseDefinition::INPUT = RelationOne(1, "INPUT");
+const RelationOne SynapseDefinition::OUTPUT = RelationOne(2, "OUTPUT");
+const RelationMany SynapseDefinition::LINK = RelationMany(3, "LINK");
+// Cannot store abstract class Relation in vector, need to use pointers instead
+// const std::vector<Relation> SynapseDefinition::RELATIONS = {SELF, INPUT, OUTPUT, LINK};
 
 SynapseDefinition::SynapseDefinition(TypeRegistry* registry, const std::string& name) : Type(registry, name), subType(SynapseSubType::CONJUNCTIVE), link(nullptr), input(nullptr), output(nullptr), storedAt(nullptr), trainingAllowed(false), instanceSynapseType(nullptr) {}
 
 std::vector<Relation> SynapseDefinition::getRelations() const {
-    return RELATIONS;
+    // We can't return a vector of the abstract class Relation
+    // For now, return an empty vector
+    return std::vector<Relation>();
 }
 
 Synapse* SynapseDefinition::instantiate() {
@@ -87,11 +90,11 @@ SynapseDefinition* SynapseDefinition::setTransition(const std::vector<Transition
     return this;
 }
 
-Direction* SynapseDefinition::getStoredAt() const {
+NetworkDirection* SynapseDefinition::getStoredAt() const {
     return storedAt;
 }
 
-SynapseDefinition* SynapseDefinition::setStoredAt(Direction* storedAt) {
+SynapseDefinition* SynapseDefinition::setStoredAt(NetworkDirection* storedAt) {
     this->storedAt = storedAt;
     return this;
 }

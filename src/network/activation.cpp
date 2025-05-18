@@ -3,12 +3,20 @@
 #include "network/input.h"
 #include "network/output.h"
 #include "network/activation_definition.h"
+#include "fields/rel_obj_iterator.h"
+#include "fields/field.h"
+#include "network/document.h"
+#include "network/fired.h" // Include for Fired class
+#include "network/link.h" // Include for Link class
+#include "network/binding_signal.h" // Include for BindingSignal class
+#include <cassert>
+#include <stdexcept>
 
 const std::function<bool(Activation*, Activation*)> Activation::ID_COMPARATOR = [](Activation* a1, Activation* a2) {
     return a1->getId() < a2->getId();
 };
 
-Activation::Activation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType, BindingSignal*> bindingSignals)
+Activation::Activation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
     : Obj(t), id(id), neuron(n), doc(doc), bindingSignals(bindingSignals), parent(parent), created(-1), fired(-1), firedStep(new Fired(this)) {
     doc->addActivation(this);
     neuron->updateLastUsed(doc->getId());
@@ -21,11 +29,11 @@ Activation::~Activation() {
 
 RelatedObjectIterable* Activation::followManyRelation(Relation* rel) const {
     // Create a custom iterable for each relation type
-    if (rel->getRelationName() == "INPUT") {
+    if (rel->getRelationLabel() == "INPUT") {
         // Since getInputLinks() is pure virtual, derived classes should implement specialized behavior
         // This base implementation handles the common case for OUTPUT relations
         return nullptr;
-    } else if (rel->getRelationName() == "OUTPUT") {
+    } else if (rel->getRelationLabel() == "OUTPUT") {
         // Convert getOutputLinks() vector to an iterable
         std::vector<Link*> links = const_cast<Activation*>(this)->getOutputLinks();
         std::vector<Obj*> objs;
@@ -34,14 +42,14 @@ RelatedObjectIterable* Activation::followManyRelation(Relation* rel) const {
         }
         return new VectorObjectIterable(objs);
     } else {
-        throw std::runtime_error("Invalid Relation: " + rel->getRelationName());
+        throw std::runtime_error("Invalid Relation: " + rel->getRelationLabel());
     }
 }
 
 Obj* Activation::followSingleRelation(const Relation* rel) const {
-    if (rel->getRelationName() == "SELF") {
+    if (rel->getRelationLabel() == "SELF") {
         return const_cast<Activation*>(this);
-    } else if (rel->getRelationName() == "NEURON") {
+    } else if (rel->getRelationLabel() == "NEURON") {
         return neuron;
     } else {
         throw std::runtime_error("Invalid Relation");
@@ -62,7 +70,7 @@ void Activation::addOutputLink(Link* l) {
     outputLinks[oAct->getId()] = l;
 }
 
-BindingSignal* Activation::getBindingSignal(BSType s) const {
+BindingSignal* Activation::getBindingSignal(BSType* s) const {
     auto it = bindingSignals.find(s);
     if (it != bindingSignals.end()) {
         return it->second;
@@ -70,11 +78,11 @@ BindingSignal* Activation::getBindingSignal(BSType s) const {
     return nullptr;
 }
 
-std::map<BSType, BindingSignal*> Activation::getBindingSignals() const {
+std::map<BSType*, BindingSignal*> Activation::getBindingSignals() const {
     return bindingSignals;
 }
 
-bool Activation::hasConflictingBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals) const {
+bool Activation::hasConflictingBindingSignals(std::map<BSType*, BindingSignal*> targetBindingSignals) const {
     for (const auto& e : targetBindingSignals) {
         if (isConflictingBindingSignal(e.first, e.second)) {
             return true;
@@ -83,13 +91,13 @@ bool Activation::hasConflictingBindingSignals(std::map<BSType, BindingSignal*> t
     return false;
 }
 
-bool Activation::isConflictingBindingSignal(BSType s, BindingSignal* targetBS) const {
+bool Activation::isConflictingBindingSignal(BSType* s, BindingSignal* targetBS) const {
     auto it = bindingSignals.find(s);
     BindingSignal* bs = (it != bindingSignals.end()) ? it->second : nullptr;
     return bs != nullptr && targetBS != bs;
 }
 
-bool Activation::hasNewBindingSignals(std::map<BSType, BindingSignal*> targetBindingSignals) const {
+bool Activation::hasNewBindingSignals(std::map<BSType*, BindingSignal*> targetBindingSignals) const {
     for (const auto& e : targetBindingSignals) {
         if (bindingSignals.find(e.first) == bindingSignals.end()) {
             return true;
@@ -98,9 +106,9 @@ bool Activation::hasNewBindingSignals(std::map<BSType, BindingSignal*> targetBin
     return false;
 }
 
-Activation* Activation::branch(std::map<BSType, BindingSignal*> bindingSignals) {
+Activation* Activation::branch(std::map<BSType*, BindingSignal*> bindingSignals) {
     // TODO: Check: Is it necessary to remove the parents binding-signals beforehand?
-    std::map<BSType, BindingSignal*> newBindingSignals = bindingSignals;
+    std::map<BSType*, BindingSignal*> newBindingSignals = bindingSignals;
     for (const auto& bs : getBindingSignals()) {
         newBindingSignals.erase(bs.first);
     }
@@ -111,8 +119,12 @@ Activation* Activation::branch(std::map<BSType, BindingSignal*> bindingSignals) 
 void Activation::linkOutgoing() {
     neuron->wakeupPropagable();
 
-    for (auto& s : neuron->getOutputSynapses()) {
-        if (static_cast<SynapseDefinition*>(s->getType())->isOutgoingLinkingCandidate(getBindingSignals().keySet())) {
+    for (auto& s : neuron->getOutputSynapsesAsStream()) {
+        std::set<BSType*> bindingSignalKeys;
+        for (const auto& bs : getBindingSignals()) {
+            bindingSignalKeys.insert(bs.first);
+        }
+        if (static_cast<SynapseDefinition*>(s->getType())->isOutgoingLinkingCandidate(bindingSignalKeys)) {
             linkOutgoing(s);
         }
     }
@@ -131,7 +143,7 @@ void Activation::linkOutgoing(Synapse* targetSyn) {
 }
 
 void Activation::propagate(Synapse* targetSyn) {
-    std::map<BSType, BindingSignal*> bindingSignals = targetSyn->transitionForward(getBindingSignals());
+    std::map<BSType*, BindingSignal*> bindingSignals = targetSyn->transitionForward(getBindingSignals());
     Activation* oAct = targetSyn->getOutput(getModel())->createActivation(nullptr, getDocument(), bindingSignals);
 
     targetSyn->createLink(this, bindingSignals, oAct);
@@ -173,7 +185,9 @@ void Activation::setFired(long f) {
 }
 
 void Activation::updateFiredStep(Field* net) {
-    if (!net->exceedsThreshold() || fired != -1) {
+    // TODO: Add exceedsThreshold method to Field class
+    // if (!net->exceedsThreshold() || fired != -1) {
+    if (fired != -1) {
         return;
     }
 
@@ -248,7 +262,8 @@ std::vector<Link*> Activation::getOutputLinks(Synapse* s) const {
 }
 
 int Activation::compareTo(Activation* act) const {
-    return ID_COMPARATOR(this, act) ? -1 : (ID_COMPARATOR(act, this) ? 1 : 0);
+    // For const correctness, we remove const to use with ID_COMPARATOR
+    return id < act->id ? -1 : (id > act->id ? 1 : 0);
 }
 
 bool Activation::equals(Activation* o) const {

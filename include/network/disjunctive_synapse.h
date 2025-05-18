@@ -9,9 +9,9 @@ public:
     DisjunctiveSynapse(SynapseDefinition* type, Neuron* input, Neuron* output);
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
-    Obj* followSingleRelation(const Relation* rel) override;
+    Obj* followSingleRelation(const Relation* rel) const override;
 
-    void link(Model* m) override;
+    void link(Model* m);
 
 private:
     bool propagable;
