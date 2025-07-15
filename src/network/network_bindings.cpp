@@ -22,6 +22,10 @@
 #include "network/binding_signal.h"
 #include "network/transition.h"
 #include "network/bs_type.h"
+#include "network/conjunctive_activation.h"
+#include "network/disjunctive_activation.h"
+#include "network/activation_key.h"
+#include "network/fired.h"
 
 // Fields module includes (for base classes)
 #include "fields/type.h"
@@ -66,7 +70,118 @@ void bind_network(py::module_& m) {
 
     // Bind ActivationDefinition class (inherits from Type)
     py::class_<ActivationDefinition, Type>(m, "ActivationDefinition")
-        .def(py::init<TypeRegistry*, const std::string&>());
+        .def(py::init<TypeRegistry*, const std::string&>())
+        .def("__str__", [](const ActivationDefinition& ad) {
+            return ad.toString();
+        });
+
+    // Bind ActivationKey class
+    py::class_<ActivationKey>(m, "ActivationKey")
+        .def(py::init<long, int>())
+        .def("getNeuronId", &ActivationKey::getNeuronId)
+        .def("getActId", &ActivationKey::getActId);
+
+    // Bind Document class (inherits from Queue, ModelProvider, QueueProvider)
+    py::class_<Document, Queue>(m, "Document")
+        .def(py::init<Model*, int>())
+        .def("getId", &Document::getId)
+        .def("getTimeout", &Document::getTimeout)
+        .def("process", &Document::process)
+        .def("getModel", &Document::getModel, py::return_value_policy::reference_internal)
+        .def("getConfig", &Document::getConfig, py::return_value_policy::reference_internal)
+        .def("getCurrentStep", &Document::getCurrentStep, py::return_value_policy::reference_internal)
+        .def("addActivation", &Document::addActivation)
+        .def("getActivations", &Document::getActivations, py::return_value_policy::reference_internal)
+        .def("getActivationByNeuron", &Document::getActivationByNeuron, py::return_value_policy::reference_internal)
+        .def("createActivationId", &Document::createActivationId)
+        .def("disconnect", &Document::disconnect)
+        .def("getQueue", &Document::getQueue, py::return_value_policy::reference_internal)
+        .def("addToken", &Document::addToken, py::return_value_policy::reference_internal)
+        .def("getOrCreateBindingSignal", &Document::getOrCreateBindingSignal, py::return_value_policy::reference_internal)
+        .def("getBindingSignal", &Document::getBindingSignal, py::return_value_policy::reference_internal)
+        .def("__str__", [](const Document& d) {
+            return d.toString();
+        });
+
+    // Bind Link class (inherits from Object)
+    py::class_<Link, Object>(m, "Link")
+        .def(py::init<LinkDefinition*, Synapse*, Activation*, Activation*>())
+        .def("getFired", &Link::getFired)
+        .def("getCreated", &Link::getCreated)
+        .def("getSynapse", &Link::getSynapse, py::return_value_policy::reference_internal)
+        .def("setSynapse", &Link::setSynapse)
+        .def("getInput", &Link::getInput, py::return_value_policy::reference_internal)
+        .def("getOutput", &Link::getOutput, py::return_value_policy::reference_internal)
+        .def("isCausal", &Link::isCausal)
+        .def_static("isCausal", &Link::isCausal)
+        .def("getDocument", &Link::getDocument, py::return_value_policy::reference_internal)
+        .def("getQueue", &Link::getQueue, py::return_value_policy::reference_internal)
+        .def("getModel", &Link::getModel, py::return_value_policy::reference_internal)
+        .def("getConfig", &Link::getConfig, py::return_value_policy::reference_internal)
+        .def("getInputKeyString", &Link::getInputKeyString)
+        .def("getOutputKeyString", &Link::getOutputKeyString)
+        .def("toKeyString", &Link::toKeyString)
+        .def("__str__", [](const Link& l) {
+            return l.toString();
+        });
+
+    // Bind Activation base class (inherits from Object)
+    py::class_<Activation, Object>(m, "Activation")
+        .def("getKey", &Activation::getKey)
+        .def("getParent", &Activation::getParent, py::return_value_policy::reference_internal)
+        .def("addOutputLink", &Activation::addOutputLink)
+        .def("getBindingSignal", &Activation::getBindingSignal, py::return_value_policy::reference_internal)
+        .def("getBindingSignals", &Activation::getBindingSignals, py::return_value_policy::reference_internal)
+        .def("hasConflictingBindingSignals", &Activation::hasConflictingBindingSignals)
+        .def("isConflictingBindingSignal", &Activation::isConflictingBindingSignal)
+        .def("hasNewBindingSignals", &Activation::hasNewBindingSignals)
+        .def("branch", &Activation::branch, py::return_value_policy::reference_internal)
+        .def("linkOutgoing", py::overload_cast<>(&Activation::linkOutgoing))
+        .def("linkOutgoing", py::overload_cast<Synapse*>(&Activation::linkOutgoing))
+        .def("propagate", &Activation::propagate)
+        .def("collectLinkingTargets", &Activation::collectLinkingTargets, py::return_value_policy::reference_internal)
+        .def("getId", &Activation::getId)
+        .def("getCreated", &Activation::getCreated)
+        .def("setCreated", &Activation::setCreated)
+        .def("getFired", &Activation::getFired)
+        .def("setFired", py::overload_cast<>(&Activation::setFired))
+        .def("setFired", py::overload_cast<long>(&Activation::setFired))
+        .def("updateFiredStep", &Activation::updateFiredStep)
+        .def("getQueue", &Activation::getQueue, py::return_value_policy::reference_internal)
+        .def("getNeuron", &Activation::getNeuron, py::return_value_policy::reference_internal)
+        .def("getDocument", &Activation::getDocument, py::return_value_policy::reference_internal)
+        .def("getModel", &Activation::getModel, py::return_value_policy::reference_internal)
+        .def("getConfig", &Activation::getConfig, py::return_value_policy::reference_internal)
+        .def("getCorrespondingInputLink", &Activation::getCorrespondingInputLink, py::return_value_policy::reference_internal)
+        .def("getCorrespondingOutputLink", &Activation::getCorrespondingOutputLink, py::return_value_policy::reference_internal)
+        .def("getInputLinks", py::overload_cast<LinkDefinition*>(&Activation::getInputLinks, py::const_), py::return_value_policy::reference_internal)
+        .def("getOutputLinks", py::overload_cast<LinkDefinition*>(&Activation::getOutputLinks, py::const_), py::return_value_policy::reference_internal)
+        .def("getOutputLinks", py::overload_cast<>(&Activation::getOutputLinks, py::const_), py::return_value_policy::reference_internal)
+        .def("getOutputLink", &Activation::getOutputLink, py::return_value_policy::reference_internal)
+        .def("getOutputLinks", py::overload_cast<Synapse*>(&Activation::getOutputLinks, py::const_), py::return_value_policy::reference_internal)
+        .def("compareTo", &Activation::compareTo)
+        .def("equals", &Activation::equals)
+        .def("hashCode", &Activation::hashCode)
+        .def("toKeyString", &Activation::toKeyString)
+        .def("__str__", [](const Activation& a) {
+            return a.toString();
+        })
+        .def_readonly_static("ID_COMPARATOR", &Activation::ID_COMPARATOR);
+
+    // Bind ConjunctiveActivation (inherits from Activation)
+    py::class_<ConjunctiveActivation, Activation>(m, "ConjunctiveActivation")
+        .def(py::init<ActivationDefinition*, Activation*, int, Neuron*, Document*, std::map<BSType*, BindingSignal*>>())
+        .def("linkIncoming", py::overload_cast<Activation*>(&ConjunctiveActivation::linkIncoming))
+        .def("linkIncoming", py::overload_cast<Synapse*, Activation*>(&ConjunctiveActivation::linkIncoming))
+        .def("addInputLink", &ConjunctiveActivation::addInputLink)
+        .def("getInputLinks", &ConjunctiveActivation::getInputLinks, py::return_value_policy::reference_internal);
+
+    // Bind DisjunctiveActivation (inherits from Activation)
+    py::class_<DisjunctiveActivation, Activation>(m, "DisjunctiveActivation")
+        .def(py::init<ActivationDefinition*, Activation*, int, Neuron*, Document*, std::map<BSType*, BindingSignal*>>())
+        .def("linkIncoming", &DisjunctiveActivation::linkIncoming)
+        .def("addInputLink", &DisjunctiveActivation::addInputLink)
+        .def("getInputLinks", &DisjunctiveActivation::getInputLinks, py::return_value_policy::reference_internal);
 
     // Bind NeuronDefinition class (inherits from Type)
     py::class_<NeuronDefinition, Type>(m, "NeuronDefinition")
