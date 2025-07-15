@@ -124,6 +124,7 @@ set(SOURCES
         src/network/synapse_definition.cpp
         src/network/transition.cpp
         src/network/utils.cpp
+        src/network/network_bindings.cpp
 )
 
 include_directories(${PROJECT_SOURCE_DIR}/include)

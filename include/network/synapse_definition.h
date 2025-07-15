@@ -8,6 +8,7 @@
 #include "network/activation.h"
 #include "network/binding_signal.h"
 #include "network/transition.h"
+
 // Forward declarations
 class Synapse;
 class Neuron;

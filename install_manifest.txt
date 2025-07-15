@@ -15,6 +15,7 @@
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/save.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/disjunctive_synapse.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/transition.h
+/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/network_bindings.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/edge_definition.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/conjunctive_synapse.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/missing_neuron_exception.h
