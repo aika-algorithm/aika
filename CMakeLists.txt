@@ -24,7 +24,7 @@ set(SOURCES
         src/fields/summation.cpp
         src/fields/field_activation_function.cpp
         src/fields/field_link_definition.cpp
-        src/fields/obj.cpp
+        src/fields/object.cpp
         src/fields/type.cpp
         src/fields/type_registry.cpp
         src/fields/flattened_type.cpp

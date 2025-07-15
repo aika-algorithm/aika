@@ -6,9 +6,9 @@
 #include "fields/rel_obj_iterator.h"
 #include "fields/field.h"
 #include "network/document.h"
-#include "network/fired.h" // Include for Fired class
-#include "network/link.h" // Include for Link class
-#include "network/binding_signal.h" // Include for BindingSignal class
+#include "network/fired.h"
+#include "network/link.h"
+#include "network/binding_signal.h"
 #include <cassert>
 #include <stdexcept>
 
@@ -17,7 +17,7 @@ const std::function<bool(Activation*, Activation*)> Activation::ID_COMPARATOR = 
 };
 
 Activation::Activation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
-    : Obj(t), id(id), neuron(n), doc(doc), bindingSignals(bindingSignals), parent(parent), created(-1), fired(-1), firedStep(new Fired(this)) {
+    : Object(t), id(id), neuron(n), doc(doc), bindingSignals(bindingSignals), parent(parent), created(-1), fired(-1), firedStep(new Fired(this)) {
     doc->addActivation(this);
     neuron->updateLastUsed(doc->getId());
     setCreated(doc->getCurrentTimestamp());
@@ -36,9 +36,9 @@ RelatedObjectIterable* Activation::followManyRelation(Relation* rel) const {
     } else if (rel->getRelationLabel() == "OUTPUT") {
         // Convert getOutputLinks() vector to an iterable
         std::vector<Link*> links = const_cast<Activation*>(this)->getOutputLinks();
-        std::vector<Obj*> objs;
+        std::vector<Object*> objs;
         for (Link* link : links) {
-            objs.push_back(static_cast<Obj*>(link));
+            objs.push_back(static_cast<Object*>(link));
         }
         return new VectorObjectIterable(objs);
     } else {
@@ -46,7 +46,7 @@ RelatedObjectIterable* Activation::followManyRelation(Relation* rel) const {
     }
 }
 
-Obj* Activation::followSingleRelation(const Relation* rel) const {
+Object* Activation::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationLabel() == "SELF") {
         return const_cast<Activation*>(this);
     } else if (rel->getRelationLabel() == "NEURON") {

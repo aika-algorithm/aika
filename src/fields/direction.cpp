@@ -12,7 +12,7 @@
 #include "fields/field_definition.h"
 #include "fields/field_link_definition.h"
 #include "fields/relation.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/flattened_type.h"
 
 // Initialize static members
@@ -42,7 +42,7 @@ FlattenedType* Input::getFlattenedType(Type* type) const {
 
 void Input::transmit(Field* originField,
                      FieldLinkDefinition* fl,
-                     Obj* relatedObject) const {
+                     Object* relatedObject) const {
     double inputFieldValue = relatedObject->getFieldValue(fl->getRelatedFD()); // Get the field value from the related object
     fl->getOriginFD()->transmit(originField, fl->getOppositeSide(), inputFieldValue); // Transmit the value to the output field
 }
@@ -70,7 +70,7 @@ FlattenedType* Output::getFlattenedType(Type* type) const {
 
 void Output::transmit(Field* originField,
                       FieldLinkDefinition* fl,
-                      Obj* relatedObject) const {
+                      Object* relatedObject) const {
     // Transmit the related field value using the related field definition
     fl->getRelatedFD()->transmit(
         relatedObject->getOrCreateFieldInput(fl->getRelatedFD()), // Create or get the input field

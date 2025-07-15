@@ -62,7 +62,7 @@ public:
     FieldDefinition*** getFieldsReverse();
     FieldDefinition* getFieldDefinitionIdByIndex(short idx);
 
-    void followLinks(FlattenedTypeRelation* ftr, Obj* relatedObj, Field* field);
+    void followLinks(FlattenedTypeRelation* ftr, Object* relatedObj, Field* field);
 };
 
 #endif // FLATTENED_TYPE_H

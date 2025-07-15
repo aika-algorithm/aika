@@ -5,14 +5,14 @@
 #include "network/model_provider.h"
 #include "network/link_definition.h"
 #include "network/synapse.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/queue.h"
 #include "fields/queue_provider.h"
 #include "network/timestamp.h"
 
 Link::Link(LinkDefinition* type, Synapse* s, Activation* input, Activation* output)
-    : Obj(type), synapse(s), input(input), output(output) {
-    // initFields() call removed as it doesn't exist in Obj class
+    : Object(type), synapse(s), input(input), output(output) {
+    // initFields() call removed as it doesn't exist in Object class
     input->addOutputLink(this);
     output->addInputLink(this);
 }
@@ -21,7 +21,7 @@ RelatedObjectIterable* Link::followManyRelation(Relation* rel) const {
     throw std::runtime_error("Invalid Relation: " + rel->getRelationLabel());
 }
 
-Obj* Link::followSingleRelation(const Relation* rel) const {
+Object* Link::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationLabel() == "SELF") return const_cast<Link*>(this);
     if (rel->getRelationLabel() == "INPUT") return input;
     if (rel->getRelationLabel() == "OUTPUT") return output;

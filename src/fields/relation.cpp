@@ -20,11 +20,11 @@ Relation* Relation::getReverse() {
 RelationMany::RelationMany(int relationId, const std::string& relationName)
     : Relation(relationId, relationName) {}
 
-RelatedObjectIterable* RelationMany::followMany(Obj* fromObj) {
+RelatedObjectIterable* RelationMany::followMany(Object* fromObj) {
     return fromObj->followManyRelation(this); // Call the followManyRelation method of the Obj object
 }
 
-bool RelationMany::testRelation(Obj* fromObj, Obj* toObj) const {
+bool RelationMany::testRelation(Object* fromObj, Object* toObj) const {
     return reversed->testRelation(toObj, fromObj); // Test the reverse relation
 }
 
@@ -35,16 +35,16 @@ std::string RelationMany::getRelationLabel() const {
 RelationOne::RelationOne(int relationId, const std::string& relationName)
     : Relation(relationId, relationName) {}
 
-Obj* RelationOne::followOne(Obj* fromObj) const {
+Object* RelationOne::followOne(Object* fromObj) const {
     return fromObj->followSingleRelation(this); // Call the followSingleRelation method of the Obj object
 }
 
-RelatedObjectIterable* RelationOne::followMany(Obj* fromObj) {
+RelatedObjectIterable* RelationOne::followMany(Object* fromObj) {
     auto toObj = followOne(fromObj); // Follow the relation one
     return new SingleObjectIterable(toObj); // Return as a vector
 }
 
-bool RelationOne::testRelation(Obj* fromObj, Obj* toObj) const {
+bool RelationOne::testRelation(Object* fromObj, Object* toObj) const {
     return followOne(fromObj) == toObj; // Test if the single related object matches the given one
 }
 
@@ -56,15 +56,15 @@ std::string RelationOne::getRelationLabel() const {
 RelationSelf::RelationSelf(int relationId, const std::string& relationName)
     : RelationOne(relationId, relationName) {}
 
-Obj* RelationSelf::followOne(Obj* fromObj) const {
+Object* RelationSelf::followOne(Object* fromObj) const {
     return fromObj; // Return the same object
 }
 
-RelatedObjectIterable* RelationSelf::followMany(Obj* fromObj) {
+RelatedObjectIterable* RelationSelf::followMany(Object* fromObj) {
     return new SingleObjectIterable(fromObj); // Return a singleton iterable with the same object
 }
 
-bool RelationSelf::testRelation(Obj* fromObj, Obj* toObj) const {
+bool RelationSelf::testRelation(Object* fromObj, Object* toObj) const {
     return fromObj == toObj; // Test if both objects are the same
 }
 

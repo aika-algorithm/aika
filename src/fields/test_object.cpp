@@ -1,10 +1,10 @@
 #include "fields/test_object.h"
 
 // Constructor
-TestObject::TestObject(TestType* type) : Obj(type) {}
+TestObject::TestObject(TestType* type) : Object(type) {}
 
 // Follow a single relation
-Obj* TestObject::followSingleRelation(const Relation* rel) const {
+Object* TestObject::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationId() == TestType::TEST_RELATION_FROM.getRelationId() || rel->getRelationId() == TestType::TEST_RELATION_TO.getRelationId()) {
         return getRelatedTestObject();
     } else {

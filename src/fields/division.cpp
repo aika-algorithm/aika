@@ -5,7 +5,7 @@ Division::Division(Type* ref, const std::string& name)
     : AbstractFunctionDefinition(ref, name, 2, 0.0) {}
 
 void Division::initializeField(Field* field) {
-    Obj* toObj = field->getObject();
+    Object* toObj = field->getObject();
     FieldDefinition* fieldDef = field->getFieldDefinition();
     std::vector<FieldLinkDefinition*> inputs = fieldDef->getInputs();
     double dividend = inputs[0]->getInputValue(toObj);
@@ -22,7 +22,7 @@ void Division::initializeField(Field* field) {
 // Overridden computeUpdate method
 // This method computes the update for the division operation
 // based on which argument is being updated.
-double Division::computeUpdate(Obj* obj, FieldLinkDefinition* fl, double u) {
+double Division::computeUpdate(Object* obj, FieldLinkDefinition* fl, double u) {
     if (fl->getArgument() == 0) {
         double divisor = inputs[1]->getInputValue(obj);
         if (divisor == 0.0) {

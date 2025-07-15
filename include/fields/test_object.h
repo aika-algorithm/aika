@@ -1,13 +1,13 @@
 #ifndef TEST_OBJECT_H
 #define TEST_OBJECT_H
 
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/test_type.h"
 #include "fields/relation.h"
 #include <stdexcept>
 #include <vector>
 
-class TestObject : public Obj {
+class TestObject : public Object {
 private:
     TestObject* relatedTestObject = nullptr;
 
@@ -16,7 +16,7 @@ public:
     explicit TestObject(TestType* type);
 
     // Follow a single relation
-    Obj* followSingleRelation(const Relation* rel) const override;
+    Object* followSingleRelation(const Relation* rel) const override;
 
     // Get related test object
     TestObject* getRelatedTestObject() const;

@@ -12,10 +12,10 @@ ConjunctiveActivation::~ConjunctiveActivation() {}
 
 RelatedObjectIterable* ConjunctiveActivation::followManyRelation(Relation* rel) const {
     if (rel->getRelationLabel() == "INPUT") {
-        // Convert inputLinks to a vector of Obj*
-        std::vector<Obj*> objs;
+        // Convert inputLinks to a vector of Object*
+        std::vector<Object*> objs;
         for (const auto& pair : inputLinks) {
-            objs.push_back(static_cast<Obj*>(pair.second));
+            objs.push_back(static_cast<Object*>(pair.second));
         }
         return new VectorObjectIterable(objs);
     } else {

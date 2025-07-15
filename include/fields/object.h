@@ -8,23 +8,23 @@
 #include <fields/rel_obj_iterator.h>
 
 
-class Obj : public QueueProvider {
+class Object : public QueueProvider {
 protected:
     Type* type;
     Field** fields;
 
 public:
-    explicit Obj(Type* type);
+    explicit Object(Type* type);
 
     void initFields();
     Type* getType() const;
     virtual RelatedObjectIterable* followManyRelation(Relation* rel) const = 0;
-    virtual Obj* followSingleRelation(const Relation* rel) const = 0;
+    virtual Object* followSingleRelation(const Relation* rel) const = 0;
     bool isInstanceOf(Type* t) const;
     Field* getFieldInput(FieldDefinition* fd) const;
     Field* getFieldOutput(FieldDefinition* fd) const;
     Field* getOrCreateFieldInput(FieldDefinition* fd);
-    Obj& setFieldValue(FieldDefinition* fd, double v);
+    Object& setFieldValue(FieldDefinition* fd, double v);
     double getFieldValue(FieldDefinition* fd) const;
     double getFieldUpdatedValue(FieldDefinition* fd) const;
     Field** getFields() const;

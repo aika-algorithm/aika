@@ -3,7 +3,7 @@
 
 #include <vector>
 
-class Obj;
+class Object;
 
 class RelatedObjectIterator {
 public:
@@ -11,14 +11,14 @@ public:
 
     virtual bool hasNext() = 0;
 
-    virtual Obj* next() = 0;
+    virtual Object* next() = 0;
 };
 
 class SingleObjectIterator : public RelatedObjectIterator {
-    Obj* _obj;
+    Object* _obj;
 
 public:
-    SingleObjectIterator(Obj* obj) : _obj(obj) {}
+    SingleObjectIterator(Object* obj) : _obj(obj) {}
 
     ~SingleObjectIterator() = default;
 
@@ -26,7 +26,7 @@ public:
         return _obj != nullptr;
     }
 
-    Obj* next() {
+    Object* next() {
         auto obj = _obj;
         _obj = nullptr;
         return obj;
@@ -34,11 +34,11 @@ public:
 };
 
 class VectorObjectIterator : public RelatedObjectIterator {
-    std::vector<Obj*> _objects;
+    std::vector<Object*> _objects;
     size_t _currentIndex;
 
 public:
-    VectorObjectIterator(const std::vector<Obj*>& objects) 
+    VectorObjectIterator(const std::vector<Object*>& objects)
         : _objects(objects), _currentIndex(0) {}
 
     ~VectorObjectIterator() = default;
@@ -47,7 +47,7 @@ public:
         return _currentIndex < _objects.size();
     }
 
-    Obj* next() override {
+    Object* next() override {
         if (!hasNext()) {
             return nullptr;
         }
@@ -67,11 +67,11 @@ public:
         return *this;
     }
 
-    Obj& operator*() {
+    Object& operator*() {
         return baseIt->second;
     }
 
-    Obj* operator->() {
+    Object* operator->() {
         return &baseIt->second;
     }
 
@@ -97,10 +97,10 @@ public:
 };
 
 class SingleObjectIterable : public RelatedObjectIterable {
-    Obj* _obj;
+    Object* _obj;
 
 public:
-    SingleObjectIterable(Obj* obj) : _obj(obj) {}
+    SingleObjectIterable(Object* obj) : _obj(obj) {}
 
     SingleObjectIterator* iterator() const override {
         return new SingleObjectIterator(_obj);
@@ -108,10 +108,10 @@ public:
 };
 
 class VectorObjectIterable : public RelatedObjectIterable {
-    std::vector<Obj*> _objects;
+    std::vector<Object*> _objects;
 
 public:
-    VectorObjectIterable(const std::vector<Obj*>& objects) : _objects(objects) {}
+    VectorObjectIterable(const std::vector<Object*>& objects) : _objects(objects) {}
 
     VectorObjectIterator* iterator() const override {
         return new VectorObjectIterator(_objects);

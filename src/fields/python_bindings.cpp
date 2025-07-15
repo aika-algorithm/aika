@@ -4,7 +4,7 @@
 #include "fields/field_definition.h"
 #include "fields/field_update.h"
 #include "fields/type.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/type_registry.h"
 #include "fields/input_field.h"
 #include "fields/subtraction.h"
@@ -138,24 +138,24 @@ PYBIND11_MODULE(aika, m)
                   );
             }, py::return_value_policy::reference_internal);
 
-      py::class_<Obj>(m, "Obj")
-            .def("__str__", [](const Obj &t) {
+      py::class_<Object>(m, "Object")
+            .def("__str__", [](const Object &t) {
                   return t.toString();
             })
-            .def("getFieldAsString", &Obj::getFieldAsString)
-            .def("setFieldValue", &Obj::setFieldValue)
-            .def("getFieldValue", &Obj::getFieldValue)
-            .def("initFields", &Obj::initFields)
-            .def("getType", &Obj::getType, py::return_value_policy::reference_internal)
-            .def("isInstanceOf", &Obj::isInstanceOf)
-            .def("getFieldOutput", &Obj::getFieldOutput, py::return_value_policy::reference_internal)
-            .def("getOrCreateFieldInput", &Obj::getOrCreateFieldInput, py::return_value_policy::reference_internal);
+            .def("getFieldAsString", &Object::getFieldAsString)
+            .def("setFieldValue", &Object::setFieldValue)
+            .def("getFieldValue", &Object::getFieldValue)
+            .def("initFields", &Object::initFields)
+            .def("getType", &Object::getType, py::return_value_policy::reference_internal)
+            .def("isInstanceOf", &Object::isInstanceOf)
+            .def("getFieldOutput", &Object::getFieldOutput, py::return_value_policy::reference_internal)
+            .def("getOrCreateFieldInput", &Object::getOrCreateFieldInput, py::return_value_policy::reference_internal);
 
       py::class_<TestType, Type>(m, "TestType")
             .def(py::init<TypeRegistry*, const std::string&>())
             .def("instantiate", &TestType::instantiate, py::return_value_policy::reference_internal);    
 
-      py::class_<TestObject, Obj>(m, "TestObj")
+      py::class_<TestObject, Object>(m, "TestObj")
             .def(py::init<TestType*>())
             .def_static("linkObjects", &TestObject::linkObjects);    
 

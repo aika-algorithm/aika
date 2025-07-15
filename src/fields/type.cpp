@@ -1,5 +1,5 @@
 #include "fields/type.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/type_registry.h"
 #include "fields/field_definition.h"
 #include "fields/flattened_type.h"
@@ -72,7 +72,7 @@ int Type::getDepth() const {
     return depth.value();
 }
 
-bool Type::isInstanceOf(Obj* obj) const {
+bool Type::isInstanceOf(Object* obj) const {
     return isInstanceOf(obj->getType());
 }
 

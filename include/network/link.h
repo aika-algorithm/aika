@@ -1,7 +1,7 @@
 #ifndef NETWORK_LINK_H
 #define NETWORK_LINK_H
 
-#include "fields/obj.h"
+#include "fields/object.h"
 
 #include "network/link_definition.h"
 #include "network/element.h"
@@ -16,12 +16,12 @@ class Activation;
 class Document;
 class Model;
 
-class Link : public Obj, public Element, public ModelProvider {
+class Link : public Object, public Element, public ModelProvider {
 public:
     Link(LinkDefinition* type, Synapse* s, Activation* input, Activation* output);
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
-    Obj* followSingleRelation(const Relation* rel) const override;
+    Object* followSingleRelation(const Relation* rel) const override;
     long getFired() const override;
     long getCreated() const override;
     Synapse* getSynapse() const;

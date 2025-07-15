@@ -12,7 +12,7 @@
 #include <string>
 
 #include "fields/queue.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/step.h"
 
 class QueueInterceptor;

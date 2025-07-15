@@ -13,7 +13,7 @@
 #include <vector>
 #include <string>
 
-class Obj;
+class Object;
 class Field;
 class FieldDefinition;
 class FieldLinkDefinition;
@@ -89,7 +89,7 @@ public:
      */
     virtual void transmit(Field* originField,
                           FieldLinkDefinition* fl,
-                          Obj* relatedObject) const = 0;
+                          Object* relatedObject) const = 0;
 };
 
 /**
@@ -108,7 +108,7 @@ public:
     FlattenedType* getFlattenedType(Type* type) const override;
     void transmit(Field* originField,
                   FieldLinkDefinition* fl,
-                  Obj* relatedObject) const override;
+                  Object* relatedObject) const override;
 };
 
 /**
@@ -127,7 +127,7 @@ public:
     FlattenedType* getFlattenedType(Type* type) const override;
     void transmit(Field* originField,
                   FieldLinkDefinition* fl,
-                  Obj* relatedObject) const override;
+                  Object* relatedObject) const override;
 };
 
 #endif // DIRECTION_H

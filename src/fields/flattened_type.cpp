@@ -9,7 +9,7 @@
 #include "fields/flattened_type.h"
 #include "fields/type_registry.h"
 #include "fields/relation.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/field.h"
 #include "fields/utils.h"
 #include "fields/queue_interceptor.h"
@@ -220,7 +220,7 @@ void FlattenedType::followLinks(Field* field) {
  * @param relatedObj The related object to follow links from
  * @param field The field to follow links from
  */
-void FlattenedType::followLinks(FlattenedTypeRelation* ftr, Obj* relatedObj, Field* field) {
+void FlattenedType::followLinks(FlattenedTypeRelation* ftr, Object* relatedObj, Field* field) {
     if (ftr != nullptr) {
         ftr->followLinks(direction, relatedObj, field);
     }

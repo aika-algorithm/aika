@@ -39,7 +39,7 @@ FlattenedTypeRelation::FlattenedTypeRelation(FlattenedType* ft, const std::vecto
     }
 }
 
-void FlattenedTypeRelation::followLinks(Direction* direction, Obj* relatedObj, Field* field) {
+void FlattenedTypeRelation::followLinks(Direction* direction, Object* relatedObj, Field* field) {
     FieldLinkDefinition** flArray = fieldLinks[field->getId()];
 
     int i = 0;

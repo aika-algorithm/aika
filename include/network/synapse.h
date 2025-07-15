@@ -2,7 +2,7 @@
 #define NETWORK_SYNAPSE_H
 
 #include "fields/type_registry.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 
 #include "network/synapse_definition.h"
 #include "network/element.h"
@@ -17,7 +17,7 @@ class Model;
 #include <map>
 #include <vector>
 
-class Synapse : public Obj, public Element {
+class Synapse : public Object, public Element {
 public:
     Synapse(SynapseDefinition* type);
     Synapse(SynapseDefinition* type, Neuron* input, Neuron* output);
@@ -25,7 +25,7 @@ public:
     virtual ~Synapse() = default;
 
     virtual RelatedObjectIterable* followManyRelation(Relation* rel) const override = 0;
-    virtual Obj* followSingleRelation(const Relation* rel) const override = 0;
+    virtual Object* followSingleRelation(const Relation* rel) const override = 0;
 
     int getSynapseId() const;
     void setSynapseId(int synapseId);

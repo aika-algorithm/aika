@@ -2,13 +2,14 @@
 #define NETWORK_ACTIVATION_H
 
 
-#include "fields/obj.h"
+#include "fields/object.h"
 
 #include "network/activation_definition.h"
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/neuron.h"
 #include "network/bs_type.h"
+
 // Forward declarations to avoid circular includes
 class BindingSignal;
 class Link;
@@ -23,16 +24,16 @@ class ActivationKey;
 
 class Document;
 
-class Activation : public Obj, public Element, public ModelProvider {
+class Activation : public Object, public Element, public ModelProvider {
 public:
     static const std::function<bool(Activation*, Activation*)> ID_COMPARATOR;
 
     Activation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
     virtual ~Activation();
 
-    // Implementation of Obj virtual methods
+    // Implementation of Object virtual methods
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
-    Obj* followSingleRelation(const Relation* rel) const override;
+    Object* followSingleRelation(const Relation* rel) const override;
     
     ActivationKey getKey() const;
     Activation* getParent() const;

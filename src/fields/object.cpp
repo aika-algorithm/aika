@@ -3,16 +3,16 @@
 #include <stdexcept>
 #include <algorithm>
 
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/type.h"
 
-Obj::Obj(Type* type) : type(type) {
+Object::Object(Type* type) : type(type) {
     if (type != nullptr) {
         fields = new Field*[type->getFlattenedTypeInputSide()->getNumberOfFields()];
     }
 }
 
-void Obj::initFields() {
+void Object::initFields() {
     for (short i = 0; i < type->getFlattenedTypeInputSide()->getNumberOfFields(); ++i) {
         auto fd = type->getFlattenedTypeInputSide()->getFieldDefinitionIdByIndex(i);
         auto field = getOrCreateFieldInput(fd);
@@ -21,25 +21,25 @@ void Obj::initFields() {
     }
 }
 
-Type* Obj::getType() const {
+Type* Object::getType() const {
     return type;
 }
 
-bool Obj::isInstanceOf(Type* t) const {
+bool Object::isInstanceOf(Type* t) const {
     return type->isInstanceOf(t);
 }
 
-Field* Obj::getFieldInput(FieldDefinition* fd) const {
+Field* Object::getFieldInput(FieldDefinition* fd) const {
     short fieldIndex = type->getFlattenedTypeInputSide()->getFieldIndex(fd);
     return fields[fieldIndex];
 }
 
-Field* Obj::getFieldOutput(FieldDefinition* fd) const {
+Field* Object::getFieldOutput(FieldDefinition* fd) const {
     short fieldIndex = type->getFlattenedTypeOutputSide()->getFieldIndex(fd);
     return fields[fieldIndex];
 }
 
-Field* Obj::getOrCreateFieldInput(FieldDefinition* fd) {
+Field* Object::getOrCreateFieldInput(FieldDefinition* fd) {
     short fieldIndex = type->getFlattenedTypeInputSide()->getFieldIndex(fd);
 
     auto field = fields[fieldIndex];
@@ -50,36 +50,36 @@ Field* Obj::getOrCreateFieldInput(FieldDefinition* fd) {
     return field;
 }
 
-Obj& Obj::setFieldValue(FieldDefinition* fd, double v) {
+Object& Object::setFieldValue(FieldDefinition* fd, double v) {
     getOrCreateFieldInput(fd)->setValue(v);
     return *this;
 }
 
-double Obj::getFieldValue(FieldDefinition* fd) const {
+double Object::getFieldValue(FieldDefinition* fd) const {
     auto f = getFieldOutput(fd);
     return f ? f->getValue() : 0.0;
 }
 
-double Obj::getFieldUpdatedValue(FieldDefinition* fd) const {
+double Object::getFieldUpdatedValue(FieldDefinition* fd) const {
     auto f = getFieldOutput(fd);
     return f ? f->getUpdatedValue() : 0.0;
 }
 
-Field** Obj::getFields() const {
+Field** Object::getFields() const {
     return fields;
 }
 
-std::string Obj::toKeyString() const {
+std::string Object::toKeyString() const {
     return ""; // Implementation as needed
 }
 
-std::string Obj::toString() const {
+std::string Object::toString() const {
     std::stringstream ss;
     ss << type->getId() << ":" << type->getName();
     return ss.str();
 }
 
-std::string Obj::getFieldAsString(FieldDefinition* fd) const {
+std::string Object::getFieldAsString(FieldDefinition* fd) const {
     std::stringstream ss;
     ss << toString() << " fd:<" << fd->toString() << "> Number of inputs:" << fd->getInputs().size() << std::endl;
 

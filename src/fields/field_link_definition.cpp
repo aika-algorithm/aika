@@ -147,7 +147,7 @@ std::string FieldLinkDefinition::toString() const {
  * @param obj The object to get the input field for
  * @return The input field
  */
-Field* FieldLinkDefinition::getInputField(Obj* obj) {
+Field* FieldLinkDefinition::getInputField(Object* obj) {
     RelationOne* rt = (RelationOne*) getRelation();
     auto inputObj = rt->followOne(obj);
     return inputObj->getFieldOutput(getRelatedFD());
@@ -159,7 +159,7 @@ Field* FieldLinkDefinition::getInputField(Obj* obj) {
  * @param obj The object to get the input value for
  * @return The current input value, or 0.0 if no field exists
  */
-double FieldLinkDefinition::getInputValue(Obj* obj) {
+double FieldLinkDefinition::getInputValue(Object* obj) {
     auto f = getInputField(obj);
     return (f != nullptr) ? f->getValue() : 0.0;
 }
@@ -170,7 +170,7 @@ double FieldLinkDefinition::getInputValue(Obj* obj) {
  * @param obj The object to get the updated input value for
  * @return The updated input value, or 0.0 if no field exists
  */
-double FieldLinkDefinition::getUpdatedInputValue(Obj* obj) {
+double FieldLinkDefinition::getUpdatedInputValue(Object* obj) {
     auto f = getInputField(obj);
     return (f != nullptr) ? f->getUpdatedValue() : 0.0;
 }

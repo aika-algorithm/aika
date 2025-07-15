@@ -16,7 +16,7 @@
 #include "fields/field_definition.h"
 #include "fields/relation.h"
 #include "fields/direction.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 
 /**
  * @class FieldLinkDefinition
@@ -143,7 +143,7 @@ public:
      * @param obj The object to get the input field for
      * @return The input field
      */
-    Field* getInputField(Obj* obj);
+    Field* getInputField(Object* obj);
 
     /**
      * @brief Gets the current input value for a given object
@@ -151,7 +151,7 @@ public:
      * @param obj The object to get the input value for
      * @return The current input value
      */
-    double getInputValue(Obj* obj);
+    double getInputValue(Object* obj);
 
     /**
      * @brief Gets the updated input value for a given object
@@ -159,7 +159,7 @@ public:
      * @param obj The object to get the updated input value for
      * @return The updated input value
      */
-    double getUpdatedInputValue(Obj* obj);
+    double getUpdatedInputValue(Object* obj);
 
     /**
      * @brief Converts the field link definition to a string representation

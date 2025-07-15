@@ -8,10 +8,10 @@
 // Need to add the missing SynapseDefinition* type member to Synapse class
 // This will be a temporary fix until the proper header update is done
 
-Synapse::Synapse(SynapseDefinition* type) : Obj(type), synapseId(0), input(nullptr), output(nullptr), propagable(false) {}
+Synapse::Synapse(SynapseDefinition* type) : Object(type), synapseId(0), input(nullptr), output(nullptr), propagable(false) {}
 
 Synapse::Synapse(SynapseDefinition* type, Neuron* input, Neuron* output)
-    : Obj(type), synapseId(0), 
+    : Object(type), synapseId(0),
       input(new NeuronReference(input, RefType::SYNAPSE_IN)), 
       output(new NeuronReference(output, RefType::SYNAPSE_OUT)), 
       propagable(false) 
@@ -26,7 +26,7 @@ Synapse::Synapse(SynapseDefinition* type, Neuron* input, Neuron* output)
 // }
 
 // This is a pure virtual method in Synapse, so the implementation should be in the derived classes
-// Obj* Synapse::followSingleRelation(const Relation* rel) const {
+// Object* Synapse::followSingleRelation(const Relation* rel) const {
 //     // Not implemented in base class
 //     return nullptr;
 // }

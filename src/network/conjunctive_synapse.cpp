@@ -11,7 +11,7 @@ RelatedObjectIterable* ConjunctiveSynapse::followManyRelation(Relation* rel) con
     throw std::runtime_error("Invalid Relation for ConjunctiveSynapse: " + rel->getRelationLabel());
 }
 
-Obj* ConjunctiveSynapse::followSingleRelation(const Relation* rel) const {
+Object* ConjunctiveSynapse::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationLabel() == "SELF") {
         return const_cast<ConjunctiveSynapse*>(this);
     } else if (rel->getRelationLabel() == "INPUT") {

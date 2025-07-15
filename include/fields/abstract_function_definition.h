@@ -12,7 +12,7 @@
 
 #include "fields/field_definition.h"
 #include "fields/type.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/field.h"
 
 /**
@@ -48,7 +48,7 @@ public:
      * @param numInputs Number of inputs (must match constructor value)
      * @return The computed update value
      */
-    virtual double computeUpdate(Obj* obj, FieldLinkDefinition* fl, double u) = 0;
+    virtual double computeUpdate(Object* obj, FieldLinkDefinition* fl, double u) = 0;
 
     /**
      * @brief Transmits an update to connected fields

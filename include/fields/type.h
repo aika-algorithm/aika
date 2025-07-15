@@ -15,7 +15,7 @@
 class TypeRegistry;
 class FieldDefinition;
 class Relation;
-class Obj;
+class Object;
 class Field;
 
 class Type {
@@ -49,7 +49,7 @@ public:
     std::set<Type*> collectTypes();
     void collectTypesRecursiveStep(std::set<Type*>& sortedTypes);
     int getDepth() const;
-    bool isInstanceOf(Obj* obj) const;
+    bool isInstanceOf(Object* obj) const;
     bool isInstanceOf(Type* type) const;
     std::string getName() const;
     TypeRegistry* getTypeRegistry() const;

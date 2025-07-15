@@ -5,7 +5,7 @@
 
 #include "fields/abstract_function_definition.h"
 #include "fields/type.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 
 class InputField : public AbstractFunctionDefinition {
 
@@ -15,7 +15,7 @@ public:
     InputField(Type* ref, const std::string& name);
 
     // Overridden method from AbstractFunctionDefinition
-    double computeUpdate(Obj* obj, FieldLinkDefinition* fl, double u) override;
+    double computeUpdate(Object* obj, FieldLinkDefinition* fl, double u) override;
 };
 
 #endif //INPUT_FIELD_H

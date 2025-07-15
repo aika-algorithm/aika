@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include <fields/obj.h>
+#include <fields/object.h>
 #include "fields/rel_obj_iterator.h"
 
 class Relation {
@@ -19,8 +19,8 @@ public:
     int getRelationId() const;
     void setReversed(Relation* reversed);
     virtual Relation* getReverse();
-    virtual RelatedObjectIterable* followMany(Obj* fromObj) = 0;
-    virtual bool testRelation(Obj* fromObj, Obj* toObj) const = 0;
+    virtual RelatedObjectIterable* followMany(Object* fromObj) = 0;
+    virtual bool testRelation(Object* fromObj, Object* toObj) const = 0;
     virtual std::string getRelationLabel() const = 0;
 
     virtual ~Relation() = default; // Ensure proper cleanup for derived classes
@@ -31,8 +31,8 @@ class RelationMany : public Relation {
 public:
     RelationMany(int relationId, const std::string& relationName);
 
-    RelatedObjectIterable* followMany(Obj* fromObj) override;
-    bool testRelation(Obj* fromObj, Obj* toObj) const override;
+    RelatedObjectIterable* followMany(Object* fromObj) override;
+    bool testRelation(Object* fromObj, Object* toObj) const override;
     std::string getRelationLabel() const override;
 };
 
@@ -41,9 +41,9 @@ class RelationOne : public Relation {
 public:
     RelationOne(int relationId, const std::string& relationName);
 
-    virtual Obj* followOne(Obj* fromObj) const;
-    RelatedObjectIterable* followMany(Obj* fromObj) override;
-    bool testRelation(Obj* fromObj, Obj* toObj) const override;
+    virtual Object* followOne(Object* fromObj) const;
+    RelatedObjectIterable* followMany(Object* fromObj) override;
+    bool testRelation(Object* fromObj, Object* toObj) const override;
     std::string getRelationLabel() const override;
 };
 
@@ -51,9 +51,9 @@ class RelationSelf : public RelationOne {
 public:
     RelationSelf(int relationId, const std::string& relationName);
 
-    Obj* followOne(Obj* fromObj) const override;
-    RelatedObjectIterable* followMany(Obj* fromObj) override;
-    bool testRelation(Obj* fromObj, Obj* toObj) const override;
+    Object* followOne(Object* fromObj) const override;
+    RelatedObjectIterable* followMany(Object* fromObj) override;
+    bool testRelation(Object* fromObj, Object* toObj) const override;
     std::string getRelationLabel() const override;
 };
 

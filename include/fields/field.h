@@ -13,7 +13,7 @@
 #include <string>
 
 #include "fields/field_definition.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/queue_interceptor.h"
 
 
@@ -39,7 +39,7 @@ class Field {
 private:
     FieldDefinition* fieldDefinition;  ///< The field definition this field is an instance of
     int id;                           ///< Unique identifier for this field
-    Obj* object;                      ///< The object this field is associated with
+    Object* object;                      ///< The object this field is associated with
     double value;                     ///< Current value of the field
     double updatedValue;              ///< Updated value during processing
     bool withinUpdate;                ///< Flag indicating if field is being updated
@@ -53,7 +53,7 @@ public:
      * @param fd The field definition this field is an instance of
      * @param id The unique identifier for this field
      */
-    Field(Obj* obj, FieldDefinition* fd, int id);
+    Field(Object* obj, FieldDefinition* fd, int id);
 
     /**
      * @brief Gets the field's unique identifier
@@ -88,7 +88,7 @@ public:
      * 
      * @return The associated object
      */
-    Obj* getObject();
+    Object* getObject();
 
     /**
      * @brief Sets the field to be queued for processing

@@ -13,7 +13,7 @@
 #include <sstream>
 
 #include "fields/field.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/field_definition.h"
 #include "fields/queue_interceptor.h"
 
@@ -27,7 +27,7 @@
  * @param fd The field definition this field is an instance of
  * @param id The unique identifier for this field
  */
-Field::Field(Obj* obj, FieldDefinition* fd, int id)
+Field::Field(Object* obj, FieldDefinition* fd, int id)
     : object(obj), fieldDefinition(fd), id(id), value(0.0), updatedValue(0.0), withinUpdate(false), interceptor(nullptr) {}
 
 /**
@@ -74,7 +74,7 @@ double Field::getUpdatedValue() {
  * 
  * @return The associated object
  */
-Obj* Field::getObject() {
+Object* Field::getObject() {
     return object;
 }
 

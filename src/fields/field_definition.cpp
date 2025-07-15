@@ -14,7 +14,7 @@
 #include "fields/field.h"
 #include "fields/field_definition.h"
 #include "fields/field_link_definition.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 
 /**
  * @brief Constructs a new FieldDefinition

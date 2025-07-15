@@ -11,7 +11,7 @@ RelatedObjectIterable* DisjunctiveSynapse::followManyRelation(Relation* rel) con
     throw std::runtime_error("Invalid Relation for DisjunctiveSynapse: " + rel->getRelationLabel());
 }
 
-Obj* DisjunctiveSynapse::followSingleRelation(const Relation* rel) const {
+Object* DisjunctiveSynapse::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationLabel() == "SELF") {
         return const_cast<DisjunctiveSynapse*>(this);
     } else if (rel->getRelationLabel() == "INPUT") {

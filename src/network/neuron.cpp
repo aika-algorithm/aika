@@ -11,7 +11,7 @@
 #include "network/synapse_definition.h"
 #include "network/activation.h"
 #include "network/element.h"
-#include "fields/obj.h"
+#include "fields/object.h"
 #include "fields/queue.h"
 #include "fields/queue_provider.h"
 #include "network/timestamp.h"
@@ -23,26 +23,26 @@
 #include <mutex>
 
 Neuron::Neuron(NeuronDefinition* type, Model* model, long id)
-    : Obj(type), model(model), id(id), synapseIdCounter(0), lastUsed(0), modified(false) {}
+    : Object(type), model(model), id(id), synapseIdCounter(0), lastUsed(0), modified(false) {}
 
 Neuron::Neuron(NeuronDefinition* type, Model* model)
     : Neuron(type, model, model->createNeuronId()) {}
     
 RelatedObjectIterable* Neuron::followManyRelation(Relation* rel) const {
     if (rel->getRelationLabel() == "INPUT_SYNAPSES") {
-        // Convert input synapses to a vector of Obj*
-        std::vector<Obj*> objs;
+        // Convert input synapses to a vector of Object*
+        std::vector<Object*> objs;
         for (const auto& pair : inputSynapses) {
-            // Synapse inherits from Obj, but we need to avoid the static_cast to fix the error
-            objs.push_back(reinterpret_cast<Obj*>(pair.second));
+            // Synapse inherits from Object, but we need to avoid the static_cast to fix the error
+            objs.push_back(reinterpret_cast<Object*>(pair.second));
         }
         return new VectorObjectIterable(objs);
     } else if (rel->getRelationLabel() == "OUTPUT_SYNAPSES") {
-        // Convert output synapses to a vector of Obj*
-        std::vector<Obj*> objs;
+        // Convert output synapses to a vector of Object*
+        std::vector<Object*> objs;
         for (const auto& pair : outputSynapses) {
-            // Synapse inherits from Obj, but we need to avoid the static_cast to fix the error
-            objs.push_back(reinterpret_cast<Obj*>(pair.second));
+            // Synapse inherits from Object, but we need to avoid the static_cast to fix the error
+            objs.push_back(reinterpret_cast<Object*>(pair.second));
         }
         return new VectorObjectIterable(objs);
     } else {
@@ -50,13 +50,13 @@ RelatedObjectIterable* Neuron::followManyRelation(Relation* rel) const {
     }
 }
 
-Obj* Neuron::followSingleRelation(const Relation* rel) const {
+Object* Neuron::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationLabel() == "SELF") {
         return const_cast<Neuron*>(this);
-    // Model is not an Obj subclass, so we can't return it directly
+    // Model is not an Object subclass, so we can't return it directly
     // For now, return nullptr for "MODEL" relation
     } else if (rel->getRelationLabel() == "MODEL") {
-        return nullptr; // Can't return model as it's not an Obj
+        return nullptr; // Can't return model as it's not an Object
     } else {
         throw std::runtime_error("Invalid Relation for Neuron: " + rel->getRelationLabel());
     }
@@ -339,7 +339,7 @@ void Neuron::save() {
 void Neuron::write(std::ostream& out) const {
     // Write the type name instead of using getClass()->getCanonicalName()
     out << getType()->getName() << std::endl;
-    // Obj doesn't have a write method, just write our own fields
+    // Object doesn't have a write method, just write our own fields
     for (const auto& s : getInputSynapsesStoredAtOutputSide()) {
         out << true << std::endl;
         // Synapse doesn't have a write method yet, so we'll just write the ID
@@ -374,7 +374,7 @@ Neuron* Neuron::read(std::istream& in, TypeRegistry* tr) {
 }
 
 void Neuron::readFields(std::istream& in, TypeRegistry* tr) {
-    // Obj doesn't have a readFields method, just read our own fields
+    // Object doesn't have a readFields method, just read our own fields
     bool hasMore;
     // Read input synapses
     while (in >> hasMore && hasMore) {

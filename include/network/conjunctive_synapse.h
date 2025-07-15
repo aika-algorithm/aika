@@ -9,7 +9,7 @@ public:
     ConjunctiveSynapse(SynapseDefinition* type, Neuron* input, Neuron* output);
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
-    Obj* followSingleRelation(const Relation* rel) const override;
+    Object* followSingleRelation(const Relation* rel) const override;
 /*
     void write(DataOutput* out) override;
     void readFields(DataInput* in, TypeRegistry* tr) override;
