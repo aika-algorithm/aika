@@ -12,6 +12,7 @@ find_package(pybind11 REQUIRED)
 
 # Add source files
 set(SOURCES
+        src/python_bindings.cpp
         src/fields/field.cpp
         src/fields/field_definition.cpp
         src/fields/abstract_function_definition.cpp
@@ -39,7 +40,7 @@ set(SOURCES
         src/fields/step.cpp
         src/fields/test_type.cpp
         src/fields/test_object.cpp
-        src/fields/python_bindings.cpp
+        src/fields/field_bindings.cpp
         src/network/model.cpp
         src/network/activation.cpp
         src/network/activation_definition.cpp

@@ -1,5 +1,7 @@
 #include <pybind11/pybind11.h>
 
+#include "fields/field_bindings.h"
+
 #include "fields/relation.h"
 #include "fields/field_definition.h"
 #include "fields/field_update.h"
@@ -18,15 +20,13 @@
 #include "fields/summation.h"
 #include "fields/field_activation_function.h"
 
+namespace py = pybind11;
 
 // ----------------
 // Python interface
 // ----------------
 
-namespace py = pybind11;
-
-PYBIND11_MODULE(aika, m)
-{
+void bind_fields(py::module_& m) {
       // Bind Relation
       py::class_<Relation>(m, "Relation")
             .def("setReversed", [](Relation &rel, Relation* reversed) {

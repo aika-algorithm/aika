@@ -12,15 +12,15 @@ class ExponentialFunctionTestCase(unittest.TestCase):
     def testExponentialFunction(self):
         print("Module 'aika' was loaded from:", aika.__file__)
 
-        TEST_RELATION_FROM = aika.RelationOne(1, "TEST_FROM")
-        TEST_RELATION_TO = aika.RelationOne(2, "TEST_TO")
+        TEST_RELATION_FROM = aika.fields.RelationOne(1, "TEST_FROM")
+        TEST_RELATION_TO = aika.fields.RelationOne(2, "TEST_TO")
         TEST_RELATION_TO.setReversed(TEST_RELATION_FROM)
         TEST_RELATION_FROM.setReversed(TEST_RELATION_TO)
 
-        registry = aika.TypeRegistry()
+        registry = aika.fields.TypeRegistry()
 
-        typeA = aika.TestType(registry, "A")
-        typeB = aika.TestType(registry, "B")
+        typeA = aika.fields.TestType(registry, "A")
+        typeB = aika.fields.TestType(registry, "B")
 
         a = typeA.inputField("a")
 
@@ -33,7 +33,7 @@ class ExponentialFunctionTestCase(unittest.TestCase):
         oa = typeA.instantiate()
         ob = typeB.instantiate()
 
-        aika.TestObj.linkObjects(oa, ob)
+        aika.fields.TestObj.linkObjects(oa, ob)
         ob.initFields()
 
         oa.setFieldValue(a, 5.0)  
