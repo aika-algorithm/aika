@@ -366,4 +366,22 @@ void bind_network(py::module_& m) {
         .def(py::init<SynapseDefinition*>())
         .def(py::init<SynapseDefinition*, Neuron*, Neuron*>())
         .def("link", &DisjunctiveSynapse::link);
+
+    // Bind BSType base class
+    py::class_<BSType>(m, "BSType")
+        .def("__str__", [](const BSType& bs) {
+            return std::string("BSType");
+        });
+
+    // Bind BindingSignal class
+    py::class_<BindingSignal>(m, "BindingSignal")
+        .def(py::init<int, Document*>())
+        .def("getTokenId", &BindingSignal::getTokenId)
+        .def("getDocument", &BindingSignal::getDocument, py::return_value_policy::reference_internal)
+        .def("addActivation", &BindingSignal::addActivation)
+        .def("getActivations", py::overload_cast<Neuron*>(&BindingSignal::getActivations), py::return_value_policy::reference_internal)
+        .def("getActivations", py::overload_cast<>(&BindingSignal::getActivations), py::return_value_policy::reference_internal)
+        .def("__str__", [](const BindingSignal& bs) {
+            return bs.toString();
+        });
 }
