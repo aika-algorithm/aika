@@ -16,6 +16,16 @@ Aika (Artificial Intelligence for Knowledge Acquisition) is an experimental AI f
 
 In summary, Aika diverges from conventional neural network frameworks by separating the knowledge representation (the types of neurons/synapses) from the activation instances. Its event-driven, type-based approach aims to more closely mimic certain aspects of biological neural processing and provide greater flexibility in how networks can be constructed and interpreted.
 
+## Formal Descriptions
+
+### Fields Module
+- [Fields and Type Hierarchy](specs/fields/field-and-type-system.md)
+- [Type Flattening](specs/fields/flattening.md)
+- [Processing Queue](specs/fields/queue.md)
+
+### Neural Network Module
+- [Neural Network](specs/network/network.md)
+
 ## Installation Instructions
 
 To install and set up Aika, make sure you have a Python 3 environment (a virtual environment is recommended) and the necessary build tools (CMake, a C++ compiler, etc.). Once you have the Aika source code, use the following commands to build and install the project:
