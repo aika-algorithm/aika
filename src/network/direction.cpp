@@ -6,8 +6,3 @@
 NetworkDirection* NetworkDirection::INPUT = new NetworkInput();
 NetworkDirection* NetworkDirection::OUTPUT = new NetworkOutput();
 
-/*
-NetworkDirection* NetworkDirection::read(DataInput* in) {
-    return in->readBoolean() ? new NetworkOutput() : new NetworkInput();
-}
-*/

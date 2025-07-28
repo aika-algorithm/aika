@@ -9,13 +9,17 @@ Document::Document(Model* m) : model(m), activationIdCounter(0), isStale(false) 
 }
 
 Document::~Document() {
+    std::cout << "~Document begin" << std::endl;
     // Clean up activations and binding signals
     for (auto& pair : activations) {
+        std::cout << "~Document act:" << pair.second << std::endl;
         delete pair.second;
     }
+    std::cout << "~Document middle" << std::endl;
     for (auto& pair : bindingSignals) {
         delete pair.second;
     }
+    std::cout << "~Document end" << std::endl;
 }
 
 long Document::getId() const {

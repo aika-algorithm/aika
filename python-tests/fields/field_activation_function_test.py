@@ -3,13 +3,13 @@ import sys
 import os
 
 # Add the project root to Python's module search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import aika
 
-class AdditionTestCase(unittest.TestCase):
+class FieldActivationFunctionTestCase(unittest.TestCase):
 
-    def testAddition(self):
+    def testFieldActivationFunction(self):
         print("Module 'aika' was loaded from:", aika.__file__)
 
         TEST_RELATION_FROM = aika.fields.RelationOne(1, "TEST_FROM")

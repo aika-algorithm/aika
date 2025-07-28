@@ -24,6 +24,7 @@ Activation::Activation(ActivationDefinition* t, Activation* parent, int id, Neur
 }
 
 Activation::~Activation() {
+    std::cout << "~Activation" << std::endl;
     delete firedStep;
 }
 
