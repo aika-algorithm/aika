@@ -19,6 +19,7 @@
 #include "fields/exponential_function.h"
 #include "fields/summation.h"
 #include "fields/field_activation_function.h"
+#include "fields/queue.h"
 
 namespace py = pybind11;
 
@@ -27,6 +28,18 @@ namespace py = pybind11;
 // ----------------
 
 void bind_fields(py::module_& m) {
+      // Bind Queue class first (needed as base for Document and other classes)
+      py::class_<Queue>(m, "Queue")
+            .def("getTimeout", &Queue::getTimeout)
+            .def("getTimestampOnProcess", &Queue::getTimestampOnProcess)
+            .def("getCurrentTimestamp", &Queue::getCurrentTimestamp)
+            .def("getNextTimestamp", &Queue::getNextTimestamp)
+            .def("addStep", &Queue::addStep)
+            .def("removeStep", &Queue::removeStep)
+            .def("process", py::overload_cast<>(&Queue::process))
+            .def("getQueueEntries", &Queue::getQueueEntries, py::return_value_policy::reference_internal)
+            .def("getCurrentRound", &Queue::getCurrentRound);
+
       // Bind Relation
       py::class_<Relation>(m, "Relation")
             .def("setReversed", [](Relation &rel, Relation* reversed) {

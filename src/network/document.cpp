@@ -2,7 +2,7 @@
 #include "network/activation.h"
 #include "network/model.h"
 
-Document::Document(Model* m, int length) : model(m), length(length), activationIdCounter(0), isStale(false) {
+Document::Document(Model* m) : model(m), activationIdCounter(0), isStale(false) {
     id = model->createThoughtId();
     absoluteBeginChar = model->getN();
     model->registerDocument(this);

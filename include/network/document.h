@@ -14,7 +14,7 @@
 
 class Document : public Queue, public ModelProvider, public QueueProvider {
 public:
-    Document(Model* m, int length);
+    Document(Model* m);
     ~Document();
 
     long getId() const;

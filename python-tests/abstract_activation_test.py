@@ -24,9 +24,10 @@ class AbstractActivationTest(unittest.TestCase):
         
         # Create neuron instance
         self.neuron = self.neuron_def.instantiate(self.model)
+        print(f"DEBUG: self.neuron = {self.neuron}")
         
         # Create document
-        self.doc = aika.network.Document(self.model, 100)
+        self.doc = aika.network.Document(self.model)
         
         # Test BSTypes - Create concrete BSType implementations
         self.BSType_A = TestBSType("A")
