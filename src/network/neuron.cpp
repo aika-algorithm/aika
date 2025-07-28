@@ -10,6 +10,7 @@
 #include "network/neuron_definition.h"
 #include "network/synapse_definition.h"
 #include "network/activation.h"
+#include "network/conjunctive_activation.h"
 #include "network/element.h"
 #include "fields/object.h"
 #include "fields/queue.h"
@@ -111,9 +112,20 @@ int Neuron::getNewSynapseId() {
 }
 
 Activation* Neuron::createActivation(Activation* parent, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals) {
-    // ActivationDefinition doesn't have an instantiate method
-    // We need to return nullptr for now, or implement a different approach
-    return nullptr; // TODO: Implement proper activation creation
+    // Get the neuron definition and its activation definition
+    NeuronDefinition* neuronDef = static_cast<NeuronDefinition*>(getType());
+    
+    ActivationDefinition* activationDef = neuronDef->getActivation();
+    if (!activationDef) {
+        return nullptr;
+    }
+    
+    // Create activation ID
+    int activationId = doc->createActivationId();
+    
+    // For now, create a ConjunctiveActivation as the default
+    // In a full implementation, this would depend on the activation definition type
+    return new ConjunctiveActivation(activationDef, parent, activationId, this, doc, bindingSignals);
 }
 
 void Neuron::deleteNeuron() {

@@ -1,4 +1,5 @@
 #include "network/neuron_definition.h"
+#include "network/neuron.h"
 
 const RelationSelf NeuronDefinition::SELF = RelationSelf(0, "SELF");
 const RelationMany NeuronDefinition::INPUT = RelationMany(1, "INPUT");
@@ -18,7 +19,7 @@ std::vector<Relation> NeuronDefinition::getRelations() const {
 
 Neuron* NeuronDefinition::instantiate(Model* m) {
     // Implementation for instantiating a Neuron
-    return nullptr; // Placeholder
+    return new Neuron(this, m);
 }
 
 ActivationDefinition* NeuronDefinition::getActivation() const {

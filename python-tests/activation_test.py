@@ -6,7 +6,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import aika
-from abstract_activation_test import AbstractActivationTest, TestBSType, TestUtils
+from abstract_activation_test import AbstractActivationTest, TestUtils
 
 class ActivationTest(AbstractActivationTest):
     

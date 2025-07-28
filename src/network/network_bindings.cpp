@@ -373,6 +373,22 @@ void bind_network(py::module_& m) {
             return std::string("BSType");
         });
 
+    // Simple test BSType implementation for Python tests
+    class TestBSType : public BSType {
+    private:
+        std::string name;
+    public:
+        TestBSType(const std::string& name) : name(name) {}
+        const std::string& getName() const { return name; }
+    };
+
+    py::class_<TestBSType, BSType>(m, "TestBSType")
+        .def(py::init<const std::string&>())
+        .def("getName", &TestBSType::getName)
+        .def("__str__", [](const TestBSType& bs) {
+            return bs.getName();
+        });
+
     // Bind BindingSignal class
     py::class_<BindingSignal>(m, "BindingSignal")
         .def(py::init<int, Document*>())

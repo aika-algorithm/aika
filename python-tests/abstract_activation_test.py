@@ -24,33 +24,14 @@ class AbstractActivationTest(unittest.TestCase):
         
         # Create neuron instance
         self.neuron = self.neuron_def.instantiate(self.model)
-        print(f"DEBUG: self.neuron = {self.neuron}")
         
         # Create document
         self.doc = aika.network.Document(self.model)
         
         # Test BSTypes - Create concrete BSType implementations
-        self.BSType_A = TestBSType("A")
-        self.BSType_B = TestBSType("B")
+        self.BSType_A = aika.network.TestBSType("A")
+        self.BSType_B = aika.network.TestBSType("B")
 
-
-class TestBSType:
-    """Test implementation of BSType"""
-    
-    def __init__(self, name):
-        self.name = name
-        
-    def __str__(self):
-        return self.name
-        
-    def __repr__(self):
-        return f"TestBSType({self.name})"
-        
-    def __eq__(self, other):
-        return isinstance(other, TestBSType) and self.name == other.name
-        
-    def __hash__(self):
-        return hash(self.name)
 
 
 class TestUtils:
