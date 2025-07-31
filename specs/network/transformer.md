@@ -72,12 +72,12 @@ We define the following fields for each type category:
 
 ## 🧮 Special Case: **Inhibitory Neuron (Softmax)**
 
-Inhibitory neurons deviate from this structure. Each output link has a **pair input link** (via relation $\texttt{PAIR\_IN}$). The softmax is computed **per output link**, using a norm defined on the target activation (i.e. inhibitory activation):
+Inhibitory neurons deviate from this structure. Each output link has a **pair input link** (via relation $\texttt{PAIR_IN}$). The softmax is computed **per output link**, using a norm defined on the target activation (i.e. inhibitory activation):
 
 Let:
 
 * $l_{\text{out}}$: output link
-* $l_{\text{in}} = \texttt{PAIR\_IN}(l_{\text{out}})$: paired input link
+* $l_{\text{in}} = \texttt{PAIR_IN}(l_{\text{out}})$: paired input link
 * $a_{\text{norm}} = \texttt{OUTPUT}(l_{\text{out}})$: inhibitory activation receiving softmaxed inputs
 
 We define:
