@@ -28,69 +28,112 @@ Each token $t_i$ in a sequence has:
 
 ---
 
-## 3. **Types and Field Definitions**
-
-### A. **Embedding Neuron Type** ($T_{\text{EMB}}$)
-
-* **Description**: Represents token embeddings; no input synapses; initiates BS propagation.
-* **Fields**:
-
-    * Bias: $b_{\text{emb}}$ (fixed per neuron; defines the value)
-    * Output: $f_{\text{emb}}^{\cdot}(n) = b_{\text{emb}}(n)$
-
-### B. **Key Neuron Type** ($T_{\text{KEY}}$)
-
-* **Inputs**: Embedding neurons (via synapse type $S_{\text{emb→key}}$)
-* **Fields**:
-
-    * $f_{\text{key}}^{\cdot}(k) = \phi_{\text{key}}\left( { f_{\text{emb}}^{r}(e) \mid e \in r(k) } \right)$
-
-### C. **Query Neuron Type** ($T_{\text{QUERY}}$)
-
-* **Inputs**: Embedding + Key neurons (via $S_{\text{emb→query}}, S_{\text{key→query}}$)
-* **Fields**:
-
-    * $f_{\text{query}}^{\cdot}(q) = \phi_{\text{query}}\left( { f_{\text{emb}}^{r_1}(e) }, { f_{\text{key}}^{r_2}(k) } \right)$
-
-### D. **Inhibitory Neuron Type** ($T_{\text{INHIB}}$)
-
-* **Purpose**: Softmax normalization layer
-* **Inputs**: All query neuron activations relevant to one token
-* **Fields**:
-
-    * Softmax-style function:
-
-      $$
-      f^{\cdot}_{T_{\text{INHIB}}}(i) =
-      \frac{
-      \exp\left(f^{r}_{T_{\text{QUERY}}}(q)\right)
-      }{
-      \sum_{q' \in r(i)} \exp\left(f^{\cdot}_{T_{\text{QUERY}}}(q')\right)
-      }
-      $$
-    * Relation $r$: references all query neurons associated with the same token (i.e., same BS)
-
-### E. **Value Neuron Type** ($T_{\text{VALUE}}$)
-
-* **Inputs**: Inhibitory + Embedding neuron activations
-* **Fields**:
-
-    * $f^{\cdot}*{T*{\text{VALUE}}}(v) = \phi_{\text{val}}\left( { f_{\text{inhib}}^{r_1}(i) }, { f_{\text{emb}}^{r_2}(e) } \right)$
+Excellent clarification. Based on your requirements, I’ll now refine **Section 3** (Field Definitions) and **Section 4** (Relations) to specify all fields and their corresponding mathematical functions **explicitly per object type** (Neuron, Synapse, Activation, Link), and account for the special case of the **Inhibitory neuron** that performs a softmax-like normalization using paired links.
 
 ---
 
-## 4. **Relation Graph**
+## 3. **Field Definitions and Functions per Object Type**
 
-Relations used (from source type to target type):
+We define the following fields for each type category:
 
-| Relation Name    | Source Type           | Target Type           | Notes       |
-| ---------------- | --------------------- | --------------------- | ----------- |
-| `EMB_TO_KEY`     | $T_{\text{KEY}}$   | $T_{\text{EMB}}$   | many-to-one |
-| `EMB_TO_QUERY`   | $T_{\text{QUERY}}$ | $T_{\text{EMB}}$   | many-to-one |
-| `KEY_TO_QUERY`   | $T_{\text{QUERY}}$ | $T_{\text{KEY}}$   | many-to-one |
-| `QUERY_TO_INHIB` | $T_{\text{INHIB}}$ | $T_{\text{QUERY}}$ | one-to-many |
-| `INHIB_TO_VALUE` | $T_{\text{VALUE}}$ | $T_{\text{INHIB}}$ | many-to-one |
-| `EMB_TO_VALUE`   | $T_{\text{VALUE}}$ | $T_{\text{EMB}}$   | many-to-one |
+### A. **Neuron Object Fields** (Object type $\tau(n) \in \mathcal{T}_N$)
+
+| Field  | Name                            | Description                                              | Function |
+| ------ | ------------------------------- | -------------------------------------------------------- | -------- |
+| `bias` | $f_{\text{bias}}^{\cdot}(n)$ | Constant scalar per neuron (external input or parameter) | Static   |
+
+---
+
+### B. **Synapse Object Fields** (Object type $\tau(s) \in \mathcal{T}_S$)
+
+| Field    | Name                              | Description                           | Function |
+| -------- | --------------------------------- | ------------------------------------- | -------- |
+| `weight` | $f_{\text{weight}}^{\cdot}(s)$ | Scalar weight applied to input values | Static   |
+
+---
+
+### C. **Activation Object Fields** (Object type $\tau(a) \in \mathcal{T}_A$)
+
+| Field   | Name                             | Description                        | Function                                                                                                            |
+| ------- | -------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `net`   | $f_{\text{net}}^{\cdot}(a)$   | Sum of weighted inputs             | $f_{\text{net}}(a) = \sum_{\texttt{INPUT}(l)=a} f_{\text{weightedInput}}^{\cdot}(l)$                            |
+| `value` | $f_{\text{val}}^{\cdot}(a)$   | Activation output                  | $f_{\text{val}}(a) = \phi(f_{\text{net}}(a))$ where $\phi$ is the activation function (e.g., ReLU or identity) |
+| `fired` | $f_{\text{fired}}^{\cdot}(a)$ | Boolean, true if value > threshold | $f_{\text{fired}}(a) = [f_{\text{val}}(a) > \theta]$                                                            |
+
+---
+
+### D. **Link Object Fields** (Object type $\tau(l) \in \mathcal{T}_L$)
+
+| Field           | Name                                     | Description                                    | Function                                                                                      |
+| --------------- | ---------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `weightedInput` | $f_{\text{weightedInput}}^{\cdot}(l)$ | Product of input activation and synapse weight | $f(l) = f_{\text{weight}}^{\texttt{SYNAPSE}(l)} \cdot f_{\text{val}}^{\texttt{INPUT}(l)}$ |
+
+---
+
+## 🧮 Special Case: **Inhibitory Neuron (Softmax)**
+
+Inhibitory neurons deviate from this structure. Each output link has a **pair input link** (via relation $\texttt{PAIR\_IN}$). The softmax is computed **per output link**, using a norm defined on the target activation (i.e. inhibitory activation):
+
+Let:
+
+* $l_{\text{out}}$: output link
+* $l_{\text{in}} = \texttt{PAIR\_IN}(l_{\text{out}})$: paired input link
+* $a_{\text{norm}} = \texttt{OUTPUT}(l_{\text{out}})$: inhibitory activation receiving softmaxed inputs
+
+We define:
+
+### Link Field: Softmax Output
+
+$$
+f_{\text{weightedInput}}^{\cdot}(l_{\text{out}}) =
+\frac{
+\exp\left(f_{\text{val}}^{\texttt{INPUT}(l_{\text{in}})}\right)
+}{
+\sum_{l' \in \texttt{INPUT}^{-1}(a_{\text{norm}})}
+\exp\left(f_{\text{val}}^{\texttt{INPUT}(\texttt{PAIR\_IN}(l'))}\right)
+}
+\cdot
+f_{\text{weight}}^{\texttt{SYNAPSE}(l_{\text{out}})}
+$$
+
+Explanation:
+
+* The numerator is the exponential of the **input activation** of the *paired* input link.
+* The denominator is a sum of exponentials over all paired input links leading to the same inhibitory activation.
+* This implements the softmax attention vector without matrix notation.
+
+---
+
+## 4. **Relations (Expanded and Clarified)**
+
+All relations are declared with source/target types and directionality. The reverse relation is implied and named accordingly.
+
+| Relation     | From Type  | To Type    | Cardinality | Purpose                                            |
+| ------------ | ---------- | ---------- | ----------- | -------------------------------------------------- |
+| `INPUT`      | Link       | Activation | 1:1         | Source activation                                  |
+| `OUTPUT`     | Link       | Activation | 1:1         | Target activation                                  |
+| `SYNAPSE`    | Link       | Synapse    | 1:1         | Originating synapse                                |
+| `PAIR_IN`    | Link       | Link       | 1:1         | Paired input link (softmax)                        |
+| `PAIR_OUT`   | Link       | Link       | 1:1         | Paired output link (softmax), reverse of `PAIR_IN` |
+| `INPUT`      | Synapse    | Neuron     | 1:1         | Source neuron                                      |
+| `OUTPUT`     | Synapse    | Neuron     | 1:1         | Target neuron                                      |
+| `ACTIVATION` | Neuron     | Activation | 1\:N        | Associated activations                             |
+| `NEURON`     | Activation | Neuron     | 1:1         | Reverse of above                                   |
+| `INPUT`      | Neuron     | Synapse    | 1\:N        | Incoming synapses                                  |
+| `OUTPUT`     | Neuron     | Synapse    | 1\:N        | Outgoing synapses                                  |
+| `SELF`       | Any        | Same       | 1:1         | Identity/self-reference                            |
+
+---
+
+### Optional: Token Binding via BS
+
+To track **which token identity** (binding signal) each activation refers to:
+
+| Field | Object     | Description                                                 |
+| ----- | ---------- | ----------------------------------------------------------- |
+| `bs`  | Activation | The binding signal $\beta_i$ carried with the activation |
+
+Transitions in synapses define how $\beta_i$ changes. Invalid transitions block linking.
 
 ---
 
