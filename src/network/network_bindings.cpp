@@ -281,8 +281,8 @@ void bind_network(py::module_& m) {
         .def_readonly_static("INPUT", &LinkDefinition::INPUT)
         .def_readonly_static("OUTPUT", &LinkDefinition::OUTPUT)
         .def_readonly_static("SYNAPSE", &LinkDefinition::SYNAPSE)
-        .def_readonly_static("CORRESPONDING_INPUT_LINK", &LinkDefinition::CORRESPONDING_INPUT_LINK)
-        .def_readonly_static("CORRESPONDING_OUTPUT_LINK", &LinkDefinition::CORRESPONDING_OUTPUT_LINK);
+        .def_readonly_static("PAIR_IN", &LinkDefinition::PAIR_IN)
+        .def_readonly_static("PAIR_OUT", &LinkDefinition::PAIR_OUT);
 
     // Bind SynapseDefinition::SynapseSubType enum
     py::enum_<SynapseDefinition::SynapseSubType>(m, "SynapseSubType")

@@ -22,8 +22,8 @@ public:
     static const RelationOne INPUT;
     static const RelationOne OUTPUT;
     static const RelationOne SYNAPSE;
-    static const RelationOne CORRESPONDING_INPUT_LINK;
-    static const RelationOne CORRESPONDING_OUTPUT_LINK;
+    static const RelationOne PAIR_IN;
+    static const RelationOne PAIR_OUT;
     // We can't use vector of abstract class Relation directly
     // static const std::vector<Relation> RELATIONS;
 
