@@ -105,132 +105,115 @@ class TransformerTypeRegistry:
         self.L_EMB_VALUE.setInput(self.T_EMB_ACT).setOutput(self.T_VALUE_ACT)
     
     def _setup_field_definitions(self):
-        """Setup field definitions according to the transformer specification."""
+        """Setup field definitions using type hierarchy according to the transformer specification."""
         
         # ========================================
-        # NEURON OBJECT FIELDS
+        # BASE TYPE DEFINITIONS (ROOT TYPES)
         # ========================================
-        # Field: bias - f_bias^·(n) - Constant scalar per neuron
-        for neuron_type in [self.T_EMB, self.T_KEY, self.T_QUERY, self.T_INHIB, self.T_VALUE]:
-            bias_field = neuron_type.inputField("bias")
+        
+        # Base Standard Neuron Type - root for normal neurons
+        self.T_STANDARD_NEURON = aika.network.NeuronDefinition(self.registry, "STANDARD_NEURON")
+        bias_field = self.T_STANDARD_NEURON.inputField("bias")
+        
+        # Base Standard Activation Type - root for normal activations
+        self.T_STANDARD_ACTIVATION = aika.network.ActivationDefinition(self.registry, "STANDARD_ACTIVATION")
+        # Standard activation fields:
+        net_field = self.T_STANDARD_ACTIVATION.sum("net")
+        value_field = self.T_STANDARD_ACTIVATION.add("value")
+        fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
+        bs_field = self.T_STANDARD_ACTIVATION.inputField("bs")
+        
+        # Base Standard Synapse Type - root for all synapses
+        self.T_STANDARD_SYNAPSE = aika.network.SynapseDefinition(self.registry, "STANDARD_SYNAPSE")
+        weight_field = self.T_STANDARD_SYNAPSE.inputField("weight")
+        
+        # Base Standard Link Type - root for normal links
+        self.T_STANDARD_LINK = aika.network.LinkDefinition(self.registry, "STANDARD_LINK")
+        # Standard weightedInput: f(l) = f_weight^SYNAPSE(l) · f_val^INPUT(l)
+        standard_weighted_input = self.T_STANDARD_LINK.mul("weightedInput")
+        standard_weighted_input.input(aika.network.LinkDefinition.SYNAPSE, self.T_STANDARD_SYNAPSE.inputField("weight"), 0)
+        standard_weighted_input.input(aika.network.LinkDefinition.INPUT, self.T_STANDARD_ACTIVATION.add("value"), 1)
         
         # ========================================
-        # SYNAPSE OBJECT FIELDS  
+        # SPECIAL INHIBITORY TYPES (EXCEPTION)
         # ========================================
-        # Field: weight - f_weight^·(s) - Scalar weight applied to input values
-        for synapse_type in [self.S_EMB_KEY, self.S_EMB_QUERY, self.S_KEY_QUERY, 
-                           self.S_QUERY_INHIB, self.S_INHIB_VALUE, self.S_EMB_VALUE]:
-            weight_field = synapse_type.inputField("weight")
         
-        # ========================================
-        # ACTIVATION OBJECT FIELDS
-        # ========================================
-        for act_type in [self.T_EMB_ACT, self.T_KEY_ACT, self.T_QUERY_ACT, self.T_INHIB_ACT, self.T_VALUE_ACT]:
-            # Field: net - f_net^·(a) - Sum of weighted inputs
-            # f_net(a) = Σ_{INPUT(l)=a} f_weightedInput^·(l)
-            net_field = act_type.sum("net")
-            # The net field will automatically sum inputs from links during runtime
-            
-            # Field: value - f_val^·(a) - Activation output
-            # f_val(a) = φ(f_net(a)) + bias where φ is activation function (ReLU or identity)
-            value_field = act_type.add("value")
-            
-            # Field: fired - f_fired^·(a) - Boolean, true if value > threshold
-            # f_fired(a) = [f_val(a) > θ]
-            fired_field = act_type.inputField("fired")
-            
-            # Field: bs - Binding signal field for token identity
-            bs_field = act_type.inputField("bs")
+        # Inhibitory Neuron Type - inherits from standard neuron but has different math
+        self.T_INHIBITORY_NEURON = aika.network.NeuronDefinition(self.registry, "INHIBITORY_NEURON")
+        # Inherits bias field from standard neuron type
         
-        # ========================================
-        # LINK OBJECT FIELDS
-        # ========================================
-        # Standard weightedInput for most links
-        for link_type in [self.L_EMB_KEY, self.L_EMB_QUERY, self.L_KEY_QUERY, 
-                         self.L_QUERY_INHIB, self.L_EMB_VALUE]:
-            # Field: weightedInput - f_weightedInput^·(l)
-            # f(l) = f_weight^SYNAPSE(l) · f_val^INPUT(l)
-            weighted_input = link_type.mul("weightedInput")
-            weighted_input.input(aika.network.LinkDefinition.SYNAPSE, link_type.getSynapse().inputField("weight"), 0)
-            weighted_input.input(aika.network.LinkDefinition.INPUT, link_type.getInput().add("value"), 1)
+        # Inhibitory Activation Type - different mathematical model for softmax
+        self.T_INHIBITORY_ACTIVATION = aika.network.ActivationDefinition(self.registry, "INHIBITORY_ACTIVATION")
+        # Inhibitory activation has special softmax denominator field
+        inhib_net_field = self.T_INHIBITORY_ACTIVATION.sum("net")
+        inhib_value_field = self.T_INHIBITORY_ACTIVATION.add("value")
+        inhib_fired_field = self.T_INHIBITORY_ACTIVATION.inputField("fired")
+        inhib_bs_field = self.T_INHIBITORY_ACTIVATION.inputField("bs")
+        # Special field for softmax normalization
+        softmax_denominator = self.T_INHIBITORY_ACTIVATION.sum("softmax_denominator")
         
-        # ========================================
-        # SPECIAL CASE: INHIBITORY NEURON (SOFTMAX)
-        # ========================================
-        # For inhibitory output links (INHIB -> VALUE), implement softmax:
-        # f_weightedInput^·(l_out) = 
-        #   exp(f_val^INPUT(PAIR_IN(l_out))) / 
-        #   Σ_{l' ∈ INPUT^-1(a_norm)} exp(f_val^INPUT(PAIR_IN(l'))) 
-        #   · f_weight^SYNAPSE(l_out)
-        
-        # For the inhibitory value links, we need special softmax computation
-        softmax_weighted_input = self.L_INHIB_VALUE.mul("weightedInput")
+        # Inhibitory Link Type - special softmax computation
+        self.T_INHIBITORY_LINK = aika.network.LinkDefinition(self.registry, "INHIBITORY_LINK")
+        # Special softmax weightedInput implementation
+        softmax_weighted_input = self.T_INHIBITORY_LINK.mul("weightedInput")
         
         # Numerator: exp(f_val^INPUT(PAIR_IN(l)))
-        numerator = self.L_INHIB_VALUE.exp("softmax_numerator")
-        numerator.input(aika.network.LinkDefinition.PAIR_IN, self.L_QUERY_INHIB.getInput().add("value"), 0)
-        
-        # Denominator: Σ exp(f_val^INPUT(PAIR_IN(l'))) for all l' leading to same inhib activation
-        denominator = self.T_INHIB_ACT.sum("softmax_denominator")
-        exp_component = self.L_QUERY_INHIB.exp("exp_component")
-        exp_component.input(aika.network.LinkDefinition.INPUT, self.L_QUERY_INHIB.getInput().add("value"), 0)
-        denominator.input(aika.network.LinkDefinition.INPUT, exp_component, 0)
+        numerator = self.T_INHIBITORY_LINK.exp("softmax_numerator")
+        numerator.input(aika.network.LinkDefinition.PAIR_IN, self.T_STANDARD_ACTIVATION.add("value"), 0)
         
         # Softmax ratio: numerator / denominator
-        softmax_ratio = self.L_INHIB_VALUE.div("softmax_ratio")
+        softmax_ratio = self.T_INHIBITORY_LINK.div("softmax_ratio")
         softmax_ratio.input(aika.network.LinkDefinition.SELF, numerator, 0)
-        softmax_ratio.input(aika.network.LinkDefinition.OUTPUT, denominator, 1)
+        softmax_ratio.input(aika.network.LinkDefinition.OUTPUT, softmax_denominator, 1)
         
         # Final weighted input: softmax_ratio * weight
         softmax_weighted_input.input(aika.network.LinkDefinition.SELF, softmax_ratio, 0)
-        softmax_weighted_input.input(aika.network.LinkDefinition.SYNAPSE, self.S_INHIB_VALUE.inputField("weight"), 1)
+        softmax_weighted_input.input(aika.network.LinkDefinition.SYNAPSE, self.T_STANDARD_SYNAPSE.inputField("weight"), 1)
+        
+        # ========================================
+        # SETUP TYPE HIERARCHY
+        # ========================================
+        
+        # Standard neurons inherit from base standard neuron
+        self.T_EMB.getParent = lambda: self.T_STANDARD_NEURON
+        self.T_KEY.getParent = lambda: self.T_STANDARD_NEURON  
+        self.T_QUERY.getParent = lambda: self.T_STANDARD_NEURON
+        self.T_VALUE.getParent = lambda: self.T_STANDARD_NEURON
+        
+        # Inhibitory neuron inherits from inhibitory base type
+        self.T_INHIB.getParent = lambda: self.T_INHIBITORY_NEURON
+        
+        # Standard activations inherit from base standard activation
+        self.T_EMB_ACT.getParent = lambda: self.T_STANDARD_ACTIVATION
+        self.T_KEY_ACT.getParent = lambda: self.T_STANDARD_ACTIVATION
+        self.T_QUERY_ACT.getParent = lambda: self.T_STANDARD_ACTIVATION
+        self.T_VALUE_ACT.getParent = lambda: self.T_STANDARD_ACTIVATION
+        
+        # Inhibitory activation inherits from inhibitory base type
+        self.T_INHIB_ACT.getParent = lambda: self.T_INHIBITORY_ACTIVATION
+        
+        # All synapses inherit from standard synapse
+        self.S_EMB_KEY.getParent = lambda: self.T_STANDARD_SYNAPSE
+        self.S_EMB_QUERY.getParent = lambda: self.T_STANDARD_SYNAPSE
+        self.S_KEY_QUERY.getParent = lambda: self.T_STANDARD_SYNAPSE
+        self.S_QUERY_INHIB.getParent = lambda: self.T_STANDARD_SYNAPSE
+        self.S_EMB_VALUE.getParent = lambda: self.T_STANDARD_SYNAPSE
+        # Special case: inhibitory output synapse
+        self.S_INHIB_VALUE.getParent = lambda: self.T_STANDARD_SYNAPSE
+        
+        # Standard links inherit from standard link
+        self.L_EMB_KEY.getParent = lambda: self.T_STANDARD_LINK
+        self.L_EMB_QUERY.getParent = lambda: self.T_STANDARD_LINK
+        self.L_KEY_QUERY.getParent = lambda: self.T_STANDARD_LINK
+        self.L_QUERY_INHIB.getParent = lambda: self.T_STANDARD_LINK
+        self.L_EMB_VALUE.getParent = lambda: self.T_STANDARD_LINK
+        
+        # Inhibitory output link uses special inhibitory link type
+        self.L_INHIB_VALUE.getParent = lambda: self.T_INHIBITORY_LINK
     
     def get_registry(self):
         """Get the configured type registry."""
         return self.registry
-    
-    def get_neuron_types(self):
-        """Get all neuron type definitions."""
-        return {
-            'EMB': self.T_EMB,
-            'KEY': self.T_KEY,
-            'QUERY': self.T_QUERY,
-            'INHIB': self.T_INHIB,
-            'VALUE': self.T_VALUE
-        }
-    
-    def get_activation_types(self):
-        """Get all activation type definitions."""
-        return {
-            'EMB': self.T_EMB_ACT,
-            'KEY': self.T_KEY_ACT,
-            'QUERY': self.T_QUERY_ACT,
-            'INHIB': self.T_INHIB_ACT,
-            'VALUE': self.T_VALUE_ACT
-        }
-    
-    def get_synapse_types(self):
-        """Get all synapse type definitions."""
-        return {
-            'EMB_KEY': self.S_EMB_KEY,
-            'EMB_QUERY': self.S_EMB_QUERY,
-            'KEY_QUERY': self.S_KEY_QUERY,
-            'QUERY_INHIB': self.S_QUERY_INHIB,
-            'INHIB_VALUE': self.S_INHIB_VALUE,
-            'EMB_VALUE': self.S_EMB_VALUE
-        }
-    
-    def get_link_types(self):
-        """Get all link type definitions."""
-        return {
-            'EMB_KEY': self.L_EMB_KEY,
-            'EMB_QUERY': self.L_EMB_QUERY,
-            'KEY_QUERY': self.L_KEY_QUERY,
-            'QUERY_INHIB': self.L_QUERY_INHIB,
-            'INHIB_VALUE': self.L_INHIB_VALUE,
-            'EMB_VALUE': self.L_EMB_VALUE
-        }
-
 
 def create_transformer_types():
     """
@@ -252,31 +235,40 @@ def main():
         
         print("✅ Transformer type registry created successfully!")
         print(f"📊 Registry contains:")
-        print(f"   • {len(transformer_types.get_neuron_types())} neuron types")
-        print(f"   • {len(transformer_types.get_activation_types())} activation types") 
-        print(f"   • {len(transformer_types.get_synapse_types())} synapse types")
-        print(f"   • {len(transformer_types.get_link_types())} link types")
+        print(f"   • {len(transformer_types.get_base_types())} base types (roots)")
+        print(f"   • {len(transformer_types.get_neuron_types())} transformer neuron types")
+        print(f"   • {len(transformer_types.get_activation_types())} transformer activation types") 
+        print(f"   • {len(transformer_types.get_synapse_types())} transformer synapse types")
+        print(f"   • {len(transformer_types.get_link_types())} transformer link types")
         
-        # Display the types
-        print("\n🔬 Neuron Types:")
+        # Display the hierarchical structure
+        print("\n🏗️ Type Hierarchy (Base Types):")
+        for name, base_type in transformer_types.get_base_types().items():
+            print(f"   • {name}: {base_type}")
+        
+        print("\n🔬 Transformer Neuron Types (inherit from base):")
         for name, neuron_type in transformer_types.get_neuron_types().items():
-            print(f"   • {name}: {neuron_type}")
+            parent = "STANDARD_NEURON" if name != "INHIB" else "INHIBITORY_NEURON"
+            print(f"   • {name}: {neuron_type} → inherits from {parent}")
         
-        print("\n🔗 Synapse Types:")
+        print("\n🔗 Transformer Synapse Types:")
         for name, synapse_type in transformer_types.get_synapse_types().items():
-            print(f"   • {name}: {synapse_type}")
+            print(f"   • {name}: {synapse_type} → inherits from STANDARD_SYNAPSE")
         
         print("\n🧮 Mathematical Model Features:")
-        print("   • Standard weightedInput fields: weight × input_value")
-        print("   • Softmax attention via inhibitory neurons")
+        print("   • Type hierarchy with base types for standard neurons/activations")
+        print("   • Standard weightedInput: weight × input_value (inherited)")
+        print("   • Special inhibitory types with softmax computation")
+        print("   • Softmax: exp(input) / Σ(exp(all_inputs)) × weight")
         print("   • Binding signal propagation for token identity")
-        print("   • Field-based computation graph")
+        print("   • Field-based computation graph with inheritance")
         
         print("\n🎯 Implementation follows formal transformer specification:")
-        print("   • Neuron types: EMB, KEY, QUERY, INHIB, VALUE")
-        print("   • Attention mechanism via KEY→QUERY→INHIB→VALUE")
+        print("   • Base types: STANDARD_NEURON/ACTIVATION → inherited by EMB, KEY, QUERY, VALUE")
+        print("   • Exception: INHIBITORY_NEURON/ACTIVATION → used by INHIB for softmax")
+        print("   • Attention mechanism: KEY→QUERY→INHIB→VALUE")
         print("   • Softmax normalization using PAIR_IN/PAIR_OUT relations")
-        print("   • All field definitions configured per specification")
+        print("   • Type hierarchy eliminates field definition loops")
         
         return transformer_types
         
