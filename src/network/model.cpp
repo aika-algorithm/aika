@@ -131,7 +131,7 @@ void Model::close(bool store) {
     suspensionCallback->close();
 }
 
-long Model::createThoughtId() {
+long Model::createDocumentId() {
     return ++documentIdCounter;
 }
 

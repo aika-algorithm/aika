@@ -3,7 +3,7 @@
 #include "network/model.h"
 
 Document::Document(Model* m) : model(m), activationIdCounter(0), isStale(false) {
-    id = model->createThoughtId();
+    id = model->createDocumentId();
     absoluteBeginChar = model->getN();
     model->registerDocument(this);
 }

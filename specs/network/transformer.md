@@ -90,7 +90,7 @@ f_{\text{weightedInput}}^{\cdot}(l_{\text{out}}) =
 \exp\left(f_{\text{val}}^{\texttt{INPUT}(l_{\text{in}})}\right)
 }{
 \sum_{l' \in \texttt{INPUT}^{-1}(a_{\text{norm}})}
-\exp\left(f_{\text{val}}^{\texttt{INPUT}(\texttt{PAIR\_IN}(l'))}\right)
+\exp\left(f_{\text{val}}^{\texttt{INPUT}(\texttt{PAIR_IN}(l'))}\right)
 }
 \cdot
 f_{\text{weight}}^{\texttt{SYNAPSE}(l_{\text{out}})}

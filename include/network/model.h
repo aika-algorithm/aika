@@ -31,7 +31,7 @@ public:
     void unregister(Neuron* n);
     void open(bool create);
     void close(bool store);
-    long createThoughtId();
+    long createDocumentId();
     Config* getConfig() const;
     void setConfig(Config* config);
     void write(std::ostream& out) const;

@@ -58,7 +58,7 @@ void bind_network(py::module_& m) {
         .def("unregister", &Model::unregister)
         .def("open", &Model::open)
         .def("close", &Model::close)
-        .def("createThoughtId", &Model::createThoughtId)
+        .def("createDocumentId", &Model::createDocumentId)
         .def("getConfig", &Model::getConfig, py::return_value_policy::reference_internal)
         .def("setConfig", &Model::setConfig)
         .def("getTypeRegistry", &Model::getTypeRegistry, py::return_value_policy::reference_internal)
