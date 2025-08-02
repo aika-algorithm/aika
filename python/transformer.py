@@ -120,7 +120,7 @@ class TransformerTypeRegistry:
         self.T_STANDARD_ACTIVATION = an.ActivationType(self.registry, "STANDARD_ACTIVATION")
         # Standard activation fields:
         net_field = self.T_STANDARD_ACTIVATION.sum("net")
-        value_field = self.T_STANDARD_ACTIVATION.add("value")
+        value_field = self.T_STANDARD_ACTIVATION.fieldActivationFunc("value", af.TanhActivationFunction)
         fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
 
         print("A")
@@ -133,11 +133,11 @@ class TransformerTypeRegistry:
         self.T_STANDARD_LINK = an.LinkType(self.registry, "STANDARD_LINK")
         print("C")
         # Standard weightedInput: f(l) = f_weight^SYNAPSE(l) · f_val^INPUT(l)
-        standard_weighted_input = self.T_STANDARD_LINK.mul("weightedInput")
+        weighted_input = self.T_STANDARD_LINK.mul("weightedInput")
         print("D")
-        standard_weighted_input.input(an.LinkType.SYNAPSE, self.T_STANDARD_SYNAPSE.inputField("weight"), 0)
+        weighted_input.input(an.LinkType.SYNAPSE, self.T_STANDARD_SYNAPSE.inputField("weight"), 0)
         print("E")
-        standard_weighted_input.input(an.LinkType.INPUT, self.T_STANDARD_ACTIVATION.add("value"), 1)
+        weighted_input.input(an.LinkType.INPUT, self.T_STANDARD_ACTIVATION.add("value"), 1)
 
         # ========================================
         # SPECIAL INHIBITORY TYPES (EXCEPTION)

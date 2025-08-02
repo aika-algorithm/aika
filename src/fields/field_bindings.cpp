@@ -112,7 +112,7 @@ void bind_fields(py::module_& m) {
 
       // Bind FieldActivationFunction (inherits from AbstractFunctionDefinition)
       py::class_<FieldActivationFunction, AbstractFunctionDefinition>(m, "FieldActivationFunction")
-            .def(py::init<Type*, const std::string&, ActivationFunction*, double>());
+            .def(py::init<Type*, const std::string&, ActivationFunction*>());
 
       py::class_<InputField, FieldDefinition>(m, "InputField")
             .def(py::init<Type*, const std::string &>())
@@ -167,12 +167,11 @@ void bind_fields(py::module_& m) {
                         name
                   );
             }, py::return_value_policy::reference_internal)
-            .def("fieldActivationFunc", [](const Type &ref, const std::string &name, ActivationFunction* actFunction, double tolerance) {
+            .def("fieldActivationFunc", [](const Type &ref, const std::string &name, ActivationFunction* actFunction) {
                   return new FieldActivationFunction(
                         const_cast<Type*>(&ref),
                         name,
-                        actFunction,
-                        tolerance
+                        actFunction
                   );
             }, py::return_value_policy::reference_internal);
 
