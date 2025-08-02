@@ -14,7 +14,8 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import aika
-
+import aika.fields as af
+import aika.network as an
 
 class TransformerTypeRegistry:
     """
@@ -23,7 +24,7 @@ class TransformerTypeRegistry:
     """
     
     def __init__(self):
-        self.registry = aika.fields.TypeRegistry()
+        self.registry = af.TypeRegistry()
         
         # Initialize all type definitions
         self._setup_neuron_types()
@@ -39,19 +40,19 @@ class TransformerTypeRegistry:
     
     def _setup_neuron_types(self):
         """Setup neuron type definitions: T_N = {T_EMB, T_KEY, T_QUERY, T_INHIB, T_VALUE}"""
-        self.T_EMB = aika.network.NeuronType(self.registry, "EMB_NEURON")
-        self.T_KEY = aika.network.NeuronType(self.registry, "KEY_NEURON")
-        self.T_QUERY = aika.network.NeuronType(self.registry, "QUERY_NEURON")
-        self.T_INHIB = aika.network.NeuronType(self.registry, "INHIB_NEURON")  
-        self.T_VALUE = aika.network.NeuronType(self.registry, "VALUE_NEURON")
+        self.T_EMB = an.NeuronType(self.registry, "EMB_NEURON")
+        self.T_KEY = an.NeuronType(self.registry, "KEY_NEURON")
+        self.T_QUERY = an.NeuronType(self.registry, "QUERY_NEURON")
+        self.T_INHIB = an.NeuronType(self.registry, "INHIB_NEURON")
+        self.T_VALUE = an.NeuronType(self.registry, "VALUE_NEURON")
     
     def _setup_activation_types(self):
         """Setup activation type definitions: T_A"""
-        self.T_EMB_ACT = aika.network.ActivationType(self.registry, "EMB_ACTIVATION")
-        self.T_KEY_ACT = aika.network.ActivationType(self.registry, "KEY_ACTIVATION")
-        self.T_QUERY_ACT = aika.network.ActivationType(self.registry, "QUERY_ACTIVATION")
-        self.T_INHIB_ACT = aika.network.ActivationType(self.registry, "INHIB_ACTIVATION")
-        self.T_VALUE_ACT = aika.network.ActivationType(self.registry, "VALUE_ACTIVATION")
+        self.T_EMB_ACT = an.ActivationType(self.registry, "EMB_ACTIVATION")
+        self.T_KEY_ACT = an.ActivationType(self.registry, "KEY_ACTIVATION")
+        self.T_QUERY_ACT = an.ActivationType(self.registry, "QUERY_ACTIVATION")
+        self.T_INHIB_ACT = an.ActivationType(self.registry, "INHIB_ACTIVATION")
+        self.T_VALUE_ACT = an.ActivationType(self.registry, "VALUE_ACTIVATION")
         
         # Link neuron types to their activation types
         self.T_EMB.setActivation(self.T_EMB_ACT)
@@ -63,12 +64,12 @@ class TransformerTypeRegistry:
     def _setup_synapse_types(self):
         """Setup synapse type definitions: T_S"""
         # Synapse types according to transformer specification
-        self.S_EMB_KEY = aika.network.SynapseType(self.registry, "S_EMB_KEY")
-        self.S_EMB_QUERY = aika.network.SynapseType(self.registry, "S_EMB_QUERY")
-        self.S_KEY_QUERY = aika.network.SynapseType(self.registry, "S_KEY_QUERY")
-        self.S_QUERY_INHIB = aika.network.SynapseType(self.registry, "S_QUERY_INHIB")
-        self.S_INHIB_VALUE = aika.network.SynapseType(self.registry, "S_INHIB_VALUE")
-        self.S_EMB_VALUE = aika.network.SynapseType(self.registry, "S_EMB_VALUE")
+        self.S_EMB_KEY = an.SynapseType(self.registry, "S_EMB_KEY")
+        self.S_EMB_QUERY = an.SynapseType(self.registry, "S_EMB_QUERY")
+        self.S_KEY_QUERY = an.SynapseType(self.registry, "S_KEY_QUERY")
+        self.S_QUERY_INHIB = an.SynapseType(self.registry, "S_QUERY_INHIB")
+        self.S_INHIB_VALUE = an.SynapseType(self.registry, "S_INHIB_VALUE")
+        self.S_EMB_VALUE = an.SynapseType(self.registry, "S_EMB_VALUE")
         
         # Set input/output neuron type relationships
         self.S_EMB_KEY.setInput(self.T_EMB).setOutput(self.T_KEY)
@@ -81,12 +82,12 @@ class TransformerTypeRegistry:
     def _setup_link_types(self):
         """Setup link type definitions: T_L"""
         # Link types for each synapse type
-        self.L_EMB_KEY = aika.network.LinkType(self.registry, "L_EMB_KEY")
-        self.L_EMB_QUERY = aika.network.LinkType(self.registry, "L_EMB_QUERY")
-        self.L_KEY_QUERY = aika.network.LinkType(self.registry, "L_KEY_QUERY")
-        self.L_QUERY_INHIB = aika.network.LinkType(self.registry, "L_QUERY_INHIB")
-        self.L_INHIB_VALUE = aika.network.LinkType(self.registry, "L_INHIB_VALUE")
-        self.L_EMB_VALUE = aika.network.LinkType(self.registry, "L_EMB_VALUE")
+        self.L_EMB_KEY = an.LinkType(self.registry, "L_EMB_KEY")
+        self.L_EMB_QUERY = an.LinkType(self.registry, "L_EMB_QUERY")
+        self.L_KEY_QUERY = an.LinkType(self.registry, "L_KEY_QUERY")
+        self.L_QUERY_INHIB = an.LinkType(self.registry, "L_QUERY_INHIB")
+        self.L_INHIB_VALUE = an.LinkType(self.registry, "L_INHIB_VALUE")
+        self.L_EMB_VALUE = an.LinkType(self.registry, "L_EMB_VALUE")
         
         # Set synapse relationships
         self.L_EMB_KEY.setSynapse(self.S_EMB_KEY)
@@ -112,61 +113,63 @@ class TransformerTypeRegistry:
         # ========================================
         
         # Base Standard Neuron Type - root for normal neurons
-        self.T_STANDARD_NEURON = aika.network.NeuronType(self.registry, "STANDARD_NEURON")
+        self.T_STANDARD_NEURON = an.NeuronType(self.registry, "STANDARD_NEURON")
         bias_field = self.T_STANDARD_NEURON.inputField("bias")
         
         # Base Standard Activation Type - root for normal activations
-        self.T_STANDARD_ACTIVATION = aika.network.ActivationType(self.registry, "STANDARD_ACTIVATION")
+        self.T_STANDARD_ACTIVATION = an.ActivationType(self.registry, "STANDARD_ACTIVATION")
         # Standard activation fields:
         net_field = self.T_STANDARD_ACTIVATION.sum("net")
         value_field = self.T_STANDARD_ACTIVATION.add("value")
         fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
 
+        print("A")
         # Base Standard Synapse Type - root for all synapses
-        self.T_STANDARD_SYNAPSE = aika.network.SynapseType(self.registry, "STANDARD_SYNAPSE")
+        self.T_STANDARD_SYNAPSE = an.SynapseType(self.registry, "STANDARD_SYNAPSE")
         weight_field = self.T_STANDARD_SYNAPSE.inputField("weight")
-        
+
+        print("B")
         # Base Standard Link Type - root for normal links
-        self.T_STANDARD_LINK = aika.network.LinkType(self.registry, "STANDARD_LINK")
+        self.T_STANDARD_LINK = an.LinkType(self.registry, "STANDARD_LINK")
+        print("C")
         # Standard weightedInput: f(l) = f_weight^SYNAPSE(l) · f_val^INPUT(l)
         standard_weighted_input = self.T_STANDARD_LINK.mul("weightedInput")
-        standard_weighted_input.input(aika.network.LinkType.SYNAPSE, self.T_STANDARD_SYNAPSE.inputField("weight"), 0)
-        standard_weighted_input.input(aika.network.LinkType.INPUT, self.T_STANDARD_ACTIVATION.add("value"), 1)
-        
+        print("D")
+        standard_weighted_input.input(an.LinkType.SYNAPSE, self.T_STANDARD_SYNAPSE.inputField("weight"), 0)
+        print("E")
+        standard_weighted_input.input(an.LinkType.INPUT, self.T_STANDARD_ACTIVATION.add("value"), 1)
+
         # ========================================
         # SPECIAL INHIBITORY TYPES (EXCEPTION)
         # ========================================
         
         # Inhibitory Neuron Type - inherits from standard neuron but has different math
-        self.T_INHIBITORY_NEURON = aika.network.NeuronType(self.registry, "INHIBITORY_NEURON")
+        self.T_INHIBITORY_NEURON = an.NeuronType(self.registry, "INHIBITORY_NEURON")
         # Inherits bias field from standard neuron type
         
         # Inhibitory Activation Type - different mathematical model for softmax
-        self.T_INHIBITORY_ACTIVATION = aika.network.ActivationType(self.registry, "INHIBITORY_ACTIVATION")
-        # Inhibitory activation has special softmax denominator field
-        inhib_net_field = self.T_INHIBITORY_ACTIVATION.sum("net")
-        inhib_value_field = self.T_INHIBITORY_ACTIVATION.add("value")
-        inhib_fired_field = self.T_INHIBITORY_ACTIVATION.inputField("fired")
+        self.T_INHIBITORY_ACTIVATION = an.ActivationType(self.registry, "INHIBITORY_ACTIVATION")
+
         # Special field for softmax normalization
         softmax_denominator = self.T_INHIBITORY_ACTIVATION.sum("softmax_denominator")
         
         # Inhibitory Link Type - special softmax computation
-        self.T_INHIBITORY_LINK = aika.network.LinkType(self.registry, "INHIBITORY_LINK")
+        self.T_INHIBITORY_LINK = an.LinkType(self.registry, "INHIBITORY_LINK")
         # Special softmax weightedInput implementation
         softmax_weighted_input = self.T_INHIBITORY_LINK.mul("weightedInput")
         
         # Numerator: exp(f_val^INPUT(PAIR_IN(l)))
         numerator = self.T_INHIBITORY_LINK.exp("softmax_numerator")
-        numerator.input(aika.network.LinkType.PAIR_IN, self.T_STANDARD_ACTIVATION.add("value"), 0)
+        numerator.input(an.LinkType.PAIR_IN, self.T_STANDARD_ACTIVATION.add("value"), 0)
         
         # Softmax ratio: numerator / denominator
         softmax_ratio = self.T_INHIBITORY_LINK.div("softmax_ratio")
-        softmax_ratio.input(aika.network.LinkType.SELF, numerator, 0)
-        softmax_ratio.input(aika.network.LinkType.OUTPUT, softmax_denominator, 1)
+        softmax_ratio.input(an.LinkType.SELF, numerator, 0)
+        softmax_ratio.input(an.LinkType.OUTPUT, softmax_denominator, 1)
         
         # Final weighted input: softmax_ratio * weight
-        softmax_weighted_input.input(aika.network.LinkType.SELF, softmax_ratio, 0)
-        softmax_weighted_input.input(aika.network.LinkType.SYNAPSE, self.T_STANDARD_SYNAPSE.inputField("weight"), 1)
+        softmax_weighted_input.input(an.LinkType.SELF, softmax_ratio, 0)
+        softmax_weighted_input.input(an.LinkType.SYNAPSE, self.T_STANDARD_SYNAPSE.inputField("weight"), 1)
         
         # ========================================
         # SETUP TYPE HIERARCHY
