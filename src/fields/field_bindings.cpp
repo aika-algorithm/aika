@@ -19,6 +19,7 @@
 #include "fields/exponential_function.h"
 #include "fields/summation.h"
 #include "fields/field_activation_function.h"
+#include "fields/activation_functions.h"
 #include "fields/queue.h"
 
 namespace py = pybind11;
@@ -85,7 +86,31 @@ void bind_fields(py::module_& m) {
       // Bind Summation (inherits from AbstractFunctionDefinition)
       py::class_<Summation, AbstractFunctionDefinition>(m, "Summation");
 
-            // Bind FieldActivationFunction (inherits from AbstractFunctionDefinition)
+      // Bind ActivationFunction base class
+      py::class_<ActivationFunction>(m, "ActivationFunction")
+            .def("f", &ActivationFunction::f)
+            .def("outerGrad", &ActivationFunction::outerGrad);
+
+      // Bind concrete activation function implementations
+      py::class_<SigmoidActivationFunction, ActivationFunction>(m, "SigmoidActivationFunction")
+            .def(py::init<>());
+
+      py::class_<TanhActivationFunction, ActivationFunction>(m, "TanhActivationFunction")
+            .def(py::init<>());
+
+      py::class_<ReLUActivationFunction, ActivationFunction>(m, "ReLUActivationFunction")
+            .def(py::init<>());
+
+      py::class_<LeakyReLUActivationFunction, ActivationFunction>(m, "LeakyReLUActivationFunction")
+            .def(py::init<>())
+            .def(py::init<double>())
+            .def("getAlpha", &LeakyReLUActivationFunction::getAlpha)
+            .def("setAlpha", &LeakyReLUActivationFunction::setAlpha);
+
+      py::class_<LinearActivationFunction, ActivationFunction>(m, "LinearActivationFunction")
+            .def(py::init<>());
+
+      // Bind FieldActivationFunction (inherits from AbstractFunctionDefinition)
       py::class_<FieldActivationFunction, AbstractFunctionDefinition>(m, "FieldActivationFunction")
             .def(py::init<Type*, const std::string&, ActivationFunction*, double>());
 

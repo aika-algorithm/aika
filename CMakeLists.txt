@@ -24,6 +24,7 @@ set(SOURCES
         src/fields/exponential_function.cpp
         src/fields/summation.cpp
         src/fields/field_activation_function.cpp
+        src/fields/activation_functions.cpp
         src/fields/field_link_definition.cpp
         src/fields/object.cpp
         src/fields/type.cpp

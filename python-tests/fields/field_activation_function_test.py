@@ -22,13 +22,17 @@ class FieldActivationFunctionTestCase(unittest.TestCase):
         typeA = aika.fields.TestType(registry, "A")
         typeB = aika.fields.TestType(registry, "B")
 
-        a = typeA.inputField("a")
-        b = typeA.inputField("b")
+        # Input field for raw input value
+        input_val = typeA.inputField("input_val")
 
-        c = typeB.add("c")
+        # Create a sigmoid activation function
+        sigmoid_func = aika.fields.SigmoidActivationFunction()
+        
+        # Create field activation function with sigmoid and tolerance
+        sigmoid_field = typeB.fieldActivationFunc("sigmoid_output", sigmoid_func, 0.001)
 
-        c.input(TEST_RELATION_FROM, a, 0)
-        c.input(TEST_RELATION_FROM, b, 1)
+        # Connect input to the sigmoid field
+        sigmoid_field.input(TEST_RELATION_FROM, input_val, 0)
 
         registry.flattenTypeHierarchy()
 
@@ -38,12 +42,25 @@ class FieldActivationFunctionTestCase(unittest.TestCase):
         aika.fields.TestObj.linkObjects(oa, ob)
         ob.initFields()
 
-        oa.setFieldValue(a, 50.0)
-        oa.setFieldValue(b, 20.0)
+        # Test sigmoid activation with input value 0 (should give ~0.5)
+        oa.setFieldValue(input_val, 0.0)
+        result = ob.getFieldValue(sigmoid_field)
+        print(f"Sigmoid(0.0): {result}")
+        self.assertAlmostEqual(result, 0.5, places=3)
 
-        print("ob.getFieldValue(c):", ob.getFieldValue(c))
+        # Test sigmoid activation with input value 1 (should give ~0.731) 
+        oa.setFieldValue(input_val, 1.0)
+        result = ob.getFieldValue(sigmoid_field)
+        print(f"Sigmoid(1.0): {result}")
+        self.assertAlmostEqual(result, 0.731, places=3)
 
-        self.assertEqual(70.0, ob.getFieldValue(c))
+        # Test sigmoid activation with input value -1 (should give ~0.269)
+        oa.setFieldValue(input_val, -1.0)
+        result = ob.getFieldValue(sigmoid_field)
+        print(f"Sigmoid(-1.0): {result}")
+        self.assertAlmostEqual(result, 0.269, places=3)
+        
+        print("✅ Field activation function with Sigmoid works correctly!")
 
 if __name__ == '__main__':
     unittest.main() 

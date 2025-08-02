@@ -69,7 +69,7 @@ void bind_network(py::module_& m) {
         });
 
     // Bind ActivationDefinition class (inherits from Type)
-    py::class_<ActivationDefinition, Type>(m, "ActivationDefinition")
+    py::class_<ActivationDefinition, Type>(m, "ActivationType")
         .def(py::init<TypeRegistry*, const std::string&>())
         .def("__str__", [](const ActivationDefinition& ad) {
             return ad.toString();
@@ -184,7 +184,7 @@ void bind_network(py::module_& m) {
         .def("getInputLinks", &DisjunctiveActivation::getInputLinks, py::return_value_policy::reference_internal);
 
     // Bind NeuronDefinition class (inherits from Type)
-    py::class_<NeuronDefinition, Type>(m, "NeuronDefinition")
+    py::class_<NeuronDefinition, Type>(m, "NeuronType")
         .def(py::init<TypeRegistry*, const std::string&>())
         .def("getRelations", &NeuronDefinition::getRelations)
         .def("instantiate", &NeuronDefinition::instantiate, py::return_value_policy::reference_internal)
@@ -263,7 +263,7 @@ void bind_network(py::module_& m) {
         .def_readonly_static("OUTPUT", &NetworkDirection::OUTPUT);
 
     // Bind LinkDefinition class (inherits from Type)
-    py::class_<LinkDefinition, Type>(m, "LinkDefinition")
+    py::class_<LinkDefinition, Type>(m, "LinkType")
         .def(py::init<TypeRegistry*, const std::string&>())
         .def("getRelations", &LinkDefinition::getRelations, py::return_value_policy::reference_internal)
         .def("instantiate", &LinkDefinition::instantiate, py::return_value_policy::reference_internal)
@@ -291,7 +291,7 @@ void bind_network(py::module_& m) {
         .export_values();
 
     // Bind SynapseDefinition class (inherits from Type)
-    py::class_<SynapseDefinition, Type>(m, "SynapseDefinition")
+    py::class_<SynapseDefinition, Type>(m, "SynapseType")
         .def(py::init<TypeRegistry*, const std::string&>())
         .def("getRelations", &SynapseDefinition::getRelations)
         .def("instantiate", py::overload_cast<>(&SynapseDefinition::instantiate), py::return_value_policy::reference_internal)
