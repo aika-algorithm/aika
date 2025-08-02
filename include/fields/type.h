@@ -40,6 +40,7 @@ public:
 
 public:
     Type(TypeRegistry* registry, const std::string& name);
+    virtual ~Type() = default;
 
     short getId() const;
     bool isAbstract() const;

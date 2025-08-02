@@ -15,6 +15,7 @@ protected:
 
 public:
     explicit Object(Type* type);
+    virtual ~Object() = default;
 
     void initFields();
     Type* getType() const;
