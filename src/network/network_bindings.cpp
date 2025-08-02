@@ -71,9 +71,15 @@ void bind_network(py::module_& m) {
     // Bind ActivationDefinition class (inherits from Type)
     py::class_<ActivationDefinition, Type>(m, "ActivationType")
         .def(py::init<TypeRegistry*, const std::string&>())
+        .def("getRelations", &ActivationDefinition::getRelations, py::return_value_policy::reference_internal)
         .def("__str__", [](const ActivationDefinition& ad) {
             return ad.toString();
-        });
+        })
+        // Static relation members
+        .def_readonly_static("SELF", &ActivationDefinition::SELF)
+        .def_readonly_static("INPUT", &ActivationDefinition::INPUT)
+        .def_readonly_static("OUTPUT", &ActivationDefinition::OUTPUT)
+        .def_readonly_static("NEURON", &ActivationDefinition::NEURON);
 
     // Bind ActivationKey class
     py::class_<ActivationKey>(m, "ActivationKey")

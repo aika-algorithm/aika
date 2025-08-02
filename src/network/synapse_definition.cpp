@@ -7,6 +7,22 @@ const RelationMany SynapseDefinition::LINK = RelationMany(3, "LINK");
 // Cannot store abstract class Relation in vector, need to use pointers instead
 // const std::vector<Relation> SynapseDefinition::RELATIONS = {SELF, INPUT, OUTPUT, LINK};
 
+// Static initializer to set up reverse relationships
+class SynapseDefinitionInitializer {
+public:
+    SynapseDefinitionInitializer() {
+        // Set up bidirectional relationships
+        const_cast<RelationOne&>(SynapseDefinition::INPUT).setReversed(const_cast<RelationOne*>(&SynapseDefinition::OUTPUT));
+        const_cast<RelationOne&>(SynapseDefinition::OUTPUT).setReversed(const_cast<RelationOne*>(&SynapseDefinition::INPUT));
+        
+        // SELF and LINK are their own reverse
+        const_cast<RelationSelf&>(SynapseDefinition::SELF).setReversed(const_cast<RelationSelf*>(&SynapseDefinition::SELF));
+        const_cast<RelationMany&>(SynapseDefinition::LINK).setReversed(const_cast<RelationMany*>(&SynapseDefinition::LINK));
+    }
+};
+
+static SynapseDefinitionInitializer synapseDefInit;
+
 SynapseDefinition::SynapseDefinition(TypeRegistry* registry, const std::string& name) : Type(registry, name), subType(SynapseSubType::CONJUNCTIVE), link(nullptr), input(nullptr), output(nullptr), storedAt(nullptr), trainingAllowed(false), instanceSynapseType(nullptr) {}
 
 std::vector<Relation> SynapseDefinition::getRelations() const {

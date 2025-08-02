@@ -8,6 +8,22 @@ const RelationMany NeuronDefinition::ACTIVATION = RelationMany(3, "ACTIVATION");
 // Cannot store abstract class Relation in vector, need to use pointers instead
 // const std::vector<Relation> NeuronDefinition::RELATIONS = {SELF, INPUT, OUTPUT, ACTIVATION};
 
+// Static initializer to set up reverse relationships
+class NeuronDefinitionInitializer {
+public:
+    NeuronDefinitionInitializer() {
+        // Set up bidirectional relationships
+        const_cast<RelationMany&>(NeuronDefinition::INPUT).setReversed(const_cast<RelationMany*>(&NeuronDefinition::OUTPUT));
+        const_cast<RelationMany&>(NeuronDefinition::OUTPUT).setReversed(const_cast<RelationMany*>(&NeuronDefinition::INPUT));
+        
+        // SELF and ACTIVATION are their own reverse
+        const_cast<RelationSelf&>(NeuronDefinition::SELF).setReversed(const_cast<RelationSelf*>(&NeuronDefinition::SELF));
+        const_cast<RelationMany&>(NeuronDefinition::ACTIVATION).setReversed(const_cast<RelationMany*>(&NeuronDefinition::ACTIVATION));
+    }
+};
+
+static NeuronDefinitionInitializer neuronDefInit;
+
 NeuronDefinition::NeuronDefinition(TypeRegistry* registry, const std::string& name) : Type(registry, name) {}
 
 std::vector<Relation> NeuronDefinition::getRelations() const {
