@@ -63,6 +63,8 @@ void Type::initDepth() {
     if (!depth.has_value()) {
         depth = 0;
         for (const auto& p : parents) {
+            // Ensure parent depth is initialized first
+            p->initDepth();
             depth = std::max(depth.value(), p->getDepth() + 1);
         }
     }
