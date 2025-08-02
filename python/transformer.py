@@ -143,36 +143,29 @@ class TransformerTypeRegistry:
         weighted_input.input(an.LinkType.INPUT, self.T_STANDARD_ACTIVATION.add("value"), 1)
 
         # ========================================
-        # SPECIAL INHIBITORY TYPES (EXCEPTION)
+        # INHIBITORY TYPES (STANDALONE)
         # ========================================
         
-        # Inhibitory Neuron Type - inherits from standard neuron but has different math
-        self.T_INHIBITORY_NEURON = an.NeuronType(self.registry, "INHIBITORY_NEURON")
-        # Inherits bias field from standard neuron type
+        # Standalone inhibitory neuron with bias field
+        print("Creating standalone T_INHIB neuron type...")
         
-        # Inhibitory Activation Type - different mathematical model for softmax
-        self.T_INHIBITORY_ACTIVATION = an.ActivationType(self.registry, "INHIBITORY_ACTIVATION")
-
+        # Standalone inhibitory activation with softmax fields
+        print("Creating standalone T_INHIB_ACT activation type...")
+        
         # Special field for softmax normalization
-        softmax_denominator = self.T_INHIBITORY_ACTIVATION.sum("softmax_denominator")
+        softmax_denominator = self.T_INHIB_ACT.sum("softmax_denominator")
         
-        # Inhibitory Link Type - special softmax computation
-        self.T_INHIBITORY_LINK = an.LinkType(self.registry, "INHIBITORY_LINK")
-        # Special softmax weightedInput implementation
-        softmax_weighted_input = self.T_INHIBITORY_LINK.mul("weightedInput")
+        # Standalone inhibitory link with softmax computation
+        print("Creating standalone L_INHIB_VALUE link type...")
         
         # Numerator: exp(f_val^INPUT(PAIR_IN(l)))
-        numerator = self.T_INHIBITORY_LINK.exp("softmax_numerator")
-        numerator.input(an.LinkType.PAIR_IN, self.T_STANDARD_ACTIVATION.add("value"), 0)
+        numerator = self.L_INHIB_VALUE.exp("softmax_numerator")
+        numerator.input(an.LinkType.PAIR_IN, self.T_INHIB_ACT.add("value"), 0)
         
         # Softmax ratio: numerator / denominator
-        softmax_ratio = self.T_INHIBITORY_LINK.div("softmax_ratio")
+        softmax_ratio = self.L_INHIB_VALUE.div("softmax_ratio")
         softmax_ratio.input(an.LinkType.SELF, numerator, 0)
         softmax_ratio.input(an.LinkType.OUTPUT, softmax_denominator, 1)
-        
-        # Final weighted input: softmax_ratio * weight
-        softmax_weighted_input.input(an.LinkType.SELF, softmax_ratio, 0)
-        softmax_weighted_input.input(an.LinkType.SYNAPSE, self.T_STANDARD_SYNAPSE.inputField("weight"), 1)
         
         # ========================================
         # SETUP TYPE HIERARCHY
@@ -187,9 +180,6 @@ class TransformerTypeRegistry:
         self.T_QUERY.addParent(self.T_STANDARD_NEURON)
         self.T_VALUE.addParent(self.T_STANDARD_NEURON)
         
-        # Inhibitory neuron inherits from inhibitory base type
-        self.T_INHIB.addParent(self.T_INHIBITORY_NEURON)
-        
         # Standard activations inherit from base standard activation
         print("Setting activation inheritance...")
         self.T_EMB_ACT.addParent(self.T_STANDARD_ACTIVATION)
@@ -197,8 +187,7 @@ class TransformerTypeRegistry:
         self.T_QUERY_ACT.addParent(self.T_STANDARD_ACTIVATION)
         self.T_VALUE_ACT.addParent(self.T_STANDARD_ACTIVATION)
         
-        # Inhibitory activation inherits from inhibitory base type
-        self.T_INHIB_ACT.addParent(self.T_INHIBITORY_ACTIVATION)
+        # T_INHIB_ACT is standalone (no inheritance)
         
         # All synapses inherit from standard synapse
         print("Setting synapse inheritance...")
@@ -218,8 +207,7 @@ class TransformerTypeRegistry:
         self.L_QUERY_INHIB.addParent(self.T_STANDARD_LINK)
         self.L_EMB_VALUE.addParent(self.T_STANDARD_LINK)
         
-        # Inhibitory output link uses special inhibitory link type
-        self.L_INHIB_VALUE.addParent(self.T_INHIBITORY_LINK)
+        # L_INHIB_VALUE is standalone (no inheritance)
         
         print("Type hierarchy setup completed.")
     
@@ -255,32 +243,33 @@ def main():
         # Display the hierarchical structure
         print("\n🏗️ Type Hierarchy:")
         print(f"   • Base standard types: STANDARD_NEURON, STANDARD_ACTIVATION, STANDARD_SYNAPSE, STANDARD_LINK")
-        print(f"   • Base inhibitory types: INHIBITORY_NEURON, INHIBITORY_ACTIVATION, INHIBITORY_LINK")
+        print(f"   • Standalone inhibitory types: T_INHIB, T_INHIB_ACT, L_INHIB_VALUE")
         
         print("\n🔬 Transformer Type Inheritance:")
         print(f"   • EMB, KEY, QUERY, VALUE inherit from STANDARD_NEURON")
-        print(f"   • INHIB inherits from INHIBITORY_NEURON") 
-        print(f"   • All *_ACT types inherit from their respective base activation types")
+        print(f"   • INHIB is standalone (no inheritance)")
+        print(f"   • EMB_ACT, KEY_ACT, QUERY_ACT, VALUE_ACT inherit from STANDARD_ACTIVATION")
+        print(f"   • INHIB_ACT is standalone (no inheritance)")
         
         print("\n🔗 Synapse & Link Inheritance:")
         print(f"   • All S_* types inherit from STANDARD_SYNAPSE")
         print(f"   • Most L_* types inherit from STANDARD_LINK")
-        print(f"   • L_INHIB_VALUE inherits from INHIBITORY_LINK")
+        print(f"   • L_INHIB_VALUE is standalone (no inheritance)")
         
         print("\n🧮 Mathematical Model Features:")
-        print("   • Type hierarchy with base types for standard neurons/activations")
+        print("   • Simplified type hierarchy with base standard types")
         print("   • Standard weightedInput: weight × input_value (inherited)")
-        print("   • Special inhibitory types with softmax computation")
+        print("   • Standalone inhibitory types with softmax computation")
         print("   • Softmax: exp(input) / Σ(exp(all_inputs)) × weight")
         print("   • Binding signal propagation for token identity")
         print("   • Field-based computation graph with inheritance")
         
-        print("\n🎯 Implementation follows formal transformer specification:")
+        print("\n🎯 Implementation follows simplified transformer specification:")
         print("   • Base types: STANDARD_NEURON/ACTIVATION → inherited by EMB, KEY, QUERY, VALUE")
-        print("   • Exception: INHIBITORY_NEURON/ACTIVATION → used by INHIB for softmax")
+        print("   • Standalone types: T_INHIB, T_INHIB_ACT, L_INHIB_VALUE with softmax fields")
         print("   • Attention mechanism: KEY→QUERY→INHIB→VALUE")
         print("   • Softmax normalization using PAIR_IN/PAIR_OUT relations")
-        print("   • Type hierarchy eliminates field definition loops")
+        print("   • Simplified hierarchy removes intermediate INHIBITORY types")
         
         return transformer_types
         
