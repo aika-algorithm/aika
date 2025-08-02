@@ -120,7 +120,8 @@ class TransformerTypeRegistry:
         self.T_STANDARD_ACTIVATION = an.ActivationType(self.registry, "STANDARD_ACTIVATION")
         # Standard activation fields:
         net_field = self.T_STANDARD_ACTIVATION.sum("net")
-        value_field = self.T_STANDARD_ACTIVATION.fieldActivationFunc("value", af.TanhActivationFunction)
+        tanh_func = af.TanhActivationFunction()
+        value_field = self.T_STANDARD_ACTIVATION.fieldActivationFunc("value", tanh_func, 0.001)
         fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
 
         print("A")

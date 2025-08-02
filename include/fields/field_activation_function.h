@@ -9,7 +9,7 @@
 
 class FieldActivationFunction : public AbstractFunctionDefinition {
 public:
-    FieldActivationFunction(Type* ref, const std::string& name, ActivationFunction* actFunction);
+    FieldActivationFunction(Type* ref, const std::string& name, ActivationFunction* actFunction, double tolerance);
 
     double computeUpdate(Object* obj, FieldLinkDefinition* fl, double u) override;
 

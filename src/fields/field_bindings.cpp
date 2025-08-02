@@ -61,9 +61,9 @@ void bind_fields(py::module_& m) {
 
       // Bind FieldDefinition first
       py::class_<FieldDefinition>(m, "FieldDefinition")
-            .def("input", &FieldDefinition::input, py::return_value_policy::reference_internal, 
+            .def("input", &FieldDefinition::input, py::return_value_policy::reference_internal,
                   py::arg("relation"), py::arg("input"), py::arg("arg"))
-            .def("output", &FieldDefinition::output, py::return_value_policy::reference_internal, 
+            .def("output", &FieldDefinition::output, py::return_value_policy::reference_internal,
                   py::arg("relation"), py::arg("output"), py::arg("arg"));
 
       // Bind AbstractFunctionDefinition (inherits from FieldDefinition)
@@ -112,7 +112,7 @@ void bind_fields(py::module_& m) {
 
       // Bind FieldActivationFunction (inherits from AbstractFunctionDefinition)
       py::class_<FieldActivationFunction, AbstractFunctionDefinition>(m, "FieldActivationFunction")
-            .def(py::init<Type*, const std::string&, ActivationFunction*>());
+            .def(py::init<Type*, const std::string&, ActivationFunction*, double>());
 
       py::class_<InputField, FieldDefinition>(m, "InputField")
             .def(py::init<Type*, const std::string &>())
@@ -167,11 +167,12 @@ void bind_fields(py::module_& m) {
                         name
                   );
             }, py::return_value_policy::reference_internal)
-            .def("fieldActivationFunc", [](const Type &ref, const std::string &name, ActivationFunction* actFunction) {
+            .def("fieldActivationFunc", [](const Type &ref, const std::string &name, ActivationFunction* actFunction, double tolerance) {
                   return new FieldActivationFunction(
                         const_cast<Type*>(&ref),
                         name,
-                        actFunction
+                        actFunction,
+                        tolerance
                   );
             }, py::return_value_policy::reference_internal);
 
