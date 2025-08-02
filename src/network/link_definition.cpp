@@ -7,6 +7,24 @@ const RelationOne LinkDefinition::SYNAPSE = RelationOne(3, "SYNAPSE");
 const RelationOne LinkDefinition::PAIR_IN = RelationOne(4, "PAIR_IN");
 const RelationOne LinkDefinition::PAIR_OUT = RelationOne(5, "PAIR_OUT");
 
+// Static initializer to set up reverse relationships
+class LinkDefinitionInitializer {
+public:
+    LinkDefinitionInitializer() {
+        // Set up bidirectional relationships
+        const_cast<RelationOne&>(LinkDefinition::INPUT).setReversed(const_cast<RelationOne*>(&LinkDefinition::OUTPUT));
+        const_cast<RelationOne&>(LinkDefinition::OUTPUT).setReversed(const_cast<RelationOne*>(&LinkDefinition::INPUT));
+        const_cast<RelationOne&>(LinkDefinition::PAIR_IN).setReversed(const_cast<RelationOne*>(&LinkDefinition::PAIR_OUT));
+        const_cast<RelationOne&>(LinkDefinition::PAIR_OUT).setReversed(const_cast<RelationOne*>(&LinkDefinition::PAIR_IN));
+        
+        // SYNAPSE and SELF are their own reverse
+        const_cast<RelationOne&>(LinkDefinition::SYNAPSE).setReversed(const_cast<RelationOne*>(&LinkDefinition::SYNAPSE));
+        const_cast<RelationSelf&>(LinkDefinition::SELF).setReversed(const_cast<RelationSelf*>(&LinkDefinition::SELF));
+    }
+};
+
+static LinkDefinitionInitializer linkDefInit;
+
 // Can't use an abstract class Relation in a vector directly
 // Will need to implement a different approach
 // Commenting out for now to fix compilation

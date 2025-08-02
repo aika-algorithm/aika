@@ -108,15 +108,19 @@ class TransformerTypeRegistry:
     def _setup_field_definitions(self):
         """Setup field definitions using type hierarchy according to the transformer specification."""
         
+        print("Starting field definitions setup...")
+        
         # ========================================
         # BASE TYPE DEFINITIONS (ROOT TYPES)
         # ========================================
         
         # Base Standard Neuron Type - root for normal neurons
+        print("Creating T_STANDARD_NEURON...")
         self.T_STANDARD_NEURON = an.NeuronType(self.registry, "STANDARD_NEURON")
         bias_field = self.T_STANDARD_NEURON.inputField("bias")
         
         # Base Standard Activation Type - root for normal activations
+        print("Creating T_STANDARD_ACTIVATION...")
         self.T_STANDARD_ACTIVATION = an.ActivationType(self.registry, "STANDARD_ACTIVATION")
         # Standard activation fields:
         net_field = self.T_STANDARD_ACTIVATION.sum("net")
@@ -124,20 +128,18 @@ class TransformerTypeRegistry:
         value_field = self.T_STANDARD_ACTIVATION.fieldActivationFunc("value", tanh_func, 0.001)
         fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
 
-        print("A")
         # Base Standard Synapse Type - root for all synapses
+        print("Creating T_STANDARD_SYNAPSE...")
         self.T_STANDARD_SYNAPSE = an.SynapseType(self.registry, "STANDARD_SYNAPSE")
         weight_field = self.T_STANDARD_SYNAPSE.inputField("weight")
 
-        print("B")
         # Base Standard Link Type - root for normal links
+        print("Creating T_STANDARD_LINK...")
         self.T_STANDARD_LINK = an.LinkType(self.registry, "STANDARD_LINK")
-        print("C")
         # Standard weightedInput: f(l) = f_weight^SYNAPSE(l) · f_val^INPUT(l)
         weighted_input = self.T_STANDARD_LINK.mul("weightedInput")
-        print("D")
+
         weighted_input.input(an.LinkType.SYNAPSE, self.T_STANDARD_SYNAPSE.inputField("weight"), 0)
-        print("E")
         weighted_input.input(an.LinkType.INPUT, self.T_STANDARD_ACTIVATION.add("value"), 1)
 
         # ========================================
@@ -176,42 +178,50 @@ class TransformerTypeRegistry:
         # SETUP TYPE HIERARCHY
         # ========================================
         
+        print("Setting up type hierarchy...")
+        
         # Standard neurons inherit from base standard neuron
-        self.T_EMB.getParent = lambda: self.T_STANDARD_NEURON
-        self.T_KEY.getParent = lambda: self.T_STANDARD_NEURON  
-        self.T_QUERY.getParent = lambda: self.T_STANDARD_NEURON
-        self.T_VALUE.getParent = lambda: self.T_STANDARD_NEURON
+        print("Setting neuron inheritance...")
+        self.T_EMB.addParent(self.T_STANDARD_NEURON)
+        self.T_KEY.addParent(self.T_STANDARD_NEURON)  
+        self.T_QUERY.addParent(self.T_STANDARD_NEURON)
+        self.T_VALUE.addParent(self.T_STANDARD_NEURON)
         
         # Inhibitory neuron inherits from inhibitory base type
-        self.T_INHIB.getParent = lambda: self.T_INHIBITORY_NEURON
+        self.T_INHIB.addParent(self.T_INHIBITORY_NEURON)
         
         # Standard activations inherit from base standard activation
-        self.T_EMB_ACT.getParent = lambda: self.T_STANDARD_ACTIVATION
-        self.T_KEY_ACT.getParent = lambda: self.T_STANDARD_ACTIVATION
-        self.T_QUERY_ACT.getParent = lambda: self.T_STANDARD_ACTIVATION
-        self.T_VALUE_ACT.getParent = lambda: self.T_STANDARD_ACTIVATION
+        print("Setting activation inheritance...")
+        self.T_EMB_ACT.addParent(self.T_STANDARD_ACTIVATION)
+        self.T_KEY_ACT.addParent(self.T_STANDARD_ACTIVATION)
+        self.T_QUERY_ACT.addParent(self.T_STANDARD_ACTIVATION)
+        self.T_VALUE_ACT.addParent(self.T_STANDARD_ACTIVATION)
         
         # Inhibitory activation inherits from inhibitory base type
-        self.T_INHIB_ACT.getParent = lambda: self.T_INHIBITORY_ACTIVATION
+        self.T_INHIB_ACT.addParent(self.T_INHIBITORY_ACTIVATION)
         
         # All synapses inherit from standard synapse
-        self.S_EMB_KEY.getParent = lambda: self.T_STANDARD_SYNAPSE
-        self.S_EMB_QUERY.getParent = lambda: self.T_STANDARD_SYNAPSE
-        self.S_KEY_QUERY.getParent = lambda: self.T_STANDARD_SYNAPSE
-        self.S_QUERY_INHIB.getParent = lambda: self.T_STANDARD_SYNAPSE
-        self.S_EMB_VALUE.getParent = lambda: self.T_STANDARD_SYNAPSE
+        print("Setting synapse inheritance...")
+        self.S_EMB_KEY.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_EMB_QUERY.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_KEY_QUERY.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_QUERY_INHIB.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_EMB_VALUE.addParent(self.T_STANDARD_SYNAPSE)
         # Special case: inhibitory output synapse
-        self.S_INHIB_VALUE.getParent = lambda: self.T_STANDARD_SYNAPSE
+        self.S_INHIB_VALUE.addParent(self.T_STANDARD_SYNAPSE)
         
         # Standard links inherit from standard link
-        self.L_EMB_KEY.getParent = lambda: self.T_STANDARD_LINK
-        self.L_EMB_QUERY.getParent = lambda: self.T_STANDARD_LINK
-        self.L_KEY_QUERY.getParent = lambda: self.T_STANDARD_LINK
-        self.L_QUERY_INHIB.getParent = lambda: self.T_STANDARD_LINK
-        self.L_EMB_VALUE.getParent = lambda: self.T_STANDARD_LINK
+        print("Setting link inheritance...")
+        self.L_EMB_KEY.addParent(self.T_STANDARD_LINK)
+        self.L_EMB_QUERY.addParent(self.T_STANDARD_LINK)
+        self.L_KEY_QUERY.addParent(self.T_STANDARD_LINK)
+        self.L_QUERY_INHIB.addParent(self.T_STANDARD_LINK)
+        self.L_EMB_VALUE.addParent(self.T_STANDARD_LINK)
         
         # Inhibitory output link uses special inhibitory link type
-        self.L_INHIB_VALUE.getParent = lambda: self.T_INHIBITORY_LINK
+        self.L_INHIB_VALUE.addParent(self.T_INHIBITORY_LINK)
+        
+        print("Type hierarchy setup completed.")
     
     def get_registry(self):
         """Get the configured type registry."""
@@ -236,26 +246,26 @@ def main():
         transformer_types = create_transformer_types()
         
         print("✅ Transformer type registry created successfully!")
-        print(f"📊 Registry contains:")
-        print(f"   • {len(transformer_types.get_base_types())} base types (roots)")
-        print(f"   • {len(transformer_types.get_neuron_types())} transformer neuron types")
-        print(f"   • {len(transformer_types.get_activation_types())} transformer activation types") 
-        print(f"   • {len(transformer_types.get_synapse_types())} transformer synapse types")
-        print(f"   • {len(transformer_types.get_link_types())} transformer link types")
+        print(f"📊 Registry contains all transformer types:")
+        print(f"   • Neuron types: EMB, KEY, QUERY, INHIB, VALUE")
+        print(f"   • Activation types: EMB_ACT, KEY_ACT, QUERY_ACT, INHIB_ACT, VALUE_ACT") 
+        print(f"   • Synapse types: S_EMB_KEY, S_EMB_QUERY, S_KEY_QUERY, S_QUERY_INHIB, S_INHIB_VALUE, S_EMB_VALUE")
+        print(f"   • Link types: L_EMB_KEY, L_EMB_QUERY, L_KEY_QUERY, L_QUERY_INHIB, L_INHIB_VALUE, L_EMB_VALUE")
         
         # Display the hierarchical structure
-        print("\n🏗️ Type Hierarchy (Base Types):")
-        for name, base_type in transformer_types.get_base_types().items():
-            print(f"   • {name}: {base_type}")
+        print("\n🏗️ Type Hierarchy:")
+        print(f"   • Base standard types: STANDARD_NEURON, STANDARD_ACTIVATION, STANDARD_SYNAPSE, STANDARD_LINK")
+        print(f"   • Base inhibitory types: INHIBITORY_NEURON, INHIBITORY_ACTIVATION, INHIBITORY_LINK")
         
-        print("\n🔬 Transformer Neuron Types (inherit from base):")
-        for name, neuron_type in transformer_types.get_neuron_types().items():
-            parent = "STANDARD_NEURON" if name != "INHIB" else "INHIBITORY_NEURON"
-            print(f"   • {name}: {neuron_type} → inherits from {parent}")
+        print("\n🔬 Transformer Type Inheritance:")
+        print(f"   • EMB, KEY, QUERY, VALUE inherit from STANDARD_NEURON")
+        print(f"   • INHIB inherits from INHIBITORY_NEURON") 
+        print(f"   • All *_ACT types inherit from their respective base activation types")
         
-        print("\n🔗 Transformer Synapse Types:")
-        for name, synapse_type in transformer_types.get_synapse_types().items():
-            print(f"   • {name}: {synapse_type} → inherits from STANDARD_SYNAPSE")
+        print("\n🔗 Synapse & Link Inheritance:")
+        print(f"   • All S_* types inherit from STANDARD_SYNAPSE")
+        print(f"   • Most L_* types inherit from STANDARD_LINK")
+        print(f"   • L_INHIB_VALUE inherits from INHIBITORY_LINK")
         
         print("\n🧮 Mathematical Model Features:")
         print("   • Type hierarchy with base types for standard neurons/activations")
