@@ -118,11 +118,12 @@ class TransformerTypeRegistry:
         # Base Standard Activation Type - root for normal activations
         self.T_STANDARD_ACTIVATION = aika.network.ActivationDefinition(self.registry, "STANDARD_ACTIVATION")
         # Standard activation fields:
+        print("A\n")
         net_field = self.T_STANDARD_ACTIVATION.sum("net")
+        print("B\n")
         value_field = self.T_STANDARD_ACTIVATION.add("value")
         fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
-        bs_field = self.T_STANDARD_ACTIVATION.inputField("bs")
-        
+
         # Base Standard Synapse Type - root for all synapses
         self.T_STANDARD_SYNAPSE = aika.network.SynapseDefinition(self.registry, "STANDARD_SYNAPSE")
         weight_field = self.T_STANDARD_SYNAPSE.inputField("weight")
@@ -148,7 +149,6 @@ class TransformerTypeRegistry:
         inhib_net_field = self.T_INHIBITORY_ACTIVATION.sum("net")
         inhib_value_field = self.T_INHIBITORY_ACTIVATION.add("value")
         inhib_fired_field = self.T_INHIBITORY_ACTIVATION.inputField("fired")
-        inhib_bs_field = self.T_INHIBITORY_ACTIVATION.inputField("bs")
         # Special field for softmax normalization
         softmax_denominator = self.T_INHIBITORY_ACTIVATION.sum("softmax_denominator")
         
