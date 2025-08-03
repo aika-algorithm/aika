@@ -228,11 +228,11 @@ Link* Activation::getCorrespondingOutputLink(const Link* l) const {
     return nullptr;
 }
 
-std::vector<Link*> Activation::getInputLinks(LinkDefinition* linkDefinition) const {
+std::vector<Link*> Activation::getInputLinks(LinkType* linkDefinition) const {
     return getInputLinks();
 }
 
-std::vector<Link*> Activation::getOutputLinks(LinkDefinition* linkDefinition) const {
+std::vector<Link*> Activation::getOutputLinks(LinkType* linkDefinition) const {
     return getOutputLinks();
 }
 

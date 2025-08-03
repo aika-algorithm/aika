@@ -3,14 +3,14 @@
 #include "network/document.h"
 #include "network/element.h"
 #include "network/model_provider.h"
-#include "network/link_definition.h"
+#include "network/link_type.h"
 #include "network/synapse.h"
 #include "fields/object.h"
 #include "fields/queue.h"
 #include "fields/queue_provider.h"
 #include "network/timestamp.h"
 
-Link::Link(LinkDefinition* type, Synapse* s, Activation* input, Activation* output)
+Link::Link(LinkType* type, Synapse* s, Activation* input, Activation* output)
     : Object(type), synapse(s), input(input), output(output) {
     // initFields() call removed as it doesn't exist in Object class
     input->addOutputLink(this);

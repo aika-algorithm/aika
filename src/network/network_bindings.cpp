@@ -14,7 +14,7 @@
 #include "network/synapse_type.h"
 #include "network/conjunctive_synapse.h"
 #include "network/disjunctive_synapse.h"
-#include "network/link_definition.h"
+#include "network/link_type.h"
 #include "network/link.h"
 #include "network/direction.h"
 #include "network/config.h"
@@ -111,7 +111,7 @@ void bind_network(py::module_& m) {
 
     // Bind Link class (inherits from Object)
     py::class_<Link, Object>(m, "Link")
-        .def(py::init<LinkDefinition*, Synapse*, Activation*, Activation*>())
+        .def(py::init<LinkType*, Synapse*, Activation*, Activation*>())
         .def("getFired", &Link::getFired)
         .def("getCreated", &Link::getCreated)
         .def("getSynapse", &Link::getSynapse, py::return_value_policy::reference_internal)
@@ -160,8 +160,8 @@ void bind_network(py::module_& m) {
         .def("getConfig", &Activation::getConfig, py::return_value_policy::reference_internal)
         .def("getCorrespondingInputLink", &Activation::getCorrespondingInputLink, py::return_value_policy::reference_internal)
         .def("getCorrespondingOutputLink", &Activation::getCorrespondingOutputLink, py::return_value_policy::reference_internal)
-        .def("getInputLinks", py::overload_cast<LinkDefinition*>(&Activation::getInputLinks, py::const_), py::return_value_policy::reference_internal)
-        .def("getOutputLinks", py::overload_cast<LinkDefinition*>(&Activation::getOutputLinks, py::const_), py::return_value_policy::reference_internal)
+        .def("getInputLinks", py::overload_cast<LinkType*>(&Activation::getInputLinks, py::const_), py::return_value_policy::reference_internal)
+        .def("getOutputLinks", py::overload_cast<LinkType*>(&Activation::getOutputLinks, py::const_), py::return_value_policy::reference_internal)
         .def("getOutputLinks", py::overload_cast<>(&Activation::getOutputLinks, py::const_), py::return_value_policy::reference_internal)
         .def("getOutputLink", &Activation::getOutputLink, py::return_value_policy::reference_internal)
         .def("getOutputLinks", py::overload_cast<Synapse*>(&Activation::getOutputLinks, py::const_), py::return_value_policy::reference_internal)
@@ -268,27 +268,27 @@ void bind_network(py::module_& m) {
         .def_readonly_static("INPUT", &NetworkDirection::INPUT)
         .def_readonly_static("OUTPUT", &NetworkDirection::OUTPUT);
 
-    // Bind LinkDefinition class (inherits from Type)
-    py::class_<LinkDefinition, Type>(m, "LinkType")
+    // Bind LinkType class (inherits from Type)
+    py::class_<LinkType, Type>(m, "LinkType")
         .def(py::init<TypeRegistry*, const std::string&>())
-        .def("getRelations", &LinkDefinition::getRelations, py::return_value_policy::reference_internal)
-        .def("instantiate", &LinkDefinition::instantiate, py::return_value_policy::reference_internal)
-        .def("getSynapse", &LinkDefinition::getSynapse, py::return_value_policy::reference_internal)
-        .def("setSynapse", &LinkDefinition::setSynapse, py::return_value_policy::reference_internal)
-        .def("getInput", &LinkDefinition::getInput, py::return_value_policy::reference_internal)
-        .def("setInput", &LinkDefinition::setInput, py::return_value_policy::reference_internal)
-        .def("getOutput", &LinkDefinition::getOutput, py::return_value_policy::reference_internal)
-        .def("setOutput", &LinkDefinition::setOutput, py::return_value_policy::reference_internal)
-        .def("__str__", [](const LinkDefinition& ld) {
+        .def("getRelations", &LinkType::getRelations, py::return_value_policy::reference_internal)
+        .def("instantiate", &LinkType::instantiate, py::return_value_policy::reference_internal)
+        .def("getSynapse", &LinkType::getSynapse, py::return_value_policy::reference_internal)
+        .def("setSynapse", &LinkType::setSynapse, py::return_value_policy::reference_internal)
+        .def("getInput", &LinkType::getInput, py::return_value_policy::reference_internal)
+        .def("setInput", &LinkType::setInput, py::return_value_policy::reference_internal)
+        .def("getOutput", &LinkType::getOutput, py::return_value_policy::reference_internal)
+        .def("setOutput", &LinkType::setOutput, py::return_value_policy::reference_internal)
+        .def("__str__", [](const LinkType& ld) {
             return ld.toString();
         })
         // Static relation members
-        .def_readonly_static("SELF", &LinkDefinition::SELF)
-        .def_readonly_static("INPUT", &LinkDefinition::INPUT)
-        .def_readonly_static("OUTPUT", &LinkDefinition::OUTPUT)
-        .def_readonly_static("SYNAPSE", &LinkDefinition::SYNAPSE)
-        .def_readonly_static("PAIR_IN", &LinkDefinition::PAIR_IN)
-        .def_readonly_static("PAIR_OUT", &LinkDefinition::PAIR_OUT);
+        .def_readonly_static("SELF", &LinkType::SELF)
+        .def_readonly_static("INPUT", &LinkType::INPUT)
+        .def_readonly_static("OUTPUT", &LinkType::OUTPUT)
+        .def_readonly_static("SYNAPSE", &LinkType::SYNAPSE)
+        .def_readonly_static("PAIR_IN", &LinkType::PAIR_IN)
+        .def_readonly_static("PAIR_OUT", &LinkType::PAIR_OUT);
 
     // Bind SynapseType::SynapseSubType enum
     py::enum_<SynapseType::SynapseSubType>(m, "SynapseSubType")

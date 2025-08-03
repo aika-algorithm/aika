@@ -68,11 +68,11 @@ SynapseType* SynapseType::setOutput(NeuronType* outputDef) {
     return this;
 }
 
-LinkDefinition* SynapseType::getLink() const {
+LinkType* SynapseType::getLink() const {
     return link;
 }
 
-SynapseType* SynapseType::setLink(LinkDefinition* link) {
+SynapseType* SynapseType::setLink(LinkType* link) {
     this->link = link;
     return this;
 }

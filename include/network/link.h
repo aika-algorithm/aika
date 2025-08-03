@@ -3,7 +3,7 @@
 
 #include "fields/object.h"
 
-#include "network/link_definition.h"
+#include "network/link_type.h"
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/typedefs.h"
@@ -18,7 +18,7 @@ class Model;
 
 class Link : public Object, public Element, public ModelProvider {
 public:
-    Link(LinkDefinition* type, Synapse* s, Activation* input, Activation* output);
+    Link(LinkType* type, Synapse* s, Activation* input, Activation* output);
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
     Object* followSingleRelation(const Relation* rel) const override;

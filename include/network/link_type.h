@@ -16,7 +16,7 @@ class Synapse;
 class SynapseType;
 
 
-class LinkDefinition : public Type {
+class LinkType : public Type {
 public:
     static const RelationSelf SELF;
     static const RelationOne INPUT;
@@ -27,19 +27,19 @@ public:
     // We can't use vector of abstract class Relation directly
     // static const std::vector<Relation> RELATIONS;
 
-    LinkDefinition(TypeRegistry* registry, const std::string& name);
+    LinkType(TypeRegistry* registry, const std::string& name);
 
     std::vector<Relation*> getRelations() const;
     Link* instantiate(Synapse* synapse, Activation* input, Activation* output);
 
     SynapseType* getSynapse() const;
-    LinkDefinition* setSynapse(SynapseType* synapse);
+    LinkType* setSynapse(SynapseType* synapse);
 
     ActivationType* getInput() const;
-    LinkDefinition* setInput(ActivationType* input);
+    LinkType* setInput(ActivationType* input);
 
     ActivationType* getOutput() const;
-    LinkDefinition* setOutput(ActivationType* output);
+    LinkType* setOutput(ActivationType* output);
 
     std::string toString() const;
 

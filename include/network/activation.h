@@ -15,7 +15,7 @@ class BindingSignal;
 class Link;
 class Fired;
 class Synapse;
-class LinkDefinition;
+class LinkType;
 class ActivationKey;
 
 #include <map>
@@ -64,9 +64,9 @@ public:
     Config* getConfig() const override;
     Link* getCorrespondingInputLink(const Link* l) const;
     Link* getCorrespondingOutputLink(const Link* l) const;
-    std::vector<Link*> getInputLinks(LinkDefinition* linkDefinition) const;
+    std::vector<Link*> getInputLinks(LinkType* linkDefinition) const;
     virtual std::vector<Link*> getInputLinks() const = 0;
-    std::vector<Link*> getOutputLinks(LinkDefinition* linkDefinition) const;
+    std::vector<Link*> getOutputLinks(LinkType* linkDefinition) const;
     std::vector<Link*> getOutputLinks() const;
     Link* getOutputLink(Neuron* n) const;
     std::vector<Link*> getOutputLinks(Synapse* s) const;

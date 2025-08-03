@@ -13,7 +13,7 @@
 class Synapse;
 class Neuron;
 class NeuronType;
-class LinkDefinition;
+class LinkType;
 class NetworkDirection;
 
 
@@ -50,8 +50,8 @@ public:
     NeuronType* getOutput() const;
     SynapseType* setOutput(NeuronType* outputDef);
 
-    LinkDefinition* getLink() const;
-    SynapseType* setLink(LinkDefinition* link);
+    LinkType* getLink() const;
+    SynapseType* setLink(LinkType* link);
 
     bool isIncomingLinkingCandidate(const std::set<BSType*>& BSTypes) const;
     bool isOutgoingLinkingCandidate(const std::set<BSType*>& BSTypes) const;
@@ -75,7 +75,7 @@ public:
 private:
     SynapseSubType subType;
 
-    LinkDefinition* link;
+    LinkType* link;
 
     NeuronType* input;
     NeuronType* output;

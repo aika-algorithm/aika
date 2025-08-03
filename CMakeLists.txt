@@ -67,7 +67,7 @@ set(SOURCES
         src/network/inhibitory_activation.cpp
         src/network/input.cpp
         src/network/link.cpp
-        src/network/link_definition.cpp
+        src/network/link_type.cpp
         src/network/lock_exception.cpp
         src/network/missing_neuron_exception.cpp
         src/network/model.cpp
@@ -105,7 +105,7 @@ set(SOURCES
         src/network/inhibitory_activation.cpp
         src/network/input.cpp
         src/network/link.cpp
-        src/network/link_definition.cpp
+        src/network/link_type.cpp
         src/network/lock_exception.cpp
         src/network/missing_neuron_exception.cpp
         src/network/model.cpp
@@ -214,7 +214,7 @@ set(CORE_SOURCES
     src/network/inhibitory_activation.cpp
     src/network/input.cpp
     src/network/link.cpp
-    src/network/link_definition.cpp
+        src/network/link_type.cpp
     src/network/lock_exception.cpp
     src/network/missing_neuron_exception.cpp
     src/network/model_provider.cpp
