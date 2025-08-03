@@ -44,10 +44,10 @@ set(SOURCES
         src/fields/field_bindings.cpp
         src/network/model.cpp
         src/network/activation.cpp
-        src/network/activation_definition.cpp
+        src/network/activation_type.cpp
         src/network/activation_key.cpp
         src/network/activation.cpp
-        src/network/activation_definition.cpp
+        src/network/activation_type.cpp
         src/network/activation_key.cpp
         src/network/binding_signal.cpp
         src/network/config.cpp
@@ -194,7 +194,7 @@ set(CORE_SOURCES
     src/fields/test_object.cpp
     src/network/model.cpp
     src/network/activation.cpp
-    src/network/activation_definition.cpp
+        src/network/activation_type.cpp
     src/network/activation_key.cpp
     src/network/binding_signal.cpp
     src/network/config.cpp

@@ -58,20 +58,20 @@ LinkDefinition* LinkDefinition::setSynapse(SynapseDefinition* synapse) {
     return this;
 }
 
-ActivationDefinition* LinkDefinition::getInput() const {
+ActivationType* LinkDefinition::getInput() const {
     return input;
 }
 
-LinkDefinition* LinkDefinition::setInput(ActivationDefinition* input) {
+LinkDefinition* LinkDefinition::setInput(ActivationType* input) {
     this->input = input;
     return this;
 }
 
-ActivationDefinition* LinkDefinition::getOutput() const {
+ActivationType* LinkDefinition::getOutput() const {
     return output;
 }
 
-LinkDefinition* LinkDefinition::setOutput(ActivationDefinition* output) {
+LinkDefinition* LinkDefinition::setOutput(ActivationType* output) {
     this->output = output;
     return this;
 }

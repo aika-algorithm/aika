@@ -6,7 +6,7 @@
 #include "network/document.h"
 #include "network/neuron.h"
 #include "network/neuron_definition.h"
-#include "network/activation_definition.h"
+#include "network/activation_type.h"
 #include "test_bs_types.h"
 
 class AbstractActivationTest {
@@ -14,7 +14,7 @@ protected:
     TypeRegistry* typeRegistry;
     Model* model;
     NeuronDefinition* neuronDef;
-    ActivationDefinition* activationDef;
+    ActivationType* activationType;
     Neuron* neuron;
     Document* doc;
 

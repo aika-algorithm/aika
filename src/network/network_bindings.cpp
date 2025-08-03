@@ -8,7 +8,7 @@
 #include "network/neuron_definition.h"
 #include "network/neuron.h"
 #include "network/model.h"
-#include "network/activation_definition.h"
+#include "network/activation_type.h"
 #include "network/activation.h"
 #include "network/synapse.h"
 #include "network/synapse_definition.h"
@@ -68,18 +68,18 @@ void bind_network(py::module_& m) {
             return m.toString();
         });
 
-    // Bind ActivationDefinition class (inherits from Type)
-    py::class_<ActivationDefinition, Type>(m, "ActivationType")
+    // Bind ActivationType class (inherits from Type)
+    py::class_<ActivationType, Type>(m, "ActivationType")
         .def(py::init<TypeRegistry*, const std::string&>())
-        .def("getRelations", &ActivationDefinition::getRelations, py::return_value_policy::reference_internal)
-        .def("__str__", [](const ActivationDefinition& ad) {
+        .def("getRelations", &ActivationType::getRelations, py::return_value_policy::reference_internal)
+        .def("__str__", [](const ActivationType& ad) {
             return ad.toString();
         })
         // Static relation members
-        .def_readonly_static("SELF", &ActivationDefinition::SELF)
-        .def_readonly_static("INPUT", &ActivationDefinition::INPUT)
-        .def_readonly_static("OUTPUT", &ActivationDefinition::OUTPUT)
-        .def_readonly_static("NEURON", &ActivationDefinition::NEURON);
+        .def_readonly_static("SELF", &ActivationType::SELF)
+        .def_readonly_static("INPUT", &ActivationType::INPUT)
+        .def_readonly_static("OUTPUT", &ActivationType::OUTPUT)
+        .def_readonly_static("NEURON", &ActivationType::NEURON);
 
     // Bind ActivationKey class
     py::class_<ActivationKey>(m, "ActivationKey")
@@ -176,7 +176,7 @@ void bind_network(py::module_& m) {
 
     // Bind ConjunctiveActivation (inherits from Activation)
     py::class_<ConjunctiveActivation, Activation>(m, "ConjunctiveActivation")
-        .def(py::init<ActivationDefinition*, Activation*, int, Neuron*, Document*, std::map<BSType*, BindingSignal*>>())
+        .def(py::init<ActivationType*, Activation*, int, Neuron*, Document*, std::map<BSType*, BindingSignal*>>())
         .def("linkIncoming", py::overload_cast<Activation*>(&ConjunctiveActivation::linkIncoming))
         .def("linkIncoming", py::overload_cast<Synapse*, Activation*>(&ConjunctiveActivation::linkIncoming))
         .def("addInputLink", &ConjunctiveActivation::addInputLink)
@@ -184,7 +184,7 @@ void bind_network(py::module_& m) {
 
     // Bind DisjunctiveActivation (inherits from Activation)
     py::class_<DisjunctiveActivation, Activation>(m, "DisjunctiveActivation")
-        .def(py::init<ActivationDefinition*, Activation*, int, Neuron*, Document*, std::map<BSType*, BindingSignal*>>())
+        .def(py::init<ActivationType*, Activation*, int, Neuron*, Document*, std::map<BSType*, BindingSignal*>>())
         .def("linkIncoming", &DisjunctiveActivation::linkIncoming)
         .def("addInputLink", &DisjunctiveActivation::addInputLink)
         .def("getInputLinks", &DisjunctiveActivation::getInputLinks, py::return_value_policy::reference_internal);

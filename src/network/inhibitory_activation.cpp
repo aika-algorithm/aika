@@ -1,5 +1,5 @@
 #include "network/inhibitory_activation.h"
-#include "network/activation_definition.h"
+#include "network/activation_type.h"
 #include "network/synapse_definition.h"
 #include "network/binding_signal.h"
 #include "network/synapse.h"
@@ -7,7 +7,7 @@
 #include "fields/rel_obj_iterator.h"
 #include <cassert>
 
-InhibitoryActivation::InhibitoryActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
+InhibitoryActivation::InhibitoryActivation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
     : Activation(t, parent, id, n, doc, bindingSignals) {}
     
 RelatedObjectIterable* InhibitoryActivation::followManyRelation(Relation* rel) const {
@@ -47,7 +47,7 @@ Link* InhibitoryActivation::getInputLink(int bsId) const {
 
 int InhibitoryActivation::getInputKey(Link* l) const {
     // TODO: Need to properly implement getWildcard method
-    // BSType* wildcard = static_cast<ActivationDefinition*>(type)->getWildcard();
+    // BSType* wildcard = static_cast<ActivationType*>(type)->getWildcard();
     BSType* wildcard = nullptr; // Temporary fix
     BSType* inputBSType = static_cast<SynapseDefinition*>(l->getSynapse()->getType())->mapTransitionBackward(wildcard);
     BindingSignal* inputBS = l->getInput()->getBindingSignal(inputBSType);
@@ -70,7 +70,7 @@ Link* InhibitoryActivation::getOutputLink(int bsId) const {
 
 int InhibitoryActivation::getOutputKey(Link* l) const {
     // TODO: Need to properly implement getWildcard method
-    // BSType* wildcard = static_cast<ActivationDefinition*>(type)->getWildcard();
+    // BSType* wildcard = static_cast<ActivationType*>(type)->getWildcard();
     BSType* wildcard = nullptr; // Temporary fix
     BSType* outputBSType = static_cast<SynapseDefinition*>(l->getSynapse()->getType())->mapTransitionForward(wildcard);
     BindingSignal* outputBS = l->getOutput()->getBindingSignal(outputBSType);

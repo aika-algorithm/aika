@@ -6,8 +6,8 @@ void AbstractActivationTest::setUp() {
     
     // Create neuron and activation definitions
     neuronDef = new NeuronDefinition(typeRegistry, "test");
-    activationDef = new ActivationDefinition(typeRegistry, "test_activation");
-    neuronDef->setActivation(activationDef);
+    activationType = new ActivationType(typeRegistry, "test_activation");
+    neuronDef->setActivation(activationType);
     
     // Initialize flattened types
     typeRegistry->flattenTypeHierarchy();
@@ -22,7 +22,7 @@ void AbstractActivationTest::setUp() {
 void AbstractActivationTest::tearDown() {
     delete doc;
     delete neuron;
-    delete activationDef;
+    delete activationType;
     delete neuronDef;
     delete model;
     delete typeRegistry;

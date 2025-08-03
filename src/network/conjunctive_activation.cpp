@@ -5,7 +5,7 @@
 #include "fields/rel_obj_iterator.h"
 #include <cassert>
 
-ConjunctiveActivation::ConjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
+ConjunctiveActivation::ConjunctiveActivation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
     : Activation(t, parent, id, n, doc, bindingSignals) {}
 
 ConjunctiveActivation::~ConjunctiveActivation() {}

@@ -35,18 +35,18 @@ public:
     SynapseDefinition* getSynapse() const;
     LinkDefinition* setSynapse(SynapseDefinition* synapse);
 
-    ActivationDefinition* getInput() const;
-    LinkDefinition* setInput(ActivationDefinition* input);
+    ActivationType* getInput() const;
+    LinkDefinition* setInput(ActivationType* input);
 
-    ActivationDefinition* getOutput() const;
-    LinkDefinition* setOutput(ActivationDefinition* output);
+    ActivationType* getOutput() const;
+    LinkDefinition* setOutput(ActivationType* output);
 
     std::string toString() const;
 
 private:
     SynapseDefinition* synapse;
-    ActivationDefinition* input;
-    ActivationDefinition* output;
+    ActivationType* input;
+    ActivationType* output;
 };
 
 #endif // NETWORK_LINK_DEFINITION_H 

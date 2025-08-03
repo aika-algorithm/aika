@@ -5,19 +5,19 @@
 #include "fields/type.h"
 #include "fields/relation.h"
 
-class ActivationDefinition : public Type {
+class ActivationType : public Type {
 public:
     static const RelationSelf SELF;
     static const RelationMany INPUT;
     static const RelationMany OUTPUT;
     static const RelationOne NEURON;
 
-    ActivationDefinition(TypeRegistry* registry, const std::string& name);
-    virtual ~ActivationDefinition();
+    ActivationType(TypeRegistry* registry, const std::string& name);
+    virtual ~ActivationType();
 
     std::vector<Relation*> getRelations() const;
 
-    // Add any additional methods or members specific to ActivationDefinition here
+    // Add any additional methods or members specific to ActivationType here
 };
 
 #endif // NETWORK_ACTIVATION_DEFINITION_H 

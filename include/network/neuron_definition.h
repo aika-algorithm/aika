@@ -25,11 +25,11 @@ public:
     std::vector<Relation> getRelations() const;
     Neuron* instantiate(Model* m);
 
-    ActivationDefinition* getActivation() const;
-    NeuronDefinition* setActivation(ActivationDefinition* activation);
+    ActivationType* getActivation() const;
+    NeuronDefinition* setActivation(ActivationType* activation);
 
 private:
-    ActivationDefinition* activation;
+    ActivationType* activation;
 };
 
 #endif // NETWORK_NEURON_DEFINITION_H 

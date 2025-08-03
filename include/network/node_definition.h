@@ -4,7 +4,7 @@
 #include "fields/type_registry.h"
 
 class NeuronDefinition;
-class ActivationDefinition;
+class ActivationType;
 
 class NodeDefinition {
 public:
@@ -14,7 +14,7 @@ public:
 
 private:
     NeuronDefinition* neuron;
-    ActivationDefinition* activation;
+    ActivationType* activation;
 };
 
 #endif // NETWORK_NODE_DEFINITION_H 

@@ -2,7 +2,7 @@
 #include "network/direction.h"
 #include "network/input.h"
 #include "network/output.h"
-#include "network/activation_definition.h"
+#include "network/activation_type.h"
 #include "fields/rel_obj_iterator.h"
 #include "fields/field.h"
 #include "network/document.h"
@@ -16,7 +16,7 @@ const std::function<bool(Activation*, Activation*)> Activation::ID_COMPARATOR = 
     return a1->getId() < a2->getId();
 };
 
-Activation::Activation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
+Activation::Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
     : Object(t), id(id), neuron(n), doc(doc), bindingSignals(bindingSignals), parent(parent), created(-1), fired(-1), firedStep(new Fired(this)) {
     doc->addActivation(this);
     neuron->updateLastUsed(doc->getId());

@@ -115,7 +115,7 @@ Activation* Neuron::createActivation(Activation* parent, Document* doc, std::map
     // Get the neuron definition and its activation definition
     NeuronDefinition* neuronDef = static_cast<NeuronDefinition*>(getType());
     
-    ActivationDefinition* activationDef = neuronDef->getActivation();
+    ActivationType* activationDef = neuronDef->getActivation();
     if (!activationDef) {
         return nullptr;
     }

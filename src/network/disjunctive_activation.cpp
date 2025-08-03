@@ -4,7 +4,7 @@
 #include "network/link.h"
 #include <cassert>
 
-DisjunctiveActivation::DisjunctiveActivation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
+DisjunctiveActivation::DisjunctiveActivation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
     : Activation(t, parent, id, n, doc, bindingSignals) {}
 
 DisjunctiveActivation::~DisjunctiveActivation() {}

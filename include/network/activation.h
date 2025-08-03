@@ -4,7 +4,7 @@
 
 #include "fields/object.h"
 
-#include "network/activation_definition.h"
+#include "network/activation_type.h"
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/neuron.h"
@@ -28,7 +28,7 @@ class Activation : public Object, public Element, public ModelProvider {
 public:
     static const std::function<bool(Activation*, Activation*)> ID_COMPARATOR;
 
-    Activation(ActivationDefinition* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
+    Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
     virtual ~Activation();
 
     // Implementation of Object virtual methods

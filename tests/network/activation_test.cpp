@@ -10,7 +10,7 @@ void ActivationTest::testHasConflictingBindingSignals() {
     // Create activation with binding signal A -> bs0
     std::map<BSType*, BindingSignal*> bindingSignals = {{TEST_BS_A, bs0}};
     ConjunctiveActivation* act = new ConjunctiveActivation(
-        activationDef,
+        activationType,
         nullptr,  // parent
         1,        // id
         neuron,
@@ -46,7 +46,7 @@ void ActivationTest::testHasNewBindingSignals() {
     // Create activation with binding signal A -> bs0
     std::map<BSType*, BindingSignal*> bindingSignals = {{TEST_BS_A, bs0}};
     ConjunctiveActivation* act = new ConjunctiveActivation(
-        activationDef,
+        activationType,
         nullptr,  // parent
         1,        // id
         neuron,
@@ -78,7 +78,7 @@ void ActivationTest::testBranch() {
     // Create parent activation
     std::map<BSType*, BindingSignal*> parentBindingSignals = {{TEST_BS_A, bs0}};
     ConjunctiveActivation* parentAct = new ConjunctiveActivation(
-        activationDef,
+        activationType,
         nullptr,  // parent
         1,        // id
         neuron,
