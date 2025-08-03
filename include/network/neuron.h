@@ -3,7 +3,7 @@
 
 #include "fields/object.h"
 
-#include "network/neuron_definition.h"
+#include "network/neuron_type.h"
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/read_write_lock.h"
@@ -23,8 +23,8 @@ class NeuronReference; // Forward declare NeuronReference
 
 class Neuron : public Object, public Element, public ModelProvider {
 public:
-    Neuron(NeuronDefinition* type, Model* model, long id);
-    Neuron(NeuronDefinition* type, Model* model);
+    Neuron(NeuronType* type, Model* model, long id);
+    Neuron(NeuronType* type, Model* model);
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
     Object* followSingleRelation(const Relation* rel) const override;

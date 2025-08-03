@@ -3,7 +3,7 @@
 
 #include "fields/type_registry.h"
 
-class NeuronDefinition;
+class NeuronType;
 class ActivationType;
 
 class NodeDefinition {
@@ -13,7 +13,7 @@ public:
     NodeDefinition* addParent(NodeDefinition* parent);
 
 private:
-    NeuronDefinition* neuron;
+    NeuronType* neuron;
     ActivationType* activation;
 };
 

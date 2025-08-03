@@ -73,7 +73,7 @@ set(SOURCES
         src/network/model.cpp
         src/network/model_provider.cpp
         src/network/neuron.cpp
-        src/network/neuron_definition.cpp
+        src/network/neuron_type.cpp
         src/network/neuron_reference.cpp
         src/network/neuron_serialization_exception.cpp
         src/network/node_definition.cpp
@@ -111,7 +111,7 @@ set(SOURCES
         src/network/model.cpp
         src/network/model_provider.cpp
         src/network/neuron.cpp
-        src/network/neuron_definition.cpp
+        src/network/neuron_type.cpp
         src/network/neuron_reference.cpp
         src/network/neuron_serialization_exception.cpp
         src/network/node_definition.cpp
@@ -219,7 +219,7 @@ set(CORE_SOURCES
     src/network/missing_neuron_exception.cpp
     src/network/model_provider.cpp
     src/network/neuron.cpp
-    src/network/neuron_definition.cpp
+        src/network/neuron_type.cpp
     src/network/neuron_reference.cpp
     src/network/neuron_serialization_exception.cpp
     src/network/node_definition.cpp

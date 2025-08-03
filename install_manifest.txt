@@ -5,7 +5,6 @@
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/binding_signal.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/utils.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/input.h
-/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/neuron_definition.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/disjunctive_activation.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/ref_type.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/read_write_lock.h
@@ -14,6 +13,7 @@
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/neuron.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/save.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/disjunctive_synapse.h
+/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/neuron_type.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/transition.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/network_bindings.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/edge_definition.h

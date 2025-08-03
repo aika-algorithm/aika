@@ -12,7 +12,7 @@
 // Forward declarations
 class Synapse;
 class Neuron;
-class NeuronDefinition;
+class NeuronType;
 class LinkDefinition;
 class NetworkDirection;
 
@@ -44,11 +44,11 @@ public:
     SynapseSubType getSubType() const;
     SynapseDefinition* setSubType(SynapseSubType subType);
 
-    NeuronDefinition* getInput() const;
-    SynapseDefinition* setInput(NeuronDefinition* input);
+    NeuronType* getInput() const;
+    SynapseDefinition* setInput(NeuronType* input);
 
-    NeuronDefinition* getOutput() const;
-    SynapseDefinition* setOutput(NeuronDefinition* outputDef);
+    NeuronType* getOutput() const;
+    SynapseDefinition* setOutput(NeuronType* outputDef);
 
     LinkDefinition* getLink() const;
     SynapseDefinition* setLink(LinkDefinition* link);
@@ -77,8 +77,8 @@ private:
 
     LinkDefinition* link;
 
-    NeuronDefinition* input;
-    NeuronDefinition* output;
+    NeuronType* input;
+    NeuronType* output;
 
     std::vector<Transition*> transition;
 

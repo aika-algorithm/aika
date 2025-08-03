@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-class NeuronDefinition : public Type {
+class NeuronType : public Type {
 public:
     static const RelationSelf SELF;
     static const RelationMany INPUT;
@@ -20,13 +20,13 @@ public:
     // Cannot store abstract class Relation in vector, need to use pointers instead
     // static const std::vector<Relation> RELATIONS;
 
-    NeuronDefinition(TypeRegistry* registry, const std::string& name);
+    NeuronType(TypeRegistry* registry, const std::string& name);
 
     std::vector<Relation> getRelations() const;
     Neuron* instantiate(Model* m);
 
     ActivationType* getActivation() const;
-    NeuronDefinition* setActivation(ActivationType* activation);
+    NeuronType* setActivation(ActivationType* activation);
 
 private:
     ActivationType* activation;

@@ -5,7 +5,7 @@ void AbstractActivationTest::setUp() {
     model = new Model(typeRegistry);
     
     // Create neuron and activation definitions
-    neuronDef = new NeuronDefinition(typeRegistry, "test");
+    neuronDef = new NeuronType(typeRegistry, "test");
     activationType = new ActivationType(typeRegistry, "test_activation");
     neuronDef->setActivation(activationType);
     

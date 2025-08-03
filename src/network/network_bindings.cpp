@@ -5,7 +5,7 @@
 #include "network/network_bindings.h"
 
 // Network module includes
-#include "network/neuron_definition.h"
+#include "network/neuron_type.h"
 #include "network/neuron.h"
 #include "network/model.h"
 #include "network/activation_type.h"
@@ -189,26 +189,26 @@ void bind_network(py::module_& m) {
         .def("addInputLink", &DisjunctiveActivation::addInputLink)
         .def("getInputLinks", &DisjunctiveActivation::getInputLinks, py::return_value_policy::reference_internal);
 
-    // Bind NeuronDefinition class (inherits from Type)
-    py::class_<NeuronDefinition, Type>(m, "NeuronType")
+    // Bind NeuronType class (inherits from Type)
+    py::class_<NeuronType, Type>(m, "NeuronType")
         .def(py::init<TypeRegistry*, const std::string&>())
-        .def("getRelations", &NeuronDefinition::getRelations)
-        .def("instantiate", &NeuronDefinition::instantiate, py::return_value_policy::reference_internal)
-        .def("getActivation", &NeuronDefinition::getActivation, py::return_value_policy::reference_internal)
-        .def("setActivation", &NeuronDefinition::setActivation, py::return_value_policy::reference_internal)
-        .def("__str__", [](const NeuronDefinition& nd) {
+        .def("getRelations", &NeuronType::getRelations)
+        .def("instantiate", &NeuronType::instantiate, py::return_value_policy::reference_internal)
+        .def("getActivation", &NeuronType::getActivation, py::return_value_policy::reference_internal)
+        .def("setActivation", &NeuronType::setActivation, py::return_value_policy::reference_internal)
+        .def("__str__", [](const NeuronType& nd) {
             return nd.toString();
         })
         // Static relation members
-        .def_readonly_static("SELF", &NeuronDefinition::SELF)
-        .def_readonly_static("INPUT", &NeuronDefinition::INPUT)
-        .def_readonly_static("OUTPUT", &NeuronDefinition::OUTPUT)
-        .def_readonly_static("ACTIVATION", &NeuronDefinition::ACTIVATION);
+        .def_readonly_static("SELF", &NeuronType::SELF)
+        .def_readonly_static("INPUT", &NeuronType::INPUT)
+        .def_readonly_static("OUTPUT", &NeuronType::OUTPUT)
+        .def_readonly_static("ACTIVATION", &NeuronType::ACTIVATION);
 
     // Bind Neuron class (inherits from Object)
     py::class_<Neuron, Object>(m, "Neuron")
-        .def(py::init<NeuronDefinition*, Model*, long>())
-        .def(py::init<NeuronDefinition*, Model*>())
+        .def(py::init<NeuronType*, Model*, long>())
+        .def(py::init<NeuronType*, Model*>())
         .def("getId", &Neuron::getId)
         .def("updatePropagable", &Neuron::updatePropagable)
         .def("addPropagable", &Neuron::addPropagable)

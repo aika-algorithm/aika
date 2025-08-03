@@ -5,7 +5,7 @@
 #include "network/model.h"
 #include "network/document.h"
 #include "network/neuron.h"
-#include "network/neuron_definition.h"
+#include "network/neuron_type.h"
 #include "network/activation_type.h"
 #include "test_bs_types.h"
 
@@ -13,7 +13,7 @@ class AbstractActivationTest {
 protected:
     TypeRegistry* typeRegistry;
     Model* model;
-    NeuronDefinition* neuronDef;
+    NeuronType* neuronDef;
     ActivationType* activationType;
     Neuron* neuron;
     Document* doc;

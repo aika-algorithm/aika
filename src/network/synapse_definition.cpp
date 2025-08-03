@@ -50,20 +50,20 @@ SynapseDefinition* SynapseDefinition::setSubType(SynapseSubType subType) {
     return this;
 }
 
-NeuronDefinition* SynapseDefinition::getInput() const {
+NeuronType* SynapseDefinition::getInput() const {
     return input;
 }
 
-SynapseDefinition* SynapseDefinition::setInput(NeuronDefinition* input) {
+SynapseDefinition* SynapseDefinition::setInput(NeuronType* input) {
     this->input = input;
     return this;
 }
 
-NeuronDefinition* SynapseDefinition::getOutput() const {
+NeuronType* SynapseDefinition::getOutput() const {
     return output;
 }
 
-SynapseDefinition* SynapseDefinition::setOutput(NeuronDefinition* outputDef) {
+SynapseDefinition* SynapseDefinition::setOutput(NeuronType* outputDef) {
     this->output = outputDef;
     return this;
 }

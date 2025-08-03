@@ -7,7 +7,7 @@
 #include "network/model_provider.h"
 #include "fields/type_registry.h"
 //#include "network/relations.h" // This file doesn't exist, may not be needed
-#include "network/neuron_definition.h"
+#include "network/neuron_type.h"
 #include "network/synapse_definition.h"
 #include "network/activation.h"
 #include "network/conjunctive_activation.h"
@@ -23,10 +23,10 @@
 #include <iostream>
 #include <mutex>
 
-Neuron::Neuron(NeuronDefinition* type, Model* model, long id)
+Neuron::Neuron(NeuronType* type, Model* model, long id)
     : Object(type), model(model), id(id), synapseIdCounter(0), lastUsed(0), modified(false) {}
 
-Neuron::Neuron(NeuronDefinition* type, Model* model)
+Neuron::Neuron(NeuronType* type, Model* model)
     : Neuron(type, model, model->createNeuronId()) {}
     
 RelatedObjectIterable* Neuron::followManyRelation(Relation* rel) const {
@@ -113,9 +113,9 @@ int Neuron::getNewSynapseId() {
 
 Activation* Neuron::createActivation(Activation* parent, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals) {
     // Get the neuron definition and its activation definition
-    NeuronDefinition* neuronDef = static_cast<NeuronDefinition*>(getType());
+    NeuronType* neuronType = static_cast<NeuronType*>(getType());
     
-    ActivationType* activationDef = neuronDef->getActivation();
+    ActivationType* activationDef = neuronType->getActivation();
     if (!activationDef) {
         return nullptr;
     }
@@ -375,12 +375,12 @@ void Neuron::write(std::ostream& out) const {
 Neuron* Neuron::read(std::istream& in, TypeRegistry* tr) {
     short neuronTypeId;
     in >> neuronTypeId;
-    NeuronDefinition* neuronDefinition = static_cast<NeuronDefinition*>(tr->getType(neuronTypeId));
+    NeuronType* neuronType = static_cast<NeuronType*>(tr->getType(neuronTypeId));
     // We can't cast TypeRegistry to Model, so we need to get the model differently
     // For now, we'll use a placeholder or null to indicate this needs to be fixed
     Model* model = nullptr;  // This would need to be fixed with the proper model access
     // Create a simple neuron for now
-    Neuron* n = new Neuron(neuronDefinition, model, 0);
+    Neuron* n = new Neuron(neuronType, model, 0);
     n->readFields(in, tr);
     return n;
 }
