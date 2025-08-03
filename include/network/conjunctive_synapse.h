@@ -5,8 +5,8 @@
 
 class ConjunctiveSynapse : public Synapse {
 public:
-    ConjunctiveSynapse(SynapseDefinition* type);
-    ConjunctiveSynapse(SynapseDefinition* type, Neuron* input, Neuron* output);
+    ConjunctiveSynapse(SynapseType* type);
+    ConjunctiveSynapse(SynapseType* type, Neuron* input, Neuron* output);
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
     Object* followSingleRelation(const Relation* rel) const override;

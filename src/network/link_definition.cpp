@@ -49,11 +49,11 @@ Link* LinkDefinition::instantiate(Synapse* synapse, Activation* input, Activatio
     return nullptr; // Placeholder
 }
 
-SynapseDefinition* LinkDefinition::getSynapse() const {
+SynapseType* LinkDefinition::getSynapse() const {
     return synapse;
 }
 
-LinkDefinition* LinkDefinition::setSynapse(SynapseDefinition* synapse) {
+LinkDefinition* LinkDefinition::setSynapse(SynapseType* synapse) {
     this->synapse = synapse;
     return this;
 }

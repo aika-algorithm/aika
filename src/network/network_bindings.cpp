@@ -11,7 +11,7 @@
 #include "network/activation_type.h"
 #include "network/activation.h"
 #include "network/synapse.h"
-#include "network/synapse_definition.h"
+#include "network/synapse_type.h"
 #include "network/conjunctive_synapse.h"
 #include "network/disjunctive_synapse.h"
 #include "network/link_definition.h"
@@ -290,45 +290,45 @@ void bind_network(py::module_& m) {
         .def_readonly_static("PAIR_IN", &LinkDefinition::PAIR_IN)
         .def_readonly_static("PAIR_OUT", &LinkDefinition::PAIR_OUT);
 
-    // Bind SynapseDefinition::SynapseSubType enum
-    py::enum_<SynapseDefinition::SynapseSubType>(m, "SynapseSubType")
-        .value("CONJUNCTIVE", SynapseDefinition::SynapseSubType::CONJUNCTIVE)
-        .value("DISJUNCTIVE", SynapseDefinition::SynapseSubType::DISJUNCTIVE)
+    // Bind SynapseType::SynapseSubType enum
+    py::enum_<SynapseType::SynapseSubType>(m, "SynapseSubType")
+        .value("CONJUNCTIVE", SynapseType::SynapseSubType::CONJUNCTIVE)
+        .value("DISJUNCTIVE", SynapseType::SynapseSubType::DISJUNCTIVE)
         .export_values();
 
-    // Bind SynapseDefinition class (inherits from Type)
-    py::class_<SynapseDefinition, Type>(m, "SynapseType")
+    // Bind SynapseType class (inherits from Type)
+    py::class_<SynapseType, Type>(m, "SynapseType")
         .def(py::init<TypeRegistry*, const std::string&>())
-        .def("getRelations", &SynapseDefinition::getRelations)
-        .def("instantiate", py::overload_cast<>(&SynapseDefinition::instantiate), py::return_value_policy::reference_internal)
-        .def("instantiate", py::overload_cast<Neuron*, Neuron*>(&SynapseDefinition::instantiate), py::return_value_policy::reference_internal)
-        .def("getSubType", &SynapseDefinition::getSubType)
-        .def("setSubType", &SynapseDefinition::setSubType, py::return_value_policy::reference_internal)
-        .def("getInput", &SynapseDefinition::getInput, py::return_value_policy::reference_internal)
-        .def("setInput", &SynapseDefinition::setInput, py::return_value_policy::reference_internal)
-        .def("getOutput", &SynapseDefinition::getOutput, py::return_value_policy::reference_internal)
-        .def("setOutput", &SynapseDefinition::setOutput, py::return_value_policy::reference_internal)
-        .def("getLink", &SynapseDefinition::getLink, py::return_value_policy::reference_internal)
-        .def("setLink", &SynapseDefinition::setLink, py::return_value_policy::reference_internal)
-        .def("isIncomingLinkingCandidate", &SynapseDefinition::isIncomingLinkingCandidate)
-        .def("isOutgoingLinkingCandidate", &SynapseDefinition::isOutgoingLinkingCandidate)
-        .def("mapTransitionForward", &SynapseDefinition::mapTransitionForward, py::return_value_policy::reference_internal)
-        .def("mapTransitionBackward", &SynapseDefinition::mapTransitionBackward, py::return_value_policy::reference_internal)
-        .def("getTransition", &SynapseDefinition::getTransition, py::return_value_policy::reference_internal)
-        .def("setTransition", &SynapseDefinition::setTransition, py::return_value_policy::reference_internal)
-        .def("getStoredAt", &SynapseDefinition::getStoredAt, py::return_value_policy::reference_internal)
-        .def("setStoredAt", &SynapseDefinition::setStoredAt, py::return_value_policy::reference_internal)
-        .def("setTrainingAllowed", &SynapseDefinition::setTrainingAllowed, py::return_value_policy::reference_internal)
-        .def("getInstanceSynapseType", &SynapseDefinition::getInstanceSynapseType, py::return_value_policy::reference_internal)
-        .def("setInstanceSynapseType", &SynapseDefinition::setInstanceSynapseType, py::return_value_policy::reference_internal)
-        .def("__str__", [](const SynapseDefinition& sd) {
+        .def("getRelations", &SynapseType::getRelations)
+        .def("instantiate", py::overload_cast<>(&SynapseType::instantiate), py::return_value_policy::reference_internal)
+        .def("instantiate", py::overload_cast<Neuron*, Neuron*>(&SynapseType::instantiate), py::return_value_policy::reference_internal)
+        .def("getSubType", &SynapseType::getSubType)
+        .def("setSubType", &SynapseType::setSubType, py::return_value_policy::reference_internal)
+        .def("getInput", &SynapseType::getInput, py::return_value_policy::reference_internal)
+        .def("setInput", &SynapseType::setInput, py::return_value_policy::reference_internal)
+        .def("getOutput", &SynapseType::getOutput, py::return_value_policy::reference_internal)
+        .def("setOutput", &SynapseType::setOutput, py::return_value_policy::reference_internal)
+        .def("getLink", &SynapseType::getLink, py::return_value_policy::reference_internal)
+        .def("setLink", &SynapseType::setLink, py::return_value_policy::reference_internal)
+        .def("isIncomingLinkingCandidate", &SynapseType::isIncomingLinkingCandidate)
+        .def("isOutgoingLinkingCandidate", &SynapseType::isOutgoingLinkingCandidate)
+        .def("mapTransitionForward", &SynapseType::mapTransitionForward, py::return_value_policy::reference_internal)
+        .def("mapTransitionBackward", &SynapseType::mapTransitionBackward, py::return_value_policy::reference_internal)
+        .def("getTransition", &SynapseType::getTransition, py::return_value_policy::reference_internal)
+        .def("setTransition", &SynapseType::setTransition, py::return_value_policy::reference_internal)
+        .def("getStoredAt", &SynapseType::getStoredAt, py::return_value_policy::reference_internal)
+        .def("setStoredAt", &SynapseType::setStoredAt, py::return_value_policy::reference_internal)
+        .def("setTrainingAllowed", &SynapseType::setTrainingAllowed, py::return_value_policy::reference_internal)
+        .def("getInstanceSynapseType", &SynapseType::getInstanceSynapseType, py::return_value_policy::reference_internal)
+        .def("setInstanceSynapseType", &SynapseType::setInstanceSynapseType, py::return_value_policy::reference_internal)
+        .def("__str__", [](const SynapseType& sd) {
             return sd.toString();
         })
         // Static relation members
-        .def_readonly_static("SELF", &SynapseDefinition::SELF)
-        .def_readonly_static("INPUT", &SynapseDefinition::INPUT)
-        .def_readonly_static("OUTPUT", &SynapseDefinition::OUTPUT)
-        .def_readonly_static("LINK", &SynapseDefinition::LINK);
+        .def_readonly_static("SELF", &SynapseType::SELF)
+        .def_readonly_static("INPUT", &SynapseType::INPUT)
+        .def_readonly_static("OUTPUT", &SynapseType::OUTPUT)
+        .def_readonly_static("LINK", &SynapseType::LINK);
 
     // Bind Synapse base class (inherits from Object)
     py::class_<Synapse, Object>(m, "Synapse")
@@ -364,13 +364,13 @@ void bind_network(py::module_& m) {
 
     // Bind ConjunctiveSynapse (inherits from Synapse)
     py::class_<ConjunctiveSynapse, Synapse>(m, "ConjunctiveSynapse")
-        .def(py::init<SynapseDefinition*>())
-        .def(py::init<SynapseDefinition*, Neuron*, Neuron*>());
+        .def(py::init<SynapseType*>())
+        .def(py::init<SynapseType*, Neuron*, Neuron*>());
 
     // Bind DisjunctiveSynapse (inherits from Synapse)
     py::class_<DisjunctiveSynapse, Synapse>(m, "DisjunctiveSynapse")
-        .def(py::init<SynapseDefinition*>())
-        .def(py::init<SynapseDefinition*, Neuron*, Neuron*>())
+        .def(py::init<SynapseType*>())
+        .def(py::init<SynapseType*, Neuron*, Neuron*>())
         .def("link", &DisjunctiveSynapse::link);
 
     // Bind BSType base class

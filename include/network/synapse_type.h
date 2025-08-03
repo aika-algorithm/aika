@@ -20,7 +20,7 @@ class NetworkDirection;
 #include <set>
 #include <vector>
 
-class SynapseDefinition : public Type {
+class SynapseType : public Type {
 public:
     enum class SynapseSubType {
         CONJUNCTIVE,
@@ -34,7 +34,7 @@ public:
     // Cannot store abstract class Relation in vector, need to use pointers instead
     // static const std::vector<Relation> RELATIONS;
 
-    SynapseDefinition(TypeRegistry* registry, const std::string& name);
+    SynapseType(TypeRegistry* registry, const std::string& name);
 
     std::vector<Relation> getRelations() const;
 
@@ -42,16 +42,16 @@ public:
     Synapse* instantiate(Neuron* input, Neuron* output);
 
     SynapseSubType getSubType() const;
-    SynapseDefinition* setSubType(SynapseSubType subType);
+    SynapseType* setSubType(SynapseSubType subType);
 
     NeuronType* getInput() const;
-    SynapseDefinition* setInput(NeuronType* input);
+    SynapseType* setInput(NeuronType* input);
 
     NeuronType* getOutput() const;
-    SynapseDefinition* setOutput(NeuronType* outputDef);
+    SynapseType* setOutput(NeuronType* outputDef);
 
     LinkDefinition* getLink() const;
-    SynapseDefinition* setLink(LinkDefinition* link);
+    SynapseType* setLink(LinkDefinition* link);
 
     bool isIncomingLinkingCandidate(const std::set<BSType*>& BSTypes) const;
     bool isOutgoingLinkingCandidate(const std::set<BSType*>& BSTypes) const;
@@ -60,15 +60,15 @@ public:
     BSType* mapTransitionBackward(BSType* bsType) const;
 
     std::vector<Transition*> getTransition() const;
-    SynapseDefinition* setTransition(const std::vector<Transition*>& transition);
+    SynapseType* setTransition(const std::vector<Transition*>& transition);
 
     NetworkDirection* getStoredAt() const;
-    SynapseDefinition* setStoredAt(NetworkDirection* storedAt);
+    SynapseType* setStoredAt(NetworkDirection* storedAt);
 
-    SynapseDefinition* setTrainingAllowed(bool trainingAllowed);
+    SynapseType* setTrainingAllowed(bool trainingAllowed);
 
-    SynapseDefinition* getInstanceSynapseType() const;
-    SynapseDefinition* setInstanceSynapseType(SynapseDefinition* instanceSynapseType);
+    SynapseType* getInstanceSynapseType() const;
+    SynapseType* setInstanceSynapseType(SynapseType* instanceSynapseType);
 
     std::string toString() const;
 
@@ -86,7 +86,7 @@ private:
 
     bool trainingAllowed;
 
-    SynapseDefinition* instanceSynapseType;
+    SynapseType* instanceSynapseType;
 };
 
 #endif // NETWORK_SYNAPSE_DEFINITION_H 

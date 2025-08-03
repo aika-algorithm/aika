@@ -1,6 +1,6 @@
 #include "network/conjunctive_activation.h"
 #include "network/synapse.h"
-#include "network/synapse_definition.h"
+#include "network/synapse_type.h"
 #include "fields/relation.h"
 #include "fields/rel_obj_iterator.h"
 #include <cassert>
@@ -31,7 +31,7 @@ void ConjunctiveActivation::linkIncoming(Activation* excludedInputAct) {
         for (const auto& pair : getBindingSignals()) {
             bsKeys.insert(pair.first);
         }
-        if (static_cast<SynapseDefinition*>(s->getType())->isIncomingLinkingCandidate(bsKeys)) {
+        if (static_cast<SynapseType*>(s->getType())->isIncomingLinkingCandidate(bsKeys)) {
             linkIncoming(s, excludedInputAct);
         }
     }

@@ -13,7 +13,7 @@
 
 class Link;
 class Synapse;
-class SynapseDefinition;
+class SynapseType;
 
 
 class LinkDefinition : public Type {
@@ -32,8 +32,8 @@ public:
     std::vector<Relation*> getRelations() const;
     Link* instantiate(Synapse* synapse, Activation* input, Activation* output);
 
-    SynapseDefinition* getSynapse() const;
-    LinkDefinition* setSynapse(SynapseDefinition* synapse);
+    SynapseType* getSynapse() const;
+    LinkDefinition* setSynapse(SynapseType* synapse);
 
     ActivationType* getInput() const;
     LinkDefinition* setInput(ActivationType* input);
@@ -44,7 +44,7 @@ public:
     std::string toString() const;
 
 private:
-    SynapseDefinition* synapse;
+    SynapseType* synapse;
     ActivationType* input;
     ActivationType* output;
 };

@@ -1,16 +1,16 @@
 #include "network/synapse.h"
-#include "network/synapse_definition.h"
+#include "network/synapse_type.h"
 #include "network/direction.h" // Include the full NetworkDirection definition
 #include <iostream>
 #include <stdexcept>
 #include <limits>
 
-// Need to add the missing SynapseDefinition* type member to Synapse class
+// Need to add the missing SynapseType* type member to Synapse class
 // This will be a temporary fix until the proper header update is done
 
-Synapse::Synapse(SynapseDefinition* type) : Object(type), synapseId(0), input(nullptr), output(nullptr), propagable(false) {}
+Synapse::Synapse(SynapseType* type) : Object(type), synapseId(0), input(nullptr), output(nullptr), propagable(false) {}
 
-Synapse::Synapse(SynapseDefinition* type, Neuron* input, Neuron* output)
+Synapse::Synapse(SynapseType* type, Neuron* input, Neuron* output)
     : Object(type), synapseId(0),
       input(new NeuronReference(input, RefType::SYNAPSE_IN)), 
       output(new NeuronReference(output, RefType::SYNAPSE_OUT)), 
@@ -41,7 +41,7 @@ void Synapse::setSynapseId(int synapseId) {
 
 std::map<BSType*, BindingSignal*> Synapse::transitionForward(const std::map<BSType*, BindingSignal*>& inputBindingSignals) {
     std::map<BSType*, BindingSignal*> outputTransitions;
-    auto transitions = static_cast<SynapseDefinition*>(getType())->getTransition();
+    auto transitions = static_cast<SynapseType*>(getType())->getTransition();
     
     for (auto t : transitions) {
         auto it = inputBindingSignals.find(t->from());
@@ -119,13 +119,13 @@ Link* Synapse::createLink(Activation* input, const std::map<BSType*, BindingSign
         output->linkIncoming(input);
     }
     
-    return static_cast<SynapseDefinition*>(getType())
+    return static_cast<SynapseType*>(getType())
         ->getLink()
         ->instantiate(this, input, output);
 }
 
 NetworkDirection* Synapse::getStoredAt() const {
-    return static_cast<SynapseDefinition*>(getType())->getStoredAt();
+    return static_cast<SynapseType*>(getType())->getStoredAt();
 }
 
 NeuronReference* Synapse::getInputRef() const {

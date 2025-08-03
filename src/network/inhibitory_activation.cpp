@@ -1,6 +1,6 @@
 #include "network/inhibitory_activation.h"
 #include "network/activation_type.h"
-#include "network/synapse_definition.h"
+#include "network/synapse_type.h"
 #include "network/binding_signal.h"
 #include "network/synapse.h"
 #include "fields/relation.h"
@@ -49,7 +49,7 @@ int InhibitoryActivation::getInputKey(Link* l) const {
     // TODO: Need to properly implement getWildcard method
     // BSType* wildcard = static_cast<ActivationType*>(type)->getWildcard();
     BSType* wildcard = nullptr; // Temporary fix
-    BSType* inputBSType = static_cast<SynapseDefinition*>(l->getSynapse()->getType())->mapTransitionBackward(wildcard);
+    BSType* inputBSType = static_cast<SynapseType*>(l->getSynapse()->getType())->mapTransitionBackward(wildcard);
     BindingSignal* inputBS = l->getInput()->getBindingSignal(inputBSType);
     return inputBS->getTokenId();
 }
@@ -72,7 +72,7 @@ int InhibitoryActivation::getOutputKey(Link* l) const {
     // TODO: Need to properly implement getWildcard method
     // BSType* wildcard = static_cast<ActivationType*>(type)->getWildcard();
     BSType* wildcard = nullptr; // Temporary fix
-    BSType* outputBSType = static_cast<SynapseDefinition*>(l->getSynapse()->getType())->mapTransitionForward(wildcard);
+    BSType* outputBSType = static_cast<SynapseType*>(l->getSynapse()->getType())->mapTransitionForward(wildcard);
     BindingSignal* outputBS = l->getOutput()->getBindingSignal(outputBSType);
     return outputBS->getTokenId();
 }

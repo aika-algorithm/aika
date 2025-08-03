@@ -125,7 +125,7 @@ void Activation::linkOutgoing() {
         for (const auto& bs : getBindingSignals()) {
             bindingSignalKeys.insert(bs.first);
         }
-        if (static_cast<SynapseDefinition*>(s->getType())->isOutgoingLinkingCandidate(bindingSignalKeys)) {
+        if (static_cast<SynapseType*>(s->getType())->isOutgoingLinkingCandidate(bindingSignalKeys)) {
             linkOutgoing(s);
         }
     }

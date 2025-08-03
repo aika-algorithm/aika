@@ -2,9 +2,9 @@
 #include "fields/relation.h"
 #include "fields/rel_obj_iterator.h"
 
-DisjunctiveSynapse::DisjunctiveSynapse(SynapseDefinition* type) : Synapse(type), propagable(true) {}
+DisjunctiveSynapse::DisjunctiveSynapse(SynapseType* type) : Synapse(type), propagable(true) {}
 
-DisjunctiveSynapse::DisjunctiveSynapse(SynapseDefinition* type, Neuron* input, Neuron* output) : Synapse(type, input, output), propagable(true) {}
+DisjunctiveSynapse::DisjunctiveSynapse(SynapseType* type, Neuron* input, Neuron* output) : Synapse(type, input, output), propagable(true) {}
 
 RelatedObjectIterable* DisjunctiveSynapse::followManyRelation(Relation* rel) const {
     // Typically synapses don't have "many" relationships

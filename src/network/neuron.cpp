@@ -8,7 +8,7 @@
 #include "fields/type_registry.h"
 //#include "network/relations.h" // This file doesn't exist, may not be needed
 #include "network/neuron_type.h"
-#include "network/synapse_definition.h"
+#include "network/synapse_type.h"
 #include "network/activation.h"
 #include "network/conjunctive_activation.h"
 #include "network/element.h"

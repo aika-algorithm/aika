@@ -84,7 +84,7 @@ set(SOURCES
         src/network/save.cpp
         src/network/suspension_callback.cpp
         src/network/synapse.cpp
-        src/network/synapse_definition.cpp
+        src/network/synapse_type.cpp
         src/network/transition.cpp
         src/network/utils.cpp
         src/network/binding_signal.cpp
@@ -122,7 +122,7 @@ set(SOURCES
         src/network/save.cpp
         src/network/suspension_callback.cpp
         src/network/synapse.cpp
-        src/network/synapse_definition.cpp
+        src/network/synapse_type.cpp
         src/network/transition.cpp
         src/network/utils.cpp
         src/network/network_bindings.cpp
@@ -230,7 +230,7 @@ set(CORE_SOURCES
     src/network/save.cpp
     src/network/suspension_callback.cpp
     src/network/synapse.cpp
-    src/network/synapse_definition.cpp
+        src/network/synapse_type.cpp
     src/network/transition.cpp
     src/network/utils.cpp
 )

@@ -4,7 +4,7 @@
 #include "fields/type_registry.h"
 #include "fields/object.h"
 
-#include "network/synapse_definition.h"
+#include "network/synapse_type.h"
 #include "network/element.h"
 #include "network/neuron_reference.h"
 #include "network/binding_signal.h"
@@ -19,8 +19,8 @@ class Model;
 
 class Synapse : public Object, public Element {
 public:
-    Synapse(SynapseDefinition* type);
-    Synapse(SynapseDefinition* type, Neuron* input, Neuron* output);
+    Synapse(SynapseType* type);
+    Synapse(SynapseType* type, Neuron* input, Neuron* output);
 
     virtual ~Synapse() = default;
 
