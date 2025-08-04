@@ -53,11 +53,11 @@ public:
     LinkType* getLink() const;
     SynapseType* setLink(LinkType* link);
 
-    bool isIncomingLinkingCandidate(const std::set<BSType*>& BSTypes) const;
-    bool isOutgoingLinkingCandidate(const std::set<BSType*>& BSTypes) const;
+    bool isIncomingLinkingCandidate(const std::set<int>& bsTypes) const;
+    bool isOutgoingLinkingCandidate(const std::set<int>& bsTypes) const;
 
-    BSType* mapTransitionForward(BSType* bsType) const;
-    BSType* mapTransitionBackward(BSType* bsType) const;
+    int mapTransitionForward(int bsType) const;
+    int mapTransitionBackward(int bsType) const;
 
     std::vector<Transition*> getTransition() const;
     SynapseType* setTransition(const std::vector<Transition*>& transition);

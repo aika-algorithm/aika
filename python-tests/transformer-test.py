@@ -274,167 +274,74 @@ class TransformerTestCase(unittest.TestCase):
         # The registry should have been flattened during initialization
         # We can test this by checking that types have flattened representations
         # (This would require more detailed testing of flattened types if needed)
-        
+
     def test_network_propagation_emb_to_key(self):
         """Test network propagation from embedding neuron to key neuron."""
         print("Testing network propagation EMB -> KEY...")
-        
+
         # Create model and document for network execution
         registry = self.transformer_types.get_registry()
         model = an.Model(registry)
-        doc = an.Document(model)
-        
+
         # Instantiate embedding and key neurons
         emb_neuron = self.transformer_types.T_EMB.instantiate(model)
         key_neuron = self.transformer_types.T_KEY.instantiate(model)
-        
+
         print(f"Created EMB neuron: {emb_neuron}")
         print(f"Created KEY neuron: {key_neuron}")
-        
-        # Debug: Check synapse type first
+
+        bias_field = self.transformer_types.T_STANDARD_NEURON.sum("bias")
+        emb_neuron.setFieldValue(bias_field, 1.0)
+        print("Set bias field value on EMB activation")
+
+        key_neuron.setFieldValue(bias_field, -1.0)
+        print("Set bias field value on KEY activation")
+
+    # Debug: Check synapse type first
         print(f"S_EMB_KEY type: {self.transformer_types.S_EMB_KEY}")
         print(f"S_EMB_KEY input: {self.transformer_types.S_EMB_KEY.getInput()}")
         print(f"S_EMB_KEY output: {self.transformer_types.S_EMB_KEY.getOutput()}")
-        
-        # Try creating synapse with different approaches
-        emb_key_synapse = None
-        
-        try:
-            # Method 1: Direct instantiation with neurons
-            emb_key_synapse = self.transformer_types.S_EMB_KEY.instantiate(emb_neuron, key_neuron)
-            print(f"Method 1 - Created synapse with neurons: {emb_key_synapse}")
-        except Exception as e:
-            print(f"Method 1 failed: {e}")
-            
-            try:
-                # Method 2: No-argument instantiation
-                emb_key_synapse = self.transformer_types.S_EMB_KEY.instantiate()
-                print(f"Method 2 - Created synapse without neurons: {emb_key_synapse}")
-                
-                if emb_key_synapse:
-                    # Set input and output neurons manually
-                    emb_key_synapse.setInput(emb_neuron)
-                    emb_key_synapse.setOutput(key_neuron)
-                    print("Set input/output neurons manually")
-                    
-            except Exception as e2:
-                print(f"Method 2 failed: {e2}")
-                
-                try:
-                    # Method 3: Use ConjunctiveSynapse directly
-                    emb_key_synapse = an.ConjunctiveSynapse(self.transformer_types.S_EMB_KEY, emb_neuron, key_neuron)
-                    print(f"Method 3 - Created ConjunctiveSynapse: {emb_key_synapse}")
-                except Exception as e3:
-                    print(f"Method 3 failed: {e3}")
-                    
-                    # Method 4: Just test without synapses for now
-                    print("Could not create synapse - testing network components only")
-        
-        if emb_key_synapse:
-            try:
-                # Link the synapse to connect the neurons
-                emb_key_synapse.link(model)
-                print("Linked synapse to model")
-            except Exception as e:
-                print(f"Link error: {e}")
-                try:
-                    emb_key_synapse.link(model, emb_neuron, key_neuron)
-                    print("Linked synapse with explicit neurons")
-                except Exception as e2:
-                    print(f"Link with neurons error: {e2}")
-        
+
+        emb_key_synapse = self.transformer_types.S_EMB_KEY.instantiate(emb_neuron, key_neuron)
+
+        weight_field = self.transformer_types.T_STANDARD_NEURON.sum("weight")
+        emb_neuron.setFieldValue(weight_field, 1.0)
+        print("Set weight field value on EMB activation")
+
         # Continue with test even if synapse creation failed (to test other components)
         print("Continuing with network test...")
-        
-        # Create input activation on the embedding neuron
-        # Note: Activations are typically created through the neuron's instantiation process
-        # Let's try creating an activation properly
+
+        doc = an.Document(model)
+
+        emb_activation = doc.addToken(doc)
+        print(f"EMB activation: {emb_activation}")
+
+        # Process the document to propagate activations
         try:
-            # Create activation through the neuron
-            emb_activation = emb_neuron.createActivation(doc)
-            print(f"Created EMB activation through neuron: {emb_activation}")
-        except AttributeError:
-            # If that doesn't work, try direct instantiation
-            try:
-                # Use ConjunctiveActivation or DisjunctiveActivation directly
-                binding_signals = {}  # Empty binding signals map
-                emb_activation = an.ConjunctiveActivation(
-                    self.transformer_types.T_EMB_ACT, 
-                    None,  # parent
-                    0,     # actId
-                    emb_neuron, 
-                    doc, 
-                    binding_signals
-                )
-                print(f"Created EMB activation via ConjunctiveActivation: {emb_activation}")
-            except Exception as e:
-                print(f"Failed to create activation via ConjunctiveActivation: {e}")
-                # For now, skip activation creation and just test synapse setup
-                emb_activation = None
-        
-        if emb_activation:
-            print(f"Created EMB activation: {emb_activation}")
-            
-            # Add activation to document
-            doc.addActivation(emb_activation)
-        
-        # Set activation values and test propagation (if activation was created)
-        if emb_activation:
-            # Set activation values (simulating input embedding)
-            # We need to set field values to trigger propagation
-            if hasattr(emb_activation, 'setFieldValue'):
-                # Set a bias value to activate the neuron
-                try:
-                    bias_field = self.transformer_types.T_STANDARD_NEURON.inputField("bias")
-                    emb_activation.setFieldValue(bias_field, 1.0)
-                    print("Set bias field value on EMB activation")
-                except Exception as e:
-                    print(f"Could not set bias field: {e}")
-            
-            # Fire the embedding activation
-            try:
-                emb_activation.setFired()
-                print("Fired EMB activation")
-            except Exception as e:
-                print(f"Could not fire activation: {e}")
-            
-            # Process the document to propagate activations
-            try:
-                doc.process()
-                print("Processed document")
-            except Exception as e:
-                print(f"Document processing error: {e}")
-            
-            # Check if key activation was created
-            try:
-                key_activations = doc.getActivationByNeuron(key_neuron)
-                if key_activations:
-                    print(f"SUCCESS: Key activation created: {key_activations}")
-                    self.assertIsNotNone(key_activations)
-                    print("✅ Network propagation EMB -> KEY successful!")
-                else:
-                    print("No key activation found - checking all activations in document")
-                    all_activations = doc.getActivations()
-                    print(f"Total activations in document: {len(all_activations) if all_activations else 0}")
-            except Exception as e:
-                print(f"Error checking activations: {e}")
-        
+            doc.process()
+            print("Processed document")
+        except Exception as e:
+            print(f"Document processing error: {e}")
+
+        # Check if key activation was created
+        try:
+            key_activations = doc.getActivationByNeuron(key_neuron)
+            if key_activations:
+                print(f"SUCCESS: Key activation created: {key_activations}")
+                self.assertIsNotNone(key_activations)
+                print("✅ Network propagation EMB -> KEY successful!")
+            else:
+                print("No key activation found - checking all activations in document")
+                all_activations = doc.getActivations()
+                print(f"Total activations in document: {len(all_activations) if all_activations else 0}")
+        except Exception as e:
+            print(f"Error checking activations: {e}")
+
         # Verify basic network setup worked
         self.assertIsNotNone(emb_neuron)
-        self.assertIsNotNone(key_neuron) 
+        self.assertIsNotNone(key_neuron)
         print("✅ Neuron creation successful")
-        
-        if emb_key_synapse:
-            print("✅ Synapse creation successful")
-        else:
-            print("⚠️  Synapse creation needs additional setup")
-        
-        if emb_activation:
-            print("✅ Activation creation successful")
-        else:
-            print("⚠️  Activation creation needs additional setup")
-            
-        print("✅ Network propagation test completed (setup verification)")
+
         
     def tearDown(self):
         """Clean up after each test method."""

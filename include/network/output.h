@@ -7,7 +7,6 @@
 #include "network/link.h"
 #include "network/neuron.h"
 #include "network/synapse.h"
-#include "network/bs_type.h"
 #include "network/transition.h"
 
 #include <string>
@@ -24,7 +23,7 @@ public:
 
     Neuron* getNeuron(Model* m, Synapse* s) override;
     Activation* getActivation(Link* l) override;
-    BSType* transition(BSType* s, Transition* trns) override;
+    int transition(int s, Transition* trns) override;
     int getOrder() override;
 //    void write(std::ostream& out) override;
     std::string toString();

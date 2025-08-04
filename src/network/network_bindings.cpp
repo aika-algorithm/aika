@@ -21,7 +21,6 @@
 #include "network/document.h"
 #include "network/binding_signal.h"
 #include "network/transition.h"
-#include "network/bs_type.h"
 #include "network/conjunctive_activation.h"
 #include "network/disjunctive_activation.h"
 #include "network/activation_key.h"
@@ -176,7 +175,7 @@ void bind_network(py::module_& m) {
 
     // Bind ConjunctiveActivation (inherits from Activation)
     py::class_<ConjunctiveActivation, Activation>(m, "ConjunctiveActivation")
-        .def(py::init<ActivationType*, Activation*, int, Neuron*, Document*, std::map<BSType*, BindingSignal*>>())
+        .def(py::init<ActivationType*, Activation*, int, Neuron*, Document*, std::map<int, BindingSignal*>>())
         .def("linkIncoming", py::overload_cast<Activation*>(&ConjunctiveActivation::linkIncoming))
         .def("linkIncoming", py::overload_cast<Synapse*, Activation*>(&ConjunctiveActivation::linkIncoming))
         .def("addInputLink", &ConjunctiveActivation::addInputLink)
@@ -184,7 +183,7 @@ void bind_network(py::module_& m) {
 
     // Bind DisjunctiveActivation (inherits from Activation)
     py::class_<DisjunctiveActivation, Activation>(m, "DisjunctiveActivation")
-        .def(py::init<ActivationType*, Activation*, int, Neuron*, Document*, std::map<BSType*, BindingSignal*>>())
+        .def(py::init<ActivationType*, Activation*, int, Neuron*, Document*, std::map<int, BindingSignal*>>())
         .def("linkIncoming", &DisjunctiveActivation::linkIncoming)
         .def("addInputLink", &DisjunctiveActivation::addInputLink)
         .def("getInputLinks", &DisjunctiveActivation::getInputLinks, py::return_value_policy::reference_internal);
@@ -345,7 +344,7 @@ void bind_network(py::module_& m) {
         .def("unlinkInput", &Synapse::unlinkInput)
         .def("unlinkOutput", &Synapse::unlinkOutput)
         .def("createLink", py::overload_cast<Activation*, Activation*>(&Synapse::createLink), py::return_value_policy::reference_internal)
-        .def("createLink", py::overload_cast<Activation*, const std::map<BSType*, BindingSignal*>&, Activation*>(&Synapse::createLink), py::return_value_policy::reference_internal)
+        .def("createLink", py::overload_cast<Activation*, const std::map<int, BindingSignal*>&, Activation*>(&Synapse::createLink), py::return_value_policy::reference_internal)
         .def("getStoredAt", &Synapse::getStoredAt, py::return_value_policy::reference_internal)
         .def("getInputRef", &Synapse::getInputRef, py::return_value_policy::reference_internal)
         .def("getOutputRef", &Synapse::getOutputRef, py::return_value_policy::reference_internal)
@@ -372,28 +371,6 @@ void bind_network(py::module_& m) {
         .def(py::init<SynapseType*>())
         .def(py::init<SynapseType*, Neuron*, Neuron*>())
         .def("link", &DisjunctiveSynapse::link);
-
-    // Bind BSType base class
-    py::class_<BSType>(m, "BSType")
-        .def("__str__", [](const BSType& bs) {
-            return std::string("BSType");
-        });
-
-    // Simple test BSType implementation for Python tests
-    class TestBSType : public BSType {
-    private:
-        std::string name;
-    public:
-        TestBSType(const std::string& name) : name(name) {}
-        const std::string& getName() const { return name; }
-    };
-
-    py::class_<TestBSType, BSType>(m, "TestBSType")
-        .def(py::init<const std::string&>())
-        .def("getName", &TestBSType::getName)
-        .def("__str__", [](const TestBSType& bs) {
-            return bs.getName();
-        });
 
     // Bind BindingSignal class
     py::class_<BindingSignal>(m, "BindingSignal")

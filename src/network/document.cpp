@@ -4,7 +4,6 @@
 
 Document::Document(Model* m) : model(m), activationIdCounter(0), isStale(false) {
     id = model->createDocumentId();
-    absoluteBeginChar = model->getN();
     model->registerDocument(this);
 }
 
@@ -89,7 +88,7 @@ Queue* Document::getQueue() const {
     return const_cast<Document*>(this);
 }
 
-Activation* Document::addToken(Neuron* n, BSType* bsType, int tokenId) {
+Activation* Document::addToken(Neuron* n, int bsType, int tokenId) {
     BindingSignal* bs = getOrCreateBindingSignal(tokenId);
     return n->createActivation(nullptr, this, {{bsType, bs}});
 }

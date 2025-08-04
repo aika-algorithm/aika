@@ -7,7 +7,7 @@
 #include "fields/rel_obj_iterator.h"
 #include <cassert>
 
-InhibitoryActivation::InhibitoryActivation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
+InhibitoryActivation::InhibitoryActivation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<int, BindingSignal*> bindingSignals)
     : Activation(t, parent, id, n, doc, bindingSignals) {}
     
 RelatedObjectIterable* InhibitoryActivation::followManyRelation(Relation* rel) const {
@@ -47,9 +47,9 @@ Link* InhibitoryActivation::getInputLink(int bsId) const {
 
 int InhibitoryActivation::getInputKey(Link* l) const {
     // TODO: Need to properly implement getWildcard method
-    // BSType* wildcard = static_cast<ActivationType*>(type)->getWildcard();
-    BSType* wildcard = nullptr; // Temporary fix
-    BSType* inputBSType = static_cast<SynapseType*>(l->getSynapse()->getType())->mapTransitionBackward(wildcard);
+    // int wildcard = static_cast<ActivationType*>(type)->getWildcard();
+    int wildcard = -1; // Temporary fix
+    int inputBSType = static_cast<SynapseType*>(l->getSynapse()->getType())->mapTransitionBackward(wildcard);
     BindingSignal* inputBS = l->getInput()->getBindingSignal(inputBSType);
     return inputBS->getTokenId();
 }
@@ -70,9 +70,9 @@ Link* InhibitoryActivation::getOutputLink(int bsId) const {
 
 int InhibitoryActivation::getOutputKey(Link* l) const {
     // TODO: Need to properly implement getWildcard method
-    // BSType* wildcard = static_cast<ActivationType*>(type)->getWildcard();
-    BSType* wildcard = nullptr; // Temporary fix
-    BSType* outputBSType = static_cast<SynapseType*>(l->getSynapse()->getType())->mapTransitionForward(wildcard);
+    // int wildcard = static_cast<ActivationType*>(type)->getWildcard();
+    int wildcard = -1; // Temporary fix
+    int outputBSType = static_cast<SynapseType*>(l->getSynapse()->getType())->mapTransitionForward(wildcard);
     BindingSignal* outputBS = l->getOutput()->getBindingSignal(outputBSType);
     return outputBS->getTokenId();
 }

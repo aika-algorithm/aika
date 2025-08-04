@@ -8,7 +8,6 @@
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/neuron.h"
-#include "network/bs_type.h"
 
 // Forward declarations to avoid circular includes
 class BindingSignal;
@@ -28,7 +27,7 @@ class Activation : public Object, public Element, public ModelProvider {
 public:
     static const std::function<bool(Activation*, Activation*)> ID_COMPARATOR;
 
-    Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
+    Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<int, BindingSignal*> bindingSignals);
     virtual ~Activation();
 
     // Implementation of Object virtual methods
@@ -39,12 +38,12 @@ public:
     Activation* getParent() const;
     void addOutputLink(Link* l);
     virtual void addInputLink(Link* l) = 0;
-    BindingSignal* getBindingSignal(BSType* s) const;
-    std::map<BSType*, BindingSignal*> getBindingSignals() const;
-    bool hasConflictingBindingSignals(std::map<BSType*, BindingSignal*> targetBindingSignals) const;
-    bool isConflictingBindingSignal(BSType* s, BindingSignal* targetBS) const;
-    bool hasNewBindingSignals(std::map<BSType*, BindingSignal*> targetBindingSignals) const;
-    Activation* branch(std::map<BSType*, BindingSignal*> bindingSignals);
+    BindingSignal* getBindingSignal(int s) const;
+    std::map<int, BindingSignal*> getBindingSignals() const;
+    bool hasConflictingBindingSignals(std::map<int, BindingSignal*> targetBindingSignals) const;
+    bool isConflictingBindingSignal(int s, BindingSignal* targetBS) const;
+    bool hasNewBindingSignals(std::map<int, BindingSignal*> targetBindingSignals) const;
+    Activation* branch(std::map<int, BindingSignal*> bindingSignals);
     void linkOutgoing();
     void linkOutgoing(Synapse* targetSyn);
     void propagate(Synapse* targetSyn);
@@ -80,7 +79,7 @@ protected:
     int id;
     Neuron* neuron;
     Document* doc;
-    std::map<BSType*, BindingSignal*> bindingSignals;
+    std::map<int, BindingSignal*> bindingSignals;
     Activation* parent;
     long created;
     long fired;

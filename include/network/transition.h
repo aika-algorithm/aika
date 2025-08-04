@@ -1,20 +1,19 @@
 #ifndef NETWORK_TRANSITION_H
 #define NETWORK_TRANSITION_H
 
-#include "network/bs_type.h"
 
 class Transition {
 public:
-    Transition(BSType* from, BSType* to);
+    Transition(int from, int to);
 
-    static Transition* of(BSType* from, BSType* to);
+    static Transition* of(int from, int to);
 
-    BSType* from() const;
-    BSType* to() const;
+    int from() const;
+    int to() const;
 
 private:
-    BSType* fromType;
-    BSType* toType;
+    int fromType;
+    int toType;
 };
 
 #endif // NETWORK_TRANSITION_H 

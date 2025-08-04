@@ -5,7 +5,7 @@
 #include "fields/rel_obj_iterator.h"
 #include <cassert>
 
-ConjunctiveActivation::ConjunctiveActivation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
+ConjunctiveActivation::ConjunctiveActivation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<int, BindingSignal*> bindingSignals)
     : Activation(t, parent, id, n, doc, bindingSignals) {}
 
 ConjunctiveActivation::~ConjunctiveActivation() {}
@@ -26,8 +26,7 @@ RelatedObjectIterable* ConjunctiveActivation::followManyRelation(Relation* rel) 
 
 void ConjunctiveActivation::linkIncoming(Activation* excludedInputAct) {
     for (auto& s : neuron->getInputSynapsesAsStream()) {
-        // Extract keys from the map (BSType* pointers)
-        std::set<BSType*> bsKeys;
+        std::set<int> bsKeys;
         for (const auto& pair : getBindingSignals()) {
             bsKeys.insert(pair.first);
         }

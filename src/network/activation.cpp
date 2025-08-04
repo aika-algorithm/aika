@@ -16,7 +16,7 @@ const std::function<bool(Activation*, Activation*)> Activation::ID_COMPARATOR = 
     return a1->getId() < a2->getId();
 };
 
-Activation::Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals)
+Activation::Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<int, BindingSignal*> bindingSignals)
     : Object(t), id(id), neuron(n), doc(doc), bindingSignals(bindingSignals), parent(parent), created(-1), fired(-1), firedStep(new Fired(this)) {
     doc->addActivation(this);
     neuron->updateLastUsed(doc->getId());
@@ -71,7 +71,7 @@ void Activation::addOutputLink(Link* l) {
     outputLinks[oAct->getId()] = l;
 }
 
-BindingSignal* Activation::getBindingSignal(BSType* s) const {
+BindingSignal* Activation::getBindingSignal(int s) const {
     auto it = bindingSignals.find(s);
     if (it != bindingSignals.end()) {
         return it->second;
@@ -79,11 +79,11 @@ BindingSignal* Activation::getBindingSignal(BSType* s) const {
     return nullptr;
 }
 
-std::map<BSType*, BindingSignal*> Activation::getBindingSignals() const {
+std::map<int, BindingSignal*> Activation::getBindingSignals() const {
     return bindingSignals;
 }
 
-bool Activation::hasConflictingBindingSignals(std::map<BSType*, BindingSignal*> targetBindingSignals) const {
+bool Activation::hasConflictingBindingSignals(std::map<int, BindingSignal*> targetBindingSignals) const {
     for (const auto& e : targetBindingSignals) {
         if (isConflictingBindingSignal(e.first, e.second)) {
             return true;
@@ -92,13 +92,13 @@ bool Activation::hasConflictingBindingSignals(std::map<BSType*, BindingSignal*> 
     return false;
 }
 
-bool Activation::isConflictingBindingSignal(BSType* s, BindingSignal* targetBS) const {
+bool Activation::isConflictingBindingSignal(int s, BindingSignal* targetBS) const {
     auto it = bindingSignals.find(s);
     BindingSignal* bs = (it != bindingSignals.end()) ? it->second : nullptr;
     return bs != nullptr && targetBS != bs;
 }
 
-bool Activation::hasNewBindingSignals(std::map<BSType*, BindingSignal*> targetBindingSignals) const {
+bool Activation::hasNewBindingSignals(std::map<int, BindingSignal*> targetBindingSignals) const {
     for (const auto& e : targetBindingSignals) {
         if (bindingSignals.find(e.first) == bindingSignals.end()) {
             return true;
@@ -107,9 +107,9 @@ bool Activation::hasNewBindingSignals(std::map<BSType*, BindingSignal*> targetBi
     return false;
 }
 
-Activation* Activation::branch(std::map<BSType*, BindingSignal*> bindingSignals) {
+Activation* Activation::branch(std::map<int, BindingSignal*> bindingSignals) {
     // TODO: Check: Is it necessary to remove the parents binding-signals beforehand?
-    std::map<BSType*, BindingSignal*> newBindingSignals = bindingSignals;
+    std::map<int, BindingSignal*> newBindingSignals = bindingSignals;
     for (const auto& bs : getBindingSignals()) {
         newBindingSignals.erase(bs.first);
     }
@@ -121,7 +121,7 @@ void Activation::linkOutgoing() {
     neuron->wakeupPropagable();
 
     for (auto& s : neuron->getOutputSynapsesAsStream()) {
-        std::set<BSType*> bindingSignalKeys;
+        std::set<int> bindingSignalKeys;
         for (const auto& bs : getBindingSignals()) {
             bindingSignalKeys.insert(bs.first);
         }
@@ -144,7 +144,7 @@ void Activation::linkOutgoing(Synapse* targetSyn) {
 }
 
 void Activation::propagate(Synapse* targetSyn) {
-    std::map<BSType*, BindingSignal*> bindingSignals = targetSyn->transitionForward(getBindingSignals());
+    std::map<int, BindingSignal*> bindingSignals = targetSyn->transitionForward(getBindingSignals());
     Activation* oAct = targetSyn->getOutput(getModel())->createActivation(nullptr, getDocument(), bindingSignals);
 
     targetSyn->createLink(this, bindingSignals, oAct);

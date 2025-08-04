@@ -29,7 +29,7 @@ public:
     int createActivationId();
     void disconnect();
     Queue* getQueue() const override;
-    Activation* addToken(Neuron* n, BSType* bsType, int tokenId);
+    Activation* addToken(Neuron* n, int bsType, int tokenId);
     BindingSignal* getOrCreateBindingSignal(int tokenId);
     BindingSignal* getBindingSignal(int tokenId);
     std::string toString() const;
@@ -37,7 +37,6 @@ public:
 private:
     Model* model;
     long id;
-    long absoluteBeginChar;
     int length;
     int activationIdCounter;
     std::map<int, Activation*> activations;

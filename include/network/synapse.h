@@ -30,7 +30,7 @@ public:
     int getSynapseId() const;
     void setSynapseId(int synapseId);
 
-    std::map<BSType*, BindingSignal*> transitionForward(const std::map<BSType*, BindingSignal*>& inputBindingSignals);
+    std::map<int, BindingSignal*> transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals);
 
     Synapse* setPropagable(Model* m, bool propagable);
     bool isPropagable() const;
@@ -46,7 +46,7 @@ public:
     void unlinkOutput(Model* m);
 
     Link* createLink(Activation* input, Activation* output);
-    Link* createLink(Activation* input, const std::map<BSType*, BindingSignal*>& bindingSignals, Activation* output);
+    Link* createLink(Activation* input, const std::map<int, BindingSignal*>& bindingSignals, Activation* output);
 
     NetworkDirection* getStoredAt() const;
 

@@ -39,8 +39,8 @@ void Synapse::setSynapseId(int synapseId) {
     this->synapseId = synapseId;
 }
 
-std::map<BSType*, BindingSignal*> Synapse::transitionForward(const std::map<BSType*, BindingSignal*>& inputBindingSignals) {
-    std::map<BSType*, BindingSignal*> outputTransitions;
+std::map<int, BindingSignal*> Synapse::transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals) {
+    std::map<int, BindingSignal*> outputTransitions;
     auto transitions = static_cast<SynapseType*>(getType())->getTransition();
     
     for (auto t : transitions) {
@@ -111,7 +111,7 @@ Link* Synapse::createLink(Activation* input, Activation* output) {
     return createLink(input, transitionForward(input->getBindingSignals()), output);
 }
 
-Link* Synapse::createLink(Activation* input, const std::map<BSType*, BindingSignal*>& bindingSignals, Activation* output) {
+Link* Synapse::createLink(Activation* input, const std::map<int, BindingSignal*>& bindingSignals, Activation* output) {
     if (output->hasConflictingBindingSignals(bindingSignals)) {
         return nullptr;
     } else if (output->hasNewBindingSignals(bindingSignals)) {

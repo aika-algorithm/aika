@@ -6,7 +6,7 @@
 
 class ConjunctiveActivation : public Activation {
 public:
-    ConjunctiveActivation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
+    ConjunctiveActivation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<int, BindingSignal*> bindingSignals);
     virtual ~ConjunctiveActivation();
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;

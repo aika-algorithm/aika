@@ -28,23 +28,13 @@ Activation* NetworkInput::getActivation(Link* l) {
     return l ? l->getInput() : nullptr;
 }
 
-BSType* NetworkInput::transition(BSType* s, Transition* trns) {
-    // Transition is not an iterable type, we need to handle it differently
-    if (trns) {
-        return trns->from();
-    }
-    return nullptr;
+int NetworkInput::transition(int s, Transition* trns) {
+    return trns->from();
 }
 
 int NetworkInput::getOrder() {
     return -1;
 }
-
-/*
-void NetworkInput::write(std::ostream& out) {
-    out << false;
-}
-*/
 
 std::string NetworkInput::toString() {
     return "INPUT";

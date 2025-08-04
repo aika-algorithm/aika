@@ -8,7 +8,7 @@
 
 class InhibitoryActivation : public Activation {
 public:
-    InhibitoryActivation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
+    InhibitoryActivation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<int, BindingSignal*> bindingSignals);
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
     

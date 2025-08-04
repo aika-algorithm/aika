@@ -1,15 +1,15 @@
 #include "network/transition.h"
 
-Transition::Transition(BSType* from, BSType* to) : fromType(from), toType(to) {}
+Transition::Transition(int from, int to) : fromType(from), toType(to) {}
 
-Transition* Transition::of(BSType* from, BSType* to) {
+Transition* Transition::of(int from, int to) {
     return new Transition(from, to);
 }
 
-BSType* Transition::from() const {
+int Transition::from() const {
     return fromType;
 }
 
-BSType* Transition::to() const {
+int Transition::to() const {
     return toType;
 } 

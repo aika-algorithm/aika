@@ -77,22 +77,22 @@ SynapseType* SynapseType::setLink(LinkType* link) {
     return this;
 }
 
-bool SynapseType::isIncomingLinkingCandidate(const std::set<BSType*>& BSTypes) const {
+bool SynapseType::isIncomingLinkingCandidate(const std::set<int>& BSTypes) const {
     // Implementation for checking incoming linking candidate
     return false; // Placeholder
 }
 
-bool SynapseType::isOutgoingLinkingCandidate(const std::set<BSType*>& BSTypes) const {
+bool SynapseType::isOutgoingLinkingCandidate(const std::set<int>& BSTypes) const {
     // Implementation for checking outgoing linking candidate
     return false; // Placeholder
 }
 
-BSType* SynapseType::mapTransitionForward(BSType* bsType) const {
+int SynapseType::mapTransitionForward(int bsType) const {
     // Implementation for mapping transition forward
     return nullptr; // Placeholder
 }
 
-BSType* SynapseType::mapTransitionBackward(BSType* bsType) const {
+int SynapseType::mapTransitionBackward(int bsType) const {
     // Implementation for mapping transition backward
     return nullptr; // Placeholder
 }

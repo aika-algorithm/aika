@@ -35,7 +35,7 @@ public:
     void wakeupPropagable();
     std::set<NeuronReference*> getPropagable() const;
     int getNewSynapseId();
-    Activation* createActivation(Activation* parent, Document* doc, std::map<BSType*, BindingSignal*> bindingSignals);
+    Activation* createActivation(Activation* parent, Document* doc, std::map<int, BindingSignal*> bindingSignals);
     void deleteNeuron();
     Model* getModel() const override;
     Config* getConfig() const override;
