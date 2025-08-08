@@ -26,8 +26,8 @@ Object* Link::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationLabel() == "INPUT") return input;
     if (rel->getRelationLabel() == "OUTPUT") return output;
     if (rel->getRelationLabel() == "SYNAPSE") return synapse;
-    if (rel->getRelationLabel() == "PAIR_IN") return input->getCorrespondingInputLink(this);
-    if (rel->getRelationLabel() == "PAIR_OUT") return output->getCorrespondingOutputLink(this);
+//    if (rel->getRelationLabel() == "PAIR_IN") return input->getCorrespondingInputLink(this);
+//    if (rel->getRelationLabel() == "PAIR_OUT") return output->getCorrespondingOutputLink(this);
     throw std::runtime_error("Invalid Relation: " + rel->getRelationLabel());
 }
 

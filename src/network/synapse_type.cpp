@@ -97,12 +97,12 @@ int SynapseType::mapTransitionBackward(int bsType) const {
     return nullptr; // Placeholder
 }
 
-std::vector<Transition*> SynapseType::getTransition() const {
-    return transition;
+std::vector<Transition*> SynapseType::getTransitions() const {
+    return transitions;
 }
 
-SynapseType* SynapseType::setTransition(const std::vector<Transition*>& transition) {
-    this->transition = transition;
+SynapseType* SynapseType::setTransitions(const std::vector<Transition*>& transitions) {
+    this->transitions = transitions;
     return this;
 }
 
@@ -112,11 +112,6 @@ NetworkDirection* SynapseType::getStoredAt() const {
 
 SynapseType* SynapseType::setStoredAt(NetworkDirection* storedAt) {
     this->storedAt = storedAt;
-    return this;
-}
-
-SynapseType* SynapseType::setTrainingAllowed(bool trainingAllowed) {
-    this->trainingAllowed = trainingAllowed;
     return this;
 }
 

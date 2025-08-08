@@ -10,7 +10,6 @@
 #include "network/neuron_type.h"
 #include "network/synapse_type.h"
 #include "network/activation.h"
-#include "network/conjunctive_activation.h"
 #include "network/element.h"
 #include "fields/object.h"
 #include "fields/queue.h"

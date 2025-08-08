@@ -22,6 +22,9 @@ public:
 
     NeuronType(TypeRegistry* registry, const std::string& name);
 
+    std::vector<int> getBindingSignals() const;
+    NeuronType* setBindingSignals(const std::vector<int>& bindingSignals);
+
     std::vector<Relation> getRelations() const;
     Neuron* instantiate(Model* m);
 
@@ -29,6 +32,8 @@ public:
     NeuronType* setActivation(ActivationType* activation);
 
 private:
+    std::vector<int> bindingSignals;
+
     ActivationType* activation;
 };
 

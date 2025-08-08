@@ -58,12 +58,6 @@ public:
     Neuron* getOutput() const;
     Neuron* getOutput(Model* m) const;
 
-/*
-    virtual void write(DataOutput* out) const = 0;
-    static Synapse* read(DataInput* in, TypeRegistry* tr);
-    virtual void readFields(DataInput* in, TypeRegistry* tr) = 0;
-*/
-
     long getCreated() const override;
     long getFired() const override;
 

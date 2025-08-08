@@ -1,0 +1,12 @@
+- Renaming of the Binding-Neuron to Feature-Neuron as a base Neuron for Key-, Query- and Value-Neurons.
+- Introduction of Comparison- and Modulator-Neurons, basically the Dot-Products of the Transformer Model. (TODO: Draw the Inputs)
+- Attempt to unify the Neuron-Types within the C++ layer, i.e. to remove concepts like Conjunctive, Disjunctive and Inhibitory.  ✅
+- The key for string Input- and Output-Links should consist of the Synapse-ID and all Binding-Signals
+- The Neuron should specify the 'fixed' Binding-Signals to replace the wildcards.
+- Document -> Context
+- The MATCHING_SYNAPSE_PAIR and the MATCHING_BS_PAIR need to be implemented.
+- Latent-Linking for the Comparison Dot Product Pairs needs to implemented. 
+- Embeddings should be represented as disjunctive output Synapses of input Token Neurons.
+- The tokenizer needs to be integrated.
+- Reintroduce PreActivations. (Required for linking the Comparison-Synapses)
+- Implement SynapseType::instantiate.

@@ -19,17 +19,17 @@ Synapse::Synapse(SynapseType* type, Neuron* input, Neuron* output)
     link(input->getModel(), input, output);
 }
 
-// This is a pure virtual method in Synapse, so the implementation should be in the derived classes
-// RelatedObjectIterable* Synapse::followManyRelation(Relation* rel) const {
-//     // Not implemented in base class
-//     return nullptr;
-// }
-
-// This is a pure virtual method in Synapse, so the implementation should be in the derived classes
-// Object* Synapse::followSingleRelation(const Relation* rel) const {
-//     // Not implemented in base class
-//     return nullptr;
-// }
+Object* Synapse::followSingleRelation(const Relation* rel) const {
+    if (rel->getRelationLabel() == "SELF") {
+        return const_cast<ConjunctiveSynapse*>(this);
+    } else if (rel->getRelationLabel() == "INPUT") {
+        return getInput();
+    } else if (rel->getRelationLabel() == "OUTPUT") {
+        return getOutput();
+    } else {
+        throw std::runtime_error("Invalid Relation for ConjunctiveSynapse: " + rel->getRelationLabel());
+    }
+}
 
 int Synapse::getSynapseId() const {
     return synapseId;

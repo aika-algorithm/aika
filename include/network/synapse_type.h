@@ -22,10 +22,6 @@ class NetworkDirection;
 
 class SynapseType : public Type {
 public:
-    enum class SynapseSubType {
-        CONJUNCTIVE,
-        DISJUNCTIVE
-    };
 
     static const RelationSelf SELF;
     static const RelationOne INPUT;
@@ -41,9 +37,6 @@ public:
     Synapse* instantiate();
     Synapse* instantiate(Neuron* input, Neuron* output);
 
-    SynapseSubType getSubType() const;
-    SynapseType* setSubType(SynapseSubType subType);
-
     NeuronType* getInput() const;
     SynapseType* setInput(NeuronType* input);
 
@@ -53,19 +46,14 @@ public:
     LinkType* getLink() const;
     SynapseType* setLink(LinkType* link);
 
-    bool isIncomingLinkingCandidate(const std::set<int>& bsTypes) const;
-    bool isOutgoingLinkingCandidate(const std::set<int>& bsTypes) const;
-
     int mapTransitionForward(int bsType) const;
     int mapTransitionBackward(int bsType) const;
 
-    std::vector<Transition*> getTransition() const;
-    SynapseType* setTransition(const std::vector<Transition*>& transition);
+    std::vector<Transition*> getTransitions() const;
+    SynapseType* setTransitions(const std::vector<Transition*>& transitions);
 
     NetworkDirection* getStoredAt() const;
     SynapseType* setStoredAt(NetworkDirection* storedAt);
-
-    SynapseType* setTrainingAllowed(bool trainingAllowed);
 
     SynapseType* getInstanceSynapseType() const;
     SynapseType* setInstanceSynapseType(SynapseType* instanceSynapseType);
@@ -73,20 +61,16 @@ public:
     std::string toString() const;
 
 private:
-    SynapseSubType subType;
+    SynapseType* instanceSynapseType;
 
     LinkType* link;
 
     NeuronType* input;
     NeuronType* output;
 
-    std::vector<Transition*> transition;
+    std::vector<Transition*> transitions;
 
     NetworkDirection* storedAt;
-
-    bool trainingAllowed;
-
-    SynapseType* instanceSynapseType;
 };
 
 #endif // NETWORK_SYNAPSE_DEFINITION_H 

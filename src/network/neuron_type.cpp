@@ -26,6 +26,15 @@ static NeuronTypeInitializer neuronTypeInit;
 
 NeuronType::NeuronType(TypeRegistry* registry, const std::string& name) : Type(registry, name) {}
 
+std::vector<int> NeuronType::getBindingSignals() const {
+    return bindingSignals;
+}
+
+NeuronType* NeuronType::setBindingSignals(const std::vector<int>& bindingSignals) {
+    this->bindingSignals = bindingSignals;
+    return this;
+}
+
 std::vector<Relation> NeuronType::getRelations() const {
     // We can't return a vector of abstract class objects
     // For now, return an empty vector

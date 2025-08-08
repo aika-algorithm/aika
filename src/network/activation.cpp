@@ -65,12 +65,6 @@ Activation* Activation::getParent() const {
     return parent;
 }
 
-void Activation::addOutputLink(Link* l) {
-    Activation* oAct = l->getOutput();
-    assert(outputLinks.find(oAct->getId()) == outputLinks.end());
-    outputLinks[oAct->getId()] = l;
-}
-
 BindingSignal* Activation::getBindingSignal(int s) const {
     auto it = bindingSignals.find(s);
     if (it != bindingSignals.end()) {
@@ -83,38 +77,41 @@ std::map<int, BindingSignal*> Activation::getBindingSignals() const {
     return bindingSignals;
 }
 
-bool Activation::hasConflictingBindingSignals(std::map<int, BindingSignal*> targetBindingSignals) const {
-    for (const auto& e : targetBindingSignals) {
-        if (isConflictingBindingSignal(e.first, e.second)) {
-            return true;
-        }
+bool Activation::matchBindingSignals(std::map<int, BindingSignal*> latentBindingSignals) const {
+    for (const auto& e : latentBindingSignals) {
+     //   if (isConflictingBindingSignal(e.first, e.second)) {
+            return false;
+    //    }
     }
-    return false;
+    return true;
 }
 
+/*
 bool Activation::isConflictingBindingSignal(int s, BindingSignal* targetBS) const {
     auto it = bindingSignals.find(s);
     BindingSignal* bs = (it != bindingSignals.end()) ? it->second : nullptr;
     return bs != nullptr && targetBS != bs;
 }
+*/
 
-bool Activation::hasNewBindingSignals(std::map<int, BindingSignal*> targetBindingSignals) const {
-    for (const auto& e : targetBindingSignals) {
-        if (bindingSignals.find(e.first) == bindingSignals.end()) {
-            return true;
+void Activation::linkIncoming(Activation* excludedInputAct) {
+    for (auto& s : neuron->getInputSynapsesAsStream()) {
+        std::set<int> bsKeys;
+        for (const auto& pair : getBindingSignals()) {
+            bsKeys.insert(pair.first);
         }
+//        if (static_cast<SynapseType*>(s->getType())->isIncomingLinkingCandidate(bsKeys)) {
+            linkIncoming(s, excludedInputAct);
+//        }
     }
-    return false;
 }
 
-Activation* Activation::branch(std::map<int, BindingSignal*> bindingSignals) {
-    // TODO: Check: Is it necessary to remove the parents binding-signals beforehand?
-    std::map<int, BindingSignal*> newBindingSignals = bindingSignals;
-    for (const auto& bs : getBindingSignals()) {
-        newBindingSignals.erase(bs.first);
+void Activation::linkIncoming(Synapse* targetSyn, Activation* excludedInputAct) {
+    for (auto& iAct : collectLinkingTargets(targetSyn->getInput(getModel()))) {
+        if (iAct != excludedInputAct) {
+            targetSyn->createLink(iAct, this);
+        }
     }
-
-    return neuron->createActivation(this, getDocument(), newBindingSignals);
 }
 
 void Activation::linkOutgoing() {
@@ -125,9 +122,9 @@ void Activation::linkOutgoing() {
         for (const auto& bs : getBindingSignals()) {
             bindingSignalKeys.insert(bs.first);
         }
-        if (static_cast<SynapseType*>(s->getType())->isOutgoingLinkingCandidate(bindingSignalKeys)) {
+//        if (static_cast<SynapseType*>(s->getType())->isOutgoingLinkingCandidate(bindingSignalKeys)) {
             linkOutgoing(s);
-        }
+//        }
     }
 }
 
@@ -220,16 +217,38 @@ Config* Activation::getConfig() const {
     return neuron->getModel()->getConfig();
 }
 
-Link* Activation::getCorrespondingInputLink(const Link* l) const {
-    return nullptr;
-}
-
-Link* Activation::getCorrespondingOutputLink(const Link* l) const {
-    return nullptr;
-}
-
 std::vector<Link*> Activation::getInputLinks(LinkType* linkDefinition) const {
     return getInputLinks();
+}
+
+void Activation::addInputLink(Link* l) {
+    //assert(inputLinks.find(syn->getSynapseId()) == inputLinks.end());
+    inputLinks[getInputKey(l)] = l;
+}
+
+std::vector<Link*> Activation::getInputLinks() const {
+    std::vector<Link*> result;
+    for (const auto& pair : inputLinks) {
+        result.push_back(pair.second);
+    }
+    return result;
+}
+
+std::vector<int> Activation::getInputKey(Link* l) const {
+    std::vector<int> key;
+    key.push_back(l->getSynapse()->getSynapseId());
+
+    for (const auto& t : static_cast<SynapseType*>(l->getSynapse()->getType())->getTransitions()) {
+        BindingSignal* bs = l->getInput()->getBindingSignal(t->from());
+        key.push_back(bs->getTokenId());
+    }
+
+    return key;
+}
+
+void Activation::addOutputLink(Link* l) {
+    //    assert(outputLinks.find(oAct->getId()) == outputLinks.end());
+    outputLinks[getOutputKey(l)] = l;
 }
 
 std::vector<Link*> Activation::getOutputLinks(LinkType* linkDefinition) const {
@@ -245,10 +264,11 @@ std::vector<Link*> Activation::getOutputLinks() const {
 }
 
 Link* Activation::getOutputLink(Neuron* n) const {
-    auto it = outputLinks.find(n->getId());
+/*    auto it = outputLinks.find(n->getId());
     if (it != outputLinks.end()) {
         return it->second;
     }
+*/
     return nullptr;
 }
 
@@ -260,6 +280,18 @@ std::vector<Link*> Activation::getOutputLinks(Synapse* s) const {
         }
     }
     return result;
+}
+
+std::vector<int> Activation::getOutputKey(Link* l) const {
+    std::vector<int> key;
+    key.push_back(l->getSynapse()->getSynapseId());
+
+    for (const auto& t : static_cast<SynapseType*>(l->getSynapse()->getType())->getTransitions()) {
+        BindingSignal* bs = l->getInput()->getBindingSignal(t->from());
+        key.push_back(bs->getTokenId());
+    }
+
+    return key;
 }
 
 int Activation::compareTo(Activation* act) const {
