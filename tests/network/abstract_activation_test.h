@@ -7,7 +7,6 @@
 #include "network/neuron.h"
 #include "network/neuron_type.h"
 #include "network/activation_type.h"
-#include "test_bs_types.h"
 
 class AbstractActivationTest {
 protected:

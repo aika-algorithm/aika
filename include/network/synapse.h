@@ -22,10 +22,10 @@ public:
     Synapse(SynapseType* type);
     Synapse(SynapseType* type, Neuron* input, Neuron* output);
 
-    virtual ~Synapse() = default;
+    ~Synapse() = default;
 
-    virtual RelatedObjectIterable* followManyRelation(Relation* rel) const override = 0;
-    virtual Object* followSingleRelation(const Relation* rel) const override = 0;
+    RelatedObjectIterable* followManyRelation(Relation* rel) const override = 0;
+    Object* followSingleRelation(const Relation* rel) const override = 0;
 
     int getSynapseId() const;
     void setSynapseId(int synapseId);

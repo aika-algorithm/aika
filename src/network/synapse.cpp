@@ -21,13 +21,13 @@ Synapse::Synapse(SynapseType* type, Neuron* input, Neuron* output)
 
 Object* Synapse::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationLabel() == "SELF") {
-        return const_cast<ConjunctiveSynapse*>(this);
+        return const_cast<Synapse*>(this);
     } else if (rel->getRelationLabel() == "INPUT") {
         return getInput();
     } else if (rel->getRelationLabel() == "OUTPUT") {
         return getOutput();
     } else {
-        throw std::runtime_error("Invalid Relation for ConjunctiveSynapse: " + rel->getRelationLabel());
+        throw std::runtime_error("Invalid Relation for Synapse: " + rel->getRelationLabel());
     }
 }
 
@@ -41,7 +41,7 @@ void Synapse::setSynapseId(int synapseId) {
 
 std::map<int, BindingSignal*> Synapse::transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals) {
     std::map<int, BindingSignal*> outputTransitions;
-    auto transitions = static_cast<SynapseType*>(getType())->getTransition();
+    auto transitions = static_cast<SynapseType*>(getType())->getTransitions();
     
     for (auto t : transitions) {
         auto it = inputBindingSignals.find(t->from());
@@ -112,10 +112,8 @@ Link* Synapse::createLink(Activation* input, Activation* output) {
 }
 
 Link* Synapse::createLink(Activation* input, const std::map<int, BindingSignal*>& bindingSignals, Activation* output) {
-    if (output->hasConflictingBindingSignals(bindingSignals)) {
-        return nullptr;
-    } else if (output->hasNewBindingSignals(bindingSignals)) {
-        output = output->branch(bindingSignals);
+    if (output->matchBindingSignals(bindingSignals)) {
+        // TODO
         output->linkIncoming(input);
     }
     

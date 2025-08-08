@@ -135,15 +135,10 @@ add_executable(activation_tests
     tests/network/test_runner.cpp
     tests/network/activation_test.cpp
     tests/network/abstract_activation_test.cpp
-    tests/network/test_bs_types.cpp
 )
 
 target_link_libraries(activation_tests PRIVATE aika_core)
 target_include_directories(activation_tests PRIVATE include)
-
-# Add simple activation tests  
-add_executable(simple_activation_tests tests/network/simple_activation_test.cpp)
-target_compile_features(simple_activation_tests PUBLIC cxx_std_17)
 
 # Register tests with CTest
 add_test(NAME ActivationTests COMMAND activation_tests)

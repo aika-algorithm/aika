@@ -23,7 +23,7 @@ public:
 
 static SynapseTypeInitializer synapseDefInit;
 
-SynapseType::SynapseType(TypeRegistry* registry, const std::string& name) : Type(registry, name), subType(SynapseSubType::CONJUNCTIVE), link(nullptr), input(nullptr), output(nullptr), storedAt(nullptr), trainingAllowed(false), instanceSynapseType(nullptr) {}
+SynapseType::SynapseType(TypeRegistry* registry, const std::string& name) : Type(registry, name), link(nullptr), input(nullptr), output(nullptr), storedAt(nullptr), instanceSynapseType(nullptr) {}
 
 std::vector<Relation> SynapseType::getRelations() const {
     // We can't return a vector of the abstract class Relation
@@ -39,15 +39,6 @@ Synapse* SynapseType::instantiate() {
 Synapse* SynapseType::instantiate(Neuron* input, Neuron* output) {
     // Implementation for instantiating a Synapse with input and output
     return nullptr; // Placeholder
-}
-
-SynapseType::SynapseSubType SynapseType::getSubType() const {
-    return subType;
-}
-
-SynapseType* SynapseType::setSubType(SynapseSubType subType) {
-    this->subType = subType;
-    return this;
 }
 
 NeuronType* SynapseType::getInput() const {
@@ -77,24 +68,14 @@ SynapseType* SynapseType::setLink(LinkType* link) {
     return this;
 }
 
-bool SynapseType::isIncomingLinkingCandidate(const std::set<int>& BSTypes) const {
-    // Implementation for checking incoming linking candidate
-    return false; // Placeholder
-}
-
-bool SynapseType::isOutgoingLinkingCandidate(const std::set<int>& BSTypes) const {
-    // Implementation for checking outgoing linking candidate
-    return false; // Placeholder
-}
-
 int SynapseType::mapTransitionForward(int bsType) const {
     // Implementation for mapping transition forward
-    return nullptr; // Placeholder
+    return -1; // Placeholder
 }
 
 int SynapseType::mapTransitionBackward(int bsType) const {
     // Implementation for mapping transition backward
-    return nullptr; // Placeholder
+    return -1; // Placeholder
 }
 
 std::vector<Transition*> SynapseType::getTransitions() const {

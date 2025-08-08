@@ -122,9 +122,9 @@ Activation* Neuron::createActivation(Activation* parent, Document* doc, std::map
     // Create activation ID
     int activationId = doc->createActivationId();
     
-    // For now, create a ConjunctiveActivation as the default
+    // For now, create a Activation as the default
     // In a full implementation, this would depend on the activation definition type
-    return new ConjunctiveActivation(activationDef, parent, activationId, this, doc, bindingSignals);
+    return new Activation(activationDef, parent, activationId, this, doc, bindingSignals);
 }
 
 void Neuron::deleteNeuron() {
