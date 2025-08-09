@@ -94,7 +94,6 @@ set(CORE_SOURCES
         src/network/config.cpp
         src/network/direction.cpp
         src/network/context.cpp
-        src/network/edge_definition.cpp
         src/network/element.cpp
         src/network/element_step.cpp
         src/network/f_s_suspension_callback.cpp
@@ -112,7 +111,6 @@ set(CORE_SOURCES
         src/network/neuron_type.cpp
         src/network/neuron_reference.cpp
         src/network/neuron_serialization_exception.cpp
-        src/network/node_definition.cpp
         src/network/output.cpp
         src/network/phase.cpp
         src/network/read_write_lock.cpp
@@ -123,6 +121,12 @@ set(CORE_SOURCES
         src/network/synapse_type.cpp
         src/network/transition.cpp
         src/network/utils.cpp
+        src/network/builders/neuron_type_builder.cpp
+        src/network/builders/synapse_type_builder.cpp
+        src/network/builders/activation_type_builder.cpp
+        src/network/builders/link_type_builder.cpp
+        src/network/builders/node_definition.cpp
+        src/network/builders/edge_definition.cpp
 )
 
 # Create core library

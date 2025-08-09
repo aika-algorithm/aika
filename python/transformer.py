@@ -40,11 +40,19 @@ class TransformerTypeRegistry:
     
     def _setup_neuron_types(self):
         """Setup neuron type definitions: T_N = {T_EMB, T_KEY, T_QUERY, T_INHIB, T_VALUE}"""
-        self.T_EMB = an.NeuronType(self.registry, "EMB_NEURON")
-        self.T_KEY = an.NeuronType(self.registry, "KEY_NEURON")
-        self.T_QUERY = an.NeuronType(self.registry, "QUERY_NEURON")
-        self.T_INHIB = an.NeuronType(self.registry, "INHIB_NEURON")
-        self.T_VALUE = an.NeuronType(self.registry, "VALUE_NEURON")
+        # Create builders first
+        self.T_EMB_BUILDER = an.NeuronTypeBuilder(self.registry, "EMB_NEURON")
+        self.T_KEY_BUILDER = an.NeuronTypeBuilder(self.registry, "KEY_NEURON")
+        self.T_QUERY_BUILDER = an.NeuronTypeBuilder(self.registry, "QUERY_NEURON")
+        self.T_INHIB_BUILDER = an.NeuronTypeBuilder(self.registry, "INHIB_NEURON")
+        self.T_VALUE_BUILDER = an.NeuronTypeBuilder(self.registry, "VALUE_NEURON")
+        
+        # Build implementation types
+        self.T_EMB = self.T_EMB_BUILDER.build()
+        self.T_KEY = self.T_KEY_BUILDER.build()
+        self.T_QUERY = self.T_QUERY_BUILDER.build()
+        self.T_INHIB = self.T_INHIB_BUILDER.build()
+        self.T_VALUE = self.T_VALUE_BUILDER.build()
     
     def _setup_activation_types(self):
         """Setup activation type definitions: T_A"""

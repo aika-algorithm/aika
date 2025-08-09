@@ -1,7 +1,6 @@
 #ifndef NETWORK_ACTIVATION_DEFINITION_H
 #define NETWORK_ACTIVATION_DEFINITION_H
 
-#include "network/node_definition.h"
 #include "fields/type.h"
 #include "fields/relation.h"
 

@@ -22,6 +22,12 @@
 #include "network/activation_key.h"
 #include "network/fired.h"
 
+// Builder classes
+#include "network/builders/neuron_type_builder.h"
+#include "network/builders/synapse_type_builder.h"
+#include "network/builders/activation_type_builder.h"
+#include "network/builders/link_type_builder.h"
+
 // Fields module includes (for base classes)
 #include "fields/type.h"
 #include "fields/object.h"
@@ -335,4 +341,75 @@ void bind_network(py::module_& m) {
         .def("__str__", [](const BindingSignal& bs) {
             return bs.toString();
         });
+
+    // Bind Builder classes
+    py::class_<NeuronTypeBuilder, Type>(m, "NeuronTypeBuilder")
+        .def(py::init<TypeRegistry*, const std::string&>())
+        .def("setActivation", &NeuronTypeBuilder::setActivation, py::return_value_policy::reference_internal)
+        .def("getActivation", &NeuronTypeBuilder::getActivation, py::return_value_policy::reference_internal)
+        .def("build", &NeuronTypeBuilder::build, py::return_value_policy::reference_internal)
+        .def("getRelations", &NeuronTypeBuilder::getRelations, py::return_value_policy::reference_internal)
+        .def("__str__", [](const NeuronTypeBuilder& nb) {
+            return nb.toString();
+        })
+        // Static relation members
+        .def_readonly_static("SELF", &NeuronTypeBuilder::SELF)
+        .def_readonly_static("INPUT", &NeuronTypeBuilder::INPUT)
+        .def_readonly_static("OUTPUT", &NeuronTypeBuilder::OUTPUT)
+        .def_readonly_static("ACTIVATION", &NeuronTypeBuilder::ACTIVATION);
+
+    py::class_<SynapseTypeBuilder, Type>(m, "SynapseTypeBuilder")
+        .def(py::init<TypeRegistry*, const std::string&>())
+        .def("setInput", &SynapseTypeBuilder::setInput, py::return_value_policy::reference_internal)
+        .def("setOutput", &SynapseTypeBuilder::setOutput, py::return_value_policy::reference_internal)
+        .def("setLink", &SynapseTypeBuilder::setLink, py::return_value_policy::reference_internal)
+        .def("getInput", &SynapseTypeBuilder::getInput, py::return_value_policy::reference_internal)
+        .def("getOutput", &SynapseTypeBuilder::getOutput, py::return_value_policy::reference_internal)
+        .def("getLink", &SynapseTypeBuilder::getLink, py::return_value_policy::reference_internal)
+        .def("build", &SynapseTypeBuilder::build, py::return_value_policy::reference_internal)
+        .def("getRelations", &SynapseTypeBuilder::getRelations, py::return_value_policy::reference_internal)
+        .def("__str__", [](const SynapseTypeBuilder& sb) {
+            return sb.toString();
+        })
+        // Static relation members
+        .def_readonly_static("SELF", &SynapseTypeBuilder::SELF)
+        .def_readonly_static("INPUT", &SynapseTypeBuilder::INPUT)
+        .def_readonly_static("OUTPUT", &SynapseTypeBuilder::OUTPUT)
+        .def_readonly_static("LINK", &SynapseTypeBuilder::LINK);
+
+    py::class_<ActivationTypeBuilder, Type>(m, "ActivationTypeBuilder")
+        .def(py::init<TypeRegistry*, const std::string&>())
+        .def("setNeuron", &ActivationTypeBuilder::setNeuron, py::return_value_policy::reference_internal)
+        .def("getNeuron", &ActivationTypeBuilder::getNeuron, py::return_value_policy::reference_internal)
+        .def("build", &ActivationTypeBuilder::build, py::return_value_policy::reference_internal)
+        .def("getRelations", &ActivationTypeBuilder::getRelations, py::return_value_policy::reference_internal)
+        .def("__str__", [](const ActivationTypeBuilder& ab) {
+            return ab.toString();
+        })
+        // Static relation members
+        .def_readonly_static("SELF", &ActivationTypeBuilder::SELF)
+        .def_readonly_static("INPUT", &ActivationTypeBuilder::INPUT)
+        .def_readonly_static("OUTPUT", &ActivationTypeBuilder::OUTPUT)
+        .def_readonly_static("NEURON", &ActivationTypeBuilder::NEURON);
+
+    py::class_<LinkTypeBuilder, Type>(m, "LinkTypeBuilder")
+        .def(py::init<TypeRegistry*, const std::string&>())
+        .def("setSynapse", &LinkTypeBuilder::setSynapse, py::return_value_policy::reference_internal)
+        .def("setInput", &LinkTypeBuilder::setInput, py::return_value_policy::reference_internal)
+        .def("setOutput", &LinkTypeBuilder::setOutput, py::return_value_policy::reference_internal)
+        .def("getSynapse", &LinkTypeBuilder::getSynapse, py::return_value_policy::reference_internal)
+        .def("getInput", &LinkTypeBuilder::getInput, py::return_value_policy::reference_internal)
+        .def("getOutput", &LinkTypeBuilder::getOutput, py::return_value_policy::reference_internal)
+        .def("build", &LinkTypeBuilder::build, py::return_value_policy::reference_internal)
+        .def("getRelations", &LinkTypeBuilder::getRelations, py::return_value_policy::reference_internal)
+        .def("__str__", [](const LinkTypeBuilder& lb) {
+            return lb.toString();
+        })
+        // Static relation members
+        .def_readonly_static("SELF", &LinkTypeBuilder::SELF)
+        .def_readonly_static("INPUT", &LinkTypeBuilder::INPUT)
+        .def_readonly_static("OUTPUT", &LinkTypeBuilder::OUTPUT)
+        .def_readonly_static("SYNAPSE", &LinkTypeBuilder::SYNAPSE)
+        .def_readonly_static("PAIR_IN", &LinkTypeBuilder::PAIR_IN)
+        .def_readonly_static("PAIR_OUT", &LinkTypeBuilder::PAIR_OUT);
 }

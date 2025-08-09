@@ -1,4 +1,5 @@
 #include "network/binding_signal.h"
+#include "network/activation.h"
 
 BindingSignal::BindingSignal(int tokenId, Context* ctx) : tokenId(tokenId), ctx(ctx) {}
 

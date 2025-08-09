@@ -12,10 +12,10 @@
 // Forward declarations to break circular dependencies
 class Activation;
 class Synapse;
-class BSType;
 class BindingSignal;
 class Context;
 class NeuronReference; // Forward declare NeuronReference
+
 #include <map>
 #include <set>
 #include <vector>
