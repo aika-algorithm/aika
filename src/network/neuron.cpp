@@ -3,7 +3,7 @@
 #include "network/read_write_lock.h"
 #include "fields/type.h"
 #include "network/model.h"
-#include "network/document.h"
+#include "network/context.h"
 #include "network/model_provider.h"
 #include "fields/type_registry.h"
 //#include "network/relations.h" // This file doesn't exist, may not be needed
@@ -110,7 +110,7 @@ int Neuron::getNewSynapseId() {
     return synapseIdCounter++;
 }
 
-Activation* Neuron::createActivation(Activation* parent, Document* doc, std::map<int, BindingSignal*> bindingSignals) {
+Activation* Neuron::createActivation(Activation* parent, Context* ctx, std::map<int, BindingSignal*> bindingSignals) {
     // Get the neuron definition and its activation definition
     NeuronType* neuronType = static_cast<NeuronType*>(getType());
     
@@ -120,11 +120,11 @@ Activation* Neuron::createActivation(Activation* parent, Document* doc, std::map
     }
     
     // Create activation ID
-    int activationId = doc->createActivationId();
+    int activationId = ctx->createActivationId();
     
     // For now, create a Activation as the default
     // In a full implementation, this would depend on the activation definition type
-    return new Activation(activationDef, parent, activationId, this, doc, bindingSignals);
+    return new Activation(activationDef, parent, activationId, this, ctx, bindingSignals);
 }
 
 void Neuron::deleteNeuron() {
@@ -339,8 +339,8 @@ long Neuron::getLastUsed() const {
     return lastUsed;
 }
 
-void Neuron::updateLastUsed(long docId) {
-    lastUsed = std::max(lastUsed, docId);
+void Neuron::updateLastUsed(long ctxId) {
+    lastUsed = std::max(lastUsed, ctxId);
 }
 
 void Neuron::save() {

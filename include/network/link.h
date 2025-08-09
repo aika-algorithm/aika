@@ -13,7 +13,7 @@
 
 class Synapse;
 class Activation;
-class Document;
+class Context;
 class Model;
 
 class Link : public Object, public Element, public ModelProvider {
@@ -30,7 +30,7 @@ public:
     Activation* getOutput() const;
     bool isCausal() const;
     static bool isCausal(Activation* iAct, Activation* oAct);
-    Document* getDocument() const;
+    Context* getContext() const;
     Queue* getQueue() const override;
     Model* getModel() const override;
     Config* getConfig() const override;

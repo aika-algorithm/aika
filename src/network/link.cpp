@@ -1,6 +1,6 @@
 #include "network/link.h"
 #include "network/model.h"
-#include "network/document.h"
+#include "network/context.h"
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/link_type.h"
@@ -63,12 +63,12 @@ bool Link::isCausal(Activation* iAct, Activation* oAct) {
     return iAct->getFired() < oAct->getFired();
 }
 
-Document* Link::getDocument() const {
-    return output->getDocument();
+Context* Link::getContext() const {
+    return output->getContext();
 }
 
 Queue* Link::getQueue() const {
-    return output->getDocument();
+    return output->getContext();
 }
 
 Model* Link::getModel() const {

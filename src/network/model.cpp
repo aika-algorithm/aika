@@ -5,7 +5,7 @@
 #include "network/model.h"
 #include "fields/type_registry.h"
 #include "network/neuron.h"
-#include "network/document.h"
+#include "network/context.h"
 #include "network/suspension_callback.h"
 #include "network/in_memory_suspension_callback.h"
 #include <iostream>
@@ -14,13 +14,13 @@
 #include "type_registry.h"
 #include "SuspensionCallback.h"
 #include "Neuron.h"
-#include "Document.h"
+#include "Context.h"
 */
 
 class TypeRegistry;
 
 Model::Model(TypeRegistry *typeRegistry)
-    : typeRegistry(typeRegistry), suspensionCallback(new InMemorySuspensionCallback()), documentIdCounter(0), N(0) {}
+    : typeRegistry(typeRegistry), suspensionCallback(new InMemorySuspensionCallback()), contextIdCounter(0), N(0) {}
 
 long Model::getTimeout() const {
     return 0; //config ? config->getTimeout() : 0;
@@ -30,25 +30,25 @@ long Model::createNeuronId() {
     return suspensionCallback->createId();
 }
 
-long Model::getLowestDocumentId() const {
-    std::lock_guard<std::mutex> lock(documentMutex);
-    if (documents.empty()) {
+long Model::getLowestContextId() const {
+    std::lock_guard<std::mutex> lock(contextMutex);
+    if (contexts.empty()) {
         return -1; // Equivalent to returning null in Java
     }
-    return documents.begin()->first;
+    return contexts.begin()->first;
 }
 
 TypeRegistry *Model::getTypeRegistry() {
     return typeRegistry;
 }
 
-void Model::registerDocument(Document *doc) {
-    documents[doc->getId()] = doc;
+void Model::registerContext(Context *ctx) {
+    contexts[ctx->getId()] = ctx;
 }
 
-void Model::deregisterDocument(Document *doc) {
-    documents.erase(doc->getId());
-    lastProcessedDocument = std::max(lastProcessedDocument, doc->getId());
+void Model::deregisterContext(Context *ctx) {
+    contexts.erase(ctx->getId());
+    lastProcessedContext = std::max(lastProcessedContext, ctx->getId());
 }
 
 std::vector<Neuron *> Model::getActiveNeurons() {
@@ -96,9 +96,9 @@ void Model::setN(long n) {
 }
 
 bool Model::canBeSuspended(long lastUsed) const {
-    long tId = getLowestDocumentId();
+    long tId = getLowestContextId();
     if (tId == 0) {
-        tId = lastProcessedDocument;
+        tId = lastProcessedContext;
     }
     return lastUsed < tId - config->getNeuronProviderRetention();
 }
@@ -131,8 +131,8 @@ void Model::close(bool store) {
     suspensionCallback->close();
 }
 
-long Model::createDocumentId() {
-    return ++documentIdCounter;
+long Model::createContextId() {
+    return ++contextIdCounter;
 }
 
 Config *Model::getConfig() const {

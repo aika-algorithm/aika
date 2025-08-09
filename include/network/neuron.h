@@ -14,7 +14,7 @@ class Activation;
 class Synapse;
 class BSType;
 class BindingSignal;
-class Document;
+class Context;
 class NeuronReference; // Forward declare NeuronReference
 #include <map>
 #include <set>
@@ -35,7 +35,7 @@ public:
     void wakeupPropagable();
     std::set<NeuronReference*> getPropagable() const;
     int getNewSynapseId();
-    Activation* createActivation(Activation* parent, Document* doc, std::map<int, BindingSignal*> bindingSignals);
+    Activation* createActivation(Activation* parent, Context* doc, std::map<int, BindingSignal*> bindingSignals);
     void deleteNeuron();
     Model* getModel() const override;
     Config* getConfig() const override;

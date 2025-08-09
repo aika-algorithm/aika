@@ -5,7 +5,7 @@
 #include "network/activation_type.h"
 #include "fields/rel_obj_iterator.h"
 #include "fields/field.h"
-#include "network/document.h"
+#include "network/context.h"
 #include "network/fired.h"
 #include "network/link.h"
 #include "network/binding_signal.h"
@@ -16,11 +16,11 @@ const std::function<bool(Activation*, Activation*)> Activation::ID_COMPARATOR = 
     return a1->getId() < a2->getId();
 };
 
-Activation::Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<int, BindingSignal*> bindingSignals)
-    : Object(t), id(id), neuron(n), doc(doc), bindingSignals(bindingSignals), parent(parent), created(-1), fired(-1), firedStep(new Fired(this)) {
-    doc->addActivation(this);
-    neuron->updateLastUsed(doc->getId());
-    setCreated(doc->getCurrentTimestamp());
+Activation::Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Context* ctx, std::map<int, BindingSignal*> bindingSignals)
+    : Object(t), id(id), neuron(n), ctx(ctx), bindingSignals(bindingSignals), parent(parent), created(-1), fired(-1), firedStep(new Fired(this)) {
+    ctx->addActivation(this);
+    neuron->updateLastUsed(ctx->getId());
+    setCreated(ctx->getCurrentTimestamp());
 }
 
 Activation::~Activation() {
@@ -142,7 +142,7 @@ void Activation::linkOutgoing(Synapse* targetSyn) {
 
 void Activation::propagate(Synapse* targetSyn) {
     std::map<int, BindingSignal*> bindingSignals = targetSyn->transitionForward(getBindingSignals());
-    Activation* oAct = targetSyn->getOutput(getModel())->createActivation(nullptr, getDocument(), bindingSignals);
+    Activation* oAct = targetSyn->getOutput(getModel())->createActivation(nullptr, getContext(), bindingSignals);
 
     targetSyn->createLink(this, bindingSignals, oAct);
 
@@ -175,7 +175,7 @@ long Activation::getFired() const {
 }
 
 void Activation::setFired() {
-    fired = doc->getCurrentTimestamp();
+    fired = ctx->getCurrentTimestamp();
 }
 
 void Activation::setFired(long f) {
@@ -190,23 +190,23 @@ void Activation::updateFiredStep(Field* net) {
     }
 
     if (firedStep->isQueued()) {
-        doc->removeStep(firedStep);
+        ctx->removeStep(firedStep);
     }
 
     firedStep->updateNet(net->getUpdatedValue());
-    doc->addStep(firedStep);
+    ctx->addStep(firedStep);
 }
 
 Queue* Activation::getQueue() const {
-    return doc;
+    return ctx;
 }
 
 Neuron* Activation::getNeuron() const {
     return neuron;
 }
 
-Document* Activation::getDocument() const {
-    return doc;
+Context* Activation::getContext() const {
+    return ctx;
 }
 
 Model* Activation::getModel() const {

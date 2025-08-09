@@ -311,7 +311,7 @@ class TransformerTestCase(unittest.TestCase):
         # Continue with test even if synapse creation failed (to test other components)
         print("Continuing with network test...")
 
-        doc = an.Document(model)
+        doc = an.Context(model)
 
         emb_activation = doc.addToken(doc)
         print(f"EMB activation: {emb_activation}")
@@ -321,7 +321,7 @@ class TransformerTestCase(unittest.TestCase):
             doc.process()
             print("Processed document")
         except Exception as e:
-            print(f"Document processing error: {e}")
+            print(f"Context processing error: {e}")
 
         # Check if key activation was created
         try:

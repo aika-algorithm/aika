@@ -12,10 +12,10 @@
 #include "network/binding_signal.h"
 #include "network/neuron.h"
 
-class Document : public Queue, public ModelProvider, public QueueProvider {
+class Context : public Queue, public ModelProvider, public QueueProvider {
 public:
-    Document(Model* m);
-    ~Document();
+    Context(Model* m);
+    ~Context();
 
     long getId() const;
     long getTimeout() const override;

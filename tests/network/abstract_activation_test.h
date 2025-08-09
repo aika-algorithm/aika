@@ -3,7 +3,7 @@
 
 #include "fields/type_registry.h"
 #include "network/model.h"
-#include "network/document.h"
+#include "network/context.h"
 #include "network/neuron.h"
 #include "network/neuron_type.h"
 #include "network/activation_type.h"
@@ -15,7 +15,7 @@ protected:
     NeuronType* neuronDef;
     ActivationType* activationType;
     Neuron* neuron;
-    Document* doc;
+    Context* ctx;
 
     void setUp();
     void tearDown();

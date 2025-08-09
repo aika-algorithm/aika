@@ -10,7 +10,7 @@
 #include <mutex>
 
 class Neuron;
-class Document;
+class Context;
 class SuspensionCallback;
 
 class Model : public Queue {
@@ -18,9 +18,9 @@ public:
     Model(TypeRegistry* typeRegistry);
 
     long createNeuronId();
-    void registerDocument(Document* doc);
-    void deregisterDocument(Document* doc);
-    long getLowestDocumentId() const;
+    void registerContext(Context* doc);
+    void deregisterContext(Context* doc);
+    long getLowestContextId() const;
     void addToN(int l);
     long getN() const;
     void setN(long n);
@@ -31,7 +31,7 @@ public:
     void unregister(Neuron* n);
     void open(bool create);
     void close(bool store);
-    long createDocumentId();
+    long createContextId();
     Config* getConfig() const;
     void setConfig(Config* config);
     void write(std::ostream& out) const;
@@ -45,13 +45,13 @@ public:
 private:
     TypeRegistry* typeRegistry;
     SuspensionCallback* suspensionCallback;
-    long documentIdCounter;
+    long contextIdCounter;
     long N;
     Config* config;
     std::map<long, Neuron*> activeNeurons;
-    std::map<long, Document*> documents;
-    long lastProcessedDocument;
-    mutable std::mutex documentMutex;
+    std::map<long, Context*> contexts;
+    long lastProcessedContext;
+    mutable std::mutex contextMutex;
     mutable std::mutex neuronMutex;
 };
 

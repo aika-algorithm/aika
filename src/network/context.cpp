@@ -1,50 +1,50 @@
-#include "network/document.h"
+#include "network/context.h"
 #include "network/activation.h"
 #include "network/model.h"
 
-Document::Document(Model* m) : model(m), activationIdCounter(0), isStale(false) {
-    id = model->createDocumentId();
-    model->registerDocument(this);
+Context::Context(Model* m) : model(m), activationIdCounter(0), isStale(false) {
+    id = model->createContextId();
+    model->registerContext(this);
 }
 
-Document::~Document() {
-    std::cout << "~Document begin" << std::endl;
+Context::~Context() {
+    std::cout << "~Context begin" << std::endl;
     // Clean up activations and binding signals
     for (auto& pair : activations) {
-        std::cout << "~Document act:" << pair.second << std::endl;
+        std::cout << "~Context act:" << pair.second << std::endl;
         delete pair.second;
     }
-    std::cout << "~Document middle" << std::endl;
+    std::cout << "~Context middle" << std::endl;
     for (auto& pair : bindingSignals) {
         delete pair.second;
     }
-    std::cout << "~Document end" << std::endl;
+    std::cout << "~Context end" << std::endl;
 }
 
-long Document::getId() const {
+long Context::getId() const {
     return id;
 }
 
-long Document::getTimeout() const {
+long Context::getTimeout() const {
     return getConfig()->getTimeout();
 }
 
-void Document::process(std::function<bool(Step*)> filter) {
+void Context::process(std::function<bool(Step*)> filter) {
     Queue::process(filter);
     if (model->getConfig()->isCountingEnabled()) {
         model->addToN(length);
     }
 }
 
-Model* Document::getModel() const {
+Model* Context::getModel() const {
     return model;
 }
 
-Config* Document::getConfig() const {
+Config* Context::getConfig() const {
     return model->getConfig();
 }
 
-Step* Document::getCurrentStep() {
+Step* Context::getCurrentStep() {
     // We need to work around the private access to currentStep
     // Check for any available information in the queue entries
     auto entries = getQueueEntries();
@@ -54,11 +54,11 @@ Step* Document::getCurrentStep() {
     return nullptr; // Return null if no steps are available
 }
 
-void Document::addActivation(Activation* act) {
+void Context::addActivation(Activation* act) {
     activations[act->getId()] = act;
 }
 
-std::set<Activation*> Document::getActivations() {
+std::set<Activation*> Context::getActivations() {
     std::set<Activation*> result;
     for (const auto& pair : activations) {
         result.insert(pair.second);
@@ -66,7 +66,7 @@ std::set<Activation*> Document::getActivations() {
     return result;
 }
 
-Activation* Document::getActivationByNeuron(Neuron* outputNeuron) {
+Activation* Context::getActivationByNeuron(Neuron* outputNeuron) {
     for (const auto& act : getActivations()) {
         if (act->getNeuron() == outputNeuron) {
             return act;
@@ -75,35 +75,35 @@ Activation* Document::getActivationByNeuron(Neuron* outputNeuron) {
     return nullptr;
 }
 
-int Document::createActivationId() {
+int Context::createActivationId() {
     return activationIdCounter++;
 }
 
-void Document::disconnect() {
-    model->deregisterDocument(this);
+void Context::disconnect() {
+    model->deregisterContext(this);
     isStale = true;
 }
 
-Queue* Document::getQueue() const {
-    return const_cast<Document*>(this);
+Queue* Context::getQueue() const {
+    return const_cast<Context*>(this);
 }
 
-Activation* Document::addToken(Neuron* n, int bsType, int tokenId) {
+Activation* Context::addToken(Neuron* n, int bsType, int tokenId) {
     BindingSignal* bs = getOrCreateBindingSignal(tokenId);
     return n->createActivation(nullptr, this, {{bsType, bs}});
 }
 
-BindingSignal* Document::getOrCreateBindingSignal(int tokenId) {
+BindingSignal* Context::getOrCreateBindingSignal(int tokenId) {
     if (bindingSignals.find(tokenId) == bindingSignals.end()) {
         bindingSignals[tokenId] = new BindingSignal(tokenId, this);
     }
     return bindingSignals[tokenId];
 }
 
-BindingSignal* Document::getBindingSignal(int tokenId) {
+BindingSignal* Context::getBindingSignal(int tokenId) {
     return bindingSignals[tokenId];
 }
 
-std::string Document::toString() const {
+std::string Context::toString() const {
     return "Id:" + std::to_string(id);
 } 

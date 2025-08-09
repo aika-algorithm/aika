@@ -16,7 +16,7 @@
 #include "network/link.h"
 #include "network/direction.h"
 #include "network/config.h"
-#include "network/document.h"
+#include "network/context.h"
 #include "network/binding_signal.h"
 #include "network/transition.h"
 #include "network/activation_key.h"
@@ -42,7 +42,7 @@ void bind_network(py::module_& m) {
     py::class_<Model>(m, "Model")
         .def(py::init<TypeRegistry*>())
         .def("createNeuronId", &Model::createNeuronId)
-        .def("getLowestDocumentId", &Model::getLowestDocumentId)
+        .def("getLowestContextId", &Model::getLowestContextId)
         .def("addToN", &Model::addToN)
         .def("getN", &Model::getN)
         .def("setN", &Model::setN)
@@ -53,7 +53,7 @@ void bind_network(py::module_& m) {
         .def("unregister", &Model::unregister)
         .def("open", &Model::open)
         .def("close", &Model::close)
-        .def("createDocumentId", &Model::createDocumentId)
+        .def("createContextId", &Model::createContextId)
         .def("getConfig", &Model::getConfig, py::return_value_policy::reference_internal)
         .def("setConfig", &Model::setConfig)
         .def("getTypeRegistry", &Model::getTypeRegistry, py::return_value_policy::reference_internal)
@@ -82,25 +82,25 @@ void bind_network(py::module_& m) {
         .def("getNeuronId", &ActivationKey::getNeuronId)
         .def("getActId", &ActivationKey::getActId);
 
-    // Bind Document class (inherits from Queue, ModelProvider, QueueProvider)
-    py::class_<Document, Queue>(m, "Document")
+    // Bind Context class (inherits from Queue, ModelProvider, QueueProvider)
+    py::class_<Context, Queue>(m, "Context")
         .def(py::init<Model*>())
-        .def("getId", &Document::getId)
-        .def("getTimeout", &Document::getTimeout)
-        .def("process", &Document::process)
-        .def("getModel", &Document::getModel, py::return_value_policy::reference_internal)
-        .def("getConfig", &Document::getConfig, py::return_value_policy::reference_internal)
-        .def("getCurrentStep", &Document::getCurrentStep, py::return_value_policy::reference_internal)
-        .def("addActivation", &Document::addActivation)
-        .def("getActivations", &Document::getActivations, py::return_value_policy::reference_internal)
-        .def("getActivationByNeuron", &Document::getActivationByNeuron, py::return_value_policy::reference_internal)
-        .def("createActivationId", &Document::createActivationId)
-        .def("disconnect", &Document::disconnect)
-        .def("getQueue", &Document::getQueue, py::return_value_policy::reference_internal)
-        .def("addToken", &Document::addToken, py::return_value_policy::reference_internal)
-        .def("getOrCreateBindingSignal", &Document::getOrCreateBindingSignal, py::return_value_policy::reference_internal)
-        .def("getBindingSignal", &Document::getBindingSignal, py::return_value_policy::reference_internal)
-        .def("__str__", [](const Document& d) {
+        .def("getId", &Context::getId)
+        .def("getTimeout", &Context::getTimeout)
+        .def("process", &Context::process)
+        .def("getModel", &Context::getModel, py::return_value_policy::reference_internal)
+        .def("getConfig", &Context::getConfig, py::return_value_policy::reference_internal)
+        .def("getCurrentStep", &Context::getCurrentStep, py::return_value_policy::reference_internal)
+        .def("addActivation", &Context::addActivation)
+        .def("getActivations", &Context::getActivations, py::return_value_policy::reference_internal)
+        .def("getActivationByNeuron", &Context::getActivationByNeuron, py::return_value_policy::reference_internal)
+        .def("createActivationId", &Context::createActivationId)
+        .def("disconnect", &Context::disconnect)
+        .def("getQueue", &Context::getQueue, py::return_value_policy::reference_internal)
+        .def("addToken", &Context::addToken, py::return_value_policy::reference_internal)
+        .def("getOrCreateBindingSignal", &Context::getOrCreateBindingSignal, py::return_value_policy::reference_internal)
+        .def("getBindingSignal", &Context::getBindingSignal, py::return_value_policy::reference_internal)
+        .def("__str__", [](const Context& d) {
             return d.toString();
         });
 
@@ -115,7 +115,7 @@ void bind_network(py::module_& m) {
         .def("getOutput", &Link::getOutput, py::return_value_policy::reference_internal)
         .def("isCausal", py::overload_cast<>(&Link::isCausal, py::const_))
         .def_static("isCausalStatic", py::overload_cast<Activation*, Activation*>(&Link::isCausal))
-        .def("getDocument", &Link::getDocument, py::return_value_policy::reference_internal)
+        .def("getContext", &Link::getContext, py::return_value_policy::reference_internal)
         .def("getQueue", &Link::getQueue, py::return_value_policy::reference_internal)
         .def("getModel", &Link::getModel, py::return_value_policy::reference_internal)
         .def("getConfig", &Link::getConfig, py::return_value_policy::reference_internal)
@@ -147,7 +147,7 @@ void bind_network(py::module_& m) {
         .def("updateFiredStep", &Activation::updateFiredStep)
         .def("getQueue", &Activation::getQueue, py::return_value_policy::reference_internal)
         .def("getNeuron", &Activation::getNeuron, py::return_value_policy::reference_internal)
-        .def("getDocument", &Activation::getDocument, py::return_value_policy::reference_internal)
+        .def("getContext", &Activation::getContext, py::return_value_policy::reference_internal)
         .def("getModel", &Activation::getModel, py::return_value_policy::reference_internal)
         .def("getConfig", &Activation::getConfig, py::return_value_policy::reference_internal)
         .def("getInputLinks", py::overload_cast<LinkType*>(&Activation::getInputLinks, py::const_), py::return_value_policy::reference_internal)
@@ -326,9 +326,9 @@ void bind_network(py::module_& m) {
 
     // Bind BindingSignal class
     py::class_<BindingSignal>(m, "BindingSignal")
-        .def(py::init<int, Document*>())
+        .def(py::init<int, Context*>())
         .def("getTokenId", &BindingSignal::getTokenId)
-        .def("getDocument", &BindingSignal::getDocument, py::return_value_policy::reference_internal)
+        .def("getContext", &BindingSignal::getContext, py::return_value_policy::reference_internal)
         .def("addActivation", &BindingSignal::addActivation)
         .def("getActivations", py::overload_cast<Neuron*>(&BindingSignal::getActivations), py::return_value_policy::reference_internal)
         .def("getActivations", py::overload_cast<>(&BindingSignal::getActivations), py::return_value_policy::reference_internal)

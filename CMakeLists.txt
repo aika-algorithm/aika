@@ -93,7 +93,7 @@ set(CORE_SOURCES
         src/network/binding_signal.cpp
         src/network/config.cpp
         src/network/direction.cpp
-        src/network/document.cpp
+        src/network/context.cpp
         src/network/edge_definition.cpp
         src/network/element.cpp
         src/network/element_step.cpp

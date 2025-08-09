@@ -15,12 +15,12 @@ void AbstractActivationTest::setUp() {
     // Create neuron instance
     neuron = neuronDef->instantiate(model);
     
-    // Create document
-    doc = new Document(model);
+    // Create context
+    ctx = new Context(model);
 }
 
 void AbstractActivationTest::tearDown() {
-    delete doc;
+    delete ctx;
     delete neuron;
     delete activationType;
     delete neuronDef;

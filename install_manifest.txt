@@ -13,6 +13,7 @@
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/save.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/neuron_type.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/transition.h
+/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/context.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/network_bindings.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/edge_definition.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/missing_neuron_exception.h
@@ -26,7 +27,6 @@
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/node_definition.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/synapse.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/activation_type.h
-/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/document.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/model.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/activation.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/link_type.h

@@ -63,7 +63,7 @@ void bind_ConstructorStats(py::module_ &m) {
 }
 
 PYBIND11_MODULE(pybind11_tests, m) {
-    m.doc() = "pybind11 test module";
+    m.ctx() = "pybind11 test module";
 
     bind_ConstructorStats(m);
 

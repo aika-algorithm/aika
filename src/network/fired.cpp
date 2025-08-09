@@ -3,7 +3,7 @@
 #include "fields/queue_key.h"
 #include "network/fired_queue_key.h"
 #include "network/binding_signal.h"
-#include "network/document.h"
+#include "network/context.h"
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -43,8 +43,8 @@ Activation* Fired::getElement() const {
 }
 
 Queue* Fired::getQueue() const {
-    Document* doc = act->getDocument();
-    return doc->getQueue();
+    Context* ctx = act->getContext();
+    return ctx->getQueue();
 }
 
 bool Fired::isQueued() const {

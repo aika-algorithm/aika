@@ -1,13 +1,13 @@
 #include "network/binding_signal.h"
 
-BindingSignal::BindingSignal(int tokenId, Document* doc) : tokenId(tokenId), doc(doc) {}
+BindingSignal::BindingSignal(int tokenId, Context* ctx) : tokenId(tokenId), ctx(ctx) {}
 
 int BindingSignal::getTokenId() const {
     return tokenId;
 }
 
-Document* BindingSignal::getDocument() const {
-    return doc;
+Context* BindingSignal::getContext() const {
+    return ctx;
 }
 
 void BindingSignal::addActivation(Activation* act) {

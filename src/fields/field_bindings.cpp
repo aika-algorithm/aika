@@ -29,7 +29,7 @@ namespace py = pybind11;
 // ----------------
 
 void bind_fields(py::module_& m) {
-      // Bind Queue class first (needed as base for Document and other classes)
+      // Bind Queue class first (needed as base for Context and other classes)
       py::class_<Queue>(m, "Queue")
             .def("getTimeout", &Queue::getTimeout)
             .def("getTimestampOnProcess", &Queue::getTimestampOnProcess)

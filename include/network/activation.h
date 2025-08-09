@@ -21,13 +21,13 @@ class ActivationKey;
 #include <set>
 #include <vector>
 
-class Document;
+class Context;
 
 class Activation : public Object, public Element, public ModelProvider {
 public:
     static const std::function<bool(Activation*, Activation*)> ID_COMPARATOR;
 
-    Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Document* doc, std::map<int, BindingSignal*> bindingSignals);
+    Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Context* ctx, std::map<int, BindingSignal*> bindingSignals);
     ~Activation();
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
@@ -56,7 +56,7 @@ public:
     void updateFiredStep(Field* net);
     Queue* getQueue() const override;
     Neuron* getNeuron() const;
-    Document* getDocument() const;
+    Context* getContext() const;
     Model* getModel() const override;
     Config* getConfig() const override;
 
@@ -82,7 +82,7 @@ private:
 
     int id;
     Neuron* neuron;
-    Document* doc;
+    Context* ctx;
     std::map<int, BindingSignal*> bindingSignals;
     Activation* parent;
     long created;
