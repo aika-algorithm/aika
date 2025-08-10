@@ -47,11 +47,11 @@ Neuron* NeuronType::instantiate(Model* m) {
     return new Neuron(this, m);
 }
 
-ActivationType* NeuronType::getActivation() const {
-    return activation;
+ActivationType* NeuronType::getActivationType() const {
+    return activationType;
 }
 
-NeuronType* NeuronType::setActivation(ActivationType* activation) {
-    this->activation = activation;
+NeuronType* NeuronType::setActivationType(ActivationType* activationType) {
+    this->activationType = activationType;
     return this;
 } 

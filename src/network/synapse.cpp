@@ -1,6 +1,7 @@
 #include "network/synapse.h"
 #include "network/synapse_type.h"
 #include "network/direction.h" // Include the full NetworkDirection definition
+#include "network/linker.h"
 #include <iostream>
 #include <stdexcept>
 #include <limits>
@@ -112,13 +113,13 @@ Link* Synapse::createLink(Activation* input, Activation* output) {
 }
 
 Link* Synapse::createLink(Activation* input, const std::map<int, BindingSignal*>& bindingSignals, Activation* output) {
-    if (output->matchBindingSignals(bindingSignals)) {
+    if (Linker::matchBindingSignals(output, bindingSignals)) {
         // TODO
-        output->linkIncoming(input);
+        Linker::linkIncoming(output, input);
     }
     
     return static_cast<SynapseType*>(getType())
-        ->getLink()
+        ->getLinkType()
         ->instantiate(this, input, output);
 }
 

@@ -39,14 +39,6 @@ public:
     BindingSignal* getBindingSignal(int s) const;
     std::map<int, BindingSignal*> getBindingSignals() const;
 
-    bool matchBindingSignals(std::map<int, BindingSignal*> latentBindingSignals) const;
-
-    void linkIncoming(Activation* excludedInputAct);
-    void linkIncoming(Synapse* targetSyn, Activation* excludedInputAct);
-    void linkOutgoing();
-    void linkOutgoing(Synapse* targetSyn);
-    void propagate(Synapse* targetSyn);
-    std::set<Activation*> collectLinkingTargets(Neuron* n);
     int getId() const;
     long getCreated() const override;
     void setCreated(long ts);

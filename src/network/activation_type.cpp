@@ -39,4 +39,13 @@ std::vector<Relation*> ActivationType::getRelations() const {
         const_cast<RelationMany*>(&OUTPUT),
         const_cast<RelationOne*>(&NEURON)
     };
-} 
+}
+
+NeuronType* ActivationType::getNeuronType() const {
+    return neuronType;
+}
+
+ActivationType* ActivationType::setNeuronType(NeuronType* neuronType) {
+    this->neuronType = neuronType;
+    return this;
+}

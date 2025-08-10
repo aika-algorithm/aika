@@ -121,6 +121,7 @@ set(CORE_SOURCES
         src/network/synapse_type.cpp
         src/network/transition.cpp
         src/network/utils.cpp
+        src/network/linker.cpp
         src/network/builders/neuron_type_builder.cpp
         src/network/builders/synapse_type_builder.cpp
         src/network/builders/activation_type_builder.cpp

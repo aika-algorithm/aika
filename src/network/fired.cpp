@@ -4,6 +4,7 @@
 #include "network/fired_queue_key.h"
 #include "network/binding_signal.h"
 #include "network/context.h"
+#include "network/linker.h"
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -24,7 +25,7 @@ void Fired::process() {
         bs.second->addActivation(act);
     }
 
-    act->linkOutgoing();
+    Linker::linkOutgoing(act);
 }
 
 void Fired::updateNet(double net) {

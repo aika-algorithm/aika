@@ -23,7 +23,7 @@ public:
 
 static SynapseTypeInitializer synapseDefInit;
 
-SynapseType::SynapseType(TypeRegistry* registry, const std::string& name) : Type(registry, name), link(nullptr), input(nullptr), output(nullptr), storedAt(nullptr), instanceSynapseType(nullptr) {}
+SynapseType::SynapseType(TypeRegistry* registry, const std::string& name) : Type(registry, name), linkType(nullptr), inputType(nullptr), outputType(nullptr), storedAt(nullptr), instanceSynapseType(nullptr) {}
 
 std::vector<Relation> SynapseType::getRelations() const {
     // We can't return a vector of the abstract class Relation
@@ -41,30 +41,30 @@ Synapse* SynapseType::instantiate(Neuron* input, Neuron* output) {
     return nullptr; // Placeholder
 }
 
-NeuronType* SynapseType::getInput() const {
-    return input;
+NeuronType* SynapseType::getInputType() const {
+    return inputType;
 }
 
-SynapseType* SynapseType::setInput(NeuronType* input) {
-    this->input = input;
+SynapseType* SynapseType::setInputType(NeuronType* inputType) {
+    this->inputType = inputType;
     return this;
 }
 
-NeuronType* SynapseType::getOutput() const {
-    return output;
+NeuronType* SynapseType::getOutputType() const {
+    return outputType;
 }
 
-SynapseType* SynapseType::setOutput(NeuronType* outputDef) {
-    this->output = outputDef;
+SynapseType* SynapseType::setOutputType(NeuronType* outputType) {
+    this->outputType = outputType;
     return this;
 }
 
-LinkType* SynapseType::getLink() const {
-    return link;
+LinkType* SynapseType::getLinkType() const {
+    return linkType;
 }
 
-SynapseType* SynapseType::setLink(LinkType* link) {
-    this->link = link;
+SynapseType* SynapseType::setLinkType(LinkType* linkType) {
+    this->linkType = linkType;
     return this;
 }
 

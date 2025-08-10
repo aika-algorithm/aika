@@ -49,30 +49,30 @@ Link* LinkType::instantiate(Synapse* synapse, Activation* input, Activation* out
     return nullptr; // Placeholder
 }
 
-SynapseType* LinkType::getSynapse() const {
-    return synapse;
+SynapseType* LinkType::getSynapseType() const {
+    return synapseType;
 }
 
-LinkType* LinkType::setSynapse(SynapseType* synapse) {
-    this->synapse = synapse;
+LinkType* LinkType::setSynapseType(SynapseType* synapseType) {
+    this->synapseType = synapseType;
     return this;
 }
 
-ActivationType* LinkType::getInput() const {
-    return input;
+ActivationType* LinkType::getInputType() const {
+    return inputType;
 }
 
-LinkType* LinkType::setInput(ActivationType* input) {
-    this->input = input;
+LinkType* LinkType::setInputType(ActivationType* inputType) {
+    this->inputType = inputType;
     return this;
 }
 
-ActivationType* LinkType::getOutput() const {
-    return output;
+ActivationType* LinkType::getOutputType() const {
+    return outputType;
 }
 
-LinkType* LinkType::setOutput(ActivationType* output) {
-    this->output = output;
+LinkType* LinkType::setOutputType(ActivationType* outputType) {
+    this->outputType = outputType;
     return this;
 }
 

@@ -1,4 +1,4 @@
-#include "network/edge_definition.h"
+#include "network/builders/edge_definition.h"
 
 EdgeDefinition::EdgeDefinition() {
     // Constructor implementation

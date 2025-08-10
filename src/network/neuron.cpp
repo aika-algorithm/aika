@@ -114,8 +114,8 @@ Activation* Neuron::createActivation(Activation* parent, Context* ctx, std::map<
     // Get the neuron definition and its activation definition
     NeuronType* neuronType = static_cast<NeuronType*>(getType());
     
-    ActivationType* activationDef = neuronType->getActivation();
-    if (!activationDef) {
+    ActivationType* activationType = neuronType->getActivationType();
+    if (!activationType) {
         return nullptr;
     }
     
@@ -124,7 +124,7 @@ Activation* Neuron::createActivation(Activation* parent, Context* ctx, std::map<
     
     // For now, create a Activation as the default
     // In a full implementation, this would depend on the activation definition type
-    return new Activation(activationDef, parent, activationId, this, ctx, bindingSignals);
+    return new Activation(activationType, parent, activationId, this, ctx, bindingSignals);
 }
 
 void Neuron::deleteNeuron() {

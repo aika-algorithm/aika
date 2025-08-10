@@ -32,21 +32,21 @@ public:
     std::vector<Relation*> getRelations() const;
     Link* instantiate(Synapse* synapse, Activation* input, Activation* output);
 
-    SynapseType* getSynapse() const;
-    LinkType* setSynapse(SynapseType* synapse);
+    SynapseType* getSynapseType() const;
+    LinkType* setSynapseType(SynapseType* synapseType);
 
-    ActivationType* getInput() const;
-    LinkType* setInput(ActivationType* input);
+    ActivationType* getInputType() const;
+    LinkType* setInputType(ActivationType* inputType);
 
-    ActivationType* getOutput() const;
-    LinkType* setOutput(ActivationType* output);
+    ActivationType* getOutputType() const;
+    LinkType* setOutputType(ActivationType* outputType);
 
     std::string toString() const;
 
 private:
-    SynapseType* synapse;
-    ActivationType* input;
-    ActivationType* output;
+    SynapseType* synapseType;
+    ActivationType* inputType;
+    ActivationType* outputType;
 };
 
 #endif // NETWORK_LINK_DEFINITION_H 

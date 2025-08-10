@@ -7,7 +7,7 @@ void AbstractActivationTest::setUp() {
     // Create neuron and activation definitions
     neuronDef = new NeuronType(typeRegistry, "test");
     activationType = new ActivationType(typeRegistry, "test_activation");
-    neuronDef->setActivation(activationType);
+    neuronDef->setActivationType(activationType);
     
     // Initialize flattened types
     typeRegistry->flattenTypeHierarchy();
