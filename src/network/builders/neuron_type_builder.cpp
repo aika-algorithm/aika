@@ -4,13 +4,21 @@
 #include "fields/type_registry.h"
 
 // Static relation constants
-const RelationSelf NeuronTypeBuilder::SELF(RelationSelf{});
-const RelationMany NeuronTypeBuilder::INPUT(RelationMany{});
-const RelationMany NeuronTypeBuilder::OUTPUT(RelationMany{});
-const RelationOne NeuronTypeBuilder::ACTIVATION(RelationOne{});
+const RelationSelf NeuronType::SELF = RelationSelf(0, "SELF");
+const RelationMany NeuronType::INPUT = RelationMany(1, "INPUT");
+const RelationMany NeuronType::OUTPUT = RelationMany(2, "OUTPUT");
+const RelationMany NeuronType::ACTIVATION = RelationMany(3, "ACTIVATION");
 
 NeuronTypeBuilder::NeuronTypeBuilder(TypeRegistry* registry, const std::string& name)
-    : Type(registry, name), activationType(nullptr), builtInstance(nullptr), isBuilt(false) {
+    : registry(registry), name(name), activationType(nullptr), builtInstance(nullptr), isBuilt(false) {
+}
+
+std::string NeuronTypeBuilder::getName() const {
+    return name;
+}
+
+TypeRegistry* NeuronTypeBuilder::getTypeRegistry() const {
+    return registry;
 }
 
 NeuronTypeBuilder& NeuronTypeBuilder::setActivation(ActivationTypeBuilder* activationType) {
@@ -28,7 +36,7 @@ NeuronType* NeuronTypeBuilder::build() {
     }
     
     // Build the actual implementation
-    builtInstance = new NeuronType(getRegistry(), getName());
+    builtInstance = new NeuronType(getTypeRegistry(), getName());
     
     // Configure the implementation with builder settings
     if (activationType) {

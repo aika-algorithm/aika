@@ -343,7 +343,7 @@ void bind_network(py::module_& m) {
         });
 
     // Bind Builder classes
-    py::class_<NeuronTypeBuilder, Type>(m, "NeuronTypeBuilder")
+    py::class_<NeuronTypeBuilder>(m, "NeuronTypeBuilder")
         .def(py::init<TypeRegistry*, const std::string&>())
         .def("setActivation", &NeuronTypeBuilder::setActivation, py::return_value_policy::reference_internal)
         .def("getActivation", &NeuronTypeBuilder::getActivation, py::return_value_policy::reference_internal)
@@ -358,7 +358,7 @@ void bind_network(py::module_& m) {
         .def_readonly_static("OUTPUT", &NeuronTypeBuilder::OUTPUT)
         .def_readonly_static("ACTIVATION", &NeuronTypeBuilder::ACTIVATION);
 
-    py::class_<SynapseTypeBuilder, Type>(m, "SynapseTypeBuilder")
+    py::class_<SynapseTypeBuilder>(m, "SynapseTypeBuilder")
         .def(py::init<TypeRegistry*, const std::string&>())
         .def("setInput", &SynapseTypeBuilder::setInput, py::return_value_policy::reference_internal)
         .def("setOutput", &SynapseTypeBuilder::setOutput, py::return_value_policy::reference_internal)
@@ -377,7 +377,7 @@ void bind_network(py::module_& m) {
         .def_readonly_static("OUTPUT", &SynapseTypeBuilder::OUTPUT)
         .def_readonly_static("LINK", &SynapseTypeBuilder::LINK);
 
-    py::class_<ActivationTypeBuilder, Type>(m, "ActivationTypeBuilder")
+    py::class_<ActivationTypeBuilder>(m, "ActivationTypeBuilder")
         .def(py::init<TypeRegistry*, const std::string&>())
         .def("setNeuron", &ActivationTypeBuilder::setNeuron, py::return_value_policy::reference_internal)
         .def("getNeuron", &ActivationTypeBuilder::getNeuron, py::return_value_policy::reference_internal)
@@ -392,7 +392,7 @@ void bind_network(py::module_& m) {
         .def_readonly_static("OUTPUT", &ActivationTypeBuilder::OUTPUT)
         .def_readonly_static("NEURON", &ActivationTypeBuilder::NEURON);
 
-    py::class_<LinkTypeBuilder, Type>(m, "LinkTypeBuilder")
+    py::class_<LinkTypeBuilder>(m, "LinkTypeBuilder")
         .def(py::init<TypeRegistry*, const std::string&>())
         .def("setSynapse", &LinkTypeBuilder::setSynapse, py::return_value_policy::reference_internal)
         .def("setInput", &LinkTypeBuilder::setInput, py::return_value_policy::reference_internal)

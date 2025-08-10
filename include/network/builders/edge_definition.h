@@ -6,7 +6,7 @@
 class EdgeDefinition {
 public:
     EdgeDefinition();
-    virtual ~EdgeDefinition();
+    ~EdgeDefinition();
 
     // Add any additional methods or members specific to EdgeDefinition here
 };

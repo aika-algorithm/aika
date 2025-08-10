@@ -3,6 +3,7 @@
 
 #include "fields/type.h"
 #include "fields/relation.h"
+#include "network/synapse_type.h"
 #include <string>
 #include <vector>
 
@@ -25,7 +26,10 @@ public:
     static const RelationOne LINK;
 
     explicit SynapseTypeBuilder(TypeRegistry* registry, const std::string& name);
-    ~SynapseTypeBuilder() override = default;
+    ~SynapseTypeBuilder();
+
+    std::string getName() const;
+    TypeRegistry* getTypeRegistry() const;
 
     // Builder configuration methods
     SynapseTypeBuilder& setInput(NeuronTypeBuilder* inputType);
@@ -44,6 +48,8 @@ public:
     std::string toString() const;
 
 private:
+    std::string name;
+    TypeRegistry* registry;
     NeuronTypeBuilder* inputType;
     NeuronTypeBuilder* outputType;
     LinkTypeBuilder* linkType;

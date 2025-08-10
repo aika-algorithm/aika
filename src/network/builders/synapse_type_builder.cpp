@@ -5,14 +5,22 @@
 #include "fields/type_registry.h"
 
 // Static relation constants
-const RelationSelf SynapseTypeBuilder::SELF(RelationSelf{});
-const RelationMany SynapseTypeBuilder::INPUT(RelationMany{});
-const RelationMany SynapseTypeBuilder::OUTPUT(RelationMany{});
-const RelationOne SynapseTypeBuilder::LINK(RelationOne{});
+const RelationSelf SynapseType::SELF = RelationSelf(0, "SELF");
+const RelationOne SynapseType::INPUT = RelationOne(1, "INPUT");
+const RelationOne SynapseType::OUTPUT = RelationOne(2, "OUTPUT");
+const RelationMany SynapseType::LINK = RelationMany(3, "LINK");
 
 SynapseTypeBuilder::SynapseTypeBuilder(TypeRegistry* registry, const std::string& name)
-    : Type(registry, name), inputType(nullptr), outputType(nullptr), linkType(nullptr), 
+    : registry(registry), name(name), inputType(nullptr), outputType(nullptr), linkType(nullptr),
       builtInstance(nullptr), isBuilt(false) {
+}
+
+std::string SynapseTypeBuilder::getName() const {
+    return name;
+}
+
+TypeRegistry* SynapseTypeBuilder::getTypeRegistry() const {
+    return registry;
 }
 
 SynapseTypeBuilder& SynapseTypeBuilder::setInput(NeuronTypeBuilder* inputType) {
@@ -48,7 +56,7 @@ SynapseType* SynapseTypeBuilder::build() {
     }
     
     // Build the actual implementation
-    builtInstance = new SynapseType(getRegistry(), getName());
+    builtInstance = new SynapseType(getTypeRegistry(), getName());
     
     // Configure the implementation with builder settings
     if (inputType) {

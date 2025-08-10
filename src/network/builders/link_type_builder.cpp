@@ -5,21 +5,29 @@
 #include "fields/type_registry.h"
 
 // Static relation constants
-const RelationSelf LinkTypeBuilder::SELF(RelationSelf{});
-const RelationMany LinkTypeBuilder::INPUT(RelationMany{});
-const RelationMany LinkTypeBuilder::OUTPUT(RelationMany{});
-const RelationOne LinkTypeBuilder::SYNAPSE(RelationOne{});
-const RelationOne LinkTypeBuilder::PAIR_IN(RelationOne{});
-const RelationOne LinkTypeBuilder::PAIR_OUT(RelationOne{});
+const RelationSelf LinkType::SELF = RelationSelf(0, "SELF");
+const RelationOne LinkType::INPUT = RelationOne(1, "INPUT");
+const RelationOne LinkType::OUTPUT = RelationOne(2, "OUTPUT");
+const RelationOne LinkType::SYNAPSE = RelationOne(3, "SYNAPSE");
+const RelationOne LinkType::PAIR_IN = RelationOne(4, "PAIR_IN");
+const RelationOne LinkType::PAIR_OUT = RelationOne(5, "PAIR_OUT");
 
 LinkTypeBuilder::LinkTypeBuilder(TypeRegistry* registry, const std::string& name)
-    : Type(registry, name), synapseType(nullptr), inputType(nullptr), outputType(nullptr),
+    : registry(registry), name(name), synapseType(nullptr), inputType(nullptr), outputType(nullptr),
       builtInstance(nullptr), isBuilt(false) {
 }
 
 LinkTypeBuilder& LinkTypeBuilder::setSynapse(SynapseTypeBuilder* synapseType) {
     this->synapseType = synapseType;
     return *this;
+}
+
+std::string LinkTypeBuilder::getName() const {
+    return name;
+}
+
+TypeRegistry* LinkTypeBuilder::getTypeRegistry() const {
+    return registry;
 }
 
 LinkTypeBuilder& LinkTypeBuilder::setInput(ActivationTypeBuilder* inputType) {
@@ -50,7 +58,7 @@ LinkType* LinkTypeBuilder::build() {
     }
     
     // Build the actual implementation
-    builtInstance = new LinkType(getRegistry(), getName());
+    builtInstance = new LinkType(getTypeRegistry(), getName());
     
     // Configure the implementation with builder settings
     if (synapseType) {

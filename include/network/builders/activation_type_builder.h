@@ -3,6 +3,7 @@
 
 #include "fields/type.h"
 #include "fields/relation.h"
+#include "network/activation_type.h"
 #include <string>
 #include <vector>
 
@@ -24,7 +25,10 @@ public:
     static const RelationOne NEURON;
 
     explicit ActivationTypeBuilder(TypeRegistry* registry, const std::string& name);
-    ~ActivationTypeBuilder() override = default;
+    ~ActivationTypeBuilder();
+
+    std::string getName() const;
+    TypeRegistry* getTypeRegistry() const;
 
     // Builder configuration methods
     ActivationTypeBuilder& setNeuron(NeuronTypeBuilder* neuronType);
@@ -38,6 +42,8 @@ public:
     std::string toString() const;
 
 private:
+    std::string name;
+    TypeRegistry* registry;
     NeuronTypeBuilder* neuronType;
     ActivationType* builtInstance;
     bool isBuilt;
