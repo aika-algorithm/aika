@@ -2,7 +2,7 @@
 #include "network/direction.h"
 #include "network/input.h"
 #include "network/output.h"
-#include "network/activation_type.h"
+#include "network/types/activation_type.h"
 #include "fields/rel_obj_iterator.h"
 #include "fields/field.h"
 #include "network/context.h"

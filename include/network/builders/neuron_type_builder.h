@@ -3,7 +3,7 @@
 
 #include "fields/type.h"
 #include "fields/relation.h"
-#include "network/neuron_type.h"
+#include "network/types/neuron_type.h"
 #include <string>
 #include <vector>
 

@@ -3,7 +3,7 @@
 #include "network/context.h"
 #include "network/element.h"
 #include "network/model_provider.h"
-#include "network/link_type.h"
+#include "network/types/link_type.h"
 #include "network/synapse.h"
 #include "fields/object.h"
 #include "fields/queue.h"

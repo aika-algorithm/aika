@@ -7,8 +7,8 @@
 #include "network/model_provider.h"
 #include "fields/type_registry.h"
 //#include "network/relations.h" // This file doesn't exist, may not be needed
-#include "network/neuron_type.h"
-#include "network/synapse_type.h"
+#include "network/types/neuron_type.h"
+#include "network/types/synapse_type.h"
 #include "network/activation.h"
 #include "network/element.h"
 #include "fields/object.h"

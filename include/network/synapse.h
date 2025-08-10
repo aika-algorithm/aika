@@ -4,7 +4,7 @@
 #include "fields/type_registry.h"
 #include "fields/object.h"
 
-#include "network/synapse_type.h"
+#include "network/types/synapse_type.h"
 #include "network/element.h"
 #include "network/neuron_reference.h"
 #include "network/binding_signal.h"

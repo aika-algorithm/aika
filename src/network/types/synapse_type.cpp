@@ -1,4 +1,4 @@
-#include "network/synapse_type.h"
+#include "network/types/synapse_type.h"
 
 const RelationSelf SynapseType::SELF = RelationSelf(0, "SELF");
 const RelationOne SynapseType::INPUT = RelationOne(1, "INPUT");

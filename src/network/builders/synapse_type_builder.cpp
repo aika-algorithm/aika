@@ -1,5 +1,5 @@
 #include "network/builders/synapse_type_builder.h"
-#include "network/synapse_type.h"
+#include "network/types/synapse_type.h"
 #include "network/builders/neuron_type_builder.h"
 #include "network/builders/link_type_builder.h"
 #include "fields/type_registry.h"

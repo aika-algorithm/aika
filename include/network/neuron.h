@@ -3,7 +3,7 @@
 
 #include "fields/object.h"
 
-#include "network/neuron_type.h"
+#include "network/types/neuron_type.h"
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/read_write_lock.h"

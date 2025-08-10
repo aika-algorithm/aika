@@ -3,7 +3,7 @@
 
 #include "fields/type.h"
 #include "fields/relation.h"
-#include "network/link_type.h"
+#include "network/types/link_type.h"
 #include <string>
 #include <vector>
 

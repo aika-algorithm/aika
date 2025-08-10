@@ -4,7 +4,7 @@
 #include "fields/relation.h"
 #include "fields/type.h"
 #include "fields/type_registry.h"
-#include "network/activation_type.h"
+#include "network/types/activation_type.h"
 #include "network/model.h"
 
 #include <string>

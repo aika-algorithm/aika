@@ -5,14 +5,14 @@
 #include "network/network_bindings.h"
 
 // Network module includes
-#include "network/neuron_type.h"
+#include "network/types/neuron_type.h"
 #include "network/neuron.h"
 #include "network/model.h"
-#include "network/activation_type.h"
+#include "network/types/activation_type.h"
 #include "network/activation.h"
 #include "network/synapse.h"
-#include "network/synapse_type.h"
-#include "network/link_type.h"
+#include "network/types/synapse_type.h"
+#include "network/types/link_type.h"
 #include "network/link.h"
 #include "network/direction.h"
 #include "network/config.h"

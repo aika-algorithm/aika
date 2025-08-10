@@ -3,7 +3,7 @@
 
 #include "fields/object.h"
 
-#include "network/link_type.h"
+#include "network/types/link_type.h"
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/typedefs.h"

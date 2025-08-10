@@ -5,8 +5,8 @@
 #include "network/model.h"
 #include "network/context.h"
 #include "network/neuron.h"
-#include "network/neuron_type.h"
-#include "network/activation_type.h"
+#include "network/types/neuron_type.h"
+#include "network/types/activation_type.h"
 
 class AbstractActivationTest {
 protected:

@@ -1,5 +1,5 @@
 #include "network/builders/activation_type_builder.h"
-#include "network/activation_type.h"
+#include "network/types/activation_type.h"
 #include "network/builders/neuron_type_builder.h"
 #include "fields/type_registry.h"
 

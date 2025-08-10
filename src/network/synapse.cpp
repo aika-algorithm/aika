@@ -1,5 +1,5 @@
 #include "network/synapse.h"
-#include "network/synapse_type.h"
+#include "network/types/synapse_type.h"
 #include "network/direction.h" // Include the full NetworkDirection definition
 #include "network/linker.h"
 #include <iostream>

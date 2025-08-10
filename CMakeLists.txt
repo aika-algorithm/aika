@@ -85,10 +85,10 @@ set(CORE_SOURCES
         src/fields/test_object.cpp
         src/network/model.cpp
         src/network/activation.cpp
-        src/network/activation_type.cpp
+        src/network/types/activation_type.cpp
         src/network/activation_key.cpp
         src/network/activation.cpp
-        src/network/activation_type.cpp
+        src/network/types/activation_type.cpp
         src/network/activation_key.cpp
         src/network/binding_signal.cpp
         src/network/config.cpp
@@ -102,13 +102,13 @@ set(CORE_SOURCES
         src/network/in_memory_suspension_callback.cpp
         src/network/input.cpp
         src/network/link.cpp
-        src/network/link_type.cpp
+        src/network/types/link_type.cpp
         src/network/lock_exception.cpp
         src/network/missing_neuron_exception.cpp
         src/network/model.cpp
         src/network/model_provider.cpp
         src/network/neuron.cpp
-        src/network/neuron_type.cpp
+        src/network/types/neuron_type.cpp
         src/network/neuron_reference.cpp
         src/network/neuron_serialization_exception.cpp
         src/network/output.cpp
@@ -118,7 +118,7 @@ set(CORE_SOURCES
         src/network/save.cpp
         src/network/suspension_callback.cpp
         src/network/synapse.cpp
-        src/network/synapse_type.cpp
+        src/network/types/synapse_type.cpp
         src/network/transition.cpp
         src/network/utils.cpp
         src/network/linker.cpp

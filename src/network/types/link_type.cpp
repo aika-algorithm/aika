@@ -1,4 +1,4 @@
-#include "network/link_type.h"
+#include "network/types/link_type.h"
 
 const RelationSelf LinkType::SELF = RelationSelf(0, "SELF");
 const RelationOne LinkType::INPUT = RelationOne(1, "INPUT");

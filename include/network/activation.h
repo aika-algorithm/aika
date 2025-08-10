@@ -4,7 +4,7 @@
 
 #include "fields/object.h"
 
-#include "network/activation_type.h"
+#include "network/types/activation_type.h"
 #include "network/element.h"
 #include "network/model_provider.h"
 #include "network/neuron.h"

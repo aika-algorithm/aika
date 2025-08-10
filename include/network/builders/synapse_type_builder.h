@@ -3,7 +3,7 @@
 
 #include "fields/type.h"
 #include "fields/relation.h"
-#include "network/synapse_type.h"
+#include "network/types/synapse_type.h"
 #include <string>
 #include <vector>
 

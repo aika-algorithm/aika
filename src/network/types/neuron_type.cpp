@@ -1,4 +1,4 @@
-#include "network/neuron_type.h"
+#include "network/types/neuron_type.h"
 #include "network/neuron.h"
 
 const RelationSelf NeuronType::SELF = RelationSelf(0, "SELF");

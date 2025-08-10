@@ -1,5 +1,5 @@
 #include "network/builders/link_type_builder.h"
-#include "network/link_type.h"
+#include "network/types/link_type.h"
 #include "network/builders/synapse_type_builder.h"
 #include "network/builders/activation_type_builder.h"
 #include "fields/type_registry.h"

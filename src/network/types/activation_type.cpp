@@ -1,4 +1,4 @@
-#include "network/activation_type.h"
+#include "network/types/activation_type.h"
 #include "network/activation.h"
 
 const RelationSelf ActivationType::SELF = RelationSelf(0, "SELF");
