@@ -346,9 +346,11 @@ void bind_network(py::module_& m) {
     py::class_<SynapseTypeBuilder>(m, "SynapseTypeBuilder")
         .def(py::init<TypeRegistry*, const std::string&>())
         .def("setInput", &SynapseTypeBuilder::setInput)
-        .def("setOutput", &SynapseTypeBuilder::setOutput)
         .def("getInput", &SynapseTypeBuilder::getInput, py::return_value_policy::reference_internal)
+        .def("setOutput", &SynapseTypeBuilder::setOutput)
         .def("getOutput", &SynapseTypeBuilder::getOutput, py::return_value_policy::reference_internal)
+        .def("setPairedSynapseType", &SynapseTypeBuilder::setPairedSynapseType)
+        .def("getPairedSynapseType", &SynapseTypeBuilder::getPairedSynapseType, py::return_value_policy::reference_internal)
         .def("build", &SynapseTypeBuilder::build, py::return_value_policy::reference_internal)
         .def("__str__", [](const SynapseTypeBuilder& sb) {
             return sb.getName();

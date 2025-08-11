@@ -18,17 +18,26 @@ SynapseTypeBuilder& SynapseTypeBuilder::setInput(NeuronType* inputType) {
     return *this;
 }
 
+NeuronType* SynapseTypeBuilder::getInput() const {
+    return inputType;
+}
+
 SynapseTypeBuilder& SynapseTypeBuilder::setOutput(NeuronType* outputType) {
     this->outputType = outputType;
     return *this;
 }
 
-NeuronType* SynapseTypeBuilder::getInput() const {
-    return inputType;
-}
-
 NeuronType* SynapseTypeBuilder::getOutput() const {
     return outputType;
+}
+
+SynapseTypeBuilder& SynapseTypeBuilder::setPairedSynapseType(SynapseType* pairedSynapseType) {
+    this->pairedSynapseType = pairedSynapseType;
+    return *this;
+}
+
+SynapseType* SynapseTypeBuilder::getPairedSynapseType() const {
+    return pairedSynapseType;
 }
 
 SynapseType* SynapseTypeBuilder::build() {
@@ -43,6 +52,7 @@ SynapseType* SynapseTypeBuilder::build() {
     // Configure the implementation with builder settings
     linkType->setSynapseType(builtInstance);
     builtInstance->setLinkType(linkType);
+    builtInstance->setPairedSynapseType(pairedSynapseType);
 
     if (inputType) {
         builtInstance->setInputType(inputType);

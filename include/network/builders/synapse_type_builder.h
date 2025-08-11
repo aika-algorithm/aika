@@ -30,6 +30,9 @@ public:
     SynapseTypeBuilder& setOutput(NeuronType* outputType);
     NeuronType* getOutput() const;
 
+    SynapseTypeBuilder& setPairedSynapseType(SynapseType* pairedSynapseType);
+    SynapseType* getPairedSynapseType() const;
+
     // Build the actual implementation
     SynapseType* build();
 
@@ -39,6 +42,7 @@ private:
     NeuronType* inputType;
     NeuronType* outputType;
     LinkType* linkType;
+    SynapseType* pairedSynapseType;
     SynapseType* builtInstance;
     bool isBuilt;
 };

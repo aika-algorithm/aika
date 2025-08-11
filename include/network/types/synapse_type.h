@@ -58,6 +58,9 @@ public:
     SynapseType* getInstanceSynapseType() const;
     void setInstanceSynapseType(SynapseType* instanceSynapseType);
 
+    SynapseType* getPairedSynapseType() const;
+    void setPairedSynapseType(SynapseType* pairedSynapseType);
+
     std::string toString() const;
 
 private:

@@ -99,6 +99,14 @@ void SynapseType::setInstanceSynapseType(SynapseType* instanceSynapseType) {
     this->instanceSynapseType = instanceSynapseType;
 }
 
+SynapseType* SynapseType::getPairedSynapseType() const {
+    return pairedSynapseType;
+}
+
+void SynapseType::setPairedSynapseType(SynapseType* pairedSynapseType) {
+    this->pairedSynapseType = pairedSynapseType;
+}
+
 std::string SynapseType::toString() const {
     return "SynapseType: " + name;
 } 
