@@ -52,7 +52,9 @@ SynapseType* SynapseTypeBuilder::build() {
     // Configure the implementation with builder settings
     linkType->setSynapseType(builtInstance);
     builtInstance->setLinkType(linkType);
+
     builtInstance->setPairedSynapseType(pairedSynapseType);
+    pairedSynapseType->setPairedSynapseType(builtInstance);
 
     if (inputType) {
         builtInstance->setInputType(inputType);

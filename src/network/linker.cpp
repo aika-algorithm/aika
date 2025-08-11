@@ -14,6 +14,9 @@ void linkLatent(Activation* act) {
         Neuron* targetNeuron = firstSynapse->getOutput(model);
         std::set<Activation*> targetActCandidates = Linker::collectLinkingTargets(latentBindingSignals, targetNeuron);
 
+        Synapse secondSynapse = firstSynapse->getPairedSynapse();
+        if(secondSynapse == nullptr)
+            continue;
 
         for (auto& secondSynapse : neuron->getInputSynapsesAsStream()) {
         }
