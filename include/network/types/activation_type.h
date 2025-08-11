@@ -14,12 +14,12 @@ public:
     static const RelationOne NEURON;
 
     ActivationType(TypeRegistry* registry, const std::string& name);
-    virtual ~ActivationType();
+    ~ActivationType();
 
     std::vector<Relation*> getRelations() const;
 
     NeuronType* getNeuronType() const;
-    ActivationType* setNeuronType(NeuronType* neuronType);
+    void setNeuronType(NeuronType* neuronType);
 
     // Add any additional methods or members specific to ActivationType here
 

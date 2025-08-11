@@ -53,27 +53,24 @@ SynapseType* LinkType::getSynapseType() const {
     return synapseType;
 }
 
-LinkType* LinkType::setSynapseType(SynapseType* synapseType) {
+void LinkType::setSynapseType(SynapseType* synapseType) {
     this->synapseType = synapseType;
-    return this;
 }
 
 ActivationType* LinkType::getInputType() const {
     return inputType;
 }
 
-LinkType* LinkType::setInputType(ActivationType* inputType) {
+void LinkType::setInputType(ActivationType* inputType) {
     this->inputType = inputType;
-    return this;
 }
 
 ActivationType* LinkType::getOutputType() const {
     return outputType;
 }
 
-LinkType* LinkType::setOutputType(ActivationType* outputType) {
+void LinkType::setOutputType(ActivationType* outputType) {
     this->outputType = outputType;
-    return this;
 }
 
 std::string LinkType::toString() const {

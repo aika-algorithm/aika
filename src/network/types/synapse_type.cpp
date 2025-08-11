@@ -45,27 +45,24 @@ NeuronType* SynapseType::getInputType() const {
     return inputType;
 }
 
-SynapseType* SynapseType::setInputType(NeuronType* inputType) {
+void SynapseType::setInputType(NeuronType* inputType) {
     this->inputType = inputType;
-    return this;
 }
 
 NeuronType* SynapseType::getOutputType() const {
     return outputType;
 }
 
-SynapseType* SynapseType::setOutputType(NeuronType* outputType) {
+void SynapseType::setOutputType(NeuronType* outputType) {
     this->outputType = outputType;
-    return this;
 }
 
 LinkType* SynapseType::getLinkType() const {
     return linkType;
 }
 
-SynapseType* SynapseType::setLinkType(LinkType* linkType) {
+void SynapseType::setLinkType(LinkType* linkType) {
     this->linkType = linkType;
-    return this;
 }
 
 int SynapseType::mapTransitionForward(int bsType) const {
@@ -82,27 +79,24 @@ std::vector<Transition*> SynapseType::getTransitions() const {
     return transitions;
 }
 
-SynapseType* SynapseType::setTransitions(const std::vector<Transition*>& transitions) {
+void SynapseType::setTransitions(const std::vector<Transition*>& transitions) {
     this->transitions = transitions;
-    return this;
 }
 
 NetworkDirection* SynapseType::getStoredAt() const {
     return storedAt;
 }
 
-SynapseType* SynapseType::setStoredAt(NetworkDirection* storedAt) {
+void SynapseType::setStoredAt(NetworkDirection* storedAt) {
     this->storedAt = storedAt;
-    return this;
 }
 
 SynapseType* SynapseType::getInstanceSynapseType() const {
     return instanceSynapseType;
 }
 
-SynapseType* SynapseType::setInstanceSynapseType(SynapseType* instanceSynapseType) {
+void SynapseType::setInstanceSynapseType(SynapseType* instanceSynapseType) {
     this->instanceSynapseType = instanceSynapseType;
-    return this;
 }
 
 std::string SynapseType::toString() const {

@@ -9,7 +9,6 @@
 
 // Forward declarations
 class TypeRegistry;
-class ActivationTypeBuilder;
 
 /**
  * Builder for configuring NeuronType instances.
@@ -17,33 +16,18 @@ class ActivationTypeBuilder;
  */
 class NeuronTypeBuilder {
 public:
-    // Static relation constants for configuration
-    static const RelationSelf SELF;
-    static const RelationMany INPUT;
-    static const RelationMany OUTPUT;
-    static const RelationOne ACTIVATION;
-
     explicit NeuronTypeBuilder(TypeRegistry* registry, const std::string& name);
     ~NeuronTypeBuilder();
 
     std::string getName() const;
-    TypeRegistry* getTypeRegistry() const;
-
-    // Builder configuration methods
-    NeuronTypeBuilder& setActivation(ActivationTypeBuilder* activationType);
-    ActivationTypeBuilder* getActivation() const;
 
     // Build the actual implementation
     NeuronType* build();
 
-    // Type interface
-    std::vector<Relation*> getRelations() const;
-    std::string toString() const;
-
 private:
     std::string name;
     TypeRegistry* registry;
-    ActivationTypeBuilder* activationType;
+    ActivationType* activationType;
     NeuronType* builtInstance;
     bool isBuilt;
 };

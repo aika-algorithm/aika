@@ -1,6 +1,24 @@
 #include "network/linker.h"
 
 
+void linkLatent(Activation* act) {
+    Model* model = act->getModel();
+    Neuron* neuron = act->getNeuron();
+    neuron->wakeupPropagable();
+
+    for (auto& firstSynapse : neuron->getOutputSynapsesAsStream()) {
+        std::map<int, BindingSignal*> latentBindingSignals = firstSynapse->transitionForward(act->getBindingSignals());
+        if(latentBindingSignals.empty())
+            continue;
+
+        Neuron* targetNeuron = firstSynapse->getOutput(model);
+        std::set<Activation*> targetActCandidates = Linker::collectLinkingTargets(latentBindingSignals, targetNeuron);
+
+
+        for (auto& secondSynapse : neuron->getInputSynapsesAsStream()) {
+        }
+    }
+}
 
 bool Linker::matchBindingSignals(Activation* act, std::map<int, BindingSignal*> latentBindingSignals) {
     for (const auto& e : latentBindingSignals) {
@@ -32,7 +50,7 @@ void Linker::linkIncoming(Activation* act, Activation* excludedInputAct) {
 }
 
 void Linker::linkIncoming(Activation* act, Synapse* targetSyn, Activation* excludedInputAct) {
-    for (auto& iAct : collectLinkingTargets(act, targetSyn->getInput(act->getModel()))) {
+    for (auto& iAct : collectLinkingTargets(act->getBindingSignals(), targetSyn->getInput(act->getModel()))) {
         if (iAct != excludedInputAct) {
             targetSyn->createLink(iAct, act);
         }
@@ -55,7 +73,7 @@ void Linker::linkOutgoing(Activation* act) {
 }
 
 void Linker::linkOutgoing(Activation* act, Synapse* targetSyn) {
-    std::set<Activation*> targets = collectLinkingTargets(act, targetSyn->getOutput(act->getModel()));
+    std::set<Activation*> targets = collectLinkingTargets(act->getBindingSignals(), targetSyn->getOutput(act->getModel()));
 
     for (auto& targetAct : targets) {
         targetSyn->createLink(act, targetAct);
@@ -75,9 +93,9 @@ void Linker::propagate(Activation* act, Synapse* targetSyn) {
     linkIncoming(oAct, act);
 }
 
-std::set<Activation*> Linker::collectLinkingTargets(Activation* act, Neuron* n) {
+std::set<Activation*> Linker::collectLinkingTargets(std::map<int, BindingSignal*> bindingSignals, Neuron* n) {
     std::set<Activation*> result;
-    for (auto& bs : act->getBindingSignals()) {
+    for (auto& bs : bindingSignals) {
         auto activations = bs.second->getActivations(n);
         result.insert(activations.begin(), activations.end());
     }

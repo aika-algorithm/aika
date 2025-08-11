@@ -33,13 +33,13 @@ public:
     Link* instantiate(Synapse* synapse, Activation* input, Activation* output);
 
     SynapseType* getSynapseType() const;
-    LinkType* setSynapseType(SynapseType* synapseType);
+    void setSynapseType(SynapseType* synapseType);
 
     ActivationType* getInputType() const;
-    LinkType* setInputType(ActivationType* inputType);
+    void setInputType(ActivationType* inputType);
 
     ActivationType* getOutputType() const;
-    LinkType* setOutputType(ActivationType* outputType);
+    void setOutputType(ActivationType* outputType);
 
     std::string toString() const;
 

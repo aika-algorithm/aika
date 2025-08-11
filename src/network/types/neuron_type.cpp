@@ -30,9 +30,8 @@ std::vector<int> NeuronType::getBindingSignals() const {
     return bindingSignals;
 }
 
-NeuronType* NeuronType::setBindingSignals(const std::vector<int>& bindingSignals) {
+void NeuronType::setBindingSignals(const std::vector<int>& bindingSignals) {
     this->bindingSignals = bindingSignals;
-    return this;
 }
 
 std::vector<Relation> NeuronType::getRelations() const {
@@ -51,7 +50,6 @@ ActivationType* NeuronType::getActivationType() const {
     return activationType;
 }
 
-NeuronType* NeuronType::setActivationType(ActivationType* activationType) {
+void NeuronType::setActivationType(ActivationType* activationType) {
     this->activationType = activationType;
-    return this;
 } 

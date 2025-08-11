@@ -45,7 +45,6 @@ NeuronType* ActivationType::getNeuronType() const {
     return neuronType;
 }
 
-ActivationType* ActivationType::setNeuronType(NeuronType* neuronType) {
+void ActivationType::setNeuronType(NeuronType* neuronType) {
     this->neuronType = neuronType;
-    return this;
 }

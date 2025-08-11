@@ -21,14 +21,14 @@ public:
 
     NeuronType(TypeRegistry* registry, const std::string& name);
 
+    ActivationType* getActivationType() const;
+    void setActivationType(ActivationType* activationType);
+
     std::vector<int> getBindingSignals() const;
-    NeuronType* setBindingSignals(const std::vector<int>& bindingSignals);
+    void setBindingSignals(const std::vector<int>& bindingSignals);
 
     std::vector<Relation> getRelations() const;
     Neuron* instantiate(Model* m);
-
-    ActivationType* getActivationType() const;
-    NeuronType* setActivationType(ActivationType* activationType);
 
 private:
     std::vector<int> bindingSignals;

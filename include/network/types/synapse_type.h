@@ -38,30 +38,32 @@ public:
     Synapse* instantiate(Neuron* input, Neuron* output);
 
     NeuronType* getInputType() const;
-    SynapseType* setInputType(NeuronType* inputType);
+    void setInputType(NeuronType* inputType);
 
     NeuronType* getOutputType() const;
-    SynapseType* setOutputType(NeuronType* outputType);
+    void setOutputType(NeuronType* outputType);
 
     LinkType* getLinkType() const;
-    SynapseType* setLinkType(LinkType* link);
+    void setLinkType(LinkType* link);
 
     int mapTransitionForward(int bsType) const;
     int mapTransitionBackward(int bsType) const;
 
     std::vector<Transition*> getTransitions() const;
-    SynapseType* setTransitions(const std::vector<Transition*>& transitions);
+    void setTransitions(const std::vector<Transition*>& transitions);
 
     NetworkDirection* getStoredAt() const;
-    SynapseType* setStoredAt(NetworkDirection* storedAt);
+    void setStoredAt(NetworkDirection* storedAt);
 
     SynapseType* getInstanceSynapseType() const;
-    SynapseType* setInstanceSynapseType(SynapseType* instanceSynapseType);
+    void setInstanceSynapseType(SynapseType* instanceSynapseType);
 
     std::string toString() const;
 
 private:
     SynapseType* instanceSynapseType;
+
+    SynapseType* pairedSynapseType;
 
     LinkType* linkType;
 
