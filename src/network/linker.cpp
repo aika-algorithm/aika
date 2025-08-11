@@ -18,7 +18,14 @@ void linkLatent(Activation* act) {
         if(secondSynapse == nullptr)
             continue;
 
-        for (auto& secondSynapse : neuron->getInputSynapsesAsStream()) {
+        Neuron* secondInputNeuron = secondSynapse->getInput(model);
+
+        std::map<int, BindingSignal*> bindingSignals = latentBindingSignals;
+
+        for (auto& secondInputAct : collectLinkingTargets(bindingSignals, secondInputNeuron)) {
+            if (secondInputAct != act) {
+                targetSyn->createLink(secondInputAct, targetAct);
+            }
         }
     }
 }
