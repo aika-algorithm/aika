@@ -64,7 +64,7 @@ Relations in $\mathcal{R}$ are named, directed, and typed. Key relations (groupe
     - $\texttt{INPUT}: T_L \to T_A$ (input activation, one-to-one; reverse: $\texttt{OUTPUT}$).
     - $\texttt{OUTPUT}: T_L \to T_A$ (output activation, one-to-one; reverse: $\texttt{INPUT}$).
     - $\texttt{SYNAPSE}: T_L \to T_S$ (associated synapse, one-to-one; reverse: $\texttt{LINK}$).
-    - $\texttt{PAIR_IN}, \texttt{PAIR_OUT}: T_L \to T_L$ (paired links for bidirectional flow, one-to-one; mutual reverses).
+    - $\texttt{PAIR}: T_L \to T_L$ (paired links required for the inner multiplication in a dot product neuron, one-to-one; mutual reverses).
 
 - **From Synapse Types ($\mathcal{T}_S$)**:
     - $\texttt{SELF}: T_S \to T_S$ (self-reference, one-to-one).
@@ -99,8 +99,6 @@ Instantiation: Triggered event-driven (e.g., when a neuron's field exceeds thres
 Linking uses binding signals (BS): Let $\mathcal{B}$ be BS types (defined in mathematical model), with transitions $\delta: \mathcal{B} \times \mathcal{T}_S \to \mathcal{B}$ (forward/backward). A link candidate is valid if BS propagate without conflict (e.g., no mismatched signals in $a_t$).
 
 Propagation: If no target $a_t$ exists, create via $a_t = n_t.\texttt{createActivation}(...)$. Fields update asynchronously (e.g., net value accumulation may fire $a_t$).
-
-Conjunctive/disjunctive: Conjunctive activations accept multiple inputs; disjunctive fire on single inputs. Inhibitory subtypes modulate via wildcards.
 
 ## Event-Driven Processing and Integration with Fields Module
 

@@ -1,20 +1,20 @@
 #include "network/linker.h"
 
 
-void linkLatent(Activation* act) {
-    Model* model = act->getModel();
-    Neuron* neuron = act->getNeuron();
-    neuron->wakeupPropagable();
+void Linker::linkLatent(Activation* firstInputAct) {
+    Model* model = firstInputAct->getModel();
+    Neuron* firstInputNeuron = firstInputAct->getNeuron();
+    firstInputNeuron->wakeupPropagable();
 
-    for (auto& firstSynapse : neuron->getOutputSynapsesAsStream()) {
-        std::map<int, BindingSignal*> latentBindingSignals = firstSynapse->transitionForward(act->getBindingSignals());
+    for (auto& firstSynapse : firstInputNeuron->getOutputSynapsesAsStream()) {
+        std::map<int, BindingSignal*> latentBindingSignals = firstSynapse->transitionForward(firstInputAct->getBindingSignals());
         if(latentBindingSignals.empty())
             continue;
 
-        Neuron* targetNeuron = firstSynapse->getOutput(model);
-        std::set<Activation*> targetActCandidates = Linker::collectLinkingTargets(latentBindingSignals, targetNeuron);
+        Neuron* outputNeuron = firstSynapse->getOutput(model);
+        std::set<Activation*> outputActCandidates = Linker::collectLinkingTargets(latentBindingSignals, outputNeuron);
 
-        Synapse secondSynapse = firstSynapse->getPairedSynapse();
+        Synapse* secondSynapse = firstSynapse->getPairedSynapse();
         if(secondSynapse == nullptr)
             continue;
 
@@ -22,9 +22,10 @@ void linkLatent(Activation* act) {
 
         std::map<int, BindingSignal*> bindingSignals = latentBindingSignals;
 
-        for (auto& secondInputAct : collectLinkingTargets(bindingSignals, secondInputNeuron)) {
-            if (secondInputAct != act) {
-                targetSyn->createLink(secondInputAct, targetAct);
+        for (auto& secondInputAct : Linker::collectLinkingTargets(bindingSignals, secondInputNeuron)) {
+            if (firstInputAct != secondInputAct) {
+                firstSynapse->createLink(firstInputAct, outputAct);
+                secondSynapse->createLink(secondInputAct, outputAct);
             }
         }
     }

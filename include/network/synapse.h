@@ -24,11 +24,13 @@ public:
 
     ~Synapse() = default;
 
-    RelatedObjectIterable* followManyRelation(Relation* rel) const override = 0;
-    Object* followSingleRelation(const Relation* rel) const override = 0;
+    RelatedObjectIterable* followManyRelation(Relation* rel) const override;
+    Object* followSingleRelation(const Relation* rel) const override;
 
     int getSynapseId() const;
     void setSynapseId(int synapseId);
+
+    Synapse* getPairedSynapse() const;
 
     std::map<int, BindingSignal*> transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals);
 

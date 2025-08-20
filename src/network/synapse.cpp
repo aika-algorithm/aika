@@ -20,6 +20,10 @@ Synapse::Synapse(SynapseType* type, Neuron* input, Neuron* output)
     link(input->getModel(), input, output);
 }
 
+RelatedObjectIterable* Link::followManyRelation(Relation* rel) const {
+    throw std::runtime_error("Invalid Relation: " + rel->getRelationLabel());
+}
+
 Object* Synapse::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationLabel() == "SELF") {
         return const_cast<Synapse*>(this);
@@ -38,6 +42,10 @@ int Synapse::getSynapseId() const {
 
 void Synapse::setSynapseId(int synapseId) {
     this->synapseId = synapseId;
+}
+
+Synapse* Synapse::getPairedSynapse() const {
+    return nullptr; //pairedSynapse;
 }
 
 std::map<int, BindingSignal*> Synapse::transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals) {
