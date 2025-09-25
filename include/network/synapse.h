@@ -33,6 +33,7 @@ public:
     Synapse* getPairedSynapse() const;
 
     std::map<int, BindingSignal*> transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals);
+    std::map<int, BindingSignal*> transitionBackward(const std::map<int, BindingSignal*>& outputBindingSignals);
 
     Synapse* setPropagable(Model* m, bool propagable);
     bool isPropagable() const;

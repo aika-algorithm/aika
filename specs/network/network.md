@@ -100,6 +100,8 @@ Linking uses binding signals (BS): Let $\mathcal{B}$ be BS types (defined in mat
 
 Propagation: If no target $a_t$ exists, create via $a_t = n_t.\texttt{createActivation}(...)$. Fields update asynchronously (e.g., net value accumulation may fire $a_t$).
 
+Conjunctive/disjunctive: Conjunctive activations accept multiple inputs; disjunctive fire on single inputs. Inhibitory subtypes modulate via wildcards.
+
 ## Event-Driven Processing and Integration with Fields Module
 
 Updates queue events (e.g., firing when $f_{\text{net}}(a) > \theta$ via Fields Module). Binding signals route along $\mathcal{L}$, filtered by transitions. Graphs evolve: $G_{\text{activations}}$ per input instance, referencing static $G_{\text{neural}}$. Sparsity: Only threshold-exceeding elements activate, leveraging Fields Module's selective computations.

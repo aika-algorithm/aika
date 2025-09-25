@@ -62,6 +62,21 @@ std::map<int, BindingSignal*> Synapse::transitionForward(const std::map<int, Bin
     return outputTransitions;
 }
 
+std::map<int, BindingSignal*> Synapse::transitionBackward(const std::map<int, BindingSignal*>& outputBindingSignals) {
+    std::map<int, BindingSignal*> inputTransitions;
+    auto transitions = static_cast<SynapseType*>(getType())->getTransitions();
+
+    for (auto t : transitions) {
+        auto it = outputBindingSignals.find(t->to());
+        if (it != outputBindingSignals.end()) {
+            inputTransitions[t->from()] = it->second;
+        }
+    }
+
+    return inputTransitions;
+}
+
+
 Synapse* Synapse::setPropagable(Model* m, bool propagable) {
     if (this->propagable != propagable) {
         input->getNeuron(m)->setModified();
