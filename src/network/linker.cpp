@@ -62,9 +62,7 @@ void Linker::linkLatent(Activation* firstInputAct) {
             if (!secondInputAct || secondInputAct == firstInputAct) continue;
 
             // Select or realize an output activation compatible with beta1.
-            Activation* outputAct = outputNeuron.createActivation(null, getDocument(), bindingSignals);
-
-            Activation* outputAct = selectOrRealizeOutputActivation(model, outputNeuron, beta1, outputActCandidates);
+            Activation* outputAct = nullptr; // TODO: Implement selectOrRealizeOutputActivation
             if (!outputAct)
                 continue;
 
@@ -85,8 +83,7 @@ void Linker::linkLatent(Activation* firstInputAct) {
     }
 }
 
-std::set<Activation*> Linker::collectLinkingTargets(const std::map<int, BindingSignal*>& bindingSignals,
-Neuron* n) {
+std::set<Activation*> Linker::collectLinkingTargets(std::map<int, BindingSignal*> bindingSignals, Neuron* n) {
     std::set<Activation*> result;
     for (const auto& [ch, bs] : bindingSignals) {
         if (!bs) continue;

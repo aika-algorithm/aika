@@ -307,6 +307,7 @@ void bind_network(py::module_& m) {
         .def("unlinkOutput", &Synapse::unlinkOutput)
         .def("createLink", py::overload_cast<Activation*, Activation*>(&Synapse::createLink), py::return_value_policy::reference_internal)
         .def("createLink", py::overload_cast<Activation*, const std::map<int, BindingSignal*>&, Activation*>(&Synapse::createLink), py::return_value_policy::reference_internal)
+        .def("hasLink", &Synapse::hasLink)
         .def("getStoredAt", &Synapse::getStoredAt, py::return_value_policy::reference_internal)
         .def("getInputRef", &Synapse::getInputRef, py::return_value_policy::reference_internal)
         .def("getOutputRef", &Synapse::getOutputRef, py::return_value_policy::reference_internal)

@@ -50,6 +50,8 @@ public:
 
     Link* createLink(Activation* input, Activation* output);
     Link* createLink(Activation* input, const std::map<int, BindingSignal*>& bindingSignals, Activation* output);
+    
+    bool hasLink(Activation* input, Activation* output) const;
 
     NetworkDirection* getStoredAt() const;
 

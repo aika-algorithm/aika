@@ -20,7 +20,7 @@ Synapse::Synapse(SynapseType* type, Neuron* input, Neuron* output)
     link(input->getModel(), input, output);
 }
 
-RelatedObjectIterable* Link::followManyRelation(Relation* rel) const {
+RelatedObjectIterable* Synapse::followManyRelation(Relation* rel) const {
     throw std::runtime_error("Invalid Relation: " + rel->getRelationLabel());
 }
 
@@ -144,6 +144,22 @@ Link* Synapse::createLink(Activation* input, const std::map<int, BindingSignal*>
     return static_cast<SynapseType*>(getType())
         ->getLinkType()
         ->instantiate(this, input, output);
+}
+
+bool Synapse::hasLink(Activation* input, Activation* output) const {
+    if (!input || !output) {
+        return false;
+    }
+    
+    // Check if the input activation has an output link to the output activation via this synapse
+    auto outputLinks = input->getOutputLinks(const_cast<Synapse*>(this));
+    for (Link* link : outputLinks) {
+        if (link && link->getOutput() == output && link->getSynapse() == this) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 NetworkDirection* Synapse::getStoredAt() const {
