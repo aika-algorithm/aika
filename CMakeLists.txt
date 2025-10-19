@@ -135,6 +135,7 @@ add_executable(activation_tests
     tests/network/test_runner.cpp
     tests/network/activation_test.cpp
     tests/network/abstract_activation_test.cpp
+    tests/network/link_latent_test.cpp
 )
 
 target_link_libraries(activation_tests PRIVATE aika_core)

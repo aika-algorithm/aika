@@ -1,14 +1,22 @@
 #include "activation_test.h"
+#include "link_latent_test.h"
 #include <iostream>
 
 int main() {
-    std::cout << "Running C++ Activation Tests..." << std::endl;
+    std::cout << "Running C++ Network Tests..." << std::endl;
     
     try {
-        ActivationTest test;
-        test.runAllTests();
+        // Run Activation Tests
+        std::cout << "\n=== Running Activation Tests ===" << std::endl;
+        ActivationTest activationTest;
+        activationTest.runAllTests();
         
-        std::cout << "\nAll tests completed!" << std::endl;
+        // Run LinkLatent Tests
+        std::cout << "\n=== Running LinkLatent Tests ===" << std::endl;
+        LinkLatentTest linkLatentTest;
+        linkLatentTest.runAllTests();
+        
+        std::cout << "\nAll tests completed successfully!" << std::endl;
         return 0;
     } catch (const std::exception& e) {
         std::cerr << "Test failed with exception: " << e.what() << std::endl;

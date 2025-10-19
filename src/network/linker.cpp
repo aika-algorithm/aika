@@ -17,6 +17,10 @@ void Linker::linkOutgoing(Activation* act) {
 }
 
 void Linker::linkLatent(Activation* firstInputAct) {
+    if (!firstInputAct) {
+        throw std::invalid_argument("linkLatent: firstInputAct cannot be null");
+    }
+    
     Model* model = firstInputAct->getModel();
     Neuron* firstInputNeuron = firstInputAct->getNeuron();
     firstInputNeuron->wakeupPropagable();
