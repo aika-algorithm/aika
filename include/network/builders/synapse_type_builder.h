@@ -34,7 +34,7 @@ public:
     SynapseTypeBuilder& setPairedSynapseType(SynapseType* pairedSynapseType);
     SynapseType* getPairedSynapseType() const;
 
-    SynapseTypeBuilder& setTransitions(const std::vector<Transition*>& transitions);
+    SynapseTypeBuilder& addTransition(Transition* transition);
     std::vector<Transition*> getTransitions() const;
 
     // Build the actual implementation

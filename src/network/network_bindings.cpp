@@ -352,6 +352,8 @@ void bind_network(py::module_& m) {
         .def("getOutput", &SynapseTypeBuilder::getOutput, py::return_value_policy::reference_internal)
         .def("setPairedSynapseType", &SynapseTypeBuilder::setPairedSynapseType)
         .def("getPairedSynapseType", &SynapseTypeBuilder::getPairedSynapseType, py::return_value_policy::reference_internal)
+        .def("addTransition", &SynapseTypeBuilder::addTransition)
+        .def("getTransitions", &SynapseTypeBuilder::getTransitions, py::return_value_policy::reference_internal)
         .def("build", &SynapseTypeBuilder::build, py::return_value_policy::reference_internal)
         .def("__str__", [](const SynapseTypeBuilder& sb) {
             return sb.getName();

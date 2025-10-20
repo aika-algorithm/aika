@@ -44,8 +44,10 @@ SynapseType* SynapseTypeBuilder::getPairedSynapseType() const {
     return pairedSynapseType;
 }
 
-SynapseTypeBuilder& SynapseTypeBuilder::setTransitions(const std::vector<Transition*>& transitions) {
-    this->transitions = transitions;
+SynapseTypeBuilder& SynapseTypeBuilder::addTransition(Transition* transition) {
+    if (transition) {
+        this->transitions.push_back(transition);
+    }
     return *this;
 }
 

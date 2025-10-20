@@ -46,6 +46,7 @@ protected:
 public:
     void testLinkLatentBasicFlow();
     void testActivationPropagationWithTransition();
+    void testCompleteLatentLinking();
     void testLinkLatentWithEmptyBindingSignals();
     void testLinkLatentWithNoSecondInputCandidates();
     void testLinkLatentDuplicateLinkPrevention();

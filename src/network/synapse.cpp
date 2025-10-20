@@ -45,7 +45,27 @@ void Synapse::setSynapseId(int synapseId) {
 }
 
 Synapse* Synapse::getPairedSynapse() const {
-    return nullptr; //pairedSynapse;
+    SynapseType* synapseType = static_cast<SynapseType*>(getType());
+    SynapseType* pairedSynapseType = synapseType->getPairedSynapseType();
+    
+    if (!pairedSynapseType) {
+        return nullptr;
+    }
+    
+    // Find the paired synapse instance that connects the paired input neuron to the same output neuron
+    Neuron* outputNeuron = getOutput();
+    if (!outputNeuron) {
+        return nullptr;
+    }
+    
+    // Look through the output neuron's input synapses to find the paired one
+    for (Synapse* inputSyn : outputNeuron->getInputSynapsesAsStream()) {
+        if (inputSyn && inputSyn->getType() == pairedSynapseType) {
+            return inputSyn;
+        }
+    }
+    
+    return nullptr;
 }
 
 std::map<int, BindingSignal*> Synapse::transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals) {
