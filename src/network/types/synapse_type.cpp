@@ -65,21 +65,40 @@ void SynapseType::setLinkType(LinkType* linkType) {
 }
 
 int SynapseType::mapTransitionForward(int bsType) const {
-    // Implementation for mapping transition forward
-    return -1; // Placeholder
+    auto it = forwardTransitionMap.find(bsType);
+    return (it != forwardTransitionMap.end()) ? it->second : -1;
 }
 
 int SynapseType::mapTransitionBackward(int bsType) const {
-    // Implementation for mapping transition backward
-    return -1; // Placeholder
+    auto it = backwardTransitionMap.find(bsType);
+    return (it != backwardTransitionMap.end()) ? it->second : -1;
 }
 
 std::vector<Transition*> SynapseType::getTransitions() const {
-    return transitions;
+    // Reconstruct transitions vector from maps for backward compatibility
+    std::vector<Transition*> result;
+    for (const auto& pair : forwardTransitionMap) {
+        result.push_back(Transition::of(pair.first, pair.second));
+    }
+    return result;
 }
 
 void SynapseType::setTransitions(const std::vector<Transition*>& transitions) {
-    this->transitions = transitions;
+    initializeTransitionMaps(transitions);
+}
+
+void SynapseType::initializeTransitionMaps(const std::vector<Transition*>& transitions) {
+    // Clear existing maps
+    forwardTransitionMap.clear();
+    backwardTransitionMap.clear();
+    
+    // Build maps from transitions
+    for (const Transition* t : transitions) {
+        if (t) {
+            forwardTransitionMap[t->from()] = t->to();
+            backwardTransitionMap[t->to()] = t->from();
+        }
+    }
 }
 
 NetworkDirection* SynapseType::getStoredAt() const {

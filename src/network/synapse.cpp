@@ -50,12 +50,16 @@ Synapse* Synapse::getPairedSynapse() const {
 
 std::map<int, BindingSignal*> Synapse::transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals) {
     std::map<int, BindingSignal*> outputTransitions;
-    auto transitions = static_cast<SynapseType*>(getType())->getTransitions();
+    SynapseType* synapseType = static_cast<SynapseType*>(getType());
     
-    for (auto t : transitions) {
-        auto it = inputBindingSignals.find(t->from());
-        if (it != inputBindingSignals.end()) {
-            outputTransitions[t->to()] = it->second;
+    // Iterate over input binding signals and map each one forward
+    for (const auto& pair : inputBindingSignals) {
+        int fromType = pair.first;
+        BindingSignal* bindingSignal = pair.second;
+        
+        int toType = synapseType->mapTransitionForward(fromType);
+        if (toType != -1) {
+            outputTransitions[toType] = bindingSignal;
         }
     }
     
@@ -64,15 +68,19 @@ std::map<int, BindingSignal*> Synapse::transitionForward(const std::map<int, Bin
 
 std::map<int, BindingSignal*> Synapse::transitionBackward(const std::map<int, BindingSignal*>& outputBindingSignals) {
     std::map<int, BindingSignal*> inputTransitions;
-    auto transitions = static_cast<SynapseType*>(getType())->getTransitions();
-
-    for (auto t : transitions) {
-        auto it = outputBindingSignals.find(t->to());
-        if (it != outputBindingSignals.end()) {
-            inputTransitions[t->from()] = it->second;
+    SynapseType* synapseType = static_cast<SynapseType*>(getType());
+    
+    // Iterate over output binding signals and map each one backward
+    for (const auto& pair : outputBindingSignals) {
+        int toType = pair.first;
+        BindingSignal* bindingSignal = pair.second;
+        
+        int fromType = synapseType->mapTransitionBackward(toType);
+        if (fromType != -1) {
+            inputTransitions[fromType] = bindingSignal;
         }
     }
-
+    
     return inputTransitions;
 }
 

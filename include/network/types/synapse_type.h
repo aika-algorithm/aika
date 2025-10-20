@@ -73,9 +73,14 @@ private:
     NeuronType* inputType;
     NeuronType* outputType;
 
-    std::vector<Transition*> transitions;
+    // Transition maps for O(1) lookup
+    std::map<int, int> forwardTransitionMap;  // from -> to
+    std::map<int, int> backwardTransitionMap; // to -> from
 
     NetworkDirection* storedAt;
+    
+    // Private helper method
+    void initializeTransitionMaps(const std::vector<Transition*>& transitions);
 };
 
 #endif // NETWORK_SYNAPSE_DEFINITION_H 
