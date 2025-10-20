@@ -6,6 +6,8 @@
 #include "network/synapse.h"
 #include "network/types/synapse_type.h"
 #include "network/types/link_type.h"
+#include "network/builders/neuron_type_builder.h"
+#include "network/builders/synapse_type_builder.h"
 #include "network/binding_signal.h"
 #include "network/transition.h"
 #include <map>

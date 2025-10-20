@@ -8,6 +8,10 @@ NeuronTypeBuilder::NeuronTypeBuilder(TypeRegistry* registry, const std::string& 
     : registry(registry), name(name), activationType(nullptr), builtInstance(nullptr), isBuilt(false) {
 }
 
+NeuronTypeBuilder::~NeuronTypeBuilder() {
+    // Note: We don't delete builtInstance here as it's managed by the TypeRegistry
+}
+
 std::string NeuronTypeBuilder::getName() const {
     return name;
 }

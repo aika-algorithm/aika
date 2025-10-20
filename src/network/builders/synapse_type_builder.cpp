@@ -6,7 +6,11 @@
 
 SynapseTypeBuilder::SynapseTypeBuilder(TypeRegistry* registry, const std::string& name)
     : registry(registry), name(name), inputType(nullptr), outputType(nullptr), linkType(nullptr),
-      builtInstance(nullptr), isBuilt(false) {
+      pairedSynapseType(nullptr), builtInstance(nullptr), isBuilt(false) {
+}
+
+SynapseTypeBuilder::~SynapseTypeBuilder() {
+    // Note: We don't delete builtInstance here as it's managed by the TypeRegistry
 }
 
 std::string SynapseTypeBuilder::getName() const {
@@ -40,6 +44,15 @@ SynapseType* SynapseTypeBuilder::getPairedSynapseType() const {
     return pairedSynapseType;
 }
 
+SynapseTypeBuilder& SynapseTypeBuilder::setTransitions(const std::vector<Transition*>& transitions) {
+    this->transitions = transitions;
+    return *this;
+}
+
+std::vector<Transition*> SynapseTypeBuilder::getTransitions() const {
+    return transitions;
+}
+
 SynapseType* SynapseTypeBuilder::build() {
     if (isBuilt) {
         return builtInstance;
@@ -53,8 +66,10 @@ SynapseType* SynapseTypeBuilder::build() {
     linkType->setSynapseType(builtInstance);
     builtInstance->setLinkType(linkType);
 
-    builtInstance->setPairedSynapseType(pairedSynapseType);
-    pairedSynapseType->setPairedSynapseType(builtInstance);
+    if (pairedSynapseType) {
+        builtInstance->setPairedSynapseType(pairedSynapseType);
+        pairedSynapseType->setPairedSynapseType(builtInstance);
+    }
 
     if (inputType) {
         builtInstance->setInputType(inputType);
@@ -63,6 +78,10 @@ SynapseType* SynapseTypeBuilder::build() {
     if (outputType) {
         builtInstance->setOutputType(outputType);
         linkType->setOutputType(outputType->getActivationType());
+    }
+    
+    if (!transitions.empty()) {
+        builtInstance->setTransitions(transitions);
     }
 
     isBuilt = true;

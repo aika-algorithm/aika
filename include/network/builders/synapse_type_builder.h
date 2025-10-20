@@ -4,6 +4,7 @@
 #include "fields/type.h"
 #include "fields/relation.h"
 #include "network/types/synapse_type.h"
+#include "network/transition.h"
 #include <string>
 #include <vector>
 
@@ -33,6 +34,9 @@ public:
     SynapseTypeBuilder& setPairedSynapseType(SynapseType* pairedSynapseType);
     SynapseType* getPairedSynapseType() const;
 
+    SynapseTypeBuilder& setTransitions(const std::vector<Transition*>& transitions);
+    std::vector<Transition*> getTransitions() const;
+
     // Build the actual implementation
     SynapseType* build();
 
@@ -43,6 +47,7 @@ private:
     NeuronType* outputType;
     LinkType* linkType;
     SynapseType* pairedSynapseType;
+    std::vector<Transition*> transitions;
     SynapseType* builtInstance;
     bool isBuilt;
 };

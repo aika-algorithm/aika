@@ -7,30 +7,23 @@ void LinkLatentTest::setUpLinkLatentFixtures() {
     
     std::cout << "Setting up comprehensive LinkLatent test fixtures..." << std::endl;
     
-    // Create neuron types
-    firstInputNeuronType = new NeuronType(typeRegistry, "firstInput");
-    outputNeuronType = new NeuronType(typeRegistry, "output");
+    // Create neuron types using builders
+    NeuronTypeBuilder firstInputBuilder(typeRegistry, "firstInput");
+    firstInputNeuronType = firstInputBuilder.build();
     
-    // Create activation types
-    ActivationType* firstInputActivationType = new ActivationType(typeRegistry, "firstInputActivation");
-    ActivationType* outputActivationType = new ActivationType(typeRegistry, "outputActivation");
+    NeuronTypeBuilder outputBuilder(typeRegistry, "output");
+    outputNeuronType = outputBuilder.build();
     
-    firstInputNeuronType->setActivationType(firstInputActivationType);
-    outputNeuronType->setActivationType(outputActivationType);
-    
-    // Create link type
-    LinkType* linkType = new LinkType(typeRegistry, "testLink");
-    
-    // Create synapse type with transition
-    firstSynapseType = new SynapseType(typeRegistry, "testSynapse");
-    firstSynapseType->setInputType(firstInputNeuronType);
-    firstSynapseType->setOutputType(outputNeuronType);
-    firstSynapseType->setLinkType(linkType);
-    
-    // Add transition from binding signal type 1 to type 2
+    // Create synapse type with transition using builder
+    SynapseTypeBuilder synapseBuilder(typeRegistry, "testSynapse");
     std::vector<Transition*> transitions;
     transitions.push_back(Transition::of(1, 2));
-    firstSynapseType->setTransitions(transitions);
+    
+    firstSynapseType = synapseBuilder
+        .setInput(firstInputNeuronType)
+        .setOutput(outputNeuronType)
+        .setTransitions(transitions)
+        .build();
     
     // Flatten type hierarchy
     typeRegistry->flattenTypeHierarchy();
