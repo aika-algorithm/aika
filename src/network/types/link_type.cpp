@@ -1,4 +1,5 @@
 #include "network/types/link_type.h"
+#include "network/link.h"
 
 const RelationSelf LinkType::SELF = RelationSelf(0, "SELF");
 const RelationOne LinkType::INPUT = RelationOne(1, "INPUT");
@@ -45,8 +46,13 @@ std::vector<Relation*> LinkType::getRelations() const {
 }
 
 Link* LinkType::instantiate(Synapse* synapse, Activation* input, Activation* output) {
-    // Implementation for instantiating a Link
-    return nullptr; // Placeholder
+    Link* link = new Link(this, synapse, input, output);
+    
+    // Register the link with both activations
+    input->addOutputLink(link);
+    output->addInputLink(link);
+    
+    return link;
 }
 
 SynapseType* LinkType::getSynapseType() const {

@@ -18,10 +18,14 @@ void LinkLatentTest::setUpLinkLatentFixtures() {
     firstInputNeuronType->setActivationType(firstInputActivationType);
     outputNeuronType->setActivationType(outputActivationType);
     
+    // Create link type
+    LinkType* linkType = new LinkType(typeRegistry, "testLink");
+    
     // Create synapse type with transition
     firstSynapseType = new SynapseType(typeRegistry, "testSynapse");
     firstSynapseType->setInputType(firstInputNeuronType);
     firstSynapseType->setOutputType(outputNeuronType);
+    firstSynapseType->setLinkType(linkType);
     
     // Add transition from binding signal type 1 to type 2
     std::vector<Transition*> transitions;
@@ -116,28 +120,62 @@ void LinkLatentTest::testActivationPropagationWithTransition() {
         
         std::cout << "📝 Created input activation with binding signal type 1 (token 200)" << std::endl;
         
-        // Test synapse transition
-        std::map<int, BindingSignal*> transitionedSignals = firstSynapse->transitionForward(inputBindingSignals);
+        // Get initial activation count
+        std::set<Activation*> initialActivations = ctx->getActivations();
+        int initialCount = initialActivations.size();
+        std::cout << "📊 Initial activation count: " << initialCount << std::endl;
         
-        if (!transitionedSignals.empty()) {
-            std::cout << "✅ Synapse transitioned signals: " << transitionedSignals.size() << " signals" << std::endl;
+        // Test activation propagation using the propagate method
+        firstInputActivation->propagate(firstSynapse);
+        
+        // Verify output activation was created
+        std::set<Activation*> finalActivations = ctx->getActivations();
+        int finalCount = finalActivations.size();
+        std::cout << "📊 Final activation count: " << finalCount << std::endl;
+        
+        if (finalCount > initialCount) {
+            std::cout << "✅ Output activation created successfully" << std::endl;
             
-            // Verify the transition mapping (1 -> 2)
-            if (transitionedSignals.find(2) != transitionedSignals.end()) {
-                BindingSignal* outputBS = transitionedSignals[2];
-                if (outputBS && outputBS->getTokenId() == inputBS->getTokenId()) {
-                    std::cout << "✅ Correct transition: binding signal type 1 -> type 2, same token (" << outputBS->getTokenId() << ")" << std::endl;
+            // Find the output activation
+            Activation* outputActivation = nullptr;
+            for (Activation* act : finalActivations) {
+                if (act->getNeuron() == outputNeuron) {
+                    outputActivation = act;
+                    break;
+                }
+            }
+            
+            if (outputActivation) {
+                std::cout << "✅ Found output activation on correct neuron" << std::endl;
+                
+                // Verify transitioned binding signals
+                std::map<int, BindingSignal*> outputBindingSignals = outputActivation->getBindingSignals();
+                if (outputBindingSignals.find(2) != outputBindingSignals.end()) {
+                    BindingSignal* outputBS = outputBindingSignals[2];
+                    if (outputBS && outputBS->getTokenId() == inputBS->getTokenId()) {
+                        std::cout << "✅ Output activation has correct transitioned binding signal (type 2, token " << outputBS->getTokenId() << ")" << std::endl;
+                    } else {
+                        std::cout << "❌ Output activation binding signal has wrong token ID" << std::endl;
+                    }
                 } else {
-                    std::cout << "❌ Transition created different token ID" << std::endl;
+                    std::cout << "❌ Output activation missing expected binding signal type 2" << std::endl;
+                }
+                
+                // Verify link was created
+                std::vector<Link*> outputLinks = firstInputActivation->getOutputLinks();
+                if (!outputLinks.empty()) {
+                    std::cout << "✅ Output link created from input activation" << std::endl;
+                } else {
+                    std::cout << "❌ No output link found on input activation" << std::endl;
                 }
             } else {
-                std::cout << "❌ Expected transition to type 2 not found" << std::endl;
+                std::cout << "❌ No output activation found on target neuron" << std::endl;
             }
         } else {
-            std::cout << "❌ No transitions produced by synapse" << std::endl;
+            std::cout << "❌ No new activation was created" << std::endl;
         }
         
-        std::cout << "✅ Activation propagation with transition test completed" << std::endl;
+        std::cout << "✅ Complete activation propagation test completed" << std::endl;
         
     } catch (const std::exception& e) {
         std::cout << "⚠️  Activation propagation test: " << e.what() << std::endl;

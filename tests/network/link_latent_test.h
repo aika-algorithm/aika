@@ -5,6 +5,7 @@
 #include "network/linker.h"
 #include "network/synapse.h"
 #include "network/types/synapse_type.h"
+#include "network/types/link_type.h"
 #include "network/binding_signal.h"
 #include "network/transition.h"
 #include <map>

@@ -232,4 +232,27 @@ std::string Activation::toString() const {
 
 std::string Activation::toKeyString() const {
     return "id:" + std::to_string(getId()) + " n:[" + neuron->toKeyString() + "]";
+}
+
+void Activation::propagate(Synapse* targetSyn) {
+    // Get transitioned binding signals from synapse
+    std::map<int, BindingSignal*> bindingSignals = targetSyn->transitionForward(getBindingSignals());
+    
+    // Create output activation on the target synapse's output neuron
+    Activation* oAct = targetSyn->getOutput(getModel())->createActivation(nullptr, getContext(), bindingSignals);
+    
+    // Create link between this activation and the output activation
+    targetSyn->createLink(this, bindingSignals, oAct);
+    
+    // Link the incoming activation to the output activation
+    oAct->linkIncoming(this);
+}
+
+void Activation::linkIncoming(Activation* inputAct) {
+    // Add the input activation's output links to this activation's input links
+    for (Link* link : inputAct->getOutputLinks()) {
+        if (link->getOutput() == this) {
+            addInputLink(link);
+        }
+    }
 } 
