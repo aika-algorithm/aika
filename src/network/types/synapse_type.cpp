@@ -1,4 +1,5 @@
 #include "network/types/synapse_type.h"
+#include "network/synapse.h"
 
 const RelationSelf SynapseType::SELF = RelationSelf(0, "SELF");
 const RelationOne SynapseType::INPUT = RelationOne(1, "INPUT");
@@ -32,13 +33,11 @@ std::vector<Relation> SynapseType::getRelations() const {
 }
 
 Synapse* SynapseType::instantiate() {
-    // Implementation for instantiating a Synapse
-    return nullptr; // Placeholder
+    return new Synapse(this);
 }
 
 Synapse* SynapseType::instantiate(Neuron* input, Neuron* output) {
-    // Implementation for instantiating a Synapse with input and output
-    return nullptr; // Placeholder
+    return new Synapse(this, input, output);
 }
 
 NeuronType* SynapseType::getInputType() const {

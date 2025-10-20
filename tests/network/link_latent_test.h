@@ -42,7 +42,7 @@ protected:
 
 public:
     void testLinkLatentBasicFlow();
-    void testLinkLatentWithNoPairedSynapse();
+    void testActivationPropagationWithTransition();
     void testLinkLatentWithEmptyBindingSignals();
     void testLinkLatentWithNoSecondInputCandidates();
     void testLinkLatentDuplicateLinkPrevention();
