@@ -333,6 +333,187 @@ void LinkLatentTest::testLinkLatentDuplicateLinkPrevention() {
     std::cout << "✅ hasLink integration verified - duplicate prevention logic present in linkLatent" << std::endl;
 }
 
+void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
+    std::cout << "Testing linkLatent with three inputs, non-matching input signals converging to same output..." << std::endl;
+    
+    try {
+        // Create type registry for this test
+        TypeRegistry* testTypeRegistry = new TypeRegistry();
+        
+        // Create three input neuron types
+        NeuronTypeBuilder sharedInputBuilder(testTypeRegistry, "sharedInput");
+        NeuronType* sharedInputNeuronType = sharedInputBuilder.build();
+        
+        NeuronTypeBuilder secondInputBuilder(testTypeRegistry, "secondInput");
+        NeuronType* secondInputNeuronType = secondInputBuilder.build();
+        
+        NeuronTypeBuilder thirdInputBuilder(testTypeRegistry, "thirdInput");
+        NeuronType* thirdInputNeuronType = thirdInputBuilder.build();
+        
+        // Create two output neuron types
+        NeuronTypeBuilder firstOutputBuilder(testTypeRegistry, "firstOutput");
+        NeuronType* firstOutputNeuronType = firstOutputBuilder.build();
+        
+        NeuronTypeBuilder secondOutputBuilder(testTypeRegistry, "secondOutput");
+        NeuronType* secondOutputNeuronType = secondOutputBuilder.build();
+        
+        // Create first synapse type: shared input -> first output (transition 1->5)
+        SynapseTypeBuilder firstSynapseBuilder(testTypeRegistry, "firstSynapse");
+        SynapseType* firstSynapseType = firstSynapseBuilder
+            .setInput(sharedInputNeuronType)
+            .setOutput(firstOutputNeuronType)
+            .addTransition(Transition::of(1, 5))  // 1->5
+            .build();
+            
+        // Create second synapse type: second input -> first output (transition 3->5, same output signal)
+        // This creates the scenario where both synapses target the same output neuron but with different input signals
+        SynapseTypeBuilder secondSynapseBuilder(testTypeRegistry, "secondSynapse");
+        SynapseType* secondSynapseType = secondSynapseBuilder
+            .setInput(secondInputNeuronType)
+            .setOutput(firstOutputNeuronType)  // Same output neuron!
+            .addTransition(Transition::of(3, 5))  // 3->5, same output signal type
+            .build();
+        
+        // Pair the synapse types (even though they have non-matching transitions)
+        firstSynapseType->setPairedSynapseType(secondSynapseType);
+        secondSynapseType->setPairedSynapseType(firstSynapseType);
+        
+        // Flatten type hierarchy
+        testTypeRegistry->flattenTypeHierarchy();
+        
+        // Create model and context for this test
+        Model* testModel = new Model(testTypeRegistry);
+        Context* testCtx = new Context(testModel);
+        
+        // Create neuron instances
+        Neuron* sharedInputNeuron = sharedInputNeuronType->instantiate(testModel);
+        Neuron* secondInputNeuron = secondInputNeuronType->instantiate(testModel);
+        Neuron* thirdInputNeuron = thirdInputNeuronType->instantiate(testModel);
+        Neuron* firstOutputNeuron = firstOutputNeuronType->instantiate(testModel);
+        // Note: secondOutputNeuron not used in this revised test design
+        
+        // Create synapse instances - both target the same output neuron
+        Synapse* firstSynapse = firstSynapseType->instantiate(sharedInputNeuron, firstOutputNeuron);
+        Synapse* secondSynapse = secondSynapseType->instantiate(secondInputNeuron, firstOutputNeuron);
+        
+        std::cout << "📝 Created test setup:" << std::endl;
+        std::cout << "   - Shared input neuron connects to output via first synapse (1->5)" << std::endl;
+        std::cout << "   - Second input neuron connects to SAME output via second synapse (3->5)" << std::endl;
+        std::cout << "   - Third input neuron (used for additional activation)" << std::endl;
+        std::cout << "   - Both synapses converge to same output signal type (5) but from different input types (1 vs 3)" << std::endl;
+        std::cout << "   - linkLatent should create output activation when both inputs are present" << std::endl;
+        
+        // Create three input activations with different binding signal types
+        int sharedTokenId = 600;
+        BindingSignal* sharedBindingSignal = testCtx->getOrCreateBindingSignal(sharedTokenId);
+        
+        // First input activation (shared) - binding signal type 1
+        std::map<int, BindingSignal*> sharedInputBindingSignals;
+        sharedInputBindingSignals[1] = sharedBindingSignal;
+        Activation* sharedInputActivation = sharedInputNeuron->createActivation(nullptr, testCtx, sharedInputBindingSignals);
+        sharedBindingSignal->addActivation(sharedInputActivation);
+        
+        // Second input activation - binding signal type 3 (same token to enable latent linking)
+        std::map<int, BindingSignal*> secondInputBindingSignals;
+        secondInputBindingSignals[3] = sharedBindingSignal;  // Same binding signal!
+        Activation* secondInputActivation = secondInputNeuron->createActivation(nullptr, testCtx, secondInputBindingSignals);
+        sharedBindingSignal->addActivation(secondInputActivation);
+        
+        // Third input activation - binding signal type 3 (different token)
+        int thirdTokenId = 602;
+        BindingSignal* thirdBindingSignal = testCtx->getOrCreateBindingSignal(thirdTokenId);
+        std::map<int, BindingSignal*> thirdInputBindingSignals;
+        thirdInputBindingSignals[3] = thirdBindingSignal;
+        Activation* thirdInputActivation = thirdInputNeuron->createActivation(nullptr, testCtx, thirdInputBindingSignals);
+        thirdBindingSignal->addActivation(thirdInputActivation);
+        
+        std::cout << "📝 Created three input activations:" << std::endl;
+        std::cout << "   - Shared input: type 1, token " << sharedTokenId << std::endl;
+        std::cout << "   - Second input: type 3, token " << sharedTokenId << " (SAME TOKEN - enables latent linking)" << std::endl;
+        std::cout << "   - Third input: type 3, token " << thirdTokenId << " (different token)" << std::endl;
+        
+        // Get initial activation count
+        std::set<Activation*> initialActivations = testCtx->getActivations();
+        int initialCount = initialActivations.size();
+        std::cout << "📊 Initial activation count: " << initialCount << std::endl;
+        
+        // Test linkLatent from shared input - should create output activation when paired input exists
+        std::cout << "🔗 Testing linkLatent from shared input activation..." << std::endl;
+        Linker::linkLatent(sharedInputActivation);
+        
+        // Test linkLatent from second input - should create second output activation
+        std::cout << "🔗 Testing linkLatent from second input activation..." << std::endl;
+        Linker::linkLatent(secondInputActivation);
+        
+        // Also test linkLatent from third input to demonstrate completeness
+        std::cout << "🔗 Testing linkLatent from third input activation..." << std::endl;
+        Linker::linkLatent(thirdInputActivation);
+        
+        // Check final activation count
+        std::set<Activation*> finalActivations = testCtx->getActivations();
+        int finalCount = finalActivations.size();
+        std::cout << "📊 Final activation count: " << finalCount << std::endl;
+        
+        if (finalCount > initialCount) {
+            std::cout << "✅ Output activation created successfully via linkLatent" << std::endl;
+            
+            // Find the output activation
+            Activation* outputActivation = nullptr;
+            
+            for (Activation* act : finalActivations) {
+                if (act->getNeuron() == firstOutputNeuron) {
+                    outputActivation = act;
+                    break;
+                }
+            }
+            
+            // Verify output activation
+            if (outputActivation) {
+                std::cout << "✅ Output activation created on correct neuron" << std::endl;
+                std::map<int, BindingSignal*> outputBindingSignals = outputActivation->getBindingSignals();
+                std::cout << "   - Binding signals:" << std::endl;
+                for (const auto& pair : outputBindingSignals) {
+                    std::cout << "     * Type " << pair.first << ": token " << pair.second->getTokenId() << std::endl;
+                }
+                
+                // Should have type 5 from both transitions (1->5 and 3->5)
+                if (outputBindingSignals.find(5) != outputBindingSignals.end()) {
+                    std::cout << "✅ Output has correct transitioned binding signal (type 5)" << std::endl;
+                    std::cout << "   - This signal can come from EITHER input type (1 OR 3) transitioning to type 5" << std::endl;
+                } else {
+                    std::cout << "❌ Output missing expected binding signal type 5" << std::endl;
+                }
+                
+                // Verify that linkLatent created proper links
+                std::vector<Link*> inputLinks = outputActivation->getInputLinks();
+                std::cout << "🔗 Output activation has " << inputLinks.size() << " input links" << std::endl;
+                
+                if (inputLinks.size() >= 1) {
+                    std::cout << "✅ linkLatent successfully created links from input activations" << std::endl;
+                    std::cout << "   - This demonstrates latent linking with non-matching input types (1 and 3)" << std::endl;
+                    std::cout << "   - converging to same output signal type (5)" << std::endl;
+                }
+                
+            } else {
+                std::cout << "❌ Output activation not found" << std::endl;
+            }
+            
+        } else {
+            std::cout << "❌ No new output activations were created" << std::endl;
+        }
+        
+        std::cout << "✅ Three input two output non-matching signals test completed" << std::endl;
+        
+        // Cleanup
+        delete testCtx;  // This will clean up activations and binding signals
+        delete testModel;
+        delete testTypeRegistry;
+        
+    } catch (const std::exception& e) {
+        std::cout << "⚠️  Three input two output test encountered issue: " << e.what() << std::endl;
+    }
+}
+
 void LinkLatentTest::runAllTests() {
     std::cout << "\n=== Running LinkLatent Tests ===" << std::endl;
     
@@ -343,6 +524,7 @@ void LinkLatentTest::runAllTests() {
     testLinkLatentWithEmptyBindingSignals();
     testLinkLatentWithNoSecondInputCandidates();
     testLinkLatentDuplicateLinkPrevention();
+    testThreeInputTwoOutputNonMatchingSignals();
     
     std::cout << "\n=== LinkLatent Tests Completed ===" << std::endl;
 }

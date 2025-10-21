@@ -66,7 +66,22 @@ void Linker::linkLatent(Activation* firstInputAct) {
             if (!secondInputAct || secondInputAct == firstInputAct) continue;
 
             // Select or realize an output activation compatible with beta1.
-            Activation* outputAct = nullptr; // TODO: Implement selectOrRealizeOutputActivation
+            Activation* outputAct = nullptr;
+            
+            // First, try to find existing output activation with matching binding signals
+            for (Activation* existingOutputAct : outputActCandidates) {
+                if (matchBindingSignals(existingOutputAct, beta1)) {
+                    outputAct = existingOutputAct;
+                    break;
+                }
+            }
+            
+            // If no existing activation found, create a new one
+            if (!outputAct) {
+                outputAct = outputNeuron->createActivation(nullptr, firstInputAct->getContext(), beta1);
+                outputActCandidates.insert(outputAct);  // Add to candidates for reuse
+            }
+            
             if (!outputAct)
                 continue;
 

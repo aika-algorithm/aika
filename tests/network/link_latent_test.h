@@ -51,6 +51,7 @@ public:
     void testLinkLatentWithNoSecondInputCandidates();
     void testLinkLatentDuplicateLinkPrevention();
     void testLinkLatentWithNullActivation();
+    void testThreeInputTwoOutputNonMatchingSignals();
     
     void runAllTests();
 };
