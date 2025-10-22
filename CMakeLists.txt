@@ -40,8 +40,8 @@ target_compile_options(aika PRIVATE
     $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-frtti>
 )
 
-# Link pybind11 and Python libraries
-target_link_libraries(aika PRIVATE pybind11::module)
+# Link pybind11 and Python libraries, and the core library
+target_link_libraries(aika PRIVATE pybind11::module aika_core)
 
 
 # Install the module
