@@ -113,21 +113,29 @@ std::set<Activation*> Linker::collectLinkingTargets(std::map<int, BindingSignal*
 }
 
 bool Linker::matchBindingSignals(Activation* act, std::map<int, BindingSignal*> latentBindingSignals) {
-    for (const auto& e : latentBindingSignals) {
-     //   if (isConflictingBindingSignal(e.first, e.second)) {
-            return false;
-    //    }
+    if (!act) {
+        return true; // No existing activation, no conflicts possible
     }
-    return true;
+    
+    // Get existing binding signals from the activation
+    std::map<int, BindingSignal*> existingBindingSignals = act->getBindingSignals();
+    
+    // Check for conflicts: same binding signal type but different BindingSignal objects (different tokens)
+    for (const auto& [type, latentBS] : latentBindingSignals) {
+        if (!latentBS) continue;
+        
+        auto it = existingBindingSignals.find(type);
+        if (it != existingBindingSignals.end()) {
+            BindingSignal* existingBS = it->second;
+            if (existingBS && existingBS != latentBS) {
+                // Conflict detected: same type, different BindingSignal objects (different tokens)
+                return false;
+            }
+        }
+    }
+    
+    return true; // No conflicts found
 }
-
-/*
-bool Linker::isConflictingBindingSignal(Activation* act, int s, BindingSignal* targetBS) const {
-    auto it = bindingSignals.find(s);
-    BindingSignal* bs = (it != bindingSignals.end()) ? it->second : nullptr;
-    return bs != nullptr && targetBS != bs;
-}
-*/
 
 void Linker::linkIncoming(Activation* act, Activation* excludedInputAct) {
     for (auto& s : act->getNeuron()->getInputSynapsesAsStream()) {

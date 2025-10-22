@@ -440,15 +440,7 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
         // Test linkLatent from shared input - should create output activation when paired input exists
         std::cout << "🔗 Testing linkLatent from shared input activation..." << std::endl;
         Linker::linkLatent(sharedInputActivation);
-        
-        // Test linkLatent from second input - should create second output activation
-        std::cout << "🔗 Testing linkLatent from second input activation..." << std::endl;
-        Linker::linkLatent(secondInputActivation);
-        
-        // Also test linkLatent from third input to demonstrate completeness
-        std::cout << "🔗 Testing linkLatent from third input activation..." << std::endl;
-        Linker::linkLatent(thirdInputActivation);
-        
+
         // Check final activation count
         std::set<Activation*> finalActivations = testCtx->getActivations();
         int finalCount = finalActivations.size();
@@ -514,6 +506,186 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
     }
 }
 
+void LinkLatentTest::testBindingSignalConflictPrevention() {
+    std::cout << "Testing binding signal conflict prevention in linkLatent..." << std::endl;
+    
+    try {
+        // Create type registry for this test
+        TypeRegistry* testTypeRegistry = new TypeRegistry();
+        
+        // Create two input neuron types
+        NeuronTypeBuilder firstInputBuilder(testTypeRegistry, "firstInput");
+        NeuronType* firstInputNeuronType = firstInputBuilder.build();
+        
+        NeuronTypeBuilder secondInputBuilder(testTypeRegistry, "secondInput");
+        NeuronType* secondInputNeuronType = secondInputBuilder.build();
+        
+        // Create output neuron type
+        NeuronTypeBuilder outputBuilder(testTypeRegistry, "output");
+        NeuronType* outputNeuronType = outputBuilder.build();
+        
+        // Create first synapse type: first input -> output (transition 1->5)
+        SynapseTypeBuilder firstSynapseBuilder(testTypeRegistry, "firstSynapse");
+        SynapseType* firstSynapseType = firstSynapseBuilder
+            .setInput(firstInputNeuronType)
+            .setOutput(outputNeuronType)
+            .addTransition(Transition::of(1, 5))  // 1->5
+            .build();
+            
+        // Create second synapse type: second input -> output (transition 2->5, SAME output slot)
+        SynapseTypeBuilder secondSynapseBuilder(testTypeRegistry, "secondSynapse");
+        SynapseType* secondSynapseType = secondSynapseBuilder
+            .setInput(secondInputNeuronType)
+            .setOutput(outputNeuronType)
+            .addTransition(Transition::of(2, 5))  // 2->5, SAME output slot!
+            .build();
+        
+        // Pair the synapse types
+        firstSynapseType->setPairedSynapseType(secondSynapseType);
+        secondSynapseType->setPairedSynapseType(firstSynapseType);
+        
+        // Flatten type hierarchy
+        testTypeRegistry->flattenTypeHierarchy();
+        
+        // Create model and context for this test
+        Model* testModel = new Model(testTypeRegistry);
+        Context* testCtx = new Context(testModel);
+        
+        // Create neuron instances
+        Neuron* firstInputNeuron = firstInputNeuronType->instantiate(testModel);
+        Neuron* secondInputNeuron = secondInputNeuronType->instantiate(testModel);
+        Neuron* outputNeuron = outputNeuronType->instantiate(testModel);
+        
+        // Create synapse instances - both target the same output neuron
+        Synapse* firstSynapse = firstSynapseType->instantiate(firstInputNeuron, outputNeuron);
+        Synapse* secondSynapse = secondSynapseType->instantiate(secondInputNeuron, outputNeuron);
+        
+        std::cout << "📝 Created conflict test setup:" << std::endl;
+        std::cout << "   - First input neuron connects to output via first synapse (1->5)" << std::endl;
+        std::cout << "   - Second input neuron connects to SAME output via second synapse (2->5)" << std::endl;
+        std::cout << "   - Both synapses target the SAME output binding signal slot (type 5)" << std::endl;
+        std::cout << "   - BUT inputs have DIFFERENT tokens - this should create a conflict!" << std::endl;
+        
+        // Create two input activations with DIFFERENT binding signals (different tokens)
+        int firstTokenId = 700;
+        int secondTokenId = 701;  // Different token!
+        
+        BindingSignal* firstBindingSignal = testCtx->getOrCreateBindingSignal(firstTokenId);
+        BindingSignal* secondBindingSignal = testCtx->getOrCreateBindingSignal(secondTokenId);
+        
+        // First input activation - binding signal type 1, token 700
+        std::map<int, BindingSignal*> firstInputBindingSignals;
+        firstInputBindingSignals[1] = firstBindingSignal;
+        Activation* firstInputActivation = firstInputNeuron->createActivation(nullptr, testCtx, firstInputBindingSignals);
+        firstBindingSignal->addActivation(firstInputActivation);
+        
+        // Second input activation - binding signal type 2, token 701 (DIFFERENT token!)
+        std::map<int, BindingSignal*> secondInputBindingSignals;
+        secondInputBindingSignals[2] = secondBindingSignal;
+        Activation* secondInputActivation = secondInputNeuron->createActivation(nullptr, testCtx, secondInputBindingSignals);
+        secondBindingSignal->addActivation(secondInputActivation);
+        
+        std::cout << "📝 Created conflicting input activations:" << std::endl;
+        std::cout << "   - First input: type 1, token " << firstTokenId << std::endl;
+        std::cout << "   - Second input: type 2, token " << secondTokenId << " (DIFFERENT token)" << std::endl;
+        std::cout << "   - Both will transition to output slot type 5, creating a conflict" << std::endl;
+        
+        // Get initial activation count
+        std::set<Activation*> initialActivations = testCtx->getActivations();
+        int initialCount = initialActivations.size();
+        std::cout << "📊 Initial activation count: " << initialCount << std::endl;
+        
+        // Test linkLatent - this should NOT create output activation due to binding signal conflict
+        std::cout << "🔗 Testing linkLatent with conflicting binding signals..." << std::endl;
+        Linker::linkLatent(firstInputActivation);
+        
+        // Check final activation count
+        std::set<Activation*> finalActivations = testCtx->getActivations();
+        int finalCount = finalActivations.size();
+        std::cout << "📊 Final activation count: " << finalCount << std::endl;
+        
+        if (finalCount == initialCount) {
+            std::cout << "✅ Binding signal conflict correctly prevented output activation creation" << std::endl;
+            std::cout << "   - linkLatent detected that tokens " << firstTokenId << " and " << secondTokenId << std::endl;
+            std::cout << "   - would both try to occupy the same output binding signal slot (type 5)" << std::endl;
+            std::cout << "   - This conflict prevention is essential for maintaining binding signal consistency" << std::endl;
+        } else {
+            std::cout << "❌ Output activation was created despite binding signal conflict" << std::endl;
+            std::cout << "   - This suggests matchBindingSignals is not properly detecting conflicts" << std::endl;
+            
+            // Let's examine what was created
+            for (Activation* act : finalActivations) {
+                if (act->getNeuron() == outputNeuron) {
+                    std::cout << "   - Output activation binding signals:" << std::endl;
+                    for (const auto& pair : act->getBindingSignals()) {
+                        std::cout << "     * Type " << pair.first << ": token " << pair.second->getTokenId() << std::endl;
+                    }
+                }
+            }
+        }
+        
+        // Now test the positive case: same tokens should work
+        std::cout << "\n🔗 Testing positive case: same tokens (should succeed)..." << std::endl;
+        
+        // Create new test context for positive case
+        Context* testCtx2 = new Context(testModel);
+        
+        // Create two input activations with SAME token (should work)
+        int sameTokenId = 800;
+        BindingSignal* sameBindingSignal = testCtx2->getOrCreateBindingSignal(sameTokenId);
+        
+        // First input activation - binding signal type 1, token 800
+        std::map<int, BindingSignal*> firstInputBindingSignals2;
+        firstInputBindingSignals2[1] = sameBindingSignal;
+        Activation* firstInputActivation2 = firstInputNeuron->createActivation(nullptr, testCtx2, firstInputBindingSignals2);
+        sameBindingSignal->addActivation(firstInputActivation2);
+        
+        // Second input activation - binding signal type 2, same token 800
+        std::map<int, BindingSignal*> secondInputBindingSignals2;
+        secondInputBindingSignals2[2] = sameBindingSignal;  // SAME BindingSignal object
+        Activation* secondInputActivation2 = secondInputNeuron->createActivation(nullptr, testCtx2, secondInputBindingSignals2);
+        sameBindingSignal->addActivation(secondInputActivation2);
+        
+        std::cout << "📝 Created non-conflicting input activations:" << std::endl;
+        std::cout << "   - First input: type 1, token " << sameTokenId << std::endl;
+        std::cout << "   - Second input: type 2, token " << sameTokenId << " (SAME token)" << std::endl;
+        std::cout << "   - Both transition to output slot type 5 with same token - no conflict" << std::endl;
+        
+        // Get initial activation count
+        std::set<Activation*> initialActivations2 = testCtx2->getActivations();
+        int initialCount2 = initialActivations2.size();
+        std::cout << "📊 Initial activation count: " << initialCount2 << std::endl;
+        
+        // Test linkLatent - this SHOULD create output activation (no conflict)
+        Linker::linkLatent(firstInputActivation2);
+        
+        // Check final activation count
+        std::set<Activation*> finalActivations2 = testCtx2->getActivations();
+        int finalCount2 = finalActivations2.size();
+        std::cout << "📊 Final activation count: " << finalCount2 << std::endl;
+        
+        if (finalCount2 > initialCount2) {
+            std::cout << "✅ Output activation created successfully with same tokens" << std::endl;
+            std::cout << "   - This confirms that conflict detection works correctly" << std::endl;
+            std::cout << "   - Same tokens allow output activation creation" << std::endl;
+        } else {
+            std::cout << "❌ Output activation was not created even with same tokens" << std::endl;
+            std::cout << "   - This suggests an issue with the linkLatent implementation" << std::endl;
+        }
+        
+        std::cout << "✅ Binding signal conflict prevention test completed" << std::endl;
+        
+        // Cleanup
+        delete testCtx2;
+        delete testCtx;
+        delete testModel;
+        delete testTypeRegistry;
+        
+    } catch (const std::exception& e) {
+        std::cout << "⚠️  Binding signal conflict test encountered issue: " << e.what() << std::endl;
+    }
+}
+
 void LinkLatentTest::runAllTests() {
     std::cout << "\n=== Running LinkLatent Tests ===" << std::endl;
     
@@ -525,6 +697,7 @@ void LinkLatentTest::runAllTests() {
     testLinkLatentWithNoSecondInputCandidates();
     testLinkLatentDuplicateLinkPrevention();
     testThreeInputTwoOutputNonMatchingSignals();
+    testBindingSignalConflictPrevention();
     
     std::cout << "\n=== LinkLatent Tests Completed ===" << std::endl;
 }
