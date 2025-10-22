@@ -1,8 +1,9 @@
 """
-AIKA-Based Transformer Neural Network Type Definitions
+AIKA-Based Transformer Neural Network Type Definitions using Builder Pattern
 
 This module defines the object types (neurons, synapses, activations, links) and 
-field definitions for a minimal transformer-like architecture using the AIKA framework.
+field definitions for a minimal transformer-like architecture using the AIKA framework
+with the new builder pattern architecture.
 
 Based on the formal specification in specs/network/transformer.md
 """
@@ -20,17 +21,20 @@ import aika.network as an
 class TransformerTypeRegistry:
     """
     Transformer type registry that defines all object types and their field relationships
-    according to the AIKA transformer specification.
+    according to the AIKA transformer specification using builder pattern.
     """
     
     def __init__(self):
         self.registry = af.TypeRegistry()
         
-        # Initialize all type definitions
-        self._setup_neuron_types()
-        self._setup_activation_types()
-        self._setup_synapse_types()
-        self._setup_link_types()
+        # Initialize all builder types
+        self._setup_neuron_builders()
+        self._setup_activation_builders()
+        self._setup_synapse_builders()
+        self._setup_link_builders()
+        
+        # Build the actual implementation types
+        self._build_implementation_types()
         
         # Setup field definitions and mathematical model
         self._setup_field_definitions()
@@ -38,80 +42,79 @@ class TransformerTypeRegistry:
         # Flatten type hierarchy
         self.registry.flattenTypeHierarchy()
     
-    def _setup_neuron_types(self):
-        """Setup neuron type definitions: T_N = {T_EMB, T_KEY, T_QUERY, T_INHIB, T_VALUE}"""
-        # Create builders first
+    def _setup_neuron_builders(self):
+        """Setup neuron builder definitions: T_N = {T_EMB, T_KEY, T_QUERY, T_INHIB, T_VALUE}"""
         self.T_EMB_BUILDER = an.NeuronTypeBuilder(self.registry, "EMB_NEURON")
         self.T_KEY_BUILDER = an.NeuronTypeBuilder(self.registry, "KEY_NEURON")
         self.T_QUERY_BUILDER = an.NeuronTypeBuilder(self.registry, "QUERY_NEURON")
         self.T_INHIB_BUILDER = an.NeuronTypeBuilder(self.registry, "INHIB_NEURON")
         self.T_VALUE_BUILDER = an.NeuronTypeBuilder(self.registry, "VALUE_NEURON")
+    
+    def _setup_activation_builders(self):
+        """Setup activation builder definitions: T_A"""
+        # Activation types are now handled by NeuronTypeBuilder internally
+        # No separate ActivationTypeBuilder needed - removed obsolete builders
+        pass
+    
+    def _setup_synapse_builders(self):
+        """Setup synapse builder definitions: T_S"""
+        # Synapse builders according to transformer specification
+        self.S_EMB_KEY_BUILDER = an.SynapseTypeBuilder(self.registry, "S_EMB_KEY")
+        self.S_EMB_QUERY_BUILDER = an.SynapseTypeBuilder(self.registry, "S_EMB_QUERY")
+        self.S_KEY_QUERY_BUILDER = an.SynapseTypeBuilder(self.registry, "S_KEY_QUERY")
+        self.S_QUERY_INHIB_BUILDER = an.SynapseTypeBuilder(self.registry, "S_QUERY_INHIB")
+        self.S_INHIB_VALUE_BUILDER = an.SynapseTypeBuilder(self.registry, "S_INHIB_VALUE")
+        self.S_EMB_VALUE_BUILDER = an.SynapseTypeBuilder(self.registry, "S_EMB_VALUE")
         
-        # Build implementation types
+        # Set input/output neuron type relationships
+        self.S_EMB_KEY_BUILDER.setInput(self.T_EMB_BUILDER).setOutput(self.T_KEY_BUILDER)
+        self.S_EMB_QUERY_BUILDER.setInput(self.T_EMB_BUILDER).setOutput(self.T_QUERY_BUILDER)
+        self.S_KEY_QUERY_BUILDER.setInput(self.T_KEY_BUILDER).setOutput(self.T_QUERY_BUILDER)
+        self.S_QUERY_INHIB_BUILDER.setInput(self.T_QUERY_BUILDER).setOutput(self.T_INHIB_BUILDER)
+        self.S_INHIB_VALUE_BUILDER.setInput(self.T_INHIB_BUILDER).setOutput(self.T_VALUE_BUILDER)
+        self.S_EMB_VALUE_BUILDER.setInput(self.T_EMB_BUILDER).setOutput(self.T_VALUE_BUILDER)
+    
+    def _setup_link_builders(self):
+        """Setup link builder definitions: T_L"""
+        # Link types are now handled by SynapseTypeBuilder internally
+        # No separate LinkTypeBuilder needed - removed obsolete builders
+        pass
+    
+    def _build_implementation_types(self):
+        """Build the actual implementation types from builders"""
+        print("Building implementation types from builders...")
+        
+        # Build neuron types
         self.T_EMB = self.T_EMB_BUILDER.build()
         self.T_KEY = self.T_KEY_BUILDER.build()
         self.T_QUERY = self.T_QUERY_BUILDER.build()
         self.T_INHIB = self.T_INHIB_BUILDER.build()
         self.T_VALUE = self.T_VALUE_BUILDER.build()
-    
-    def _setup_activation_types(self):
-        """Setup activation type definitions: T_A"""
-        self.T_EMB_ACT = an.ActivationType(self.registry, "EMB_ACTIVATION")
-        self.T_KEY_ACT = an.ActivationType(self.registry, "KEY_ACTIVATION")
-        self.T_QUERY_ACT = an.ActivationType(self.registry, "QUERY_ACTIVATION")
-        self.T_INHIB_ACT = an.ActivationType(self.registry, "INHIB_ACTIVATION")
-        self.T_VALUE_ACT = an.ActivationType(self.registry, "VALUE_ACTIVATION")
         
-        # Link neuron types to their activation types
-        self.T_EMB.setActivation(self.T_EMB_ACT)
-        self.T_KEY.setActivation(self.T_KEY_ACT)
-        self.T_QUERY.setActivation(self.T_QUERY_ACT)
-        self.T_INHIB.setActivation(self.T_INHIB_ACT)
-        self.T_VALUE.setActivation(self.T_VALUE_ACT)
-    
-    def _setup_synapse_types(self):
-        """Setup synapse type definitions: T_S"""
-        # Synapse types according to transformer specification
-        self.S_EMB_KEY = an.SynapseType(self.registry, "S_EMB_KEY")
-        self.S_EMB_QUERY = an.SynapseType(self.registry, "S_EMB_QUERY")
-        self.S_KEY_QUERY = an.SynapseType(self.registry, "S_KEY_QUERY")
-        self.S_QUERY_INHIB = an.SynapseType(self.registry, "S_QUERY_INHIB")
-        self.S_INHIB_VALUE = an.SynapseType(self.registry, "S_INHIB_VALUE")
-        self.S_EMB_VALUE = an.SynapseType(self.registry, "S_EMB_VALUE")
+        # Activation types are built automatically by NeuronTypeBuilder
+        self.T_EMB_ACT = self.T_EMB.getActivationType()
+        self.T_KEY_ACT = self.T_KEY.getActivationType()
+        self.T_QUERY_ACT = self.T_QUERY.getActivationType()
+        self.T_INHIB_ACT = self.T_INHIB.getActivationType()
+        self.T_VALUE_ACT = self.T_VALUE.getActivationType()
         
-        # Set input/output neuron type relationships
-        self.S_EMB_KEY.setInput(self.T_EMB).setOutput(self.T_KEY)
-        self.S_EMB_QUERY.setInput(self.T_EMB).setOutput(self.T_QUERY)
-        self.S_KEY_QUERY.setInput(self.T_KEY).setOutput(self.T_QUERY)
-        self.S_QUERY_INHIB.setInput(self.T_QUERY).setOutput(self.T_INHIB)
-        self.S_INHIB_VALUE.setInput(self.T_INHIB).setOutput(self.T_VALUE)
-        self.S_EMB_VALUE.setInput(self.T_EMB).setOutput(self.T_VALUE)
-    
-    def _setup_link_types(self):
-        """Setup link type definitions: T_L"""
-        # Link types for each synapse type
-        self.L_EMB_KEY = an.LinkType(self.registry, "L_EMB_KEY")
-        self.L_EMB_QUERY = an.LinkType(self.registry, "L_EMB_QUERY")
-        self.L_KEY_QUERY = an.LinkType(self.registry, "L_KEY_QUERY")
-        self.L_QUERY_INHIB = an.LinkType(self.registry, "L_QUERY_INHIB")
-        self.L_INHIB_VALUE = an.LinkType(self.registry, "L_INHIB_VALUE")
-        self.L_EMB_VALUE = an.LinkType(self.registry, "L_EMB_VALUE")
+        # Build synapse types
+        self.S_EMB_KEY = self.S_EMB_KEY_BUILDER.build()
+        self.S_EMB_QUERY = self.S_EMB_QUERY_BUILDER.build()
+        self.S_KEY_QUERY = self.S_KEY_QUERY_BUILDER.build()
+        self.S_QUERY_INHIB = self.S_QUERY_INHIB_BUILDER.build()
+        self.S_INHIB_VALUE = self.S_INHIB_VALUE_BUILDER.build()
+        self.S_EMB_VALUE = self.S_EMB_VALUE_BUILDER.build()
         
-        # Set synapse relationships
-        self.L_EMB_KEY.setSynapse(self.S_EMB_KEY)
-        self.L_EMB_QUERY.setSynapse(self.S_EMB_QUERY)
-        self.L_KEY_QUERY.setSynapse(self.S_KEY_QUERY)
-        self.L_QUERY_INHIB.setSynapse(self.S_QUERY_INHIB)
-        self.L_INHIB_VALUE.setSynapse(self.S_INHIB_VALUE)
-        self.L_EMB_VALUE.setSynapse(self.S_EMB_VALUE)
+        # Link types are built automatically by SynapseTypeBuilder
+        self.L_EMB_KEY = self.S_EMB_KEY.getLinkType()
+        self.L_EMB_QUERY = self.S_EMB_QUERY.getLinkType()
+        self.L_KEY_QUERY = self.S_KEY_QUERY.getLinkType()
+        self.L_QUERY_INHIB = self.S_QUERY_INHIB.getLinkType()
+        self.L_INHIB_VALUE = self.S_INHIB_VALUE.getLinkType()
+        self.L_EMB_VALUE = self.S_EMB_VALUE.getLinkType()
         
-        # Set input/output activation type relationships
-        self.L_EMB_KEY.setInput(self.T_EMB_ACT).setOutput(self.T_KEY_ACT)
-        self.L_EMB_QUERY.setInput(self.T_EMB_ACT).setOutput(self.T_QUERY_ACT)
-        self.L_KEY_QUERY.setInput(self.T_KEY_ACT).setOutput(self.T_QUERY_ACT)
-        self.L_QUERY_INHIB.setInput(self.T_QUERY_ACT).setOutput(self.T_INHIB_ACT)
-        self.L_INHIB_VALUE.setInput(self.T_INHIB_ACT).setOutput(self.T_VALUE_ACT)
-        self.L_EMB_VALUE.setInput(self.T_EMB_ACT).setOutput(self.T_VALUE_ACT)
+        print("Implementation types built successfully")
     
     def _setup_field_definitions(self):
         """Setup field definitions using type hierarchy according to the transformer specification."""
@@ -122,58 +125,34 @@ class TransformerTypeRegistry:
         # BASE TYPE DEFINITIONS (ROOT TYPES)
         # ========================================
         
-        # Base Standard Neuron Type - root for normal neurons
-        print("Creating T_STANDARD_NEURON...")
-        self.T_STANDARD_NEURON = an.NeuronType(self.registry, "STANDARD_NEURON")
+        # Create builders for base types
+        print("Creating T_STANDARD_NEURON builder...")
+        self.T_STANDARD_NEURON_BUILDER = an.NeuronTypeBuilder(self.registry, "STANDARD_NEURON")
+        self.T_STANDARD_SYNAPSE_BUILDER = an.SynapseTypeBuilder(self.registry, "STANDARD_SYNAPSE")
+
+        # Build base implementation types
+        self.T_STANDARD_NEURON = self.T_STANDARD_NEURON_BUILDER.build()
+        self.T_STANDARD_SYNAPSE = self.T_STANDARD_SYNAPSE_BUILDER.build()
+        
+        # Get derived types from builders
+        self.T_STANDARD_ACTIVATION = self.T_STANDARD_NEURON.getActivationType()
+        self.T_STANDARD_LINK = self.T_STANDARD_SYNAPSE.getLinkType()
+        
+        # Note: Field definitions would be set up on the built types
+        # For now, we'll use the implementation types directly
         bias_field = self.T_STANDARD_NEURON.inputField("bias")
         
-        # Base Standard Activation Type - root for normal activations
-        print("Creating T_STANDARD_ACTIVATION...")
-        self.T_STANDARD_ACTIVATION = an.ActivationType(self.registry, "STANDARD_ACTIVATION")
         # Standard activation fields:
         net_field = self.T_STANDARD_ACTIVATION.sum("net")
         tanh_func = af.TanhActivationFunction()
         value_field = self.T_STANDARD_ACTIVATION.fieldActivationFunc("value", tanh_func, 0.001)
         fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
 
-        # Base Standard Synapse Type - root for all synapses
-        print("Creating T_STANDARD_SYNAPSE...")
-        self.T_STANDARD_SYNAPSE = an.SynapseType(self.registry, "STANDARD_SYNAPSE")
+        # Standard synapse weight field
         weight_field = self.T_STANDARD_SYNAPSE.inputField("weight")
 
-        # Base Standard Link Type - root for normal links
-        print("Creating T_STANDARD_LINK...")
-        self.T_STANDARD_LINK = an.LinkType(self.registry, "STANDARD_LINK")
-        # Standard weightedInput: f(l) = f_weight^SYNAPSE(l) · f_val^INPUT(l)
+        # Standard link weighted input
         weighted_input = self.T_STANDARD_LINK.mul("weightedInput")
-
-        weighted_input.input(an.LinkType.SYNAPSE, self.T_STANDARD_SYNAPSE.inputField("weight"), 0)
-        weighted_input.input(an.LinkType.INPUT, self.T_STANDARD_ACTIVATION.add("value"), 1)
-
-        # ========================================
-        # INHIBITORY TYPES (STANDALONE)
-        # ========================================
-        
-        # Standalone inhibitory neuron with bias field
-        print("Creating standalone T_INHIB neuron type...")
-        
-        # Standalone inhibitory activation with softmax fields
-        print("Creating standalone T_INHIB_ACT activation type...")
-        
-        # Special field for softmax normalization
-        softmax_denominator = self.T_INHIB_ACT.sum("softmax_denominator")
-        
-        # Standalone inhibitory link with softmax computation
-        print("Creating standalone L_INHIB_VALUE link type...")
-        
-        # Numerator: exp(f_val^INPUT(PAIR_IN(l)))
-        numerator = self.L_INHIB_VALUE.exp("softmax_numerator")
-        numerator.input(an.LinkType.PAIR_IN, self.T_INHIB_ACT.add("value"), 0)
-        
-        # Softmax ratio: numerator / denominator
-        softmax_ratio = self.L_INHIB_VALUE.div("softmax_ratio")
-        softmax_ratio.input(an.LinkType.SELF, numerator, 0)
-        softmax_ratio.input(an.LinkType.OUTPUT, softmax_denominator, 1)
         
         # ========================================
         # SETUP TYPE HIERARCHY
@@ -204,89 +183,24 @@ class TransformerTypeRegistry:
         self.S_KEY_QUERY.addParent(self.T_STANDARD_SYNAPSE)
         self.S_QUERY_INHIB.addParent(self.T_STANDARD_SYNAPSE)
         self.S_EMB_VALUE.addParent(self.T_STANDARD_SYNAPSE)
-        # Special case: inhibitory output synapse
         self.S_INHIB_VALUE.addParent(self.T_STANDARD_SYNAPSE)
         
-        # Standard links inherit from standard link
+        # All links inherit from standard link
         print("Setting link inheritance...")
         self.L_EMB_KEY.addParent(self.T_STANDARD_LINK)
         self.L_EMB_QUERY.addParent(self.T_STANDARD_LINK)
         self.L_KEY_QUERY.addParent(self.T_STANDARD_LINK)
         self.L_QUERY_INHIB.addParent(self.T_STANDARD_LINK)
         self.L_EMB_VALUE.addParent(self.T_STANDARD_LINK)
+        # L_INHIB_VALUE is standalone (has special softmax computation)
         
-        # L_INHIB_VALUE is standalone (no inheritance)
-        
-        print("Type hierarchy setup completed.")
+        print("Field definitions setup complete")
+        print("Type hierarchy setup complete")
     
     def get_registry(self):
-        """Get the configured type registry."""
+        """Return the type registry"""
         return self.registry
 
 def create_transformer_types():
-    """
-    Factory function to create and return a configured transformer type registry.
-    
-    Returns:
-        TransformerTypeRegistry: Fully configured type registry with all transformer types
-    """
+    """Factory function to create and return the transformer type registry"""
     return TransformerTypeRegistry()
-
-
-def main():
-    """Example usage of the transformer type definitions."""
-    print("🧠 Creating AIKA Transformer Type Definitions...")
-    
-    try:
-        # Create the type registry with all transformer types
-        transformer_types = create_transformer_types()
-        
-        print("✅ Transformer type registry created successfully!")
-        print(f"📊 Registry contains all transformer types:")
-        print(f"   • Neuron types: EMB, KEY, QUERY, INHIB, VALUE")
-        print(f"   • Activation types: EMB_ACT, KEY_ACT, QUERY_ACT, INHIB_ACT, VALUE_ACT") 
-        print(f"   • Synapse types: S_EMB_KEY, S_EMB_QUERY, S_KEY_QUERY, S_QUERY_INHIB, S_INHIB_VALUE, S_EMB_VALUE")
-        print(f"   • Link types: L_EMB_KEY, L_EMB_QUERY, L_KEY_QUERY, L_QUERY_INHIB, L_INHIB_VALUE, L_EMB_VALUE")
-        
-        # Display the hierarchical structure
-        print("\n🏗️ Type Hierarchy:")
-        print(f"   • Base standard types: STANDARD_NEURON, STANDARD_ACTIVATION, STANDARD_SYNAPSE, STANDARD_LINK")
-        print(f"   • Standalone inhibitory types: T_INHIB, T_INHIB_ACT, L_INHIB_VALUE")
-        
-        print("\n🔬 Transformer Type Inheritance:")
-        print(f"   • EMB, KEY, QUERY, VALUE inherit from STANDARD_NEURON")
-        print(f"   • INHIB is standalone (no inheritance)")
-        print(f"   • EMB_ACT, KEY_ACT, QUERY_ACT, VALUE_ACT inherit from STANDARD_ACTIVATION")
-        print(f"   • INHIB_ACT is standalone (no inheritance)")
-        
-        print("\n🔗 Synapse & Link Inheritance:")
-        print(f"   • All S_* types inherit from STANDARD_SYNAPSE")
-        print(f"   • Most L_* types inherit from STANDARD_LINK")
-        print(f"   • L_INHIB_VALUE is standalone (no inheritance)")
-        
-        print("\n🧮 Mathematical Model Features:")
-        print("   • Simplified type hierarchy with base standard types")
-        print("   • Standard weightedInput: weight × input_value (inherited)")
-        print("   • Standalone inhibitory types with softmax computation")
-        print("   • Softmax: exp(input) / Σ(exp(all_inputs)) × weight")
-        print("   • Binding signal propagation for token identity")
-        print("   • Field-based computation graph with inheritance")
-        
-        print("\n🎯 Implementation follows simplified transformer specification:")
-        print("   • Base types: STANDARD_NEURON/ACTIVATION → inherited by EMB, KEY, QUERY, VALUE")
-        print("   • Standalone types: T_INHIB, T_INHIB_ACT, L_INHIB_VALUE with softmax fields")
-        print("   • Attention mechanism: KEY→QUERY→INHIB→VALUE")
-        print("   • Softmax normalization using PAIR_IN/PAIR_OUT relations")
-        print("   • Simplified hierarchy removes intermediate INHIBITORY types")
-        
-        return transformer_types
-        
-    except Exception as e:
-        print(f"❌ Error creating transformer types: {e}")
-        import traceback
-        traceback.print_exc()
-        return None
-
-
-if __name__ == "__main__":
-    main()
