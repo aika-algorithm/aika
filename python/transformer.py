@@ -29,11 +29,14 @@ class TransformerTypeRegistry:
         
         # Initialize all builder types
         self._setup_neuron_builders()
-        self._setup_activation_builders()
-        self._setup_synapse_builders()
-        self._setup_link_builders()
         
-        # Build the actual implementation types
+        # Build neuron types first (needed by synapse builders)
+        self._build_neuron_types()
+        
+        # Setup synapse builders (now that neuron types are built)
+        self._setup_synapse_builders()
+        
+        # Build the remaining implementation types
         self._build_implementation_types()
         
         # Setup field definitions and mathematical model
@@ -49,12 +52,6 @@ class TransformerTypeRegistry:
         self.T_QUERY_BUILDER = an.NeuronTypeBuilder(self.registry, "QUERY_NEURON")
         self.T_INHIB_BUILDER = an.NeuronTypeBuilder(self.registry, "INHIB_NEURON")
         self.T_VALUE_BUILDER = an.NeuronTypeBuilder(self.registry, "VALUE_NEURON")
-    
-    def _setup_activation_builders(self):
-        """Setup activation builder definitions: T_A"""
-        # Activation types are now handled by NeuronTypeBuilder internally
-        # No separate ActivationTypeBuilder needed - removed obsolete builders
-        pass
     
     def _setup_synapse_builders(self):
         """Setup synapse builder definitions: T_S"""
@@ -72,13 +69,20 @@ class TransformerTypeRegistry:
         self.S_KEY_QUERY_BUILDER.setInput(self.T_KEY_BUILDER).setOutput(self.T_QUERY_BUILDER)
         self.S_QUERY_INHIB_BUILDER.setInput(self.T_QUERY_BUILDER).setOutput(self.T_INHIB_BUILDER)
         self.S_INHIB_VALUE_BUILDER.setInput(self.T_INHIB_BUILDER).setOutput(self.T_VALUE_BUILDER)
-        self.S_EMB_VALUE_BUILDER.setInput(self.T_EMB_BUILDER).setOutput(self.T_VALUE_BUILDER)
+        self.S_EMB_VALUE_BUILDER.setInput(self.T_EMB).setOutput(self.T_VALUE)
     
-    def _setup_link_builders(self):
-        """Setup link builder definitions: T_L"""
-        # Link types are now handled by SynapseTypeBuilder internally
-        # No separate LinkTypeBuilder needed - removed obsolete builders
-        pass
+    def _build_neuron_types(self):
+        """Build neuron types first (needed by synapse builders)"""
+        print("Building neuron types...")
+        
+        # Build neuron types
+        self.T_EMB = self.T_EMB_BUILDER.build()
+        self.T_KEY = self.T_KEY_BUILDER.build()
+        self.T_QUERY = self.T_QUERY_BUILDER.build()
+        self.T_INHIB = self.T_INHIB_BUILDER.build()
+        self.T_VALUE = self.T_VALUE_BUILDER.build()
+        
+        print("Neuron types built successfully")
     
     def _build_implementation_types(self):
         """Build the actual implementation types from builders"""
