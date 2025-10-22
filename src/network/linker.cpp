@@ -138,10 +138,6 @@ bool Linker::matchBindingSignals(Activation* act, std::map<int, BindingSignal*> 
 
 void Linker::linkIncoming(Activation* act, Activation* excludedInputAct) {
     for (auto& s : act->getNeuron()->getInputSynapsesAsStream()) {
-        std::set<int> bsKeys;
-        for (const auto& pair : act->getBindingSignals()) {
-            bsKeys.insert(pair.first);
-        }
 //        if (static_cast<SynapseType*>(s->getType())->isIncomingLinkingCandidate(bsKeys)) {
             linkIncoming(act, s, excludedInputAct);
 //        }
@@ -149,18 +145,35 @@ void Linker::linkIncoming(Activation* act, Activation* excludedInputAct) {
 }
 
 void Linker::linkIncoming(Activation* act, Synapse* targetSyn, Activation* excludedInputAct) {
-    for (auto& iAct : collectLinkingTargets(act->getBindingSignals(), targetSyn->getInput(act->getModel()))) {
+    // Get the output activation's binding signals and transition them backward through the synapse
+    std::map<int, BindingSignal*> outputBindingSignals = act->getBindingSignals();
+    std::map<int, BindingSignal*> inputBindingSignals = targetSyn->transitionBackward(outputBindingSignals);
+    
+    // Find input activations that match the transitioned binding signals
+    for (auto& iAct : collectLinkingTargets(inputBindingSignals, targetSyn->getInput(act->getModel()))) {
         if (iAct != excludedInputAct) {
-            targetSyn->createLink(iAct, act);
+            // Verify no binding signal conflicts before creating the link
+            std::map<int, BindingSignal*> forwardTransitioned = targetSyn->transitionForward(iAct->getBindingSignals());
+            if (matchBindingSignals(act, forwardTransitioned)) {
+                targetSyn->createLink(iAct, act);
+            }
         }
     }
 }
 
 void Linker::linkOutgoing(Activation* act, Synapse* targetSyn) {
-    std::set<Activation*> targets = collectLinkingTargets(act->getBindingSignals(), targetSyn->getOutput(act->getModel()));
+    // Transition the input activation's binding signals forward through the synapse
+    std::map<int, BindingSignal*> inputBindingSignals = act->getBindingSignals();
+    std::map<int, BindingSignal*> outputBindingSignals = targetSyn->transitionForward(inputBindingSignals);
+    
+    // Find output activations that match the transitioned binding signals
+    std::set<Activation*> targets = collectLinkingTargets(outputBindingSignals, targetSyn->getOutput(act->getModel()));
 
     for (auto& targetAct : targets) {
-        targetSyn->createLink(act, targetAct);
+        // Verify no binding signal conflicts before creating the link
+        if (matchBindingSignals(targetAct, outputBindingSignals)) {
+            targetSyn->createLink(act, targetAct);
+        }
     }
 
     if (targets.empty() && targetSyn->isPropagable()) {
