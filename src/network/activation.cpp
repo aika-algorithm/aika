@@ -8,6 +8,7 @@
 #include "network/context.h"
 #include "network/fired.h"
 #include "network/link.h"
+#include "network/linker.h"
 #include "network/binding_signal.h"
 #include <cassert>
 #include <stdexcept>
@@ -235,17 +236,8 @@ std::string Activation::toKeyString() const {
 }
 
 void Activation::propagate(Synapse* targetSyn) {
-    // Get transitioned binding signals from synapse
-    std::map<int, BindingSignal*> bindingSignals = targetSyn->transitionForward(getBindingSignals());
-    
-    // Create output activation on the target synapse's output neuron
-    Activation* oAct = targetSyn->getOutput(getModel())->createActivation(nullptr, getContext(), bindingSignals);
-    
-    // Create link between this activation and the output activation
-    targetSyn->createLink(this, bindingSignals, oAct);
-    
-    // Link the incoming activation to the output activation
-    oAct->linkIncoming(this);
+    // Delegate to the static Linker::propagate method to avoid code duplication
+    Linker::propagate(this, targetSyn);
 }
 
 void Activation::linkIncoming(Activation* inputAct) {

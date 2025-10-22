@@ -48,7 +48,6 @@ void Linker::linkLatent(Activation* firstInputAct) {
             // optionally realize an output link here using only (a1, s1).
             continue;
         }
-
         Neuron* secondInputNeuron = secondSynapse->getInput(model);
 
         // Backward transition over the paired synapse (beta2)
