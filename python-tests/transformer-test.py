@@ -95,7 +95,7 @@ class TransformerTestCase(unittest.TestCase):
         
         # Test type names
         self.assertEqual(str(self.transformer_types.T_STANDARD_NEURON), "STANDARD_NEURON")
-        self.assertEqual(str(self.transformer_types.T_STANDARD_ACTIVATION), "STANDARD_ACTIVATION")
+        self.assertEqual(str(self.transformer_types.T_STANDARD_ACTIVATION), "STANDARD_NEURON")
         
         # The hierarchy setup was performed during initialization
         # We trust that addParent() calls worked correctly
@@ -105,67 +105,67 @@ class TransformerTestCase(unittest.TestCase):
         print("Testing synapse relationships...")
         
         # Test S_EMB_KEY: EMB -> KEY
-        self.assertEqual(str(self.transformer_types.S_EMB_KEY.getInput()), "EMB_NEURON")
-        self.assertEqual(str(self.transformer_types.S_EMB_KEY.getOutput()), "KEY_NEURON")
+        self.assertEqual(str(self.transformer_types.S_EMB_KEY.getInputType()), "EMB_NEURON")
+        self.assertEqual(str(self.transformer_types.S_EMB_KEY.getOutputType()), "KEY_NEURON")
         
         # Test S_EMB_QUERY: EMB -> QUERY
-        self.assertEqual(str(self.transformer_types.S_EMB_QUERY.getInput()), "EMB_NEURON")
-        self.assertEqual(str(self.transformer_types.S_EMB_QUERY.getOutput()), "QUERY_NEURON")
+        self.assertEqual(str(self.transformer_types.S_EMB_QUERY.getInputType()), "EMB_NEURON")
+        self.assertEqual(str(self.transformer_types.S_EMB_QUERY.getOutputType()), "QUERY_NEURON")
         
         # Test S_KEY_QUERY: KEY -> QUERY
-        self.assertEqual(str(self.transformer_types.S_KEY_QUERY.getInput()), "KEY_NEURON")
-        self.assertEqual(str(self.transformer_types.S_KEY_QUERY.getOutput()), "QUERY_NEURON")
+        self.assertEqual(str(self.transformer_types.S_KEY_QUERY.getInputType()), "KEY_NEURON")
+        self.assertEqual(str(self.transformer_types.S_KEY_QUERY.getOutputType()), "QUERY_NEURON")
         
         # Test S_QUERY_INHIB: QUERY -> INHIB
-        self.assertEqual(str(self.transformer_types.S_QUERY_INHIB.getInput()), "QUERY_NEURON")
-        self.assertEqual(str(self.transformer_types.S_QUERY_INHIB.getOutput()), "INHIB_NEURON")
+        self.assertEqual(str(self.transformer_types.S_QUERY_INHIB.getInputType()), "QUERY_NEURON")
+        self.assertEqual(str(self.transformer_types.S_QUERY_INHIB.getOutputType()), "INHIB_NEURON")
         
         # Test S_INHIB_VALUE: INHIB -> VALUE
-        self.assertEqual(str(self.transformer_types.S_INHIB_VALUE.getInput()), "INHIB_NEURON")
-        self.assertEqual(str(self.transformer_types.S_INHIB_VALUE.getOutput()), "VALUE_NEURON")
+        self.assertEqual(str(self.transformer_types.S_INHIB_VALUE.getInputType()), "INHIB_NEURON")
+        self.assertEqual(str(self.transformer_types.S_INHIB_VALUE.getOutputType()), "VALUE_NEURON")
         
         # Test S_EMB_VALUE: EMB -> VALUE
-        self.assertEqual(str(self.transformer_types.S_EMB_VALUE.getInput()), "EMB_NEURON")
-        self.assertEqual(str(self.transformer_types.S_EMB_VALUE.getOutput()), "VALUE_NEURON")
+        self.assertEqual(str(self.transformer_types.S_EMB_VALUE.getInputType()), "EMB_NEURON")
+        self.assertEqual(str(self.transformer_types.S_EMB_VALUE.getOutputType()), "VALUE_NEURON")
         
     def test_link_relationships(self):
         """Test that link input/output relationships are correct."""
         print("Testing link relationships...")
         
         # Test L_EMB_KEY: EMB_ACT -> KEY_ACT
-        self.assertEqual(str(self.transformer_types.L_EMB_KEY.getInput()), "EMB_ACTIVATION")
-        self.assertEqual(str(self.transformer_types.L_EMB_KEY.getOutput()), "KEY_ACTIVATION")
+        self.assertEqual(str(self.transformer_types.L_EMB_KEY.getInputType()), "EMB_NEURON")
+        self.assertEqual(str(self.transformer_types.L_EMB_KEY.getOutputType()), "KEY_NEURON")
         
         # Test L_EMB_QUERY: EMB_ACT -> QUERY_ACT
-        self.assertEqual(str(self.transformer_types.L_EMB_QUERY.getInput()), "EMB_ACTIVATION")
-        self.assertEqual(str(self.transformer_types.L_EMB_QUERY.getOutput()), "QUERY_ACTIVATION")
+        self.assertEqual(str(self.transformer_types.L_EMB_QUERY.getInputType()), "EMB_NEURON")
+        self.assertEqual(str(self.transformer_types.L_EMB_QUERY.getOutputType()), "QUERY_NEURON")
         
         # Test L_KEY_QUERY: KEY_ACT -> QUERY_ACT
-        self.assertEqual(str(self.transformer_types.L_KEY_QUERY.getInput()), "KEY_ACTIVATION")
-        self.assertEqual(str(self.transformer_types.L_KEY_QUERY.getOutput()), "QUERY_ACTIVATION")
+        self.assertEqual(str(self.transformer_types.L_KEY_QUERY.getInputType()), "KEY_NEURON")
+        self.assertEqual(str(self.transformer_types.L_KEY_QUERY.getOutputType()), "QUERY_NEURON")
         
         # Test L_QUERY_INHIB: QUERY_ACT -> INHIB_ACT
-        self.assertEqual(str(self.transformer_types.L_QUERY_INHIB.getInput()), "QUERY_ACTIVATION")
-        self.assertEqual(str(self.transformer_types.L_QUERY_INHIB.getOutput()), "INHIB_ACTIVATION")
+        self.assertEqual(str(self.transformer_types.L_QUERY_INHIB.getInputType()), "QUERY_NEURON")
+        self.assertEqual(str(self.transformer_types.L_QUERY_INHIB.getOutputType()), "INHIB_NEURON")
         
         # Test L_INHIB_VALUE: INHIB_ACT -> VALUE_ACT
-        self.assertEqual(str(self.transformer_types.L_INHIB_VALUE.getInput()), "INHIB_ACTIVATION")
-        self.assertEqual(str(self.transformer_types.L_INHIB_VALUE.getOutput()), "VALUE_ACTIVATION")
+        self.assertEqual(str(self.transformer_types.L_INHIB_VALUE.getInputType()), "INHIB_NEURON")
+        self.assertEqual(str(self.transformer_types.L_INHIB_VALUE.getOutputType()), "VALUE_NEURON")
         
         # Test L_EMB_VALUE: EMB_ACT -> VALUE_ACT
-        self.assertEqual(str(self.transformer_types.L_EMB_VALUE.getInput()), "EMB_ACTIVATION")
-        self.assertEqual(str(self.transformer_types.L_EMB_VALUE.getOutput()), "VALUE_ACTIVATION")
+        self.assertEqual(str(self.transformer_types.L_EMB_VALUE.getInputType()), "EMB_NEURON")
+        self.assertEqual(str(self.transformer_types.L_EMB_VALUE.getOutputType()), "VALUE_NEURON")
         
     def test_neuron_activation_relationships(self):
         """Test that neuron-activation relationships are correct."""
         print("Testing neuron-activation relationships...")
         
         # Test that each neuron type has correct activation type
-        self.assertEqual(str(self.transformer_types.T_EMB.getActivation()), "EMB_ACTIVATION")
-        self.assertEqual(str(self.transformer_types.T_KEY.getActivation()), "KEY_ACTIVATION")
-        self.assertEqual(str(self.transformer_types.T_QUERY.getActivation()), "QUERY_ACTIVATION")
-        self.assertEqual(str(self.transformer_types.T_INHIB.getActivation()), "INHIB_ACTIVATION")
-        self.assertEqual(str(self.transformer_types.T_VALUE.getActivation()), "VALUE_ACTIVATION")
+        self.assertEqual(str(self.transformer_types.T_EMB.getActivationType()), "EMB_NEURON")
+        self.assertEqual(str(self.transformer_types.T_KEY.getActivationType()), "KEY_NEURON")
+        self.assertEqual(str(self.transformer_types.T_QUERY.getActivationType()), "QUERY_NEURON")
+        self.assertEqual(str(self.transformer_types.T_INHIB.getActivationType()), "INHIB_NEURON")
+        self.assertEqual(str(self.transformer_types.T_VALUE.getActivationType()), "VALUE_NEURON")
         
     def test_link_synapse_relationships(self):
         """Test that link-synapse relationships are correct."""
@@ -173,12 +173,12 @@ class TransformerTestCase(unittest.TestCase):
         
         # Test that each link type has correct synapse type
         # Note: toString includes class prefix, so we check contains
-        self.assertIn("S_EMB_KEY", str(self.transformer_types.L_EMB_KEY.getSynapse()))
-        self.assertIn("S_EMB_QUERY", str(self.transformer_types.L_EMB_QUERY.getSynapse()))
-        self.assertIn("S_KEY_QUERY", str(self.transformer_types.L_KEY_QUERY.getSynapse()))
-        self.assertIn("S_QUERY_INHIB", str(self.transformer_types.L_QUERY_INHIB.getSynapse()))
-        self.assertIn("S_INHIB_VALUE", str(self.transformer_types.L_INHIB_VALUE.getSynapse()))
-        self.assertIn("S_EMB_VALUE", str(self.transformer_types.L_EMB_VALUE.getSynapse()))
+        self.assertIn("S_EMB_KEY", str(self.transformer_types.L_EMB_KEY.getSynapseType()))
+        self.assertIn("S_EMB_QUERY", str(self.transformer_types.L_EMB_QUERY.getSynapseType()))
+        self.assertIn("S_KEY_QUERY", str(self.transformer_types.L_KEY_QUERY.getSynapseType()))
+        self.assertIn("S_QUERY_INHIB", str(self.transformer_types.L_QUERY_INHIB.getSynapseType()))
+        self.assertIn("S_INHIB_VALUE", str(self.transformer_types.L_INHIB_VALUE.getSynapseType()))
+        self.assertIn("S_EMB_VALUE", str(self.transformer_types.L_EMB_VALUE.getSynapseType()))
         
     def test_static_relations(self):
         """Test that static relations are properly initialized."""
@@ -236,33 +236,33 @@ class TransformerTestCase(unittest.TestCase):
         # Verify the complete path exists
         # EMB -> KEY (via S_EMB_KEY)
         emb_to_key = self.transformer_types.S_EMB_KEY
-        self.assertEqual(str(emb_to_key.getInput()), "EMB_NEURON")
-        self.assertEqual(str(emb_to_key.getOutput()), "KEY_NEURON")
+        self.assertEqual(str(emb_to_key.getInputType()), "EMB_NEURON")
+        self.assertEqual(str(emb_to_key.getOutputType()), "KEY_NEURON")
         
         # EMB -> QUERY (via S_EMB_QUERY)
         emb_to_query = self.transformer_types.S_EMB_QUERY
-        self.assertEqual(str(emb_to_query.getInput()), "EMB_NEURON")
-        self.assertEqual(str(emb_to_query.getOutput()), "QUERY_NEURON")
+        self.assertEqual(str(emb_to_query.getInputType()), "EMB_NEURON")
+        self.assertEqual(str(emb_to_query.getOutputType()), "QUERY_NEURON")
         
         # KEY -> QUERY (via S_KEY_QUERY)
         key_to_query = self.transformer_types.S_KEY_QUERY
-        self.assertEqual(str(key_to_query.getInput()), "KEY_NEURON")
-        self.assertEqual(str(key_to_query.getOutput()), "QUERY_NEURON")
+        self.assertEqual(str(key_to_query.getInputType()), "KEY_NEURON")
+        self.assertEqual(str(key_to_query.getOutputType()), "QUERY_NEURON")
         
         # QUERY -> INHIB (via S_QUERY_INHIB)
         query_to_inhib = self.transformer_types.S_QUERY_INHIB
-        self.assertEqual(str(query_to_inhib.getInput()), "QUERY_NEURON")
-        self.assertEqual(str(query_to_inhib.getOutput()), "INHIB_NEURON")
+        self.assertEqual(str(query_to_inhib.getInputType()), "QUERY_NEURON")
+        self.assertEqual(str(query_to_inhib.getOutputType()), "INHIB_NEURON")
         
         # INHIB -> VALUE (via S_INHIB_VALUE)
         inhib_to_value = self.transformer_types.S_INHIB_VALUE
-        self.assertEqual(str(inhib_to_value.getInput()), "INHIB_NEURON")
-        self.assertEqual(str(inhib_to_value.getOutput()), "VALUE_NEURON")
+        self.assertEqual(str(inhib_to_value.getInputType()), "INHIB_NEURON")
+        self.assertEqual(str(inhib_to_value.getOutputType()), "VALUE_NEURON")
         
         # EMB -> VALUE (direct path via S_EMB_VALUE)
         emb_to_value = self.transformer_types.S_EMB_VALUE
-        self.assertEqual(str(emb_to_value.getInput()), "EMB_NEURON")
-        self.assertEqual(str(emb_to_value.getOutput()), "VALUE_NEURON")
+        self.assertEqual(str(emb_to_value.getInputType()), "EMB_NEURON")
+        self.assertEqual(str(emb_to_value.getOutputType()), "VALUE_NEURON")
         
     def test_type_registry_functionality(self):
         """Test that type registry functionality works."""
@@ -299,8 +299,8 @@ class TransformerTestCase(unittest.TestCase):
 
     # Debug: Check synapse type first
         print(f"S_EMB_KEY type: {self.transformer_types.S_EMB_KEY}")
-        print(f"S_EMB_KEY input: {self.transformer_types.S_EMB_KEY.getInput()}")
-        print(f"S_EMB_KEY output: {self.transformer_types.S_EMB_KEY.getOutput()}")
+        print(f"S_EMB_KEY input: {self.transformer_types.S_EMB_KEY.getInputType()}")
+        print(f"S_EMB_KEY output: {self.transformer_types.S_EMB_KEY.getOutputType()}")
 
         emb_key_synapse = self.transformer_types.S_EMB_KEY.instantiate(emb_neuron, key_neuron)
 
@@ -313,7 +313,7 @@ class TransformerTestCase(unittest.TestCase):
 
         doc = an.Context(model)
 
-        emb_activation = doc.addToken(doc)
+        emb_activation = doc.addToken(emb_neuron, 0, 1)
         print(f"EMB activation: {emb_activation}")
 
         # Process the document to propagate activations

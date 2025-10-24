@@ -27,17 +27,8 @@ class TransformerTypeRegistry:
     def __init__(self):
         self.registry = af.TypeRegistry()
         
-        # Initialize all builder types
-        self._setup_neuron_builders()
-        
-        # Build neuron types first (needed by synapse builders)
-        self._build_neuron_types()
-        
-        # Setup synapse builders (now that neuron types are built)
-        self._setup_synapse_builders()
-        
-        # Build the remaining implementation types
-        self._build_implementation_types()
+        # Build types following proper builder pattern
+        self._build_types()
         
         # Setup field definitions and mathematical model
         self._setup_field_definitions()
@@ -45,80 +36,80 @@ class TransformerTypeRegistry:
         # Flatten type hierarchy
         self.registry.flattenTypeHierarchy()
     
-    def _setup_neuron_builders(self):
-        """Setup neuron builder definitions: T_N = {T_EMB, T_KEY, T_QUERY, T_INHIB, T_VALUE}"""
-        self.T_EMB_BUILDER = an.NeuronTypeBuilder(self.registry, "EMB_NEURON")
-        self.T_KEY_BUILDER = an.NeuronTypeBuilder(self.registry, "KEY_NEURON")
-        self.T_QUERY_BUILDER = an.NeuronTypeBuilder(self.registry, "QUERY_NEURON")
-        self.T_INHIB_BUILDER = an.NeuronTypeBuilder(self.registry, "INHIB_NEURON")
-        self.T_VALUE_BUILDER = an.NeuronTypeBuilder(self.registry, "VALUE_NEURON")
-    
-    def _setup_synapse_builders(self):
-        """Setup synapse builder definitions: T_S"""
-        # Synapse builders according to transformer specification
-        self.S_EMB_KEY_BUILDER = an.SynapseTypeBuilder(self.registry, "S_EMB_KEY")
-        self.S_EMB_QUERY_BUILDER = an.SynapseTypeBuilder(self.registry, "S_EMB_QUERY")
-        self.S_KEY_QUERY_BUILDER = an.SynapseTypeBuilder(self.registry, "S_KEY_QUERY")
-        self.S_QUERY_INHIB_BUILDER = an.SynapseTypeBuilder(self.registry, "S_QUERY_INHIB")
-        self.S_INHIB_VALUE_BUILDER = an.SynapseTypeBuilder(self.registry, "S_INHIB_VALUE")
-        self.S_EMB_VALUE_BUILDER = an.SynapseTypeBuilder(self.registry, "S_EMB_VALUE")
+    def _build_types(self):
+        """Build all types following proper builder pattern"""
+        print("Building types...")
         
-        # Set input/output neuron type relationships
-        self.S_EMB_KEY_BUILDER.setInput(self.T_EMB_BUILDER).setOutput(self.T_KEY_BUILDER)
-        self.S_EMB_QUERY_BUILDER.setInput(self.T_EMB_BUILDER).setOutput(self.T_QUERY_BUILDER)
-        self.S_KEY_QUERY_BUILDER.setInput(self.T_KEY_BUILDER).setOutput(self.T_QUERY_BUILDER)
-        self.S_QUERY_INHIB_BUILDER.setInput(self.T_QUERY_BUILDER).setOutput(self.T_INHIB_BUILDER)
-        self.S_INHIB_VALUE_BUILDER.setInput(self.T_INHIB_BUILDER).setOutput(self.T_VALUE_BUILDER)
-        self.S_EMB_VALUE_BUILDER.setInput(self.T_EMB).setOutput(self.T_VALUE)
-    
-    def _build_neuron_types(self):
-        """Build neuron types first (needed by synapse builders)"""
-        print("Building neuron types...")
+        # ========================================
+        # BUILD NEURON AND ACTIVATION TYPES FIRST
+        # ========================================
         
-        # Build neuron types
-        self.T_EMB = self.T_EMB_BUILDER.build()
-        self.T_KEY = self.T_KEY_BUILDER.build()
-        self.T_QUERY = self.T_QUERY_BUILDER.build()
-        self.T_INHIB = self.T_INHIB_BUILDER.build()
-        self.T_VALUE = self.T_VALUE_BUILDER.build()
-        
-        print("Neuron types built successfully")
-    
-    def _build_implementation_types(self):
-        """Build the actual implementation types from builders"""
-        print("Building implementation types from builders...")
-        
-        # Build neuron types
-        self.T_EMB = self.T_EMB_BUILDER.build()
-        self.T_KEY = self.T_KEY_BUILDER.build()
-        self.T_QUERY = self.T_QUERY_BUILDER.build()
-        self.T_INHIB = self.T_INHIB_BUILDER.build()
-        self.T_VALUE = self.T_VALUE_BUILDER.build()
-        
-        # Activation types are built automatically by NeuronTypeBuilder
+        # Build T_EMB (embedding neuron and activation)
+        emb_builder = an.NeuronTypeBuilder(self.registry, "EMB_NEURON")
+        self.T_EMB = emb_builder.build()
         self.T_EMB_ACT = self.T_EMB.getActivationType()
+        
+        # Build T_KEY (key neuron and activation)
+        key_builder = an.NeuronTypeBuilder(self.registry, "KEY_NEURON")
+        self.T_KEY = key_builder.build()
         self.T_KEY_ACT = self.T_KEY.getActivationType()
+        
+        # Build T_QUERY (query neuron and activation)
+        query_builder = an.NeuronTypeBuilder(self.registry, "QUERY_NEURON")
+        self.T_QUERY = query_builder.build()
         self.T_QUERY_ACT = self.T_QUERY.getActivationType()
+        
+        # Build T_INHIB (inhibition neuron and activation)
+        inhib_builder = an.NeuronTypeBuilder(self.registry, "INHIB_NEURON")
+        self.T_INHIB = inhib_builder.build()
         self.T_INHIB_ACT = self.T_INHIB.getActivationType()
+        
+        # Build T_VALUE (value neuron and activation)
+        value_builder = an.NeuronTypeBuilder(self.registry, "VALUE_NEURON")
+        self.T_VALUE = value_builder.build()
         self.T_VALUE_ACT = self.T_VALUE.getActivationType()
         
-        # Build synapse types
-        self.S_EMB_KEY = self.S_EMB_KEY_BUILDER.build()
-        self.S_EMB_QUERY = self.S_EMB_QUERY_BUILDER.build()
-        self.S_KEY_QUERY = self.S_KEY_QUERY_BUILDER.build()
-        self.S_QUERY_INHIB = self.S_QUERY_INHIB_BUILDER.build()
-        self.S_INHIB_VALUE = self.S_INHIB_VALUE_BUILDER.build()
-        self.S_EMB_VALUE = self.S_EMB_VALUE_BUILDER.build()
+        # ========================================
+        # BUILD SYNAPSE AND LINK TYPES SECOND
+        # ========================================
         
-        # Link types are built automatically by SynapseTypeBuilder
+        # Build S_EMB_KEY (embedding to key synapse and link)
+        emb_key_builder = an.SynapseTypeBuilder(self.registry, "S_EMB_KEY")
+        emb_key_builder.setInput(self.T_EMB).setOutput(self.T_KEY)
+        self.S_EMB_KEY = emb_key_builder.build()
         self.L_EMB_KEY = self.S_EMB_KEY.getLinkType()
+        
+        # Build S_EMB_QUERY (embedding to query synapse and link)
+        emb_query_builder = an.SynapseTypeBuilder(self.registry, "S_EMB_QUERY")
+        emb_query_builder.setInput(self.T_EMB).setOutput(self.T_QUERY)
+        self.S_EMB_QUERY = emb_query_builder.build()
         self.L_EMB_QUERY = self.S_EMB_QUERY.getLinkType()
+        
+        # Build S_KEY_QUERY (key to query synapse and link)
+        key_query_builder = an.SynapseTypeBuilder(self.registry, "S_KEY_QUERY")
+        key_query_builder.setInput(self.T_KEY).setOutput(self.T_QUERY)
+        self.S_KEY_QUERY = key_query_builder.build()
         self.L_KEY_QUERY = self.S_KEY_QUERY.getLinkType()
+        
+        # Build S_QUERY_INHIB (query to inhibition synapse and link)
+        query_inhib_builder = an.SynapseTypeBuilder(self.registry, "S_QUERY_INHIB")
+        query_inhib_builder.setInput(self.T_QUERY).setOutput(self.T_INHIB)
+        self.S_QUERY_INHIB = query_inhib_builder.build()
         self.L_QUERY_INHIB = self.S_QUERY_INHIB.getLinkType()
+        
+        # Build S_INHIB_VALUE (inhibition to value synapse and link)
+        inhib_value_builder = an.SynapseTypeBuilder(self.registry, "S_INHIB_VALUE")
+        inhib_value_builder.setInput(self.T_INHIB).setOutput(self.T_VALUE)
+        self.S_INHIB_VALUE = inhib_value_builder.build()
         self.L_INHIB_VALUE = self.S_INHIB_VALUE.getLinkType()
+        
+        # Build S_EMB_VALUE (embedding to value synapse and link)
+        emb_value_builder = an.SynapseTypeBuilder(self.registry, "S_EMB_VALUE")
+        emb_value_builder.setInput(self.T_EMB).setOutput(self.T_VALUE)
+        self.S_EMB_VALUE = emb_value_builder.build()
         self.L_EMB_VALUE = self.S_EMB_VALUE.getLinkType()
         
-        print("Implementation types built successfully")
+        print("Types built successfully")
     
     def _setup_field_definitions(self):
         """Setup field definitions using type hierarchy according to the transformer specification."""
@@ -129,17 +120,17 @@ class TransformerTypeRegistry:
         # BASE TYPE DEFINITIONS (ROOT TYPES)
         # ========================================
         
-        # Create builders for base types
-        print("Creating T_STANDARD_NEURON builder...")
-        self.T_STANDARD_NEURON_BUILDER = an.NeuronTypeBuilder(self.registry, "STANDARD_NEURON")
-        self.T_STANDARD_SYNAPSE_BUILDER = an.SynapseTypeBuilder(self.registry, "STANDARD_SYNAPSE")
-
-        # Build base implementation types
-        self.T_STANDARD_NEURON = self.T_STANDARD_NEURON_BUILDER.build()
-        self.T_STANDARD_SYNAPSE = self.T_STANDARD_SYNAPSE_BUILDER.build()
+        # Build base standard types using proper builder pattern
+        print("Creating standard types...")
         
-        # Get derived types from builders
+        # Build T_STANDARD_NEURON and activation
+        standard_neuron_builder = an.NeuronTypeBuilder(self.registry, "STANDARD_NEURON")
+        self.T_STANDARD_NEURON = standard_neuron_builder.build()
         self.T_STANDARD_ACTIVATION = self.T_STANDARD_NEURON.getActivationType()
+        
+        # Build T_STANDARD_SYNAPSE and link
+        standard_synapse_builder = an.SynapseTypeBuilder(self.registry, "STANDARD_SYNAPSE")
+        self.T_STANDARD_SYNAPSE = standard_synapse_builder.build()
         self.T_STANDARD_LINK = self.T_STANDARD_SYNAPSE.getLinkType()
         
         # Note: Field definitions would be set up on the built types
