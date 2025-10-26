@@ -59,10 +59,10 @@ class TransformerTypeRegistry:
         self.T_QUERY = query_builder.build()
         self.T_QUERY_ACT = self.T_QUERY.getActivationType()
         
-        # Build T_INHIB (inhibition neuron and activation)
-        inhib_builder = an.NeuronTypeBuilder(self.registry, "INHIB_NEURON")
-        self.T_INHIB = inhib_builder.build()
-        self.T_INHIB_ACT = self.T_INHIB.getActivationType()
+        # Build T_SOFTMAX (softmax neuron and activation)
+        softmax_builder = an.NeuronTypeBuilder(self.registry, "SOFTMAX_NEURON")
+        self.T_SOFTMAX = softmax_builder.build()
+        self.T_SOFTMAX_ACT = self.T_SOFTMAX.getActivationType()
         
         # Build T_VALUE (value neuron and activation)
         value_builder = an.NeuronTypeBuilder(self.registry, "VALUE_NEURON")
@@ -91,17 +91,17 @@ class TransformerTypeRegistry:
         self.S_KEY_QUERY = key_query_builder.build()
         self.L_KEY_QUERY = self.S_KEY_QUERY.getLinkType()
         
-        # Build S_QUERY_INHIB (query to inhibition synapse and link)
-        query_inhib_builder = an.SynapseTypeBuilder(self.registry, "S_QUERY_INHIB")
-        query_inhib_builder.setInput(self.T_QUERY).setOutput(self.T_INHIB)
-        self.S_QUERY_INHIB = query_inhib_builder.build()
-        self.L_QUERY_INHIB = self.S_QUERY_INHIB.getLinkType()
+        # Build S_QUERY_SOFTMAX (query to softmax synapse and link)
+        query_softmax_builder = an.SynapseTypeBuilder(self.registry, "S_QUERY_SOFTMAX")
+        query_softmax_builder.setInput(self.T_QUERY).setOutput(self.T_SOFTMAX)
+        self.S_QUERY_SOFTMAX = query_softmax_builder.build()
+        self.L_QUERY_SOFTMAX = self.S_QUERY_SOFTMAX.getLinkType()
         
-        # Build S_INHIB_VALUE (inhibition to value synapse and link)
-        inhib_value_builder = an.SynapseTypeBuilder(self.registry, "S_INHIB_VALUE")
-        inhib_value_builder.setInput(self.T_INHIB).setOutput(self.T_VALUE)
-        self.S_INHIB_VALUE = inhib_value_builder.build()
-        self.L_INHIB_VALUE = self.S_INHIB_VALUE.getLinkType()
+        # Build S_SOFTMAX_VALUE (softmax to value synapse and link)
+        softmax_value_builder = an.SynapseTypeBuilder(self.registry, "S_SOFTMAX_VALUE")
+        softmax_value_builder.setInput(self.T_SOFTMAX).setOutput(self.T_VALUE)
+        self.S_SOFTMAX_VALUE = softmax_value_builder.build()
+        self.L_SOFTMAX_VALUE = self.S_SOFTMAX_VALUE.getLinkType()
         
         # Build S_EMB_VALUE (embedding to value synapse and link)
         emb_value_builder = an.SynapseTypeBuilder(self.registry, "S_EMB_VALUE")
@@ -169,25 +169,25 @@ class TransformerTypeRegistry:
         self.T_QUERY_ACT.addParent(self.T_STANDARD_ACTIVATION)
         self.T_VALUE_ACT.addParent(self.T_STANDARD_ACTIVATION)
         
-        # T_INHIB_ACT is standalone (no inheritance)
+        # T_SOFTMAX_ACT is standalone (no inheritance)
         
         # All synapses inherit from standard synapse
         print("Setting synapse inheritance...")
         self.S_EMB_KEY.addParent(self.T_STANDARD_SYNAPSE)
         self.S_EMB_QUERY.addParent(self.T_STANDARD_SYNAPSE)
         self.S_KEY_QUERY.addParent(self.T_STANDARD_SYNAPSE)
-        self.S_QUERY_INHIB.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_QUERY_SOFTMAX.addParent(self.T_STANDARD_SYNAPSE)
         self.S_EMB_VALUE.addParent(self.T_STANDARD_SYNAPSE)
-        self.S_INHIB_VALUE.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_SOFTMAX_VALUE.addParent(self.T_STANDARD_SYNAPSE)
         
         # All links inherit from standard link
         print("Setting link inheritance...")
         self.L_EMB_KEY.addParent(self.T_STANDARD_LINK)
         self.L_EMB_QUERY.addParent(self.T_STANDARD_LINK)
         self.L_KEY_QUERY.addParent(self.T_STANDARD_LINK)
-        self.L_QUERY_INHIB.addParent(self.T_STANDARD_LINK)
+        self.L_QUERY_SOFTMAX.addParent(self.T_STANDARD_LINK)
         self.L_EMB_VALUE.addParent(self.T_STANDARD_LINK)
-        # L_INHIB_VALUE is standalone (has special softmax computation)
+        # L_SOFTMAX_VALUE is standalone (has special softmax computation)
         
         print("Field definitions setup complete")
         print("Type hierarchy setup complete")
