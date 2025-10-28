@@ -1,8 +1,8 @@
 """
 AIKA-Based Transformer Neural Network Type Definitions using Builder Pattern
 
-This module defines the object types (neurons, synapses, activations, links) and 
-field definitions for a minimal transformer-like architecture using the AIKA framework
+This module defines the transformer-specific object types (dot-product neurons, softmax, etc.) 
+for a minimal transformer-like architecture using the AIKA framework
 with the new builder pattern architecture.
 
 Based on the formal specification in specs/network/transformer.md
@@ -17,48 +17,40 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import aika
 import aika.fields as af
 import aika.network as an
+from python.standard_network import create_standard_network_types
 
 class TransformerTypeRegistry:
     """
-    Transformer type registry that defines all object types and their field relationships
+    Transformer type registry that defines transformer-specific object types and their field relationships
     according to the AIKA transformer specification using builder pattern.
+    
+    This builds on the standard neural network foundation.
     """
     
     def __init__(self):
-        self.registry = af.TypeRegistry()
+        # Create the standard network foundation
+        print("Setting up standard neural network foundation...")
+        self.standard_network = create_standard_network_types()
+        self.registry = self.standard_network.get_registry()
         
-        # Build types following proper builder pattern
-        self._build_types()
+        # Get standard types for inheritance
+        self.T_STANDARD_NEURON = self.standard_network.get_standard_neuron_type()
+        self.T_STANDARD_ACTIVATION = self.standard_network.get_standard_activation_type()
+        self.T_STANDARD_SYNAPSE = self.standard_network.get_standard_synapse_type()
+        self.T_STANDARD_LINK = self.standard_network.get_standard_link_type()
         
-        # Setup field definitions and mathematical model
-        self._setup_field_definitions()
+        # Build transformer-specific types
+        self._build_transformer_types()
         
-        # Flatten type hierarchy
+        # Flatten type hierarchy (includes standard + transformer types)
         self.registry.flattenTypeHierarchy()
     
-    def _build_types(self):
-        """Build all types following proper builder pattern"""
-        print("Building types...")
+    def _build_transformer_types(self):
+        """Build transformer-specific types that inherit from the standard foundation"""
+        print("Building transformer-specific types...")
         
         # ========================================
-        # BUILD BASE TYPES FIRST (FOR INHERITANCE)
-        # ========================================
-        
-        # Build base standard types first (these will be parent types)
-        print("Building base standard types...")
-        
-        # Build T_STANDARD_NEURON and activation first
-        standard_neuron_builder = an.NeuronTypeBuilder(self.registry, "STANDARD_NEURON")
-        self.T_STANDARD_NEURON = standard_neuron_builder.build()
-        self.T_STANDARD_ACTIVATION = self.T_STANDARD_NEURON.getActivationType()
-        
-        # Build T_STANDARD_SYNAPSE and link
-        standard_synapse_builder = an.SynapseTypeBuilder(self.registry, "STANDARD_SYNAPSE")
-        self.T_STANDARD_SYNAPSE = standard_synapse_builder.build()
-        self.T_STANDARD_LINK = self.T_STANDARD_SYNAPSE.getLinkType()
-        
-        # ========================================
-        # BUILD NEURON AND ACTIVATION TYPES WITH INHERITANCE
+        # BUILD TRANSFORMER NEURON TYPES
         # ========================================
         
         # Build T_EMB (embedding neuron and activation)
@@ -85,8 +77,13 @@ class TransformerTypeRegistry:
         self.T_VALUE = value_builder.build()
         self.T_VALUE_ACT = self.T_VALUE.getActivationType()
         
+        # ========================================
+        # BUILD DOT-PRODUCT FAMILY TYPES
+        # ========================================
+        
         # Build T_DOT (abstract dot-product neuron and activation)
         dot_builder = an.NeuronTypeBuilder(self.registry, "DOT_NEURON")
+        dot_builder.addParent(self.T_STANDARD_NEURON)
         self.T_DOT = dot_builder.build()
         self.T_DOT_ACT = self.T_DOT.getActivationType()
         
@@ -102,13 +99,18 @@ class TransformerTypeRegistry:
         self.T_MIX = mix_builder.build()
         self.T_MIX_ACT = self.T_MIX.getActivationType()
         
+        # ========================================
+        # BUILD SOFTMAX TYPE
+        # ========================================
+        
         # Build T_SOFTMAX (softmax neuron and activation)
         softmax_builder = an.NeuronTypeBuilder(self.registry, "SOFTMAX_NEURON")
+        softmax_builder.addParent(self.T_STANDARD_NEURON)
         self.T_SOFTMAX = softmax_builder.build()
         self.T_SOFTMAX_ACT = self.T_SOFTMAX.getActivationType()
         
         # ========================================
-        # BUILD SYNAPSE AND LINK TYPES WITH INHERITANCE
+        # BUILD TRANSFORMER SYNAPSE TYPES
         # ========================================
         
         # Build S_EMB_KEY (embedding to key synapse and link)
@@ -134,6 +136,10 @@ class TransformerTypeRegistry:
         key_query_builder.setInput(self.T_KEY).setOutput(self.T_QUERY).addParent(self.T_STANDARD_SYNAPSE)
         self.S_KEY_QUERY = key_query_builder.build()
         self.L_KEY_QUERY = self.S_KEY_QUERY.getLinkType()
+        
+        # ========================================
+        # BUILD DOT-PRODUCT SYNAPSE TYPES
+        # ========================================
         
         # Build S_KEY_COMP (key to comparison synapse and link)
         key_comp_builder = an.SynapseTypeBuilder(self.registry, "S_KEY_COMP")
@@ -171,36 +177,15 @@ class TransformerTypeRegistry:
         self.S_MIX_SOFTMAX = mix_softmax_builder.build()
         self.L_MIX_SOFTMAX = self.S_MIX_SOFTMAX.getLinkType()
         
-        print("Types built successfully")
-    
-    def _setup_field_definitions(self):
-        """Setup field definitions using the standard types that were built with proper inheritance."""
-        
-        print("Starting field definitions setup...")
-        
-        # Field definitions are already set up on the standard types that were created during build
-        # All inheritance is now handled by the builders during the build phase
-        
-        # Define fields on the standard base types (these will be inherited)
-        bias_field = self.T_STANDARD_NEURON.inputField("bias")
-        
-        # Standard activation fields:
-        net_field = self.T_STANDARD_ACTIVATION.sum("net")
-        tanh_func = af.TanhActivationFunction()
-        value_field = self.T_STANDARD_ACTIVATION.fieldActivationFunc("value", tanh_func, 0.001)
-        fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
-
-        # Standard synapse weight field
-        weight_field = self.T_STANDARD_SYNAPSE.inputField("weight")
-
-        # Standard link weighted input
-        weighted_input = self.T_STANDARD_LINK.mul("weightedInput")
-        
-        print("Field definitions setup complete")
+        print("Transformer-specific types built successfully")
     
     def get_registry(self):
-        """Return the type registry"""
+        """Return the type registry (includes both standard and transformer types)"""
         return self.registry
+    
+    def get_standard_network(self):
+        """Return the underlying standard network foundation"""
+        return self.standard_network
 
 def create_transformer_types():
     """Factory function to create and return the transformer type registry"""
