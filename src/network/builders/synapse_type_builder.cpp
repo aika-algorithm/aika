@@ -6,7 +6,7 @@
 
 SynapseTypeBuilder::SynapseTypeBuilder(TypeRegistry* registry, const std::string& name)
     : registry(registry), name(name), inputType(nullptr), outputType(nullptr), linkType(nullptr),
-      pairedSynapseType(nullptr), builtInstance(nullptr), isBuilt(false) {
+      pairedSynapseType(nullptr), parentTypes(), builtInstance(nullptr), isBuilt(false) {
 }
 
 SynapseTypeBuilder::~SynapseTypeBuilder() {
@@ -55,6 +55,17 @@ std::vector<Transition*> SynapseTypeBuilder::getTransitions() const {
     return transitions;
 }
 
+SynapseTypeBuilder& SynapseTypeBuilder::addParent(SynapseType* parentType) {
+    if (parentType && !isBuilt) {
+        parentTypes.push_back(parentType);
+    }
+    return *this;
+}
+
+std::vector<SynapseType*> SynapseTypeBuilder::getParents() const {
+    return parentTypes;
+}
+
 SynapseType* SynapseTypeBuilder::build() {
     if (isBuilt) {
         return builtInstance;
@@ -84,6 +95,12 @@ SynapseType* SynapseTypeBuilder::build() {
     
     if (!transitions.empty()) {
         builtInstance->setTransitions(transitions);
+    }
+
+    // Set up inheritance hierarchy
+    for (SynapseType* parentType : parentTypes) {
+        builtInstance->addParent(parentType);
+        linkType->addParent(parentType->getLinkType());
     }
 
     isBuilt = true;

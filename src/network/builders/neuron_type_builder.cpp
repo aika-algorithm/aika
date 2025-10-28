@@ -5,7 +5,7 @@
 
 
 NeuronTypeBuilder::NeuronTypeBuilder(TypeRegistry* registry, const std::string& name)
-    : registry(registry), name(name), activationType(nullptr), builtInstance(nullptr), isBuilt(false) {
+    : registry(registry), name(name), activationType(nullptr), builtInstance(nullptr), parentTypes(), isBuilt(false) {
 }
 
 NeuronTypeBuilder::~NeuronTypeBuilder() {
@@ -14,6 +14,17 @@ NeuronTypeBuilder::~NeuronTypeBuilder() {
 
 std::string NeuronTypeBuilder::getName() const {
     return name;
+}
+
+NeuronTypeBuilder& NeuronTypeBuilder::addParent(NeuronType* parentType) {
+    if (parentType && !isBuilt) {
+        parentTypes.push_back(parentType);
+    }
+    return *this;
+}
+
+std::vector<NeuronType*> NeuronTypeBuilder::getParents() const {
+    return parentTypes;
 }
 
 NeuronType* NeuronTypeBuilder::build() {
@@ -26,6 +37,12 @@ NeuronType* NeuronTypeBuilder::build() {
 
     builtInstance->setActivationType(activationType);
     activationType->setNeuronType(builtInstance);
+    
+    // Set up inheritance hierarchy
+    for (NeuronType* parentType : parentTypes) {
+        builtInstance->addParent(parentType);
+        activationType->addParent(parentType->getActivationType());
+    }
     
     isBuilt = true;
     return builtInstance;

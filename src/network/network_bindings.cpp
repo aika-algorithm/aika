@@ -169,7 +169,6 @@ void bind_network(py::module_& m) {
         .def("getRelations", &NeuronType::getRelations)
         .def("instantiate", &NeuronType::instantiate, py::return_value_policy::reference_internal)
         .def("getActivationType", &NeuronType::getActivationType, py::return_value_policy::reference_internal)
-        .def("setActivationType", &NeuronType::setActivationType, py::return_value_policy::reference_internal)
         .def("__str__", [](const NeuronType& nd) {
             return nd.toString();
         })
@@ -248,11 +247,8 @@ void bind_network(py::module_& m) {
         .def("getRelations", &LinkType::getRelations, py::return_value_policy::reference_internal)
         .def("instantiate", &LinkType::instantiate, py::return_value_policy::reference_internal)
         .def("getSynapseType", &LinkType::getSynapseType, py::return_value_policy::reference_internal)
-        .def("setSynapseType", &LinkType::setSynapseType, py::return_value_policy::reference_internal)
         .def("getInputType", &LinkType::getInputType, py::return_value_policy::reference_internal)
-        .def("setInputType", &LinkType::setInputType, py::return_value_policy::reference_internal)
         .def("getOutputType", &LinkType::getOutputType, py::return_value_policy::reference_internal)
-        .def("setOutputType", &LinkType::setOutputType, py::return_value_policy::reference_internal)
         .def("__str__", [](const LinkType& ld) {
             return ld.toString();
         })
@@ -271,17 +267,11 @@ void bind_network(py::module_& m) {
         .def("instantiate", py::overload_cast<>(&SynapseType::instantiate), py::return_value_policy::reference_internal)
         .def("instantiate", py::overload_cast<Neuron*, Neuron*>(&SynapseType::instantiate), py::return_value_policy::reference_internal)
         .def("getInputType", &SynapseType::getInputType, py::return_value_policy::reference_internal)
-        .def("setInputType", &SynapseType::setInputType, py::return_value_policy::reference_internal)
         .def("getOutputType", &SynapseType::getOutputType, py::return_value_policy::reference_internal)
-        .def("setOutputType", &SynapseType::setOutputType, py::return_value_policy::reference_internal)
         .def("getLinkType", &SynapseType::getLinkType, py::return_value_policy::reference_internal)
-        .def("setLinkType", &SynapseType::setLinkType, py::return_value_policy::reference_internal)
         .def("getTransitions", &SynapseType::getTransitions, py::return_value_policy::reference_internal)
-        .def("setTransitions", &SynapseType::setTransitions, py::return_value_policy::reference_internal)
         .def("getStoredAt", &SynapseType::getStoredAt, py::return_value_policy::reference_internal)
-        .def("setStoredAt", &SynapseType::setStoredAt, py::return_value_policy::reference_internal)
         .def("getInstanceSynapseType", &SynapseType::getInstanceSynapseType, py::return_value_policy::reference_internal)
-        .def("setInstanceSynapseType", &SynapseType::setInstanceSynapseType, py::return_value_policy::reference_internal)
         .def("__str__", [](const SynapseType& sd) {
             return sd.toString();
         })
@@ -339,6 +329,8 @@ void bind_network(py::module_& m) {
     // Bind Builder classes
     py::class_<NeuronTypeBuilder>(m, "NeuronTypeBuilder")
         .def(py::init<TypeRegistry*, const std::string&>())
+        .def("addParent", &NeuronTypeBuilder::addParent, py::return_value_policy::reference_internal)
+        .def("getParents", &NeuronTypeBuilder::getParents, py::return_value_policy::reference_internal)
         .def("build", &NeuronTypeBuilder::build, py::return_value_policy::reference_internal)
         .def("__str__", [](const NeuronTypeBuilder& nb) {
             return nb.getName();
@@ -354,6 +346,8 @@ void bind_network(py::module_& m) {
         .def("getPairedSynapseType", &SynapseTypeBuilder::getPairedSynapseType, py::return_value_policy::reference_internal)
         .def("addTransition", &SynapseTypeBuilder::addTransition)
         .def("getTransitions", &SynapseTypeBuilder::getTransitions, py::return_value_policy::reference_internal)
+        .def("addParent", &SynapseTypeBuilder::addParent, py::return_value_policy::reference_internal)
+        .def("getParents", &SynapseTypeBuilder::getParents, py::return_value_policy::reference_internal)
         .def("build", &SynapseTypeBuilder::build, py::return_value_policy::reference_internal)
         .def("__str__", [](const SynapseTypeBuilder& sb) {
             return sb.getName();

@@ -21,6 +21,10 @@ public:
 
     std::string getName() const;
 
+    // Builder configuration methods
+    NeuronTypeBuilder& addParent(NeuronType* parentType);
+    std::vector<NeuronType*> getParents() const;
+
     // Build the actual implementation
     NeuronType* build();
 
@@ -29,6 +33,7 @@ private:
     TypeRegistry* registry;
     ActivationType* activationType;
     NeuronType* builtInstance;
+    std::vector<NeuronType*> parentTypes;
     bool isBuilt;
 };
 

@@ -122,7 +122,6 @@ void bind_fields(py::module_& m) {
 
       py::class_<Type>(m, "Type")
             .def(py::init<TypeRegistry*, const std::string&>())
-            .def("addParent", &Type::addParent, py::return_value_policy::reference_internal)
             .def("getParents", &Type::getParents, py::return_value_policy::reference_internal)
             .def("getChildren", &Type::getChildren, py::return_value_policy::reference_internal)
             .def("__str__", [](const Type &t) {
