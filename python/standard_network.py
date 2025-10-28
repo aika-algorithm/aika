@@ -63,21 +63,42 @@ class StandardNetworkTypeRegistry:
         
         # Define foundational fields on standard types (these will be inherited)
         # Neuron bias field
-        bias_field = self.T_STANDARD_NEURON.inputField("bias")
+        self.bias_field = self.T_STANDARD_NEURON.inputField("bias")
         
-        # Standard activation fields:
-        net_field = self.T_STANDARD_ACTIVATION.sum("net")
-        tanh_func = af.TanhActivationFunction()
-        value_field = self.T_STANDARD_ACTIVATION.fieldActivationFunc("value", tanh_func, 0.001)
-        fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
-
         # Standard synapse weight field
-        weight_field = self.T_STANDARD_SYNAPSE.inputField("weight")
+        self.weight_field = self.T_STANDARD_SYNAPSE.inputField("weight")
+
+        # Standard activation fields:
+        self.net_field = self.T_STANDARD_ACTIVATION.sum("net")
+        tanh_func = af.TanhActivationFunction()
+        self.value_field = self.T_STANDARD_ACTIVATION.fieldActivationFunc("value", tanh_func, 0.001)
+        self.fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
 
         # Standard link weighted input
-        weighted_input = self.T_STANDARD_LINK.mul("weightedInput")
+        self.weighted_input = self.T_STANDARD_LINK.mul("weightedInput")
         
-        print("Standard field definitions setup complete")
+        # ========================================
+        # ESTABLISH FIELD CONNECTIONS
+        # ========================================
+        print("Connecting field relationships...")
+        
+        # 1. weighted_input = input_activation.value × synapse.weight
+        # weighted_input connects to input activation's value field via INPUT relation
+        self.weighted_input.input(self.T_STANDARD_LINK.INPUT, self.value_field, 0)
+        # weighted_input connects to synapse weight via SYNAPSE relation  
+        self.weighted_input.input(self.T_STANDARD_LINK.SYNAPSE, self.weight_field, 1)
+        
+        # 2. net = sum of weighted_inputs + neuron.bias
+        # net field sums from incoming links via INPUT relation
+        self.net_field.input(self.T_STANDARD_ACTIVATION.INPUT, self.weighted_input, 0)
+        # net field adds neuron bias via NEURON relation
+        self.net_field.input(self.T_STANDARD_ACTIVATION.NEURON, self.bias_field, 1)
+        
+        # 3. value = tanh(net)  
+        # FieldActivationFunction might automatically use "net" field as input
+        # Try not connecting it explicitly - let it find the net field automatically
+        
+        print("Standard field definitions and connections setup complete")
     
     def get_registry(self):
         """Return the type registry"""

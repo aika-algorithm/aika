@@ -91,7 +91,8 @@ void bind_network(py::module_& m) {
         .def(py::init<Model*>())
         .def("getId", &Context::getId)
         .def("getTimeout", &Context::getTimeout)
-        .def("process", &Context::process)
+        .def("process", py::overload_cast<>(&Queue::process))
+        .def("process", py::overload_cast<std::function<bool(Step*)>>(&Context::process))
         .def("getModel", &Context::getModel, py::return_value_policy::reference_internal)
         .def("getConfig", &Context::getConfig, py::return_value_policy::reference_internal)
         .def("getCurrentStep", &Context::getCurrentStep, py::return_value_policy::reference_internal)
@@ -158,6 +159,7 @@ void bind_network(py::module_& m) {
         .def("equals", &Activation::equals)
         .def("hashCode", &Activation::hashCode)
         .def("toKeyString", &Activation::toKeyString)
+        .def("propagate", &Activation::propagate)
         .def("__str__", [](const Activation& a) {
             return a.toString();
         })
