@@ -159,7 +159,6 @@ void bind_network(py::module_& m) {
         .def("equals", &Activation::equals)
         .def("hashCode", &Activation::hashCode)
         .def("toKeyString", &Activation::toKeyString)
-        .def("propagate", &Activation::propagate)
         .def("__str__", [](const Activation& a) {
             return a.toString();
         })
