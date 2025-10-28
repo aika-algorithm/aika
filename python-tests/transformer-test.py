@@ -32,31 +32,45 @@ class TransformerTestCase(unittest.TestCase):
         self.assertIsNotNone(self.transformer_types.T_EMB)
         self.assertIsNotNone(self.transformer_types.T_KEY)
         self.assertIsNotNone(self.transformer_types.T_QUERY)
-        self.assertIsNotNone(self.transformer_types.T_SOFTMAX)
         self.assertIsNotNone(self.transformer_types.T_VALUE)
+        self.assertIsNotNone(self.transformer_types.T_DOT)
+        self.assertIsNotNone(self.transformer_types.T_COMP)
+        self.assertIsNotNone(self.transformer_types.T_MIX)
+        self.assertIsNotNone(self.transformer_types.T_SOFTMAX)
         
         # Test activation types exist
         self.assertIsNotNone(self.transformer_types.T_EMB_ACT)
         self.assertIsNotNone(self.transformer_types.T_KEY_ACT)
         self.assertIsNotNone(self.transformer_types.T_QUERY_ACT)
-        self.assertIsNotNone(self.transformer_types.T_SOFTMAX_ACT)
         self.assertIsNotNone(self.transformer_types.T_VALUE_ACT)
+        self.assertIsNotNone(self.transformer_types.T_DOT_ACT)
+        self.assertIsNotNone(self.transformer_types.T_COMP_ACT)
+        self.assertIsNotNone(self.transformer_types.T_MIX_ACT)
+        self.assertIsNotNone(self.transformer_types.T_SOFTMAX_ACT)
         
         # Test synapse types exist
         self.assertIsNotNone(self.transformer_types.S_EMB_KEY)
         self.assertIsNotNone(self.transformer_types.S_EMB_QUERY)
-        self.assertIsNotNone(self.transformer_types.S_KEY_QUERY)
-        self.assertIsNotNone(self.transformer_types.S_QUERY_SOFTMAX)
-        self.assertIsNotNone(self.transformer_types.S_SOFTMAX_VALUE)
         self.assertIsNotNone(self.transformer_types.S_EMB_VALUE)
+        self.assertIsNotNone(self.transformer_types.S_KEY_QUERY)
+        self.assertIsNotNone(self.transformer_types.S_KEY_COMP)
+        self.assertIsNotNone(self.transformer_types.S_QUERY_COMP)
+        self.assertIsNotNone(self.transformer_types.S_COMP_SOFTMAX)
+        self.assertIsNotNone(self.transformer_types.S_SOFTMAX_MIX)
+        self.assertIsNotNone(self.transformer_types.S_VALUE_MIX)
+        self.assertIsNotNone(self.transformer_types.S_MIX_SOFTMAX)
         
         # Test link types exist
         self.assertIsNotNone(self.transformer_types.L_EMB_KEY)
         self.assertIsNotNone(self.transformer_types.L_EMB_QUERY)
-        self.assertIsNotNone(self.transformer_types.L_KEY_QUERY)
-        self.assertIsNotNone(self.transformer_types.L_QUERY_SOFTMAX)
-        self.assertIsNotNone(self.transformer_types.L_SOFTMAX_VALUE)
         self.assertIsNotNone(self.transformer_types.L_EMB_VALUE)
+        self.assertIsNotNone(self.transformer_types.L_KEY_QUERY)
+        self.assertIsNotNone(self.transformer_types.L_KEY_COMP)
+        self.assertIsNotNone(self.transformer_types.L_QUERY_COMP)
+        self.assertIsNotNone(self.transformer_types.L_COMP_SOFTMAX)
+        self.assertIsNotNone(self.transformer_types.L_SOFTMAX_MIX)
+        self.assertIsNotNone(self.transformer_types.L_VALUE_MIX)
+        self.assertIsNotNone(self.transformer_types.L_MIX_SOFTMAX)
         
     def test_base_type_creation(self):
         """Test that base types are created correctly."""
@@ -84,6 +98,9 @@ class TransformerTestCase(unittest.TestCase):
         self.assertIsNotNone(self.transformer_types.T_KEY)
         self.assertIsNotNone(self.transformer_types.T_QUERY)
         self.assertIsNotNone(self.transformer_types.T_VALUE)
+        self.assertIsNotNone(self.transformer_types.T_DOT)
+        self.assertIsNotNone(self.transformer_types.T_COMP)
+        self.assertIsNotNone(self.transformer_types.T_MIX)
         self.assertIsNotNone(self.transformer_types.T_SOFTMAX)
         
         # Test that activation types exist
@@ -116,13 +133,13 @@ class TransformerTestCase(unittest.TestCase):
         self.assertEqual(str(self.transformer_types.S_KEY_QUERY.getInputType()), "KEY_NEURON")
         self.assertEqual(str(self.transformer_types.S_KEY_QUERY.getOutputType()), "QUERY_NEURON")
         
-        # Test S_QUERY_SOFTMAX: QUERY -> SOFTMAX
-        self.assertEqual(str(self.transformer_types.S_QUERY_SOFTMAX.getInputType()), "QUERY_NEURON")
-        self.assertEqual(str(self.transformer_types.S_QUERY_SOFTMAX.getOutputType()), "SOFTMAX_NEURON")
+        # Test S_COMP_SOFTMAX: COMP -> SOFTMAX (scores)
+        self.assertEqual(str(self.transformer_types.S_COMP_SOFTMAX.getInputType()), "COMP_NEURON")
+        self.assertEqual(str(self.transformer_types.S_COMP_SOFTMAX.getOutputType()), "SOFTMAX_NEURON")
         
-        # Test S_SOFTMAX_VALUE: SOFTMAX -> VALUE
-        self.assertEqual(str(self.transformer_types.S_SOFTMAX_VALUE.getInputType()), "SOFTMAX_NEURON")
-        self.assertEqual(str(self.transformer_types.S_SOFTMAX_VALUE.getOutputType()), "VALUE_NEURON")
+        # Test S_SOFTMAX_MIX: SOFTMAX -> MIX (attention weights)
+        self.assertEqual(str(self.transformer_types.S_SOFTMAX_MIX.getInputType()), "SOFTMAX_NEURON")
+        self.assertEqual(str(self.transformer_types.S_SOFTMAX_MIX.getOutputType()), "MIX_NEURON")
         
         # Test S_EMB_VALUE: EMB -> VALUE
         self.assertEqual(str(self.transformer_types.S_EMB_VALUE.getInputType()), "EMB_NEURON")
@@ -140,21 +157,37 @@ class TransformerTestCase(unittest.TestCase):
         self.assertEqual(str(self.transformer_types.L_EMB_QUERY.getInputType()), "EMB_NEURON")
         self.assertEqual(str(self.transformer_types.L_EMB_QUERY.getOutputType()), "QUERY_NEURON")
         
-        # Test L_KEY_QUERY: KEY_ACT -> QUERY_ACT
-        self.assertEqual(str(self.transformer_types.L_KEY_QUERY.getInputType()), "KEY_NEURON")
-        self.assertEqual(str(self.transformer_types.L_KEY_QUERY.getOutputType()), "QUERY_NEURON")
-        
-        # Test L_QUERY_SOFTMAX: QUERY_ACT -> SOFTMAX_ACT
-        self.assertEqual(str(self.transformer_types.L_QUERY_SOFTMAX.getInputType()), "QUERY_NEURON")
-        self.assertEqual(str(self.transformer_types.L_QUERY_SOFTMAX.getOutputType()), "SOFTMAX_NEURON")
-        
-        # Test L_SOFTMAX_VALUE: SOFTMAX_ACT -> VALUE_ACT
-        self.assertEqual(str(self.transformer_types.L_SOFTMAX_VALUE.getInputType()), "SOFTMAX_NEURON")
-        self.assertEqual(str(self.transformer_types.L_SOFTMAX_VALUE.getOutputType()), "VALUE_NEURON")
-        
         # Test L_EMB_VALUE: EMB_ACT -> VALUE_ACT
         self.assertEqual(str(self.transformer_types.L_EMB_VALUE.getInputType()), "EMB_NEURON")
         self.assertEqual(str(self.transformer_types.L_EMB_VALUE.getOutputType()), "VALUE_NEURON")
+        
+        # Test L_KEY_QUERY: KEY_ACT -> QUERY_ACT (optional connection)
+        self.assertEqual(str(self.transformer_types.L_KEY_QUERY.getInputType()), "KEY_NEURON")
+        self.assertEqual(str(self.transformer_types.L_KEY_QUERY.getOutputType()), "QUERY_NEURON")
+        
+        # Test L_KEY_COMP: KEY_ACT -> COMP_ACT (paired with QUERY->COMP)
+        self.assertEqual(str(self.transformer_types.L_KEY_COMP.getInputType()), "KEY_NEURON")
+        self.assertEqual(str(self.transformer_types.L_KEY_COMP.getOutputType()), "COMP_NEURON")
+        
+        # Test L_QUERY_COMP: QUERY_ACT -> COMP_ACT (paired with KEY->COMP)
+        self.assertEqual(str(self.transformer_types.L_QUERY_COMP.getInputType()), "QUERY_NEURON")
+        self.assertEqual(str(self.transformer_types.L_QUERY_COMP.getOutputType()), "COMP_NEURON")
+        
+        # Test L_COMP_SOFTMAX: COMP_ACT -> SOFTMAX_ACT (scores)
+        self.assertEqual(str(self.transformer_types.L_COMP_SOFTMAX.getInputType()), "COMP_NEURON")
+        self.assertEqual(str(self.transformer_types.L_COMP_SOFTMAX.getOutputType()), "SOFTMAX_NEURON")
+        
+        # Test L_SOFTMAX_MIX: SOFTMAX_ACT -> MIX_ACT (attention weights, paired with VALUE->MIX)
+        self.assertEqual(str(self.transformer_types.L_SOFTMAX_MIX.getInputType()), "SOFTMAX_NEURON")
+        self.assertEqual(str(self.transformer_types.L_SOFTMAX_MIX.getOutputType()), "MIX_NEURON")
+        
+        # Test L_VALUE_MIX: VALUE_ACT -> MIX_ACT (values, paired with SOFTMAX->MIX)
+        self.assertEqual(str(self.transformer_types.L_VALUE_MIX.getInputType()), "VALUE_NEURON")
+        self.assertEqual(str(self.transformer_types.L_VALUE_MIX.getOutputType()), "MIX_NEURON")
+        
+        # Test L_MIX_SOFTMAX: MIX_ACT -> SOFTMAX_ACT (optional re-normalization)
+        self.assertEqual(str(self.transformer_types.L_MIX_SOFTMAX.getInputType()), "MIX_NEURON")
+        self.assertEqual(str(self.transformer_types.L_MIX_SOFTMAX.getOutputType()), "SOFTMAX_NEURON")
         
     def test_neuron_activation_relationships(self):
         """Test that neuron-activation relationships are correct."""
@@ -164,8 +197,11 @@ class TransformerTestCase(unittest.TestCase):
         self.assertEqual(str(self.transformer_types.T_EMB.getActivationType()), "EMB_NEURON")
         self.assertEqual(str(self.transformer_types.T_KEY.getActivationType()), "KEY_NEURON")
         self.assertEqual(str(self.transformer_types.T_QUERY.getActivationType()), "QUERY_NEURON")
-        self.assertEqual(str(self.transformer_types.T_SOFTMAX.getActivationType()), "SOFTMAX_NEURON")
         self.assertEqual(str(self.transformer_types.T_VALUE.getActivationType()), "VALUE_NEURON")
+        self.assertEqual(str(self.transformer_types.T_DOT.getActivationType()), "DOT_NEURON")
+        self.assertEqual(str(self.transformer_types.T_COMP.getActivationType()), "COMP_NEURON")
+        self.assertEqual(str(self.transformer_types.T_MIX.getActivationType()), "MIX_NEURON")
+        self.assertEqual(str(self.transformer_types.T_SOFTMAX.getActivationType()), "SOFTMAX_NEURON")
         
     def test_link_synapse_relationships(self):
         """Test that link-synapse relationships are correct."""
@@ -175,10 +211,14 @@ class TransformerTestCase(unittest.TestCase):
         # Note: toString includes class prefix, so we check contains
         self.assertIn("S_EMB_KEY", str(self.transformer_types.L_EMB_KEY.getSynapseType()))
         self.assertIn("S_EMB_QUERY", str(self.transformer_types.L_EMB_QUERY.getSynapseType()))
-        self.assertIn("S_KEY_QUERY", str(self.transformer_types.L_KEY_QUERY.getSynapseType()))
-        self.assertIn("S_QUERY_SOFTMAX", str(self.transformer_types.L_QUERY_SOFTMAX.getSynapseType()))
-        self.assertIn("S_SOFTMAX_VALUE", str(self.transformer_types.L_SOFTMAX_VALUE.getSynapseType()))
         self.assertIn("S_EMB_VALUE", str(self.transformer_types.L_EMB_VALUE.getSynapseType()))
+        self.assertIn("S_KEY_QUERY", str(self.transformer_types.L_KEY_QUERY.getSynapseType()))
+        self.assertIn("S_KEY_COMP", str(self.transformer_types.L_KEY_COMP.getSynapseType()))
+        self.assertIn("S_QUERY_COMP", str(self.transformer_types.L_QUERY_COMP.getSynapseType()))
+        self.assertIn("S_COMP_SOFTMAX", str(self.transformer_types.L_COMP_SOFTMAX.getSynapseType()))
+        self.assertIn("S_SOFTMAX_MIX", str(self.transformer_types.L_SOFTMAX_MIX.getSynapseType()))
+        self.assertIn("S_VALUE_MIX", str(self.transformer_types.L_VALUE_MIX.getSynapseType()))
+        self.assertIn("S_MIX_SOFTMAX", str(self.transformer_types.L_MIX_SOFTMAX.getSynapseType()))
         
     def test_static_relations(self):
         """Test that static relations are properly initialized."""
@@ -224,14 +264,16 @@ class TransformerTestCase(unittest.TestCase):
         # Test that inhibitory types exist
         self.assertIsNotNone(self.transformer_types.T_SOFTMAX)
         self.assertIsNotNone(self.transformer_types.T_SOFTMAX_ACT)
-        self.assertIsNotNone(self.transformer_types.L_SOFTMAX_VALUE)
+        self.assertIsNotNone(self.transformer_types.L_SOFTMAX_MIX)
         
     def test_transformer_attention_flow(self):
-        """Test the transformer attention mechanism flow."""
+        """Test the transformer attention mechanism flow with dot-product architecture."""
         print("Testing transformer attention flow...")
         
-        # The attention flow should be: EMB -> KEY/QUERY -> SOFTMAX -> VALUE
-        # This is verified through the synapse relationships tested above
+        # The new dot-product attention flow is:
+        # EMB -> KEY/QUERY/VALUE
+        # KEY,QUERY (paired) -> COMP -> SOFTMAX
+        # SOFTMAX,VALUE (paired) -> MIX
         
         # Verify the complete path exists
         # EMB -> KEY (via S_EMB_KEY)
@@ -244,25 +286,35 @@ class TransformerTestCase(unittest.TestCase):
         self.assertEqual(str(emb_to_query.getInputType()), "EMB_NEURON")
         self.assertEqual(str(emb_to_query.getOutputType()), "QUERY_NEURON")
         
-        # KEY -> QUERY (via S_KEY_QUERY)
-        key_to_query = self.transformer_types.S_KEY_QUERY
-        self.assertEqual(str(key_to_query.getInputType()), "KEY_NEURON")
-        self.assertEqual(str(key_to_query.getOutputType()), "QUERY_NEURON")
-        
-        # QUERY -> SOFTMAX (via S_QUERY_SOFTMAX)
-        query_to_softmax = self.transformer_types.S_QUERY_SOFTMAX
-        self.assertEqual(str(query_to_softmax.getInputType()), "QUERY_NEURON")
-        self.assertEqual(str(query_to_softmax.getOutputType()), "SOFTMAX_NEURON")
-        
-        # SOFTMAX -> VALUE (via S_SOFTMAX_VALUE)
-        softmax_to_value = self.transformer_types.S_SOFTMAX_VALUE
-        self.assertEqual(str(softmax_to_value.getInputType()), "SOFTMAX_NEURON")
-        self.assertEqual(str(softmax_to_value.getOutputType()), "VALUE_NEURON")
-        
         # EMB -> VALUE (direct path via S_EMB_VALUE)
         emb_to_value = self.transformer_types.S_EMB_VALUE
         self.assertEqual(str(emb_to_value.getInputType()), "EMB_NEURON")
         self.assertEqual(str(emb_to_value.getOutputType()), "VALUE_NEURON")
+        
+        # KEY -> COMP (via S_KEY_COMP, paired with QUERY)
+        key_to_comp = self.transformer_types.S_KEY_COMP
+        self.assertEqual(str(key_to_comp.getInputType()), "KEY_NEURON")
+        self.assertEqual(str(key_to_comp.getOutputType()), "COMP_NEURON")
+        
+        # QUERY -> COMP (via S_QUERY_COMP, paired with KEY)
+        query_to_comp = self.transformer_types.S_QUERY_COMP
+        self.assertEqual(str(query_to_comp.getInputType()), "QUERY_NEURON")
+        self.assertEqual(str(query_to_comp.getOutputType()), "COMP_NEURON")
+        
+        # COMP -> SOFTMAX (via S_COMP_SOFTMAX, produces attention scores)
+        comp_to_softmax = self.transformer_types.S_COMP_SOFTMAX
+        self.assertEqual(str(comp_to_softmax.getInputType()), "COMP_NEURON")
+        self.assertEqual(str(comp_to_softmax.getOutputType()), "SOFTMAX_NEURON")
+        
+        # SOFTMAX -> MIX (via S_SOFTMAX_MIX, paired with VALUE)
+        softmax_to_mix = self.transformer_types.S_SOFTMAX_MIX
+        self.assertEqual(str(softmax_to_mix.getInputType()), "SOFTMAX_NEURON")
+        self.assertEqual(str(softmax_to_mix.getOutputType()), "MIX_NEURON")
+        
+        # VALUE -> MIX (via S_VALUE_MIX, paired with SOFTMAX)
+        value_to_mix = self.transformer_types.S_VALUE_MIX
+        self.assertEqual(str(value_to_mix.getInputType()), "VALUE_NEURON")
+        self.assertEqual(str(value_to_mix.getOutputType()), "MIX_NEURON")
         
     def test_type_registry_functionality(self):
         """Test that type registry functionality works."""

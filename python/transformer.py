@@ -59,6 +59,21 @@ class TransformerTypeRegistry:
         self.T_QUERY = query_builder.build()
         self.T_QUERY_ACT = self.T_QUERY.getActivationType()
         
+        # Build T_DOT (abstract dot-product neuron and activation)
+        dot_builder = an.NeuronTypeBuilder(self.registry, "DOT_NEURON")
+        self.T_DOT = dot_builder.build()
+        self.T_DOT_ACT = self.T_DOT.getActivationType()
+        
+        # Build T_COMP (comparison neuron and activation)
+        comp_builder = an.NeuronTypeBuilder(self.registry, "COMP_NEURON")
+        self.T_COMP = comp_builder.build()
+        self.T_COMP_ACT = self.T_COMP.getActivationType()
+        
+        # Build T_MIX (mixing neuron and activation)
+        mix_builder = an.NeuronTypeBuilder(self.registry, "MIX_NEURON")
+        self.T_MIX = mix_builder.build()
+        self.T_MIX_ACT = self.T_MIX.getActivationType()
+        
         # Build T_SOFTMAX (softmax neuron and activation)
         softmax_builder = an.NeuronTypeBuilder(self.registry, "SOFTMAX_NEURON")
         self.T_SOFTMAX = softmax_builder.build()
@@ -91,17 +106,41 @@ class TransformerTypeRegistry:
         self.S_KEY_QUERY = key_query_builder.build()
         self.L_KEY_QUERY = self.S_KEY_QUERY.getLinkType()
         
-        # Build S_QUERY_SOFTMAX (query to softmax synapse and link)
-        query_softmax_builder = an.SynapseTypeBuilder(self.registry, "S_QUERY_SOFTMAX")
-        query_softmax_builder.setInput(self.T_QUERY).setOutput(self.T_SOFTMAX)
-        self.S_QUERY_SOFTMAX = query_softmax_builder.build()
-        self.L_QUERY_SOFTMAX = self.S_QUERY_SOFTMAX.getLinkType()
+        # Build S_KEY_COMP (key to comparison synapse and link)
+        key_comp_builder = an.SynapseTypeBuilder(self.registry, "S_KEY_COMP")
+        key_comp_builder.setInput(self.T_KEY).setOutput(self.T_COMP)
+        self.S_KEY_COMP = key_comp_builder.build()
+        self.L_KEY_COMP = self.S_KEY_COMP.getLinkType()
         
-        # Build S_SOFTMAX_VALUE (softmax to value synapse and link)
-        softmax_value_builder = an.SynapseTypeBuilder(self.registry, "S_SOFTMAX_VALUE")
-        softmax_value_builder.setInput(self.T_SOFTMAX).setOutput(self.T_VALUE)
-        self.S_SOFTMAX_VALUE = softmax_value_builder.build()
-        self.L_SOFTMAX_VALUE = self.S_SOFTMAX_VALUE.getLinkType()
+        # Build S_QUERY_COMP (query to comparison synapse and link)
+        query_comp_builder = an.SynapseTypeBuilder(self.registry, "S_QUERY_COMP")
+        query_comp_builder.setInput(self.T_QUERY).setOutput(self.T_COMP)
+        self.S_QUERY_COMP = query_comp_builder.build()
+        self.L_QUERY_COMP = self.S_QUERY_COMP.getLinkType()
+        
+        # Build S_COMP_SOFTMAX (comparison to softmax synapse and link)
+        comp_softmax_builder = an.SynapseTypeBuilder(self.registry, "S_COMP_SOFTMAX")
+        comp_softmax_builder.setInput(self.T_COMP).setOutput(self.T_SOFTMAX)
+        self.S_COMP_SOFTMAX = comp_softmax_builder.build()
+        self.L_COMP_SOFTMAX = self.S_COMP_SOFTMAX.getLinkType()
+        
+        # Build S_SOFTMAX_MIX (softmax to mix synapse and link)
+        softmax_mix_builder = an.SynapseTypeBuilder(self.registry, "S_SOFTMAX_MIX")
+        softmax_mix_builder.setInput(self.T_SOFTMAX).setOutput(self.T_MIX)
+        self.S_SOFTMAX_MIX = softmax_mix_builder.build()
+        self.L_SOFTMAX_MIX = self.S_SOFTMAX_MIX.getLinkType()
+        
+        # Build S_VALUE_MIX (value to mix synapse and link)
+        value_mix_builder = an.SynapseTypeBuilder(self.registry, "S_VALUE_MIX")
+        value_mix_builder.setInput(self.T_VALUE).setOutput(self.T_MIX)
+        self.S_VALUE_MIX = value_mix_builder.build()
+        self.L_VALUE_MIX = self.S_VALUE_MIX.getLinkType()
+        
+        # Build S_MIX_SOFTMAX (optional mix to softmax synapse and link)
+        mix_softmax_builder = an.SynapseTypeBuilder(self.registry, "S_MIX_SOFTMAX")
+        mix_softmax_builder.setInput(self.T_MIX).setOutput(self.T_SOFTMAX)
+        self.S_MIX_SOFTMAX = mix_softmax_builder.build()
+        self.L_MIX_SOFTMAX = self.S_MIX_SOFTMAX.getLinkType()
         
         # Build S_EMB_VALUE (embedding to value synapse and link)
         emb_value_builder = an.SynapseTypeBuilder(self.registry, "S_EMB_VALUE")
@@ -162,6 +201,14 @@ class TransformerTypeRegistry:
         self.T_QUERY.addParent(self.T_STANDARD_NEURON)
         self.T_VALUE.addParent(self.T_STANDARD_NEURON)
         
+        # DOT family inheritance: COMP and MIX inherit from DOT
+        self.T_DOT.addParent(self.T_STANDARD_NEURON)
+        self.T_COMP.addParent(self.T_DOT)
+        self.T_MIX.addParent(self.T_DOT)
+        
+        # SOFTMAX inherits from standard neuron
+        self.T_SOFTMAX.addParent(self.T_STANDARD_NEURON)
+        
         # Standard activations inherit from base standard activation
         print("Setting activation inheritance...")
         self.T_EMB_ACT.addParent(self.T_STANDARD_ACTIVATION)
@@ -169,25 +216,39 @@ class TransformerTypeRegistry:
         self.T_QUERY_ACT.addParent(self.T_STANDARD_ACTIVATION)
         self.T_VALUE_ACT.addParent(self.T_STANDARD_ACTIVATION)
         
-        # T_SOFTMAX_ACT is standalone (no inheritance)
+        # DOT family activation inheritance
+        self.T_DOT_ACT.addParent(self.T_STANDARD_ACTIVATION)
+        self.T_COMP_ACT.addParent(self.T_DOT_ACT)
+        self.T_MIX_ACT.addParent(self.T_DOT_ACT)
+        
+        # SOFTMAX activation inherits from standard
+        self.T_SOFTMAX_ACT.addParent(self.T_STANDARD_ACTIVATION)
         
         # All synapses inherit from standard synapse
         print("Setting synapse inheritance...")
         self.S_EMB_KEY.addParent(self.T_STANDARD_SYNAPSE)
         self.S_EMB_QUERY.addParent(self.T_STANDARD_SYNAPSE)
-        self.S_KEY_QUERY.addParent(self.T_STANDARD_SYNAPSE)
-        self.S_QUERY_SOFTMAX.addParent(self.T_STANDARD_SYNAPSE)
         self.S_EMB_VALUE.addParent(self.T_STANDARD_SYNAPSE)
-        self.S_SOFTMAX_VALUE.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_KEY_QUERY.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_KEY_COMP.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_QUERY_COMP.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_COMP_SOFTMAX.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_SOFTMAX_MIX.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_VALUE_MIX.addParent(self.T_STANDARD_SYNAPSE)
+        self.S_MIX_SOFTMAX.addParent(self.T_STANDARD_SYNAPSE)
         
         # All links inherit from standard link
         print("Setting link inheritance...")
         self.L_EMB_KEY.addParent(self.T_STANDARD_LINK)
         self.L_EMB_QUERY.addParent(self.T_STANDARD_LINK)
-        self.L_KEY_QUERY.addParent(self.T_STANDARD_LINK)
-        self.L_QUERY_SOFTMAX.addParent(self.T_STANDARD_LINK)
         self.L_EMB_VALUE.addParent(self.T_STANDARD_LINK)
-        # L_SOFTMAX_VALUE is standalone (has special softmax computation)
+        self.L_KEY_QUERY.addParent(self.T_STANDARD_LINK)
+        self.L_KEY_COMP.addParent(self.T_STANDARD_LINK)
+        self.L_QUERY_COMP.addParent(self.T_STANDARD_LINK)
+        self.L_COMP_SOFTMAX.addParent(self.T_STANDARD_LINK)
+        self.L_SOFTMAX_MIX.addParent(self.T_STANDARD_LINK)
+        self.L_VALUE_MIX.addParent(self.T_STANDARD_LINK)
+        # L_MIX_SOFTMAX is optional for re-normalization
         
         print("Field definitions setup complete")
         print("Type hierarchy setup complete")
