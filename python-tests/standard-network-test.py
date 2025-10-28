@@ -147,6 +147,12 @@ class StandardNetworkTestCase(unittest.TestCase):
         synapse3.setFieldValue(weight_field, 10.0)
         print("Set all synapse weights to 10.0")
         
+        # Set synapses as propagable to enable automatic propagation
+        synapse1.setPropagable(model, True)
+        synapse2.setPropagable(model, True)  
+        synapse3.setPropagable(model, True)
+        print("Set all synapses as propagable")
+        
         # ========================================
         # CREATE CONTEXT AND ACTIVATIONS
         # ========================================
@@ -171,25 +177,12 @@ class StandardNetworkTestCase(unittest.TestCase):
         input2_activation.setFieldValue(value_field, 1.0)
         print("Set input2 activation value to 1.0")
         
-        # ========================================
-        # MANUALLY TRIGGER PROPAGATION FOR INPUT ACTIVATIONS
-        # ========================================
+        # Fire the input activations to trigger automatic propagation
+        input1_activation.setFired()
+        input2_activation.setFired()
+        print("Fired input activations to trigger propagation")
         
-        print("Manually triggering propagation...")
-        
-        # Trigger propagation from input1 to middle via synapse1
-        try:
-            input1_activation.propagate(synapse1)
-            print("Triggered propagation from input1 to middle")
-        except Exception as e:
-            print(f"Error during input1 propagation: {e}")
-        
-        # Trigger propagation from input2 to middle via synapse2  
-        try:
-            input2_activation.propagate(synapse2)
-            print("Triggered propagation from input2 to middle")
-        except Exception as e:
-            print(f"Error during input2 propagation: {e}")
+        print("Input activations should now propagate automatically during process()")
         
         # ========================================
         # PROCESS NETWORK PROPAGATION
@@ -215,9 +208,8 @@ class StandardNetworkTestCase(unittest.TestCase):
         print(f"Total activations created: {len(all_activations) if all_activations else 0}")
         
         # Check for middle neuron activation
-        middle_activations = context.getActivationByNeuron(middle_neuron)
-        if middle_activations:
-            middle_activation = middle_activations[0]  # Get first activation
+        middle_activation = context.getActivationByNeuron(middle_neuron)
+        if middle_activation:
             print(f"✅ Middle activation found: {middle_activation}")
             
             # Check middle activation value 
@@ -239,17 +231,16 @@ class StandardNetworkTestCase(unittest.TestCase):
             print("⚠️ No middle activation found")
         
         # Check for output neuron activation  
-        output_activations = context.getActivationByNeuron(output_neuron)
-        if output_activations:
-            output_activation = output_activations[0]  # Get first activation
+        output_activation = context.getActivationByNeuron(output_neuron)
+        if output_activation:
             print(f"✅ Output activation found: {output_activation}")
             
             # Check output activation value
             # Expected: tanh((middle_value * weight3) + bias)
-            if middle_activations:
+            if middle_activation:
                 try:
                     output_value = output_activation.getFieldValue(value_field)
-                    middle_value = middle_activations[0].getFieldValue(value_field)
+                    middle_value = middle_activation.getFieldValue(value_field)
                     expected_output_net = (middle_value * 10.0) + (-15.0)
                     expected_output_value = af.TanhActivationFunction().f(expected_output_net)
                     print(f"Output activation value: {output_value}")
