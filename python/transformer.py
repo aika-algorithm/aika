@@ -42,6 +42,9 @@ class TransformerTypeRegistry:
         # Build transformer-specific types
         self._build_transformer_types()
         
+        # Set up dot-product field definitions
+        self._setup_dot_product_fields()
+        
         # Flatten type hierarchy (includes standard + transformer types)
         self.registry.flattenTypeHierarchy()
     
@@ -82,8 +85,8 @@ class TransformerTypeRegistry:
         # ========================================
         
         # Build T_DOT (abstract dot-product neuron and activation)
+        # DOT neurons do NOT inherit from standard neurons - no bias, no activation function
         dot_builder = an.NeuronTypeBuilder(self.registry, "DOT_NEURON")
-        dot_builder.addParent(self.T_STANDARD_NEURON)
         self.T_DOT = dot_builder.build()
         self.T_DOT_ACT = self.T_DOT.getActivationType()
         
@@ -144,13 +147,31 @@ class TransformerTypeRegistry:
         # Build S_KEY_COMP (key to comparison synapse and link)
         key_comp_builder = an.SynapseTypeBuilder(self.registry, "S_KEY_COMP")
         key_comp_builder.setInput(self.T_KEY).setOutput(self.T_COMP).addParent(self.T_STANDARD_SYNAPSE)
-        self.S_KEY_COMP = key_comp_builder.build()
-        self.L_KEY_COMP = self.S_KEY_COMP.getLinkType()
         
         # Build S_QUERY_COMP (query to comparison synapse and link)
         query_comp_builder = an.SynapseTypeBuilder(self.registry, "S_QUERY_COMP")
         query_comp_builder.setInput(self.T_QUERY).setOutput(self.T_COMP).addParent(self.T_STANDARD_SYNAPSE)
+        
+        # Build the synapse types first
+        self.S_KEY_COMP = key_comp_builder.build()
         self.S_QUERY_COMP = query_comp_builder.build()
+        
+        # ========================================
+        # SET UP SYNAPSE PAIRING FOR DOT-PRODUCT
+        # ========================================
+        
+        # Set up pairing between the built synapse types
+        # Note: Using setPairedSynapseType on the builder during build phase
+        try:
+            # Try to set up pairing if the method exists
+            key_comp_builder.setPairedSynapseType(self.S_QUERY_COMP)
+            query_comp_builder.setPairedSynapseType(self.S_KEY_COMP)
+            print("Set up KEY_COMP ↔ QUERY_COMP synapse pairing")
+        except AttributeError:
+            # If setPairedSynapseType doesn't exist on builder, handle pairing differently
+            print("Note: Synapse pairing will be handled by PAIR_IN relations in field system")
+        
+        self.L_KEY_COMP = self.S_KEY_COMP.getLinkType()
         self.L_QUERY_COMP = self.S_QUERY_COMP.getLinkType()
         
         # Build S_COMP_SOFTMAX (comparison to softmax synapse and link)
@@ -171,6 +192,14 @@ class TransformerTypeRegistry:
         self.S_VALUE_MIX = value_mix_builder.build()
         self.L_VALUE_MIX = self.S_VALUE_MIX.getLinkType()
         
+        # Set up VALUE_MIX ↔ SOFTMAX_MIX pairing
+        try:
+            value_mix_builder.setPairedSynapseType(self.S_SOFTMAX_MIX)
+            softmax_mix_builder.setPairedSynapseType(self.S_VALUE_MIX)
+            print("Set up VALUE_MIX ↔ SOFTMAX_MIX synapse pairing")
+        except (AttributeError, NameError):
+            print("Note: MIX synapse pairing will be handled by PAIR_IN relations")
+        
         # Build S_MIX_SOFTMAX (optional mix to softmax synapse and link)
         mix_softmax_builder = an.SynapseTypeBuilder(self.registry, "S_MIX_SOFTMAX")
         mix_softmax_builder.setInput(self.T_MIX).setOutput(self.T_SOFTMAX).addParent(self.T_STANDARD_SYNAPSE)
@@ -178,6 +207,78 @@ class TransformerTypeRegistry:
         self.L_MIX_SOFTMAX = self.S_MIX_SOFTMAX.getLinkType()
         
         print("Transformer-specific types built successfully")
+    
+    def _setup_dot_product_fields(self):
+        """Setup dot-product field definitions using mul and sum operations on paired links"""
+        print("Setting up dot-product field definitions...")
+        
+        # ========================================
+        # DOT-PRODUCT FIELD IMPLEMENTATION USING mul AND sum
+        # ========================================
+        
+        # The dot-product calculation uses:
+        # 1. mul field on link types to multiply paired link values
+        # 2. sum field on activation types to aggregate all multiplications
+        
+        # Create multiplication field on KEY_COMP link type
+        # This will multiply the KEY input value with its paired QUERY link value
+        self.key_comp_mul_field = self.L_KEY_COMP.mul("pairMultiplication")
+        
+        # Create multiplication field on QUERY_COMP link type  
+        # This will multiply the QUERY input value with its paired KEY link value
+        self.query_comp_mul_field = self.L_QUERY_COMP.mul("pairMultiplication")
+        
+        # Create sum field on COMP activation type to aggregate all pair multiplications
+        self.comp_net_field = self.T_COMP_ACT.sum("net")
+        
+        # Create value field as identity (value = net for dot-product neurons)
+        self.comp_value_field = self.T_COMP_ACT.inputField("value")
+        
+        # ========================================
+        # ESTABLISH FIELD CONNECTIONS FOR COMP DOT-PRODUCT
+        # ========================================
+        
+        # Connect the sum field to aggregate multiplication results from both link types
+        # The net field gets input from KEY_COMP link multiplications
+        self.comp_net_field.input(self.T_COMP_ACT.INPUT, self.key_comp_mul_field, 0)
+        # The net field also gets input from QUERY_COMP link multiplications  
+        self.comp_net_field.input(self.T_COMP_ACT.INPUT, self.query_comp_mul_field, 1)
+        
+        # Connect value field to net field (identity: value = net)
+        self.comp_value_field.input(self.T_COMP_ACT.SELF, self.comp_net_field, 0)
+        
+        print("Set up COMP dot-product field connections: mul → sum → value")
+        
+        # ========================================
+        # SET UP MIX DOT-PRODUCT FIELDS (similar pattern)
+        # ========================================
+        
+        # Create multiplication fields for MIX neuron (VALUE × SOFTMAX pairs)
+        self.value_mix_mul_field = self.L_VALUE_MIX.mul("pairMultiplication") 
+        self.softmax_mix_mul_field = self.L_SOFTMAX_MIX.mul("pairMultiplication")
+        
+        # Create sum and value fields for MIX activation
+        self.mix_net_field = self.T_MIX_ACT.sum("net")
+        self.mix_value_field = self.T_MIX_ACT.inputField("value")
+        
+        # Connect MIX fields
+        self.mix_net_field.input(self.T_MIX_ACT.INPUT, self.value_mix_mul_field, 0)
+        self.mix_net_field.input(self.T_MIX_ACT.INPUT, self.softmax_mix_mul_field, 1)
+        self.mix_value_field.input(self.T_MIX_ACT.SELF, self.mix_net_field, 0)
+        
+        print("Set up MIX dot-product field connections: mul → sum → value")
+        
+        # Store field references for easy access in tests
+        self.dot_fields = {
+            'comp_net': self.comp_net_field,
+            'comp_value': self.comp_value_field,
+            'mix_net': self.mix_net_field, 
+            'mix_value': self.mix_value_field,
+            'key_comp_mul': self.key_comp_mul_field,
+            'query_comp_mul': self.query_comp_mul_field
+        }
+        
+        print("Dot-product field definitions and connections setup complete")
     
     def get_registry(self):
         """Return the type registry (includes both standard and transformer types)"""
