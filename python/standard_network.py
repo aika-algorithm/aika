@@ -25,6 +25,7 @@ class StandardNetworkTypeRegistry:
     """
     
     def __init__(self):
+        # Create type registry
         self.registry = af.TypeRegistry()
         
         # Build foundational types

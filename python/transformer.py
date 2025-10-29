@@ -18,13 +18,19 @@ import aika
 import aika.fields as af
 import aika.network as an
 from python.standard_network import create_standard_network_types
+from python.dot_product_types import create_dot_product_types
+from python.softmax_types import create_softmax_types
 
 class TransformerTypeRegistry:
     """
-    Transformer type registry that defines transformer-specific object types and their field relationships
+    Transformer type registry that defines transformer-specific concrete object types 
     according to the AIKA transformer specification using builder pattern.
     
-    This builds on the standard neural network foundation.
+    This builds on the dot-product and softmax neural network foundations and creates
+    concrete implementations of transformer components like COMP, MIX, etc.
+    
+    The dot-product mathematical model is defined in dot_product_types.py.
+    The softmax mathematical model is defined in softmax_types.py.
     """
     
     def __init__(self):
@@ -32,18 +38,65 @@ class TransformerTypeRegistry:
         print("Setting up standard neural network foundation...")
         self.standard_network = create_standard_network_types()
         self.registry = self.standard_network.get_registry()
-        
+
         # Get standard types for inheritance
         self.T_STANDARD_NEURON = self.standard_network.get_standard_neuron_type()
         self.T_STANDARD_ACTIVATION = self.standard_network.get_standard_activation_type()
         self.T_STANDARD_SYNAPSE = self.standard_network.get_standard_synapse_type()
         self.T_STANDARD_LINK = self.standard_network.get_standard_link_type()
+
+
+        # Create the dot-product foundation using the shared registry
+        print("Setting up dot-product neural network foundation...")
+        self.dot_product_network = create_dot_product_types(self.registry, self.standard_network.value_field)
         
-        # Build transformer-specific types
+        # Create the softmax foundation using the shared registry  
+        print("Setting up softmax neural network foundation...")
+        self.softmax_network = create_softmax_types(self.registry, self.standard_network.value_field)
+
+        # Get dot-product types for inheritance
+        self.T_DOT = self.dot_product_network.get_dot_neuron_type()
+        self.T_DOT_ACT = self.dot_product_network.get_dot_activation_type()
+        self.S_DOT_PRIMARY = self.dot_product_network.get_dot_primary_synapse_type()
+        self.L_DOT_PRIMARY = self.dot_product_network.get_dot_primary_link_type()
+        self.S_DOT_SECONDARY = self.dot_product_network.get_dot_secondary_synapse_type()
+        self.L_DOT_SECONDARY = self.dot_product_network.get_dot_secondary_link_type()
+        
+        # Get softmax types for inheritance
+        self.T_SOFTMAX = self.softmax_network.get_softmax_neuron_type()
+        self.T_SOFTMAX_ACT = self.softmax_network.get_softmax_activation_type()
+        
+        # Build transformer-specific concrete types
         self._build_transformer_types()
         
-        # Set up dot-product field definitions
-        self._setup_dot_product_fields()
+        # Get field definitions from the specialized modules
+        self.dot_product_fields = self.dot_product_network.get_dot_product_fields()
+        self.softmax_fields = self.softmax_network.get_softmax_fields()
+        
+        # Flatten type hierarchy (includes all types)
+        self.registry.flattenTypeHierarchy()
+        
+        # Set up field access for tests (combining dot-product and softmax fields with legacy names)
+        self.dot_fields = {
+            # DOT fields (inherited by COMP and MIX)
+            'net': self.dot_product_fields['dot_net'],
+            'value': self.dot_product_fields['dot_value'],
+            'comp_net': self.dot_product_fields['dot_net'],      # COMP uses DOT net field
+            'comp_value': self.dot_product_fields['dot_value'],  # COMP uses DOT value field  
+            'mix_net': self.dot_product_fields['dot_net'],       # MIX uses DOT net field
+            'mix_value': self.dot_product_fields['dot_value'],   # MIX uses DOT value field
+            
+            # Link-specific fields
+            'secondary_identity': self.dot_product_fields['secondary_identity'],        # KEY_COMP, VALUE_MIX
+            'primary_multiplication': self.dot_product_fields['primary_multiplication'], # QUERY_COMP, SOFTMAX_MIX
+            
+            # Compatibility names for tests
+            'key_comp_weighted': self.dot_product_fields['secondary_identity'],       # KEY_COMP identity operation
+            'key_comp_mul': self.dot_product_fields['secondary_identity'],            # Legacy name for KEY_COMP
+            'query_comp_mul': self.dot_product_fields['primary_multiplication'],     # QUERY_COMP multiplication
+            'value_mix_weighted': self.dot_product_fields['secondary_identity'],     # VALUE_MIX identity operation
+            'softmax_mix_mul': self.dot_product_fields['primary_multiplication']     # SOFTMAX_MIX multiplication
+        }
         
         # Flatten type hierarchy (includes standard + transformer types)
         self.registry.flattenTypeHierarchy()
@@ -81,37 +134,22 @@ class TransformerTypeRegistry:
         self.T_VALUE_ACT = self.T_VALUE.getActivationType()
         
         # ========================================
-        # BUILD DOT-PRODUCT FAMILY TYPES (NO INHERITANCE)
+        # BUILD CONCRETE DOT-PRODUCT FAMILY TYPES
         # ========================================
         
-        # Build T_DOT (abstract dot-product neuron and activation)
-        # DOT neurons do NOT inherit from standard neurons - no bias, no activation function
-        # This is the base abstract type for dot-product operations
-        dot_builder = an.NeuronTypeBuilder(self.registry, "DOT_NEURON")
-        self.T_DOT = dot_builder.build()
-        self.T_DOT_ACT = self.T_DOT.getActivationType()
-        
-        # Build T_COMP (comparison neuron and activation) - inherits ONLY from DOT
+        # Build T_COMP (comparison neuron and activation) - inherits from abstract DOT
         comp_builder = an.NeuronTypeBuilder(self.registry, "COMP_NEURON")  
-        comp_builder.addParent(self.T_DOT)  # Inherit from DOT, not standard
+        comp_builder.addParent(self.T_DOT)  # Inherit from abstract DOT
         self.T_COMP = comp_builder.build()
         self.T_COMP_ACT = self.T_COMP.getActivationType()
         
-        # Build T_MIX (mixing neuron and activation) - inherits ONLY from DOT
+        # Build T_MIX (mixing neuron and activation) - inherits from abstract DOT
         mix_builder = an.NeuronTypeBuilder(self.registry, "MIX_NEURON")
-        mix_builder.addParent(self.T_DOT)  # Inherit from DOT, not standard
+        mix_builder.addParent(self.T_DOT)  # Inherit from abstract DOT
         self.T_MIX = mix_builder.build()
         self.T_MIX_ACT = self.T_MIX.getActivationType()
         
-        # ========================================
-        # BUILD SOFTMAX TYPE
-        # ========================================
-        
-        # Build T_SOFTMAX (softmax neuron and activation)
-        softmax_builder = an.NeuronTypeBuilder(self.registry, "SOFTMAX_NEURON")
-        softmax_builder.addParent(self.T_STANDARD_NEURON)
-        self.T_SOFTMAX = softmax_builder.build()
-        self.T_SOFTMAX_ACT = self.T_SOFTMAX.getActivationType()
+        print("Built concrete DOT-PRODUCT types (COMP, MIX) inheriting from abstract DOT")
         
         # ========================================
         # BUILD TRANSFORMER SYNAPSE TYPES
@@ -142,19 +180,10 @@ class TransformerTypeRegistry:
         self.L_KEY_QUERY = self.S_KEY_QUERY.getLinkType()
         
         # ========================================
-        # BUILD DOT-PRODUCT SYNAPSE TYPES (NO STANDARD INHERITANCE)
+        # BUILD CONCRETE DOT-PRODUCT SYNAPSE TYPES
         # ========================================
         
-        # Build abstract DOT synapse types (no weights, no standard inheritance)
-        dot_primary_builder = an.SynapseTypeBuilder(self.registry, "DOT_PRIMARY_SYNAPSE")
-        self.S_DOT_PRIMARY = dot_primary_builder.build()
-        self.L_DOT_PRIMARY = self.S_DOT_PRIMARY.getLinkType()
-        
-        dot_secondary_builder = an.SynapseTypeBuilder(self.registry, "DOT_SECONDARY_SYNAPSE") 
-        self.S_DOT_SECONDARY = dot_secondary_builder.build()
-        self.L_DOT_SECONDARY = self.S_DOT_SECONDARY.getLinkType()
-        
-        # Build concrete KEY_COMP and QUERY_COMP synapses (inherit from DOT types)
+        # Build concrete KEY_COMP and QUERY_COMP synapses (inherit from abstract DOT types)
         key_comp_builder = an.SynapseTypeBuilder(self.registry, "S_KEY_COMP")
         key_comp_builder.setInput(self.T_KEY).setOutput(self.T_COMP).addParent(self.S_DOT_SECONDARY)
         self.S_KEY_COMP = key_comp_builder.build()
@@ -165,17 +194,9 @@ class TransformerTypeRegistry:
         self.S_QUERY_COMP = query_comp_builder.build()
         self.L_QUERY_COMP = self.S_QUERY_COMP.getLinkType()
         
-        # ========================================
-        # SET UP DOT-PRODUCT PAIRING ARCHITECTURE
-        # ========================================
-        
-        # The pairing will be:
-        # - S_KEY_COMP (secondary): Identity operation, provides input to multiplication
-        # - S_QUERY_COMP (primary): Multiplication operation, uses PAIR_IN to access KEY_COMP
-        
-        print("Set up DOT-PRODUCT architecture:")
-        print("  - KEY_COMP (secondary): Identity operation")  
-        print("  - QUERY_COMP (primary): Multiplication with PAIR_IN relation")
+        print("Built concrete DOT-PRODUCT synapses:")
+        print("  - KEY_COMP (secondary): Identity operation, inherits from DOT_SECONDARY")  
+        print("  - QUERY_COMP (primary): Multiplication with PAIR_IN, inherits from DOT_PRIMARY")
         
         # Build S_COMP_SOFTMAX (comparison to softmax synapse and link)
         comp_softmax_builder = an.SynapseTypeBuilder(self.registry, "S_COMP_SOFTMAX")
@@ -183,7 +204,7 @@ class TransformerTypeRegistry:
         self.S_COMP_SOFTMAX = comp_softmax_builder.build()
         self.L_COMP_SOFTMAX = self.S_COMP_SOFTMAX.getLinkType()
         
-        # Build MIX dot-product synapses (inherit from DOT abstract types)
+        # Build MIX dot-product synapses (inherit from abstract DOT types)
         value_mix_builder = an.SynapseTypeBuilder(self.registry, "S_VALUE_MIX")
         value_mix_builder.setInput(self.T_VALUE).setOutput(self.T_MIX).addParent(self.S_DOT_SECONDARY)
         self.S_VALUE_MIX = value_mix_builder.build()
@@ -195,10 +216,9 @@ class TransformerTypeRegistry:
         self.S_SOFTMAX_MIX = softmax_mix_builder.build()  
         self.L_SOFTMAX_MIX = self.S_SOFTMAX_MIX.getLinkType()
         
-        # Set up MIX dot-product pairing architecture
-        print("Set up MIX DOT-PRODUCT architecture:")
-        print("  - VALUE_MIX (secondary): Identity operation")
-        print("  - SOFTMAX_MIX (primary): Multiplication with PAIR_IN relation")
+        print("Built concrete MIX DOT-PRODUCT synapses:")
+        print("  - VALUE_MIX (secondary): Identity operation, inherits from DOT_SECONDARY")
+        print("  - SOFTMAX_MIX (primary): Multiplication with PAIR_IN, inherits from DOT_PRIMARY")
         
         # Build S_MIX_SOFTMAX (optional mix to softmax synapse and link)
         mix_softmax_builder = an.SynapseTypeBuilder(self.registry, "S_MIX_SOFTMAX")
@@ -310,6 +330,14 @@ class TransformerTypeRegistry:
     def get_standard_network(self):
         """Return the underlying standard network foundation"""
         return self.standard_network
+    
+    def get_dot_product_network(self):
+        """Return the underlying dot-product network foundation"""
+        return self.dot_product_network
+    
+    def get_softmax_network(self):
+        """Return the underlying softmax network foundation"""
+        return self.softmax_network
 
 def create_transformer_types():
     """Factory function to create and return the transformer type registry"""
