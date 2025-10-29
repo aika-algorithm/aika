@@ -41,6 +41,9 @@ class SoftmaxTypeRegistry:
         
         # Set up softmax field definitions
         self._setup_softmax_field_definitions()
+        
+        # Flatten type hierarchy
+        self.registry.flattenTypeHierarchy()
     
     def _build_softmax_types(self):
         """Build softmax types that don't inherit from standard types"""

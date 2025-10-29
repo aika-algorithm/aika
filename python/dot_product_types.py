@@ -42,6 +42,9 @@ class DotProductTypeRegistry:
         
         # Set up dot-product field definitions
         self._setup_dot_product_field_definitions()
+        
+        # Flatten type hierarchy
+        self.registry.flattenTypeHierarchy()
     
     def _build_dot_product_types(self):
         """Build dot-product types that don't inherit from standard types"""
