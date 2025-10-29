@@ -9,6 +9,7 @@
 #include "fields/object.h"
 #include "fields/type_registry.h"
 #include "fields/input_field.h"
+#include "fields/identity_field.h"
 #include "fields/subtraction.h"
 #include "fields/test_type.h"
 #include "fields/test_object.h"
@@ -120,6 +121,8 @@ void bind_fields(py::module_& m) {
                   return f.toString();
             });
 
+      py::class_<IdentityField, AbstractFunctionDefinition>(m, "IdentityField");
+
       py::class_<Type>(m, "Type")
             .def(py::init<TypeRegistry*, const std::string&>())
             .def("getParents", &Type::getParents, py::return_value_policy::reference_internal)
@@ -175,6 +178,12 @@ void bind_fields(py::module_& m) {
                         name,
                         actFunction,
                         tolerance
+                  );
+            }, py::return_value_policy::reference_internal)
+            .def("identity", [](const Type &ref, const std::string &name) {
+                  return new IdentityField(
+                        const_cast<Type*>(&ref),
+                        name
                   );
             }, py::return_value_policy::reference_internal);
 

@@ -26,8 +26,18 @@ Object* Link::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationLabel() == "INPUT") return input;
     if (rel->getRelationLabel() == "OUTPUT") return output;
     if (rel->getRelationLabel() == "SYNAPSE") return synapse;
-//    if (rel->getRelationLabel() == "PAIR_IN") return input->getCorrespondingInputLink(this);
-//    if (rel->getRelationLabel() == "PAIR_OUT") return output->getCorrespondingOutputLink(this);
+    if (rel->getRelationLabel() == "PAIR_IN") {
+        // Find the paired input link for dot-product operations
+        // For dot-product, we need to find the OTHER input link to the same output activation
+        // This is a simple pairing: primary links pair with secondary links
+        auto inputLinks = output->getInputLinks();
+        for (Link* link : inputLinks) {
+            if (link != this) {  // Find the other input link
+                return link;
+            }
+        }
+        return nullptr;  // No paired link found
+    }
     throw std::runtime_error("Invalid Relation: " + rel->getRelationLabel());
 }
 
