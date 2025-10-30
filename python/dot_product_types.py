@@ -150,16 +150,7 @@ class DotProductTypeRegistry:
             'secondary_identity': self.secondary_identity_field,
             'primary_multiplication': self.primary_multiplication_field,
         }
-        
-        print("\\n🎉 DOT-PRODUCT IMPLEMENTATION COMPLETE:")
-        print("✅ DOT neurons: NO bias, NO activation function")
-        print("✅ DOT synapses: NO weights")  
-        print("✅ Secondary links: Identity operation")
-        print("✅ Primary links: Multiplication with PAIR_IN")
-        print("✅ DOT activations: net = Σ(primary_multiplications), value = net")
-        print("✅ Mathematical model implemented for dot-product operations")
-        print("✅ PAIR_IN relations configured and ready")
-        print("🚀 Ready for concrete implementations to inherit!")
+
     
     def get_registry(self):
         """Return the type registry"""

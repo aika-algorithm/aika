@@ -15,6 +15,35 @@ class Neuron;
 class NeuronType;
 class LinkType;
 class NetworkDirection;
+class SynapseType;
+
+/**
+ * Enumeration for different pairing types between synapses
+ */
+enum class PairingType {
+    NONE,           // No pairing
+    BY_SYNAPSE,     // Simple synapse-to-synapse pairing (output-side default)
+    BY_BINDING_SIGNAL // Binding signal based pairing with configurable sides
+};
+
+/**
+ * Configuration structure for pairing relationships
+ */
+struct PairingConfig {
+    PairingType type;
+    SynapseType* pairedSynapseType;
+    int bindingSignalSlot;   // For BY_BINDING_SIGNAL: which binding signal slot to use
+    
+    // Constructor for no pairing
+    PairingConfig() : type(PairingType::NONE), pairedSynapseType(nullptr), bindingSignalSlot(0) {}
+    
+    // Constructor for BY_SYNAPSE pairing
+    PairingConfig(SynapseType* paired) : type(PairingType::BY_SYNAPSE), pairedSynapseType(paired), bindingSignalSlot(0) {}
+    
+    // Constructor for BY_BINDING_SIGNAL pairing
+    PairingConfig(SynapseType* paired, int slot) 
+        : type(PairingType::BY_BINDING_SIGNAL), pairedSynapseType(paired), bindingSignalSlot(slot) {}
+};
 
 
 #include <set>
@@ -58,6 +87,16 @@ public:
     SynapseType* getInstanceSynapseType() const;
     void setInstanceSynapseType(SynapseType* instanceSynapseType);
 
+    // New dual pairing configuration methods
+    const PairingConfig& getInputSidePairingConfig() const;
+    void setInputSidePairingConfig(const PairingConfig& config);
+    
+    const PairingConfig& getOutputSidePairingConfig() const;
+    void setOutputSidePairingConfig(const PairingConfig& config);
+    
+    // Legacy methods (for backward compatibility) - now return first available pairing
+    const PairingConfig& getPairingConfig() const;
+    void setPairingConfig(const PairingConfig& config);
     SynapseType* getPairedSynapseType() const;
     void setPairedSynapseType(SynapseType* pairedSynapseType);
 
@@ -66,7 +105,9 @@ public:
 private:
     SynapseType* instanceSynapseType;
 
-    SynapseType* pairedSynapseType;
+    // Dual pairing configurations - separate for input and output sides
+    PairingConfig inputSidePairingConfig;
+    PairingConfig outputSidePairingConfig;
 
     LinkType* linkType;
 

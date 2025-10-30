@@ -117,12 +117,48 @@ void SynapseType::setInstanceSynapseType(SynapseType* instanceSynapseType) {
     this->instanceSynapseType = instanceSynapseType;
 }
 
+// New dual pairing configuration methods
+const PairingConfig& SynapseType::getInputSidePairingConfig() const {
+    return inputSidePairingConfig;
+}
+
+void SynapseType::setInputSidePairingConfig(const PairingConfig& config) {
+    this->inputSidePairingConfig = config;
+}
+
+const PairingConfig& SynapseType::getOutputSidePairingConfig() const {
+    return outputSidePairingConfig;
+}
+
+void SynapseType::setOutputSidePairingConfig(const PairingConfig& config) {
+    this->outputSidePairingConfig = config;
+}
+
+// Legacy methods (for backward compatibility) - return first available pairing
+const PairingConfig& SynapseType::getPairingConfig() const {
+    // Return output-side pairing if available, otherwise input-side
+    if (outputSidePairingConfig.type != PairingType::NONE) {
+        return outputSidePairingConfig;
+    }
+    return inputSidePairingConfig;
+}
+
+void SynapseType::setPairingConfig(const PairingConfig& config) {
+    // Default to output-side for legacy compatibility
+    this->outputSidePairingConfig = config;
+}
+
 SynapseType* SynapseType::getPairedSynapseType() const {
-    return pairedSynapseType;
+    // Return output-side paired synapse if available, otherwise input-side
+    if (outputSidePairingConfig.pairedSynapseType != nullptr) {
+        return outputSidePairingConfig.pairedSynapseType;
+    }
+    return inputSidePairingConfig.pairedSynapseType;
 }
 
 void SynapseType::setPairedSynapseType(SynapseType* pairedSynapseType) {
-    this->pairedSynapseType = pairedSynapseType;
+    // Default to output-side BY_SYNAPSE pairing for legacy compatibility
+    this->outputSidePairingConfig = PairingConfig(pairedSynapseType);
 }
 
 std::string SynapseType::toString() const {

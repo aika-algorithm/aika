@@ -35,6 +35,22 @@
 namespace py = pybind11;
 
 void bind_network(py::module_& m) {
+    // Bind PairingType enum
+    py::enum_<PairingType>(m, "PairingType")
+        .value("NONE", PairingType::NONE)
+        .value("BY_SYNAPSE", PairingType::BY_SYNAPSE)
+        .value("BY_BINDING_SIGNAL", PairingType::BY_BINDING_SIGNAL)
+        .export_values();
+    
+    // Bind PairingConfig struct
+    py::class_<PairingConfig>(m, "PairingConfig")
+        .def(py::init<>())
+        .def(py::init<SynapseType*>())
+        .def(py::init<SynapseType*, int>())
+        .def_readwrite("type", &PairingConfig::type)
+        .def_readwrite("pairedSynapseType", &PairingConfig::pairedSynapseType)
+        .def_readwrite("bindingSignalSlot", &PairingConfig::bindingSignalSlot);
+    
     // Bind Config class
     py::class_<Config>(m, "Config")
         .def(py::init<>())
@@ -273,6 +289,11 @@ void bind_network(py::module_& m) {
         .def("getTransitions", &SynapseType::getTransitions, py::return_value_policy::reference_internal)
         .def("getStoredAt", &SynapseType::getStoredAt, py::return_value_policy::reference_internal)
         .def("getInstanceSynapseType", &SynapseType::getInstanceSynapseType, py::return_value_policy::reference_internal)
+        .def("getInputSidePairingConfig", &SynapseType::getInputSidePairingConfig, py::return_value_policy::reference_internal)
+        .def("setInputSidePairingConfig", &SynapseType::setInputSidePairingConfig)
+        .def("getOutputSidePairingConfig", &SynapseType::getOutputSidePairingConfig, py::return_value_policy::reference_internal)
+        .def("getPairingConfig", &SynapseType::getPairingConfig, py::return_value_policy::reference_internal)  // Legacy
+        .def("getPairedSynapseType", &SynapseType::getPairedSynapseType, py::return_value_policy::reference_internal)  // Legacy
         .def("__str__", [](const SynapseType& sd) {
             return sd.toString();
         })
@@ -343,8 +364,13 @@ void bind_network(py::module_& m) {
         .def("getInput", &SynapseTypeBuilder::getInput, py::return_value_policy::reference_internal)
         .def("setOutput", &SynapseTypeBuilder::setOutput)
         .def("getOutput", &SynapseTypeBuilder::getOutput, py::return_value_policy::reference_internal)
-        .def("setPairedSynapseType", &SynapseTypeBuilder::setPairedSynapseType)
-        .def("getPairedSynapseType", &SynapseTypeBuilder::getPairedSynapseType, py::return_value_policy::reference_internal)
+        .def("pairBySynapse", py::overload_cast<SynapseType*>(&SynapseTypeBuilder::pairBySynapse), "Pair by synapse (default output-side)")
+        .def("pairByBindingSignal", &SynapseTypeBuilder::pairByBindingSignal)
+        .def("setPairedSynapseType", &SynapseTypeBuilder::setPairedSynapseType)  // Legacy
+        .def("getInputSidePairingConfig", &SynapseTypeBuilder::getInputSidePairingConfig, py::return_value_policy::reference_internal)
+        .def("getOutputSidePairingConfig", &SynapseTypeBuilder::getOutputSidePairingConfig, py::return_value_policy::reference_internal)
+        .def("getPairingConfig", &SynapseTypeBuilder::getPairingConfig, py::return_value_policy::reference_internal)  // Legacy
+        .def("getPairedSynapseType", &SynapseTypeBuilder::getPairedSynapseType, py::return_value_policy::reference_internal)  // Legacy
         .def("addTransition", &SynapseTypeBuilder::addTransition)
         .def("getTransitions", &SynapseTypeBuilder::getTransitions, py::return_value_policy::reference_internal)
         .def("addParent", &SynapseTypeBuilder::addParent, py::return_value_policy::reference_internal)
