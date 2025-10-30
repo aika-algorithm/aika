@@ -72,6 +72,9 @@ class SoftmaxTypeRegistry:
         self.L_SOFTMAX_INPUT = self.S_SOFTMAX_INPUT.getLinkType()
         
         softmax_output_builder = an.SynapseTypeBuilder(self.registry, "SOFTMAX_OUTPUT_SYNAPSE")
+        # Pair output synapse to input synapse using binding signal slot 0
+        # This allows coordination between input scores and output probabilities
+        softmax_output_builder.pairByBindingSignal(self.S_SOFTMAX_INPUT, False, True, 0)
         self.S_SOFTMAX_OUTPUT = softmax_output_builder.build()
         self.L_SOFTMAX_OUTPUT = self.S_SOFTMAX_OUTPUT.getLinkType()
         
