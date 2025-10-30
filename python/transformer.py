@@ -88,14 +88,14 @@ class TransformerTypeRegistry:
             
             # Link-specific fields
             'secondary_identity': self.dot_product_fields['secondary_identity'],        # KEY_COMP, VALUE_MIX
-            'primary_multiplication': self.dot_product_fields['primary_multiplication'], # QUERY_COMP, SOFTMAX_MIX
+            'primary_multiplication': self.dot_product_fields['primary_multiplication'], # QUERY_COMP, ATTENTION_MIX
             
             # Compatibility names for tests
             'key_comp_weighted': self.dot_product_fields['secondary_identity'],       # KEY_COMP identity operation
             'key_comp_mul': self.dot_product_fields['secondary_identity'],            # Legacy name for KEY_COMP
             'query_comp_mul': self.dot_product_fields['primary_multiplication'],     # QUERY_COMP multiplication
             'value_mix_weighted': self.dot_product_fields['secondary_identity'],     # VALUE_MIX identity operation
-            'softmax_mix_mul': self.dot_product_fields['primary_multiplication']     # SOFTMAX_MIX multiplication
+            'softmax_mix_mul': self.dot_product_fields['primary_multiplication']     # ATTENTION_MIX multiplication (legacy name)
         }
         
         # Flatten type hierarchy (includes standard + transformer types)
@@ -152,6 +152,18 @@ class TransformerTypeRegistry:
         print("Built concrete DOT-PRODUCT types (COMP, MIX) inheriting from abstract DOT")
         
         # ========================================
+        # BUILD CONCRETE SOFTMAX FAMILY TYPES  
+        # ========================================
+        
+        # Build T_ATTENTION (attention neuron and activation) - inherits from abstract SOFTMAX
+        attention_builder = an.NeuronTypeBuilder(self.registry, "ATTENTION_NEURON")
+        attention_builder.addParent(self.T_SOFTMAX)  # Inherit from abstract SOFTMAX
+        self.T_ATTENTION = attention_builder.build()
+        self.T_ATTENTION_ACT = self.T_ATTENTION.getActivationType()
+        
+        print("Built concrete SOFTMAX type (ATTENTION) inheriting from abstract SOFTMAX")
+        
+        # ========================================
         # BUILD TRANSFORMER SYNAPSE TYPES
         # ========================================
         
@@ -198,11 +210,11 @@ class TransformerTypeRegistry:
         print("  - KEY_COMP (secondary): Identity operation, inherits from DOT_SECONDARY")  
         print("  - QUERY_COMP (primary): Multiplication with PAIR_IN, inherits from DOT_PRIMARY")
         
-        # Build S_COMP_SOFTMAX (comparison to softmax synapse and link)
-        comp_softmax_builder = an.SynapseTypeBuilder(self.registry, "S_COMP_SOFTMAX")
-        comp_softmax_builder.setInput(self.T_COMP).setOutput(self.T_SOFTMAX).addParent(self.T_STANDARD_SYNAPSE)
-        self.S_COMP_SOFTMAX = comp_softmax_builder.build()
-        self.L_COMP_SOFTMAX = self.S_COMP_SOFTMAX.getLinkType()
+        # Build S_COMP_ATTENTION (comparison to attention synapse and link)
+        comp_attention_builder = an.SynapseTypeBuilder(self.registry, "S_COMP_ATTENTION")
+        comp_attention_builder.setInput(self.T_COMP).setOutput(self.T_ATTENTION).addParent(self.T_STANDARD_SYNAPSE)
+        self.S_COMP_ATTENTION = comp_attention_builder.build()
+        self.L_COMP_ATTENTION = self.S_COMP_ATTENTION.getLinkType()
         
         # Build MIX dot-product synapses (inherit from abstract DOT types)
         value_mix_builder = an.SynapseTypeBuilder(self.registry, "S_VALUE_MIX")
@@ -210,21 +222,14 @@ class TransformerTypeRegistry:
         self.S_VALUE_MIX = value_mix_builder.build()
         self.L_VALUE_MIX = self.S_VALUE_MIX.getLinkType()
         
-        # Build SOFTMAX_MIX as primary (contains multiplication)
-        softmax_mix_builder = an.SynapseTypeBuilder(self.registry, "S_SOFTMAX_MIX")
-        softmax_mix_builder.setInput(self.T_SOFTMAX).setOutput(self.T_MIX).addParent(self.S_DOT_PRIMARY)
-        self.S_SOFTMAX_MIX = softmax_mix_builder.build()  
-        self.L_SOFTMAX_MIX = self.S_SOFTMAX_MIX.getLinkType()
+        attention_mix_builder = an.SynapseTypeBuilder(self.registry, "S_ATTENTION_MIX")
+        attention_mix_builder.setInput(self.T_ATTENTION).setOutput(self.T_MIX).addParent(self.S_DOT_PRIMARY)
+        self.S_ATTENTION_MIX = attention_mix_builder.build()
+        self.L_ATTENTION_MIX = self.S_ATTENTION_MIX.getLinkType()
         
         print("Built concrete MIX DOT-PRODUCT synapses:")
         print("  - VALUE_MIX (secondary): Identity operation, inherits from DOT_SECONDARY")
-        print("  - SOFTMAX_MIX (primary): Multiplication with PAIR_IN, inherits from DOT_PRIMARY")
-        
-        # Build S_MIX_SOFTMAX (optional mix to softmax synapse and link)
-        mix_softmax_builder = an.SynapseTypeBuilder(self.registry, "S_MIX_SOFTMAX")
-        mix_softmax_builder.setInput(self.T_MIX).setOutput(self.T_SOFTMAX).addParent(self.T_STANDARD_SYNAPSE)
-        self.S_MIX_SOFTMAX = mix_softmax_builder.build()
-        self.L_MIX_SOFTMAX = self.S_MIX_SOFTMAX.getLinkType()
+        print("  - ATTENTION_MIX (primary): Multiplication with PAIR_IN, inherits from DOT_PRIMARY")
         
         print("Transformer-specific types built successfully")
     
@@ -239,7 +244,7 @@ class TransformerTypeRegistry:
         # Abstract DOT neuron type gets the mathematical implementation
         # - DOT neurons have NO bias (no inheritance from standard)
         # - DOT synapses have NO weight (no inheritance from standard)
-        # - Primary synapses: multiplication operation (QUERY_COMP, SOFTMAX_MIX)
+        # - Primary synapses: multiplication operation (QUERY_COMP, ATTENTION_MIX)
         # - Secondary synapses: identity operation (KEY_COMP, VALUE_MIX)
         
         print("Implementing abstract DOT-PRODUCT mathematical model...")
@@ -311,17 +316,7 @@ class TransformerTypeRegistry:
             'value_mix_weighted': self.secondary_identity_field,    # Legacy name  
             'softmax_mix_mul': self.primary_multiplication_field   # Legacy name
         }
-        
-        print("\\n🎉 ABSTRACT DOT-PRODUCT IMPLEMENTATION COMPLETE:")
-        print("✅ DOT neurons: NO bias, NO activation function")
-        print("✅ DOT synapses: NO weights")  
-        print("✅ Secondary links (KEY_COMP, VALUE_MIX): Identity operation")
-        print("✅ Primary links (QUERY_COMP, SOFTMAX_MIX): Multiplication with PAIR_IN")
-        print("✅ DOT activations: net = Σ(primary_multiplications), value = net")
-        print("✅ Mathematical model implemented ONCE in abstract DOT type")
-        print("✅ COMP and MIX inherit complete dot-product functionality")
-        print("✅ PAIR_IN relations configured and ready")
-        print("🚀 Ready for automatic dot-product calculation!")
+
     
     def get_registry(self):
         """Return the type registry (includes both standard and transformer types)"""
