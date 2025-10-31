@@ -185,8 +185,8 @@ void bind_network(py::module_& m) {
         .def("getRelations", &NeuronType::getRelations)
         .def("instantiate", &NeuronType::instantiate, py::return_value_policy::reference_internal)
         .def("getActivationType", &NeuronType::getActivationType, py::return_value_policy::reference_internal)
-        .def("getBindingSignals", &NeuronType::getBindingSignals)
         .def("getWildcardBSSlot", &NeuronType::getWildcardBSSlot)
+        .def("setWildcardBSSlot", &NeuronType::setWildcardBSSlot)
         .def("__str__", [](const NeuronType& nd) {
             return nd.toString();
         })

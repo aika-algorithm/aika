@@ -182,11 +182,21 @@ void Linker::linkOutgoing(Activation* act, Synapse* targetSyn) {
 }
 
 void Linker::propagate(Activation* act, Synapse* targetSyn) {
-    std::map<int, BindingSignal*> bindingSignals = targetSyn->transitionForward(act->getBindingSignals());
-    Activation* oAct = targetSyn->getOutput(act->getModel())->createActivation(nullptr, act->getContext(), bindingSignals);
+    // Check if the synapse type has allowLatentLinking enabled
+    SynapseType* synapseType = static_cast<SynapseType*>(targetSyn->getType());
+    
+    if (synapseType && synapseType->getAllowLatentLinking()) {
+        // Use latent linking for synapses with allowLatentLinking enabled
+        // This is needed for paired synapses like dot-product synapses
+        linkLatent(act);
+    } else {
+        // Use normal propagation for regular synapses
+        std::map<int, BindingSignal*> bindingSignals = targetSyn->transitionForward(act->getBindingSignals());
+        Activation* oAct = targetSyn->getOutput(act->getModel())->createActivation(nullptr, act->getContext(), bindingSignals);
 
-    targetSyn->createLink(act, bindingSignals, oAct);
+        targetSyn->createLink(act, bindingSignals, oAct);
 
-    linkIncoming(oAct, act);
+        linkIncoming(oAct, act);
+    }
 }
 
