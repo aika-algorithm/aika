@@ -6,10 +6,7 @@
 
 SynapseTypeBuilder::SynapseTypeBuilder(TypeRegistry* registry, const std::string& name)
     : registry(registry), name(name), inputType(nullptr), outputType(nullptr), linkType(nullptr),
-      inputSidePairingConfig(), outputSidePairingConfig(),
-      inputSideThisInputSide(false), inputSidePairedInputSide(false),
-      outputSideThisInputSide(false), outputSidePairedInputSide(false),
-      parentTypes(), builtInstance(nullptr), isBuilt(false) {
+      pairingConfigs(), transitions(), parentTypes(), builtInstance(nullptr), isBuilt(false) {
 }
 
 SynapseTypeBuilder::~SynapseTypeBuilder() {
@@ -41,63 +38,23 @@ NeuronType* SynapseTypeBuilder::getOutput() const {
 // Pairing methods - side bits determine storage location
 SynapseTypeBuilder& SynapseTypeBuilder::pairBySynapse(SynapseType* pairedSynapseType) {
     PairingConfig config(pairedSynapseType);
-
-    this->outputSidePairingConfig = config;
-    this->outputSideThisInputSide = false;
-    this->outputSidePairedInputSide = false;  // BY_SYNAPSE uses default output-side pairing
+    this->pairingConfigs.push_back(config);
 
     return *this;
 }
 
-SynapseTypeBuilder& SynapseTypeBuilder::pairByBindingSignal(SynapseType* pairedSynapseType, 
-                                                          bool thisInputSide, 
-                                                          bool pairedInputSide, 
+SynapseTypeBuilder& SynapseTypeBuilder::pairByBindingSignal(SynapseType* pairedSynapseType,
                                                           int bindingSignalSlot) {
     PairingConfig config(pairedSynapseType, bindingSignalSlot);
-    if (thisInputSide) {
-        this->inputSidePairingConfig = config;
-        this->inputSideThisInputSide = thisInputSide;
-        this->inputSidePairedInputSide = pairedInputSide;
-    } else {
-        this->outputSidePairingConfig = config;
-        this->outputSideThisInputSide = thisInputSide;
-        this->outputSidePairedInputSide = pairedInputSide;
-    }
+    this->pairingConfigs.push_back(config);
+
     return *this;
 }
 
-SynapseTypeBuilder& SynapseTypeBuilder::setPairedSynapseType(SynapseType* pairedSynapseType) {
-    this->outputSidePairingConfig = PairingConfig(pairedSynapseType);  // Default to BY_SYNAPSE pairing
-    this->outputSideThisInputSide = false;  // Default to output-side
-    this->outputSidePairedInputSide = false;  // BY_SYNAPSE uses default output-side pairing
-    return *this;
+std::vector<PairingConfig> SynapseTypeBuilder::getPairingConfigs() const {
+    return pairingConfigs;
 }
 
-// Getters for dual pairing configuration
-const PairingConfig& SynapseTypeBuilder::getInputSidePairingConfig() const {
-    return inputSidePairingConfig;
-}
-
-const PairingConfig& SynapseTypeBuilder::getOutputSidePairingConfig() const {
-    return outputSidePairingConfig;
-}
-
-// Legacy getter (backward compatibility) - return first available pairing
-const PairingConfig& SynapseTypeBuilder::getPairingConfig() const {
-    // Return output-side pairing if available, otherwise input-side
-    if (outputSidePairingConfig.type != PairingType::NONE) {
-        return outputSidePairingConfig;
-    }
-    return inputSidePairingConfig;
-}
-
-SynapseType* SynapseTypeBuilder::getPairedSynapseType() const {
-    // Return output-side paired synapse if available, otherwise input-side
-    if (outputSidePairingConfig.pairedSynapseType != nullptr) {
-        return outputSidePairingConfig.pairedSynapseType;
-    }
-    return inputSidePairingConfig.pairedSynapseType;
-}
 
 SynapseTypeBuilder& SynapseTypeBuilder::addTransition(Transition* transition) {
     if (transition) {
@@ -134,48 +91,59 @@ SynapseType* SynapseTypeBuilder::build() {
     linkType->setSynapseType(builtInstance);
     builtInstance->setLinkType(linkType);
 
-    // Set up dual pairing configuration
-    if (inputSidePairingConfig.type != PairingType::NONE) {
-        builtInstance->setInputSidePairingConfig(inputSidePairingConfig);
-        
-        // For bidirectional pairing, set up the reverse pairing on the paired synapse
-        if (inputSidePairingConfig.pairedSynapseType) {
-            PairingConfig reversePairingConfig;
-            
-            if (inputSidePairingConfig.type == PairingType::BY_SYNAPSE) {
-                reversePairingConfig = PairingConfig(builtInstance);
-            } else if (inputSidePairingConfig.type == PairingType::BY_BINDING_SIGNAL) {
-                reversePairingConfig = PairingConfig(builtInstance, inputSidePairingConfig.bindingSignalSlot);
-            }
-            
-            // Set up reverse pairing on the appropriate side of the paired synapse
-            if (inputSidePairedInputSide) {
-                inputSidePairingConfig.pairedSynapseType->setInputSidePairingConfig(reversePairingConfig);
-            } else {
-                inputSidePairingConfig.pairedSynapseType->setOutputSidePairingConfig(reversePairingConfig);
-            }
+    // Set up pairing configuration using elegant common neuron type detection
+    for (const PairingConfig& config : pairingConfigs) {
+        if (!config.pairedSynapseType) {
+            continue;
         }
-    }
-    
-    if (outputSidePairingConfig.type != PairingType::NONE) {
-        builtInstance->setOutputSidePairingConfig(outputSidePairingConfig);
         
-        // For bidirectional pairing, set up the reverse pairing on the paired synapse
-        if (outputSidePairingConfig.pairedSynapseType) {
-            PairingConfig reversePairingConfig;
-            
-            if (outputSidePairingConfig.type == PairingType::BY_SYNAPSE) {
-                reversePairingConfig = PairingConfig(builtInstance);
-            } else if (outputSidePairingConfig.type == PairingType::BY_BINDING_SIGNAL) {
-                reversePairingConfig = PairingConfig(builtInstance, outputSidePairingConfig.bindingSignalSlot);
-            }
-            
-            // Set up reverse pairing on the appropriate side of the paired synapse
-            if (outputSidePairedInputSide) {
-                outputSidePairingConfig.pairedSynapseType->setInputSidePairingConfig(reversePairingConfig);
-            } else {
-                outputSidePairingConfig.pairedSynapseType->setOutputSidePairingConfig(reversePairingConfig);
-            }
+        // Determine which side to attach the pairing config based on common neuron type
+        bool attachToInputSide = false;
+        
+        // Get neuron types of the paired synapse
+        NeuronType* pairedInputType = config.pairedSynapseType->getInputType();
+        NeuronType* pairedOutputType = config.pairedSynapseType->getOutputType();
+        
+        // Check if we share a common neuron type and determine the side
+        if (inputType && inputType == pairedInputType) {
+            // Common input neuron type -> attach to input side
+            attachToInputSide = true;
+        } else if (inputType && inputType == pairedOutputType) {
+            // Our input connects to their output -> attach to input side
+            attachToInputSide = true;
+        } else if (outputType && outputType == pairedInputType) {
+            // Our output connects to their input -> attach to output side
+            attachToInputSide = false;
+        } else if (outputType && outputType == pairedOutputType) {
+            // Common output neuron type -> attach to output side
+            attachToInputSide = false;
+        } else {
+            // Default: attach to output side if no clear common neuron type found
+            attachToInputSide = false;
+        }
+        
+        // Attach the pairing config to the determined side
+        if (attachToInputSide) {
+            builtInstance->setInputSidePairingConfig(config);
+        } else {
+            builtInstance->setOutputSidePairingConfig(config);
+        }
+        
+        // Set up bidirectional reverse pairing on the paired synapse
+        PairingConfig reversePairingConfig;
+        if (config.type == PairingType::BY_SYNAPSE) {
+            reversePairingConfig = PairingConfig(builtInstance);
+        } else if (config.type == PairingType::BY_BINDING_SIGNAL) {
+            reversePairingConfig = PairingConfig(builtInstance, config.bindingSignalSlot);
+        }
+        
+        // Attach reverse pairing to the opposite side of the paired synapse
+        if (attachToInputSide) {
+            // Input side pairing creates output side reverse pairing
+            config.pairedSynapseType->setOutputSidePairingConfig(reversePairingConfig);
+        } else {
+            // Output side pairing creates input side reverse pairing
+            config.pairedSynapseType->setInputSidePairingConfig(reversePairingConfig);
         }
     }
 

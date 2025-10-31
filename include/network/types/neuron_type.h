@@ -25,7 +25,7 @@ public:
     std::vector<int> getBindingSignals() const;
     void setBindingSignals(const std::vector<int>& bindingSignals);
 
-    std::vector<Relation> getRelations() const;
+    std::vector<Relation*> getRelations() const;
     Neuron* instantiate(Model* m);
 
 private:

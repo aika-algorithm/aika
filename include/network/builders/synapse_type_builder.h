@@ -34,22 +34,11 @@ public:
     NeuronType* getOutput() const;
 
     // Pairing methods - side bits determine storage location
-    SynapseTypeBuilder& pairBySynapse(SynapseType* pairedSynapseType);  // Default output-side
+    SynapseTypeBuilder& pairBySynapse(SynapseType* pairedSynapseType);
     SynapseTypeBuilder& pairByBindingSignal(SynapseType* pairedSynapseType,
-                                          bool thisInputSide, 
-                                          bool pairedInputSide, 
                                           int bindingSignalSlot);
-    
-    // Legacy method (for backward compatibility)
-    SynapseTypeBuilder& setPairedSynapseType(SynapseType* pairedSynapseType);
-    
-    // Getters for dual pairing configuration
-    const PairingConfig& getInputSidePairingConfig() const;
-    const PairingConfig& getOutputSidePairingConfig() const;
-    
-    // Legacy getters (backward compatibility) - return first available pairing
-    const PairingConfig& getPairingConfig() const;
-    SynapseType* getPairedSynapseType() const;
+
+    std::vector<PairingConfig> getPairingConfigs() const;
 
     SynapseTypeBuilder& addTransition(Transition* transition);
     std::vector<Transition*> getTransitions() const;
@@ -66,13 +55,7 @@ private:
     NeuronType* inputType;
     NeuronType* outputType;
     LinkType* linkType;
-    PairingConfig inputSidePairingConfig;
-    PairingConfig outputSidePairingConfig;
-    // Track side information for bidirectional setup
-    bool inputSideThisInputSide;
-    bool inputSidePairedInputSide;
-    bool outputSideThisInputSide;
-    bool outputSidePairedInputSide;
+    std::vector<PairingConfig> pairingConfigs;
     std::vector<Transition*> transitions;
     std::vector<SynapseType*> parentTypes;
     SynapseType* builtInstance;

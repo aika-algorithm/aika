@@ -59,7 +59,7 @@ public:
 
     SynapseType(TypeRegistry* registry, const std::string& name);
 
-    std::vector<Relation> getRelations() const;
+    std::vector<Relation*> getRelations() const;
 
     Synapse* instantiate();
     Synapse* instantiate(Neuron* input, Neuron* output);

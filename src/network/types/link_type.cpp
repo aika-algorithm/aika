@@ -1,4 +1,5 @@
 #include "network/types/link_type.h"
+#include "network/types/synapse_type.h"
 #include "network/link.h"
 
 const RelationSelf LinkType::SELF = RelationSelf(0, "SELF");
