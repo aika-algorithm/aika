@@ -10,13 +10,10 @@ const RelationOne ActivationType::NEURON = RelationOne(3, "NEURON");
 class ActivationTypeInitializer {
 public:
     ActivationTypeInitializer() {
-        // Set up bidirectional relationships
+        const_cast<RelationSelf&>(ActivationType::SELF).setReversed(const_cast<RelationSelf*>(&ActivationType::SELF));
         const_cast<RelationMany&>(ActivationType::INPUT).setReversed(const_cast<RelationMany*>(&ActivationType::OUTPUT));
         const_cast<RelationMany&>(ActivationType::OUTPUT).setReversed(const_cast<RelationMany*>(&ActivationType::INPUT));
-        
-        // SELF and NEURON are their own reverse
-        const_cast<RelationSelf&>(ActivationType::SELF).setReversed(const_cast<RelationSelf*>(&ActivationType::SELF));
-        const_cast<RelationOne&>(ActivationType::NEURON).setReversed(const_cast<RelationOne*>(&ActivationType::NEURON));
+        const_cast<RelationOne&>(ActivationType::NEURON).setReversed(const_cast<RelationMany*>(&NeuronType::ACTIVATION));
     }
 };
 

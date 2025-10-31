@@ -177,8 +177,7 @@ void bind_network(py::module_& m) {
         .def("toKeyString", &Activation::toKeyString)
         .def("__str__", [](const Activation& a) {
             return a.toString();
-        })
-        .def_readonly_static("ID_COMPARATOR", &Activation::ID_COMPARATOR);
+        });
 
     // Bind NeuronType class (inherits from Type)
     py::class_<NeuronType, Type>(m, "NeuronType")
@@ -274,6 +273,7 @@ void bind_network(py::module_& m) {
         .def_readonly_static("INPUT", &LinkType::INPUT)
         .def_readonly_static("OUTPUT", &LinkType::OUTPUT)
         .def_readonly_static("SYNAPSE", &LinkType::SYNAPSE)
+        .def_readonly_static("PAIR", &LinkType::PAIR_IN)
         .def_readonly_static("PAIR_IN", &LinkType::PAIR_IN)
         .def_readonly_static("PAIR_OUT", &LinkType::PAIR_OUT);
 
@@ -294,6 +294,9 @@ void bind_network(py::module_& m) {
         .def("getOutputSidePairingConfig", &SynapseType::getOutputSidePairingConfig, py::return_value_policy::reference_internal)
         .def("getPairingConfig", &SynapseType::getPairingConfig, py::return_value_policy::reference_internal)  // Legacy
         .def("getPairedSynapseType", &SynapseType::getPairedSynapseType, py::return_value_policy::reference_internal)  // Legacy
+        // New derived fields from PairingConfigs
+        .def("getAllowLatentLinking", &SynapseType::getAllowLatentLinking)
+        .def("getWildcardBSSlot", &SynapseType::getWildcardBSSlot)
         .def("__str__", [](const SynapseType& sd) {
             return sd.toString();
         })

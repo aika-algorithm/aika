@@ -5,8 +5,7 @@ const RelationSelf SynapseType::SELF = RelationSelf(0, "SELF");
 const RelationOne SynapseType::INPUT = RelationOne(1, "INPUT");
 const RelationOne SynapseType::OUTPUT = RelationOne(2, "OUTPUT");
 const RelationMany SynapseType::LINK = RelationMany(3, "LINK");
-// Cannot store abstract class Relation in vector, need to use pointers instead
-// const std::vector<Relation> SynapseType::RELATIONS = {SELF, INPUT, OUTPUT, LINK};
+
 
 // Static initializer to set up reverse relationships
 class SynapseTypeInitializer {
@@ -18,18 +17,23 @@ public:
         
         // SELF and LINK are their own reverse
         const_cast<RelationSelf&>(SynapseType::SELF).setReversed(const_cast<RelationSelf*>(&SynapseType::SELF));
-        const_cast<RelationMany&>(SynapseType::LINK).setReversed(const_cast<RelationMany*>(&SynapseType::LINK));
+        const_cast<RelationMany&>(SynapseType::LINK).setReversed(const_cast<RelationOne*>(&LinkType::SYNAPSE));
     }
 };
 
 static SynapseTypeInitializer synapseDefInit;
 
-SynapseType::SynapseType(TypeRegistry* registry, const std::string& name) : Type(registry, name), linkType(nullptr), inputType(nullptr), outputType(nullptr), storedAt(nullptr), instanceSynapseType(nullptr) {}
+SynapseType::SynapseType(TypeRegistry* registry, const std::string& name) : Type(registry, name), linkType(nullptr), inputType(nullptr), outputType(nullptr), storedAt(nullptr), instanceSynapseType(nullptr), allowLatentLinking(false), wildcardBSSlot(-1) {}
 
-std::vector<Relation> SynapseType::getRelations() const {
-    // We can't return a vector of the abstract class Relation
-    // For now, return an empty vector
-    return std::vector<Relation>();
+
+std::vector<Relation*> SynapseType::getRelations() const {
+    // Return a vector of pointers to avoid the abstract class issue
+    return {
+        const_cast<RelationSelf*>(&SELF),
+        const_cast<RelationOne*>(&INPUT),
+        const_cast<RelationOne*>(&OUTPUT),
+        const_cast<RelationMany*>(&LINK)
+    };
 }
 
 Synapse* SynapseType::instantiate() {
@@ -159,6 +163,14 @@ SynapseType* SynapseType::getPairedSynapseType() const {
 void SynapseType::setPairedSynapseType(SynapseType* pairedSynapseType) {
     // Default to output-side BY_SYNAPSE pairing for legacy compatibility
     this->outputSidePairingConfig = PairingConfig(pairedSynapseType);
+}
+
+bool SynapseType::getAllowLatentLinking() const {
+    return allowLatentLinking;
+}
+
+int SynapseType::getWildcardBSSlot() const {
+    return wildcardBSSlot;
 }
 
 std::string SynapseType::toString() const {

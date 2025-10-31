@@ -98,6 +98,10 @@ public:
     SynapseType* getPairedSynapseType() const;
     void setPairedSynapseType(SynapseType* pairedSynapseType);
 
+    // Derived fields from PairingConfigs
+    bool getAllowLatentLinking() const;
+    int getWildcardBSSlot() const;
+
     std::string toString() const;
 
 private:
@@ -106,6 +110,10 @@ private:
     // Dual pairing configurations - separate for input and output sides
     PairingConfig inputSidePairingConfig;
     PairingConfig outputSidePairingConfig;
+    
+    // Derived fields computed from PairingConfigs
+    bool allowLatentLinking;
+    int wildcardBSSlot;
 
     LinkType* linkType;
 

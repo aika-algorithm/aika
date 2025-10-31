@@ -5,20 +5,16 @@ const RelationSelf NeuronType::SELF = RelationSelf(0, "SELF");
 const RelationMany NeuronType::INPUT = RelationMany(1, "INPUT");
 const RelationMany NeuronType::OUTPUT = RelationMany(2, "OUTPUT");
 const RelationMany NeuronType::ACTIVATION = RelationMany(3, "ACTIVATION");
-// Cannot store abstract class Relation in vector, need to use pointers instead
-// const std::vector<Relation> NeuronType::RELATIONS = {SELF, INPUT, OUTPUT, ACTIVATION};
+
 
 // Static initializer to set up reverse relationships
 class NeuronTypeInitializer {
 public:
     NeuronTypeInitializer() {
-        // Set up bidirectional relationships
+        const_cast<RelationSelf&>(NeuronType::SELF).setReversed(const_cast<RelationSelf*>(&NeuronType::SELF));
         const_cast<RelationMany&>(NeuronType::INPUT).setReversed(const_cast<RelationMany*>(&NeuronType::OUTPUT));
         const_cast<RelationMany&>(NeuronType::OUTPUT).setReversed(const_cast<RelationMany*>(&NeuronType::INPUT));
-        
-        // SELF and ACTIVATION are their own reverse
-        const_cast<RelationSelf&>(NeuronType::SELF).setReversed(const_cast<RelationSelf*>(&NeuronType::SELF));
-        const_cast<RelationMany&>(NeuronType::ACTIVATION).setReversed(const_cast<RelationMany*>(&NeuronType::ACTIVATION));
+        const_cast<RelationMany&>(NeuronType::ACTIVATION).setReversed(const_cast<RelationOne*>(&ActivationType::NEURON));
     }
 };
 
@@ -34,11 +30,14 @@ void NeuronType::setBindingSignals(const std::vector<int>& bindingSignals) {
     this->bindingSignals = bindingSignals;
 }
 
-std::vector<Relation> NeuronType::getRelations() const {
-    // We can't return a vector of abstract class objects
-    // For now, return an empty vector
-    // The actual implementation should return a vector of pointers or use another approach
-    return std::vector<Relation>();
+std::vector<Relation*> NeuronType::getRelations() const {
+    // Return a vector of pointers to avoid the abstract class issue
+    return {
+        const_cast<RelationSelf*>(&SELF),
+        const_cast<RelationMany*>(&INPUT),
+        const_cast<RelationMany*>(&OUTPUT),
+        const_cast<RelationMany*>(&ACTIVATION)
+    };
 }
 
 Neuron* NeuronType::instantiate(Model* m) {
