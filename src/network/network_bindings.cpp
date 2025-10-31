@@ -185,6 +185,8 @@ void bind_network(py::module_& m) {
         .def("getRelations", &NeuronType::getRelations)
         .def("instantiate", &NeuronType::instantiate, py::return_value_policy::reference_internal)
         .def("getActivationType", &NeuronType::getActivationType, py::return_value_policy::reference_internal)
+        .def("getBindingSignals", &NeuronType::getBindingSignals)
+        .def("getWildcardBSSlot", &NeuronType::getWildcardBSSlot)
         .def("__str__", [](const NeuronType& nd) {
             return nd.toString();
         })
@@ -297,7 +299,6 @@ void bind_network(py::module_& m) {
         // New derived fields from PairingConfigs
         .def("getAllowLatentLinking", &SynapseType::getAllowLatentLinking)
         .def("setAllowLatentLinking", &SynapseType::setAllowLatentLinking)
-        .def("getWildcardBSSlot", &SynapseType::getWildcardBSSlot)
         .def("__str__", [](const SynapseType& sd) {
             return sd.toString();
         })

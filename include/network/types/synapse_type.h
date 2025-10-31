@@ -101,7 +101,6 @@ public:
     // Derived fields from PairingConfigs
     bool getAllowLatentLinking() const;
     void setAllowLatentLinking(bool allowLatentLinking);
-    int getWildcardBSSlot() const;
 
     std::string toString() const;
 
@@ -114,7 +113,6 @@ private:
     
     // Derived fields computed from PairingConfigs
     bool allowLatentLinking;
-    int wildcardBSSlot;
 
     LinkType* linkType;
 

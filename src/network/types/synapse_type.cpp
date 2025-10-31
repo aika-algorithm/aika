@@ -23,7 +23,7 @@ public:
 
 static SynapseTypeInitializer synapseDefInit;
 
-SynapseType::SynapseType(TypeRegistry* registry, const std::string& name) : Type(registry, name), linkType(nullptr), inputType(nullptr), outputType(nullptr), storedAt(nullptr), instanceSynapseType(nullptr), allowLatentLinking(false), wildcardBSSlot(-1) {}
+SynapseType::SynapseType(TypeRegistry* registry, const std::string& name) : Type(registry, name), linkType(nullptr), inputType(nullptr), outputType(nullptr), storedAt(nullptr), instanceSynapseType(nullptr), allowLatentLinking(false) {}
 
 
 std::vector<Relation*> SynapseType::getRelations() const {
@@ -171,10 +171,6 @@ bool SynapseType::getAllowLatentLinking() const {
 
 void SynapseType::setAllowLatentLinking(bool allowLatentLinking) {
     this->allowLatentLinking = allowLatentLinking;
-}
-
-int SynapseType::getWildcardBSSlot() const {
-    return wildcardBSSlot;
 }
 
 std::string SynapseType::toString() const {

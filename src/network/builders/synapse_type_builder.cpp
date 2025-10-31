@@ -137,6 +137,23 @@ SynapseType* SynapseTypeBuilder::build() {
             config.pairedSynapseType->setAllowLatentLinking(true);
         }
         
+        // Check if the pair spans over a neuron type (for wildcardBSSlot setting)
+        // Spanning occurs when: one synapse's output connects to another's input, or vice versa
+        NeuronType* spanningNeuron = nullptr;
+        
+        if (outputType && outputType == pairedInputType) {
+            // Our output connects to their input: A→B, B→C (spans over B)
+            spanningNeuron = outputType;
+        } else if (inputType && inputType == pairedOutputType) {
+            // Our input connects from their output: A→B, C→A (spans over A) 
+            spanningNeuron = inputType;
+        }
+        
+        // If spanning detected and this is a binding signal pairing, set wildcardBSSlot
+        if (spanningNeuron && config.type == PairingType::BY_BINDING_SIGNAL) {
+            spanningNeuron->setWildcardBSSlot(config.bindingSignalSlot);
+        }
+        
         // Set up bidirectional reverse pairing on the paired synapse
         PairingConfig reversePairingConfig;
         if (config.type == PairingType::BY_SYNAPSE) {

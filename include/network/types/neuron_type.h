@@ -22,14 +22,15 @@ public:
     ActivationType* getActivationType() const;
     void setActivationType(ActivationType* activationType);
 
-    std::vector<int> getBindingSignals() const;
-    void setBindingSignals(const std::vector<int>& bindingSignals);
+    // Wildcard binding signal slot for spanning neuron pairs
+    int getWildcardBSSlot() const;
+    void setWildcardBSSlot(int wildcardBSSlot);
 
     std::vector<Relation*> getRelations() const;
     Neuron* instantiate(Model* m);
 
 private:
-    std::vector<int> bindingSignals;
+    int wildcardBSSlot; // -1 indicates not set (default)
 
     ActivationType* activationType;
 };
