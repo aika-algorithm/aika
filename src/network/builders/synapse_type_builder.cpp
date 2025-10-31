@@ -129,6 +129,14 @@ SynapseType* SynapseTypeBuilder::build() {
             builtInstance->setOutputSidePairingConfig(config);
         }
         
+        // Check if both synapse types share a common output neuron type
+        // If so, set allowLatentLinking to true for both synapse types
+        if (outputType && outputType == pairedOutputType) {
+            // Both synapses have the same output neuron type - enable latent linking
+            builtInstance->setAllowLatentLinking(true);
+            config.pairedSynapseType->setAllowLatentLinking(true);
+        }
+        
         // Set up bidirectional reverse pairing on the paired synapse
         PairingConfig reversePairingConfig;
         if (config.type == PairingType::BY_SYNAPSE) {

@@ -296,6 +296,7 @@ void bind_network(py::module_& m) {
         .def("getPairedSynapseType", &SynapseType::getPairedSynapseType, py::return_value_policy::reference_internal)  // Legacy
         // New derived fields from PairingConfigs
         .def("getAllowLatentLinking", &SynapseType::getAllowLatentLinking)
+        .def("setAllowLatentLinking", &SynapseType::setAllowLatentLinking)
         .def("getWildcardBSSlot", &SynapseType::getWildcardBSSlot)
         .def("__str__", [](const SynapseType& sd) {
             return sd.toString();

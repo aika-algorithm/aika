@@ -100,6 +100,7 @@ public:
 
     // Derived fields from PairingConfigs
     bool getAllowLatentLinking() const;
+    void setAllowLatentLinking(bool allowLatentLinking);
     int getWildcardBSSlot() const;
 
     std::string toString() const;

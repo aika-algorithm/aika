@@ -169,6 +169,10 @@ bool SynapseType::getAllowLatentLinking() const {
     return allowLatentLinking;
 }
 
+void SynapseType::setAllowLatentLinking(bool allowLatentLinking) {
+    this->allowLatentLinking = allowLatentLinking;
+}
+
 int SynapseType::getWildcardBSSlot() const {
     return wildcardBSSlot;
 }
