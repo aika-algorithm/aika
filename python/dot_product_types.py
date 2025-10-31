@@ -113,8 +113,8 @@ class DotProductTypeRegistry:
         # SECONDARY LINK FIELDS (IDENTITY)
         # ========================================
         
-        # Secondary links provide identity operation: output = input_activation.value
-        self.secondary_identity_field = self.L_DOT_SECONDARY.identity("identityOutput")
+        # Secondary links provide identity operation: identityValue = input_activation.value
+        self.secondary_identity_field = self.L_DOT_SECONDARY.identity("identityValue")
         # Connect to input activation's value via INPUT relation
         # Note: We connect to the standard value field since secondary links come from standard neurons
         self.secondary_identity_field.input(self.L_DOT_SECONDARY.INPUT, self.standard_value_field, 0)
@@ -125,14 +125,14 @@ class DotProductTypeRegistry:
         # PRIMARY LINK FIELDS (MULTIPLICATION)
         # ========================================
         
-        # Primary links contain multiplication: this.identityOutput × PAIR_OUT.identityOutput
+        # Primary links contain multiplication: input_activation.value × PAIR.identityValue
         self.primary_multiplication_field = self.L_DOT_PRIMARY.mul("pairMultiplication")
-        # Input 0: This link's identity output (but primary links don't have identity, so use secondary)
-        self.primary_multiplication_field.input(self.L_DOT_PRIMARY.SELF, self.secondary_identity_field, 0)
-        # Input 1: Paired secondary link's identity output (via PAIR_OUT)
-        self.primary_multiplication_field.input(self.L_DOT_PRIMARY.PAIR_OUT, self.secondary_identity_field, 1)
+        # Input 0: Connect to input activation's value via INPUT relation
+        self.primary_multiplication_field.input(self.L_DOT_PRIMARY.INPUT, self.standard_value_field, 0)
+        # Input 1: Paired secondary link's identity value (via PAIR)
+        self.primary_multiplication_field.input(self.L_DOT_PRIMARY.PAIR, self.secondary_identity_field, 1)
         
-        print("Set up DOT_PRIMARY link: Multiplication with PAIR_OUT relation")
+        print("Set up DOT_PRIMARY link: Multiplication with PAIR relation")
         
         # Connect DOT net field to primary multiplication results
         self.dot_net_field.input(self.T_DOT_ACT.INPUT, self.primary_multiplication_field, 0)
