@@ -125,14 +125,14 @@ class DotProductTypeRegistry:
         # PRIMARY LINK FIELDS (MULTIPLICATION)
         # ========================================
         
-        # Primary links contain multiplication: this.identityOutput × PAIR_IN.identityOutput
+        # Primary links contain multiplication: this.identityOutput × PAIR_OUT.identityOutput
         self.primary_multiplication_field = self.L_DOT_PRIMARY.mul("pairMultiplication")
         # Input 0: This link's identity output (but primary links don't have identity, so use secondary)
         self.primary_multiplication_field.input(self.L_DOT_PRIMARY.SELF, self.secondary_identity_field, 0)
-        # Input 1: Paired secondary link's identity output (via PAIR_IN)
-        self.primary_multiplication_field.input(self.L_DOT_PRIMARY.PAIR_IN, self.secondary_identity_field, 1)
+        # Input 1: Paired secondary link's identity output (via PAIR_OUT)
+        self.primary_multiplication_field.input(self.L_DOT_PRIMARY.PAIR_OUT, self.secondary_identity_field, 1)
         
-        print("Set up DOT_PRIMARY link: Multiplication with PAIR_IN relation")
+        print("Set up DOT_PRIMARY link: Multiplication with PAIR_OUT relation")
         
         # Connect DOT net field to primary multiplication results
         self.dot_net_field.input(self.T_DOT_ACT.INPUT, self.primary_multiplication_field, 0)

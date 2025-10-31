@@ -22,10 +22,8 @@ public:
     static const RelationOne INPUT;
     static const RelationOne OUTPUT;
     static const RelationOne SYNAPSE;
-    static const RelationOne PAIR_IN;
-    static const RelationOne PAIR_OUT;
-    // We can't use vector of abstract class Relation directly
-    // static const std::vector<Relation> RELATIONS;
+    static const RelationOne PAIR_IN; // Refering to the pair relation attached to the input side of the link.
+    static const RelationOne PAIR_OUT; // Refering to the pair relation attached to the output side of the link.
 
     LinkType(TypeRegistry* registry, const std::string& name);
 

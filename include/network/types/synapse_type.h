@@ -56,8 +56,6 @@ public:
     static const RelationOne INPUT;
     static const RelationOne OUTPUT;
     static const RelationMany LINK;
-    // Cannot store abstract class Relation in vector, need to use pointers instead
-    // static const std::vector<Relation> RELATIONS;
 
     SynapseType(TypeRegistry* registry, const std::string& name);
 

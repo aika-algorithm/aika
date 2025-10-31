@@ -60,7 +60,7 @@ class SoftmaxTypesTestCase(unittest.TestCase):
         fields = self.softmax_types.get_softmax_fields()
         
         # Verify all required fields exist
-        required_fields = ['softmax_net', 'softmax_value', 'softmax_input', 'softmax_output']
+        required_fields = ['softmax_norm', 'softmax_input', 'softmax_output']
         for field_name in required_fields:
             self.assertIn(field_name, fields)
             self.assertIsNotNone(fields[field_name])
@@ -192,12 +192,10 @@ class SoftmaxTypesTestCase(unittest.TestCase):
         
         try:
             # Check softmax activation fields
-            softmax_net = softmax_activation.getFieldValue(softmax_fields['softmax_net'])
-            softmax_value = softmax_activation.getFieldValue(softmax_fields['softmax_value'])
+            softmax_norm = softmax_activation.getFieldValue(softmax_fields['softmax_norm'])
             
             print(f"\\nSoftmax activation results:")
-            print(f"  Net field (sum of inputs): {softmax_net}")  
-            print(f"  Value field (normalized): {softmax_value}")
+            print(f"  Norm field (normalized): {softmax_norm}")
             
             # Check input link fields
             input_scores = []
@@ -270,8 +268,7 @@ class SoftmaxTypesTestCase(unittest.TestCase):
         fields = self.softmax_types.get_softmax_fields()
         
         # Verify field types
-        self.assertIsNotNone(fields['softmax_net'])  # Should be summation field
-        self.assertIsNotNone(fields['softmax_value'])  # Should be identity field
+        self.assertIsNotNone(fields['softmax_norm'])  # Should be identity field for normalized output
         self.assertIsNotNone(fields['softmax_input'])  # Should be identity field
         self.assertIsNotNone(fields['softmax_output'])  # Should be identity field
         

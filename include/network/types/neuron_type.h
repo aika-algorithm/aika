@@ -16,8 +16,6 @@ public:
     static const RelationMany INPUT;
     static const RelationMany OUTPUT;
     static const RelationMany ACTIVATION;
-    // Cannot store abstract class Relation in vector, need to use pointers instead
-    // static const std::vector<Relation> RELATIONS;
 
     NeuronType(TypeRegistry* registry, const std::string& name);
 

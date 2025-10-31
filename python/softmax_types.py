@@ -72,9 +72,7 @@ class SoftmaxTypeRegistry:
         self.L_SOFTMAX_INPUT = self.S_SOFTMAX_INPUT.getLinkType()
         
         softmax_output_builder = an.SynapseTypeBuilder(self.registry, "SOFTMAX_OUTPUT_SYNAPSE")
-        # Pair output synapse to input synapse using binding signal slot 0
-        # This allows coordination between input scores and output probabilities
-        softmax_output_builder.pairByBindingSignal(self.S_SOFTMAX_INPUT, False, True, 0)
+        # Note: Pairing functionality is not fully implemented yet, using simple approach
         self.S_SOFTMAX_OUTPUT = softmax_output_builder.build()
         self.L_SOFTMAX_OUTPUT = self.S_SOFTMAX_OUTPUT.getLinkType()
         
@@ -101,42 +99,45 @@ class SoftmaxTypeRegistry:
         # SOFTMAX ACTIVATION FIELDS
         # ========================================
         
-        # Softmax net field: Sum of input scores (before normalization)
-        self.softmax_net_field = self.T_SOFTMAX_ACT.sum("net")
-        
-        # Softmax value field: Normalized output (requires exponential and normalization)
+        # Softmax norm field: Normalized output (requires exponential and normalization)
+        # This is the main field for softmax activation - no separate value field needed
         # For now, using identity as placeholder - full softmax implementation needed
-        self.softmax_value_field = self.T_SOFTMAX_ACT.identity("value")
-        self.softmax_value_field.input(self.T_SOFTMAX_ACT.SELF, self.softmax_net_field, 0)
+        self.softmax_norm_field = self.T_SOFTMAX_ACT.sum("norm")
         
-        print("Set up SOFTMAX activation fields: net (sum) and value (normalized)")
+        print("Set up SOFTMAX activation field: norm (normalized output)")
         
         # ========================================
         # SOFTMAX INPUT LINK FIELDS
         # ========================================
         
-        # Softmax input links: Identity operation to pass scores
-        self.softmax_input_field = self.L_SOFTMAX_INPUT.identity("inputScore")
+        # Softmax input links: Exponential operation to pass scores
+        # Note: Field connections via relations are not yet implemented
+        self.softmax_input_field = self.L_SOFTMAX_INPUT.exp("inputScore")
         # Connect to input activation's value via INPUT relation
         self.softmax_input_field.input(self.L_SOFTMAX_INPUT.INPUT, self.standard_value_field, 0)
+
+        print("Set up SOFTMAX_INPUT link: Exponential operation for score input")
         
-        print("Set up SOFTMAX_INPUT link: Identity operation for score input")
+        # Connect softmax norm field to input links (sum all input scores for normalization)
+        self.softmax_norm_field.input(self.T_SOFTMAX_ACT.INPUT, self.softmax_input_field, 0)
         
         # ========================================
         # SOFTMAX OUTPUT LINK FIELDS
         # ========================================
         
-        # Softmax output links: Pass normalized values
+        # Softmax output links: Simple identity to pass normalized values
+        # Note: Field connections via relations are not yet implemented
         self.softmax_output_field = self.L_SOFTMAX_OUTPUT.identity("normalizedOutput")
-        # Connect to softmax activation's value via INPUT relation
-        self.softmax_output_field.input(self.L_SOFTMAX_OUTPUT.INPUT, self.softmax_value_field, 0)
+
+        # Connect to paired input link's exponential field via PAIR_IN relation  
+        self.softmax_output_field.input(self.L_SOFTMAX_OUTPUT.PAIR_IN, self.softmax_input_field, 0)
+
+        # Connect to softmax activation's norm field via INPUT relation
+        self.softmax_output_field.input(self.L_SOFTMAX_OUTPUT.INPUT, self.softmax_norm_field, 1)
         
-        print("Set up SOFTMAX_OUTPUT link: Identity operation for normalized output")
+        print("Set up SOFTMAX_OUTPUT link: Identity operation using norm field")
         
-        # Connect softmax net field to input links
-        self.softmax_net_field.input(self.T_SOFTMAX_ACT.INPUT, self.softmax_input_field, 0)
-        
-        print("Connected SOFTMAX net field to input links")
+        print("Connected SOFTMAX norm field to input links for normalization")
         
         # ========================================
         # COMPLETED SOFTMAX IMPLEMENTATION
@@ -144,8 +145,7 @@ class SoftmaxTypeRegistry:
         
         # Store field references for access by concrete implementations
         self.softmax_fields = {
-            'softmax_net': self.softmax_net_field,
-            'softmax_value': self.softmax_value_field,
+            'softmax_norm': self.softmax_norm_field,
             'softmax_input': self.softmax_input_field,
             'softmax_output': self.softmax_output_field,
         }
