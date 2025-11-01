@@ -72,6 +72,12 @@ public:
 
     std::string toString() const;
     std::string toKeyString() const;
+    
+    // Methods for paired synapse IDs
+    int getPairedInputSynapseId() const;
+    void setPairedInputSynapseId(int pairedInputSynapseId);
+    int getPairedOutputSynapseId() const;
+    void setPairedOutputSynapseId(int pairedOutputSynapseId);
 
 protected:
     int synapseId;
@@ -79,6 +85,10 @@ protected:
     NeuronReference* output;
 
     bool propagable;
+    
+    // IDs of paired synapses for spanning pairs
+    int pairedInputSynapseId;   // SynapseId of the paired input-side synapse
+    int pairedOutputSynapseId;  // SynapseId of the paired output-side synapse
 };
 
 #endif // NETWORK_SYNAPSE_H 

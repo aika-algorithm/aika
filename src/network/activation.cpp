@@ -240,6 +240,67 @@ void Activation::propagate(Synapse* targetSyn) {
     Linker::propagate(this, targetSyn);
 }
 
+std::vector<int> Activation::createInputKeyFromOutputCandidate(Synapse* outputSynapse, Activation* outputActivation) const {
+    std::vector<int> key;
+    
+    // Get the paired input synapse ID from the output synapse
+    int pairedInputSynapseId = outputSynapse->getPairedInputSynapseId();
+    if (pairedInputSynapseId == -1) {
+        // No paired input synapse - return empty key
+        return key;
+    }
+    
+    // Start building the key with the paired input synapse ID
+    key.push_back(pairedInputSynapseId);
+    
+    // Get binding signals from the output activation
+    std::map<int, BindingSignal*> outputBindingSignals = outputActivation->getBindingSignals();
+    
+    // Transition the binding signals backwards through the output synapse
+    std::map<int, BindingSignal*> inputBindingSignals = outputSynapse->transitionBackward(outputBindingSignals);
+
+    // Add the resolved wildcard binding signal and other binding signals to the key
+    // We need to get the transitions from the paired input synapse type to know which slots to use
+    SynapseType* outputSynapseType = static_cast<SynapseType*>(outputSynapse->getType());
+
+    // Get the paired input synapse type from the pairing configs
+    SynapseType* pairedInputSynapseType = nullptr;
+
+    // Check input side pairing config
+    const PairingConfig& inputConfig = outputSynapseType->getInputSidePairingConfig();
+    if (inputConfig.pairedSynapseType && inputConfig.pairedSynapseType->getInstanceSynapseType()) {
+        // Check if this could be our paired synapse by examining synapse IDs
+        // We need a way to match the synapse ID - for now, assume it's the input side paired synapse
+        pairedInputSynapseType = inputConfig.pairedSynapseType;
+    }
+
+/*
+    // Check output side pairing config if we didn't find it on input side
+    if (!pairedInputSynapseType) {
+        const PairingConfig& outputConfig = outputSynapseType->getOutputSidePairingConfig();
+        if (outputConfig.pairedSynapseType && outputConfig.pairedSynapseType->getInstanceSynapseType()) {
+            pairedInputSynapseType = outputConfig.pairedSynapseType;
+        }
+    }
+*/
+
+    if (pairedInputSynapseType) {
+        // Get transitions from the paired input synapse type
+        const std::vector<Transition*> transitions = pairedInputSynapseType->getTransitions();
+        
+        // For each transition in the paired input synapse, add the corresponding binding signal token ID
+        for (const auto& transition : transitions) {
+            int fromSlot = transition->from();
+            auto it = inputBindingSignals.find(fromSlot);
+            if (it != inputBindingSignals.end() && it->second) {
+                key.push_back(it->second->getTokenId());
+            }
+        }
+    }
+    
+    return key;
+}
+
 void Activation::linkIncoming(Activation* inputAct) {
     // Add the input activation's output links to this activation's input links
     for (Link* link : inputAct->getOutputLinks()) {

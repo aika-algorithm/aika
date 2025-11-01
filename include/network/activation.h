@@ -55,6 +55,9 @@ public:
     void addInputLink(Link* l);
     std::vector<Link*> getInputLinks(LinkType* linkDefinition) const;
     std::vector<Link*> getInputLinks() const;
+    
+    // Method to create InputKey for softmax lookup using output synapse and output activation
+    std::vector<int> createInputKeyFromOutputCandidate(Synapse* outputSynapse, Activation* outputActivation) const;
 
     void addOutputLink(Link* l);
     std::vector<Link*> getOutputLinks(LinkType* linkDefinition) const;
