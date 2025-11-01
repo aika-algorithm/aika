@@ -135,12 +135,17 @@ void bind_network(py::module_& m) {
         .def("getInputKeyString", &Link::getInputKeyString)
         .def("getOutputKeyString", &Link::getOutputKeyString)
         .def("toKeyString", &Link::toKeyString)
+        .def("getPairedLinkInputSide", &Link::getPairedLinkInputSide, py::return_value_policy::reference_internal)
+        .def("setPairedLinkInputSide", &Link::setPairedLinkInputSide)
+        .def("getPairedLinkOutputSide", &Link::getPairedLinkOutputSide, py::return_value_policy::reference_internal)
+        .def("setPairedLinkOutputSide", &Link::setPairedLinkOutputSide)
         .def("__str__", [](const Link& l) {
             return l.toString();
         });
 
     // Bind Activation base class (inherits from Object)
     py::class_<Activation, Object>(m, "Activation")
+        .def(py::init<ActivationType*, Activation*, int, Neuron*, Context*, std::map<int, BindingSignal*>>())
         .def("getKey", &Activation::getKey)
         .def("getParent", &Activation::getParent, py::return_value_policy::reference_internal)
         .def("addOutputLink", &Activation::addOutputLink)

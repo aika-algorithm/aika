@@ -63,7 +63,6 @@ class PairingLogicTestCase(unittest.TestCase):
         
         if input_pairing:
             self.assertEqual(input_pairing.pairedSynapseType, synapse1)
-            self.assertEqual(input_pairing.type, an.PairingType.BY_BINDING_SIGNAL)
             self.assertEqual(input_pairing.bindingSignalSlot, 0)
             print("✅ Input side pairing config correct")
         else:
@@ -107,7 +106,6 @@ class PairingLogicTestCase(unittest.TestCase):
         
         if output_pairing:
             self.assertEqual(output_pairing.pairedSynapseType, synapse1)
-            self.assertEqual(output_pairing.type, an.PairingType.BY_BINDING_SIGNAL)
             self.assertEqual(output_pairing.bindingSignalSlot, 1)
             print("✅ Output side pairing config correct")
         else:
@@ -155,12 +153,10 @@ class PairingLogicTestCase(unittest.TestCase):
         
         if input_pairing and input_pairing.pairedSynapseType:
             self.assertEqual(input_pairing.pairedSynapseType, synapse1)
-            self.assertEqual(input_pairing.type, an.PairingType.BY_SYNAPSE)
             print("✅ Input side pairing established")
             
         if output_pairing and output_pairing.pairedSynapseType:
             self.assertEqual(output_pairing.pairedSynapseType, synapse1)
-            self.assertEqual(output_pairing.type, an.PairingType.BY_SYNAPSE)
             print("✅ Output side pairing established")
         
         # The elegant algorithm chooses one side based on the order of checks

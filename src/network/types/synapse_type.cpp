@@ -141,7 +141,7 @@ void SynapseType::setOutputSidePairingConfig(const PairingConfig& config) {
 // Legacy methods (for backward compatibility) - return first available pairing
 const PairingConfig& SynapseType::getPairingConfig() const {
     // Return output-side pairing if available, otherwise input-side
-    if (outputSidePairingConfig.type != PairingType::NONE) {
+    if (outputSidePairingConfig.pairedSynapseType != nullptr) {
         return outputSidePairingConfig;
     }
     return inputSidePairingConfig;

@@ -11,7 +11,7 @@
 #include "network/timestamp.h"
 
 Link::Link(LinkType* type, Synapse* s, Activation* input, Activation* output)
-    : Object(type), synapse(s), input(input), output(output) {
+    : Object(type), synapse(s), input(input), output(output), pairedLinkInputSide(nullptr), pairedLinkOutputSide(nullptr) {
     // initFields() call removed as it doesn't exist in Object class
     input->addOutputLink(this);
     output->addInputLink(this);
@@ -27,13 +27,16 @@ Object* Link::followSingleRelation(const Relation* rel) const {
     if (rel->getRelationLabel() == "OUTPUT") return output;
     if (rel->getRelationLabel() == "SYNAPSE") return synapse;
     if (rel->getRelationLabel() == "PAIR") {
-
+        // Return the paired input link. This pairing is attached to the output side of both links.
+        return pairedLinkOutputSide;
     }
     if (rel->getRelationLabel() == "PAIR_IN") {
-        // TODO: implement!
+        // Return the paired input link. For the paired link the pair relation is attached to the output-side.
+        return pairedLinkInputSide;
     }
     if (rel->getRelationLabel() == "PAIR_OUT") {
-        // TODO: implement!
+        // Return the paired output link. For the paired link the pair relation is attached to the input-side.
+        return pairedLinkOutputSide;
     }
     throw std::runtime_error("Invalid Relation: " + rel->getRelationLabel());
 }
@@ -110,4 +113,20 @@ std::string Link::toString() const {
 
 std::string Link::toKeyString() const {
     return getInputKeyString() + " ==> " + getOutputKeyString();
+}
+
+Link* Link::getPairedLinkInputSide() const {
+    return pairedLinkInputSide;
+}
+
+void Link::setPairedLinkInputSide(Link* pairedLink) {
+    this->pairedLinkInputSide = pairedLink;
+}
+
+Link* Link::getPairedLinkOutputSide() const {
+    return pairedLinkOutputSide;
+}
+
+void Link::setPairedLinkOutputSide(Link* pairedLink) {
+    this->pairedLinkOutputSide = pairedLink;
 } 
