@@ -50,7 +50,7 @@ class WildcardBSSlotTestCase(unittest.TestCase):
         synapse2_builder.setInput(self.neuron_B).setOutput(self.neuron_C)
         
         # Add binding signal pairing (spans over neuron B)
-        synapse2_builder.pairByBindingSignal(synapse1, 5)  # Use slot 5
+        synapse2_builder.pair(synapse1, 5)  # Use slot 5
         synapse2 = synapse2_builder.build()
         
         print("✅ Created spanning synapses: A→B, B→C")
@@ -83,7 +83,7 @@ class WildcardBSSlotTestCase(unittest.TestCase):
         synapse2_builder.setInput(self.neuron_A).setOutput(self.neuron_B)
         
         # Add binding signal pairing (spans over neuron A)
-        synapse2_builder.pairByBindingSignal(synapse1, 3)  # Use slot 3
+        synapse2_builder.pair(synapse1, 3)  # Use slot 3
         synapse2 = synapse2_builder.build()
         
         print("✅ Created spanning synapses: C→A, A→B")
@@ -116,7 +116,7 @@ class WildcardBSSlotTestCase(unittest.TestCase):
         synapse2_builder.setInput(self.neuron_A).setOutput(self.neuron_B)
         
         # Add binding signal pairing (no spanning should occur)
-        synapse2_builder.pairByBindingSignal(synapse1, 7)
+        synapse2_builder.pair(synapse1, 7)
         synapse2 = synapse2_builder.build()
         
         print("✅ Created parallel synapses: A→B, A→B")
@@ -149,7 +149,7 @@ class WildcardBSSlotTestCase(unittest.TestCase):
         synapse2_builder.setInput(self.neuron_B).setOutput(self.neuron_C)
         
         # Add synapse pairing (not binding signal pairing)
-        synapse2_builder.pairBySynapse(synapse1)
+        synapse2_builder.pair(synapse1)
         synapse2 = synapse2_builder.build()
         
         print("✅ Created spanning synapses with BY_SYNAPSE pairing")
@@ -180,7 +180,7 @@ class WildcardBSSlotTestCase(unittest.TestCase):
         
         synapse2_builder = an.SynapseTypeBuilder(self.registry, "SYN_B_TO_C_MULTI1")
         synapse2_builder.setInput(self.neuron_B).setOutput(self.neuron_C)
-        synapse2_builder.pairByBindingSignal(synapse1, 2)
+        synapse2_builder.pair(synapse1, 2)
         synapse2 = synapse2_builder.build()
         
         # Create second spanning pair that also spans over B: C→B, B→A (slot 8)
@@ -191,7 +191,7 @@ class WildcardBSSlotTestCase(unittest.TestCase):
         
         synapse4_builder = an.SynapseTypeBuilder(self.registry, "SYN_B_TO_A_MULTI2")
         synapse4_builder.setInput(self.neuron_B).setOutput(self.neuron_A)
-        synapse4_builder.pairByBindingSignal(synapse3, 8)
+        synapse4_builder.pair(synapse3, 8)
         synapse4 = synapse4_builder.build()
         
         print("✅ Created multiple spanning synapse pairs")

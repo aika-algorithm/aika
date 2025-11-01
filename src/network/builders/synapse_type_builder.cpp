@@ -35,16 +35,15 @@ NeuronType* SynapseTypeBuilder::getOutput() const {
     return outputType;
 }
 
-// Pairing methods - side bits determine storage location
-SynapseTypeBuilder& SynapseTypeBuilder::pairBySynapse(SynapseType* pairedSynapseType) {
+// Pairing methods
+SynapseTypeBuilder& SynapseTypeBuilder::pair(SynapseType* pairedSynapseType) {
     PairingConfig config(pairedSynapseType);
     this->pairingConfigs.push_back(config);
 
     return *this;
 }
 
-SynapseTypeBuilder& SynapseTypeBuilder::pairByBindingSignal(SynapseType* pairedSynapseType,
-                                                          int bindingSignalSlot) {
+SynapseTypeBuilder& SynapseTypeBuilder::pair(SynapseType* pairedSynapseType, int bindingSignalSlot) {
     PairingConfig config(pairedSynapseType, bindingSignalSlot);
     this->pairingConfigs.push_back(config);
 
@@ -150,16 +149,18 @@ SynapseType* SynapseTypeBuilder::build() {
         }
         
         // If spanning detected and this is a binding signal pairing, set wildcardBSSlot
-        if (spanningNeuron && config.type == PairingType::BY_BINDING_SIGNAL) {
+        if (spanningNeuron && config.bindingSignalSlot >= 0) {
             spanningNeuron->setWildcardBSSlot(config.bindingSignalSlot);
         }
         
         // Set up bidirectional reverse pairing on the paired synapse
         PairingConfig reversePairingConfig;
-        if (config.type == PairingType::BY_SYNAPSE) {
-            reversePairingConfig = PairingConfig(builtInstance);
-        } else if (config.type == PairingType::BY_BINDING_SIGNAL) {
+        if (config.bindingSignalSlot >= 0) {
+            // Binding signal pairing
             reversePairingConfig = PairingConfig(builtInstance, config.bindingSignalSlot);
+        } else {
+            // Simple pairing
+            reversePairingConfig = PairingConfig(builtInstance);
         }
         
         // Attach reverse pairing to the opposite side of the paired synapse

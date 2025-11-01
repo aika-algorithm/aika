@@ -45,7 +45,7 @@ class SoftmaxInputKeyTestCase(unittest.TestCase):
         output_synapse_builder = an.SynapseTypeBuilder(self.registry, "OUTPUT_SYNAPSE")
         output_synapse_builder.setInput(self.softmax_type).setOutput(self.output_type)
         # Pair the output synapse with the input synapse via binding signal
-        output_synapse_builder.pairByBindingSignal(input_synapse_type, 0)
+        output_synapse_builder.pair(input_synapse_type, 0)
         output_synapse_type = output_synapse_builder.build()
         
         # Create synapse instances

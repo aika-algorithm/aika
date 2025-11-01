@@ -49,7 +49,7 @@ class PairingLogicTestCase(unittest.TestCase):
         synapse2_builder.setInput(self.neuron_A).setOutput(self.neuron_C)
         
         # Add pairing: synapse2 should pair with synapse1 via binding signal slot 0
-        synapse2_builder.pairByBindingSignal(synapse1, 0)
+        synapse2_builder.pair(synapse1, 0)
         synapse2 = synapse2_builder.build()
         
         print("✅ Created paired synapses with common input neuron A")
@@ -93,7 +93,7 @@ class PairingLogicTestCase(unittest.TestCase):
         synapse2_builder.setInput(self.neuron_C).setOutput(self.neuron_B)
         
         # Add pairing: synapse2 should pair with synapse1 via binding signal slot 1
-        synapse2_builder.pairByBindingSignal(synapse1, 1)
+        synapse2_builder.pair(synapse1, 1)
         synapse2 = synapse2_builder.build()
         
         print("✅ Created paired synapses with common output neuron B")
@@ -138,7 +138,7 @@ class PairingLogicTestCase(unittest.TestCase):
         synapse2_builder.setInput(self.neuron_B).setOutput(self.neuron_A)
         
         # Add pairing: synapse2 should pair with synapse1
-        synapse2_builder.pairBySynapse(synapse1)
+        synapse2_builder.pair(synapse1)
         synapse2 = synapse2_builder.build()
         
         print("✅ Created cross-connected paired synapses")
@@ -191,7 +191,7 @@ class PairingLogicTestCase(unittest.TestCase):
         synapse2_builder.setInput(self.neuron_A).setOutput(self.neuron_C)  # Same input neuron
         
         # Add pairing from synapse2 to synapse1
-        synapse2_builder.pairByBindingSignal(synapse1, 2)
+        synapse2_builder.pair(synapse1, 2)
         synapse2 = synapse2_builder.build()
         
         print("✅ Created bidirectional pairing setup")

@@ -52,7 +52,7 @@ class LatentLinkingTestCase(unittest.TestCase):
         synapse2_builder.setInput(self.neuron_C).setOutput(self.neuron_B)
         
         # Add pairing: synapse2 pairs with synapse1 (common output neuron B)
-        synapse2_builder.pairByBindingSignal(synapse1, 0)
+        synapse2_builder.pair(synapse1, 0)
         synapse2 = synapse2_builder.build()
         
         print("✅ Created paired synapses with common output neuron B")
@@ -85,7 +85,7 @@ class LatentLinkingTestCase(unittest.TestCase):
         synapse2_builder.setInput(self.neuron_A).setOutput(self.neuron_C)
         
         # Add pairing: synapse2 pairs with synapse1 (common input neuron A)
-        synapse2_builder.pairByBindingSignal(synapse1, 1)
+        synapse2_builder.pair(synapse1, 1)
         synapse2 = synapse2_builder.build()
         
         print("✅ Created paired synapses with common input neuron A")
@@ -118,7 +118,7 @@ class LatentLinkingTestCase(unittest.TestCase):
         synapse2_builder.setInput(self.neuron_C).setOutput(self.neuron_C)
         
         # Add pairing: synapse2 pairs with synapse1 (no common neurons)
-        synapse2_builder.pairBySynapse(synapse1)
+        synapse2_builder.pair(synapse1)
         synapse2 = synapse2_builder.build()
         
         print("✅ Created paired synapses with no common neurons")
@@ -150,13 +150,13 @@ class LatentLinkingTestCase(unittest.TestCase):
         # Synapse 2 pairs with synapse 1 (common output B)
         synapse2_builder = an.SynapseTypeBuilder(self.registry, "SYN_MULTI_2")
         synapse2_builder.setInput(self.neuron_C).setOutput(self.neuron_B)
-        synapse2_builder.pairByBindingSignal(synapse1, 0)
+        synapse2_builder.pair(synapse1, 0)
         synapse2 = synapse2_builder.build()
         
         # Synapse 3 pairs with synapse 1 (common input A, different outputs)
         synapse3_builder = an.SynapseTypeBuilder(self.registry, "SYN_MULTI_3")
         synapse3_builder.setInput(self.neuron_A).setOutput(self.neuron_C)
-        synapse3_builder.pairByBindingSignal(synapse1, 1)
+        synapse3_builder.pair(synapse1, 1)
         synapse3 = synapse3_builder.build()
         
         print("✅ Created three synapse types with mixed pairing scenarios")

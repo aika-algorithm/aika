@@ -18,31 +18,21 @@ class NetworkDirection;
 class SynapseType;
 
 /**
- * Enumeration for different pairing types between synapses
- */
-enum class PairingType {
-    NONE,           // No pairing
-    BY_SYNAPSE,     // Simple synapse-to-synapse pairing (output-side default)
-    BY_BINDING_SIGNAL // Binding signal based pairing with configurable sides
-};
-
-/**
  * Configuration structure for pairing relationships
  */
 struct PairingConfig {
-    PairingType type;
     SynapseType* pairedSynapseType;
-    int bindingSignalSlot;   // For BY_BINDING_SIGNAL: which binding signal slot to use
+    int bindingSignalSlot;   // Optional binding signal slot (-1 if not used)
     
     // Constructor for no pairing
-    PairingConfig() : type(PairingType::NONE), pairedSynapseType(nullptr), bindingSignalSlot(0) {}
+    PairingConfig() : pairedSynapseType(nullptr), bindingSignalSlot(-1) {}
     
-    // Constructor for BY_SYNAPSE pairing
-    PairingConfig(SynapseType* paired) : type(PairingType::BY_SYNAPSE), pairedSynapseType(paired), bindingSignalSlot(0) {}
+    // Constructor for simple pairing (no binding signal slot)
+    PairingConfig(SynapseType* paired) : pairedSynapseType(paired), bindingSignalSlot(-1) {}
     
-    // Constructor for BY_BINDING_SIGNAL pairing
+    // Constructor for pairing with binding signal slot
     PairingConfig(SynapseType* paired, int slot) 
-        : type(PairingType::BY_BINDING_SIGNAL), pairedSynapseType(paired), bindingSignalSlot(slot) {}
+        : pairedSynapseType(paired), bindingSignalSlot(slot) {}
 };
 
 

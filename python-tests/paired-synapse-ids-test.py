@@ -110,7 +110,7 @@ class PairedSynapseIdsTestCase(unittest.TestCase):
         # Create output synapse type and pair it with input synapse
         output_synapse_builder = an.SynapseTypeBuilder(self.registry, "PAIRED_OUTPUT_SYNAPSE")
         output_synapse_builder.setInput(self.softmax_type).setOutput(self.output_type)
-        output_synapse_builder.pairByBindingSignal(input_synapse_type, 0)  # Pair with binding signal slot 0
+        output_synapse_builder.pair(input_synapse_type, 0)  # Pair with binding signal slot 0
         output_synapse_type = output_synapse_builder.build()
         
         # Flatten type hierarchy
@@ -160,7 +160,7 @@ class PairedSynapseIdsTestCase(unittest.TestCase):
         # Create output synapse: SOFTMAX → OUTPUT (paired to input synapse)
         output_syn_builder = an.SynapseTypeBuilder(self.registry, "SOFTMAX_OUTPUT")
         output_syn_builder.setInput(self.softmax_type).setOutput(self.output_type)
-        output_syn_builder.pairByBindingSignal(input_syn_type, 1)  # Paired via binding signal slot 1
+        output_syn_builder.pair(input_syn_type, 1)  # Paired via binding signal slot 1
         output_syn_type = output_syn_builder.build()
         
         # Flatten type hierarchy

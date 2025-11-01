@@ -65,7 +65,7 @@ class PropagateLatentLinkingTestCase(unittest.TestCase):
         
         synapse2_builder = an.SynapseTypeBuilder(self.registry, "SYN_LATENT_2")
         synapse2_builder.setInput(self.neuron_C).setOutput(self.neuron_B)
-        synapse2_builder.pairByBindingSignal(synapse1, 0)  # Pair with binding signal
+        synapse2_builder.pair(synapse1, 0)  # Pair with binding signal
         synapse2 = synapse2_builder.build()
         
         # Verify both synapses have allowLatentLinking enabled
@@ -97,7 +97,7 @@ class PropagateLatentLinkingTestCase(unittest.TestCase):
         
         latent_synapse2_builder = an.SynapseTypeBuilder(self.registry, "SYN_MIXED_LATENT_2")
         latent_synapse2_builder.setInput(self.neuron_C).setOutput(self.neuron_B)
-        latent_synapse2_builder.pairByBindingSignal(latent_synapse1, 1)
+        latent_synapse2_builder.pair(latent_synapse1, 1)
         latent_synapse2 = latent_synapse2_builder.build()
         
         # Verify propagation types
@@ -128,7 +128,7 @@ class PropagateLatentLinkingTestCase(unittest.TestCase):
         
         query_synapse_builder = an.SynapseTypeBuilder(self.registry, "QUERY_SYNAPSE") 
         query_synapse_builder.setInput(self.neuron_B).setOutput(self.neuron_C)  # query → comp
-        query_synapse_builder.pairByBindingSignal(key_synapse, 0)  # Pair for dot-product
+        query_synapse_builder.pair(key_synapse, 0)  # Pair for dot-product
         query_synapse = query_synapse_builder.build()
         
         # Both synapses should have latent linking enabled for dot-product

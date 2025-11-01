@@ -11,7 +11,6 @@
 // Forward declarations
 class TypeRegistry;
 class SynapseType;
-enum class PairingType;
 struct PairingConfig;
 
 /**
@@ -33,10 +32,9 @@ public:
     SynapseTypeBuilder& setOutput(NeuronType* outputType);
     NeuronType* getOutput() const;
 
-    // Pairing methods - side bits determine storage location
-    SynapseTypeBuilder& pairBySynapse(SynapseType* pairedSynapseType);
-    SynapseTypeBuilder& pairByBindingSignal(SynapseType* pairedSynapseType,
-                                          int bindingSignalSlot);
+    // Pairing methods
+    SynapseTypeBuilder& pair(SynapseType* pairedSynapseType);
+    SynapseTypeBuilder& pair(SynapseType* pairedSynapseType, int bindingSignalSlot);
 
     std::vector<PairingConfig> getPairingConfigs() const;
 

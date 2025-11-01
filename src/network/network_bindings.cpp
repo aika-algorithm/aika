@@ -35,19 +35,11 @@
 namespace py = pybind11;
 
 void bind_network(py::module_& m) {
-    // Bind PairingType enum
-    py::enum_<PairingType>(m, "PairingType")
-        .value("NONE", PairingType::NONE)
-        .value("BY_SYNAPSE", PairingType::BY_SYNAPSE)
-        .value("BY_BINDING_SIGNAL", PairingType::BY_BINDING_SIGNAL)
-        .export_values();
-    
     // Bind PairingConfig struct
     py::class_<PairingConfig>(m, "PairingConfig")
         .def(py::init<>())
         .def(py::init<SynapseType*>())
         .def(py::init<SynapseType*, int>())
-        .def_readwrite("type", &PairingConfig::type)
         .def_readwrite("pairedSynapseType", &PairingConfig::pairedSynapseType)
         .def_readwrite("bindingSignalSlot", &PairingConfig::bindingSignalSlot);
     
@@ -374,8 +366,8 @@ void bind_network(py::module_& m) {
         .def("getInput", &SynapseTypeBuilder::getInput, py::return_value_policy::reference_internal)
         .def("setOutput", &SynapseTypeBuilder::setOutput)
         .def("getOutput", &SynapseTypeBuilder::getOutput, py::return_value_policy::reference_internal)
-        .def("pairBySynapse", py::overload_cast<SynapseType*>(&SynapseTypeBuilder::pairBySynapse), "Pair by synapse")
-        .def("pairByBindingSignal", &SynapseTypeBuilder::pairByBindingSignal)
+        .def("pair", py::overload_cast<SynapseType*>(&SynapseTypeBuilder::pair), "Pair with synapse")
+        .def("pair", py::overload_cast<SynapseType*, int>(&SynapseTypeBuilder::pair), "Pair with synapse and binding signal slot")
         .def("getPairingConfigs", &SynapseTypeBuilder::getPairingConfigs)
         .def("addTransition", &SynapseTypeBuilder::addTransition)
         .def("getTransitions", &SynapseTypeBuilder::getTransitions, py::return_value_policy::reference_internal)
