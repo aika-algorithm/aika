@@ -15,6 +15,7 @@ class Synapse;
 class BindingSignal;
 class Context;
 class NeuronReference; // Forward declare NeuronReference
+class ActivationsPerContext;
 
 #include <map>
 #include <set>
@@ -25,6 +26,7 @@ class Neuron : public Object, public Element, public ModelProvider {
 public:
     Neuron(NeuronType* type, Model* model, long id);
     Neuron(NeuronType* type, Model* model);
+    ~Neuron();
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
     Object* followSingleRelation(const Relation* rel) const override;
@@ -40,6 +42,12 @@ public:
     int getNewSynapseId();
     Activation* createActivation(Activation* parent, Context* doc, std::map<int, BindingSignal*> bindingSignals);
     void deleteNeuron();
+
+    // ActivationsPerContext management
+    void addActivation(Activation* activation);
+    void removeActivation(Activation* activation);
+    Activation* getActivationByTokenIds(Context* context, const std::vector<int>& tokenIds) const;
+    ActivationsPerContext* getActivationsPerContext(Context* context) const;
 
     Model* getModel() const override;
     Config* getConfig() const override;
@@ -98,6 +106,9 @@ private:
     int refCountByType[static_cast<int>(RefType::OTHER) + 1];
     long lastUsed;
     bool modified;
+    
+    // Map from context ID to ActivationsPerContext
+    std::map<long, ActivationsPerContext*> activationsPerContext;
 };
 
 #endif // NETWORK_NEURON_H 

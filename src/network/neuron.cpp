@@ -10,6 +10,7 @@
 #include "network/types/neuron_type.h"
 #include "network/types/synapse_type.h"
 #include "network/activation.h"
+#include "network/activations_per_context.h"
 #include "network/element.h"
 #include "fields/object.h"
 #include "fields/queue.h"
@@ -30,6 +31,14 @@ Neuron::Neuron(NeuronType* type, Model* model, long id)
 Neuron::Neuron(NeuronType* type, Model* model)
     : Neuron(type, model, model->createNeuronId()) {
     initFields();
+}
+
+Neuron::~Neuron() {
+    // Clean up ActivationsPerContext instances
+    for (auto& pair : activationsPerContext) {
+        delete pair.second;
+    }
+    activationsPerContext.clear();
 }
     
 RelatedObjectIterable* Neuron::followManyRelation(Relation* rel) const {
@@ -472,4 +481,71 @@ std::vector<Synapse*> Neuron::getOutputSynapsesByType(Type* synapseType) const {
     }
     outputLock.releaseReadLock();
     return result;
+}
+
+// ActivationsPerContext management methods
+void Neuron::addActivation(Activation* activation) {
+    if (!activation) {
+        return;
+    }
+    
+    Context* context = activation->getContext();
+    if (!context) {
+        return;
+    }
+    
+    long contextId = context->getId();
+    
+    // Get or create ActivationsPerContext for this context
+    ActivationsPerContext* apc = getActivationsPerContext(context);
+    if (!apc) {
+        apc = new ActivationsPerContext(context);
+        activationsPerContext[contextId] = apc;
+    }
+    
+    // Add activation to the context
+    apc->addActivation(activation);
+}
+
+void Neuron::removeActivation(Activation* activation) {
+    if (!activation) {
+        return;
+    }
+    
+    Context* context = activation->getContext();
+    if (!context) {
+        return;
+    }
+    
+    long contextId = context->getId();
+    auto it = activationsPerContext.find(contextId);
+    if (it != activationsPerContext.end()) {
+        ActivationsPerContext* apc = it->second;
+        apc->removeActivation(activation);
+        
+        // If this was the last activation, remove and delete ActivationsPerContext
+        if (apc->isEmpty()) {
+            delete apc;
+            activationsPerContext.erase(it);
+        }
+    }
+}
+
+Activation* Neuron::getActivationByTokenIds(Context* context, const std::vector<int>& tokenIds) const {
+    if (!context) {
+        return nullptr;
+    }
+    
+    ActivationsPerContext* apc = getActivationsPerContext(context);
+    return apc ? apc->getActivation(tokenIds) : nullptr;
+}
+
+ActivationsPerContext* Neuron::getActivationsPerContext(Context* context) const {
+    if (!context) {
+        return nullptr;
+    }
+    
+    long contextId = context->getId();
+    auto it = activationsPerContext.find(contextId);
+    return (it != activationsPerContext.end()) ? it->second : nullptr;
 }

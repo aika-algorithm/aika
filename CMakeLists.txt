@@ -87,8 +87,7 @@ set(CORE_SOURCES
         src/network/model.cpp
         src/network/activation.cpp
         src/network/activation_key.cpp
-        src/network/activation.cpp
-        src/network/activation_key.cpp
+        src/network/activations_per_context.cpp
         src/network/binding_signal.cpp
         src/network/config.cpp
         src/network/direction.cpp
@@ -103,7 +102,6 @@ set(CORE_SOURCES
         src/network/link.cpp
         src/network/lock_exception.cpp
         src/network/missing_neuron_exception.cpp
-        src/network/model.cpp
         src/network/model_provider.cpp
         src/network/neuron.cpp
         src/network/neuron_reference.cpp

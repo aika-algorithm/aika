@@ -16,6 +16,7 @@
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/builders/neuron_type_builder.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/builders/synapse_type_builder.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/neuron.h
+/Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/activations_per_context.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/save.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/transition.h
 /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages/aika/include/network/context.h

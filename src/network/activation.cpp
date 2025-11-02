@@ -23,10 +23,18 @@ Activation::Activation(ActivationType* t, Activation* parent, int id, Neuron* n,
     ctx->addActivation(this);
     neuron->updateLastUsed(ctx->getId());
     setCreated(ctx->getCurrentTimestamp());
+    
+    // Register this activation with the neuron's ActivationsPerContext system
+    neuron->addActivation(this);
 }
 
 Activation::~Activation() {
     std::cout << "~Activation" << std::endl;
+
+    ctx->removeActivation(this);
+    // Unregister this activation from the neuron's ActivationsPerContext system
+    neuron->removeActivation(this);
+    
     delete firedStep;
 }
 
