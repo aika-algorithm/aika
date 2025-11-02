@@ -66,6 +66,10 @@ void Context::addActivation(Activation* act) {
     activations[act->getId()] = act;
 }
 
+void Context::removeActivation(Activation* act) {
+    activations.erase(act->getId());
+}
+
 std::set<Activation*> Context::getActivations() {
     std::set<Activation*> result;
     for (const auto& pair : activations) {

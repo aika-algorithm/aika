@@ -24,6 +24,7 @@ public:
     Config* getConfig() const override;
     Step* getCurrentStep();
     void addActivation(Activation* act);
+    void removeActivation(Activation* act);
     std::set<Activation*> getActivations();
     Activation* getActivationByNeuron(Neuron* outputNeuron);
     int createActivationId();
