@@ -19,6 +19,7 @@ const std::function<bool(Activation*, Activation*)> Activation::ID_COMPARATOR = 
 
 Activation::Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Context* ctx, std::map<int, BindingSignal*> bindingSignals)
     : Object(t), id(id), neuron(n), ctx(ctx), bindingSignals(bindingSignals), parent(parent), created(-1), fired(-1), firedStep(new Fired(this)) {
+    initFields();
     ctx->addActivation(this);
     neuron->updateLastUsed(ctx->getId());
     setCreated(ctx->getCurrentTimestamp());

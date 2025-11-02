@@ -12,7 +12,7 @@
 
 Link::Link(LinkType* type, Synapse* s, Activation* input, Activation* output)
     : Object(type), synapse(s), input(input), output(output), pairedLinkInputSide(nullptr), pairedLinkOutputSide(nullptr) {
-    // initFields() call removed as it doesn't exist in Object class
+    initFields();
     input->addOutputLink(this);
     output->addInputLink(this);
 }

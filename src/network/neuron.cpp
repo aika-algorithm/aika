@@ -23,10 +23,14 @@
 #include <mutex>
 
 Neuron::Neuron(NeuronType* type, Model* model, long id)
-    : Object(type), model(model), id(id), synapseIdCounter(0), lastUsed(0), modified(false) {}
+    : Object(type), model(model), id(id), synapseIdCounter(0), lastUsed(0), modified(false) {
+    initFields();
+}
 
 Neuron::Neuron(NeuronType* type, Model* model)
-    : Neuron(type, model, model->createNeuronId()) {}
+    : Neuron(type, model, model->createNeuronId()) {
+    initFields();
+}
     
 RelatedObjectIterable* Neuron::followManyRelation(Relation* rel) const {
     if (rel->getRelationLabel() == "INPUT_SYNAPSES") {

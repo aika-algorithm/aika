@@ -17,6 +17,7 @@ Synapse::Synapse(SynapseType* type, Neuron* input, Neuron* output)
       output(new NeuronReference(output, RefType::SYNAPSE_OUT)), 
       propagable(false), pairedInputSynapseId(-1), pairedOutputSynapseId(-1)
 {
+    initFields();
     link(input->getModel(), input, output);
 }
 
