@@ -26,18 +26,15 @@ void LinkLatentTest::setUpLinkLatentFixtures() {
         .addTransition(Transition::of(1, 2))
         .build();
         
-    // Create second synapse type with transition (3 -> 4)
+    // Create second synapse type with transition (3 -> 4) and pair it with first
     SynapseTypeBuilder secondSynapseBuilder(typeRegistry, "secondSynapse");
     
     secondSynapseType = secondSynapseBuilder
         .setInput(secondInputNeuronType)
         .setOutput(outputNeuronType)
         .addTransition(Transition::of(3, 4))
+        .pair(firstSynapseType)  // Pair with first synapse type for latent linking
         .build();
-        
-    // Pair the synapse types for latent linking
-    firstSynapseType->setPairedSynapseType(secondSynapseType);
-    secondSynapseType->setPairedSynapseType(firstSynapseType);
     
     // Flatten type hierarchy
     typeRegistry->flattenTypeHierarchy();
@@ -71,7 +68,7 @@ void LinkLatentTest::tearDownLinkLatentFixtures() {
 }
 
 void LinkLatentTest::testLinkLatentBasicFlow() {
-    std::cout << "Testing linkLatent basic flow..." << std::endl;
+    std::cout << "Testing linkOutgoing basic flow..." << std::endl;
     
     setUpLinkLatentFixtures();
     
@@ -95,15 +92,15 @@ void LinkLatentTest::testLinkLatentBasicFlow() {
             std::cout << "❌ Synapse failed to transition binding signal" << std::endl;
         }
         
-        // Test basic linkLatent functionality
-        Linker::pairLinking(firstInputActivation, firstSynapse, inputBindingSignals);
+        // Test basic linkOutgoing functionality (replaces linkLatent)
+        Linker::linkOutgoing(firstInputActivation);
         
-        std::cout << "✅ linkLatent basic flow test completed - activation propagation tested" << std::endl;
+        std::cout << "✅ linkOutgoing basic flow test completed - activation propagation tested" << std::endl;
         
         // Context will manage cleanup
         
     } catch (const std::exception& e) {
-        std::cout << "⚠️  linkLatent basic flow encountered limitation: " << e.what() << std::endl;
+        std::cout << "⚠️  linkOutgoing basic flow encountered limitation: " << e.what() << std::endl;
     }
     
     tearDownLinkLatentFixtures();
@@ -130,8 +127,8 @@ void LinkLatentTest::testActivationPropagationWithTransition() {
         int initialCount = initialActivations.size();
         std::cout << "📊 Initial activation count: " << initialCount << std::endl;
         
-        // Test activation propagation using the propagate method
-        firstInputActivation->propagate(firstSynapse);
+        // Test activation propagation using linkOutgoing method
+        Linker::linkOutgoing(firstInputActivation, firstSynapse);
         
         // Verify output activation was created
         std::set<Activation*> finalActivations = ctx->getActivations();
@@ -190,7 +187,7 @@ void LinkLatentTest::testActivationPropagationWithTransition() {
 }
 
 void LinkLatentTest::testLinkLatentWithEmptyBindingSignals() {
-    std::cout << "Testing linkLatent with empty binding signals..." << std::endl;
+    std::cout << "Testing linkOutgoing with empty binding signals..." << std::endl;
     
     setUpLinkLatentFixtures();
     
@@ -200,35 +197,35 @@ void LinkLatentTest::testLinkLatentWithEmptyBindingSignals() {
         Activation* emptyBindingActivation = new Activation(activationType, nullptr, 99, neuron, ctx, emptyBindingSignals);
         
         // This should exit early when forward transition returns empty signals
-        Linker::pairLinking(emptyBindingActivation, nullptr, emptyBindingSignals);
+        Linker::linkOutgoing(emptyBindingActivation);
         
-        std::cout << "✅ linkLatent with empty binding signals test completed" << std::endl;
+        std::cout << "✅ linkOutgoing with empty binding signals test completed" << std::endl;
         
         // Note: emptyBindingActivation is owned by Context and will be deleted in Context destructor
         
     } catch (const std::exception& e) {
-        std::cout << "⚠️  linkLatent with empty binding signals: " << e.what() << std::endl;
+        std::cout << "⚠️  linkOutgoing with empty binding signals: " << e.what() << std::endl;
     }
     
     tearDownLinkLatentFixtures();
 }
 
 void LinkLatentTest::testLinkLatentWithNullActivation() {
-    std::cout << "Testing linkLatent with null activation..." << std::endl;
+    std::cout << "Testing linkOutgoing with null activation..." << std::endl;
     
     try {
         // This should handle null input gracefully
-        Linker::pairLinking(nullptr, nullptr, nullptr);
-        std::cout << "❌ linkLatent with null activation should have thrown an exception" << std::endl;
+        Linker::linkOutgoing(nullptr);
+        std::cout << "❌ linkOutgoing with null activation should have thrown an exception" << std::endl;
     } catch (const std::exception& e) {
-        std::cout << "✅ linkLatent with null activation correctly threw exception: " << e.what() << std::endl;
+        std::cout << "✅ linkOutgoing with null activation correctly threw exception: " << e.what() << std::endl;
     } catch (...) {
-        std::cout << "✅ linkLatent with null activation correctly handled null pointer" << std::endl;
+        std::cout << "✅ linkOutgoing with null activation correctly handled null pointer" << std::endl;
     }
 }
 
 void LinkLatentTest::testLinkLatentWithNoSecondInputCandidates() {
-    std::cout << "Testing linkLatent with no second input candidates..." << std::endl;
+    std::cout << "Testing linkOutgoing with no second input candidates..." << std::endl;
     std::cout << "✅ Test placeholder - candidate logic verified by basic flow test" << std::endl;
 }
 
@@ -264,7 +261,7 @@ void LinkLatentTest::testCompleteLatentLinking() {
         std::cout << "📊 Initial activation count: " << initialCount << std::endl;
         
         // Test latent linking - this should create an output activation if both inputs are present
-        Linker::pairLinking(firstInputActivation, firstSynapse, sharedBindingSignal);
+        Linker::linkOutgoing(firstInputActivation);
         
         // Check final state
         std::set<Activation*> finalActivations = ctx->getActivations();
@@ -329,12 +326,12 @@ void LinkLatentTest::testCompleteLatentLinking() {
 }
 
 void LinkLatentTest::testLinkLatentDuplicateLinkPrevention() {
-    std::cout << "Testing linkLatent duplicate link prevention..." << std::endl;
-    std::cout << "✅ hasLink integration verified - duplicate prevention logic present in linkLatent" << std::endl;
+    std::cout << "Testing linkOutgoing duplicate link prevention..." << std::endl;
+    std::cout << "✅ hasLink integration verified - duplicate prevention logic present in linkOutgoing" << std::endl;
 }
 
 void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
-    std::cout << "Testing linkLatent with three inputs, non-matching input signals converging to same output..." << std::endl;
+    std::cout << "Testing linkOutgoing with three inputs, non-matching input signals converging to same output..." << std::endl;
     
     try {
         // Create type registry for this test
@@ -372,11 +369,8 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
             .setInput(secondInputNeuronType)
             .setOutput(firstOutputNeuronType)  // Same output neuron!
             .addTransition(Transition::of(3, 5))  // 3->5, same output signal type
+            .pair(firstSynapseType)  // Pair with first synapse type for latent linking
             .build();
-        
-        // Pair the synapse types (even though they have non-matching transitions)
-        firstSynapseType->setPairedSynapseType(secondSynapseType);
-        secondSynapseType->setPairedSynapseType(firstSynapseType);
         
         // Flatten type hierarchy
         testTypeRegistry->flattenTypeHierarchy();
@@ -401,7 +395,7 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
         std::cout << "   - Second input neuron connects to SAME output via second synapse (3->5)" << std::endl;
         std::cout << "   - Third input neuron (used for additional activation)" << std::endl;
         std::cout << "   - Both synapses converge to same output signal type (5) but from different input types (1 vs 3)" << std::endl;
-        std::cout << "   - linkLatent should create output activation when both inputs are present" << std::endl;
+        std::cout << "   - linkOutgoing should create output activation when both inputs are present" << std::endl;
         
         // Create three input activations with different binding signal types
         int sharedTokenId = 600;
@@ -437,10 +431,9 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
         int initialCount = initialActivations.size();
         std::cout << "📊 Initial activation count: " << initialCount << std::endl;
         
-        // Test linkLatent from shared input - should create output activation when paired input exists
-        std::cout << "🔗 Testing linkLatent from shared input activation..." << std::endl;
-        Linker::pairLinking(sharedInputActivation, firstSynapse, thirdInputBindingSignals);
-        Linker::pairLinking(sharedInputActivation, secondSynapse, thirdInputBindingSignals);
+        // Test linkOutgoing from shared input - should create output activation when paired input exists
+        std::cout << "🔗 Testing linkOutgoing from shared input activation..." << std::endl;
+        Linker::linkOutgoing(sharedInputActivation);
 
         // Check final activation count
         std::set<Activation*> finalActivations = testCtx->getActivations();
@@ -448,7 +441,7 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
         std::cout << "📊 Final activation count: " << finalCount << std::endl;
         
         if (finalCount > initialCount) {
-            std::cout << "✅ Output activation created successfully via linkLatent" << std::endl;
+            std::cout << "✅ Output activation created successfully via linkOutgoing" << std::endl;
             
             // Find the output activation
             Activation* outputActivation = nullptr;
@@ -477,12 +470,12 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
                     std::cout << "❌ Output missing expected binding signal type 5" << std::endl;
                 }
                 
-                // Verify that linkLatent created proper links
+                // Verify that linkOutgoing created proper links
                 std::vector<Link*> inputLinks = outputActivation->getInputLinks();
                 std::cout << "🔗 Output activation has " << inputLinks.size() << " input links" << std::endl;
                 
                 if (inputLinks.size() >= 1) {
-                    std::cout << "✅ linkLatent successfully created links from input activations" << std::endl;
+                    std::cout << "✅ linkOutgoing successfully created links from input activations" << std::endl;
                     std::cout << "   - This demonstrates latent linking with non-matching input types (1 and 3)" << std::endl;
                     std::cout << "   - converging to same output signal type (5)" << std::endl;
                 }
@@ -508,7 +501,7 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
 }
 
 void LinkLatentTest::testBindingSignalConflictPrevention() {
-    std::cout << "Testing binding signal conflict prevention in linkLatent..." << std::endl;
+    std::cout << "Testing binding signal conflict prevention in linkOutgoing..." << std::endl;
     
     try {
         // Create type registry for this test
@@ -533,17 +526,14 @@ void LinkLatentTest::testBindingSignalConflictPrevention() {
             .addTransition(Transition::of(1, 5))  // 1->5
             .build();
             
-        // Create second synapse type: second input -> output (transition 2->5, SAME output slot)
+        // Create second synapse type: second input -> output (transition 2->5, SAME output slot) and pair with first
         SynapseTypeBuilder secondSynapseBuilder(testTypeRegistry, "secondSynapse");
         SynapseType* secondSynapseType = secondSynapseBuilder
             .setInput(secondInputNeuronType)
             .setOutput(outputNeuronType)
             .addTransition(Transition::of(2, 5))  // 2->5, SAME output slot!
+            .pair(firstSynapseType)  // Pair with first synapse type for latent linking
             .build();
-        
-        // Pair the synapse types
-        firstSynapseType->setPairedSynapseType(secondSynapseType);
-        secondSynapseType->setPairedSynapseType(firstSynapseType);
         
         // Flatten type hierarchy
         testTypeRegistry->flattenTypeHierarchy();
@@ -596,11 +586,10 @@ void LinkLatentTest::testBindingSignalConflictPrevention() {
         int initialCount = initialActivations.size();
         std::cout << "📊 Initial activation count: " << initialCount << std::endl;
         
-        // Test linkLatent - this should NOT create output activation due to binding signal conflict
-        std::cout << "🔗 Testing linkLatent with conflicting binding signals..." << std::endl;
-        Linker::pairLinking(sharedInputActivation, firstSynapse, thirdInputBindingSignals);
-        Linker::pairLinking(sharedInputActivation, secondSynapse, thirdInputBindingSignals);
-
+        // Test linkOutgoing - this should NOT create output activation due to binding signal conflict
+        std::cout << "🔗 Testing linkOutgoing with conflicting binding signals..." << std::endl;
+        Linker::linkOutgoing(firstInputActivation);
+        
         // Check final activation count
         std::set<Activation*> finalActivations = testCtx->getActivations();
         int finalCount = finalActivations.size();
@@ -608,7 +597,7 @@ void LinkLatentTest::testBindingSignalConflictPrevention() {
         
         if (finalCount == initialCount) {
             std::cout << "✅ Binding signal conflict correctly prevented output activation creation" << std::endl;
-            std::cout << "   - linkLatent detected that tokens " << firstTokenId << " and " << secondTokenId << std::endl;
+            std::cout << "   - linkOutgoing detected that tokens " << firstTokenId << " and " << secondTokenId << std::endl;
             std::cout << "   - would both try to occupy the same output binding signal slot (type 5)" << std::endl;
             std::cout << "   - This conflict prevention is essential for maintaining binding signal consistency" << std::endl;
         } else {
@@ -658,8 +647,8 @@ void LinkLatentTest::testBindingSignalConflictPrevention() {
         int initialCount2 = initialActivations2.size();
         std::cout << "📊 Initial activation count: " << initialCount2 << std::endl;
         
-        // Test linkLatent - this SHOULD create output activation (no conflict)
-        Linker::linkLatent(firstInputActivation2);
+        // Test linkOutgoing - this SHOULD create output activation (no conflict)
+        Linker::linkOutgoing(firstInputActivation2);
         
         // Check final activation count
         std::set<Activation*> finalActivations2 = testCtx2->getActivations();
@@ -672,7 +661,7 @@ void LinkLatentTest::testBindingSignalConflictPrevention() {
             std::cout << "   - Same tokens allow output activation creation" << std::endl;
         } else {
             std::cout << "❌ Output activation was not created even with same tokens" << std::endl;
-            std::cout << "   - This suggests an issue with the linkLatent implementation" << std::endl;
+            std::cout << "   - This suggests an issue with the linkOutgoing implementation" << std::endl;
         }
         
         std::cout << "✅ Binding signal conflict prevention test completed" << std::endl;
