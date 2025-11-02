@@ -236,11 +236,6 @@ std::string Activation::toKeyString() const {
     return "id:" + std::to_string(getId()) + " n:[" + neuron->toKeyString() + "]";
 }
 
-void Activation::propagate(Synapse* targetSyn) {
-    // Delegate to the static Linker::propagate method to avoid code duplication
-    Linker::propagate(this, targetSyn);
-}
-
 std::vector<int> Activation::createInputKeyFromOutputCandidate(Synapse* outputSynapse, Activation* outputActivation) const {
     std::vector<int> key;
     
@@ -301,12 +296,3 @@ std::vector<int> Activation::createInputKeyFromOutputCandidate(Synapse* outputSy
     
     return key;
 }
-
-void Activation::linkIncoming(Activation* inputAct) {
-    // Add the input activation's output links to this activation's input links
-    for (Link* link : inputAct->getOutputLinks()) {
-        if (link->getOutput() == this) {
-            addInputLink(link);
-        }
-    }
-} 

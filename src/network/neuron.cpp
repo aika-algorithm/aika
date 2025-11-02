@@ -95,9 +95,7 @@ void Neuron::removePropagable(Neuron* n) {
 void Neuron::wakeupPropagable() {
     outputLock.acquireReadLock();
     for (auto& nr : propagable) {
-        // Generic getNeuron call doesn't exist, need to handle differently
-        // This is a temporary fix
-        // nr.second->getNeuron(model);
+        nr.second->getNeuron(model);
     }
     outputLock.releaseReadLock();
 }

@@ -1,102 +1,123 @@
 #include "network/linker.h"
 
 
+
 void Linker::linkOutgoing(Activation* act) {
     Neuron* neuron = act->getNeuron();
     neuron->wakeupPropagable();
 
     for (auto& s : neuron->getOutputSynapsesAsStream()) {
-        std::set<int> bindingSignalKeys;
-        for (const auto& bs : act->getBindingSignals()) {
-            bindingSignalKeys.insert(bs.first);
-        }
-        //        if (static_cast<SynapseType*>(s->getType())->isOutgoingLinkingCandidate(bindingSignalKeys)) {
         linkOutgoing(act, s);
-        //        }
     }
 }
 
-void Linker::linkLatent(Activation* firstInputAct) {
+void Linker::linkOutgoing(Activation* act, Synapse* outputSyn) {
+    // Transition the input activation's binding signals forward through the synapse
+    std::map<int, BindingSignal*> inputBindingSignals = act->getBindingSignals();
+    std::map<int, BindingSignal*> outputBindingSignals = outputSyn->transitionForward(inputBindingSignals);
+
+    // Check if the synapse type has allowLatentLinking enabled
+    SynapseType* synapseType = static_cast<SynapseType*>(outputSyn->getType());
+
+    if (synapseType && synapseType->getAllowLatentLinking()) {
+        // Use pair linking for synapses with allowLatentLinking enabled
+        // This is needed for paired synapses like dot-product synapses
+        pairLinking(act, outputSyn, outputBindingSignals);
+    } else {
+        // Find output activations that match the transitioned binding signals
+        std::set<Activation*> outputActs = collectLinkingTargets(outputBindingSignals, outputSyn->getOutput(act->getModel()));
+
+        for (auto& outputAct : outputActs) {
+            // Verify no binding signal conflicts before creating the link
+            if (matchBindingSignals(outputAct, outputBindingSignals)) {
+                outputSyn->createLink(act, outputAct);
+            }
+        }
+
+        if (outputActs.empty() && outputSyn->isPropagable()) {
+            propagate(act, outputSyn, outputBindingSignals);
+        }
+    }
+}
+
+void Linker::propagate(Activation* act, Synapse* targetSyn, const std::map<int, BindingSignal*>& outputBindingSignals) {
+    // Use normal propagation for regular synapses
+    Activation* oAct = targetSyn->getOutput(act->getModel())->createActivation(nullptr, act->getContext(), outputBindingSignals);
+
+    targetSyn->createLink(act, oAct);
+
+    linkIncoming(oAct, act);
+}
+
+
+// The purpose of PairLinking is just to optimize the linking of paired InputSynapses. The functionality should be identical
+// to the propagate + linkIncoming calls. It just avoids actually instantiating the output activation if one of the
+// two input activations is missing or is not yet fired.
+// PairLinking avoids having to deal with incomplete Activations where some of the Binding-Signals are still missing.
+void Linker::pairLinking(Activation* firstInputAct, Synapse* firstSynapse, const std::map<int, BindingSignal*>& outputBindingSignals) {
     if (!firstInputAct) {
         throw std::invalid_argument("linkLatent: firstInputAct cannot be null");
     }
     
     Model* model = firstInputAct->getModel();
-    Neuron* firstInputNeuron = firstInputAct->getNeuron();
-    firstInputNeuron->wakeupPropagable();
 
-    const std::map<int, BindingSignal*>& a1BS = firstInputAct->getBindingSignals();
+    Neuron* outputNeuron = firstSynapse->getOutput(model);
 
-    // Traverse each outgoing synapse of the first input neuron.
-    for (Synapse* firstSynapse : firstInputNeuron->getOutputSynapsesAsStream()) {
-        if (!firstSynapse) continue;
+    // Output activation candidates given the forward BS view.
+    std::set<Activation*> outputActCandidates = collectLinkingTargets(outputBindingSignals, outputNeuron);
 
-        // Forward transition (beta1)
-        std::map<int, BindingSignal*> beta1 = firstSynapse->transitionForward(a1BS);
-        if (beta1.empty())
-            continue; // no forward-admissible signals
+    // Paired synapse for the dot-product inner multiplication.
+    Synapse* secondSynapse = firstSynapse->getPairedSynapse();
+    if (!secondSynapse) {
+        // If your neuron supports disjunctive single-leg commits, you could
+        // optionally realize an output link here using only (a1, s1).
+        return;
+    }
+    Neuron* secondInputNeuron = secondSynapse->getInput(model);
 
-        Neuron* outputNeuron = firstSynapse->getOutput(model);
+    // Backward transition over the paired synapse (secondaryInputBindingSignals)
+    std::map<int, BindingSignal*> secondaryInputBindingSignals = secondSynapse->transitionBackward(outputBindingSignals);
 
-        // Output activation candidates given the forward BS view.
-        std::set<Activation*> outputActCandidates = collectLinkingTargets(beta1, outputNeuron);
+    // Find partner input activations a2 at src(s2) matching beta2.
+    std::set<Activation*> secondInputCandidates = collectLinkingTargets(secondaryInputBindingSignals, secondInputNeuron);
+    if (secondInputCandidates.empty()) {
+        // No partner yet; higher layers may register wakeups.
+        return;
+    }
 
-        // Paired synapse for the dot-product inner multiplication.
-        Synapse* secondSynapse = firstSynapse->getPairedSynapse();
-        if (!secondSynapse) {
-            // If your neuron supports disjunctive single-leg commits, you could
-            // optionally realize an output link here using only (a1, s1).
-            continue;
+    // Pairwise commit for each admissible a2 (avoid degenerate a1==a2 case).
+    for (Activation* secondInputAct : secondInputCandidates) {
+        if (!secondInputAct || secondInputAct == firstInputAct) continue;
+
+        // Select or realize an output activation compatible with beta1.
+        Activation* outputAct = nullptr;
+            
+        // First, try to find existing output activation with matching binding signals
+        for (Activation* existingOutputAct : outputActCandidates) {
+            if (matchBindingSignals(existingOutputAct, outputBindingSignals)) {
+                outputAct = existingOutputAct;
+                break;
+            }
         }
-        Neuron* secondInputNeuron = secondSynapse->getInput(model);
-
-        // Backward transition over the paired synapse (beta2)
-        std::map<int, BindingSignal*> beta2 = secondSynapse->transitionBackward(beta1);
-
-        // Find partner input activations a2 at src(s2) matching beta2.
-        std::set<Activation*> secondInputCandidates = collectLinkingTargets(beta2, secondInputNeuron);
-        if (secondInputCandidates.empty()) {
-            // No partner yet; higher layers may register wakeups.
-            continue;
+            
+        // If no existing activation found, create a new one
+        if (!outputAct) {
+            outputAct = outputNeuron->createActivation(nullptr, firstInputAct->getContext(), outputBindingSignals);
+            outputActCandidates.insert(outputAct);  // Add to candidates for reuse
         }
-
-        // Pairwise commit for each admissible a2 (avoid degenerate a1==a2 case).
-        for (Activation* secondInputAct : secondInputCandidates) {
-            if (!secondInputAct || secondInputAct == firstInputAct) continue;
-
-            // Select or realize an output activation compatible with beta1.
-            Activation* outputAct = nullptr;
             
-            // First, try to find existing output activation with matching binding signals
-            for (Activation* existingOutputAct : outputActCandidates) {
-                if (matchBindingSignals(existingOutputAct, beta1)) {
-                    outputAct = existingOutputAct;
-                    break;
-                }
-            }
-            
-            // If no existing activation found, create a new one
-            if (!outputAct) {
-                outputAct = outputNeuron->createActivation(nullptr, firstInputAct->getContext(), beta1);
-                outputActCandidates.insert(outputAct);  // Add to candidates for reuse
-            }
-            
-            if (!outputAct)
-                continue;
+        if (!outputAct)
+           continue;
 
-            // Avoid duplicate links if already present.
-            bool l1Exists = firstSynapse->hasLink(firstInputAct, outputAct);
-            bool l2Exists = secondSynapse->hasLink(secondInputAct, outputAct);
+        // Avoid duplicate links if already present.
+        bool l1Exists = firstSynapse->hasLink(firstInputAct, outputAct);
+        bool l2Exists = secondSynapse->hasLink(secondInputAct, outputAct);
 
-            if (!l1Exists) {
-                firstSynapse->createLink(firstInputAct, outputAct);
-            }
-            if (!l2Exists) {
-                secondSynapse->createLink(secondInputAct, outputAct);
-            }
-
-            // Update candidate set to include the selected materialized output (helps reuse).
-            outputActCandidates.insert(outputAct);
+        if (!l1Exists) {
+            firstSynapse->createLink(firstInputAct, outputAct);
+        }
+        if (!l2Exists) {
+            secondSynapse->createLink(secondInputAct, outputAct);
         }
     }
 }
@@ -158,45 +179,6 @@ void Linker::linkIncoming(Activation* act, Synapse* targetSyn, Activation* exclu
                 targetSyn->createLink(iAct, act);
             }
         }
-    }
-}
-
-void Linker::linkOutgoing(Activation* act, Synapse* targetSyn) {
-    // Transition the input activation's binding signals forward through the synapse
-    std::map<int, BindingSignal*> inputBindingSignals = act->getBindingSignals();
-    std::map<int, BindingSignal*> outputBindingSignals = targetSyn->transitionForward(inputBindingSignals);
-    
-    // Find output activations that match the transitioned binding signals
-    std::set<Activation*> targets = collectLinkingTargets(outputBindingSignals, targetSyn->getOutput(act->getModel()));
-
-    for (auto& targetAct : targets) {
-        // Verify no binding signal conflicts before creating the link
-        if (matchBindingSignals(targetAct, outputBindingSignals)) {
-            targetSyn->createLink(act, targetAct);
-        }
-    }
-
-    if (targets.empty() && targetSyn->isPropagable()) {
-        propagate(act, targetSyn);
-    }
-}
-
-void Linker::propagate(Activation* act, Synapse* targetSyn) {
-    // Check if the synapse type has allowLatentLinking enabled
-    SynapseType* synapseType = static_cast<SynapseType*>(targetSyn->getType());
-    
-    if (synapseType && synapseType->getAllowLatentLinking()) {
-        // Use latent linking for synapses with allowLatentLinking enabled
-        // This is needed for paired synapses like dot-product synapses
-        linkLatent(act);
-    } else {
-        // Use normal propagation for regular synapses
-        std::map<int, BindingSignal*> bindingSignals = targetSyn->transitionForward(act->getBindingSignals());
-        Activation* oAct = targetSyn->getOutput(act->getModel())->createActivation(nullptr, act->getContext(), bindingSignals);
-
-        targetSyn->createLink(act, bindingSignals, oAct);
-
-        linkIncoming(oAct, act);
     }
 }
 

@@ -28,20 +28,25 @@ public:
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
     Object* followSingleRelation(const Relation* rel) const override;
+
     long getId() const;
+
     void updatePropagable(Neuron* n, bool isPropagable);
     void addPropagable(Neuron* n);
     void removePropagable(Neuron* n);
     void wakeupPropagable();
     std::set<NeuronReference*> getPropagable() const;
+
     int getNewSynapseId();
     Activation* createActivation(Activation* parent, Context* doc, std::map<int, BindingSignal*> bindingSignals);
     void deleteNeuron();
+
     Model* getModel() const override;
     Config* getConfig() const override;
     void setModified();
     void resetModified();
     bool isModified() const;
+
     Synapse* getSynapseBySynId(int synId) const;
     void addInputSynapse(Synapse* s);
     void removeInputSynapse(Synapse* s);
@@ -60,6 +65,7 @@ public:
     Synapse* getOutputSynapseByType(Type* synapseType) const;
     std::vector<Synapse*> getOutputSynapsesByType(Type* synapseType) const;
     Synapse* selectInputSynapse(std::function<bool(Synapse*)> predicate) const;
+
     long getCreated() const override;
     long getFired() const override;
     Queue* getQueue() const override;

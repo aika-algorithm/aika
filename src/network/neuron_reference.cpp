@@ -13,8 +13,6 @@ Neuron* NeuronReference::getRawNeuron() const {
     return neuron;
 }
 
-// This is implementing the template method from the header
-// Define the non-template function that will be used
 Neuron* NeuronReference::getNeuron(Model* m) {
     if (!neuron) {
         neuron = m->getNeuron(id);

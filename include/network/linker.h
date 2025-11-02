@@ -8,15 +8,17 @@
 
 class Linker {
 public:
-    static void linkLatent(Activation* act);
-
-    static bool matchBindingSignals(Activation* act, std::map<int, BindingSignal*> latentBindingSignals);
+    static void linkOutgoing(Activation* act);
+    static void linkOutgoing(Activation* act, Synapse* targetSyn);
 
     static void linkIncoming(Activation* act, Activation* excludedInputAct);
     static void linkIncoming(Activation* act, Synapse* targetSyn, Activation* excludedInputAct);
-    static void linkOutgoing(Activation* act);
-    static void linkOutgoing(Activation* act, Synapse* targetSyn);
-    static void propagate(Activation* act, Synapse* targetSyn);
+
+private:
+    static void pairLinking(Activation* act, Synapse* firstSynapse, const std::map<int, BindingSignal*>& outputBindingSignals);
+    static void propagate(Activation* act, Synapse* targetSyn, const std::map<int, BindingSignal*>& outputBindingSignals);
+
+    static bool matchBindingSignals(Activation* act, std::map<int, BindingSignal*> latentBindingSignals);
     static std::set<Activation*> collectLinkingTargets(std::map<int, BindingSignal*> bindingSignals, Neuron* n);
 };
 

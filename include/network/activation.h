@@ -65,9 +65,6 @@ public:
     Link* getOutputLink(Neuron* n) const;
     std::vector<Link*> getOutputLinks(Synapse* s) const;
 
-    void propagate(Synapse* targetSyn);
-    void linkIncoming(Activation* inputAct);
-
     int compareTo(Activation* act) const;
     bool equals(Activation* o) const;
     int hashCode() const;

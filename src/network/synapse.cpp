@@ -177,15 +177,6 @@ void Synapse::unlinkOutput(Model* m) {
 }
 
 Link* Synapse::createLink(Activation* input, Activation* output) {
-    return createLink(input, transitionForward(input->getBindingSignals()), output);
-}
-
-Link* Synapse::createLink(Activation* input, const std::map<int, BindingSignal*>& bindingSignals, Activation* output) {
-    if (Linker::matchBindingSignals(output, bindingSignals)) {
-        // TODO
-        Linker::linkIncoming(output, input);
-    }
-    
     return static_cast<SynapseType*>(getType())
         ->getLinkType()
         ->instantiate(this, input, output);

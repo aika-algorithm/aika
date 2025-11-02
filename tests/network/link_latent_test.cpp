@@ -96,7 +96,7 @@ void LinkLatentTest::testLinkLatentBasicFlow() {
         }
         
         // Test basic linkLatent functionality
-        Linker::linkLatent(firstInputActivation);
+        Linker::pairLinking(firstInputActivation, firstSynapse, inputBindingSignals);
         
         std::cout << "✅ linkLatent basic flow test completed - activation propagation tested" << std::endl;
         
@@ -200,7 +200,7 @@ void LinkLatentTest::testLinkLatentWithEmptyBindingSignals() {
         Activation* emptyBindingActivation = new Activation(activationType, nullptr, 99, neuron, ctx, emptyBindingSignals);
         
         // This should exit early when forward transition returns empty signals
-        Linker::linkLatent(emptyBindingActivation);
+        Linker::pairLinking(emptyBindingActivation, nullptr, emptyBindingSignals);
         
         std::cout << "✅ linkLatent with empty binding signals test completed" << std::endl;
         
@@ -218,7 +218,7 @@ void LinkLatentTest::testLinkLatentWithNullActivation() {
     
     try {
         // This should handle null input gracefully
-        Linker::linkLatent(nullptr);
+        Linker::pairLinking(nullptr, nullptr, nullptr);
         std::cout << "❌ linkLatent with null activation should have thrown an exception" << std::endl;
     } catch (const std::exception& e) {
         std::cout << "✅ linkLatent with null activation correctly threw exception: " << e.what() << std::endl;
@@ -264,7 +264,7 @@ void LinkLatentTest::testCompleteLatentLinking() {
         std::cout << "📊 Initial activation count: " << initialCount << std::endl;
         
         // Test latent linking - this should create an output activation if both inputs are present
-        Linker::linkLatent(firstInputActivation);
+        Linker::pairLinking(firstInputActivation, firstSynapse, sharedBindingSignal);
         
         // Check final state
         std::set<Activation*> finalActivations = ctx->getActivations();
@@ -439,7 +439,8 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
         
         // Test linkLatent from shared input - should create output activation when paired input exists
         std::cout << "🔗 Testing linkLatent from shared input activation..." << std::endl;
-        Linker::linkLatent(sharedInputActivation);
+        Linker::pairLinking(sharedInputActivation, firstSynapse, thirdInputBindingSignals);
+        Linker::pairLinking(sharedInputActivation, secondSynapse, thirdInputBindingSignals);
 
         // Check final activation count
         std::set<Activation*> finalActivations = testCtx->getActivations();
@@ -597,8 +598,9 @@ void LinkLatentTest::testBindingSignalConflictPrevention() {
         
         // Test linkLatent - this should NOT create output activation due to binding signal conflict
         std::cout << "🔗 Testing linkLatent with conflicting binding signals..." << std::endl;
-        Linker::linkLatent(firstInputActivation);
-        
+        Linker::pairLinking(sharedInputActivation, firstSynapse, thirdInputBindingSignals);
+        Linker::pairLinking(sharedInputActivation, secondSynapse, thirdInputBindingSignals);
+
         // Check final activation count
         std::set<Activation*> finalActivations = testCtx->getActivations();
         int finalCount = finalActivations.size();
