@@ -46,7 +46,7 @@ public:
     // ActivationsPerContext management
     void addActivation(Activation* activation);
     void removeActivation(Activation* activation);
-    Activation* getActivationByTokenIds(Context* context, const std::vector<int>& tokenIds) const;
+    Activation* getActivationById(Context* context, int activationId) const;
     ActivationsPerContext* getActivationsPerContext(Context* context) const;
 
     Model* getModel() const override;

@@ -110,8 +110,12 @@ void Linker::pairLinking(Activation* firstInputAct, Synapse* firstSynapse) {
 
         // Calculate output binding signals by transitioning second input forward through second synapse
         std::map<int, BindingSignal*> secondInputBindingSignals = secondInputAct->getBindingSignals();
-        // TODO: merge output binding-signals instead of overwriting them
-        std::map<int, BindingSignal*> outputBindingSignals = secondSynapse->transitionForward(secondInputBindingSignals);
+        std::map<int, BindingSignal*> secondOutputBindingSignals = secondSynapse->transitionForward(secondInputBindingSignals);
+        
+        // Merge binding signals instead of overwriting them
+        for (const auto& pair : secondOutputBindingSignals) {
+            outputBindingSignals[pair.first] = pair.second;
+        }
 
         // Select or realize an output activation compatible with beta1.
         Activation* outputAct = nullptr;

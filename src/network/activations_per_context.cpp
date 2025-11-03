@@ -10,7 +10,7 @@ ActivationsPerContext::ActivationsPerContext(Context* context)
 
 ActivationsPerContext::~ActivationsPerContext() {
     // Clear the map - activations themselves are managed by Context
-    activationsByTokenIds.clear();
+    activationsById.clear();
 }
 
 void ActivationsPerContext::addActivation(Activation* activation) {
@@ -18,8 +18,7 @@ void ActivationsPerContext::addActivation(Activation* activation) {
         return;
     }
     
-    std::vector<int> tokenIds = createTokenIdVector(activation);
-    activationsByTokenIds[tokenIds] = activation;
+    activationsById[activation->getId()] = activation;
 }
 
 void ActivationsPerContext::removeActivation(Activation* activation) {
@@ -27,21 +26,20 @@ void ActivationsPerContext::removeActivation(Activation* activation) {
         return;
     }
     
-    std::vector<int> tokenIds = createTokenIdVector(activation);
-    activationsByTokenIds.erase(tokenIds);
+    activationsById.erase(activation->getId());
 }
 
-Activation* ActivationsPerContext::getActivation(const std::vector<int>& tokenIds) const {
-    auto it = activationsByTokenIds.find(tokenIds);
-    return (it != activationsByTokenIds.end()) ? it->second : nullptr;
+Activation* ActivationsPerContext::getActivation(int activationId) const {
+    auto it = activationsById.find(activationId);
+    return (it != activationsById.end()) ? it->second : nullptr;
 }
 
 bool ActivationsPerContext::isEmpty() const {
-    return activationsByTokenIds.empty();
+    return activationsById.empty();
 }
 
 size_t ActivationsPerContext::size() const {
-    return activationsByTokenIds.size();
+    return activationsById.size();
 }
 
 Context* ActivationsPerContext::getContext() const {
@@ -50,43 +48,10 @@ Context* ActivationsPerContext::getContext() const {
 
 std::set<Activation*> ActivationsPerContext::getActivations() const {
     std::set<Activation*> result;
-    for (const auto& pair : activationsByTokenIds) {
+    for (const auto& pair : activationsById) {
         if (pair.second) {
             result.insert(pair.second);
         }
     }
     return result;
-}
-
-std::vector<int> ActivationsPerContext::createTokenIdVector(Activation* activation) const {
-    std::vector<int> tokenIds;
-    
-    if (!activation) {
-        return tokenIds;
-    }
-    
-    try {
-        // Get binding signals from activation
-        std::map<int, BindingSignal*> bindingSignals = activation->getBindingSignals();
-        
-        // Extract token IDs and sort them for consistent key generation
-        for (const auto& pair : bindingSignals) {
-            BindingSignal* bindingSignal = pair.second;
-            if (bindingSignal) {
-                tokenIds.push_back(bindingSignal->getTokenId());
-            }
-        }
-        
-        // Sort token IDs for consistent key generation
-        std::sort(tokenIds.begin(), tokenIds.end());
-        
-    } catch (const std::exception& e) {
-        // In case of any exception, return empty vector
-        tokenIds.clear();
-    } catch (...) {
-        // In case of any unknown exception, return empty vector
-        tokenIds.clear();
-    }
-    
-    return tokenIds;
 }

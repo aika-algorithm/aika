@@ -543,13 +543,13 @@ void Neuron::removeActivation(Activation* activation) {
     }
 }
 
-Activation* Neuron::getActivationByTokenIds(Context* context, const std::vector<int>& tokenIds) const {
+Activation* Neuron::getActivationById(Context* context, int activationId) const {
     if (!context) {
         return nullptr;
     }
     
     ActivationsPerContext* apc = getActivationsPerContext(context);
-    return apc ? apc->getActivation(tokenIds) : nullptr;
+    return apc ? apc->getActivation(activationId) : nullptr;
 }
 
 ActivationsPerContext* Neuron::getActivationsPerContext(Context* context) const {
