@@ -199,6 +199,7 @@ void bind_network(py::module_& m) {
         .def(py::init<NeuronType*, Model*, long>())
         .def(py::init<NeuronType*, Model*>())
         .def("getId", &Neuron::getId)
+        .def("getNumberOfBSSlots", &Neuron::getNumberOfBSSlots)
         .def("updatePropagable", &Neuron::updatePropagable)
         .def("addPropagable", &Neuron::addPropagable)
         .def("removePropagable", &Neuron::removePropagable)
