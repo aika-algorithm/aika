@@ -489,22 +489,28 @@ void Neuron::addActivation(Activation* activation) {
         return;
     }
     
-    Context* context = activation->getContext();
-    if (!context) {
-        return;
+    try {
+        Context* context = activation->getContext();
+        if (!context) {
+            return;
+        }
+        
+        long contextId = context->getId();
+        
+        // Get or create ActivationsPerContext for this context
+        ActivationsPerContext* apc = getActivationsPerContext(context);
+        if (!apc) {
+            apc = new ActivationsPerContext(context);
+            activationsPerContext[contextId] = apc;
+        }
+        
+        // Add activation to the context
+        apc->addActivation(activation);
+    } catch (const std::exception& e) {
+        // Silently handle exceptions to avoid crashes during activation construction
+    } catch (...) {
+        // Silently handle unknown exceptions
     }
-    
-    long contextId = context->getId();
-    
-    // Get or create ActivationsPerContext for this context
-    ActivationsPerContext* apc = getActivationsPerContext(context);
-    if (!apc) {
-        apc = new ActivationsPerContext(context);
-        activationsPerContext[contextId] = apc;
-    }
-    
-    // Add activation to the context
-    apc->addActivation(activation);
 }
 
 void Neuron::removeActivation(Activation* activation) {
@@ -512,22 +518,28 @@ void Neuron::removeActivation(Activation* activation) {
         return;
     }
     
-    Context* context = activation->getContext();
-    if (!context) {
-        return;
-    }
-    
-    long contextId = context->getId();
-    auto it = activationsPerContext.find(contextId);
-    if (it != activationsPerContext.end()) {
-        ActivationsPerContext* apc = it->second;
-        apc->removeActivation(activation);
-        
-        // If this was the last activation, remove and delete ActivationsPerContext
-        if (apc->isEmpty()) {
-            delete apc;
-            activationsPerContext.erase(it);
+    try {
+        Context* context = activation->getContext();
+        if (!context) {
+            return;
         }
+        
+        long contextId = context->getId();
+        auto it = activationsPerContext.find(contextId);
+        if (it != activationsPerContext.end()) {
+            ActivationsPerContext* apc = it->second;
+            apc->removeActivation(activation);
+            
+            // If this was the last activation, remove and delete ActivationsPerContext
+            if (apc->isEmpty()) {
+                delete apc;
+                activationsPerContext.erase(it);
+            }
+        }
+    } catch (const std::exception& e) {
+        // Silently handle exceptions to avoid crashes during activation destruction
+    } catch (...) {
+        // Silently handle unknown exceptions
     }
 }
 

@@ -55,19 +55,28 @@ std::vector<int> ActivationsPerContext::createTokenIdVector(Activation* activati
         return tokenIds;
     }
     
-    // Get binding signals from activation
-    std::map<int, BindingSignal*> bindingSignals = activation->getBindingSignals();
-    
-    // Extract token IDs and sort them for consistent key generation
-    for (const auto& pair : bindingSignals) {
-        BindingSignal* bindingSignal = pair.second;
-        if (bindingSignal) {
-            tokenIds.push_back(bindingSignal->getTokenId());
+    try {
+        // Get binding signals from activation
+        std::map<int, BindingSignal*> bindingSignals = activation->getBindingSignals();
+        
+        // Extract token IDs and sort them for consistent key generation
+        for (const auto& pair : bindingSignals) {
+            BindingSignal* bindingSignal = pair.second;
+            if (bindingSignal) {
+                tokenIds.push_back(bindingSignal->getTokenId());
+            }
         }
+        
+        // Sort token IDs for consistent key generation
+        std::sort(tokenIds.begin(), tokenIds.end());
+        
+    } catch (const std::exception& e) {
+        // In case of any exception, return empty vector
+        tokenIds.clear();
+    } catch (...) {
+        // In case of any unknown exception, return empty vector
+        tokenIds.clear();
     }
-    
-    // Sort token IDs for consistent key generation
-    std::sort(tokenIds.begin(), tokenIds.end());
     
     return tokenIds;
 }

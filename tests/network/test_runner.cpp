@@ -11,10 +11,14 @@ int main() {
         ActivationTest activationTest;
         activationTest.runAllTests();
         
-        // Run LinkLatent Tests
+        // Run LinkLatent Tests - just one test to debug
         std::cout << "\n=== Running LinkLatent Tests ===" << std::endl;
+        std::cout << "Creating LinkLatentTest object..." << std::endl;
         LinkLatentTest linkLatentTest;
+        std::cout << "LinkLatentTest object created, calling testLinkLatentWithNullActivation()..." << std::endl;
+        std::cout << "Running all LinkLatent tests..." << std::endl;
         linkLatentTest.runAllTests();
+        std::cout << "All LinkLatent tests completed." << std::endl;
         
         std::cout << "\nAll tests completed successfully!" << std::endl;
         return 0;

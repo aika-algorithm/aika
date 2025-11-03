@@ -1,8 +1,13 @@
 #include "network/linker.h"
+#include <stdexcept>
 
 
 
 void Linker::linkOutgoing(Activation* act) {
+    if (!act) {
+        throw std::invalid_argument("Activation cannot be null");
+    }
+    
     Neuron* neuron = act->getNeuron();
     neuron->wakeupPropagable();
 
