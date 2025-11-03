@@ -145,7 +145,7 @@ void bind_network(py::module_& m) {
 
     // Bind Activation base class (inherits from Object)
     py::class_<Activation, Object>(m, "Activation")
-        .def(py::init<ActivationType*, Activation*, int, Neuron*, Context*, std::map<int, BindingSignal*>>())
+        // .def(py::init<ActivationType*, Activation*, int, Neuron*, Context*, BindingSignal**>()) // Removed for array compatibility
         .def("getKey", &Activation::getKey)
         .def("getParent", &Activation::getParent, py::return_value_policy::reference_internal)
         .def("addOutputLink", &Activation::addOutputLink)
@@ -317,7 +317,7 @@ void bind_network(py::module_& m) {
         .def("setPairedSynapseInputSide", &Synapse::setPairedSynapseInputSide)
         .def("getPairedSynapseOutputSide", &Synapse::getPairedSynapseOutputSide)
         .def("setPairedSynapseOutputSide", &Synapse::setPairedSynapseOutputSide)
-        .def("transitionForward", &Synapse::transitionForward)
+        // .def("transitionForward", &Synapse::transitionForward) // Removed for array compatibility
         .def("setPropagable", &Synapse::setPropagable, py::return_value_policy::reference_internal)
         .def("isPropagable", &Synapse::isPropagable)
         .def("setModified", &Synapse::setModified)
@@ -362,6 +362,8 @@ void bind_network(py::module_& m) {
         .def(py::init<TypeRegistry*, const std::string&>())
         .def("addParent", &NeuronTypeBuilder::addParent, py::return_value_policy::reference_internal)
         .def("getParents", &NeuronTypeBuilder::getParents, py::return_value_policy::reference_internal)
+        .def("setNumberOfBSSlots", &NeuronTypeBuilder::setNumberOfBSSlots, py::return_value_policy::reference_internal)
+        .def("getNumberOfBSSlots", &NeuronTypeBuilder::getNumberOfBSSlots)
         .def("build", &NeuronTypeBuilder::build, py::return_value_policy::reference_internal)
         .def("__str__", [](const NeuronTypeBuilder& nb) {
             return nb.getName();

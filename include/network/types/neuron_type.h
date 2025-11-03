@@ -26,11 +26,16 @@ public:
     int getWildcardBSSlot() const;
     void setWildcardBSSlot(int wildcardBSSlot);
 
+    // Number of binding signal slots
+    int getNumberOfBSSlots() const;
+    void setNumberOfBSSlots(int numberOfBSSlots);
+
     std::vector<Relation*> getRelations() const;
     Neuron* instantiate(Model* m);
 
 private:
     int wildcardBSSlot; // -1 indicates not set (default)
+    int numberOfBSSlots; // Number of binding signal slots for fixed array size
 
     ActivationType* activationType;
 };

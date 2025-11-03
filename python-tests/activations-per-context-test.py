@@ -26,6 +26,10 @@ class ActivationsPerContextTestCase(unittest.TestCase):
         self.input_builder = an.NeuronTypeBuilder(self.registry, "INPUT_NEURON")
         self.output_builder = an.NeuronTypeBuilder(self.registry, "OUTPUT_NEURON")
         
+        # Set number of binding signal slots to accommodate the test
+        self.input_builder.setNumberOfBSSlots(2)
+        self.output_builder.setNumberOfBSSlots(2)
+        
         self.input_type = self.input_builder.build()
         self.output_type = self.output_builder.build()
         

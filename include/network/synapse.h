@@ -30,8 +30,8 @@ public:
     int getSynapseId() const;
     void setSynapseId(int synapseId);
 
-    std::map<int, BindingSignal*> transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals);
-    std::map<int, BindingSignal*> transitionBackward(const std::map<int, BindingSignal*>& outputBindingSignals);
+    BindingSignal** transitionForward(const BindingSignal** inputBindingSignals);
+    BindingSignal** transitionBackward(const BindingSignal** outputBindingSignals);
 
     Synapse* setPropagable(Model* m, bool propagable);
     bool isPropagable() const;

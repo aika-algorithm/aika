@@ -1,6 +1,7 @@
 #include "network/context.h"
 #include "network/activation.h"
 #include "network/model.h"
+#include "network/types/neuron_type.h"
 
 Context::Context(Model* m) : model(m), activationIdCounter(0), isStale(false) {
     id = model->createContextId();
@@ -102,9 +103,23 @@ Queue* Context::getQueue() const {
     return const_cast<Context*>(this);
 }
 
-Activation* Context::addToken(Neuron* n, int bsType, int tokenId) {
+Activation* Context::addToken(Neuron* n, int bsSlot, int tokenId) {
     BindingSignal* bs = getOrCreateBindingSignal(tokenId);
-    return n->createActivation(nullptr, this, {{bsType, bs}});
+    
+    // Create array and populate with binding signal at the specified slot
+    NeuronType* neuronType = static_cast<NeuronType*>(n->getType());
+    int numberOfBSSlots = neuronType->getNumberOfBSSlots();
+    
+    BindingSignal** bindingSignals = new BindingSignal*[numberOfBSSlots];
+    for (int i = 0; i < numberOfBSSlots; i++) {
+        bindingSignals[i] = nullptr;
+    }
+    
+    if (bsSlot >= 0 && bsSlot < numberOfBSSlots) {
+        bindingSignals[bsSlot] = bs;
+    }
+    
+    return n->createActivation(nullptr, this, bindingSignals);
 }
 
 BindingSignal* Context::getOrCreateBindingSignal(int tokenId) {

@@ -40,7 +40,7 @@ public:
     std::set<NeuronReference*> getPropagable() const;
 
     int getNewSynapseId();
-    Activation* createActivation(Activation* parent, Context* doc, std::map<int, BindingSignal*> bindingSignals);
+    Activation* createActivation(Activation* parent, Context* doc, BindingSignal** bindingSignals);
     void deleteNeuron();
 
     // ActivationsPerContext management

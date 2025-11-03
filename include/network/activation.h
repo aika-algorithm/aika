@@ -27,7 +27,7 @@ class Activation : public Object, public Element, public ModelProvider {
 public:
     static const std::function<bool(Activation*, Activation*)> ID_COMPARATOR;
 
-    Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Context* ctx, std::map<int, BindingSignal*> bindingSignals);
+    Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Context* ctx, BindingSignal** bindingSignals);
     ~Activation();
 
     RelatedObjectIterable* followManyRelation(Relation* rel) const override;
@@ -37,7 +37,8 @@ public:
     Activation* getParent() const;
 
     BindingSignal* getBindingSignal(int slot) const;
-    std::map<int, BindingSignal*> getBindingSignals() const;
+    BindingSignal** getBindingSignalsArray() const;
+    std::set<BindingSignal*> getBindingSignals() const;
 
     int getId() const;
     long getCreated() const override;
@@ -78,7 +79,7 @@ private:
     int id;
     Neuron* neuron;
     Context* ctx;
-    std::map<int, BindingSignal*> bindingSignals;
+    BindingSignal** bindingSignals;  // Fixed-size array
     Activation* parent;
     long created;
     long fired;

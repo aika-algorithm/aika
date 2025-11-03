@@ -3,6 +3,7 @@
 #include "network/input.h"
 #include "network/output.h"
 #include "network/types/activation_type.h"
+#include "network/types/neuron_type.h"
 #include "fields/rel_obj_iterator.h"
 #include "fields/field.h"
 #include "network/context.h"
@@ -17,7 +18,7 @@ const std::function<bool(Activation*, Activation*)> Activation::ID_COMPARATOR = 
     return a1->getId() < a2->getId();
 };
 
-Activation::Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Context* ctx, std::map<int, BindingSignal*> bindingSignals)
+Activation::Activation(ActivationType* t, Activation* parent, int id, Neuron* n, Context* ctx, BindingSignal** bindingSignals)
     : Object(t), id(id), neuron(n), ctx(ctx), bindingSignals(bindingSignals), parent(parent), created(-1), fired(-1), firedStep(new Fired(this)) {
     initFields();
     ctx->addActivation(this);
@@ -34,6 +35,9 @@ Activation::~Activation() {
     ctx->removeActivation(this);
     // Unregister this activation from the neuron's ActivationsPerContext system
     neuron->removeActivation(this);
+    
+    // Free the binding signals array
+    delete[] bindingSignals;
     
     delete firedStep;
 }
@@ -76,15 +80,32 @@ Activation* Activation::getParent() const {
 }
 
 BindingSignal* Activation::getBindingSignal(int slot) const {
-    auto it = bindingSignals.find(slot);
-    if (it != bindingSignals.end()) {
-        return it->second;
+    NeuronType* neuronType = static_cast<NeuronType*>(neuron->getType());
+    int numberOfBSSlots = neuronType->getNumberOfBSSlots();
+    
+    if (slot >= 0 && slot < numberOfBSSlots) {
+        return bindingSignals[slot];
     }
     return nullptr;
 }
 
-std::map<int, BindingSignal*> Activation::getBindingSignals() const {
+BindingSignal** Activation::getBindingSignalsArray() const {
     return bindingSignals;
+}
+
+std::set<BindingSignal*> Activation::getBindingSignals() const {
+    std::set<BindingSignal*> result;
+    
+    NeuronType* neuronType = static_cast<NeuronType*>(neuron->getType());
+    int numberOfBSSlots = neuronType->getNumberOfBSSlots();
+    
+    for (int slot = 0; slot < numberOfBSSlots; slot++) {
+        if (bindingSignals[slot] != nullptr) {
+            result.insert(bindingSignals[slot]);
+        }
+    }
+    
+    return result;
 }
 
 int Activation::getId() const {
@@ -258,10 +279,10 @@ std::vector<int> Activation::createInputKeyFromOutputCandidate(Synapse* outputSy
     key.push_back(pairedSynapseInputSide->getSynapseId());
     
     // Get binding signals from the output activation
-    std::map<int, BindingSignal*> outputBindingSignals = outputActivation->getBindingSignals();
+    BindingSignal** outputBindingSignals = outputActivation->getBindingSignalsArray();
     
     // Transition the binding signals backwards through the output synapse
-    std::map<int, BindingSignal*> inputBindingSignals = outputSynapse->transitionBackward(outputBindingSignals);
+    BindingSignal** inputBindingSignals = outputSynapse->transitionBackward(const_cast<const BindingSignal**>(outputBindingSignals));
 
     // Add the resolved wildcard binding signal and other binding signals to the key
     // We need to get the transitions from the paired input synapse type to know which slots to use
@@ -289,18 +310,25 @@ std::vector<int> Activation::createInputKeyFromOutputCandidate(Synapse* outputSy
 */
 
     if (pairedInputSynapseType) {
+        // Get the input neuron to determine the number of binding signal slots
+        Neuron* inputNeuron = outputSynapse->getInput(getModel());
+        NeuronType* inputNeuronType = static_cast<NeuronType*>(inputNeuron->getType());
+        int inputBSSlots = inputNeuronType->getNumberOfBSSlots();
+        
         // Get transitions from the paired input synapse type
         const std::vector<Transition*> transitions = pairedInputSynapseType->getTransitions();
-        
+
         // For each transition in the paired input synapse, add the corresponding binding signal token ID
         for (const auto& transition : transitions) {
             int fromSlot = transition->from();
-            auto it = inputBindingSignals.find(fromSlot);
-            if (it != inputBindingSignals.end() && it->second) {
-                key.push_back(it->second->getTokenId());
+            if (fromSlot >= 0 && fromSlot < inputBSSlots && inputBindingSignals[fromSlot]) {
+                key.push_back(inputBindingSignals[fromSlot]->getTokenId());
             }
         }
     }
+    
+    // Clean up the allocated input binding signals array
+    delete[] inputBindingSignals;
     
     return key;
 }

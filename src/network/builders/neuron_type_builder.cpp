@@ -5,7 +5,7 @@
 
 
 NeuronTypeBuilder::NeuronTypeBuilder(TypeRegistry* registry, const std::string& name)
-    : registry(registry), name(name), activationType(nullptr), builtInstance(nullptr), parentTypes(), isBuilt(false) {
+    : registry(registry), name(name), activationType(nullptr), builtInstance(nullptr), parentTypes(), numberOfBSSlots(0), isBuilt(false) {
 }
 
 NeuronTypeBuilder::~NeuronTypeBuilder() {
@@ -27,6 +27,17 @@ std::vector<NeuronType*> NeuronTypeBuilder::getParents() const {
     return parentTypes;
 }
 
+NeuronTypeBuilder& NeuronTypeBuilder::setNumberOfBSSlots(int numberOfBSSlots) {
+    if (!isBuilt) {
+        this->numberOfBSSlots = numberOfBSSlots;
+    }
+    return *this;
+}
+
+int NeuronTypeBuilder::getNumberOfBSSlots() const {
+    return numberOfBSSlots;
+}
+
 NeuronType* NeuronTypeBuilder::build() {
     if (isBuilt) {
         return builtInstance;
@@ -36,6 +47,7 @@ NeuronType* NeuronTypeBuilder::build() {
     builtInstance = new NeuronType(registry, name);
 
     builtInstance->setActivationType(activationType);
+    builtInstance->setNumberOfBSSlots(numberOfBSSlots);
     activationType->setNeuronType(builtInstance);
     
     // Set up inheritance hierarchy

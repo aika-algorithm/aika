@@ -121,7 +121,7 @@ int Neuron::getNewSynapseId() {
     return synapseIdCounter++;
 }
 
-Activation* Neuron::createActivation(Activation* parent, Context* ctx, std::map<int, BindingSignal*> bindingSignals) {
+Activation* Neuron::createActivation(Activation* parent, Context* ctx, BindingSignal** bindingSignals) {
     // Get the neuron definition and its activation definition
     NeuronType* neuronType = static_cast<NeuronType*>(getType());
     

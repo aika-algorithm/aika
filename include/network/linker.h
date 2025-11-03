@@ -16,9 +16,9 @@ public:
 
 private:
     static void pairLinking(Activation* act, Synapse* firstSynapse);
-    static void propagate(Activation* act, Synapse* targetSyn, const std::map<int, BindingSignal*>& outputBindingSignals);
+    static void propagate(Activation* act, Synapse* targetSyn, BindingSignal** outputBindingSignals);
 
-    static std::set<Activation*> collectLinkingTargets(std::map<int, BindingSignal*> bindingSignals, Neuron* n);
+    static std::set<Activation*> collectLinkingTargets(BindingSignal** bindingSignals, Neuron* n);
 };
 
 #endif //LINKER_H

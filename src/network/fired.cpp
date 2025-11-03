@@ -21,8 +21,8 @@ void Fired::process() {
     act->setFired();
 
     // Only once the activation is fired, will it be visible to other neurons.
-    for (auto& bs : act->getBindingSignals()) {
-        bs.second->addActivation(act);
+    for (BindingSignal* bs : act->getBindingSignals()) {
+        bs->addActivation(act);
     }
 
     Linker::linkOutgoing(act);

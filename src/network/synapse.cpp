@@ -1,5 +1,6 @@
 #include "network/synapse.h"
 #include "network/types/synapse_type.h"
+#include "network/types/neuron_type.h"
 #include "network/direction.h" // Include the full NetworkDirection definition
 #include "network/linker.h"
 #include <iostream>
@@ -65,40 +66,76 @@ void Synapse::setPairedSynapseOutputSide(Synapse* pairedSynapseOutputSide) {
     this->pairedSynapseOutputSide = pairedSynapseOutputSide;
 }
 
-std::map<int, BindingSignal*> Synapse::transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals) {
-    std::map<int, BindingSignal*> outputTransitions;
+BindingSignal** Synapse::transitionForward(const BindingSignal** inputBindingSignals) {
     SynapseType* synapseType = static_cast<SynapseType*>(getType());
     
-    // Iterate over input binding signals and map each one forward
-    for (const auto& pair : inputBindingSignals) {
-        int fromSlot = pair.first;
-        BindingSignal* bindingSignal = pair.second;
-        
-        int toSlot = synapseType->mapTransitionForward(fromSlot);
-        if (toSlot != -1) {
-            outputTransitions[toSlot] = bindingSignal;
+    // Get the output neuron to determine the number of binding signal slots
+    Neuron* outputNeuron = getOutput();
+    if (!outputNeuron) {
+        return nullptr;
+    }
+    
+    NeuronType* outputNeuronType = static_cast<NeuronType*>(outputNeuron->getType());
+    int outputBSSlots = outputNeuronType->getNumberOfBSSlots();
+    
+    // Allocate output array
+    BindingSignal** outputBindingSignals = new BindingSignal*[outputBSSlots];
+    for (int i = 0; i < outputBSSlots; i++) {
+        outputBindingSignals[i] = nullptr;
+    }
+    
+    // Get input neuron to determine the number of input binding signal slots
+    Neuron* inputNeuron = getInput();
+    NeuronType* inputNeuronType = static_cast<NeuronType*>(inputNeuron->getType());
+    int inputBSSlots = inputNeuronType->getNumberOfBSSlots();
+    
+    // Map each input binding signal forward
+    for (int fromSlot = 0; fromSlot < inputBSSlots; fromSlot++) {
+        if (inputBindingSignals[fromSlot] != nullptr) {
+            int toSlot = synapseType->mapTransitionForward(fromSlot);
+            if (toSlot >= 0 && toSlot < outputBSSlots) {
+                outputBindingSignals[toSlot] = const_cast<BindingSignal*>(inputBindingSignals[fromSlot]);
+            }
         }
     }
     
-    return outputTransitions;
+    return outputBindingSignals;
 }
 
-std::map<int, BindingSignal*> Synapse::transitionBackward(const std::map<int, BindingSignal*>& outputBindingSignals) {
-    std::map<int, BindingSignal*> inputTransitions;
+BindingSignal** Synapse::transitionBackward(const BindingSignal** outputBindingSignals) {
     SynapseType* synapseType = static_cast<SynapseType*>(getType());
     
-    // Iterate over output binding signals and map each one backward
-    for (const auto& pair : outputBindingSignals) {
-        int toSlot = pair.first;
-        BindingSignal* bindingSignal = pair.second;
-        
-        int fromSlot = synapseType->mapTransitionBackward(toSlot);
-        if (fromSlot != -1) {
-            inputTransitions[fromSlot] = bindingSignal;
+    // Get the input neuron to determine the number of binding signal slots
+    Neuron* inputNeuron = getInput();
+    if (!inputNeuron) {
+        return nullptr;
+    }
+    
+    NeuronType* inputNeuronType = static_cast<NeuronType*>(inputNeuron->getType());
+    int inputBSSlots = inputNeuronType->getNumberOfBSSlots();
+    
+    // Allocate input array
+    BindingSignal** inputBindingSignals = new BindingSignal*[inputBSSlots];
+    for (int i = 0; i < inputBSSlots; i++) {
+        inputBindingSignals[i] = nullptr;
+    }
+    
+    // Get output neuron to determine the number of output binding signal slots
+    Neuron* outputNeuron = getOutput();
+    NeuronType* outputNeuronType = static_cast<NeuronType*>(outputNeuron->getType());
+    int outputBSSlots = outputNeuronType->getNumberOfBSSlots();
+    
+    // Map each output binding signal backward
+    for (int toSlot = 0; toSlot < outputBSSlots; toSlot++) {
+        if (outputBindingSignals[toSlot] != nullptr) {
+            int fromSlot = synapseType->mapTransitionBackward(toSlot);
+            if (fromSlot >= 0 && fromSlot < inputBSSlots) {
+                inputBindingSignals[fromSlot] = const_cast<BindingSignal*>(outputBindingSignals[toSlot]);
+            }
         }
     }
     
-    return inputTransitions;
+    return inputBindingSignals;
 }
 
 

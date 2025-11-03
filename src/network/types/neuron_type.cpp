@@ -20,7 +20,7 @@ public:
 
 static NeuronTypeInitializer neuronTypeInit;
 
-NeuronType::NeuronType(TypeRegistry* registry, const std::string& name) : Type(registry, name), wildcardBSSlot(-1) {}
+NeuronType::NeuronType(TypeRegistry* registry, const std::string& name) : Type(registry, name), wildcardBSSlot(-1), numberOfBSSlots(0) {}
 
 int NeuronType::getWildcardBSSlot() const {
     return wildcardBSSlot;
@@ -28,6 +28,14 @@ int NeuronType::getWildcardBSSlot() const {
 
 void NeuronType::setWildcardBSSlot(int wildcardBSSlot) {
     this->wildcardBSSlot = wildcardBSSlot;
+}
+
+int NeuronType::getNumberOfBSSlots() const {
+    return numberOfBSSlots;
+}
+
+void NeuronType::setNumberOfBSSlots(int numberOfBSSlots) {
+    this->numberOfBSSlots = numberOfBSSlots;
 }
 
 std::vector<Relation*> NeuronType::getRelations() const {

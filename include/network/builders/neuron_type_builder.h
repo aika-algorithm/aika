@@ -24,6 +24,10 @@ public:
     // Builder configuration methods
     NeuronTypeBuilder& addParent(NeuronType* parentType);
     std::vector<NeuronType*> getParents() const;
+    
+    // Configure number of binding signal slots
+    NeuronTypeBuilder& setNumberOfBSSlots(int numberOfBSSlots);
+    int getNumberOfBSSlots() const;
 
     // Build the actual implementation
     NeuronType* build();
@@ -34,6 +38,7 @@ private:
     ActivationType* activationType;
     NeuronType* builtInstance;
     std::vector<NeuronType*> parentTypes;
+    int numberOfBSSlots;
     bool isBuilt;
 };
 
