@@ -9,18 +9,20 @@ Context::Context(Model* m) : model(m), activationIdCounter(0), isStale(false) {
 
 Context::~Context() {
     std::cout << "~Context begin" << std::endl;
-    // Clean up binding signals FIRST (they reference activations)
-    for (auto& pair : bindingSignals) {
-        std::cout << "~Context bs:" << pair.second << std::endl;
+    
+    // Clean up activations FIRST (they need to access binding signals during destruction)
+    for (auto& pair : activations) {
+        std::cout << "~Context act:" << pair.second << std::endl;
         if (pair.second != nullptr) {
             delete pair.second;
             pair.second = nullptr;
         }
     }
     std::cout << "~Context middle" << std::endl;
-    // Then clean up activations (they are referenced by binding signals)
-    for (auto& pair : activations) {
-        std::cout << "~Context act:" << pair.second << std::endl;
+    
+    // Then clean up binding signals (activations no longer reference them)
+    for (auto& pair : bindingSignals) {
+        std::cout << "~Context bs:" << pair.second << std::endl;
         if (pair.second != nullptr) {
             delete pair.second;
             pair.second = nullptr;
