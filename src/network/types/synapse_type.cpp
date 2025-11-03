@@ -35,7 +35,10 @@ std::vector<Relation*> SynapseType::getRelations() const {
         const_cast<RelationSelf*>(&SELF),
         const_cast<RelationOne*>(&INPUT),
         const_cast<RelationOne*>(&OUTPUT),
-        const_cast<RelationMany*>(&LINK)
+        const_cast<RelationMany*>(&LINK),
+        const_cast<RelationOne*>(&PAIR),
+        const_cast<RelationOne*>(&PAIR_IN),
+        const_cast<RelationOne*>(&PAIR_OUT)
     };
 }
 
