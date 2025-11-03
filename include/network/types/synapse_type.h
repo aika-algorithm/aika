@@ -46,6 +46,9 @@ public:
     static const RelationOne INPUT;
     static const RelationOne OUTPUT;
     static const RelationMany LINK;
+    static const RelationOne PAIR;
+    static const RelationOne PAIR_IN;
+    static const RelationOne PAIR_OUT;
 
     SynapseType(TypeRegistry* registry, const std::string& name);
 

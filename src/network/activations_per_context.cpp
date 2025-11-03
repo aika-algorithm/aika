@@ -48,6 +48,16 @@ Context* ActivationsPerContext::getContext() const {
     return context;
 }
 
+std::set<Activation*> ActivationsPerContext::getActivations() const {
+    std::set<Activation*> result;
+    for (const auto& pair : activationsByTokenIds) {
+        if (pair.second) {
+            result.insert(pair.second);
+        }
+    }
+    return result;
+}
+
 std::vector<int> ActivationsPerContext::createTokenIdVector(Activation* activation) const {
     std::vector<int> tokenIds;
     

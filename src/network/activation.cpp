@@ -248,14 +248,14 @@ std::vector<int> Activation::createInputKeyFromOutputCandidate(Synapse* outputSy
     std::vector<int> key;
     
     // Get the paired input synapse ID from the output synapse
-    Synapse* pairedairedSynapseInputSide = outputSynapse->getPairedSynapseInputSide();
-    if (pairedairedSynapseInputSide == nullptr) {
+    Synapse* pairedSynapseInputSide = outputSynapse->getPairedSynapseInputSide();
+    if (pairedSynapseInputSide == nullptr) {
         // No paired input synapse - return empty key
         return key;
     }
     
     // Start building the key with the paired input synapse ID
-    key.push_back(pairedairedSynapseInputSide->getSynapseId());
+    key.push_back(pairedSynapseInputSide->getSynapseId());
     
     // Get binding signals from the output activation
     std::map<int, BindingSignal*> outputBindingSignals = outputActivation->getBindingSignals();

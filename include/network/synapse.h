@@ -30,8 +30,6 @@ public:
     int getSynapseId() const;
     void setSynapseId(int synapseId);
 
-    Synapse* getPairedSynapse() const;
-
     std::map<int, BindingSignal*> transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals);
     std::map<int, BindingSignal*> transitionBackward(const std::map<int, BindingSignal*>& outputBindingSignals);
 

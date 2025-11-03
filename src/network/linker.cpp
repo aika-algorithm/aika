@@ -1,4 +1,5 @@
 #include "network/linker.h"
+#include "network/activations_per_context.h"
 #include <stdexcept>
 
 
@@ -68,7 +69,7 @@ void Linker::pairLinking(Activation* firstInputAct, Synapse* firstSynapse) {
 
     SynapseType* firstSynapseType = static_cast<SynapseType*>(firstSynapse->getType());
     PairingConfig config = firstSynapseType->getPairingConfig();
-    int pairBindingSignalSlot = config->bindingSignalSlot;
+    int pairBindingSignalSlot = config.bindingSignalSlot;
 
     // Paired synapse for the dot-product inner multiplication.
     Synapse* secondSynapse = firstSynapse->getPairedSynapse();
@@ -79,22 +80,25 @@ void Linker::pairLinking(Activation* firstInputAct, Synapse* firstSynapse) {
 
     Neuron* secondInputNeuron = secondSynapse->getInput(model);
 
+// TODO: use a pointer to the set instead of holding and overwriting the entire set datatype
     std::set<Activation*> secondInputActs;
     if(pairBindingSignalSlot != -1) {
         // Ensure matching second input neuron and paired binding-signal slot.
-        int firstFromSlot = synapseType->mapTransitionBackward(pairBindingSignalSlot);
-        BindingSignal* bs = firstInputAct.getBindingSignal(firstFromSlot)
+        int firstFromSlot = firstSynapseType->mapTransitionBackward(pairBindingSignalSlot);
+        BindingSignal* bs = firstInputAct->getBindingSignal(firstFromSlot);
 
         SynapseType* secondSynapseType = static_cast<SynapseType*>(secondSynapse->getType());
-        int secondFromSlot = synapseType->mapTransitionBackward(pairBindingSignalSlot);
+        int secondFromSlot = secondSynapseType->mapTransitionBackward(pairBindingSignalSlot);
 
         secondInputActs = bs->getActivations(secondInputNeuron);
     } else {
         // BS Wildcard case, only ensure matching second input neuron.
         Context* ctx = firstInputAct->getContext();
-        ActivationsPerContext* actPerContext = secondInputNeuron->getActivationsPerContext(ctx)
+        ActivationsPerContext* actPerContext = secondInputNeuron->getActivationsPerContext(ctx);
 
-        secondInputActs = actPerContext->getActivations();
+        if (actPerContext) {
+            secondInputActs = actPerContext->getActivations();
+        }
     }
 
     Neuron* outputNeuron = firstSynapse->getOutput(model);
@@ -103,10 +107,19 @@ void Linker::pairLinking(Activation* firstInputAct, Synapse* firstSynapse) {
     for (Activation* secondInputAct : secondInputActs) {
         if (!secondInputAct || secondInputAct == firstInputAct) continue;
 
+        // Calculate output binding signals by transitioning first input forward through first synapse
+        std::map<int, BindingSignal*> firstInputBindingSignals = firstInputAct->getBindingSignals();
+        std::map<int, BindingSignal*> outputBindingSignals = firstSynapse->transitionForward(firstInputBindingSignals);
+
+        // Calculate output binding signals by transitioning second input forward through second synapse
+        std::map<int, BindingSignal*> secondInputBindingSignals = secondInputAct->getBindingSignals();
+        // TODO: merge output binding-signals instead of overwriting them
+        std::map<int, BindingSignal*> outputBindingSignals = secondSynapse->transitionForward(secondInputBindingSignals);
+
         // Select or realize an output activation compatible with beta1.
         Activation* outputAct = nullptr;
 
-        // TODO: lookup existing outputAct
+        // TODO: lookup existing outputAct using the outputBindingSignals
             
         // If no existing activation found, create a new one
         if (!outputAct) {

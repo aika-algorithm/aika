@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include <set>
 
 // Forward declarations
 class Activation;
@@ -65,6 +66,12 @@ public:
      * @return Pointer to the context
      */
     Context* getContext() const;
+    
+    /**
+     * @brief Get all activations in this context
+     * @return Set of all activations
+     */
+    std::set<Activation*> getActivations() const;
 
 private:
     /**
