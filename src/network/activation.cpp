@@ -75,8 +75,8 @@ Activation* Activation::getParent() const {
     return parent;
 }
 
-BindingSignal* Activation::getBindingSignal(int s) const {
-    auto it = bindingSignals.find(s);
+BindingSignal* Activation::getBindingSignal(int slot) const {
+    auto it = bindingSignals.find(slot);
     if (it != bindingSignals.end()) {
         return it->second;
     }

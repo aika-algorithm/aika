@@ -15,10 +15,9 @@ public:
     static void linkIncoming(Activation* act, Synapse* targetSyn, Activation* excludedInputAct);
 
 private:
-    static void pairLinking(Activation* act, Synapse* firstSynapse, const std::map<int, BindingSignal*>& outputBindingSignals);
+    static void pairLinking(Activation* act, Synapse* firstSynapse);
     static void propagate(Activation* act, Synapse* targetSyn, const std::map<int, BindingSignal*>& outputBindingSignals);
 
-    static bool matchBindingSignals(Activation* act, std::map<int, BindingSignal*> latentBindingSignals);
     static std::set<Activation*> collectLinkingTargets(std::map<int, BindingSignal*> bindingSignals, Neuron* n);
 };
 

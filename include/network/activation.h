@@ -36,7 +36,7 @@ public:
     ActivationKey getKey() const;
     Activation* getParent() const;
 
-    BindingSignal* getBindingSignal(int s) const;
+    BindingSignal* getBindingSignal(int slot) const;
     std::map<int, BindingSignal*> getBindingSignals() const;
 
     int getId() const;

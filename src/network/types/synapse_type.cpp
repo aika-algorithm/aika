@@ -74,13 +74,17 @@ void SynapseType::setLinkType(LinkType* linkType) {
     this->linkType = linkType;
 }
 
-int SynapseType::mapTransitionForward(int bsType) const {
-    auto it = forwardTransitionMap.find(bsType);
+int SynapseType::mapTransitionForward(int bsSlot) const {
+    if(bsSlot == -1) return -1;
+
+    auto it = forwardTransitionMap.find(bsSlot);
     return (it != forwardTransitionMap.end()) ? it->second : -1;
 }
 
-int SynapseType::mapTransitionBackward(int bsType) const {
-    auto it = backwardTransitionMap.find(bsType);
+int SynapseType::mapTransitionBackward(int bsSlot) const {
+    if(bsSlot == -1) return -1;
+
+    auto it = backwardTransitionMap.find(bsSlot);
     return (it != backwardTransitionMap.end()) ? it->second : -1;
 }
 

@@ -71,12 +71,12 @@ std::map<int, BindingSignal*> Synapse::transitionForward(const std::map<int, Bin
     
     // Iterate over input binding signals and map each one forward
     for (const auto& pair : inputBindingSignals) {
-        int fromType = pair.first;
+        int fromSlot = pair.first;
         BindingSignal* bindingSignal = pair.second;
         
-        int toType = synapseType->mapTransitionForward(fromType);
-        if (toType != -1) {
-            outputTransitions[toType] = bindingSignal;
+        int toSlot = synapseType->mapTransitionForward(fromSlot);
+        if (toSlot != -1) {
+            outputTransitions[toSlot] = bindingSignal;
         }
     }
     
@@ -89,12 +89,12 @@ std::map<int, BindingSignal*> Synapse::transitionBackward(const std::map<int, Bi
     
     // Iterate over output binding signals and map each one backward
     for (const auto& pair : outputBindingSignals) {
-        int toType = pair.first;
+        int toSlot = pair.first;
         BindingSignal* bindingSignal = pair.second;
         
-        int fromType = synapseType->mapTransitionBackward(toType);
-        if (fromType != -1) {
-            inputTransitions[fromType] = bindingSignal;
+        int fromSlot = synapseType->mapTransitionBackward(toSlot);
+        if (fromSlot != -1) {
+            inputTransitions[fromSlot] = bindingSignal;
         }
     }
     

@@ -63,8 +63,8 @@ public:
     LinkType* getLinkType() const;
     void setLinkType(LinkType* link);
 
-    int mapTransitionForward(int bsType) const;
-    int mapTransitionBackward(int bsType) const;
+    int mapTransitionForward(int bsSlot) const;
+    int mapTransitionBackward(int bsSlot) const;
 
     std::vector<Transition*> getTransitions() const;
     void setTransitions(const std::vector<Transition*>& transitions);
