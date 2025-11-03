@@ -9,13 +9,13 @@
 // Need to add the missing SynapseType* type member to Synapse class
 // This will be a temporary fix until the proper header update is done
 
-Synapse::Synapse(SynapseType* type) : Object(type), synapseId(0), input(nullptr), output(nullptr), propagable(false), pairedInputSynapseId(-1), pairedOutputSynapseId(-1) {}
+Synapse::Synapse(SynapseType* type) : Object(type), synapseId(0), input(nullptr), output(nullptr), propagable(false), pairedSynapseInputSide(nullptr), pairedSynapseOutputSide(nullptr) {}
 
 Synapse::Synapse(SynapseType* type, Neuron* input, Neuron* output)
     : Object(type), synapseId(0),
       input(new NeuronReference(input, RefType::SYNAPSE_IN)), 
       output(new NeuronReference(output, RefType::SYNAPSE_OUT)), 
-      propagable(false), pairedInputSynapseId(-1), pairedOutputSynapseId(-1)
+      propagable(false), pairedSynapseInputSide(nullptr), pairedSynapseOutputSide(nullptr)
 {
     initFields();
     link(input->getModel(), input, output);
