@@ -34,10 +34,7 @@ void Linker::linkOutgoing(Activation* act, Synapse* outputSyn) {
         std::set<Activation*> outputActs = collectLinkingTargets(outputBindingSignals, outputSyn->getOutput(act->getModel()));
 
         for (auto& outputAct : outputActs) {
-            // Verify no binding signal conflicts before creating the link
-            if (matchBindingSignals(outputAct, outputBindingSignals)) {
-                outputSyn->createLink(act, outputAct);
-            }
+            outputSyn->createLink(act, outputAct);
         }
 
         if (outputActs.empty() && outputSyn->isPropagable()) {
@@ -72,7 +69,7 @@ void Linker::pairLinking(Activation* firstInputAct, Synapse* firstSynapse) {
     int pairBindingSignalSlot = config.bindingSignalSlot;
 
     // Paired synapse for the dot-product inner multiplication.
-    Synapse* secondSynapse = firstSynapse->getPairedSynapse();
+    Synapse* secondSynapse = firstSynapse->getPairedSynapseOutputSide();
     if (!secondSynapse) {
         // optionally realize an output link here using only (a1, s1).
         return;
@@ -139,16 +136,6 @@ void Linker::pairLinking(Activation* firstInputAct, Synapse* firstSynapse) {
     }
 }
 
-std::set<Activation*> Linker::collectLinkingTargets(std::map<int, BindingSignal*> bindingSignals, Neuron* n) {
-    std::set<Activation*> result;
-    for (const auto& [ch, bs] : bindingSignals) {
-        if (!bs) continue;
-        auto acts = bs->getActivations(n);
-        result.insert(acts.begin(), acts.end());
-    }
-    return result;
-}
-
 void Linker::linkIncoming(Activation* act, Activation* excludedInputAct) {
     for (auto& s : act->getNeuron()->getInputSynapsesAsStream()) {
 //        if (static_cast<SynapseType*>(s->getType())->isIncomingLinkingCandidate(bsKeys)) {
@@ -157,20 +144,29 @@ void Linker::linkIncoming(Activation* act, Activation* excludedInputAct) {
     }
 }
 
-void Linker::linkIncoming(Activation* act, Synapse* targetSyn, Activation* excludedInputAct) {
+void Linker::linkIncoming(Activation* oAct, Synapse* inputSyn, Activation* excludedInputAct) {
     // Get the output activation's binding signals and transition them backward through the synapse
-    std::map<int, BindingSignal*> outputBindingSignals = act->getBindingSignals();
-    std::map<int, BindingSignal*> inputBindingSignals = targetSyn->transitionBackward(outputBindingSignals);
+    std::map<int, BindingSignal*> outputBindingSignals = oAct->getBindingSignals();
+    std::map<int, BindingSignal*> inputBindingSignals = inputSyn->transitionBackward(outputBindingSignals);
     
     // Find input activations that match the transitioned binding signals
-    for (auto& iAct : collectLinkingTargets(inputBindingSignals, targetSyn->getInput(act->getModel()))) {
+    for (auto& iAct : collectLinkingTargets(inputBindingSignals, inputSyn->getInput(oAct->getModel()))) {
         if (iAct != excludedInputAct) {
-            // Verify no binding signal conflicts before creating the link
-            std::map<int, BindingSignal*> forwardTransitioned = targetSyn->transitionForward(iAct->getBindingSignals());
-            if (matchBindingSignals(act, forwardTransitioned)) {
-                targetSyn->createLink(iAct, act);
+            bool linkExists = inputSyn->hasLink(iAct, oAct);
+            if (!linkExists) {
+                inputSyn->createLink(iAct, oAct);
             }
         }
     }
 }
 
+std::set<Activation*> Linker::collectLinkingTargets(std::map<int, BindingSignal*> bindingSignals, Neuron* n) {
+    std::set<Activation*> result;
+    // TODO: Verify that the resulting Activations contain all provided binding-signals.
+    for (const auto& [ch, bs] : bindingSignals) {
+        if (!bs) continue;
+        auto acts = bs->getActivations(n);
+        result.insert(acts.begin(), acts.end());
+    }
+    return result;
+}
