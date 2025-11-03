@@ -80,8 +80,7 @@ Activation* Activation::getParent() const {
 }
 
 BindingSignal* Activation::getBindingSignal(int slot) const {
-    NeuronType* neuronType = static_cast<NeuronType*>(neuron->getType());
-    int numberOfBSSlots = neuronType->getNumberOfBSSlots();
+    int numberOfBSSlots = neuron->getNumberOfBSSlots();
     
     if (slot >= 0 && slot < numberOfBSSlots) {
         return bindingSignals[slot];
@@ -96,8 +95,7 @@ BindingSignal** Activation::getBindingSignalsArray() const {
 std::set<BindingSignal*> Activation::getBindingSignals() const {
     std::set<BindingSignal*> result;
     
-    NeuronType* neuronType = static_cast<NeuronType*>(neuron->getType());
-    int numberOfBSSlots = neuronType->getNumberOfBSSlots();
+    int numberOfBSSlots = neuron->getNumberOfBSSlots();
     
     for (int slot = 0; slot < numberOfBSSlots; slot++) {
         if (bindingSignals[slot] != nullptr) {
@@ -312,8 +310,7 @@ std::vector<int> Activation::createInputKeyFromOutputCandidate(Synapse* outputSy
     if (pairedInputSynapseType) {
         // Get the input neuron to determine the number of binding signal slots
         Neuron* inputNeuron = outputSynapse->getInput(getModel());
-        NeuronType* inputNeuronType = static_cast<NeuronType*>(inputNeuron->getType());
-        int inputBSSlots = inputNeuronType->getNumberOfBSSlots();
+        int inputBSSlots = inputNeuron->getNumberOfBSSlots();
         
         // Get transitions from the paired input synapse type
         const std::vector<Transition*> transitions = pairedInputSynapseType->getTransitions();

@@ -40,6 +40,8 @@ public:
     std::set<NeuronReference*> getPropagable() const;
 
     int getNewSynapseId();
+    int getNumberOfBSSlots() const;
+    BindingSignal** createBindingSignalArray() const;
     Activation* createActivation(Activation* parent, Context* doc, BindingSignal** bindingSignals);
     void deleteNeuron();
 

@@ -75,7 +75,9 @@ void LinkLatentTest::testLinkLatentBasicFlow() {
     try {
         // Create binding signal with type 1 (will be transitioned to type 2)
         BindingSignal* inputBS = ctx->getOrCreateBindingSignal(100);
-        std::map<int, BindingSignal*> inputBindingSignals;
+        
+        // Create binding signals array and set slot 1
+        BindingSignal** inputBindingSignals = firstInputNeuron->createBindingSignalArray();
         inputBindingSignals[1] = inputBS;
         
         // Create input activation with binding signal type 1
@@ -85,12 +87,13 @@ void LinkLatentTest::testLinkLatentBasicFlow() {
         std::cout << "📝 Created input activation with binding signal type 1" << std::endl;
         
         // Test transition functionality
-        std::map<int, BindingSignal*> transitioned = firstSynapse->transitionForward(inputBindingSignals);
-        if (transitioned.find(2) != transitioned.end()) {
+        BindingSignal** transitioned = firstSynapse->transitionForward(const_cast<const BindingSignal**>(inputBindingSignals));
+        if (transitioned[2] != nullptr) {
             std::cout << "✅ Synapse correctly transitioned binding signal from type 1 to type 2" << std::endl;
         } else {
             std::cout << "❌ Synapse failed to transition binding signal" << std::endl;
         }
+        delete[] transitioned;
         
         // Test basic linkOutgoing functionality (replaces linkLatent)
         Linker::linkOutgoing(firstInputActivation);
@@ -114,7 +117,9 @@ void LinkLatentTest::testActivationPropagationWithTransition() {
     try {
         // Create input activation with binding signal type 1
         BindingSignal* inputBS = ctx->getOrCreateBindingSignal(200);
-        std::map<int, BindingSignal*> inputBindingSignals;
+        
+        // Create binding signals array and set slot 1
+        BindingSignal** inputBindingSignals = firstInputNeuron->createBindingSignalArray();
         inputBindingSignals[1] = inputBS;
         
         firstInputActivation = firstInputNeuron->createActivation(nullptr, ctx, inputBindingSignals);
@@ -151,16 +156,11 @@ void LinkLatentTest::testActivationPropagationWithTransition() {
                 std::cout << "✅ Found output activation on correct neuron" << std::endl;
                 
                 // Verify transitioned binding signals
-                std::map<int, BindingSignal*> outputBindingSignals = outputActivation->getBindingSignals();
-                if (outputBindingSignals.find(2) != outputBindingSignals.end()) {
-                    BindingSignal* outputBS = outputBindingSignals[2];
-                    if (outputBS && outputBS->getTokenId() == inputBS->getTokenId()) {
-                        std::cout << "✅ Output activation has correct transitioned binding signal (type 2, token " << outputBS->getTokenId() << ")" << std::endl;
-                    } else {
-                        std::cout << "❌ Output activation binding signal has wrong token ID" << std::endl;
-                    }
+                BindingSignal* outputBS = outputActivation->getBindingSignal(2);
+                if (outputBS && outputBS->getTokenId() == inputBS->getTokenId()) {
+                    std::cout << "✅ Output activation has correct transitioned binding signal (type 2, token " << outputBS->getTokenId() << ")" << std::endl;
                 } else {
-                    std::cout << "❌ Output activation missing expected binding signal type 2" << std::endl;
+                    std::cout << "❌ Output activation missing expected binding signal type 2 or wrong token ID" << std::endl;
                 }
                 
                 // Verify link was created
@@ -193,7 +193,7 @@ void LinkLatentTest::testLinkLatentWithEmptyBindingSignals() {
     
     try {
         // Create activation with empty binding signals
-        std::map<int, BindingSignal*> emptyBindingSignals;
+        BindingSignal** emptyBindingSignals = neuron->createBindingSignalArray();
         Activation* emptyBindingActivation = new Activation(activationType, nullptr, 99, neuron, ctx, emptyBindingSignals);
         
         // This should exit early when forward transition returns empty signals
@@ -240,13 +240,13 @@ void LinkLatentTest::testCompleteLatentLinking() {
         BindingSignal* sharedBindingSignal = ctx->getOrCreateBindingSignal(tokenId);
         
         // Create first input activation with binding signal type 1
-        std::map<int, BindingSignal*> firstInputBindingSignals;
+        BindingSignal** firstInputBindingSignals = firstInputNeuron->createBindingSignalArray();
         firstInputBindingSignals[1] = sharedBindingSignal;
         firstInputActivation = firstInputNeuron->createActivation(nullptr, ctx, firstInputBindingSignals);
         sharedBindingSignal->addActivation(firstInputActivation);
         
         // Create second input activation with binding signal type 3 (same token)
-        std::map<int, BindingSignal*> secondInputBindingSignals;
+        BindingSignal** secondInputBindingSignals = secondInputNeuron->createBindingSignalArray();
         secondInputBindingSignals[3] = sharedBindingSignal;
         secondInputActivation = secondInputNeuron->createActivation(nullptr, ctx, secondInputBindingSignals);
         sharedBindingSignal->addActivation(secondInputActivation);
@@ -284,13 +284,22 @@ void LinkLatentTest::testCompleteLatentLinking() {
                 std::cout << "✅ Found output activation on target neuron" << std::endl;
                 
                 // Verify binding signals were transitioned correctly
-                std::map<int, BindingSignal*> outputBindingSignals = outputActivation->getBindingSignals();
-                bool hasType2 = outputBindingSignals.find(2) != outputBindingSignals.end();
-                bool hasType4 = outputBindingSignals.find(4) != outputBindingSignals.end();
+                BindingSignal* outputBS2 = outputActivation->getBindingSignal(2);
+                BindingSignal* outputBS4 = outputActivation->getBindingSignal(4);
+                bool hasType2 = (outputBS2 != nullptr);
+                bool hasType4 = (outputBS4 != nullptr);
                 
                 std::cout << "📋 Output binding signals:" << std::endl;
-                for (const auto& pair : outputBindingSignals) {
-                    std::cout << "   - Type " << pair.first << ": token " << pair.second->getTokenId() << std::endl;
+                std::set<BindingSignal*> allOutputBS = outputActivation->getBindingSignals();
+                for (BindingSignal* bs : allOutputBS) {
+                    // Find the slot for this binding signal
+                    int outputSlots = outputActivation->getNeuron()->getNumberOfBSSlots();
+                    for (int slot = 0; slot < outputSlots; slot++) {
+                        if (outputActivation->getBindingSignal(slot) == bs) {
+                            std::cout << "   - Type " << slot << ": token " << bs->getTokenId() << std::endl;
+                            break;
+                        }
+                    }
                 }
                 
                 if (hasType2 && hasType4) {
@@ -402,13 +411,13 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
         BindingSignal* sharedBindingSignal = testCtx->getOrCreateBindingSignal(sharedTokenId);
         
         // First input activation (shared) - binding signal type 1
-        std::map<int, BindingSignal*> sharedInputBindingSignals;
+        BindingSignal** sharedInputBindingSignals = sharedInputNeuron->createBindingSignalArray();
         sharedInputBindingSignals[1] = sharedBindingSignal;
         Activation* sharedInputActivation = sharedInputNeuron->createActivation(nullptr, testCtx, sharedInputBindingSignals);
         sharedBindingSignal->addActivation(sharedInputActivation);
         
         // Second input activation - binding signal type 3 (same token to enable latent linking)
-        std::map<int, BindingSignal*> secondInputBindingSignals;
+        BindingSignal** secondInputBindingSignals = secondInputNeuron->createBindingSignalArray();
         secondInputBindingSignals[3] = sharedBindingSignal;  // Same binding signal!
         Activation* secondInputActivation = secondInputNeuron->createActivation(nullptr, testCtx, secondInputBindingSignals);
         sharedBindingSignal->addActivation(secondInputActivation);
@@ -416,7 +425,7 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
         // Third input activation - binding signal type 3 (different token)
         int thirdTokenId = 602;
         BindingSignal* thirdBindingSignal = testCtx->getOrCreateBindingSignal(thirdTokenId);
-        std::map<int, BindingSignal*> thirdInputBindingSignals;
+        BindingSignal** thirdInputBindingSignals = thirdInputNeuron->createBindingSignalArray();
         thirdInputBindingSignals[3] = thirdBindingSignal;
         Activation* thirdInputActivation = thirdInputNeuron->createActivation(nullptr, testCtx, thirdInputBindingSignals);
         thirdBindingSignal->addActivation(thirdInputActivation);
@@ -456,14 +465,22 @@ void LinkLatentTest::testThreeInputTwoOutputNonMatchingSignals() {
             // Verify output activation
             if (outputActivation) {
                 std::cout << "✅ Output activation created on correct neuron" << std::endl;
-                std::map<int, BindingSignal*> outputBindingSignals = outputActivation->getBindingSignals();
                 std::cout << "   - Binding signals:" << std::endl;
-                for (const auto& pair : outputBindingSignals) {
-                    std::cout << "     * Type " << pair.first << ": token " << pair.second->getTokenId() << std::endl;
+                std::set<BindingSignal*> outputBindingSignals = outputActivation->getBindingSignals();
+                for (BindingSignal* bs : outputBindingSignals) {
+                    // Find the slot for this binding signal
+                    int outputSlots = outputActivation->getNeuron()->getNumberOfBSSlots();
+                    for (int slot = 0; slot < outputSlots; slot++) {
+                        if (outputActivation->getBindingSignal(slot) == bs) {
+                            std::cout << "     * Type " << slot << ": token " << bs->getTokenId() << std::endl;
+                            break;
+                        }
+                    }
                 }
                 
                 // Should have type 5 from both transitions (1->5 and 3->5)
-                if (outputBindingSignals.find(5) != outputBindingSignals.end()) {
+                BindingSignal* outputBS5 = outputActivation->getBindingSignal(5);
+                if (outputBS5 != nullptr) {
                     std::cout << "✅ Output has correct transitioned binding signal (type 5)" << std::endl;
                     std::cout << "   - This signal can come from EITHER input type (1 OR 3) transitioning to type 5" << std::endl;
                 } else {
@@ -565,13 +582,13 @@ void LinkLatentTest::testBindingSignalConflictPrevention() {
         BindingSignal* secondBindingSignal = testCtx->getOrCreateBindingSignal(secondTokenId);
         
         // First input activation - binding signal type 1, token 700
-        std::map<int, BindingSignal*> firstInputBindingSignals;
+        BindingSignal** firstInputBindingSignals = firstInputNeuron->createBindingSignalArray();
         firstInputBindingSignals[1] = firstBindingSignal;
         Activation* firstInputActivation = firstInputNeuron->createActivation(nullptr, testCtx, firstInputBindingSignals);
         firstBindingSignal->addActivation(firstInputActivation);
         
         // Second input activation - binding signal type 2, token 701 (DIFFERENT token!)
-        std::map<int, BindingSignal*> secondInputBindingSignals;
+        BindingSignal** secondInputBindingSignals = secondInputNeuron->createBindingSignalArray();
         secondInputBindingSignals[2] = secondBindingSignal;
         Activation* secondInputActivation = secondInputNeuron->createActivation(nullptr, testCtx, secondInputBindingSignals);
         secondBindingSignal->addActivation(secondInputActivation);
@@ -608,8 +625,16 @@ void LinkLatentTest::testBindingSignalConflictPrevention() {
             for (Activation* act : finalActivations) {
                 if (act->getNeuron() == outputNeuron) {
                     std::cout << "   - Output activation binding signals:" << std::endl;
-                    for (const auto& pair : act->getBindingSignals()) {
-                        std::cout << "     * Type " << pair.first << ": token " << pair.second->getTokenId() << std::endl;
+                    std::set<BindingSignal*> actBS = act->getBindingSignals();
+                    for (BindingSignal* bs : actBS) {
+                        // Find the slot for this binding signal
+                        int actSlots = act->getNeuron()->getNumberOfBSSlots();
+                        for (int slot = 0; slot < actSlots; slot++) {
+                            if (act->getBindingSignal(slot) == bs) {
+                                std::cout << "     * Type " << slot << ": token " << bs->getTokenId() << std::endl;
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -626,13 +651,13 @@ void LinkLatentTest::testBindingSignalConflictPrevention() {
         BindingSignal* sameBindingSignal = testCtx2->getOrCreateBindingSignal(sameTokenId);
         
         // First input activation - binding signal type 1, token 800
-        std::map<int, BindingSignal*> firstInputBindingSignals2;
+        BindingSignal** firstInputBindingSignals2 = firstInputNeuron->createBindingSignalArray();
         firstInputBindingSignals2[1] = sameBindingSignal;
         Activation* firstInputActivation2 = firstInputNeuron->createActivation(nullptr, testCtx2, firstInputBindingSignals2);
         sameBindingSignal->addActivation(firstInputActivation2);
         
         // Second input activation - binding signal type 2, same token 800
-        std::map<int, BindingSignal*> secondInputBindingSignals2;
+        BindingSignal** secondInputBindingSignals2 = secondInputNeuron->createBindingSignalArray();
         secondInputBindingSignals2[2] = sameBindingSignal;  // SAME BindingSignal object
         Activation* secondInputActivation2 = secondInputNeuron->createActivation(nullptr, testCtx2, secondInputBindingSignals2);
         sameBindingSignal->addActivation(secondInputActivation2);

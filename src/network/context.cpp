@@ -107,13 +107,10 @@ Activation* Context::addToken(Neuron* n, int bsSlot, int tokenId) {
     BindingSignal* bs = getOrCreateBindingSignal(tokenId);
     
     // Create array and populate with binding signal at the specified slot
-    NeuronType* neuronType = static_cast<NeuronType*>(n->getType());
-    int numberOfBSSlots = neuronType->getNumberOfBSSlots();
+    // Create binding signals array using the neuron's method
+    BindingSignal** bindingSignals = n->createBindingSignalArray();
     
-    BindingSignal** bindingSignals = new BindingSignal*[numberOfBSSlots];
-    for (int i = 0; i < numberOfBSSlots; i++) {
-        bindingSignals[i] = nullptr;
-    }
+    int numberOfBSSlots = n->getNumberOfBSSlots();
     
     if (bsSlot >= 0 && bsSlot < numberOfBSSlots) {
         bindingSignals[bsSlot] = bs;

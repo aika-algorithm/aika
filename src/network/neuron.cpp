@@ -121,6 +121,17 @@ int Neuron::getNewSynapseId() {
     return synapseIdCounter++;
 }
 
+int Neuron::getNumberOfBSSlots() const {
+    NeuronType* neuronType = static_cast<NeuronType*>(getType());
+    return neuronType->getNumberOfBSSlots();
+}
+
+BindingSignal** Neuron::createBindingSignalArray() const {
+    int numberOfBSSlots = getNumberOfBSSlots();
+    BindingSignal** bindingSignals = new BindingSignal*[numberOfBSSlots]();
+    return bindingSignals;
+}
+
 Activation* Neuron::createActivation(Activation* parent, Context* ctx, BindingSignal** bindingSignals) {
     // Get the neuron definition and its activation definition
     NeuronType* neuronType = static_cast<NeuronType*>(getType());

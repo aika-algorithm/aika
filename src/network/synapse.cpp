@@ -75,19 +75,13 @@ BindingSignal** Synapse::transitionForward(const BindingSignal** inputBindingSig
         return nullptr;
     }
     
-    NeuronType* outputNeuronType = static_cast<NeuronType*>(outputNeuron->getType());
-    int outputBSSlots = outputNeuronType->getNumberOfBSSlots();
+    // Allocate output array using the neuron's method
+    BindingSignal** outputBindingSignals = outputNeuron->createBindingSignalArray();
     
-    // Allocate output array
-    BindingSignal** outputBindingSignals = new BindingSignal*[outputBSSlots];
-    for (int i = 0; i < outputBSSlots; i++) {
-        outputBindingSignals[i] = nullptr;
-    }
-    
-    // Get input neuron to determine the number of input binding signal slots
+    // Get input and output neuron array sizes for bounds checking
     Neuron* inputNeuron = getInput();
-    NeuronType* inputNeuronType = static_cast<NeuronType*>(inputNeuron->getType());
-    int inputBSSlots = inputNeuronType->getNumberOfBSSlots();
+    int inputBSSlots = inputNeuron->getNumberOfBSSlots();
+    int outputBSSlots = outputNeuron->getNumberOfBSSlots();
     
     // Map each input binding signal forward
     for (int fromSlot = 0; fromSlot < inputBSSlots; fromSlot++) {
@@ -111,19 +105,14 @@ BindingSignal** Synapse::transitionBackward(const BindingSignal** outputBindingS
         return nullptr;
     }
     
-    NeuronType* inputNeuronType = static_cast<NeuronType*>(inputNeuron->getType());
-    int inputBSSlots = inputNeuronType->getNumberOfBSSlots();
+    // Allocate input array using the neuron's method
+    BindingSignal** inputBindingSignals = inputNeuron->createBindingSignalArray();
     
-    // Allocate input array
-    BindingSignal** inputBindingSignals = new BindingSignal*[inputBSSlots];
-    for (int i = 0; i < inputBSSlots; i++) {
-        inputBindingSignals[i] = nullptr;
-    }
+    // Get input and output neuron array sizes for bounds checking
+    int inputBSSlots = inputNeuron->getNumberOfBSSlots();
     
-    // Get output neuron to determine the number of output binding signal slots
     Neuron* outputNeuron = getOutput();
-    NeuronType* outputNeuronType = static_cast<NeuronType*>(outputNeuron->getType());
-    int outputBSSlots = outputNeuronType->getNumberOfBSSlots();
+    int outputBSSlots = outputNeuron->getNumberOfBSSlots();
     
     // Map each output binding signal backward
     for (int toSlot = 0; toSlot < outputBSSlots; toSlot++) {

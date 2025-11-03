@@ -115,8 +115,7 @@ void Linker::pairLinking(Activation* firstInputAct, Synapse* firstSynapse) {
         // Merge binding signals instead of overwriting them
         if (secondOutputBindingSignals && outputBindingSignals) {
             Neuron* outputNeuron = firstSynapse->getOutput(firstInputAct->getModel());
-            NeuronType* outputNeuronType = static_cast<NeuronType*>(outputNeuron->getType());
-            int outputBSSlots = outputNeuronType->getNumberOfBSSlots();
+            int outputBSSlots = outputNeuron->getNumberOfBSSlots();
             
             for (int slot = 0; slot < outputBSSlots; slot++) {
                 if (secondOutputBindingSignals[slot] != nullptr) {
@@ -189,8 +188,7 @@ std::set<Activation*> Linker::collectLinkingTargets(BindingSignal** bindingSigna
         return result;
     }
     
-    NeuronType* neuronType = static_cast<NeuronType*>(n->getType());
-    int numberOfBSSlots = neuronType->getNumberOfBSSlots();
+    int numberOfBSSlots = n->getNumberOfBSSlots();
     
     for (int slot = 0; slot < numberOfBSSlots; slot++) {
         BindingSignal* bs = bindingSignals[slot];
