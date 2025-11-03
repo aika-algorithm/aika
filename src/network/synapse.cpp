@@ -6,13 +6,11 @@
 #include <stdexcept>
 #include <limits>
 
-// Need to add the missing SynapseType* type member to Synapse class
-// This will be a temporary fix until the proper header update is done
 
 Synapse::Synapse(SynapseType* type) : Object(type), synapseId(0), input(nullptr), output(nullptr), propagable(false), pairedSynapseInputSide(nullptr), pairedSynapseOutputSide(nullptr) {}
 
 Synapse::Synapse(SynapseType* type, Neuron* input, Neuron* output)
-    : Object(type), synapseId(0),
+    : Object(type), synapseId(output->getNewSynapseId()),
       input(new NeuronReference(input, RefType::SYNAPSE_IN)), 
       output(new NeuronReference(output, RefType::SYNAPSE_OUT)), 
       propagable(false), pairedSynapseInputSide(nullptr), pairedSynapseOutputSide(nullptr)
