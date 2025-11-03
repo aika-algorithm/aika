@@ -32,6 +32,12 @@ Object* Synapse::followSingleRelation(const Relation* rel) const {
         return getInput();
     } else if (rel->getRelationLabel() == "OUTPUT") {
         return getOutput();
+    } else if (rel->getRelationLabel() == "PAIR") {
+        return pairedSynapseOutputSide;
+    } else if (rel->getRelationLabel() == "PAIR_IN") {
+        return pairedSynapseInputSide;
+    } else if (rel->getRelationLabel() == "PAIR_OUT") {
+        return pairedSynapseOutputSide;
     } else {
         throw std::runtime_error("Invalid Relation for Synapse: " + rel->getRelationLabel());
     }
@@ -45,44 +51,20 @@ void Synapse::setSynapseId(int synapseId) {
     this->synapseId = synapseId;
 }
 
-int Synapse::getPairedInputSynapseId() const {
-    return pairedInputSynapseId;
+Synapse* Synapse::getPairedSynapseInputSide() const {
+    return pairedSynapseInputSide;
 }
 
-void Synapse::setPairedInputSynapseId(int pairedInputSynapseId) {
-    this->pairedInputSynapseId = pairedInputSynapseId;
+void Synapse::setPairedSynapseInputSide(Synapse* pairedSynapseInputSide) {
+    this->pairedSynapseInputSide = pairedSynapseInputSide;
 }
 
-int Synapse::getPairedOutputSynapseId() const {
-    return pairedOutputSynapseId;
+Synapse* Synapse::getPairedSynapseOutputSide() const {
+    return pairedSynapseOutputSide;
 }
 
-void Synapse::setPairedOutputSynapseId(int pairedOutputSynapseId) {
-    this->pairedOutputSynapseId = pairedOutputSynapseId;
-}
-
-Synapse* Synapse::getPairedSynapse() const {
-    SynapseType* synapseType = static_cast<SynapseType*>(getType());
-    SynapseType* pairedSynapseType = synapseType->getPairedSynapseType();
-    
-    if (!pairedSynapseType) {
-        return nullptr;
-    }
-    
-    // Find the paired synapse instance that connects the paired input neuron to the same output neuron
-    Neuron* outputNeuron = getOutput();
-    if (!outputNeuron) {
-        return nullptr;
-    }
-    
-    // Look through the output neuron's input synapses to find the paired one
-    for (Synapse* inputSyn : outputNeuron->getInputSynapsesAsStream()) {
-        if (inputSyn && inputSyn->getType() == pairedSynapseType) {
-            return inputSyn;
-        }
-    }
-    
-    return nullptr;
+void Synapse::setPairedSynapseOutputSide(Synapse* pairedSynapseOutputSide) {
+    this->pairedSynapseOutputSide = pairedSynapseOutputSide;
 }
 
 std::map<int, BindingSignal*> Synapse::transitionForward(const std::map<int, BindingSignal*>& inputBindingSignals) {

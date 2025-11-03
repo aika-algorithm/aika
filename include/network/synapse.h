@@ -71,11 +71,11 @@ public:
     std::string toString() const;
     std::string toKeyString() const;
     
-    // Methods for paired synapse IDs
-    int getPairedInputSynapseId() const;
-    void setPairedInputSynapseId(int pairedInputSynapseId);
-    int getPairedOutputSynapseId() const;
-    void setPairedOutputSynapseId(int pairedOutputSynapseId);
+    // Methods for paired synapses
+    Synapse* getPairedSynapseInputSide() const;
+    void setPairedSynapseInputSide(Synapse* pairedSynapseInputSide);
+    Synapse* getPairedSynapseOutputSide() const;
+    void setPairedSynapseOutputSide(Synapse* pairedSynapseOutputSide);
 
 protected:
     int synapseId;
@@ -84,9 +84,10 @@ protected:
 
     bool propagable;
     
-    // IDs of paired synapses for spanning pairs
-    int pairedInputSynapseId;   // SynapseId of the paired input-side synapse
-    int pairedOutputSynapseId;  // SynapseId of the paired output-side synapse
+    // Paired synapses
+    // Caution: paired Synapses need to be stored and loaded at the same time.
+    Synapse* pairedSynapseInputSide;   // Synapse of the paired input-side synapse
+    Synapse* pairedSynapseOutputSide;  // Synapse of the paired output-side synapse
 };
 
 #endif // NETWORK_SYNAPSE_H 
