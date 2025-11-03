@@ -5,19 +5,22 @@ const RelationSelf SynapseType::SELF = RelationSelf(0, "SELF");
 const RelationOne SynapseType::INPUT = RelationOne(1, "INPUT");
 const RelationOne SynapseType::OUTPUT = RelationOne(2, "OUTPUT");
 const RelationMany SynapseType::LINK = RelationMany(3, "LINK");
+const RelationOne SynapseType::PAIR = RelationOne(4, "PAIR");
+const RelationOne SynapseType::PAIR_IN = RelationOne(5, "PAIR_IN");
+const RelationOne SynapseType::PAIR_OUT = RelationOne(6, "PAIR_OUT");
 
 
 // Static initializer to set up reverse relationships
 class SynapseTypeInitializer {
 public:
     SynapseTypeInitializer() {
-        // Set up bidirectional relationships
+        const_cast<RelationSelf&>(SynapseType::SELF).setReversed(const_cast<RelationSelf*>(&SynapseType::SELF));
         const_cast<RelationOne&>(SynapseType::INPUT).setReversed(const_cast<RelationOne*>(&SynapseType::OUTPUT));
         const_cast<RelationOne&>(SynapseType::OUTPUT).setReversed(const_cast<RelationOne*>(&SynapseType::INPUT));
-        
-        // SELF and LINK are their own reverse
-        const_cast<RelationSelf&>(SynapseType::SELF).setReversed(const_cast<RelationSelf*>(&SynapseType::SELF));
         const_cast<RelationMany&>(SynapseType::LINK).setReversed(const_cast<RelationOne*>(&LinkType::SYNAPSE));
+        const_cast<RelationOne&>(SynapseType::PAIR).setReversed(const_cast<RelationOne*>(&SynapseType::PAIR));
+        const_cast<RelationOne&>(SynapseType::PAIR_IN).setReversed(const_cast<RelationOne*>(&SynapseType::PAIR_OUT));
+        const_cast<RelationOne&>(SynapseType::PAIR_OUT).setReversed(const_cast<RelationOne*>(&SynapseType::PAIR_IN));
     }
 };
 
