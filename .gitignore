@@ -11,6 +11,7 @@ CMakeFiles/
 CMakeScripts/
 CTestTestfile.cmake
 cmake_install.cmake
+install_manifest.txt
 Makefile
 
 # Ignore compiled object files
@@ -29,9 +30,17 @@ Makefile
 *.a
 *.lib
 
+# Ignore test executables and binaries
+activation_tests
+debug_test
+simple_activation_tests
+
 # Ignore Python cache and compiled files
 __pycache__/
 *.py[cod]
+*.egg-info/
+dist/
+*.egg
 
 # Ignore Pybind11 generated files
 *.pyd
@@ -44,14 +53,12 @@ __pycache__/
 
 # Ignore user-specific files
 *.user
-*.DS_Store
-*.vscode/
+.vscode/
 .idea/
 
 # Ignore virtual environment
 .venv/
-.venv/include/
-.venv/include/*.h
-.venv/include/**/*.h
+venv/
 
-.DS_Store
+# Ignore node modules (if used for tooling)
+node_modules/

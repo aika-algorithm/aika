@@ -17,9 +17,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 import aika
 import aika.fields as af
 import aika.network as an
-from python.standard_network import create_standard_network_types
-from python.dot_product_types import create_dot_product_types
-from python.softmax_types import create_softmax_types
+from python.networks.standard_network import create_standard_network_types
+from python.types.dot_product_types import create_dot_product_types
+from python.types.softmax_types import create_softmax_types
 
 class TransformerTypeRegistry:
     """

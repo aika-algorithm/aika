@@ -30,28 +30,72 @@ In summary, Aika diverges from conventional neural network frameworks by separat
 
 To install and set up Aika, make sure you have a Python 3 environment (a virtual environment is recommended) and the necessary build tools (CMake, a C++ compiler, etc.). Once you have the Aika source code, use the following commands to build and install the project:
 
+### Recommended: Out-of-Source Build
+
 ```bash
+# Create and activate virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
-make clean
+
+# Install Python dependencies
+pip install parameterized
+
+# Build the project (out-of-source)
+mkdir -p build && cd build
+cmake ..
 cmake --build . --target install
-python tests/subtraction-test.py
+
+# Run a test to verify installation
+cd ..
+python tests/python/fields/subtraction-test.py
 ```
 
-Additionally, ensure that the `parameterized` package is installed for running parameterized tests. You can install it using:
+### Alternative: In-Source Build (Legacy)
 
 ```bash
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install Python dependencies
 pip install parameterized
+
+# Build the project (in-source)
+make clean
+cmake .
+cmake --build . --target install
+
+# Run a test to verify installation
+python tests/python/fields/subtraction-test.py
 ```
 
 **Steps explained:**
 
-1. Activate the Python virtual environment (here, `.venv`) so that Python dependencies and the installation target are set up correctly.
-2. Run `make clean` to remove any previous build artifacts (ensuring a fresh build).
-3. Use CMake to build the C++ core and install the Python package (`aika`). This will compile the C++ code and put the resulting Python module into the environment.
-4. Run the provided test script (`tests/subtraction-test.py`) to verify that the `aika` module was built and loaded correctly. This script will exercise a simple subtraction example using the Aika API.
+1. **Create and activate a virtual environment** (`.venv`) so that Python dependencies and the installation target are set up correctly.
+2. **Install dependencies** like `parameterized` which is needed for running parameterized tests.
+3. **Build the project** using CMake:
+   - **Out-of-source build** (recommended): Creates a separate `build/` directory for all build artifacts, keeping the source tree clean.
+   - **In-source build** (legacy): Builds directly in the project root. Use `make clean` to remove previous artifacts.
+4. **Run a test script** (`tests/python/fields/subtraction-test.py`) to verify that the `aika` module was built and installed correctly. This script exercises a simple subtraction example using the Aika API.
 
 After these steps, the `aika` package should be installed in your environment, and you can import it in Python to start defining your own models.
+
+### Project Structure
+
+The project is organized as follows:
+
+- **`src/`** - C++ source code (core library and Python bindings)
+- **`include/`** - C++ header files
+- **`python/`** - Python helper modules and utilities
+  - `networks/` - Network architectures (standard, transformer)
+  - `types/` - Type definitions (softmax, dot product)
+  - `utils/` - Debugging and utility functions
+  - `examples/` - Example implementations
+- **`tests/`** - Test suite
+  - `cpp/` - C++ unit tests
+  - `python/` - Python unit tests
+- **`specs/`** - Formal specifications and documentation
+- **`build/`** - Build artifacts (created during out-of-source build)
 
 ## Usage Example
 

@@ -4,11 +4,38 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Build & Test Commands
 
-- **Clean & Build**: `make clean && cmake --build . --target install`
-- **Run All Tests**: `python -m unittest discover python-tests`
-- **Run Single Test**: `python python-tests/[test-file].py` (e.g., `python python-tests/addition-test.py`)
-- **Build for Debug**: Set `CMAKE_BUILD_TYPE=Debug` in CMakeLists.txt
-- **CMake Configure**: `cmake .` (run after changes to CMakeLists.txt)
+### Recommended: Out-of-Source Build
+```bash
+# Initial setup
+mkdir -p build && cd build
+cmake ..
+cmake --build . --target install
+
+# Clean rebuild
+cd build
+rm -rf *
+cmake ..
+cmake --build . --target install
+```
+
+### Alternative: In-Source Build (Legacy)
+```bash
+# Clean & Build
+make clean && cmake --build . --target install
+
+# CMake Configure
+cmake .  # (run after changes to CMakeLists.txt)
+```
+
+### Testing
+- **Run All Python Tests**: `python -m unittest discover tests/python`
+- **Run Single Python Test**: `python tests/python/[test-file].py` (e.g., `python tests/python/addition-test.py`)
+- **Run C++ Tests**: `cd build && ctest` or `./build/activation_tests`
+- **Test Directory Structure**: All tests are organized under `tests/` with `tests/cpp/` and `tests/python/` subdirectories
+
+### Build Configuration
+- **Build for Debug**: Set `CMAKE_BUILD_TYPE=Debug` in CMakeLists.txt (currently default)
+- **Build for Release**: Set `CMAKE_BUILD_TYPE=Release` in CMakeLists.txt
 
 ## Code Style Guidelines
 

@@ -1,13 +1,29 @@
 cmake_minimum_required(VERSION 3.30)
 project(aika)
 
-set(PYTHON_SITE_PACKAGES /Users/lukasmolzberger/CLionProjects/aika-cpp/.venv/lib/python3.12/site-packages)
+# Prevent in-source builds
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+    message(WARNING "In-source builds are discouraged. Please use: mkdir build && cd build && cmake ..")
+endif()
+
 set(CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk)
 set(CMAKE_CXX_STANDARD 20)
 
 # Find Python and pybind11
 find_package(Python REQUIRED COMPONENTS Interpreter Development REQUIRED)
 find_package(pybind11 REQUIRED)
+
+# Determine Python site-packages directory
+# Allow override via environment variable or use detected Python path
+if(DEFINED ENV{PYTHON_SITE_PACKAGES})
+    set(PYTHON_SITE_PACKAGES $ENV{PYTHON_SITE_PACKAGES})
+elseif(DEFINED Python_SITELIB)
+    set(PYTHON_SITE_PACKAGES ${Python_SITELIB})
+else()
+    # Fallback to .venv in project root
+    set(PYTHON_SITE_PACKAGES ${CMAKE_SOURCE_DIR}/.venv/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages)
+endif()
+message(STATUS "Python site-packages: ${PYTHON_SITE_PACKAGES}")
 
 
 # Add source files
@@ -44,11 +60,12 @@ target_compile_options(aika PRIVATE
 target_link_libraries(aika PRIVATE pybind11::module aika_core)
 
 
-# Install the module
-install(TARGETS aika DESTINATION ${PYTHON_SITE_PACKAGES}/aika)
+# Install the module directly to site-packages (not in a subdirectory)
+install(TARGETS aika DESTINATION ${PYTHON_SITE_PACKAGES})
 
 # Optionally, install the include directories if you need to build it later
-install(DIRECTORY include/ DESTINATION ${PYTHON_SITE_PACKAGES}/aika/include)
+# Note: Headers are typically not needed at runtime, consider removing this if not needed
+install(DIRECTORY include/ DESTINATION ${PYTHON_SITE_PACKAGES}/aika_include)
 
 # Enable testing
 enable_testing()
@@ -131,10 +148,10 @@ target_compile_features(aika_core PUBLIC cxx_std_20)
 
 # Add activation tests
 add_executable(activation_tests
-    tests/network/test_runner.cpp
-    tests/network/activation_test.cpp
-    tests/network/abstract_activation_test.cpp
-    tests/network/link_latent_test.cpp
+    tests/cpp/network/test_runner.cpp
+    tests/cpp/network/activation_test.cpp
+    tests/cpp/network/abstract_activation_test.cpp
+    tests/cpp/network/link_latent_test.cpp
 )
 
 target_link_libraries(activation_tests PRIVATE aika_core)

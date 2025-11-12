@@ -588,7 +588,7 @@ def verbose_dump(obj) -> str:
 # Example usage function
 def example_usage():
     """Example of how to use the debug utilities"""
-    from python.transformer import create_transformer_types
+    from python.networks.transformer import create_transformer_types
     
     print("=== AIKA Debug Utilities Example ===")
     

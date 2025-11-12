@@ -2,13 +2,13 @@ import unittest
 import sys
 import os
 
-# Add the project root to Python's module search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# Add the project root to Python's module search path (go up two levels from tests/python/)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import aika
 import aika.fields as af
 import aika.network as an
-from python.standard_network import create_standard_network_types
+from python.networks.standard_network import create_standard_network_types
 
 class MathTestCase(unittest.TestCase):
     
