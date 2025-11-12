@@ -196,8 +196,8 @@ p a {
 	color: #585858;
 }
 strong {
-	color: #2c2c2c;
-	font-weight: bold;
+	color: #000000;
+	font-weight: 900;
 }
 p:has(> strong:only-child),
 p:has(> strong:first-child:last-child) {
