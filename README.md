@@ -2,7 +2,42 @@
 
 ## Project Status
 
-Work in progress!
+**Current Version**: Beta (Active Development)
+**Overall Completion**: ~72%
+
+### Module Status
+
+- ✅ **Fields Module (100%)** - Fully implemented and production-ready
+  - Type system with hierarchy and flattening
+  - All mathematical operations (addition, subtraction, multiplication, division, exponential)
+  - Event-driven queue with correct propagation
+  - All activation functions (Tanh, ReLU, Sigmoid, Linear)
+
+- ⚠️ **Network Module (85%)** - Core functionality complete, advanced features in progress
+  - Complete type system for neurons, activations, synapses, and links
+  - Builder pattern for easy type construction
+  - Basic linking and propagation working
+  - **Missing**: Latent linking mechanism (required for advanced attention)
+
+- ⚠️ **Transformer Implementation (60%)** - Type structure complete, math incomplete
+  - All transformer types defined (EMB, KEY, QUERY, VALUE, COMP, MIX)
+  - Dot-product architecture implemented
+  - **Critical Gap**: Softmax normalization formula needs correction
+  - **Blocker**: Latent linking required for full attention mechanism
+
+### What Works
+- Field-based computations with type hierarchies
+- Basic neural network construction and execution
+- Standard network patterns (feedforward connections)
+- Event-driven propagation
+- Builder-based type definitions
+
+### Known Limitations
+- Transformer attention mechanism not yet functional (softmax formula incomplete)
+- Latent linking for complex binding signal unification not implemented
+- Some recent specification updates pending implementation
+
+See [SPEC_ALIGNMENT_REPORT.md](SPEC_ALIGNMENT_REPORT.md) for detailed implementation status.
 
 ## Project Overview
 
@@ -90,59 +125,121 @@ The project is organized as follows:
 
 All project documentation is maintained in markdown format in the root directory (`README.md`, `CLAUDE.md`) and formal specifications in the `specs/` directory.
 
-## Usage Example
+## Usage Examples
 
-Below is an example (from the test suite) demonstrating how to use Aika’s Python API. In this snippet, we define two simple types `A` and `B`, create input fields on them, define a derived field `c` as a subtraction (`sub`) operation on type `B`, and then link the inputs of `c` to the fields of `A` and `B` using a relation. Finally, we instantiate objects of those types to show how the type definitions lead to actual runtime objects:
+### Basic Field Operations
+
+This example demonstrates Aika's core concepts: defining types with field operations, establishing relations between types, and executing computations through the event-driven system.
 
 ```python
-def testSubtraction(self):
-    print("Module 'aika' was loaded from:", aika.__file__)
+import aika
+import aika.fields as af
 
-    TEST_RELATION_FROM = aika.RelationOne(1, "TEST_FROM")
-    TEST_RELATION_TO = aika.RelationOne(2, "TEST_TO")
-    TEST_RELATION_TO.setReversed(TEST_RELATION_FROM)
-    TEST_RELATION_FROM.setReversed(TEST_RELATION_TO)
+# Define bidirectional relations between types
+TEST_RELATION_FROM = af.RelationOne(1, "TEST_FROM")
+TEST_RELATION_TO = af.RelationOne(2, "TEST_TO")
+TEST_RELATION_TO.setReversed(TEST_RELATION_FROM)
+TEST_RELATION_FROM.setReversed(TEST_RELATION_TO)
 
-    assert isinstance(TEST_RELATION_FROM, aika.Relation)
-    assert isinstance(TEST_RELATION_TO, aika.Relation)
+# Create type registry and define types
+registry = af.TypeRegistry()
+typeA = af.TestType(registry, "A")
+typeB = af.TestType(registry, "B")
 
-    registry = aika.TypeRegistry()
+# Define input fields
+a = typeA.inputField("a")
+b = typeA.inputField("b")
 
-    typeA = aika.TestType(registry, "A")
-    typeB = aika.TestType(registry, "B")
+# Define computed field (c = a - b)
+c = typeB.sub("c")
+c.input(TEST_RELATION_FROM, a, 0)  # First input: field 'a' from related object
+c.input(TEST_RELATION_FROM, b, 1)  # Second input: field 'b' from related object
 
-    a = typeA.inputField("a")
-    b = typeB.inputField("b")
+# Finalize type definitions
+registry.flattenTypeHierarchy()
 
-    c = typeB.sub("c")
+# Instantiate objects
+oa = typeA.instantiate()
+ob = typeB.instantiate()
 
-    print("Type of c:", type(c))
-    print("Type of TEST_RELATION_FROM:", type(TEST_RELATION_FROM))
-    print("Type of a:", type(a))
+# Link objects and initialize computed fields
+af.TestObj.linkObjects(oa, ob)
+ob.initFields()
 
-    assert isinstance(a, aika.FieldDefinition)
-    assert isinstance(c, aika.FieldDefinition)
+# Set input values
+oa.setFieldValue(a, 50.0)
+oa.setFieldValue(b, 20.0)
 
-    c.input(TEST_RELATION_FROM, a, 0)
-    c.input(TEST_RELATION_FROM, b, 1)
-
-    registry.flattenTypeHierarchy()
-
-    oa = typeA.instantiate()
-    ob = typeB.instantiate()
+# Read computed result
+result = ob.getFieldValue(c)  # Returns 30.0 (50 - 20)
+print(f"Result: {result}")
 ```
 
-In this example, we:
+**Key Concepts Demonstrated:**
+- **Type Definition**: Creating types with input and computed fields
+- **Relations**: Establishing bidirectional relationships between types
+- **Field Operations**: Using built-in operations (sub, add, mul, etc.)
+- **Type Flattening**: Finalizing the type hierarchy before instantiation
+- **Event-Driven Execution**: Field updates propagate automatically through the computation graph
+- **Object Linking**: Connecting object instances via defined relations
 
-- Create two one-to-one relations (`RelationOne`) named `"TEST_FROM"` and `"TEST_TO"` and mark them as reverses of each other (so the relationship is bidirectional).
-- Set up a `TypeRegistry` and define two new types `A` and `B` (using a test class `TestType`).
-- Define an input field on type `A` (named `"a"`) and an input field on type `B` (named `"b"`).
-- Define a field `c` on type `B` as the result of a subtraction operation (`sub`). (The exact behavior of `sub` would be defined in Aika’s library for combining inputs.)
-- Link the inputs of `c`: the code `c.input(TEST_RELATION_FROM, a, 0)` means that the 0th input of `c` comes from field `a` via the relation `TEST_FROM`, and similarly the 1st input of `c` comes from field `b`.
-- Call `registry.flattenTypeHierarchy()`, which finalizes the type definitions (resolving the type hierarchy so that the relationships between types are ready for instantiation).
-- Finally, instantiate objects `oa` and `ob` of types `A` and `B` respectively. These objects would have fields corresponding to what was defined (e.g., `oa` has field `a`).
+### Network Construction
 
-This is a basic illustration of how Aika allows you to define types and relations in Python, construct a computation (here a subtraction) linking those types, and then create actual instances that carry out the computation. (Note: The example is incomplete and meant for demonstration; a real use-case would include running the network, feeding data, and retrieving outputs.)
+For neural network construction, use the builder pattern:
+
+```python
+import aika.network as an
+from python.networks.standard_network import create_standard_network_types
+
+# Create standard network types
+network = create_standard_network_types()
+registry = network.get_registry()
+model = an.Model(registry)
+
+# Instantiate neurons using the type system
+input_neuron = network.T_STANDARD_NEURON.instantiate(model)
+output_neuron = network.T_STANDARD_NEURON.instantiate(model)
+
+# Create synapses to connect neurons
+synapse = network.T_STANDARD_SYNAPSE.instantiate(
+    input_neuron,
+    output_neuron
+)
+```
+
+**Note**: The network module provides the foundation for building neural architectures. The Fields Module (100% complete) powers the underlying field propagation system.
+
+### Transformer Architecture (Experimental)
+
+The transformer implementation provides type structures for attention mechanisms:
+
+```python
+from python.networks.transformer import create_transformer_types
+
+# Create transformer type hierarchy
+transformer = create_transformer_types()
+
+# Access transformer neuron types
+emb_type = transformer.T_EMB        # Embedding neurons
+key_type = transformer.T_KEY        # Key neurons (Q in attention)
+query_type = transformer.T_QUERY    # Query neurons (K in attention)
+value_type = transformer.T_VALUE    # Value neurons (V in attention)
+attention_type = transformer.T_SOFTMAX  # Attention/Softmax neurons
+```
+
+**⚠️ Current Status**: Type hierarchy is complete, but the attention mechanism requires:
+- Corrected softmax normalization formula (currently uses sum instead of exp)
+- Latent linking implementation for binding signal unification
+- See [SPEC_ALIGNMENT_REPORT.md](SPEC_ALIGNMENT_REPORT.md) for details
+
+### Available Operations
+
+The Fields Module provides these operations for field definitions:
+- **Arithmetic**: `add()`, `sub()`, `mul()`, `div()`
+- **Functions**: `exp()`, `sum()`, `identity()`
+- **Activations**: `tanh()`, `relu()`, `sigmoid()`, `linear()`
+
+All operations support the event-driven propagation model, where field updates automatically trigger recomputation of dependent fields.
 
 ## Comparison with PyTorch
 
