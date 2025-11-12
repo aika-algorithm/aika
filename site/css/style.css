@@ -1,4 +1,4 @@
-﻿/* Website template by freewebsitetemplates.com */
+/* Website template by freewebsitetemplates.com */
 @font-face {
 	font-family: 'OpenSans';
 	src: url('../fonts/OpenSans-Regular.eot');
@@ -31,9 +31,9 @@ img {
 }
 /*------------------------------ HEADER ------------------------------*/
 #header {
-	background-color: #eee;
-	border-bottom: 1px solid #e6e6e6;
-	padding: 27px 0;
+	background-color: #f8f8f8;
+	border-bottom: 1px solid #e0e0e0;
+	padding: 20px 0;
 }
 
 @media (min-width:500px) {
@@ -58,18 +58,18 @@ img {
 }
 
 #header .logo a {
-	background: url(../images/aika-logo.jpeg) no-repeat center top;
-    background-size: cover; /* Crops and scales */
-    background-position: center; /* Centers the cropped part */
-    background-repeat: no-repeat; /* Prevents repetition */
+	background: url(../images/aika-logo.jpeg) no-repeat center center;
+	background-size: cover;
 	color: #000;
 	display: block;
 	font: 15px/30px 'Play';
-	height: 20px;
-    width: 140px;
-	padding-top: 68px;
+	height: 80px;
+	width: 80px;
+	border-radius: 50%; /* Makes it circular */
 	text-decoration: none;
 	text-transform: uppercase;
+	text-indent: -9999px; /* Hides text to show only logo */
+	overflow: hidden; /* Ensures circular crop */
 }
 /** Navigation **/
 #navigation {
@@ -102,16 +102,18 @@ img {
 	}
 }
 #navigation li a {
-	color: #818181;
-	font-size: 20px;
+	color: #555;
+	font-size: 18px;
 	line-height: 30px;
 	text-decoration: none;
+	font-weight: 500;
 }
 #navigation li a:hover {
-	color: #000;
+	color: #f99600;
 }
 #navigation li.active a {
 	color: #f99600;
+	font-weight: 600;
 }
 
 .parse-button {
