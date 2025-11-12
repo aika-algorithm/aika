@@ -261,6 +261,13 @@ Removed obsolete conda packaging and CI workflows:
 - Tried to install non-existent "cmake_example" package
 - Not needed - project uses pip-based distribution
 
+**Removed `.appveyor.yml`**:
+- AppVeyor CI configuration (obsolete)
+- Referenced removed pybind11 submodule (line 16: `git submodule update`)
+- Wrong package name: "cmake_example" instead of "aika"
+- Redundant - GitHub Actions workflows already cover Windows builds
+- AppVeyor no longer needed since GitHub Actions provides all CI
+
 **Fixed remaining CI workflows**:
 - `pip.yml`: Removed `submodules: true` (line 23)
 - `wheels.yml`: Removed `submodules: true` (lines 20, 45)
