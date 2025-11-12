@@ -39,7 +39,7 @@ img {
 @media (min-width:500px) {
 	#header > div, #footer > div {
 		width: 1030px;
-		min-height: 100px;
+		min-height: 80px;
 		margin: 0 auto;
 		padding: 0 20px;
 	}
@@ -63,9 +63,9 @@ img {
 	color: #000;
 	display: block;
 	font: 15px/30px 'Play';
-	height: 100px;
-	width: 100px;
-	border-radius: 20%; /* Slightly rounded corners */
+	height: 80px;
+	width: 80px;
+	border-radius: 50%; /* Makes it circular */
 	text-decoration: none;
 	text-transform: uppercase;
 	text-indent: -9999px; /* Hides text to show only logo */
@@ -104,7 +104,7 @@ img {
 #navigation li a {
 	color: #555;
 	font-size: 20px;
-	line-height: 100px;
+	line-height: 80px;
 	text-decoration: none;
 	font-weight: 500;
 }
