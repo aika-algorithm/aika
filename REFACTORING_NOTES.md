@@ -268,6 +268,13 @@ Removed obsolete conda packaging and CI workflows:
 - Redundant - GitHub Actions workflows already cover Windows builds
 - AppVeyor no longer needed since GitHub Actions provides all CI
 
+**Removed `.venv/` from git tracking**:
+- Virtual environment was incorrectly committed to repository
+- Removed from git with `git rm -r --cached .venv`
+- Directory still exists locally for development use
+- Already covered by .gitignore (line 60)
+- Virtual environments should never be version controlled
+
 **Fixed remaining CI workflows**:
 - `pip.yml`: Removed `submodules: true` (line 23)
 - `wheels.yml`: Removed `submodules: true` (lines 20, 45)
