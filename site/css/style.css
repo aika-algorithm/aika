@@ -65,7 +65,7 @@ img {
 	font: 15px/30px 'Play';
 	height: 100px;
 	width: 100px;
-	border-radius: 45%; /* Slightly rounded */
+	border-radius: 20%; /* Slightly rounded corners */
 	text-decoration: none;
 	text-transform: uppercase;
 	text-indent: -9999px; /* Hides text to show only logo */
@@ -104,7 +104,7 @@ img {
 #navigation li a {
 	color: #555;
 	font-size: 20px;
-	line-height: 30px;
+	line-height: 100px;
 	text-decoration: none;
 	font-weight: 500;
 }
