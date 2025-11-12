@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIKA Usage Examples</title>
+    <title>AIKA Tutorial - Learn by Example</title>
     <link rel="stylesheet" href="css/style.css" neuronType="text/css">
     <link rel="shortcut icon" href="images/favicon.png" />
 </head>
@@ -15,22 +15,22 @@
         </div>
         <ul id="navigation">
             <li>
-                <a href="index.html">Overall Idea</a>
-            </li>
-            <li>
-                <a href="blog.html">Blog</a>
-            </li>
-            <li class="active">
-                <a href="usage.html">Examples</a>
+                <a href="index.html">About</a>
             </li>
             <li>
                 <a href="installation.html">Installation</a>
             </li>
+            <li class="active">
+                <a href="usage.html">Tutorial</a>
+            </li>
             <li>
-                <a href="comparison.html">Comparison</a>
+                <a href="comparison.html">Why AIKA?</a>
             </li>
             <li>
                 <a href="resources.html">Resources</a>
+            </li>
+            <li>
+                <a href="blog.html">Blog</a>
             </li>
             <li>
                 <a href="https://github.com/aika-algorithm/aika-cpp">GitHub</a>
@@ -40,9 +40,12 @@
 </div>
 <div id="contents">
     <div id="features">
-        <h1>AIKA Usage Examples</h1>
+        <h1>AIKA Tutorial: Learn by Example</h1>
+        <p style="background-color: #E3F2FD; padding: 12px; border-left: 4px solid #2196F3; margin: 15px 0;">
+            <strong>📚 Prerequisites:</strong> Make sure you've completed the <a href="installation.html">Installation Guide</a> before starting.
+        </p>
         <p>
-            Below are examples demonstrating AIKA's Python API for building neural networks with the C++ backend.
+            This tutorial demonstrates AIKA's Python API through three progressive examples. Each example builds on concepts from the previous one.
         </p>
 
         <h2>Example 1: Basic Field Operations</h2>
@@ -167,12 +170,25 @@ print(f"Transformer types: {len(transformer.get_all_types())} types defined")</c
             <li><strong>Object Linking:</strong> Connecting object instances via defined relations</li>
         </ul>
 
+        <h2>What You've Learned</h2>
+        <ul>
+            <li>✅ How to define types and field operations</li>
+            <li>✅ How to create relations and link objects</li>
+            <li>✅ How to build neural networks with the builder pattern</li>
+            <li>✅ How to work with transformer type structures</li>
+        </ul>
+
         <h2>Next Steps</h2>
-        <p>
-            To learn more about how AIKA differs from traditional frameworks, check out the <a href="comparison.html">Comparison</a> page.
+        <p style="margin-top: 20px;">
+            <strong>Ready to dive deeper?</strong>
         </p>
-        <p>
-            For detailed specifications, visit the <a href="https://github.com/aika-algorithm/aika-cpp/tree/main/specs">specs/ directory</a> on GitHub.
+        <p style="margin-top: 15px;">
+            <a href="comparison.html" style="display: inline-block; padding: 12px 24px; background-color: #FF9800; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">Why AIKA? →</a>
+            &nbsp;&nbsp;
+            <a href="resources.html" style="display: inline-block; padding: 12px 24px; background-color: #9C27B0; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">Documentation</a>
+        </p>
+        <p style="margin-top: 15px;">
+            Learn <a href="comparison.html">what makes AIKA different</a> from traditional frameworks, or explore the <a href="resources.html">full documentation</a> and <a href="https://github.com/aika-algorithm/aika-cpp/tree/main/specs">formal specifications</a>.
         </p>
     </div>
 </div>
