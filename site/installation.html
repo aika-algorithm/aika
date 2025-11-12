@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIKA Installation Guide</title>
+  <link rel="stylesheet" href="css/style.css" neuronType="text/css">
+  <link rel="shortcut icon" href="images/favicon.png" />
+</head>
+<body>
+<div id="header">
+  <div>
+    <div class="logo">
+      <a rel="canonical" href="https://aika.network"></a>
+    </div>
+    <ul id="navigation">
+      <li>
+        <a href="index.html">Overall Idea</a>
+      </li>
+      <li>
+        <a href="blog.html">Blog</a>
+      </li>
+      <li>
+        <a href="usage.html">Examples</a>
+      </li>
+      <li class="active">
+        <a href="installation.html">Installation</a>
+      </li>
+      <li>
+        <a href="comparison.html">Comparison</a>
+      </li>
+      <li>
+        <a href="resources.html">Resources</a>
+      </li>
+      <li>
+        <a href="https://github.com/aika-algorithm/aika-cpp">GitHub</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div id="contents">
+  <div id="features">
+    <h1>AIKA Installation Guide</h1>
+    <p>
+      AIKA is a C++ neural network framework with Python bindings. Follow these steps to build and install it on your system.
+    </p>
+
+    <h2>Prerequisites</h2>
+    <ul>
+      <li><strong>Python 3.8+</strong> with pip</li>
+      <li><strong>CMake 3.30+</strong></li>
+      <li><strong>C++ compiler</strong> with C++20 support (GCC, Clang, or MSVC)</li>
+      <li><strong>pybind11</strong> - Installed automatically via pip, or manually:
+        <ul>
+          <li>macOS: <code>brew install pybind11</code></li>
+          <li>Linux: <code>apt-get install pybind11-dev</code> or <code>pip install pybind11</code></li>
+          <li>Windows: <code>pip install pybind11</code></li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>Installation Steps</h2>
+    <pre><code># Step 1: Clone the AIKA repository
+git clone https://github.com/aika-algorithm/aika-cpp.git
+cd aika-cpp
+
+# Step 2: Create and activate a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Step 3: Install Python package in development mode
+pip install -e .
+
+# Step 4: Build the C++ core (out-of-source build)
+mkdir -p build && cd build
+cmake ..
+cmake --build . --target install
+
+# Step 5: Verify installation
+cd ..
+python tests/python/fields/subtraction-test.py</code></pre>
+
+    <p>
+      If the test runs successfully and prints computation results, AIKA is installed correctly.
+    </p>
+
+    <h2>Project Structure</h2>
+    <p>After installation, your project will have the following structure:</p>
+    <ul>
+      <li><code>src/</code> - C++ source code</li>
+      <li><code>include/</code> - C++ header files</li>
+      <li><code>python/</code> - Python helper modules (networks, types, utils, examples)</li>
+      <li><code>tests/</code> - Test suite (cpp/ and python/ subdirectories)</li>
+      <li><code>build/</code> - Build artifacts (created during compilation)</li>
+      <li><code>specs/</code> - Formal specifications and documentation</li>
+    </ul>
+
+    <h2>Running Tests</h2>
+    <p>To verify your installation, run the test suite:</p>
+    <pre><code># Python tests (Fields Module)
+python -m unittest discover tests/python/fields
+
+# Python tests (Network Module)
+python -m unittest discover tests/python
+
+# C++ tests
+cd build && ctest</code></pre>
+
+    <h2>Troubleshooting</h2>
+    <p>
+      If you encounter any issues during installation, check the following:
+    </p>
+    <ul>
+      <li>Ensure all prerequisites are installed and accessible from the command line.</li>
+      <li>Verify CMake is detecting your C++20-compatible compiler correctly.</li>
+      <li>Check that Python and pip are from your virtual environment (<code>which python</code>).</li>
+      <li>If pybind11 is not found, install it manually: <code>pip install pybind11</code></li>
+      <li>On macOS, you may need to install Xcode Command Line Tools: <code>xcode-select --install</code></li>
+      <li>For additional help, visit the <a href="https://github.com/aika-algorithm/aika-cpp/issues">GitHub Issues Page</a>.</li>
+    </ul>
+
+    <h2>Next Steps</h2>
+    <p>
+      Once installed, explore the <a href="usage.html">Usage Examples</a> to learn how to build your first AIKA neural network.
+    </p>
+  </div>
+</div>
+</body>
+</html>

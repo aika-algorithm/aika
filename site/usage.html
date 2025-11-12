@@ -1,0 +1,180 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIKA Usage Examples</title>
+    <link rel="stylesheet" href="css/style.css" neuronType="text/css">
+    <link rel="shortcut icon" href="images/favicon.png" />
+</head>
+<body>
+<div id="header">
+    <div>
+        <div class="logo">
+            <a rel="canonical" href="https://aika.network"></a>
+        </div>
+        <ul id="navigation">
+            <li>
+                <a href="index.html">Overall Idea</a>
+            </li>
+            <li>
+                <a href="blog.html">Blog</a>
+            </li>
+            <li class="active">
+                <a href="usage.html">Examples</a>
+            </li>
+            <li>
+                <a href="installation.html">Installation</a>
+            </li>
+            <li>
+                <a href="comparison.html">Comparison</a>
+            </li>
+            <li>
+                <a href="resources.html">Resources</a>
+            </li>
+            <li>
+                <a href="https://github.com/aika-algorithm/aika-cpp">GitHub</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="contents">
+    <div id="features">
+        <h1>AIKA Usage Examples</h1>
+        <p>
+            Below are examples demonstrating AIKA's Python API for building neural networks with the C++ backend.
+        </p>
+
+        <h2>Example 1: Basic Field Operations</h2>
+        <p>
+            This example shows how to define types, create relations, and perform field computations using AIKA's event-driven system.
+        </p>
+        <pre><code>import aika
+import aika.fields as af
+
+# Define bidirectional relations between types
+TEST_RELATION_FROM = af.RelationOne(1, "TEST_FROM")
+TEST_RELATION_TO = af.RelationOne(2, "TEST_TO")
+TEST_RELATION_TO.setReversed(TEST_RELATION_FROM)
+TEST_RELATION_FROM.setReversed(TEST_RELATION_TO)
+
+# Create type registry and define types
+registry = af.TypeRegistry()
+typeA = af.TestType(registry, "A")
+typeB = af.TestType(registry, "B")
+
+# Define input fields
+a = typeA.inputField("a")
+b = typeA.inputField("b")
+
+# Define computed field (c = a - b)
+c = typeB.sub("c")
+c.input(TEST_RELATION_FROM, a, 0)  # First input from field 'a'
+c.input(TEST_RELATION_FROM, b, 1)  # Second input from field 'b'
+
+# Finalize type definitions
+registry.flattenTypeHierarchy()
+
+# Instantiate objects
+oa = typeA.instantiate()
+ob = typeB.instantiate()
+
+# Link objects and initialize computed fields
+af.TestObj.linkObjects(oa, ob)
+ob.initFields()
+
+# Set input values
+oa.setFieldValue(a, 50.0)
+oa.setFieldValue(b, 20.0)
+
+# Read computed result
+result = ob.getFieldValue(c)  # Returns 30.0 (50 - 20)
+print(f"Result: {result}")</code></pre>
+
+        <h2>Example 2: Network Construction</h2>
+        <p>
+            This example demonstrates building neural networks using AIKA's builder pattern.
+        </p>
+        <pre><code>import aika.network as an
+from python.networks.standard_network import create_standard_network_types
+
+# Create standard network types
+network = create_standard_network_types()
+registry = network.get_registry()
+model = an.Model(registry)
+
+# Instantiate neurons using the type system
+input_neuron = network.T_STANDARD_NEURON.instantiate(model)
+output_neuron = network.T_STANDARD_NEURON.instantiate(model)
+
+# Create synapses to connect neurons
+synapse = network.T_STANDARD_SYNAPSE.instantiate(
+    input_neuron,
+    output_neuron
+)
+
+print(f"Created network with {model.getNumNeurons()} neurons")</code></pre>
+
+        <h2>Example 3: Transformer Types (Experimental)</h2>
+        <p>
+            AIKA includes experimental transformer architecture types. <strong>Note:</strong> The attention mechanism is currently under development.
+        </p>
+        <pre><code>from python.networks.transformer import create_transformer_types
+
+# Create transformer type hierarchy
+transformer = create_transformer_types()
+
+# Access transformer neuron types
+emb_type = transformer.T_EMB        # Embedding neurons
+key_type = transformer.T_KEY        # Key neurons (Q in attention)
+query_type = transformer.T_QUERY    # Query neurons (K in attention)
+value_type = transformer.T_VALUE    # Value neurons (V in attention)
+attention_type = transformer.T_SOFTMAX  # Attention/Softmax neurons
+
+print(f"Transformer types: {len(transformer.get_all_types())} types defined")</code></pre>
+        <p>
+            <strong>⚠️ Current Status:</strong> Type hierarchy is complete, but the attention mechanism requires corrected softmax normalization and latent linking implementation.
+        </p>
+
+        <h2>Available Operations</h2>
+        <p>
+            The Fields Module provides these operations for field definitions:
+        </p>
+        <ul>
+            <li><strong>Arithmetic:</strong> <code>add()</code>, <code>sub()</code>, <code>mul()</code>, <code>div()</code></li>
+            <li><strong>Functions:</strong> <code>exp()</code>, <code>sum()</code>, <code>identity()</code></li>
+            <li><strong>Activations:</strong> <code>tanh()</code>, <code>relu()</code>, <code>sigmoid()</code>, <code>linear()</code></li>
+        </ul>
+        <p>
+            All operations support the event-driven propagation model, where field updates automatically trigger recomputation of dependent fields.
+        </p>
+
+        <h2>Understanding Event-Driven Processing</h2>
+        <p>
+            Unlike conventional neural networks that process data in fixed layers, AIKA processes activations asynchronously using an <strong>event queue</strong> with lexicographic ordering: <code>(round, phase, -priority, timestamp)</code>.
+        </p>
+        <p>
+            This enables dynamic behavior where neurons and synapses activate based on event triggers rather than precomputed sequences. Changes propagate through the network automatically, making computation sparse and efficient.
+        </p>
+
+        <h2>Key Concepts</h2>
+        <ul>
+            <li><strong>Type Definition:</strong> Creating types with input and computed fields</li>
+            <li><strong>Relations:</strong> Establishing bidirectional relationships between types</li>
+            <li><strong>Field Operations:</strong> Using built-in operations (sub, add, mul, etc.)</li>
+            <li><strong>Type Flattening:</strong> Finalizing the type hierarchy before instantiation</li>
+            <li><strong>Event-Driven Execution:</strong> Field updates propagate automatically through the computation graph</li>
+            <li><strong>Object Linking:</strong> Connecting object instances via defined relations</li>
+        </ul>
+
+        <h2>Next Steps</h2>
+        <p>
+            To learn more about how AIKA differs from traditional frameworks, check out the <a href="comparison.html">Comparison</a> page.
+        </p>
+        <p>
+            For detailed specifications, visit the <a href="https://github.com/aika-algorithm/aika-cpp/tree/main/specs">specs/ directory</a> on GitHub.
+        </p>
+    </div>
+</div>
+</body>
+</html>
