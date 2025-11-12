@@ -28,7 +28,21 @@ In summary, Aika diverges from conventional neural network frameworks by separat
 
 ## Installation Instructions
 
-To install and set up Aika, make sure you have a Python 3 environment (a virtual environment is recommended) and the necessary build tools (CMake, a C++ compiler, etc.). Once you have the Aika source code, use the following commands to build and install the project:
+To install and set up Aika, make sure you have a Python 3 environment (a virtual environment is recommended) and the necessary build tools (CMake, a C++ compiler, etc.).
+
+### Prerequisites
+
+- **Python 3.8+** with pip
+- **CMake 3.30+**
+- **C++ compiler** with C++20 support
+- **pybind11** - Installed automatically via pip, or manually via:
+  - macOS: `brew install pybind11`
+  - Linux: `apt-get install pybind11-dev` or `pip install pybind11`
+  - Windows: `pip install pybind11`
+
+### Build and Install
+
+Once you have the prerequisites, use the following commands to build and install the project:
 
 ### Recommended: Out-of-Source Build
 

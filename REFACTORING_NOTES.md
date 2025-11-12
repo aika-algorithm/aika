@@ -244,6 +244,34 @@ After these changes, verify:
    git status
    ```
 
+## External Dependencies Cleanup
+
+Removed pybind11 git submodule and properly declared it as an external dependency:
+
+**Removed pybind11 git submodule**:
+- Was vendored as git submodule (outdated v2.9.2)
+- Removed from repository (14MB including all history)
+- Removed `.gitmodules` file (no longer needed)
+- Build already used system pybind11 v2.13.6 via `find_package()`
+
+**Updated dependency management**:
+- Added pybind11>=2.10.0 to `setup.py` dependencies
+- Will be installed automatically via `pip install -e .`
+- Can also be installed via system package managers (brew, apt, etc.)
+- CMake uses `find_package(pybind11 REQUIRED)` - standard approach
+
+**Benefits**:
+- Smaller repository size
+- No git submodule maintenance
+- Users get latest pybind11 version
+- Standard dependency management
+- Easier to update pybind11 version
+
+**Updated documentation**:
+- README.md now lists pybind11 in Prerequisites section
+- CLAUDE.md updated with prerequisite information
+- Build process unchanged (CMake already used find_package)
+
 ## Documentation Cleanup
 
 Removed incomplete and unused documentation directories:

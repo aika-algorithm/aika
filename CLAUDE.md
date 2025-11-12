@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Prerequisites
+
+- Python 3.8+ with pip
+- CMake 3.30+
+- C++ compiler with C++20 support
+- pybind11 (installed via `pip install -e .` or system package manager)
+
 ## Build & Test Commands
 
 ### Recommended: Out-of-Source Build

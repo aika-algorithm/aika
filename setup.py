@@ -20,6 +20,7 @@ setup(
     package_dir={"": "."},
     install_requires=[
         "parameterized",
+        "pybind11>=2.10.0",  # Required for C++ bindings
     ],
     extras_require={
         "dev": [
