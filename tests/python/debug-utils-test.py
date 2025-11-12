@@ -7,19 +7,15 @@ and different configuration levels.
 """
 
 import sys
-import os
 import unittest
-
-# Add the project root to Python's module search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import aika
 import aika.fields as af
 import aika.network as an
 
-from python.aika_debug_utils import AikaDebugger, DebugConfig, DetailLevel, dump_object, quick_dump, verbose_dump
-from python.transformer import create_transformer_types
-from python.standard_network import create_standard_network_types
+from python.utils.aika_debug_utils import AikaDebugger, DebugConfig, DetailLevel, dump_object, quick_dump, verbose_dump
+from python.networks.transformer import create_transformer_types
+from python.networks.standard_network import create_standard_network_types
 
 class DebugUtilsTestCase(unittest.TestCase):
     """Test cases for AIKA debug utilities"""

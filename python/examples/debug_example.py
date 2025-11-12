@@ -6,11 +6,7 @@ This script shows practical examples of how to use the AIKA debug utilities
 for debugging and understanding your AIKA neural networks.
 """
 
-import sys
-import os
 
-# Add the project root to Python's module search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import aika
 import aika.fields as af

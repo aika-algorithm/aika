@@ -5,11 +5,7 @@ This module demonstrates how to use different activation functions (Sigmoid, Tan
 in Python network configurations using the AIKA framework.
 """
 
-import sys
-import os
 
-# Add the project root to Python's module search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import aika
 

@@ -1,14 +1,9 @@
 import unittest
-import sys
-import os
-
-# Add the project root to Python's module search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import aika
 import aika.fields as af
 import aika.network as an
-from python.transformer import create_transformer_types
+from python.networks.transformer import create_transformer_types
 
 class DotProductTestCase(unittest.TestCase):
     

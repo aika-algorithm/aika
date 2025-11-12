@@ -1,16 +1,11 @@
 import unittest
-import sys
-import os
 import math
-
-# Add the project root to Python's module search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import aika
 import aika.fields as af
 import aika.network as an
-from python.softmax_types import create_softmax_types
-from python.standard_network import create_standard_network_types
+from python.types.softmax_types import create_softmax_types
+from python.networks.standard_network import create_standard_network_types
 
 class SoftmaxTypesTestCase(unittest.TestCase):
     

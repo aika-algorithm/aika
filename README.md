@@ -37,10 +37,10 @@ To install and set up Aika, make sure you have a Python 3 environment (a virtual
 python3 -m venv .venv
 source .venv/bin/activate
 
-# Install Python dependencies
-pip install parameterized
+# Install Python package in development mode (this installs dependencies too)
+pip install -e .
 
-# Build the project (out-of-source)
+# Build the C++ core (out-of-source)
 mkdir -p build && cd build
 cmake ..
 cmake --build . --target install
@@ -57,8 +57,8 @@ python tests/python/fields/subtraction-test.py
 python3 -m venv .venv
 source .venv/bin/activate
 
-# Install Python dependencies
-pip install parameterized
+# Install Python package in development mode (this installs dependencies too)
+pip install -e .
 
 # Build the project (in-source)
 make clean

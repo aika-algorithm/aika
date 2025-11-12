@@ -9,11 +9,7 @@ and have no bias or activation functions.
 Based on the formal specification in specs/network/transformer.md
 """
 
-import sys
-import os
 
-# Add the project root to Python's module search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import aika
 import aika.fields as af

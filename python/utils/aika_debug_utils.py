@@ -22,14 +22,10 @@ Usage:
     debugger.dump_model(model)
 """
 
-import sys
-import os
 from typing import Any, Dict, List, Set, Optional, Union
 from dataclasses import dataclass
 from enum import Enum
 
-# Add the project root to Python's module search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import aika
 import aika.fields as af

@@ -244,6 +244,32 @@ After these changes, verify:
    git status
    ```
 
+## Python Package Installation (Added Later)
+
+To eliminate the need for `sys.path.append()` in test files and Python modules, we made the Python helpers an installable package:
+
+**Created `setup.py`**:
+- Makes the `python/` directory an installable package
+- Allows using `pip install -e .` for development mode
+- Automatically installs dependencies (parameterized, etc.)
+
+**Benefits**:
+- No more `sys.path.append()` boilerplate in every file
+- Clean imports: `from python.networks.standard_network import ...`
+- Standard Python development workflow
+- Dependencies managed via pip
+
+**Updated workflow**:
+```bash
+pip install -e .  # Install once
+# Now all imports work without sys.path manipulation
+```
+
+**Files cleaned up**:
+- Removed `sys.path.append()` from all 28 test files
+- Removed `sys.path.append()` from all 7 Python module files
+- Updated all imports to use new package structure
+
 ## Summary
 
 These improvements modernize the project structure while maintaining backward compatibility where possible. The changes make the codebase more maintainable, easier to navigate, and aligned with industry best practices for C++/Python hybrid projects.
@@ -254,3 +280,4 @@ Key benefits:
 - Organized Python code (proper package structure)
 - Consistent test organization (unified tests/ directory)
 - Better documentation (updated CLAUDE.md)
+- Clean imports (no sys.path manipulation needed)

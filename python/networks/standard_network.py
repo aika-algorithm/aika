@@ -8,11 +8,7 @@ with the builder pattern architecture.
 This serves as the base for more specialized network architectures like transformers.
 """
 
-import sys
-import os
 
-# Add the project root to Python's module search path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import aika
 import aika.fields as af
