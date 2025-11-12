@@ -44,8 +44,6 @@ To install and set up Aika, make sure you have a Python 3 environment (a virtual
 
 Once you have the prerequisites, use the following commands to build and install the project:
 
-### Recommended: Out-of-Source Build
-
 ```bash
 # Create and activate virtual environment
 python3 -m venv .venv
@@ -64,32 +62,11 @@ cd ..
 python tests/python/fields/subtraction-test.py
 ```
 
-### Alternative: In-Source Build (Legacy)
-
-```bash
-# Create and activate virtual environment
-python3 -m venv .venv
-source .venv/bin/activate
-
-# Install Python package in development mode (this installs dependencies too)
-pip install -e .
-
-# Build the project (in-source)
-make clean
-cmake .
-cmake --build . --target install
-
-# Run a test to verify installation
-python tests/python/fields/subtraction-test.py
-```
-
 **Steps explained:**
 
 1. **Create and activate a virtual environment** (`.venv`) so that Python dependencies and the installation target are set up correctly.
 2. **Install dependencies** like `parameterized` which is needed for running parameterized tests.
-3. **Build the project** using CMake:
-   - **Out-of-source build** (recommended): Creates a separate `build/` directory for all build artifacts, keeping the source tree clean.
-   - **In-source build** (legacy): Builds directly in the project root. Use `make clean` to remove previous artifacts.
+3. **Build the project** using CMake with an out-of-source build: Creates a separate `build/` directory for all build artifacts, keeping the source tree clean.
 4. **Run a test script** (`tests/python/fields/subtraction-test.py`) to verify that the `aika` module was built and installed correctly. This script exercises a simple subtraction example using the Aika API.
 
 After these steps, the `aika` package should be installed in your environment, and you can import it in Python to start defining your own models.
