@@ -244,6 +244,34 @@ After these changes, verify:
    git status
    ```
 
+## CI/CD and Obsolete Artifacts Cleanup
+
+Removed obsolete conda packaging and CI workflows:
+
+**Removed `/conda.recipe` directory**:
+- Leftover from pybind11 example template
+- Wrong package name: "cmake_example" instead of "aika"
+- Wrong module import: "cmake_example" (doesn't exist)
+- Generic template description not updated for project
+- Last modified April 2025, never customized
+
+**Removed `.github/workflows/conda.yml`**:
+- Conda-based CI workflow
+- Referenced removed pybind11 submodule (would fail)
+- Tried to install non-existent "cmake_example" package
+- Not needed - project uses pip-based distribution
+
+**Fixed remaining CI workflows**:
+- `pip.yml`: Removed `submodules: true` (line 23)
+- `wheels.yml`: Removed `submodules: true` (lines 20, 45)
+- `format.yml`: No changes needed
+
+**Current CI Strategy**:
+- pip-based installation via `setup.py`
+- Works with removed pybind11 submodule (uses system pybind11)
+- PyPI wheels generation via cibuildwheel
+- Pre-commit formatting checks
+
 ## External Dependencies Cleanup
 
 Removed pybind11 git submodule and properly declared it as an external dependency:
