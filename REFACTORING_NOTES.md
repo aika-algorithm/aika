@@ -244,6 +244,32 @@ After these changes, verify:
    git status
    ```
 
+## Documentation Cleanup
+
+Removed incomplete and unused documentation directories:
+
+**Removed `/docs` directory**:
+- Contained skeleton Sphinx setup from 2016
+- Only had a cmake_example.rst stub
+- Not being used for actual project documentation
+- Project already has comprehensive docs in README.md and specs/
+
+**Removed `/ai_docs` directory**:
+- Completely empty directory
+- No content or purpose
+
+**Removed `/node_modules` directory**:
+- Orphaned Node.js packages (14MB, 140+ subdirectories)
+- Leftover from previous tool experiment (May 2025)
+- No package.json in project root
+- Not needed for C++/Python build
+
+**Documentation Strategy**:
+- Primary: `README.md` (user guide, installation, examples)
+- Developer: `CLAUDE.md` (build commands, code style)
+- Specifications: `specs/` directory (formal architecture docs)
+- All maintained in markdown format
+
 ## Python Package Installation (Added Later)
 
 To eliminate the need for `sys.path.append()` in test files and Python modules, we made the Python helpers an installable package:

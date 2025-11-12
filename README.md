@@ -94,8 +94,10 @@ The project is organized as follows:
 - **`tests/`** - Test suite
   - `cpp/` - C++ unit tests
   - `python/` - Python unit tests
-- **`specs/`** - Formal specifications and documentation
+- **`specs/`** - Formal specifications and documentation (markdown)
 - **`build/`** - Build artifacts (created during out-of-source build)
+
+All project documentation is maintained in markdown format in the root directory (`README.md`, `CLAUDE.md`) and formal specifications in the `specs/` directory.
 
 ## Usage Example
 
