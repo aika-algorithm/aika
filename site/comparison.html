@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIKA vs. PyTorch: A Comparison</title>
+    <title>Why AIKA? - A Different Approach to Neural Networks</title>
     <link rel="stylesheet" href="css/style.css" neuronType="text/css">
     <link rel="shortcut icon" href="images/favicon.png" />
 </head>
@@ -15,22 +15,22 @@
         </div>
         <ul id="navigation">
             <li>
-                <a href="index.html">Overall Idea</a>
-            </li>
-            <li>
-                <a href="blog.html">Blog</a>
-            </li>
-            <li>
-                <a href="usage.html">Examples</a>
+                <a href="index.html">About</a>
             </li>
             <li>
                 <a href="installation.html">Installation</a>
             </li>
+            <li>
+                <a href="usage.html">Tutorial</a>
+            </li>
             <li class="active">
-                <a href="comparison.html">Comparison</a>
+                <a href="comparison.html">Why AIKA?</a>
             </li>
             <li>
                 <a href="resources.html">Resources</a>
+            </li>
+            <li>
+                <a href="blog.html">Blog</a>
             </li>
             <li>
                 <a href="https://github.com/aika-algorithm/aika-cpp">GitHub</a>
@@ -40,9 +40,12 @@
 </div>
 <div id="contents">
     <div id="features">
-        <h1>AIKA vs. PyTorch: A Comparison</h1>
+        <h1>Why AIKA? A Different Approach to Neural Networks</h1>
         <p>
             AIKA takes a fundamentally different approach compared to traditional deep learning frameworks like PyTorch. Like PyTorch, AIKA combines Python for model definition with high-performance C++ for execution, but the underlying philosophy and execution model are quite different.
+        </p>
+        <p style="background-color: #E8F5E9; padding: 12px; border-left: 4px solid #4CAF50; margin: 15px 0;">
+            <strong>🎯 TL;DR:</strong> AIKA is an <strong>event-driven, dynamically-structured neural network framework</strong> designed for interpretability, sparse computation, and research into alternative AI architectures.
         </p>
 
         <h2>Architecture Comparison</h2>
@@ -140,24 +143,50 @@
             PyTorch is a mature, production-ready framework optimized for high-throughput numerical computation with static graphs and batched data. AIKA, by contrast, explores a more <strong>adaptive, event-driven paradigm</strong> where the focus is on individual activations and their interactions. AIKA's approach may be advantageous for research into neural architectures that require dynamic structure or need to capture fine-grained causality and interactions not easily represented in matrix form.
         </p>
 
-        <h2>When to Use AIKA</h2>
-        <p>
-            AIKA is particularly relevant for:
+        <h2>When to Use AIKA: Real-World Scenarios</h2>
+
+        <h3>✅ Ideal Use Cases</h3>
+
+        <p><strong>1. Research into Alternative AI Architectures</strong></p>
+        <p style="margin-left: 20px;">
+            <em>Scenario:</em> You're researching neural architectures that don't fit the standard layer-by-layer paradigm.<br/>
+            <em>Why AIKA:</em> Dynamic object instantiation and type-based design let you experiment with novel network topologies that PyTorch's tensor operations can't easily express.
         </p>
+
+        <p><strong>2. Interpretable AI Systems</strong></p>
+        <p style="margin-left: 20px;">
+            <em>Scenario:</em> You need to explain why your network made a specific decision (e.g., medical diagnosis, legal reasoning).<br/>
+            <em>Why AIKA:</em> Individual activations are traceable objects linked to symbolic representations, making it easier to understand the reasoning chain.
+        </p>
+
+        <p><strong>3. Sparse, Event-Driven Processing</strong></p>
+        <p style="margin-left: 20px;">
+            <em>Scenario:</em> Your data is sparse (e.g., knowledge graphs, symbolic reasoning) and only parts of the network should activate.<br/>
+            <em>Why AIKA:</em> Event-driven queue processes only active neurons, avoiding wasteful computation on irrelevant paths.
+        </p>
+
+        <p><strong>4. Dynamic Network Structures</strong></p>
+        <p style="margin-left: 20px;">
+            <em>Scenario:</em> Your network topology needs to change based on input (e.g., program synthesis, adaptive reasoning).<br/>
+            <em>Why AIKA:</em> Runtime instantiation allows the network structure to adapt dynamically to each input.
+        </p>
+
+        <h3>❌ Not Ideal For</h3>
         <ul>
-            <li>AI researchers exploring alternatives to conventional deep learning</li>
-            <li>Applications requiring interpretable neural network behavior</li>
-            <li>Dynamic graph structures that change based on input</li>
-            <li>Sparse activation patterns where only relevant neurons activate</li>
-            <li>Research into event-driven or symbolic reasoning combined with neural computation</li>
+            <li><strong>Production deep learning systems:</strong> PyTorch/TensorFlow are more mature and battle-tested</li>
+            <li><strong>High-throughput batch processing:</strong> AIKA's event-driven model trades throughput for flexibility</li>
+            <li><strong>Standard computer vision/NLP:</strong> Existing frameworks have optimized implementations</li>
+            <li><strong>Projects requiring immediate stability:</strong> AIKA is in beta (72% complete)</li>
         </ul>
 
-        <h2>Getting Started</h2>
-        <p>
-            To get started with AIKA, visit the <a href="installation.html">Installation Guide</a> and explore the <a href="usage.html">Usage Examples</a>.
+        <h2>Ready to Try AIKA?</h2>
+        <p style="margin-top: 20px;">
+            <a href="installation.html" style="display: inline-block; padding: 12px 24px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">Get Started →</a>
+            &nbsp;&nbsp;
+            <a href="resources.html" style="display: inline-block; padding: 12px 24px; background-color: #9C27B0; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">Documentation</a>
         </p>
-        <p>
-            For detailed technical specifications, see the <a href="https://github.com/aika-algorithm/aika-cpp/tree/main/specs">specs/ directory</a> on GitHub.
+        <p style="margin-top: 15px;">
+            Begin with the <a href="installation.html">Installation Guide</a>, follow the <a href="usage.html">Tutorial</a>, or explore the <a href="resources.html">full documentation</a> and <a href="https://github.com/aika-algorithm/aika-cpp/tree/main/specs">formal specifications</a>.
         </p>
     </div>
 </div>
