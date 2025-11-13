@@ -40,7 +40,7 @@ with $T_{\text{COMP}},T_{\text{MIX}}$ <: $T_{\text{DOT}}^{\text{(abs)}}$.
 | $f_{\text{fired}}^{\cdot}(a)$ | Threshold flag            | $\left[ f_{\text{val}}^{\cdot}(a)>\theta \right]$                      |
 | $bs(a)$                       | Binding signal            | carried from inputs via transitions                         |
 
-### D. Link (all (\tau(l)\in \mathcal{T}_L))
+### D. Link (all $\tau(l)\in \mathcal{T}_L$)
 
 | Field                                 | Meaning          | Definition                                                                        |
 |---------------------------------------| ---------------- |-----------------------------------------------------------------------------------|
