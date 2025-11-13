@@ -59,7 +59,7 @@ We introduce **paired input links** *at the input side* of Dot-Product neurons. 
 For a Dot-Product activation $a$ (either COMP or MIX), a **pair** $p\in \mathcal{P}(a)$ is an ordered 2-tuple of inbound links $(l^{(1)},l^{(2)})$ such that:
 
 * both $\texttt{OUTPUT}(l^{(1)})=\texttt{OUTPUT}(l^{(2)})=a$,
-* $(l^{(1)},l^{(2)})$ are connected by $\texttt{PAIR\_IN}$ (link↔link),
+* $(l^{(1)},l^{(2)})$ are connected by $\texttt{PAIR_IN}$ (link↔link),
 * their **synapse types** match the neuron’s role (see 3.2 / 3.3).
 
 We define the **pair contribution**
