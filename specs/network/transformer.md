@@ -3,8 +3,9 @@
 ## 1) Type Sets
 
 * **Neuron types**
-$$\mathcal{T}_N=\{T_{\text{EMB}},T_{\text{KEY}},T_{\text{QUERY}},T_{\text{VALUE}},T_{\text{SOFTMAX}},T_{\text{DOT}}^{\text{(abs)}},T_{\text{COMP}},T_{\text{MIX}}\}$$
-  with $T_{\text{COMP}},T_{\text{MIX}}$ <: $T_{\text{DOT}}^{\text{(abs)}}$.
+$$
+\mathcal{T}_N=
+$$
 
 * **Activations / Synapses / Links**
   $\mathcal{T}_A, \mathcal{T}_S, \mathcal{T}_L$ as before.
