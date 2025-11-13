@@ -44,7 +44,7 @@ with $T_{\text{COMP}},T_{\text{MIX}}$ <: $T_{\text{DOT}}^{\text{(abs)}}$.
 
 | Field                                 | Meaning          | Definition                                                                        |
 |---------------------------------------| ---------------- |-----------------------------------------------------------------------------------|
-| $f_{\text{weightedInput}}^{\cdot}(l)$ | Weighted message | $f_{\text{weight}}^{\text{SYNAPSE}(l)}\cdot f_{\text{val}}^{\text{INPUT}(l)}$ |
+| $f_{\text{weightedInput}}^{\cdot}(l)$ | Weighted message | $f_{\text{weight}}^{\texttt{SYNAPSE}(l)}\cdot f_{\text{val}}^{\texttt{INPUT}(l)}$ |
 
 > **Note**: we will override the aggregation rule $f_{\text{net}}$ for the **Dot-Product** family and the **Softmax**’s link logic below.
 
@@ -58,8 +58,8 @@ We introduce **paired input links** *at the input side* of Dot-Product neurons. 
 
 For a Dot-Product activation $a$ (either COMP or MIX), a **pair** $p\in \mathcal{P}(a)$ is an ordered 2-tuple of inbound links $(l^{(1)},l^{(2)})$ such that:
 
-* both $\text{OUTPUT}(l^{(1)})=\text{OUTPUT}(l^{(2)})=a$,
-* $(l^{(1)},l^{(2)})$ are connected by $\text{PAIR\_IN}$ (link↔link),
+* both $\texttt{OUTPUT}(l^{(1)})=\texttt{OUTPUT}(l^{(2)})=a$,
+* $(l^{(1)},l^{(2)})$ are connected by $\texttt{PAIR\_IN}$ (link↔link),
 * their **synapse types** match the neuron’s role (see 3.2 / 3.3).
 
 We define the **pair contribution**
@@ -120,7 +120,7 @@ By default $\phi$ is identity for the DOT family, so $f_{\text{val}}^{\text{DOT}
 
 Let $a_{\sigma}$ be a **Softmax** activation. It receives **scores** from either COMP (usual attention) or MIX (if you choose to re-normalize), and emits normalized weights to downstream targets.
 
-For each outgoing link $l_{\text{out}}$ of $a_{\sigma}$, there exists exactly one paired incoming link $l_{\text{in}}=\text{PAIR\_IO}(l_{\text{out}})$ into the same $a_{\sigma}$. Define a **competition set** $\mathcal{L}_{\text{in}}(a_{\sigma},g)$ as all incoming links to $a_{\sigma}$ that share the same *grouping key* $g$.
+For each outgoing link $l_{\text{out}}$ of $a_{\sigma}$, there exists exactly one paired incoming link $l_{\text{in}}=\texttt{PAIR_IO}(l_{\text{out}}$ into the same $a_{\sigma}$. Define a **competition set** $\mathcal{L}_{\text{in}}(a_{\sigma},g)$ as all incoming links to $a_{\sigma}$ that share the same *grouping key* $g$.
 **Grouping (g)** should at minimum include the **binding signal** (e.g., *per-query* competition). You may extend $g$ with head index, time step, etc.
 
 Then the outgoing link's effective message is:
@@ -128,12 +128,12 @@ Then the outgoing link's effective message is:
 $$
 f_{\text{weightedInput}}(l_{\text{out}})=
 \frac{
-\exp!\big(f_{\text{val}}^{\text{INPUT}(l_{\text{in}})}\big)
+\exp!\big(f_{\text{val}}^{\texttt{INPUT}(l_{\text{in}})}\big)
 }{
 \sum_{l'\in \mathcal{L}_{\text{in}}(a_{\sigma},g)}
-\exp!\big(f_{\text{val}}^{\text{INPUT}(l')}\big)
+\exp!\big(f_{\text{val}}^{\texttt{INPUT}(l')}\big)
 }\cdot
-f_{\text{weight}}^{\text{SYNAPSE}(l_{\text{out}})}.
+f_{\text{weight}}^{\texttt{SYNAPSE}(l_{\text{out}})}.
 $$
 
 This preserves your original "paired-link softmax" idea, but now the pairing is **IO-paired at Softmax**, while Dot-Product pairing lives **on the inputs** of COMP/MIX.
@@ -188,7 +188,7 @@ All BS transitions are **identity** unless otherwise noted (you can restrict pro
 
 ## 8) Optional Field Notes / Implementation Aids
 
-* **Pair identity:** add a small integer/string field $\text{pair\_id}(l)$ on inbound links to COMP/MIX so **PAIR_IN** can be validated cheaply.
+* **Pair identity:** add a small integer/string field $\texttt{pair\_id}(l)$ on inbound links to COMP/MIX so **PAIR_IN** can be validated cheaply.
 * **Group identity for softmax:** define $g=(bs,\text{head},\text{query\_pos})$ (or your chosen subset) and cache group accumulators for the denominator.
 * **Numerical stability:** implement log-sum-exp in the **SOFTMAX** denominator.
 
