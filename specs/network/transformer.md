@@ -4,7 +4,7 @@
 
 * **Neuron types**
 $$
-  \mathcal{T}*N={T*{\text{EMB}},T_{\text{KEY}},T_{\text{QUERY}},T_{\text{VALUE}},T_{\text{SOFTMAX}},T_{\text{DOT}}^{\text{(abs)}},T_{\text{COMP}},T_{\text{MIX}}}
+  \mathcal{T}_N=\{T_{\text{EMB}},T_{\text{KEY}},T_{\text{QUERY}},T_{\text{VALUE}},T_{\text{SOFTMAX}},T_{\text{DOT}}^{\text{(abs)}},T_{\text{COMP}},T_{\text{MIX}}\}
 $$
   with $T_{\text{COMP}},T_{\text{MIX}}$ <: $T_{\text{DOT}}^{\text{(abs)}}$.
 
@@ -35,7 +35,7 @@ $$
 |-------------------------------| ------------------------- |-------------------------------------------------------------|
 | $f_{\text{net}}^{\cdot}(a)$   | Aggregated pre-activation | depends on neuron subtype (below)                           |
 | $f_{\text{val}}^{\cdot}(a)$   | Output value              | $\phi(f_{\text{net}}^{\cdot}(a))$ (identity/ReLU as chosen) |
-| $f_{\text{fired}}^{\cdot}(a)$ | Threshold flag            | $[,f_{\text{val}}^{\cdot}(a)>\theta,]$                      |
+| $f_{\text{fired}}^{\cdot}(a)$ | Threshold flag            | $\left[ f_{\text{val}}^{\cdot}(a)>\theta \right]$                      |
 | $bs(a)$                       | Binding signal            | carried from inputs via transitions                         |
 
 ### D. Link (all (\tau(l)\in \mathcal{T}_L))
@@ -115,16 +115,16 @@ By default $\phi$ is identity for the DOT family, so $f_{\text{val}}^{\text{DOT}
 
 Let $a_{\sigma}$ be a **Softmax** activation. It receives **scores** from either COMP (usual attention) or MIX (if you choose to re-normalize), and emits normalized weights to downstream targets.
 
-For each outgoing link $l_{\text{out}}$ of $a_{\sigma}$, there exists exactly one paired incoming link $l_{\text{in}}=\texttt{PAIR_IO}(l_{\text{out}}$ into the same $a_{\sigma}$. Define a **competition set** $\mathcal{L}*{\text{in}}(a*{\sigma},g)$ as all incoming links to $a_{\sigma}$ that share the same *grouping key* $g$.
+For each outgoing link $l_{\text{out}}$ of $a_{\sigma}$, there exists exactly one paired incoming link $l_{\text{in}}=\texttt{PAIR_IO}(l_{\text{out}}$ into the same $a_{\sigma}$. Define a **competition set** $\mathcal{L}_{\text{in}}(a_{\sigma},g)$ as all incoming links to $a_{\sigma}$ that share the same *grouping key* $g$.
 **Grouping (g)** should at minimum include the **binding signal** (e.g., *per-query* competition). You may extend $g$ with head index, time step, etc.
 
-Then the outgoing link’s effective message is:
+Then the outgoing link's effective message is:
 $$
 f_{\text{weightedInput}}(l_{\text{out}})=
 \frac{
 \exp!\big(f_{\text{val}}^{\texttt{INPUT}(l_{\text{in}})}\big)
 }{
-\sum_{l'\in \mathcal{L}*{\text{in}}(a*{\sigma},g)}
+\sum_{l'\in \mathcal{L}_{\text{in}}(a_{\sigma},g)}
 \exp!\big(f_{\text{val}}^{\texttt{INPUT}(l')}\big)
 }\cdot
 f_{\text{weight}}^{\texttt{SYNAPSE}(l_{\text{out}})}.
@@ -162,10 +162,10 @@ All BS transitions are **identity** unless otherwise noted (you can restrict pro
 
 1. **Initialization:** For tokens $t_i$, create EMB activations with $\beta_i$; fire to produce KEY/QUERY/VALUE via $S_{\text{emb}\to *}$.
 2. **Comparison:** When a COMP activation has at least one valid **PAIR_IN** key–query pair, compute
-   $;f_{\text{val}}^{\text{COMP}}=\sum_{p} C(p)$ and emit score links via $S_{\text{comp}\to\text{softmax}}$.
-3. **Softmax (attention):** For each $a_{\sigma}$, once the competition set $\mathcal{L}*{\text{in}}(a*{\sigma},g)$ is complete for a group $g$, produce normalized **outgoing** links using the formula in §5 (IO-paired with their originating score links).
+   $f_{\text{val}}^{\text{COMP}}=\sum_{p} C(p)$ and emit score links via $S_{\text{comp}\to\text{softmax}}$.
+3. **Softmax (attention):** For each $a_{\sigma}$, once the competition set $\mathcal{L}_{\text{in}}(a_{\sigma},g)$ is complete for a group $g$, produce normalized **outgoing** links using the formula in §5 (IO-paired with their originating score links).
 4. **Mixing:** When a MIX activation has available **paired** (VALUE, SOFTMAX) inputs, compute
-   $;f_{\text{val}}^{\text{MIX}}=\sum_{p} C(p)$.
+   $f_{\text{val}}^{\text{MIX}}=\sum_{p} C(p)$.
 
     * If **no re-softmax**: route MIX outputs directly to the next stage (e.g., residual/MLP).
     * If **re-softmax enabled**: emit $S_{\text{mix}\to\text{softmax}}$ scores and repeat §5 for its groups.
@@ -191,7 +191,7 @@ All BS transitions are **identity** unless otherwise noted (you can restrict pro
 ## 9) End-to-End Flow (concise)
 
 1. EMB $\xrightarrow{}$ (KEY, QUERY, VALUE)
-2. (KEY, QUERY) **paired** &\xrightarrow{T_{\text{COMP}}}$ scores
+2. (KEY, QUERY) **paired** $\xrightarrow{T_{\text{COMP}}}$ scores
 3. scores $\xrightarrow{T_{\text{SOFTMAX}}}$ attention weights (grouped by $g$)
 4. (VALUE, weights) **paired** $\xrightarrow{T_{\text{MIX}}}$ mixed output
 5. *(optional)* MIX scores $\xrightarrow{T_{\text{SOFTMAX}}}$ re-normalized/gated output
