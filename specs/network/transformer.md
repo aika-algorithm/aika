@@ -59,7 +59,7 @@ We introduce **paired input links** *at the input side* of Dot-Product neurons. 
 For a Dot-Product activation $a$ (either COMP or MIX), a **pair** $p\in \mathcal{P}(a)$ is an ordered 2-tuple of inbound links $(l^{(1)},l^{(2)})$ such that:
 
 * both $\texttt{OUTPUT}(l^{(1)})=\texttt{OUTPUT}(l^{(2)})=a$,
-* $(l^{(1)},l^{(2)})$ are connected by $\texttt{PAIR_IN}$ (link↔link),
+* $(l^{(1)},l^{(2)})$ are connected by $\texttt{PAIR\_IN}$ (link↔link),
 * their **synapse types** match the neuron’s role (see 3.2 / 3.3).
 
 We define the **pair contribution**
@@ -188,8 +188,8 @@ All BS transitions are **identity** unless otherwise noted (you can restrict pro
 
 ## 8) Optional Field Notes / Implementation Aids
 
-* **Pair identity:** add a small integer/string field $ \texttt{pair_id}(l)$ on inbound links to COMP/MIX so **PAIR_IN** can be validated cheaply.
-* **Group identity for softmax:** define $g=(bs,\text{head},\text{query_pos})$ (or your chosen subset) and cache group accumulators for the denominator.
+* **Pair identity:** add a small integer/string field $\texttt{pair\_id}(l)$ on inbound links to COMP/MIX so **PAIR_IN** can be validated cheaply.
+* **Group identity for softmax:** define $g=(bs,\text{head},\text{query\_pos})$ (or your chosen subset) and cache group accumulators for the denominator.
 * **Numerical stability:** implement log-sum-exp in the **SOFTMAX** denominator.
 
 ---
