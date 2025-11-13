@@ -2,11 +2,13 @@
 
 ## 1) Type Sets
 
-* **Neuron types**
+**Neuron types**
+
 $$
 \mathcal{T}_N=\{T_{\text{EMB}},T_{\text{KEY}},T_{\text{QUERY}},T_{\text{VALUE}},T_{\text{SOFTMAX}},T_{\text{DOT}}^{\text{(abs)}},T_{\text{COMP}},T_{\text{MIX}}\}
 $$
-  with $T_{\text{COMP}},T_{\text{MIX}}$ <: $T_{\text{DOT}}^{\text{(abs)}}$.
+
+with $T_{\text{COMP}},T_{\text{MIX}}$ <: $T_{\text{DOT}}^{\text{(abs)}}$.
 
 * **Activations / Synapses / Links**
   $\mathcal{T}_A, \mathcal{T}_S, \mathcal{T}_L$ as before.
@@ -61,14 +63,17 @@ For a Dot-Product activation $a$ (either COMP or MIX), a **pair** $p\in \mathcal
 * their **synapse types** match the neuron’s role (see 3.2 / 3.3).
 
 We define the **pair contribution**
+
 $$
 C(p)=\big(f_{\text{weightedInput}}(l^{(1)})\big)\cdot\big(f_{\text{weightedInput}}(l^{(2)})\big).
 $$
 
 Then the Dot-Product aggregation is:
+
 $$
 f_{\text{net}}^{\text{DOT}}(a)=\sum_{p\in \mathcal{P}(a)} C(p).
 $$
+
 By default $\phi$ is identity for the DOT family, so $f_{\text{val}}^{\text{DOT}}(a)=f_{\text{net}}^{\text{DOT}}(a)$.
 
 #### 3.2 $T_{\text{COMP}}$ (Comparison)
@@ -119,6 +124,7 @@ For each outgoing link $l_{\text{out}}$ of $a_{\sigma}$, there exists exactly on
 **Grouping (g)** should at minimum include the **binding signal** (e.g., *per-query* competition). You may extend $g$ with head index, time step, etc.
 
 Then the outgoing link's effective message is:
+
 $$
 f_{\text{weightedInput}}(l_{\text{out}})=
 \frac{
@@ -130,7 +136,7 @@ f_{\text{weightedInput}}(l_{\text{out}})=
 f_{\text{weight}}^{\texttt{SYNAPSE}(l_{\text{out}})}.
 $$
 
-This preserves your original “paired-link softmax” idea, but now the pairing is **IO-paired at Softmax**, while Dot-Product pairing lives **on the inputs** of COMP/MIX.
+This preserves your original "paired-link softmax" idea, but now the pairing is **IO-paired at Softmax**, while Dot-Product pairing lives **on the inputs** of COMP/MIX.
 
 ---
 
