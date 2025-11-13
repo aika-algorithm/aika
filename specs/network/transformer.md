@@ -1,50 +1,50 @@
-# 🧠 **AIKA-Based Minimal Transformer**
+# **AIKA-Based Minimal Transformer**
 
 ## 1) Type Sets
 
 * **Neuron types**
-  [
+  $$
   \mathcal{T}*N={T*{\text{EMB}},T_{\text{KEY}},T_{\text{QUERY}},T_{\text{VALUE}},T_{\text{SOFTMAX}},T_{\text{DOT}}^{\text{(abs)}},T_{\text{COMP}},T_{\text{MIX}}}
-  ]
-  with (T_{\text{COMP}},T_{\text{MIX}}) <: (T_{\text{DOT}}^{\text{(abs)}}).
+  $$
+  with $T_{\text{COMP}},T_{\text{MIX}}$ <: $T_{\text{DOT}}^{\text{(abs)}}$.
 
 * **Activations / Synapses / Links**
-  (\mathcal{T}_A, \mathcal{T}_S, \mathcal{T}_L) as before.
+  $\mathcal{T}_A, \mathcal{T}_S, \mathcal{T}_L$ as before.
 
-* **Binding signals** (\beta_i) per token (t_i) as before; created at (T_{\text{EMB}}) activations.
+* **Binding signals** $\beta_i$ per token $t_i$ as before; created at $T_{\text{EMB}}$ activations.
 
 ---
 
 ## 2) Fields (by object type)
 
-### A. Neuron (all (\tau(n)\in \mathcal{T}_N))
+### A. Neuron (all $\tau(n)\in \mathcal{T}_N$)
 
 | Field                        | Meaning                        |
-| ---------------------------- | ------------------------------ |
-| (f_{\text{bias}}^{\cdot}(n)) | Static scalar bias (optional). |
+|------------------------------| ------------------------------ |
+| $f_{\text{bias}}^{\cdot}(n)$ | Static scalar bias (optional). |
 
-### B. Synapse (all (\tau(s)\in \mathcal{T}_S))
+### B. Synapse (all $\tau(s)\in \mathcal{T}_S$)
 
 | Field                          | Meaning               |
-| ------------------------------ | --------------------- |
-| (f_{\text{weight}}^{\cdot}(s)) | Static scalar weight. |
+|--------------------------------| --------------------- |
+| $f_{\text{weight}}^{\cdot}(s)$ | Static scalar weight. |
 
-### C. Activation (all (\tau(a)\in \mathcal{T}_A))
+### C. Activation (all $\tau(a)\in \mathcal{T}_A$)
 
 | Field                         | Meaning                   | Definition                                                  |
-| ----------------------------- | ------------------------- | ----------------------------------------------------------- |
-| (f_{\text{net}}^{\cdot}(a))   | Aggregated pre-activation | depends on neuron subtype (below)                           |
-| (f_{\text{val}}^{\cdot}(a))   | Output value              | (\phi(f_{\text{net}}^{\cdot}(a))) (identity/ReLU as chosen) |
-| (f_{\text{fired}}^{\cdot}(a)) | Threshold flag            | ([,f_{\text{val}}^{\cdot}(a)>\theta,])                      |
-| (bs(a))                       | Binding signal            | carried from inputs via transitions                         |
+|-------------------------------| ------------------------- |-------------------------------------------------------------|
+| $f_{\text{net}}^{\cdot}(a)$   | Aggregated pre-activation | depends on neuron subtype (below)                           |
+| $f_{\text{val}}^{\cdot}(a)$   | Output value              | $\phi(f_{\text{net}}^{\cdot}(a))$ (identity/ReLU as chosen) |
+| $f_{\text{fired}}^{\cdot}(a)$ | Threshold flag            | $[,f_{\text{val}}^{\cdot}(a)>\theta,]$                      |
+| $bs(a)$                       | Binding signal            | carried from inputs via transitions                         |
 
 ### D. Link (all (\tau(l)\in \mathcal{T}_L))
 
 | Field                                 | Meaning          | Definition                                                                        |
-| ------------------------------------- | ---------------- | --------------------------------------------------------------------------------- |
-| (f_{\text{weightedInput}}^{\cdot}(l)) | Weighted message | (f_{\text{weight}}^{\texttt{SYNAPSE}(l)}\cdot f_{\text{val}}^{\texttt{INPUT}(l)}) |
+|---------------------------------------| ---------------- |-----------------------------------------------------------------------------------|
+| $f_{\text{weightedInput}}^{\cdot}(l)$ | Weighted message | $f_{\text{weight}}^{\texttt{SYNAPSE}(l)}\cdot f_{\text{val}}^{\texttt{INPUT}(l)}$ |
 
-> **Note**: we will override the aggregation rule (f_{\text{net}}) for the **Dot-Product** family and the **Softmax**’s link logic below.
+> **Note**: we will override the aggregation rule $f_{\text{net}}$ for the **Dot-Product** family and the **Softmax**’s link logic below.
 
 ---
 
@@ -54,39 +54,39 @@ We introduce **paired input links** *at the input side* of Dot-Product neurons. 
 
 ### 3.1 Definition of a Pair
 
-For a Dot-Product activation (a) (either COMP or MIX), a **pair** (p\in \mathcal{P}(a)) is an ordered 2-tuple of inbound links ((l^{(1)},l^{(2)})) such that:
+For a Dot-Product activation $a$ (either COMP or MIX), a **pair** $p\in \mathcal{P}(a)$ is an ordered 2-tuple of inbound links $(l^{(1)},l^{(2)})$ such that:
 
-* both (\texttt{OUTPUT}(l^{(1)})=\texttt{OUTPUT}(l^{(2)})=a),
-* ((l^{(1)},l^{(2)})) are connected by (\texttt{PAIR_IN}) (link↔link),
+* both $\texttt{OUTPUT}(l^{(1)})=\texttt{OUTPUT}(l^{(2)})=a$,
+* $(l^{(1)},l^{(2)})$ are connected by $\texttt{PAIR_IN}$ (link↔link),
 * their **synapse types** match the neuron’s role (see 3.2 / 3.3).
 
 We define the **pair contribution**
-[
+$$
 C(p)=\big(f_{\text{weightedInput}}(l^{(1)})\big)\cdot\big(f_{\text{weightedInput}}(l^{(2)})\big).
-]
+$$
 
 Then the Dot-Product aggregation is:
-[
+$$
 f_{\text{net}}^{\text{DOT}}(a)=\sum_{p\in \mathcal{P}(a)} C(p).
-]
-By default (\phi) is identity for the DOT family, so (f_{\text{val}}^{\text{DOT}}(a)=f_{\text{net}}^{\text{DOT}}(a)).
+$$
+By default $\phi$ is identity for the DOT family, so $f_{\text{val}}^{\text{DOT}}(a)=f_{\text{net}}^{\text{DOT}}(a)$.
 
-#### 3.2 (T_{\text{COMP}}) (Comparison)
+#### 3.2 $T_{\text{COMP}}$ (Comparison)
 
-* **Inputs (paired)**: one link from (T_{\text{KEY}}) and one from (T_{\text{QUERY}}).
-  Synapse types: (S_{\text{key}\to\text{comp}}) and (S_{\text{query}\to\text{comp}}).
+* **Inputs (paired)**: one link from $T_{\text{KEY}}$ and one from $T_{\text{QUERY}}$.
+  Synapse types: $S_{\text{key}\to\text{comp}}$ and $S_{\text{query}\to\text{comp}}$.
   These two links are paired (one pair per key–query match element).
-* **Output**: links to **Softmax** activations via (S_{\text{comp}\to\text{softmax}}).
+* **Output**: links to **Softmax** activations via $S_{\text{comp}\to\text{softmax}}$.
   Intuition: produces **scores/logits**.
 
-#### 3.3 (T_{\text{MIX}}) (Mixing)
+#### 3.3 $T_{\text{MIX}}$ (Mixing)
 
-* **Inputs (paired)**: one link from (T_{\text{VALUE}}) and one from (T_{\text{SOFTMAX}}).
-  Synapse types: (S_{\text{value}\to\text{mix}}) and (S_{\text{softmax}\to\text{mix}}).
+* **Inputs (paired)**: one link from $T_{\text{VALUE}}$ and one from $T_{\text{SOFTMAX}}$.
+  Synapse types: $S_{\text{value}\to\text{mix}}$ and $S_{\text{softmax}\to\text{mix}}$.
   These two links are paired so each value is weighted by the corresponding softmax weight.
-* **Output**: links to **Softmax** via (S_{\text{mix}\to\text{softmax}}) *(per your request; see Note below)* or directly to a downstream aggregation neuron if you skip re-normalization.
+* **Output**: links to **Softmax** via $S_{\text{mix}\to\text{softmax}}$ *(per your request; see Note below)* or directly to a downstream aggregation neuron if you skip re-normalization.
 
-> **Note (design choice):** Standard attention usually **does not** re-softmax after mixing. You explicitly asked that **Mix → Softmax** also exists; we therefore keep (S_{\text{mix}\to\text{softmax}}) but mark it as optional if you want canonical attention.
+> **Note (design choice):** Standard attention usually **does not** re-softmax after mixing. You explicitly asked that **Mix → Softmax** also exists; we therefore keep $S_{\text{mix}\to\text{softmax}}$ but mark it as optional if you want canonical attention.
 
 ---
 
@@ -113,13 +113,13 @@ By default (\phi) is identity for the DOT family, so (f_{\text{val}}^{\text{DOT}
 
 ## 5) Softmax Neuron (renamed, with Paired IO)
 
-Let (a_{\sigma}) be a **Softmax** activation. It receives **scores** from either COMP (usual attention) or MIX (if you choose to re-normalize), and emits normalized weights to downstream targets.
+Let $a_{\sigma}$ be a **Softmax** activation. It receives **scores** from either COMP (usual attention) or MIX (if you choose to re-normalize), and emits normalized weights to downstream targets.
 
-For each outgoing link (l_{\text{out}}) of (a_{\sigma}), there exists exactly one paired incoming link (l_{\text{in}}=\texttt{PAIR_IO}(l_{\text{out}})) into the same (a_{\sigma}). Define a **competition set** (\mathcal{L}*{\text{in}}(a*{\sigma},g)) as all incoming links to (a_{\sigma}) that share the same *grouping key* (g).
-**Grouping (g)** should at minimum include the **binding signal** (e.g., *per-query* competition). You may extend (g) with head index, time step, etc.
+For each outgoing link $l_{\text{out}}$ of $a_{\sigma}$, there exists exactly one paired incoming link $l_{\text{in}}=\texttt{PAIR_IO}(l_{\text{out}}$ into the same $a_{\sigma}$. Define a **competition set** $\mathcal{L}*{\text{in}}(a*{\sigma},g)$ as all incoming links to $a_{\sigma}$ that share the same *grouping key* $g$.
+**Grouping (g)** should at minimum include the **binding signal** (e.g., *per-query* competition). You may extend $g$ with head index, time step, etc.
 
 Then the outgoing link’s effective message is:
-[
+$$
 f_{\text{weightedInput}}(l_{\text{out}})=
 \frac{
 \exp!\big(f_{\text{val}}^{\texttt{INPUT}(l_{\text{in}})}\big)
@@ -128,7 +128,7 @@ f_{\text{weightedInput}}(l_{\text{out}})=
 \exp!\big(f_{\text{val}}^{\texttt{INPUT}(l')}\big)
 }\cdot
 f_{\text{weight}}^{\texttt{SYNAPSE}(l_{\text{out}})}.
-]
+$$
 
 This preserves your original “paired-link softmax” idea, but now the pairing is **IO-paired at Softmax**, while Dot-Product pairing lives **on the inputs** of COMP/MIX.
 
@@ -139,59 +139,59 @@ This preserves your original “paired-link softmax” idea, but now the pairing
 All BS transitions are **identity** unless otherwise noted (you can restrict propagation where needed).
 
 | Synapse Type                                   | From → To      | Purpose                                       | BS |
-| ---------------------------------------------- | -------------- | --------------------------------------------- | -- |
-| (S_{\text{emb}\to\text{key}})                  | EMB → KEY      | build keys                                    | id |
-| (S_{\text{emb}\to\text{query}})                | EMB → QUERY    | build queries                                 | id |
-| (S_{\text{emb}\to\text{value}})                | EMB → VALUE    | build values                                  | id |
-| (S_{\text{key}\to\text{comp}})                 | KEY → COMP     | COMP input (paired with QUERY)                | id |
-| (S_{\text{query}\to\text{comp}})               | QUERY → COMP   | COMP input (paired with KEY)                  | id |
-| (S_{\text{comp}\to\text{softmax}})             | COMP → SOFTMAX | provide scores                                | id |
-| (S_{\text{softmax}\to\text{mix}})              | SOFTMAX → MIX  | provide attention weights (paired with VALUE) | id |
-| (S_{\text{value}\to\text{mix}})                | VALUE → MIX    | provide values (paired with SOFTMAX)          | id |
-| (S_{\text{mix}\to\text{softmax}}) *(optional)* | MIX → SOFTMAX  | re-normalize/gating if desired                | id |
+|------------------------------------------------| -------------- | --------------------------------------------- | -- |
+| $S_{\text{emb}\to\text{key}}$                  | EMB → KEY      | build keys                                    | id |
+| $S_{\text{emb}\to\text{query}}$                | EMB → QUERY    | build queries                                 | id |
+| $S_{\text{emb}\to\text{value}}$                | EMB → VALUE    | build values                                  | id |
+| $S_{\text{key}\to\text{comp}}$                 | KEY → COMP     | COMP input (paired with QUERY)                | id |
+| $S_{\text{query}\to\text{comp}}$               | QUERY → COMP   | COMP input (paired with KEY)                  | id |
+| $S_{\text{comp}\to\text{softmax}}$             | COMP → SOFTMAX | provide scores                                | id |
+| $S_{\text{softmax}\to\text{mix}}$              | SOFTMAX → MIX  | provide attention weights (paired with VALUE) | id |
+| $S_{\text{value}\to\text{mix}}$                | VALUE → MIX    | provide values (paired with SOFTMAX)          | id |
+| $S_{\text{mix}\to\text{softmax}}$ *(optional)* | MIX → SOFTMAX  | re-normalize/gating if desired                | id |
 
 > **Pairing constraints:**
 >
-> * For **COMP**: every inbound (S_{\text{key}\to\text{comp}}) link must be **PAIR_IN** with exactly one inbound (S_{\text{query}\to\text{comp}}) link (and vice versa), targeting the **same** COMP activation.
-> * For **MIX**: every inbound (S_{\text{value}\to\text{mix}}) link must be **PAIR_IN** with exactly one inbound (S_{\text{softmax}\to\text{mix}}) link.
-> * For **SOFTMAX**: each outbound link must **PAIR_IO** with **one** inbound score link; softmax is computed over all inbound score links in the same group (g).
+> * For **COMP**: every inbound $S_{\text{key}\to\text{comp}}$ link must be **PAIR_IN** with exactly one inbound $S_{\text{query}\to\text{comp}}$ link (and vice versa), targeting the **same** COMP activation.
+> * For **MIX**: every inbound $S_{\text{value}\to\text{mix}}$ link must be **PAIR_IN** with exactly one inbound $S_{\text{softmax}\to\text{mix}}$ link.
+> * For **SOFTMAX**: each outbound link must **PAIR_IO** with **one** inbound score link; softmax is computed over all inbound score links in the same group $g$.
 
 ---
 
 ## 7) Event & Scheduling Logic
 
-1. **Initialization:** For tokens (t_i), create EMB activations with (\beta_i); fire to produce KEY/QUERY/VALUE via (S_{\text{emb}\to *}).
+1. **Initialization:** For tokens $t_i$, create EMB activations with $\beta_i$; fire to produce KEY/QUERY/VALUE via $S_{\text{emb}\to *}$.
 2. **Comparison:** When a COMP activation has at least one valid **PAIR_IN** key–query pair, compute
-   (;f_{\text{val}}^{\text{COMP}}=\sum_{p} C(p)) and emit score links via (S_{\text{comp}\to\text{softmax}}).
-3. **Softmax (attention):** For each (a_{\sigma}), once the competition set (\mathcal{L}*{\text{in}}(a*{\sigma},g)) is complete for a group (g), produce normalized **outgoing** links using the formula in §5 (IO-paired with their originating score links).
+   $;f_{\text{val}}^{\text{COMP}}=\sum_{p} C(p)$ and emit score links via $S_{\text{comp}\to\text{softmax}}$.
+3. **Softmax (attention):** For each $a_{\sigma}$, once the competition set $\mathcal{L}*{\text{in}}(a*{\sigma},g)$ is complete for a group $g$, produce normalized **outgoing** links using the formula in §5 (IO-paired with their originating score links).
 4. **Mixing:** When a MIX activation has available **paired** (VALUE, SOFTMAX) inputs, compute
-   (;f_{\text{val}}^{\text{MIX}}=\sum_{p} C(p)).
+   $;f_{\text{val}}^{\text{MIX}}=\sum_{p} C(p)$.
 
     * If **no re-softmax**: route MIX outputs directly to the next stage (e.g., residual/MLP).
-    * If **re-softmax enabled**: emit (S_{\text{mix}\to\text{softmax}}) scores and repeat §5 for its groups.
+    * If **re-softmax enabled**: emit $S_{\text{mix}\to\text{softmax}}$ scores and repeat §5 for its groups.
 5. **Output:** Downstream neurons aggregate MIX outputs (and possibly normalized MIX if step 4b) to form the layer output.
 
 **Event ordering hints (AIKA-friendly):**
 
-* Fire **COMP** as soon as any (KEY,QUERY) pair arrives; mark groups (g) as “open”.
-* Schedule **SOFTMAX** per group (g) when it’s quiescent or reaches a boundary condition (e.g., end of window, causal fence).
+* Fire **COMP** as soon as any (KEY,QUERY) pair arrives; mark groups $g$ as “open”.
+* Schedule **SOFTMAX** per group $g$ when it’s quiescent or reaches a boundary condition (e.g., end of window, causal fence).
 * Fire **MIX** whenever a (VALUE, SOFTMAX) pair is present; MIX is purely multiplicative-sum, so it streams well.
-* If you enable re-softmax after MIX, schedule the second **SOFTMAX** exactly like the first, but with different grouping (g') if needed.
+* If you enable re-softmax after MIX, schedule the second **SOFTMAX** exactly like the first, but with different grouping $g'$ if needed.
 
 ---
 
 ## 8) Optional Field Notes / Implementation Aids
 
-* **Pair identity:** add a small integer/string field ( \texttt{pair_id}(l)) on inbound links to COMP/MIX so **PAIR_IN** can be validated cheaply.
-* **Group identity for softmax:** define (g=(bs,\text{head},\text{query_pos})) (or your chosen subset) and cache group accumulators for the denominator.
+* **Pair identity:** add a small integer/string field $ \texttt{pair_id}(l)$ on inbound links to COMP/MIX so **PAIR_IN** can be validated cheaply.
+* **Group identity for softmax:** define $g=(bs,\text{head},\text{query_pos})$ (or your chosen subset) and cache group accumulators for the denominator.
 * **Numerical stability:** implement log-sum-exp in the **SOFTMAX** denominator.
 
 ---
 
 ## 9) End-to-End Flow (concise)
 
-1. EMB (\xrightarrow{}) (KEY, QUERY, VALUE)
-2. (KEY, QUERY) **paired** (\xrightarrow{T_{\text{COMP}}}) scores
-3. scores (\xrightarrow{T_{\text{SOFTMAX}}}) attention weights (grouped by (g))
-4. (VALUE, weights) **paired** (\xrightarrow{T_{\text{MIX}}}) mixed output
-5. *(optional)* MIX scores (\xrightarrow{T_{\text{SOFTMAX}}}) re-normalized/gated output
+1. EMB $\xrightarrow{}$ (KEY, QUERY, VALUE)
+2. (KEY, QUERY) **paired** &\xrightarrow{T_{\text{COMP}}}$ scores
+3. scores $\xrightarrow{T_{\text{SOFTMAX}}}$ attention weights (grouped by $g$)
+4. (VALUE, weights) **paired** $\xrightarrow{T_{\text{MIX}}}$ mixed output
+5. *(optional)* MIX scores $\xrightarrow{T_{\text{SOFTMAX}}}$ re-normalized/gated output
