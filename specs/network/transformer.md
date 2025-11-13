@@ -4,7 +4,7 @@
 
 * **Neuron types**
 $$
-  \mathcal{T}_N=\{T_{\text{EMB}},T_{\text{KEY}},T_{\text{QUERY}},T_{\text{VALUE}},T_{\text{SOFTMAX}},T_{\text{DOT}}^{\text{(abs)}},T_{\text{COMP}},T_{\text{MIX}}\}
+\mathcal{T}_N=\{T_{\text{EMB}},T_{\text{KEY}},T_{\text{QUERY}},T_{\text{VALUE}},T_{\text{SOFTMAX}},T_{\text{DOT}}^{\text{(abs)}},T_{\text{COMP}},T_{\text{MIX}}\}
 $$
   with $T_{\text{COMP}},T_{\text{MIX}}$ <: $T_{\text{DOT}}^{\text{(abs)}}$.
 
