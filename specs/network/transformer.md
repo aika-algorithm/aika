@@ -189,7 +189,7 @@ All BS transitions are **identity** unless otherwise noted (you can restrict pro
 ## 8) Optional Field Notes / Implementation Aids
 
 * **Pair identity:** add a small integer/string field $ \texttt{pair_id}(l)$ on inbound links to COMP/MIX so **PAIR_IN** can be validated cheaply.
-* **Group identity for softmax:** define $g=(bs,\text{head},\text{query_pos})$ (or your chosen subset) and cache group accumulators for the denominator.
+* **Group identity for softmax:** define $g=(bs,\text{head},\text{query\_pos})$ (or your chosen subset) and cache group accumulators for the denominator.
 * **Numerical stability:** implement log-sum-exp in the **SOFTMAX** denominator.
 
 ---
