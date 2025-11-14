@@ -110,45 +110,39 @@ class TransformerTypeRegistry:
         # BUILD TRANSFORMER NEURON TYPES
         # ========================================
         
-        # Build T_EMB (embedding neuron and activation)
+        # Build T_EMB (embedding neuron)
         emb_builder = an.NeuronTypeBuilder(self.registry, "EMB_NEURON")
         emb_builder.setParent(self.T_STANDARD_NEURON)
         self.T_EMB = emb_builder.build()
-        self.T_EMB_ACT = self.T_EMB.getActivationType()
 
-        # Build T_KEY (key neuron and activation)
+        # Build T_KEY (key neuron)
         key_builder = an.NeuronTypeBuilder(self.registry, "KEY_NEURON")
         key_builder.setParent(self.T_STANDARD_NEURON)
         self.T_KEY = key_builder.build()
-        self.T_KEY_ACT = self.T_KEY.getActivationType()
 
-        # Build T_QUERY (query neuron and activation)
+        # Build T_QUERY (query neuron)
         query_builder = an.NeuronTypeBuilder(self.registry, "QUERY_NEURON")
         query_builder.setParent(self.T_STANDARD_NEURON)
         self.T_QUERY = query_builder.build()
-        self.T_QUERY_ACT = self.T_QUERY.getActivationType()
 
-        # Build T_VALUE (value neuron and activation)
+        # Build T_VALUE (value neuron)
         value_builder = an.NeuronTypeBuilder(self.registry, "VALUE_NEURON")
         value_builder.setParent(self.T_STANDARD_NEURON)
         self.T_VALUE = value_builder.build()
-        self.T_VALUE_ACT = self.T_VALUE.getActivationType()
-        
+
         # ========================================
         # BUILD CONCRETE DOT-PRODUCT FAMILY TYPES
         # ========================================
-        
-        # Build T_COMP (comparison neuron and activation) - inherits from abstract DOT
+
+        # Build T_COMP (comparison neuron) - inherits from abstract DOT
         comp_builder = an.NeuronTypeBuilder(self.registry, "COMP_NEURON")
         comp_builder.setParent(self.T_DOT)  # Inherit from abstract DOT
         self.T_COMP = comp_builder.build()
-        self.T_COMP_ACT = self.T_COMP.getActivationType()
 
-        # Build T_MIX (mixing neuron and activation) - inherits from abstract DOT
+        # Build T_MIX (mixing neuron) - inherits from abstract DOT
         mix_builder = an.NeuronTypeBuilder(self.registry, "MIX_NEURON")
         mix_builder.setParent(self.T_DOT)  # Inherit from abstract DOT
         self.T_MIX = mix_builder.build()
-        self.T_MIX_ACT = self.T_MIX.getActivationType()
 
         print("Built concrete DOT-PRODUCT types (COMP, MIX) inheriting from abstract DOT")
 
@@ -156,11 +150,10 @@ class TransformerTypeRegistry:
         # BUILD CONCRETE SOFTMAX FAMILY TYPES
         # ========================================
 
-        # Build T_ATTENTION (attention neuron and activation) - inherits from abstract SOFTMAX
+        # Build T_ATTENTION (attention neuron) - inherits from abstract SOFTMAX
         attention_builder = an.NeuronTypeBuilder(self.registry, "ATTENTION_NEURON")
         attention_builder.setParent(self.T_SOFTMAX)  # Inherit from abstract SOFTMAX
         self.T_ATTENTION = attention_builder.build()
-        self.T_ATTENTION_ACT = self.T_ATTENTION.getActivationType()
         
         print("Built concrete SOFTMAX type (ATTENTION) inheriting from abstract SOFTMAX")
         
@@ -168,60 +161,54 @@ class TransformerTypeRegistry:
         # BUILD TRANSFORMER SYNAPSE TYPES
         # ========================================
         
-        # Build S_EMB_KEY (embedding to key synapse and link)
+        # Build S_EMB_KEY (embedding to key synapse)
         emb_key_builder = an.SynapseTypeBuilder(self.registry, "S_EMB_KEY")
         emb_key_builder.setInput(self.T_EMB).setOutput(self.T_KEY)
         emb_key_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
         emb_key_builder.setOutputSideParent(self.S_STANDARD_OUTPUT_SIDE)
         self.S_EMB_KEY = emb_key_builder.build()
-        self.L_EMB_KEY = self.S_EMB_KEY.getLinkType()
 
-        # Build S_EMB_QUERY (embedding to query synapse and link)
+        # Build S_EMB_QUERY (embedding to query synapse)
         emb_query_builder = an.SynapseTypeBuilder(self.registry, "S_EMB_QUERY")
         emb_query_builder.setInput(self.T_EMB).setOutput(self.T_QUERY)
         emb_query_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
         emb_query_builder.setOutputSideParent(self.S_STANDARD_OUTPUT_SIDE)
         self.S_EMB_QUERY = emb_query_builder.build()
-        self.L_EMB_QUERY = self.S_EMB_QUERY.getLinkType()
 
-        # Build S_EMB_VALUE (embedding to value synapse and link)
+        # Build S_EMB_VALUE (embedding to value synapse)
         emb_value_builder = an.SynapseTypeBuilder(self.registry, "S_EMB_VALUE")
         emb_value_builder.setInput(self.T_EMB).setOutput(self.T_VALUE)
         emb_value_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
         emb_value_builder.setOutputSideParent(self.S_STANDARD_OUTPUT_SIDE)
         self.S_EMB_VALUE = emb_value_builder.build()
-        self.L_EMB_VALUE = self.S_EMB_VALUE.getLinkType()
 
         # ========================================
         # BUILD CONCRETE DOT-PRODUCT SYNAPSE TYPES
         # ========================================
-        
+
         # Build concrete KEY_COMP and QUERY_COMP synapses (inherit from abstract DOT types)
         key_comp_builder = an.SynapseTypeBuilder(self.registry, "S_KEY_COMP")
         key_comp_builder.setInput(self.T_KEY).setOutput(self.T_COMP)
         key_comp_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
         key_comp_builder.setOutputSideParent(self.S_DOT_SECONDARY_OUTPUT_SIDE)
         self.S_KEY_COMP = key_comp_builder.build()
-        self.L_KEY_COMP = self.S_KEY_COMP.getLinkType()
 
         query_comp_builder = an.SynapseTypeBuilder(self.registry, "S_QUERY_COMP")
         query_comp_builder.setInput(self.T_QUERY).setOutput(self.T_COMP)
         query_comp_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
         query_comp_builder.setOutputSideParent(self.S_DOT_PRIMARY_OUTPUT_SIDE)
         self.S_QUERY_COMP = query_comp_builder.build()
-        self.L_QUERY_COMP = self.S_QUERY_COMP.getLinkType()
 
         print("Built concrete DOT-PRODUCT synapses:")
         print("  - KEY_COMP (secondary): Standard input-side + DOT_SECONDARY output-side")
         print("  - QUERY_COMP (primary): Standard input-side + DOT_PRIMARY output-side")
 
-        # Build S_COMP_ATTENTION (comparison to attention synapse and link)
+        # Build S_COMP_ATTENTION (comparison to attention synapse)
         comp_attention_builder = an.SynapseTypeBuilder(self.registry, "S_COMP_ATTENTION")
         comp_attention_builder.setInput(self.T_COMP).setOutput(self.T_ATTENTION)
         comp_attention_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
         comp_attention_builder.setOutputSideParent(self.S_SOFTMAX_INPUT_SYNAPSE_OUTPUT_SIDE)
         self.S_COMP_ATTENTION = comp_attention_builder.build()
-        self.L_COMP_ATTENTION = self.S_COMP_ATTENTION.getLinkType()
 
         # Build MIX dot-product synapses (inherit from abstract DOT types)
         value_mix_builder = an.SynapseTypeBuilder(self.registry, "S_VALUE_MIX")
@@ -229,14 +216,12 @@ class TransformerTypeRegistry:
         value_mix_builder.setInputSideParent(self.S_SOFTMAX_OUTPUT_SYNAPSE_INPUT_SIDE)
         value_mix_builder.setOutputSideParent(self.S_DOT_SECONDARY_OUTPUT_SIDE)
         self.S_VALUE_MIX = value_mix_builder.build()
-        self.L_VALUE_MIX = self.S_VALUE_MIX.getLinkType()
 
         attention_mix_builder = an.SynapseTypeBuilder(self.registry, "S_ATTENTION_MIX")
         attention_mix_builder.setInput(self.T_ATTENTION).setOutput(self.T_MIX)
         attention_mix_builder.setInputSideParent(self.S_SOFTMAX_OUTPUT_SYNAPSE_INPUT_SIDE)
         attention_mix_builder.setOutputSideParent(self.S_DOT_PRIMARY_OUTPUT_SIDE)
         self.S_ATTENTION_MIX = attention_mix_builder.build()
-        self.L_ATTENTION_MIX = self.S_ATTENTION_MIX.getLinkType()
         
         print("Built concrete MIX DOT-PRODUCT synapses:")
         print("  - VALUE_MIX (secondary): Identity operation, inherits from DOT_SECONDARY")
