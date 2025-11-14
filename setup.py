@@ -21,11 +21,15 @@ setup(
     install_requires=[
         "parameterized",
         "pybind11>=2.10.0",  # Required for C++ bindings
+        "numpy>=1.20.0",     # Required for integration layer
     ],
     extras_require={
         "dev": [
             "pytest",
             "pytest-cov",
+        ],
+        "integration": [
+            "transformers>=4.0.0",  # Optional: for HuggingFace tokenizer backend
         ],
     },
     # Don't include the C++ extension here - it's built and installed via CMake
