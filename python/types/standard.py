@@ -1,11 +1,16 @@
 """
-AIKA-Based Standard Neural Network Foundation using Builder Pattern
+AIKA-Based Standard Neural Network Types using Builder Pattern
 
-This module defines the foundational object types (neurons, synapses, activations, links) 
-and field definitions for standard neural network operations using the AIKA framework
-with the builder pattern architecture.
+This module defines standard neural network base types that provide foundational
+operations for neural network architectures. Like DOT-product and softmax types,
+these define the basic building blocks that can be composed to create concrete networks.
 
-This serves as the base for more specialized network architectures like transformers.
+Standard types include:
+- STANDARD_NEURON with bias and tanh activation
+- STANDARD_INPUT_SIDE providing the universal input_value interface
+- STANDARD_OUTPUT_SIDE providing weighted multiplication
+
+These base types serve as foundations for more specialized architectures like transformers.
 """
 
 

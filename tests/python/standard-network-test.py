@@ -3,7 +3,7 @@ import unittest
 import aika
 import aika.fields as af
 import aika.network as an
-from python.networks.standard_network import create_standard_network_types
+from python.types.standard import create_standard_network_types
 
 class StandardNetworkTestCase(unittest.TestCase):
     
