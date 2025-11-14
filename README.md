@@ -221,8 +221,8 @@ transformer = create_transformer_types()
 
 # Access transformer neuron types
 emb_type = transformer.T_EMB        # Embedding neurons
-key_type = transformer.T_KEY        # Key neurons (Q in attention)
-query_type = transformer.T_QUERY    # Query neurons (K in attention)
+key_type = transformer.T_KEY        # Key neurons (K in attention)
+query_type = transformer.T_QUERY    # Query neurons (Q in attention)
 value_type = transformer.T_VALUE    # Value neurons (V in attention)
 attention_type = transformer.T_SOFTMAX  # Attention/Softmax neurons
 ```
