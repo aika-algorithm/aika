@@ -244,94 +244,9 @@ class TransformerTypeRegistry:
         print("Built concrete MIX DOT-PRODUCT synapses:")
         print("  - VALUE_MIX (secondary): Identity operation, inherits from DOT_SECONDARY")
         print("  - ATTENTION_MIX (primary): Multiplication with PAIR_IN, inherits from DOT_PRIMARY")
-        
-        print("Transformer-specific types built successfully")
-    
-    def _setup_dot_product_fields(self):
-        """Setup dot-product field definitions using abstract DOT types with primary/secondary architecture"""
-        print("Setting up dot-product field definitions...")
-        
-        # ========================================
-        # ABSTRACT DOT-PRODUCT FIELD IMPLEMENTATION
-        # ========================================
-        
-        # Abstract DOT neuron type gets the mathematical implementation
-        # - DOT neurons have NO bias (no inheritance from standard)
-        # - DOT synapses have NO weight (no inheritance from standard)
-        # - Primary synapses: multiplication operation (QUERY_COMP, ATTENTION_MIX)
-        # - Secondary synapses: identity operation (KEY_COMP, VALUE_MIX)
-        
-        print("Implementing abstract DOT-PRODUCT mathematical model...")
-        
-        # ========================================
-        # DOT ACTIVATION FIELDS (ABSTRACT)
-        # ========================================
-        
-        # DOT net field: Sum all pair contributions from primary links  
-        self.dot_net_field = self.T_DOT_ACT.sum("net")
-        
-        # DOT value field: Identity (value = net, no activation function)
-        self.dot_value_field = self.T_DOT_ACT.identity("value")
-        # Connect value = net (identity function)
-        self.dot_value_field.input(self.T_DOT_ACT.SELF, self.dot_net_field, 0)
-        
-        print("Set up abstract DOT activation fields: net (sum) and value (identity)")
-        
-        # ========================================
-        # SECONDARY LINK FIELDS (IDENTITY)
-        # ========================================
-        
-        # Secondary links provide identity operation: output = input_activation.value
-        self.secondary_identity_field = self.L_DOT_SECONDARY.identity("identityOutput")
-        # Connect to input activation's value via INPUT relation
-        self.secondary_identity_field.input(self.L_DOT_SECONDARY.INPUT, self.dot_value_field, 0)
-        
-        print("Set up DOT_SECONDARY link: Identity operation")
-        
-        # ========================================
-        # PRIMARY LINK FIELDS (MULTIPLICATION)
-        # ========================================
-        
-        # Primary links contain multiplication: this.identityOutput × PAIR_IN.identityOutput
-        self.primary_multiplication_field = self.L_DOT_PRIMARY.mul("pairMultiplication")
-        # Input 0: This link's identity output
-        self.primary_multiplication_field.input(self.L_DOT_PRIMARY.SELF, self.secondary_identity_field, 0)
-        # Input 1: Paired secondary link's identity output (via PAIR_IN)
-        self.primary_multiplication_field.input(self.L_DOT_PRIMARY.PAIR_IN, self.secondary_identity_field, 1)
-        
-        print("Set up DOT_PRIMARY link: Multiplication with PAIR_IN relation")
-        
-        # Connect DOT net field to primary multiplication results
-        self.dot_net_field.input(self.T_DOT_ACT.INPUT, self.primary_multiplication_field, 0)
-        
-        print("Connected DOT net field to primary multiplication results")
-        
-        # ========================================
-        # COMPLETED ABSTRACT DOT-PRODUCT IMPLEMENTATION
-        # ========================================
-        
-        # Store field references for access in tests
-        self.dot_fields = {
-            # Abstract DOT fields (inherited by COMP and MIX)
-            'net': self.dot_net_field,
-            'value': self.dot_value_field,
-            'comp_net': self.dot_net_field,      # COMP uses DOT net field
-            'comp_value': self.dot_value_field,  # COMP uses DOT value field  
-            'mix_net': self.dot_net_field,       # MIX uses DOT net field
-            'mix_value': self.dot_value_field,   # MIX uses DOT value field
-            
-            # Link-specific fields
-            'secondary_identity': self.secondary_identity_field,    # KEY_COMP, VALUE_MIX
-            'primary_multiplication': self.primary_multiplication_field, # QUERY_COMP, SOFTMAX_MIX
-            
-            # Compatibility names for tests
-            'key_comp_weighted': self.secondary_identity_field,     # Legacy name
-            'query_comp_mul': self.primary_multiplication_field,   # Legacy name
-            'value_mix_weighted': self.secondary_identity_field,    # Legacy name  
-            'softmax_mix_mul': self.primary_multiplication_field   # Legacy name
-        }
 
-    
+        print("Transformer-specific types built successfully")
+
     def get_registry(self):
         """Return the type registry (includes both standard and transformer types)"""
         return self.registry
