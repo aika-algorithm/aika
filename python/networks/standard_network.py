@@ -103,19 +103,19 @@ class StandardNetworkTypeRegistry:
         print("Connecting field relationships...")
 
         # 1. input_value = input_activation.value (identity)
-        self.input_value_field.input(self.L_STANDARD_INPUT_SIDE.INPUT, self.value_field, 0)
+        self.input_value_field.input(an.LinkType.INPUT, self.value_field, 0)
 
         # 2. weighted_input = input_value × synapse.weight
         # weighted_input connects to input-side's input_value field via SELF relation
-        self.weighted_input.input(self.L_STANDARD_OUTPUT_SIDE.SELF, self.input_value_field, 0)
+        self.weighted_input.input(an.LinkType.SELF, self.input_value_field, 0)
         # weighted_input connects to synapse weight via SYNAPSE relation
-        self.weighted_input.input(self.L_STANDARD_OUTPUT_SIDE.SYNAPSE, self.weight_field, 1)
+        self.weighted_input.input(an.LinkType.SYNAPSE, self.weight_field, 1)
 
         # 3. net = sum of weighted_inputs + neuron.bias
         # net field sums from incoming links via INPUT relation
-        self.net_field.input(self.T_STANDARD_ACTIVATION.INPUT, self.weighted_input, 0)
+        self.net_field.input(an.ActivationType.INPUT, self.weighted_input, 0)
         # net field adds neuron bias via NEURON relation
-        self.net_field.input(self.T_STANDARD_ACTIVATION.NEURON, self.bias_field, 1)
+        self.net_field.input(an.ActivationType.NEURON, self.bias_field, 1)
 
         print("Standard field definitions and connections setup complete")
     

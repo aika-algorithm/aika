@@ -109,12 +109,12 @@ class SoftmaxTypeRegistry:
         # Input synapse output-side: Exponential of input_value
         self.softmax_exponential_field = self.L_SOFTMAX_INPUT_LINK_OUTPUT_SIDE.exp("exponential")
         # Connect to input-side's input_value via SELF relation
-        self.softmax_exponential_field.input(self.L_SOFTMAX_INPUT_LINK_OUTPUT_SIDE.SELF, self.standard_input_value_field, 0)
+        self.softmax_exponential_field.input(an.LinkType.SELF, self.standard_input_value_field, 0)
 
         print("Set up SOFTMAX_INPUT_LINK_OUTPUT_SIDE: Exponential of input_value")
 
         # Connect softmax norm field to exponential fields (sum all exponentials)
-        self.softmax_norm_field.input(self.T_SOFTMAX_ACT.INPUT, self.softmax_exponential_field, 0)
+        self.softmax_norm_field.input(an.ActivationType.INPUT, self.softmax_exponential_field, 0)
 
         # ========================================
         # SOFTMAX_OUTPUT_LINK_INPUT_SIDE FIELDS
@@ -123,9 +123,9 @@ class SoftmaxTypeRegistry:
         # Output synapse input-side: Normalized input_value = exp / norm
         self.softmax_input_value_field = self.L_SOFTMAX_OUTPUT_LINK_INPUT_SIDE.div("input_value")
         # Input 0: Exponential from paired input synapse (via PAIR_IN)
-        self.softmax_input_value_field.input(self.L_SOFTMAX_OUTPUT_LINK_INPUT_SIDE.PAIR_IN, self.softmax_exponential_field, 0)
+        self.softmax_input_value_field.input(an.LinkType.PAIR_IN, self.softmax_exponential_field, 0)
         # Input 1: Norm from softmax activation (via INPUT)
-        self.softmax_input_value_field.input(self.L_SOFTMAX_OUTPUT_LINK_INPUT_SIDE.INPUT, self.softmax_norm_field, 1)
+        self.softmax_input_value_field.input(an.LinkType.INPUT, self.softmax_norm_field, 1)
 
         print("Set up SOFTMAX_OUTPUT_LINK_INPUT_SIDE: Normalized input_value (exp/sum)")
 

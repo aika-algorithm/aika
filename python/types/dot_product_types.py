@@ -105,7 +105,7 @@ class DotProductTypeRegistry:
         # DOT value field: Identity (value = net, no activation function)
         self.dot_value_field = self.T_DOT_ACT.identity("value")
         # Connect value = net (identity function)
-        self.dot_value_field.input(self.T_DOT_ACT.SELF, self.dot_net_field, 0)
+        self.dot_value_field.input(an.ActivationType.SELF, self.dot_net_field, 0)
 
         print("Set up DOT activation fields: net (sum) and value (identity)")
 
@@ -116,7 +116,7 @@ class DotProductTypeRegistry:
         # Secondary output-side provides identity of input_value from input-side
         self.secondary_identity_field = self.L_DOT_SECONDARY_OUTPUT_SIDE.identity("secondary_identity")
         # Connect to input-side's input_value field via SELF relation
-        self.secondary_identity_field.input(self.L_DOT_SECONDARY_OUTPUT_SIDE.SELF, self.standard_input_value_field, 0)
+        self.secondary_identity_field.input(an.LinkType.SELF, self.standard_input_value_field, 0)
 
         print("Set up DOT_SECONDARY_OUTPUT_SIDE link: Identity of input_value")
 
@@ -127,14 +127,14 @@ class DotProductTypeRegistry:
         # Primary output-side multiplies input_value with paired secondary's input_value
         self.primary_multiplication_field = self.L_DOT_PRIMARY_OUTPUT_SIDE.mul("pair_product")
         # Input 0: This link's input_value (via SELF)
-        self.primary_multiplication_field.input(self.L_DOT_PRIMARY_OUTPUT_SIDE.SELF, self.standard_input_value_field, 0)
+        self.primary_multiplication_field.input(an.LinkType.SELF, self.standard_input_value_field, 0)
         # Input 1: Paired secondary link's input_value (via PAIR_IN)
-        self.primary_multiplication_field.input(self.L_DOT_PRIMARY_OUTPUT_SIDE.PAIR_IN, self.standard_input_value_field, 1)
+        self.primary_multiplication_field.input(an.LinkType.PAIR_IN, self.standard_input_value_field, 1)
 
         print("Set up DOT_PRIMARY_OUTPUT_SIDE link: Multiplication with PAIR_IN")
 
         # Connect DOT net field to primary multiplication results
-        self.dot_net_field.input(self.T_DOT_ACT.INPUT, self.primary_multiplication_field, 0)
+        self.dot_net_field.input(an.ActivationType.INPUT, self.primary_multiplication_field, 0)
 
         print("Connected DOT net field to primary multiplication results")
 
