@@ -5,7 +5,7 @@ import aika
 import aika.fields as af
 import aika.network as an
 from python.types.softmax_types import create_softmax_types
-from python.types.standard import create_standard_network_types
+from python.types.standard_types import create_standard_network_types
 
 class SoftmaxTypesTestCase(unittest.TestCase):
     

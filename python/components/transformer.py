@@ -13,7 +13,7 @@ Based on the formal specification in specs/network/transformer.md
 import aika
 import aika.fields as af
 import aika.network as an
-from python.types.standard import create_standard_network_types
+from python.types.standard_types import create_standard_network_types
 from python.types.dot_product_types import create_dot_product_types
 from python.types.softmax_types import create_softmax_types
 
