@@ -22,8 +22,8 @@ public:
     std::string getName() const;
 
     // Builder configuration methods
-    NeuronTypeBuilder& addParent(NeuronType* parentType);
-    std::vector<NeuronType*> getParents() const;
+    NeuronTypeBuilder& setParent(NeuronType* parentType);
+    NeuronType* getParent() const;
     
     // Configure number of binding signal slots
     NeuronTypeBuilder& setNumberOfBSSlots(int numberOfBSSlots);
@@ -37,7 +37,7 @@ private:
     TypeRegistry* registry;
     ActivationType* activationType;
     NeuronType* builtInstance;
-    std::vector<NeuronType*> parentTypes;
+    NeuronType* parentType;
     int numberOfBSSlots;
     bool isBuilt;
 };

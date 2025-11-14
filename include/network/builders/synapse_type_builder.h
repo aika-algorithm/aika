@@ -41,8 +41,11 @@ public:
     SynapseTypeBuilder& addTransition(Transition* transition);
     std::vector<Transition*> getTransitions() const;
 
-    SynapseTypeBuilder& addParent(SynapseType* parentType);
-    std::vector<SynapseType*> getParents() const;
+    SynapseTypeBuilder& setInputSideParent(SynapseType* parentType);
+    SynapseType* getInputSideParent() const;
+
+    SynapseTypeBuilder& setOutputSideParent(SynapseType* parentType);
+    SynapseType* getOutputSideParent() const;
 
     // Build the actual implementation
     SynapseType* build();
@@ -55,7 +58,8 @@ private:
     LinkType* linkType;
     std::vector<PairingConfig> pairingConfigs;
     std::vector<Transition*> transitions;
-    std::vector<SynapseType*> parentTypes;
+    SynapseType* inputSideParentType;
+    SynapseType* outputSideParentType;
     SynapseType* builtInstance;
     bool isBuilt;
 };

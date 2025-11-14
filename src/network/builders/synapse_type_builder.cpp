@@ -6,7 +6,8 @@
 
 SynapseTypeBuilder::SynapseTypeBuilder(TypeRegistry* registry, const std::string& name)
     : registry(registry), name(name), inputType(nullptr), outputType(nullptr), linkType(nullptr),
-      pairingConfigs(), transitions(), parentTypes(), builtInstance(nullptr), isBuilt(false) {
+      pairingConfigs(), transitions(), inputSideParentType(nullptr), outputSideParentType(nullptr),
+      builtInstance(nullptr), isBuilt(false) {
 }
 
 SynapseTypeBuilder::~SynapseTypeBuilder() {
@@ -66,15 +67,26 @@ std::vector<Transition*> SynapseTypeBuilder::getTransitions() const {
     return transitions;
 }
 
-SynapseTypeBuilder& SynapseTypeBuilder::addParent(SynapseType* parentType) {
-    if (parentType && !isBuilt) {
-        parentTypes.push_back(parentType);
+SynapseTypeBuilder& SynapseTypeBuilder::setInputSideParent(SynapseType* parentType) {
+    if (!isBuilt) {
+        this->inputSideParentType = parentType;
     }
     return *this;
 }
 
-std::vector<SynapseType*> SynapseTypeBuilder::getParents() const {
-    return parentTypes;
+SynapseType* SynapseTypeBuilder::getInputSideParent() const {
+    return inputSideParentType;
+}
+
+SynapseTypeBuilder& SynapseTypeBuilder::setOutputSideParent(SynapseType* parentType) {
+    if (!isBuilt) {
+        this->outputSideParentType = parentType;
+    }
+    return *this;
+}
+
+SynapseType* SynapseTypeBuilder::getOutputSideParent() const {
+    return outputSideParentType;
 }
 
 SynapseType* SynapseTypeBuilder::build() {
@@ -187,9 +199,13 @@ SynapseType* SynapseTypeBuilder::build() {
     }
 
     // Set up inheritance hierarchy
-    for (SynapseType* parentType : parentTypes) {
-        builtInstance->addParent(parentType);
-        linkType->addParent(parentType->getLinkType());
+    if (inputSideParentType) {
+        builtInstance->addParent(inputSideParentType);
+        linkType->addParent(inputSideParentType->getLinkType());
+    }
+    if (outputSideParentType) {
+        builtInstance->addParent(outputSideParentType);
+        linkType->addParent(outputSideParentType->getLinkType());
     }
 
     isBuilt = true;

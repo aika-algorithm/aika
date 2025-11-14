@@ -361,8 +361,8 @@ void bind_network(py::module_& m) {
     // Bind Builder classes
     py::class_<NeuronTypeBuilder>(m, "NeuronTypeBuilder")
         .def(py::init<TypeRegistry*, const std::string&>())
-        .def("addParent", &NeuronTypeBuilder::addParent, py::return_value_policy::reference_internal)
-        .def("getParents", &NeuronTypeBuilder::getParents, py::return_value_policy::reference_internal)
+        .def("setParent", &NeuronTypeBuilder::setParent, py::return_value_policy::reference_internal)
+        .def("getParent", &NeuronTypeBuilder::getParent, py::return_value_policy::reference_internal)
         .def("setNumberOfBSSlots", &NeuronTypeBuilder::setNumberOfBSSlots, py::return_value_policy::reference_internal)
         .def("getNumberOfBSSlots", &NeuronTypeBuilder::getNumberOfBSSlots)
         .def("build", &NeuronTypeBuilder::build, py::return_value_policy::reference_internal)
@@ -381,8 +381,10 @@ void bind_network(py::module_& m) {
         .def("getPairingConfigs", &SynapseTypeBuilder::getPairingConfigs)
         .def("addTransition", &SynapseTypeBuilder::addTransition)
         .def("getTransitions", &SynapseTypeBuilder::getTransitions, py::return_value_policy::reference_internal)
-        .def("addParent", &SynapseTypeBuilder::addParent, py::return_value_policy::reference_internal)
-        .def("getParents", &SynapseTypeBuilder::getParents, py::return_value_policy::reference_internal)
+        .def("setInputSideParent", &SynapseTypeBuilder::setInputSideParent, py::return_value_policy::reference_internal)
+        .def("getInputSideParent", &SynapseTypeBuilder::getInputSideParent, py::return_value_policy::reference_internal)
+        .def("setOutputSideParent", &SynapseTypeBuilder::setOutputSideParent, py::return_value_policy::reference_internal)
+        .def("getOutputSideParent", &SynapseTypeBuilder::getOutputSideParent, py::return_value_policy::reference_internal)
         .def("build", &SynapseTypeBuilder::build, py::return_value_policy::reference_internal)
         .def("__str__", [](const SynapseTypeBuilder& sb) {
             return sb.getName();
