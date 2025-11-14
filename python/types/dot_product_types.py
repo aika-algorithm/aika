@@ -51,11 +51,10 @@ class DotProductTypeRegistry:
         # BUILD ABSTRACT DOT-PRODUCT NEURON TYPE
         # ========================================
 
-        # Build T_DOT (abstract dot-product neuron and activation)
+        # Build T_DOT (abstract dot-product neuron)
         # DOT neurons do NOT inherit from standard neurons - no bias, no activation function
         dot_builder = an.NeuronTypeBuilder(self.registry, "DOT_NEURON")
         self.T_DOT = dot_builder.build()
-        self.T_DOT_ACT = self.T_DOT.getActivationType()
 
         print("Built abstract DOT neuron type (no bias, no activation function)")
 
@@ -66,12 +65,10 @@ class DotProductTypeRegistry:
         # Build S_DOT_PRIMARY_OUTPUT_SIDE - provides pair_product field (multiplication)
         dot_primary_output_side_builder = an.SynapseTypeBuilder(self.registry, "DOT_PRIMARY_OUTPUT_SIDE")
         self.S_DOT_PRIMARY_OUTPUT_SIDE = dot_primary_output_side_builder.build()
-        self.L_DOT_PRIMARY_OUTPUT_SIDE = self.S_DOT_PRIMARY_OUTPUT_SIDE.getLinkType()
 
         # Build S_DOT_SECONDARY_OUTPUT_SIDE - provides secondary_identity field
         dot_secondary_output_side_builder = an.SynapseTypeBuilder(self.registry, "DOT_SECONDARY_OUTPUT_SIDE")
         self.S_DOT_SECONDARY_OUTPUT_SIDE = dot_secondary_output_side_builder.build()
-        self.L_DOT_SECONDARY_OUTPUT_SIDE = self.S_DOT_SECONDARY_OUTPUT_SIDE.getLinkType()
 
         print("Built DOT input-side and output-side base types:")
         print("  - DOT_PRIMARY_OUTPUT_SIDE: Contains multiplication operation (no weights)")
@@ -100,10 +97,11 @@ class DotProductTypeRegistry:
         # ========================================
 
         # DOT net field: Sum all pair contributions from primary links
-        self.dot_net_field = self.T_DOT_ACT.sum("net")
+        dot_activation_type = self.T_DOT.getActivationType()
+        self.dot_net_field = dot_activation_type.sum("net")
 
         # DOT value field: Identity (value = net, no activation function)
-        self.dot_value_field = self.T_DOT_ACT.identity("value")
+        self.dot_value_field = dot_activation_type.identity("value")
         # Connect value = net (identity function)
         self.dot_value_field.input(an.ActivationType.SELF, self.dot_net_field, 0)
 
@@ -114,7 +112,8 @@ class DotProductTypeRegistry:
         # ========================================
 
         # Secondary output-side provides identity of input_value from input-side
-        self.secondary_identity_field = self.L_DOT_SECONDARY_OUTPUT_SIDE.identity("secondary_identity")
+        link_type_secondary = self.S_DOT_SECONDARY_OUTPUT_SIDE.getLinkType()
+        self.secondary_identity_field = link_type_secondary.identity("secondary_identity")
         # Connect to input-side's input_value field via SELF relation
         self.secondary_identity_field.input(an.LinkType.SELF, self.standard_input_value_field, 0)
 
@@ -125,7 +124,8 @@ class DotProductTypeRegistry:
         # ========================================
 
         # Primary output-side multiplies input_value with paired secondary's input_value
-        self.primary_multiplication_field = self.L_DOT_PRIMARY_OUTPUT_SIDE.mul("pair_product")
+        link_type_primary = self.S_DOT_PRIMARY_OUTPUT_SIDE.getLinkType()
+        self.primary_multiplication_field = link_type_primary.mul("pair_product")
         # Input 0: This link's input_value (via SELF)
         self.primary_multiplication_field.input(an.LinkType.SELF, self.standard_input_value_field, 0)
         # Input 1: Paired secondary link's input_value (via PAIR_IN)
@@ -160,11 +160,7 @@ class DotProductTypeRegistry:
     def get_dot_neuron_type(self):
         """Get the abstract DOT neuron type"""
         return self.T_DOT
-    
-    def get_dot_activation_type(self):
-        """Get the abstract DOT activation type"""
-        return self.T_DOT_ACT
-    
+
     def get_dot_primary_output_side_type(self):
         """Get the DOT_PRIMARY_OUTPUT_SIDE type"""
         return self.S_DOT_PRIMARY_OUTPUT_SIDE

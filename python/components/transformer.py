@@ -37,7 +37,6 @@ class TransformerTypeRegistry:
 
         # Get standard types for inheritance
         self.T_STANDARD_NEURON = self.standard_network.get_standard_neuron_type()
-        self.T_STANDARD_ACTIVATION = self.standard_network.get_standard_activation_type()
         self.S_STANDARD_INPUT_SIDE = self.standard_network.get_standard_input_side_type()
         self.S_STANDARD_OUTPUT_SIDE = self.standard_network.get_standard_output_side_type()
 
@@ -60,13 +59,11 @@ class TransformerTypeRegistry:
 
         # Get dot-product types for inheritance
         self.T_DOT = self.dot_product_network.get_dot_neuron_type()
-        self.T_DOT_ACT = self.dot_product_network.get_dot_activation_type()
         self.S_DOT_PRIMARY_OUTPUT_SIDE = self.dot_product_network.get_dot_primary_output_side_type()
         self.S_DOT_SECONDARY_OUTPUT_SIDE = self.dot_product_network.get_dot_secondary_output_side_type()
 
         # Get softmax types for inheritance
         self.T_SOFTMAX = self.softmax_network.get_softmax_neuron_type()
-        self.T_SOFTMAX_ACT = self.softmax_network.get_softmax_activation_type()
         self.S_SOFTMAX_INPUT_SYNAPSE_OUTPUT_SIDE = self.softmax_network.get_softmax_input_synapse_output_side_type()
         self.S_SOFTMAX_OUTPUT_SYNAPSE_INPUT_SIDE = self.softmax_network.get_softmax_output_synapse_input_side_type()
         

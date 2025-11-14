@@ -46,10 +46,9 @@ class StandardNetworkTypeRegistry:
         # BUILD BASE STANDARD TYPES
         # ========================================
 
-        # Build T_STANDARD_NEURON and activation (root neuron type)
+        # Build T_STANDARD_NEURON (root neuron type)
         standard_neuron_builder = an.NeuronTypeBuilder(self.registry, "STANDARD_NEURON")
         self.T_STANDARD_NEURON = standard_neuron_builder.build()
-        self.T_STANDARD_ACTIVATION = self.T_STANDARD_NEURON.getActivationType()
 
         # ========================================
         # BUILD INPUT-SIDE AND OUTPUT-SIDE BASE TYPES
@@ -58,12 +57,10 @@ class StandardNetworkTypeRegistry:
         # Build S_STANDARD_INPUT_SIDE - provides input_value field
         standard_input_side_builder = an.SynapseTypeBuilder(self.registry, "STANDARD_INPUT_SIDE")
         self.S_STANDARD_INPUT_SIDE = standard_input_side_builder.build()
-        self.L_STANDARD_INPUT_SIDE = self.S_STANDARD_INPUT_SIDE.getLinkType()
 
         # Build S_STANDARD_OUTPUT_SIDE - provides weighted multiplication
         standard_output_side_builder = an.SynapseTypeBuilder(self.registry, "STANDARD_OUTPUT_SIDE")
         self.S_STANDARD_OUTPUT_SIDE = standard_output_side_builder.build()
-        self.L_STANDARD_OUTPUT_SIDE = self.S_STANDARD_OUTPUT_SIDE.getLinkType()
 
         print("Standard foundation types built successfully")
     
@@ -80,17 +77,19 @@ class StandardNetworkTypeRegistry:
         self.bias_field = self.T_STANDARD_NEURON.inputField("bias")
 
         # Standard activation fields:
-        self.net_field = self.T_STANDARD_ACTIVATION.sum("net")
+        activation_type = self.T_STANDARD_NEURON.getActivationType()
+        self.net_field = activation_type.sum("net")
         tanh_func = af.TanhActivationFunction()
-        self.value_field = self.T_STANDARD_ACTIVATION.fieldActivationFunc("value", tanh_func, 0.001)
-        self.fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
+        self.value_field = activation_type.fieldActivationFunc("value", tanh_func, 0.001)
+        self.fired_field = activation_type.inputField("fired")
 
         # ========================================
         # INPUT-SIDE FIELDS
         # ========================================
 
         # Input-side provides input_value field (identity copy of activation.value)
-        self.input_value_field = self.L_STANDARD_INPUT_SIDE.identity("input_value")
+        link_type_input_side = self.S_STANDARD_INPUT_SIDE.getLinkType()
+        self.input_value_field = link_type_input_side.identity("input_value")
 
         # ========================================
         # OUTPUT-SIDE FIELDS
@@ -100,7 +99,8 @@ class StandardNetworkTypeRegistry:
         self.weight_field = self.S_STANDARD_OUTPUT_SIDE.inputField("weight")
 
         # Output-side link weighted input
-        self.weighted_input = self.L_STANDARD_OUTPUT_SIDE.mul("weighted_input")
+        link_type_output_side = self.S_STANDARD_OUTPUT_SIDE.getLinkType();
+        self.weighted_input = link_type_output_side.mul("weighted_input")
 
         # ========================================
         # ESTABLISH FIELD CONNECTIONS
@@ -131,11 +131,7 @@ class StandardNetworkTypeRegistry:
     def get_standard_neuron_type(self):
         """Return the standard neuron type for inheritance"""
         return self.T_STANDARD_NEURON
-    
-    def get_standard_activation_type(self):
-        """Return the standard activation type for inheritance"""
-        return self.T_STANDARD_ACTIVATION
-    
+
     def get_standard_input_side_type(self):
         """Return the standard input-side synapse type for inheritance"""
         return self.S_STANDARD_INPUT_SIDE
