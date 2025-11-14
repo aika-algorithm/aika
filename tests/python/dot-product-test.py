@@ -3,7 +3,7 @@ import unittest
 import aika
 import aika.fields as af
 import aika.network as an
-from python.networks.transformer import create_transformer_types
+from python.components.transformer import create_transformer_types
 
 class DotProductTestCase(unittest.TestCase):
     

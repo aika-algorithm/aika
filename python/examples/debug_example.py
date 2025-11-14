@@ -13,7 +13,7 @@ import aika.fields as af
 import aika.network as an
 
 from python.utils.aika_debug_utils import AikaDebugger, DebugConfig, DetailLevel, dump_object, quick_dump, verbose_dump
-from python.networks.transformer import create_transformer_types
+from python.components.transformer import create_transformer_types
 
 def example_basic_usage():
     """Example 1: Basic usage with convenience functions"""
