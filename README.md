@@ -1,4 +1,4 @@
-# Aika
+# AIKA
 
 ## Project Status
 
