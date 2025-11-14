@@ -36,34 +36,43 @@ class StandardNetworkTypeRegistry:
     def _build_standard_types(self):
         """Build standard foundational types that other architectures can inherit from."""
         print("Building standard neural network foundation types...")
-        
+
         # ========================================
         # BUILD BASE STANDARD TYPES
         # ========================================
-        
+
         # Build T_STANDARD_NEURON and activation (root neuron type)
         standard_neuron_builder = an.NeuronTypeBuilder(self.registry, "STANDARD_NEURON")
         self.T_STANDARD_NEURON = standard_neuron_builder.build()
         self.T_STANDARD_ACTIVATION = self.T_STANDARD_NEURON.getActivationType()
-        
-        # Build T_STANDARD_SYNAPSE and link (root synapse type)
-        standard_synapse_builder = an.SynapseTypeBuilder(self.registry, "STANDARD_SYNAPSE")
-        self.T_STANDARD_SYNAPSE = standard_synapse_builder.build()
-        self.T_STANDARD_LINK = self.T_STANDARD_SYNAPSE.getLinkType()
-        
+
+        # ========================================
+        # BUILD INPUT-SIDE AND OUTPUT-SIDE BASE TYPES
+        # ========================================
+
+        # Build S_STANDARD_INPUT_SIDE - provides input_value field
+        standard_input_side_builder = an.SynapseTypeBuilder(self.registry, "STANDARD_INPUT_SIDE")
+        self.S_STANDARD_INPUT_SIDE = standard_input_side_builder.build()
+        self.L_STANDARD_INPUT_SIDE = self.S_STANDARD_INPUT_SIDE.getLinkType()
+
+        # Build S_STANDARD_OUTPUT_SIDE - provides weighted multiplication
+        standard_output_side_builder = an.SynapseTypeBuilder(self.registry, "STANDARD_OUTPUT_SIDE")
+        self.S_STANDARD_OUTPUT_SIDE = standard_output_side_builder.build()
+        self.L_STANDARD_OUTPUT_SIDE = self.S_STANDARD_OUTPUT_SIDE.getLinkType()
+
         print("Standard foundation types built successfully")
     
     def _setup_standard_field_definitions(self):
         """Setup standard field definitions that will be inherited by derived types."""
-        
+
         print("Setting up standard field definitions...")
-        
-        # Define foundational fields on standard types (these will be inherited)
+
+        # ========================================
+        # NEURON FIELDS
+        # ========================================
+
         # Neuron bias field
         self.bias_field = self.T_STANDARD_NEURON.inputField("bias")
-        
-        # Standard synapse weight field
-        self.weight_field = self.T_STANDARD_SYNAPSE.inputField("weight")
 
         # Standard activation fields:
         self.net_field = self.T_STANDARD_ACTIVATION.sum("net")
@@ -71,30 +80,43 @@ class StandardNetworkTypeRegistry:
         self.value_field = self.T_STANDARD_ACTIVATION.fieldActivationFunc("value", tanh_func, 0.001)
         self.fired_field = self.T_STANDARD_ACTIVATION.inputField("fired")
 
-        # Standard link weighted input
-        self.weighted_input = self.T_STANDARD_LINK.mul("weightedInput")
-        
+        # ========================================
+        # INPUT-SIDE FIELDS
+        # ========================================
+
+        # Input-side provides input_value field (identity copy of activation.value)
+        self.input_value_field = self.L_STANDARD_INPUT_SIDE.identity("input_value")
+
+        # ========================================
+        # OUTPUT-SIDE FIELDS
+        # ========================================
+
+        # Output-side synapse weight field
+        self.weight_field = self.S_STANDARD_OUTPUT_SIDE.inputField("weight")
+
+        # Output-side link weighted input
+        self.weighted_input = self.L_STANDARD_OUTPUT_SIDE.mul("weighted_input")
+
         # ========================================
         # ESTABLISH FIELD CONNECTIONS
         # ========================================
         print("Connecting field relationships...")
-        
-        # 1. weighted_input = input_activation.value × synapse.weight
-        # weighted_input connects to input activation's value field via INPUT relation
-        self.weighted_input.input(self.T_STANDARD_LINK.INPUT, self.value_field, 0)
-        # weighted_input connects to synapse weight via SYNAPSE relation  
-        self.weighted_input.input(self.T_STANDARD_LINK.SYNAPSE, self.weight_field, 1)
-        
-        # 2. net = sum of weighted_inputs + neuron.bias
+
+        # 1. input_value = input_activation.value (identity)
+        self.input_value_field.input(self.L_STANDARD_INPUT_SIDE.INPUT, self.value_field, 0)
+
+        # 2. weighted_input = input_value × synapse.weight
+        # weighted_input connects to input-side's input_value field via SELF relation
+        self.weighted_input.input(self.L_STANDARD_OUTPUT_SIDE.SELF, self.input_value_field, 0)
+        # weighted_input connects to synapse weight via SYNAPSE relation
+        self.weighted_input.input(self.L_STANDARD_OUTPUT_SIDE.SYNAPSE, self.weight_field, 1)
+
+        # 3. net = sum of weighted_inputs + neuron.bias
         # net field sums from incoming links via INPUT relation
         self.net_field.input(self.T_STANDARD_ACTIVATION.INPUT, self.weighted_input, 0)
         # net field adds neuron bias via NEURON relation
         self.net_field.input(self.T_STANDARD_ACTIVATION.NEURON, self.bias_field, 1)
-        
-        # 3. value = tanh(net)  
-        # FieldActivationFunction might automatically use "net" field as input
-        # Try not connecting it explicitly - let it find the net field automatically
-        
+
         print("Standard field definitions and connections setup complete")
     
     def get_registry(self):
@@ -109,13 +131,13 @@ class StandardNetworkTypeRegistry:
         """Return the standard activation type for inheritance"""
         return self.T_STANDARD_ACTIVATION
     
-    def get_standard_synapse_type(self):
-        """Return the standard synapse type for inheritance"""
-        return self.T_STANDARD_SYNAPSE
-    
-    def get_standard_link_type(self):
-        """Return the standard link type for inheritance"""
-        return self.T_STANDARD_LINK
+    def get_standard_input_side_type(self):
+        """Return the standard input-side synapse type for inheritance"""
+        return self.S_STANDARD_INPUT_SIDE
+
+    def get_standard_output_side_type(self):
+        """Return the standard output-side synapse type for inheritance"""
+        return self.S_STANDARD_OUTPUT_SIDE
 
 def create_standard_network_types():
     """Factory function to create and return the standard network type registry"""
