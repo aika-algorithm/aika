@@ -62,17 +62,17 @@ class DotProductTypeRegistry:
         # BUILD DOT-PRODUCT INPUT-SIDE AND OUTPUT-SIDE BASE TYPES
         # ========================================
 
-        # Build S_DOT_PRIMARY_OUTPUT_SIDE - provides pair_product field (multiplication)
-        dot_primary_output_side_builder = an.SynapseTypeBuilder(self.registry, "DOT_PRIMARY_OUTPUT_SIDE")
-        self.S_DOT_PRIMARY_OUTPUT_SIDE = dot_primary_output_side_builder.build()
+        # Build S_DOT_PRIMARY - provides pair_product field (multiplication)
+        dot_primary_builder = an.SynapseTypeBuilder(self.registry, "DOT_PRIMARY")
+        self.S_DOT_PRIMARY = dot_primary_builder.build()
 
-        # Build S_DOT_SECONDARY_OUTPUT_SIDE - provides secondary_identity field
-        dot_secondary_output_side_builder = an.SynapseTypeBuilder(self.registry, "DOT_SECONDARY_OUTPUT_SIDE")
-        self.S_DOT_SECONDARY_OUTPUT_SIDE = dot_secondary_output_side_builder.build()
+        # Build S_DOT_SECONDARY - provides secondary_identity field
+        dot_secondary_builder = an.SynapseTypeBuilder(self.registry, "DOT_SECONDARY")
+        self.S_DOT_SECONDARY = dot_secondary_builder.build()
 
         print("Built DOT input-side and output-side base types:")
-        print("  - DOT_PRIMARY_OUTPUT_SIDE: Contains multiplication operation (no weights)")
-        print("  - DOT_SECONDARY_OUTPUT_SIDE: Contains identity operation (no weights)")
+        print("  - DOT_PRIMARY: Contains multiplication operation (no weights)")
+        print("  - DOT_SECONDARY: Contains identity operation (no weights)")
         print("  - Note: Both use standard input-side for input_value field")
 
         print("Dot-product neural network types built successfully")
@@ -108,30 +108,30 @@ class DotProductTypeRegistry:
         print("Set up DOT activation fields: net (sum) and value (identity)")
 
         # ========================================
-        # DOT_SECONDARY_OUTPUT_SIDE LINK FIELDS (IDENTITY)
+        # DOT_SECONDARY LINK FIELDS (IDENTITY)
         # ========================================
 
         # Secondary output-side provides identity of input_value from input-side
-        link_type_secondary = self.S_DOT_SECONDARY_OUTPUT_SIDE.getLinkType()
+        link_type_secondary = self.S_DOT_SECONDARY.getLinkType()
         self.secondary_identity_field = link_type_secondary.identity("secondary_identity")
         # Connect to input-side's input_value field via SELF relation
         self.secondary_identity_field.input(an.LinkType.SELF, self.standard_input_value_field, 0)
 
-        print("Set up DOT_SECONDARY_OUTPUT_SIDE link: Identity of input_value")
+        print("Set up DOT_SECONDARY link: Identity of input_value")
 
         # ========================================
-        # DOT_PRIMARY_OUTPUT_SIDE LINK FIELDS (MULTIPLICATION)
+        # DOT_PRIMARY LINK FIELDS (MULTIPLICATION)
         # ========================================
 
         # Primary output-side multiplies input_value with paired secondary's input_value
-        link_type_primary = self.S_DOT_PRIMARY_OUTPUT_SIDE.getLinkType()
+        link_type_primary = self.S_DOT_PRIMARY.getLinkType()
         self.primary_multiplication_field = link_type_primary.mul("pair_product")
         # Input 0: This link's input_value (via SELF)
         self.primary_multiplication_field.input(an.LinkType.SELF, self.standard_input_value_field, 0)
         # Input 1: Paired secondary link's input_value (via PAIR_IN)
         self.primary_multiplication_field.input(an.LinkType.PAIR_IN, self.standard_input_value_field, 1)
 
-        print("Set up DOT_PRIMARY_OUTPUT_SIDE link: Multiplication with PAIR_IN")
+        print("Set up DOT_PRIMARY link: Multiplication with PAIR_IN")
 
         # Connect DOT net field to primary multiplication results
         self.dot_net_field.input(an.ActivationType.INPUT, self.primary_multiplication_field, 0)
@@ -161,13 +161,13 @@ class DotProductTypeRegistry:
         """Get the abstract DOT neuron type"""
         return self.T_DOT
 
-    def get_dot_primary_output_side_type(self):
-        """Get the DOT_PRIMARY_OUTPUT_SIDE type"""
-        return self.S_DOT_PRIMARY_OUTPUT_SIDE
+    def get_dot_primary_type(self):
+        """Get the DOT_PRIMARY type"""
+        return self.S_DOT_PRIMARY
 
-    def get_dot_secondary_output_side_type(self):
-        """Get the DOT_SECONDARY_OUTPUT_SIDE type"""
-        return self.S_DOT_SECONDARY_OUTPUT_SIDE
+    def get_dot_secondary_type(self):
+        """Get the DOT_SECONDARY type"""
+        return self.S_DOT_SECONDARY
 
     def get_dot_product_fields(self):
         """Get the dot-product field definitions"""

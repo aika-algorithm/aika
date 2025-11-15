@@ -37,8 +37,8 @@ class TransformerTypeRegistry:
 
         # Get standard types for inheritance
         self.T_STANDARD_NEURON = self.standard_network.get_standard_neuron_type()
-        self.S_STANDARD_INPUT_SIDE = self.standard_network.get_standard_input_side_type()
-        self.S_STANDARD_OUTPUT_SIDE = self.standard_network.get_standard_output_side_type()
+        self.S_STANDARD_INPUT = self.standard_network.get_standard_input_type()
+        self.S_STANDARD_OUTPUT = self.standard_network.get_standard_output_type()
 
 
         # Create the dot-product foundation using the shared registry
@@ -59,13 +59,13 @@ class TransformerTypeRegistry:
 
         # Get dot-product types for inheritance
         self.T_DOT = self.dot_product_network.get_dot_neuron_type()
-        self.S_DOT_PRIMARY_OUTPUT_SIDE = self.dot_product_network.get_dot_primary_output_side_type()
-        self.S_DOT_SECONDARY_OUTPUT_SIDE = self.dot_product_network.get_dot_secondary_output_side_type()
+        self.S_DOT_PRIMARY = self.dot_product_network.get_dot_primary_type()
+        self.S_DOT_SECONDARY = self.dot_product_network.get_dot_secondary_type()
 
         # Get softmax types for inheritance
         self.T_SOFTMAX = self.softmax_network.get_softmax_neuron_type()
-        self.S_SOFTMAX_INPUT_SYNAPSE_OUTPUT_SIDE = self.softmax_network.get_softmax_input_synapse_output_side_type()
-        self.S_SOFTMAX_OUTPUT_SYNAPSE_INPUT_SIDE = self.softmax_network.get_softmax_output_synapse_input_side_type()
+        self.S_SOFTMAX_INPUT = self.softmax_network.get_softmax_input_type()
+        self.S_SOFTMAX_OUTPUT = self.softmax_network.get_softmax_output_type()
         
         # Build transformer-specific concrete types
         self._build_transformer_types()
@@ -164,22 +164,22 @@ class TransformerTypeRegistry:
         # Build S_EMB_KEY (embedding to key synapse)
         emb_key_builder = an.SynapseTypeBuilder(self.registry, "S_EMB_KEY")
         emb_key_builder.setInput(self.T_EMB).setOutput(self.T_KEY)
-        emb_key_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
-        emb_key_builder.setOutputSideParent(self.S_STANDARD_OUTPUT_SIDE)
+        emb_key_builder.setInputSideParent(self.S_STANDARD_INPUT)
+        emb_key_builder.setOutputSideParent(self.S_STANDARD_OUTPUT)
         self.S_EMB_KEY = emb_key_builder.build()
 
         # Build S_EMB_QUERY (embedding to query synapse)
         emb_query_builder = an.SynapseTypeBuilder(self.registry, "S_EMB_QUERY")
         emb_query_builder.setInput(self.T_EMB).setOutput(self.T_QUERY)
-        emb_query_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
-        emb_query_builder.setOutputSideParent(self.S_STANDARD_OUTPUT_SIDE)
+        emb_query_builder.setInputSideParent(self.S_STANDARD_INPUT)
+        emb_query_builder.setOutputSideParent(self.S_STANDARD_OUTPUT)
         self.S_EMB_QUERY = emb_query_builder.build()
 
         # Build S_EMB_VALUE (embedding to value synapse)
         emb_value_builder = an.SynapseTypeBuilder(self.registry, "S_EMB_VALUE")
         emb_value_builder.setInput(self.T_EMB).setOutput(self.T_VALUE)
-        emb_value_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
-        emb_value_builder.setOutputSideParent(self.S_STANDARD_OUTPUT_SIDE)
+        emb_value_builder.setInputSideParent(self.S_STANDARD_INPUT)
+        emb_value_builder.setOutputSideParent(self.S_STANDARD_OUTPUT)
         self.S_EMB_VALUE = emb_value_builder.build()
 
         # ========================================
@@ -189,38 +189,38 @@ class TransformerTypeRegistry:
         # Build concrete KEY_COMP and QUERY_COMP synapses (inherit from abstract DOT types)
         key_comp_builder = an.SynapseTypeBuilder(self.registry, "S_KEY_COMP")
         key_comp_builder.setInput(self.T_KEY).setOutput(self.T_COMP)
-        key_comp_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
-        key_comp_builder.setOutputSideParent(self.S_DOT_SECONDARY_OUTPUT_SIDE)
+        key_comp_builder.setInputSideParent(self.S_STANDARD_INPUT)
+        key_comp_builder.setOutputSideParent(self.S_DOT_SECONDARY)
         self.S_KEY_COMP = key_comp_builder.build()
 
         query_comp_builder = an.SynapseTypeBuilder(self.registry, "S_QUERY_COMP")
         query_comp_builder.setInput(self.T_QUERY).setOutput(self.T_COMP)
-        query_comp_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
-        query_comp_builder.setOutputSideParent(self.S_DOT_PRIMARY_OUTPUT_SIDE)
+        query_comp_builder.setInputSideParent(self.S_STANDARD_INPUT)
+        query_comp_builder.setOutputSideParent(self.S_DOT_PRIMARY)
         self.S_QUERY_COMP = query_comp_builder.build()
 
         print("Built concrete DOT-PRODUCT synapses:")
-        print("  - KEY_COMP (secondary): Standard input-side + DOT_SECONDARY output-side")
-        print("  - QUERY_COMP (primary): Standard input-side + DOT_PRIMARY output-side")
+        print("  - KEY_COMP (secondary): Standard input-side + DOT_SECONDARY")
+        print("  - QUERY_COMP (primary): Standard input-side + DOT_PRIMARY")
 
         # Build S_COMP_ATTENTION (comparison to attention synapse)
         comp_attention_builder = an.SynapseTypeBuilder(self.registry, "S_COMP_ATTENTION")
         comp_attention_builder.setInput(self.T_COMP).setOutput(self.T_ATTENTION)
-        comp_attention_builder.setInputSideParent(self.S_STANDARD_INPUT_SIDE)
-        comp_attention_builder.setOutputSideParent(self.S_SOFTMAX_INPUT_SYNAPSE_OUTPUT_SIDE)
+        comp_attention_builder.setInputSideParent(self.S_STANDARD_INPUT)
+        comp_attention_builder.setOutputSideParent(self.S_SOFTMAX_INPUT)
         self.S_COMP_ATTENTION = comp_attention_builder.build()
 
         # Build MIX dot-product synapses (inherit from abstract DOT types)
         value_mix_builder = an.SynapseTypeBuilder(self.registry, "S_VALUE_MIX")
         value_mix_builder.setInput(self.T_VALUE).setOutput(self.T_MIX)
-        value_mix_builder.setInputSideParent(self.S_SOFTMAX_OUTPUT_SYNAPSE_INPUT_SIDE)
-        value_mix_builder.setOutputSideParent(self.S_DOT_SECONDARY_OUTPUT_SIDE)
+        value_mix_builder.setInputSideParent(self.S_SOFTMAX_OUTPUT)
+        value_mix_builder.setOutputSideParent(self.S_DOT_SECONDARY)
         self.S_VALUE_MIX = value_mix_builder.build()
 
         attention_mix_builder = an.SynapseTypeBuilder(self.registry, "S_ATTENTION_MIX")
         attention_mix_builder.setInput(self.T_ATTENTION).setOutput(self.T_MIX)
-        attention_mix_builder.setInputSideParent(self.S_SOFTMAX_OUTPUT_SYNAPSE_INPUT_SIDE)
-        attention_mix_builder.setOutputSideParent(self.S_DOT_PRIMARY_OUTPUT_SIDE)
+        attention_mix_builder.setInputSideParent(self.S_SOFTMAX_OUTPUT)
+        attention_mix_builder.setOutputSideParent(self.S_DOT_PRIMARY)
         self.S_ATTENTION_MIX = attention_mix_builder.build()
         
         print("Built concrete MIX DOT-PRODUCT synapses:")

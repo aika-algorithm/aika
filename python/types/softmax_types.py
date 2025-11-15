@@ -61,16 +61,16 @@ class SoftmaxTypeRegistry:
         # BUILD SOFTMAX INPUT-SIDE AND OUTPUT-SIDE BASE TYPES
         # ========================================
 
-        # Build S_SOFTMAX_INPUT_SYNAPSE_OUTPUT_SIDE - output-side of input synapse, provides exponential field
-        softmax_input_synapse_output_side_builder = an.SynapseTypeBuilder(self.registry, "SOFTMAX_OUTPUT_SIDE")
-        self.S_SOFTMAX_INPUT_SYNAPSE_OUTPUT_SIDE = softmax_input_synapse_output_side_builder.build()
+        # Build S_SOFTMAX_INPUT - output-side of input synapse, provides exponential field
+        softmax_input_builder = an.SynapseTypeBuilder(self.registry, "SOFTMAX_INPUT")
+        self.S_SOFTMAX_INPUT = softmax_input_builder.build()
 
-        # Build S_SOFTMAX_OUTPUT_SYNAPSE_INPUT_SIDE - input-side of output synapse, provides normalized input_value via division
-        softmax_output_synapse_input_side_builder = an.SynapseTypeBuilder(self.registry, "SOFTMAX_INPUT_SIDE")
-        self.S_SOFTMAX_OUTPUT_SYNAPSE_INPUT_SIDE = softmax_output_synapse_input_side_builder.build()
+        # Build S_SOFTMAX_OUTPUT - input-side of output synapse, provides normalized input_value via division
+        softmax_output_builder = an.SynapseTypeBuilder(self.registry, "SOFTMAX_OUTPUT")
+        self.S_SOFTMAX_OUTPUT = softmax_output_builder.build()
 
         print("Built SOFTMAX input-side and output-side base types:")
-        print("  - SOFTMAX_INPUT_LINK_OUTPUT_SIDE: Exponential operation (no weights)")
+        print("  - SOFTMAX_INPUT: Exponential operation (no weights)")
         print("  - SOFTMAX_OUTPUT_LINK_OUTPUT_SIDE: Provides normalized input_value via division (no weights)")
         print("  - Note: Input synapse uses standard input-side for input_value field")
 
@@ -101,33 +101,33 @@ class SoftmaxTypeRegistry:
         print("Set up SOFTMAX activation field: norm (sum of exponentials)")
 
         # ========================================
-        # SOFTMAX_INPUT_LINK_OUTPUT_SIDE FIELDS
+        # SOFTMAX_INPUT FIELDS
         # ========================================
 
         # Input synapse output-side: Exponential of input_value
-        link_type_input = self.S_SOFTMAX_INPUT_SYNAPSE_OUTPUT_SIDE.getLinkType()
+        link_type_input = self.S_SOFTMAX_INPUT.getLinkType()
         self.softmax_exponential_field = link_type_input.exp("exponential")
         # Connect to input-side's input_value via SELF relation
         self.softmax_exponential_field.input(an.LinkType.SELF, self.standard_input_value_field, 0)
 
-        print("Set up SOFTMAX_INPUT_LINK_OUTPUT_SIDE: Exponential of input_value")
+        print("Set up SOFTMAX_INPUT: Exponential of input_value")
 
         # Connect softmax norm field to exponential fields (sum all exponentials)
         self.softmax_norm_field.input(an.ActivationType.INPUT, self.softmax_exponential_field, 0)
 
         # ========================================
-        # SOFTMAX_OUTPUT_LINK_INPUT_SIDE FIELDS
+        # SOFTMAX_OUTPUT FIELDS
         # ========================================
 
         # Output synapse input-side: Normalized input_value = exp / norm
-        link_type_output = self.S_SOFTMAX_OUTPUT_SYNAPSE_INPUT_SIDE.getLinkType()
+        link_type_output = self.S_SOFTMAX_OUTPUT.getLinkType()
         self.softmax_input_value_field = link_type_output.div("input_value")
         # Input 0: Exponential from paired input synapse (via PAIR_IN)
         self.softmax_input_value_field.input(an.LinkType.PAIR_IN, self.softmax_exponential_field, 0)
         # Input 1: Norm from softmax activation (via INPUT)
         self.softmax_input_value_field.input(an.LinkType.INPUT, self.softmax_norm_field, 1)
 
-        print("Set up SOFTMAX_OUTPUT_LINK_INPUT_SIDE: Normalized input_value (exp/sum)")
+        print("Set up SOFTMAX_OUTPUT: Normalized input_value (exp/sum)")
 
         # ========================================
         # COMPLETED SOFTMAX IMPLEMENTATION
@@ -151,13 +151,13 @@ class SoftmaxTypeRegistry:
         """Get the abstract SOFTMAX neuron type"""
         return self.T_SOFTMAX
 
-    def get_softmax_input_synapse_output_side_type(self):
-        """Get the SOFTMAX_INPUT_SYNAPSE_OUTPUT_SIDE type"""
-        return self.S_SOFTMAX_INPUT_SYNAPSE_OUTPUT_SIDE
+    def get_softmax_input_type(self):
+        """Get the SOFTMAX_INPUT type"""
+        return self.S_SOFTMAX_INPUT
 
-    def get_softmax_output_synapse_input_side_type(self):
-        """Get the SOFTMAX_OUTPUT_SYNAPSE_INPUT_SIDE type"""
-        return self.S_SOFTMAX_OUTPUT_SYNAPSE_INPUT_SIDE
+    def get_softmax_output_type(self):
+        """Get the SOFTMAX_OUTPUT type"""
+        return self.S_SOFTMAX_OUTPUT
 
     def get_softmax_fields(self):
         """Get the softmax field definitions"""

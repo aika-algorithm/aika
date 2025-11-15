@@ -7,8 +7,8 @@ these define the basic building blocks that can be composed to create concrete n
 
 Standard types include:
 - STANDARD_NEURON with bias and tanh activation
-- STANDARD_INPUT_SIDE providing the universal input_value interface
-- STANDARD_OUTPUT_SIDE providing weighted multiplication
+- STANDARD_INPUT providing the universal input_value interface
+- STANDARD_OUTPUT providing weighted multiplication
 
 These base types serve as foundations for more specialized architectures like transformers.
 """
@@ -54,13 +54,13 @@ class StandardNetworkTypeRegistry:
         # BUILD INPUT-SIDE AND OUTPUT-SIDE BASE TYPES
         # ========================================
 
-        # Build S_STANDARD_INPUT_SIDE - provides input_value field
-        standard_input_side_builder = an.SynapseTypeBuilder(self.registry, "STANDARD_INPUT_SIDE")
-        self.S_STANDARD_INPUT_SIDE = standard_input_side_builder.build()
+        # Build S_STANDARD_INPUT - provides input_value field
+        standard_input_builder = an.SynapseTypeBuilder(self.registry, "STANDARD_INPUT")
+        self.S_STANDARD_INPUT = standard_input_builder.build()
 
-        # Build S_STANDARD_OUTPUT_SIDE - provides weighted multiplication
-        standard_output_side_builder = an.SynapseTypeBuilder(self.registry, "STANDARD_OUTPUT_SIDE")
-        self.S_STANDARD_OUTPUT_SIDE = standard_output_side_builder.build()
+        # Build S_STANDARD_OUTPUT - provides weighted multiplication
+        standard_output_builder = an.SynapseTypeBuilder(self.registry, "STANDARD_OUTPUT")
+        self.S_STANDARD_OUTPUT = standard_output_builder.build()
 
         print("Standard foundation types built successfully")
     
@@ -88,19 +88,19 @@ class StandardNetworkTypeRegistry:
         # ========================================
 
         # Input-side provides input_value field (identity copy of activation.value)
-        link_type_input_side = self.S_STANDARD_INPUT_SIDE.getLinkType()
-        self.input_value_field = link_type_input_side.identity("input_value")
+        link_type_input = self.S_STANDARD_INPUT.getLinkType()
+        self.input_value_field = link_type_input.identity("input_value")
 
         # ========================================
         # OUTPUT-SIDE FIELDS
         # ========================================
 
         # Output-side synapse weight field
-        self.weight_field = self.S_STANDARD_OUTPUT_SIDE.inputField("weight")
+        self.weight_field = self.S_STANDARD_OUTPUT.inputField("weight")
 
         # Output-side link weighted input
-        link_type_output_side = self.S_STANDARD_OUTPUT_SIDE.getLinkType();
-        self.weighted_input = link_type_output_side.mul("weighted_input")
+        link_type_output = self.S_STANDARD_OUTPUT.getLinkType();
+        self.weighted_input = link_type_output.mul("weighted_input")
 
         # ========================================
         # ESTABLISH FIELD CONNECTIONS
@@ -132,13 +132,13 @@ class StandardNetworkTypeRegistry:
         """Return the standard neuron type for inheritance"""
         return self.T_STANDARD_NEURON
 
-    def get_standard_input_side_type(self):
+    def get_standard_input_type(self):
         """Return the standard input-side synapse type for inheritance"""
-        return self.S_STANDARD_INPUT_SIDE
+        return self.S_STANDARD_INPUT
 
-    def get_standard_output_side_type(self):
+    def get_standard_output_type(self):
         """Return the standard output-side synapse type for inheritance"""
-        return self.S_STANDARD_OUTPUT_SIDE
+        return self.S_STANDARD_OUTPUT
 
 def create_standard_network_types():
     """Factory function to create and return the standard network type registry"""
