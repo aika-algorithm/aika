@@ -10,6 +10,7 @@
 #include "fields/type_registry.h"
 #include "fields/input_field.h"
 #include "fields/identity_field.h"
+#include "fields/proxy_field.h"
 #include "fields/subtraction.h"
 #include "fields/test_type.h"
 #include "fields/test_object.h"
@@ -122,6 +123,15 @@ void bind_fields(py::module_& m) {
             });
 
       py::class_<IdentityField, AbstractFunctionDefinition>(m, "IdentityField");
+
+      py::class_<ProxyField, FieldDefinition>(m, "ProxyField")
+            .def(py::init<Type*, const std::string&, FieldDefinition*>())
+            .def("getTargetField", &ProxyField::getTargetField, py::return_value_policy::reference_internal)
+            .def("setTargetField", &ProxyField::setTargetField)
+            .def("isProxy", &ProxyField::isProxy)
+            .def("__str__", [](const ProxyField &f) {
+                  return f.toString();
+            });
 
       py::class_<Type>(m, "Type")
             .def(py::init<TypeRegistry*, const std::string&>())

@@ -14,6 +14,7 @@
 #include "fields/utils.h"
 #include "fields/queue_interceptor.h"
 #include "fields/null_terminated_array.h"
+#include "fields/proxy_field.h"
 
 
 /**
@@ -45,11 +46,14 @@ FlattenedType::FlattenedType(Direction* dir, Type* type, const std::map<FieldDef
 
 /**
  * @brief Creates a flattened type for input direction
- * 
+ *
  * This function creates a flattened type representation for the input direction.
  * It takes a type and a set of field definitions, and maps the field definitions
  * to their corresponding indices in the flattened type.
- * 
+ *
+ * ProxyFields are excluded from the input side flattening map. They act as aliases
+ * to their target fields and should not have their own input indices.
+ *
  * @param type The type to flatten
  * @param fieldDefs The set of field definitions to include in the flattened type
  * @return A new FlattenedType object representing the input flattened type
@@ -59,6 +63,11 @@ FlattenedType* FlattenedType::createInputFlattenedType(Type* type, const std::se
 
     std::vector<FieldDefinition*> requiredFields;
     for (const auto& fd : fieldDefs) {
+        // Skip proxy fields - they don't appear in the input side map
+        if (fd->isProxy()) {
+            continue;
+        }
+
         if (fd->isFieldRequired(fieldDefs)) {
             requiredFields.push_back(fd);
         }
@@ -73,11 +82,14 @@ FlattenedType* FlattenedType::createInputFlattenedType(Type* type, const std::se
 
 /**
  * @brief Creates a flattened type for output direction
- * 
+ *
  * This function creates a flattened type representation for the output direction.
  * It takes a type and a set of field definitions, and maps the field definitions
- * to their corresponding indices in the flattened type.    
- * 
+ * to their corresponding indices in the flattened type.
+ *
+ * ProxyFields are mapped to their target field's index, enabling field merging
+ * across multiple inheritance hierarchies.
+ *
  * @param type The type to flatten
  * @param fieldDefs The set of field definitions to include in the flattened type
  * @param inputSide The flattened type of the input side
@@ -86,7 +98,18 @@ FlattenedType* FlattenedType::createInputFlattenedType(Type* type, const std::se
 FlattenedType* FlattenedType::createOutputFlattenedType(Type* type, const std::set<FieldDefinition*>& fieldDefs, FlattenedType* inputSide) {
     std::map<FieldDefinition*, int> fieldMappings;
     for (const auto& fd : fieldDefs) {
-        auto resolvedFD = fd->resolveInheritedFieldDefinition(fieldDefs);
+        FieldDefinition* resolvedFD;
+
+        // Check if this is a proxy field
+        if (fd->isProxy()) {
+            // For proxy fields, resolve to the target field first
+            ProxyField* proxyField = static_cast<ProxyField*>(fd);
+            resolvedFD = proxyField->getTargetField()->resolveInheritedFieldDefinition(fieldDefs);
+        } else {
+            // For regular fields, resolve inheritance as usual
+            resolvedFD = fd->resolveInheritedFieldDefinition(fieldDefs);
+        }
+
         short fieldIndex = inputSide->fields[resolvedFD->getId()];
         fieldMappings[fd] = fieldIndex;
     }

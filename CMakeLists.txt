@@ -77,6 +77,7 @@ set(CORE_SOURCES
         src/fields/abstract_function_definition.cpp
         src/fields/input_field.cpp
         src/fields/identity_field.cpp
+        src/fields/proxy_field.cpp
         src/fields/addition.cpp
         src/fields/subtraction.cpp
         src/fields/multiplication.cpp
