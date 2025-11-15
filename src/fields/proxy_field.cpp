@@ -22,11 +22,6 @@ void ProxyField::setTargetField(FieldDefinition* target) {
     targetField = target;
 }
 
-// Check if this is a proxy field
-bool ProxyField::isProxy() const {
-    return true;
-}
-
 // Transmit update by forwarding to the target field
 void ProxyField::transmit(Field* field, FieldLinkDefinition* fieldLink, double update) {
     // Forward the transmit call to the target field definition

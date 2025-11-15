@@ -1,4 +1,5 @@
 #include "fields/multiplication.h"
+#include "fields/field_link_definition.h"
 
 // Constructor
 Multiplication::Multiplication(Type* ref, const std::string& name)

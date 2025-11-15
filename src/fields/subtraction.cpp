@@ -1,4 +1,5 @@
 #include "fields/subtraction.h"
+#include "fields/field_link_definition.h"
 
 
 // Constructor

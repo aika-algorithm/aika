@@ -1,4 +1,5 @@
 #include "fields/exponential_function.h"
+#include "fields/field_link_definition.h"
 #include <cmath>
 
 // Constructor

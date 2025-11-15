@@ -1,4 +1,5 @@
 #include "fields/division.h"
+#include "fields/field_link_definition.h"
 
 // Constructor
 Division::Division(Type* ref, const std::string& name)

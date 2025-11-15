@@ -11,6 +11,7 @@
 #include "fields/step.h"
 #include "fields/field_update.h"
 #include "fields/queue_interceptor.h"
+#include "fields/field.h"
 
 /**
  * @brief Constructs a new QueueInterceptor instance.

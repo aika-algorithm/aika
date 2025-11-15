@@ -60,12 +60,6 @@ public:
     void setTargetField(FieldDefinition* target);
 
     /**
-     * @brief Checks if this is a proxy field
-     * @return Always returns true for ProxyField instances
-     */
-    bool isProxy() const override;
-
-    /**
      * @brief Transmits an update by forwarding to the target field
      *
      * This method forwards the transmission to the target field, ensuring

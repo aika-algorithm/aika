@@ -15,6 +15,9 @@
 #include "fields/field.h"
 #include "fields/object.h"
 #include "fields/field_definition.h"
+#include "fields/field_link_definition.h"
+#include "fields/relation.h"
+#include "fields/direction.h"
 #include "fields/queue_interceptor.h"
 
 /**
@@ -171,12 +174,33 @@ void Field::triggerUpdate(double u) {
 
 /**
  * @brief Propagates the current update to connected fields
- * 
- * Follows the output links in the flattened type to propagate
- * the update to connected fields, then finalizes the update.
+ *
+ * Propagates updates by following output field links at runtime.
+ * Relations are resolved dynamically during propagation.
  */
 void Field::propagateUpdate() {
-    object->getType()->getFlattenedTypeOutputSide()->followLinks(this);
+    // Get output field links from the field definition
+    auto outputLinks = fieldDefinition->getOutputs();
+
+    // For each output link, follow the relation and transmit
+    for (auto* fieldLink : outputLinks) {
+        Relation* relation = fieldLink->getRelation();
+
+        // Follow the relation to get related objects
+        auto iterable = relation->followMany(object);
+        auto it = iterable->iterator();
+
+        while (it->hasNext()) {
+            Object* relatedObj = it->next();
+
+            // Transmit the update to the related field
+            Direction::OUTPUT->transmit(this, fieldLink, relatedObj);
+        }
+
+        delete it;
+        delete iterable;
+    }
+
     value = updatedValue;
     withinUpdate = false;
 }

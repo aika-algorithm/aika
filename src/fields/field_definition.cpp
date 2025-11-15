@@ -14,6 +14,8 @@
 #include "fields/field.h"
 #include "fields/field_definition.h"
 #include "fields/field_link_definition.h"
+#include "fields/relation.h"
+#include "fields/direction.h"
 #include "fields/object.h"
 
 /**
@@ -142,13 +144,34 @@ FieldDefinition* FieldDefinition::resolveInheritedFieldDefinition(const std::set
 
 /**
  * @brief Initializes a field instance based on this definition
- * 
- * Sets up the field's connections by following the flattened type's input links.
- * 
+ *
+ * Sets up the field's connections by following input field links at runtime.
+ * Relations are resolved dynamically.
+ *
  * @param field The field to initialize
  */
 void FieldDefinition::initializeField(Field* field) {
-    field->getObject()->getType()->getFlattenedTypeInputSide()->followLinks(field);
+    // Get input field links from this field definition
+    auto inputLinks = getInputs();
+
+    // For each input link, follow the relation and connect
+    for (auto* fieldLink : inputLinks) {
+        Relation* relation = fieldLink->getRelation();
+
+        // Follow the relation to get related objects
+        auto iterable = relation->followMany(field->getObject());
+        auto it = iterable->iterator();
+
+        while (it->hasNext()) {
+            Object* relatedObj = it->next();
+
+            // Connect to the related field via the input direction
+            Direction::INPUT->transmit(field, fieldLink, relatedObj);
+        }
+
+        delete it;
+        delete iterable;
+    }
 }
 
 /**

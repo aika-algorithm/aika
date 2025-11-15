@@ -5,6 +5,8 @@
 
 #include "fields/object.h"
 #include "fields/type.h"
+#include "fields/field.h"
+#include "fields/field_link_definition.h"
 
 Object::Object(Type* type) : type(type) {
     if (type != nullptr) {

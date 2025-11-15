@@ -14,7 +14,6 @@
 #include "fields/utils.h"
 #include "fields/queue_interceptor.h"
 #include "fields/null_terminated_array.h"
-#include "fields/proxy_field.h"
 
 
 /**
@@ -48,11 +47,8 @@ FlattenedType::FlattenedType(Direction* dir, Type* type, const std::map<FieldDef
  * @brief Creates a flattened type for input direction
  *
  * This function creates a flattened type representation for the input direction.
- * It takes a type and a set of field definitions, and maps the field definitions
- * to their corresponding indices in the flattened type.
- *
- * ProxyFields are excluded from the input side flattening map. They act as aliases
- * to their target fields and should not have their own input indices.
+ * A field definition is included only if it has input field links.
+ * ProxyFields never have input links and thus are excluded from the input map.
  *
  * @param type The type to flatten
  * @param fieldDefs The set of field definitions to include in the flattened type
@@ -61,34 +57,35 @@ FlattenedType::FlattenedType(Direction* dir, Type* type, const std::map<FieldDef
 FlattenedType* FlattenedType::createInputFlattenedType(Type* type, const std::set<FieldDefinition*>& fieldDefs) {
     std::map<FieldDefinition*, int> fieldMappings;
 
-    std::vector<FieldDefinition*> requiredFields;
+    // Collect field definitions that have input links
+    std::vector<FieldDefinition*> fieldsWithInputs;
     for (const auto& fd : fieldDefs) {
-        // Skip proxy fields - they don't appear in the input side map
-        if (fd->isProxy()) {
-            continue;
-        }
-
-        if (fd->isFieldRequired(fieldDefs)) {
-            requiredFields.push_back(fd);
+        if (!fd->getInputs().empty()) {
+            fieldsWithInputs.push_back(fd);
         }
     }
 
-    for (short i = 0; i < requiredFields.size(); i++) {
-        fieldMappings[requiredFields[i]] = i;
+    // Assign sequential indices
+    short index = 0;
+    for (const auto& fd : fieldsWithInputs) {
+        fieldMappings[fd] = index++;
     }
 
-    return new FlattenedType(Direction::INPUT, type, fieldMappings, requiredFields.size());
+    return new FlattenedType(Direction::INPUT, type, fieldMappings, fieldsWithInputs.size());
 }
 
 /**
  * @brief Creates a flattened type for output direction
  *
  * This function creates a flattened type representation for the output direction.
- * It takes a type and a set of field definitions, and maps the field definitions
- * to their corresponding indices in the flattened type.
+ * A field definition is included only if it has output field links.
  *
- * ProxyFields are mapped to their target field's index, enabling field merging
- * across multiple inheritance hierarchies.
+ * Index assignment uses field name as the identity:
+ * - If a field with the same name exists in input side, reuse its index
+ * - Otherwise assign a new index
+ *
+ * This naturally handles ProxyFields: since they share the same name as their
+ * target field, they automatically map to the same index without special handling.
  *
  * @param type The type to flatten
  * @param fieldDefs The set of field definitions to include in the flattened type
@@ -97,156 +94,34 @@ FlattenedType* FlattenedType::createInputFlattenedType(Type* type, const std::se
  */
 FlattenedType* FlattenedType::createOutputFlattenedType(Type* type, const std::set<FieldDefinition*>& fieldDefs, FlattenedType* inputSide) {
     std::map<FieldDefinition*, int> fieldMappings;
-    for (const auto& fd : fieldDefs) {
-        FieldDefinition* resolvedFD;
+    short nextNewIndex = inputSide->numberOfFields;
 
-        // Check if this is a proxy field
-        if (fd->isProxy()) {
-            // For proxy fields, resolve to the target field first
-            ProxyField* proxyField = static_cast<ProxyField*>(fd);
-            resolvedFD = proxyField->getTargetField()->resolveInheritedFieldDefinition(fieldDefs);
-        } else {
-            // For regular fields, resolve inheritance as usual
-            resolvedFD = fd->resolveInheritedFieldDefinition(fieldDefs);
+    // Build a name-to-index map from input side for quick lookup
+    std::map<std::string, short> inputNameToIndex;
+    for (int i = 0; i < inputSide->numberOfFields; i++) {
+        FieldDefinition* fd = inputSide->fieldsReverse[i][0]; // Get first field at this index
+        inputNameToIndex[fd->getName()] = i;
+    }
+
+    // Collect field definitions that have output links
+    for (const auto& fd : fieldDefs) {
+        if (fd->getOutputs().empty()) {
+            continue; // Skip fields without output links
         }
 
-        short fieldIndex = inputSide->fields[resolvedFD->getId()];
+        // Check if a field with this name exists in input side
+        auto it = inputNameToIndex.find(fd->getName());
+        short fieldIndex;
+        if (it != inputNameToIndex.end()) {
+            fieldIndex = it->second; // Reuse input side index
+        } else {
+            fieldIndex = nextNewIndex++; // Assign new index
+        }
+
         fieldMappings[fd] = fieldIndex;
     }
 
-    return new FlattenedType(Direction::OUTPUT, type, fieldMappings, inputSide->numberOfFields);
-}
-
-/**
- * @brief Checks if all elements in a vector are null
- * 
- * This function checks if all elements in a vector are null.
- * It iterates through the vector and returns true if all elements are null,    
- * otherwise it returns false.
- * 
- * @param vec The vector to check
- * @return true if all elements are null, otherwise false
- */
-template <typename T>
-bool isAllNull(const std::vector<T>& vec) {
-    for (const auto& element : vec) {
-        if (element != nullptr) {
-            return false; // As soon as a non-null element is found, return false
-        }
-    }
-    return true; // If no non-null element is found, return true
-}
-
-/**
- * @brief Flattens the type hierarchy
- * 
- * This function flattens the type hierarchy by creating a mapping of relations
- * to their corresponding flattened type relations. It iterates through all 
- * relations and types to build the mapping.
- */
-void FlattenedType::flatten() {
-    mapping = new FlattenedTypeRelation**[type->getRelations().size()];
-
-    for (const auto& rel : type->getRelations()) {
-        std::vector<FlattenedTypeRelation*> resultsPerRelation(type->getTypeRegistry()->getTypes().size());
-        for (const auto& relatedType : type->getTypeRegistry()->getTypes()) {
-            resultsPerRelation[relatedType->getId()] = flattenPerType(rel, relatedType);
-        }
-
-        // TODO: Check if resultsPerRelation is correctly filled.
-
-        if (!isAllNull(resultsPerRelation)) {
-            FlattenedTypeRelation** tmp = new FlattenedTypeRelation*[resultsPerRelation.size()];
-            for (int i = 0; i < resultsPerRelation.size(); i++) {
-                tmp[i] = resultsPerRelation[i];
-            }
-
-            mapping[rel->getRelationId()] = tmp;
-        }
-    }
-}
-
-/**
- * @brief Flattens the type hierarchy per type
- * 
- * This function flattens the type hierarchy per type by creating a mapping of
- * field links for a given relation and related type. It iterates through all
- * field definitions and their corresponding field link definitions to build the mapping.
- * 
- * @param relation The relation to flatten
- * @param relatedType The related type to flatten
- * @return A new FlattenedTypeRelation object representing the flattened type relation
- */
-FlattenedTypeRelation* FlattenedType::flattenPerType(Relation* relation, Type* relatedType) {
-    std::vector<FieldLinkDefinition*> fieldLinks;
-
-
-    for (int i = 0; i < numberOfFields; i++) {
-        FieldDefinition** fdArray = fieldsReverse[i];
-
-        int j = 0;
-        while (fdArray[j] != nullptr) {
-            FieldDefinition* fd = fdArray[j];
-            j++;
-
-            std::vector<FieldLinkDefinition*> fls = direction->getFieldLinkDefinitions(fd);
-            for(FieldLinkDefinition* fl : fls) {
-                if (fl->getRelation()->getRelationId() == relation->getRelationId() &&
-                    relatedType->isInstanceOf(fl->getRelatedFD()->getObjectType()) &&
-                    direction->invert()->getFlattenedType(relatedType)->fields[fl->getRelatedFD()->getId()] >= 0) {
-                    fieldLinks.push_back(fl);
-                }
-            }
-       }
-    }
-
-    return fieldLinks.empty() ?
-                              nullptr :
-                              new FlattenedTypeRelation(this, fieldLinks);
-}
-
-/**
- * @brief Follows links in the flattened type
- * 
- * This function follows links in the flattened type by iterating through all
- * relations and their corresponding flattened type relations. It iterates through
- * all relations and their corresponding flattened type relations to follow links.
- * 
- * @param field The field to follow links from
- */
-void FlattenedType::followLinks(Field* field) {
-    for (int relationId = 0; relationId < type->getRelations().size(); relationId++) {
-        auto& ftr = mapping[relationId];
-
-        if (ftr != nullptr) {
-            auto relation = type->getRelations()[relationId];
-            auto iterable = relation->followMany(field->getObject());
-            auto it = iterable->iterator();
-            while (it->hasNext()) {
-                auto relatedObj = it->next();
-
-                followLinks(ftr[relatedObj->getType()->getId()], relatedObj, field);
-            }
-            delete it;
-            delete iterable;
-        }
-    }
-}
-
-/**
- * @brief Follows links in the flattened type relation
- * 
- * This function follows links in the flattened type relation by iterating through
- * all field links and their corresponding field link definitions.  
- * 
- * @param ftr The flattened type relation to follow links from
- * @param relatedObj The related object to follow links from
- * @param field The field to follow links from
- */
-void FlattenedType::followLinks(FlattenedTypeRelation* ftr, Object* relatedObj, Field* field) {
-    if (ftr != nullptr) {
-        ftr->followLinks(direction, relatedObj, field);
-    }
+    return new FlattenedType(Direction::OUTPUT, type, fieldMappings, nextNewIndex);
 }
 
 /**

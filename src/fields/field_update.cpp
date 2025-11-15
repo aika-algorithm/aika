@@ -12,6 +12,8 @@
 #include <sstream>
 
 #include "fields/field_update.h"
+#include "fields/queue_interceptor.h"
+#include "fields/field.h"
 #include "fields/utils.h"
 
 /**

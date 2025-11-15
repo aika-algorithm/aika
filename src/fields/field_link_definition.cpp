@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "fields/field_link_definition.h"
+#include "fields/field.h"
 
 /**
  * @brief Creates a pair of linked field definitions

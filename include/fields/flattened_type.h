@@ -11,48 +11,40 @@
 #define FLATTENED_TYPE_H
 
 #include <map>
+#include <set>
 
 #include "fields/field_definition.h"
-#include "fields/flattened_type_relation.h"
 #include "fields/direction.h"
 
 class Type;
-class Field;
 class FieldDefinition;
-class FlattenedTypeRelation;
 
 /**
  * @class FlattenedType
- * @brief Optimized representation of type hierarchies.
- * 
+ * @brief Optimized representation of type hierarchies with field index mapping.
+ *
  * The FlattenedType class provides:
- * - Efficient mapping of field definitions to indices
- * - Flattened relations for quick traversal
- * - Link following for update propagation
- * - Type hierarchy optimization
- * 
- * This class is crucial for performance in large field graphs,
- * as it eliminates the need to traverse the type hierarchy at runtime.
+ * - Efficient bidirectional mapping between field definitions and array indices
+ * - Separate input/output maps based on link presence
+ * - Field inheritance resolution through flattening
+ *
+ * Relations are resolved at runtime during propagation, not stored in flattening.
+ * Flattening focuses on field hierarchy management and index assignment.
  */
 class FlattenedType {
 private:
     Direction* direction;
     Type* type;                                                  ///< The type being flattened
-    
+
     int numberOfFields;
-    int* fields;
-    FieldDefinition*** fieldsReverse; // Number of fields | List of rev. field mappings terminated by nullptr.
-    FlattenedTypeRelation*** mapping; // Number of Relations | Number of Types
+    int* fields;                                                 ///< FieldDefinition ID → index mapping
+    FieldDefinition*** fieldsReverse;                           ///< Index → FieldDefinitions (null-terminated)
 
     FlattenedType(Direction* dir, Type* type, const std::map<FieldDefinition*, int>& fieldMappings, int numberOfFields);
-    FlattenedTypeRelation* flattenPerType(Relation* relation, Type* relatedType);
 
 public:
     static FlattenedType* createInputFlattenedType(Type* type, const std::set<FieldDefinition*>& fieldDefs);
     static FlattenedType* createOutputFlattenedType(Type* type, const std::set<FieldDefinition*>& fieldDefs, FlattenedType* inputSide);
-
-    void flatten();
-    void followLinks(Field* field);
 
     int getFieldIndex(FieldDefinition* fd);
     int getNumberOfFields() const;
@@ -61,8 +53,6 @@ public:
 
     FieldDefinition*** getFieldsReverse();
     FieldDefinition* getFieldDefinitionIdByIndex(short idx);
-
-    void followLinks(FlattenedTypeRelation* ftr, Object* relatedObj, Field* field);
 };
 
 #endif // FLATTENED_TYPE_H

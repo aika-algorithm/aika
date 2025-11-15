@@ -129,11 +129,6 @@ public:
     virtual void initializeField(Field* field);
 
     /**
-     * @brief Checks if this is a proxy field
-     * @return true if this is a proxy field, false otherwise (default)
-     */
-    virtual bool isProxy() const { return false; }
-    /**
      * @brief Adds an input field link
      * @param fl The field link to add
      */

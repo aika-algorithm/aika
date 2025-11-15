@@ -128,7 +128,6 @@ void bind_fields(py::module_& m) {
             .def(py::init<Type*, const std::string&, FieldDefinition*>())
             .def("getTargetField", &ProxyField::getTargetField, py::return_value_policy::reference_internal)
             .def("setTargetField", &ProxyField::setTargetField)
-            .def("isProxy", &ProxyField::isProxy)
             .def("__str__", [](const ProxyField &f) {
                   return f.toString();
             });

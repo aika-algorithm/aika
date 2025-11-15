@@ -10,6 +10,7 @@
 #include <sstream>
 #include "fields/direction.h"
 #include "fields/field_definition.h"
+#include "fields/field.h"
 #include "fields/field_link_definition.h"
 #include "fields/relation.h"
 #include "fields/object.h"

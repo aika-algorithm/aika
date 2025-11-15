@@ -1,4 +1,5 @@
 #include "fields/identity_field.h"
+#include "fields/field_link_definition.h"
 
 // Constructor
 IdentityField::IdentityField(Type* ref, const std::string& name)
